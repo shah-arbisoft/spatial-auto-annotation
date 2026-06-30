@@ -19,8 +19,7 @@ detector:
 
 segmentation:
   backend: sam2
-  variant: sam2.1_hiera_small  # small variant to fit 6 GB
-  checkpoint: checkpoints/sam2.1_hiera_small.pt
+  hf_model: facebook/sam2.1-hiera-small  # auto-downloads from HF; small variant for 6 GB
 
 depth:
   backend: depth_anything_v2

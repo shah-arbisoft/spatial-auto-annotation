@@ -2,13 +2,17 @@
 #
 # IMPORTANT (read before installing):
 # 1. Create a Python 3.11 or 3.12 venv first. PyTorch/SAM2 have no 3.14 wheels.
-# 2. Install PyTorch from the correct CUDA index, NOT from plain PyPI, e.g.:
-#       pip install torch==2.4.1 torchvision==0.19.1 \
+# 2. Install PyTorch from the correct CUDA index, NOT from plain PyPI. SAM2 needs
+#    torch>=2.5.1, so use a CUDA build at/above that, e.g.:
+#       pip install torch==2.5.1 torchvision==0.20.1 \
 #           --index-url https://download.pytorch.org/whl/cu121
-#    Match the CUDA build (cu121 / cu118) to your installed driver.
-# 3. SAM2 installs from GitHub (no PyPI release that tracks the latest checkpoints):
+#    Match the CUDA build (cu121 / cu124 / cu128) to your installed driver.
+# 3. SAM2 installs from GitHub:
 #       pip install "git+https://github.com/facebookresearch/sam2.git"
-#    Download a small checkpoint (e.g. sam2.1_hiera_small) separately.
+#    Checkpoints auto-download via SAM2ImagePredictor.from_pretrained (no manual
+#    files). WARNING: installing SAM2 may upgrade torch to a CPU-only wheel; if
+#    `CUDA available: False` after, reinstall the CUDA torch from step 2 with
+#    --no-deps --force-reinstall.
 #
 # The pins below are a known-good baseline; relax minor versions if pip resolves.
 

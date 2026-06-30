@@ -1,0 +1,7 @@
+# Project + test configuration.
+# pythonpath = ["."] puts the repo root on sys.path during test collection so
+# `import src...` and `import eval...` resolve when running pytest from the root.
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

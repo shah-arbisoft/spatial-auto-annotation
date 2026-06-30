@@ -46,9 +46,40 @@ def check_depth(image_path: str, device: str) -> None:
 
 
 def check_sam2(image_path: str, device: str) -> None:
-    log("SAM2 check: load a small checkpoint and segment one box.")
-    log("  -> implement once the SAM2 checkpoint is downloaded (src/segment.py).")
-    # Intentionally a no-op placeholder for Week 1; depth is the harder memory test.
+    from PIL import Image
+    import numpy as np
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from src.segment import Segmenter
+
+    log("loading SAM2 (facebook/sam2.1-hiera-small) ...")
+    seg = Segmenter(device=device).load()
+
+    img = np.array(Image.open(image_path).convert("RGB"))
+    h, w = img.shape[:2]
+    # a central box prompt (no detector in the smoke test) just to confirm output
+    box = [w * 0.3, h * 0.3, w * 0.7, h * 0.85]
+    masks = seg.masks_from_boxes(img, box)
+    m = masks[0]
+    area = int(m.sum())
+    log(f"SAM2 mask: shape={m.shape}, dtype={m.dtype}, covered px={area}")
+    if area == 0:
+        # diagnostic: empty mask — inspect raw predictor output (shapes + scores)
+        import torch
+        log("  mask empty; running diagnostic predict (multimask) ...")
+        with torch.inference_mode():
+            seg._predictor.set_image(img)
+            raw, scores, _ = seg._predictor.predict(
+                box=np.array([box], dtype=float), multimask_output=True
+            )
+        raw = np.asarray(raw)
+        log(f"  raw shape={raw.shape}, dtype={raw.dtype}, scores={np.asarray(scores).ravel()}")
+        flat = raw.reshape(-1, raw.shape[-2], raw.shape[-1])
+        log(f"  per-mask covered px={[int((flat[i] > 0).sum()) for i in range(flat.shape[0])]}")
+    else:
+        log("  SAM2 OK")
+    if device == "cuda":
+        import torch
+        log(f"peak GPU memory: {torch.cuda.max_memory_allocated() / 1e9:.2f} GB")
 
 
 def main() -> int:
