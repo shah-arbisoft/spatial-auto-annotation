@@ -1,0 +1,38 @@
+# requirements.txt — pinned for an RTX 2060 (6 GB), Python 3.10–3.12.
+#
+# IMPORTANT (read before installing):
+# 1. Create a Python 3.11 or 3.12 venv first. PyTorch/SAM2 have no 3.14 wheels.
+# 2. Install PyTorch from the correct CUDA index, NOT from plain PyPI, e.g.:
+#       pip install torch==2.4.1 torchvision==0.19.1 \
+#           --index-url https://download.pytorch.org/whl/cu121
+#    Match the CUDA build (cu121 / cu118) to your installed driver.
+# 3. SAM2 installs from GitHub (no PyPI release that tracks the latest checkpoints):
+#       pip install "git+https://github.com/facebookresearch/sam2.git"
+#    Download a small checkpoint (e.g. sam2.1_hiera_small) separately.
+#
+# The pins below are a known-good baseline; relax minor versions if pip resolves.
+
+# --- core perception ---
+# torch / torchvision: install via the CUDA index URL above, not from here.
+ultralytics==8.3.0            # YOLOv10m detector (AGPL-3.0)
+transformers==4.44.2          # Depth Anything v2 Small via the HF pipeline
+# sam2: install from git (see note 3 above)
+
+# --- imaging / arrays ---
+numpy==1.26.4
+scipy==1.13.1
+opencv-python==4.10.0.84
+Pillow==10.4.0
+h5py==3.11.0                  # h5 scene-graph export
+
+# --- downstream classifier + metrics + figures ---
+scikit-learn==1.5.1
+matplotlib==3.9.2
+pandas==2.2.2
+
+# --- config / repro / utilities ---
+PyYAML==6.0.2
+tqdm==4.66.5
+
+# --- dev ---
+pytest==8.3.2

@@ -1,0 +1,52 @@
+# Default configuration for the spatial-auto-annotation pipeline.
+# Every number that affects a label lives here so runs are reproducible and
+# ablations are a one-line config change.
+
+seed: 42                       # seed numpy / torch / python random everywhere
+
+# --- dataset (supervisor-supplied; see docs/DATASET_NOTES.md) ---
+dataset:
+  # inner folder containing img_data/ and annotated_data/
+  root: ../SpatialAwareRobotDataset-main/SpatialAwareRobotDataset-main
+  target_only: true            # keep only the 7 spatial predicates (95.9% of triplets)
+
+# --- models ---
+detector:
+  backend: yolov10m            # yolov10m | groundingdino
+  weights: checkpoints/yolov10m_spatial.pt
+  conf_threshold: 0.25
+  iou_nms: 0.7
+
+segmentation:
+  backend: sam2
+  variant: sam2.1_hiera_small  # small variant to fit 6 GB
+  checkpoint: checkpoints/sam2.1_hiera_small.pt
+
+depth:
+  backend: depth_anything_v2
+  variant: Small               # Apache-2.0; avoid Base/Large (non-commercial)
+  hf_model: depth-anything/Depth-Anything-V2-Small-hf
+
+# --- predicate thresholds (see docs/predicate_spec.md) ---
+# These are the explicit, graded thresholds. `near_T` is FITTED to the human
+# labels in eval/ and then frozen here; the value below is a placeholder default.
+predicates:
+  near_T: 0.30                 # 3D distance threshold for `near`, normalised units
+  on_vertical_gap: 0.05        # max normalised vertical gap to count as touching
+  on_horizontal_overlap: 0.20  # min IoU-of-x-extent to count as horizontal overlap
+  lateral_center_eps: 0.02     # |x_A - x_B| below this => left/right ambiguous (flag)
+  depth_eps: 0.03              # |depth_A - depth_B| below this => front/behind ambiguous
+
+# --- correction & confidence ---
+correction:
+  enabled: true                # reject geometrically impossible label sets
+confidence:
+  flag_near_band: 0.05         # flag `near` cases within +/- this of near_T
+  flag_lateral: true           # flag left/right when centres nearly coincide
+
+# --- output formats ---
+output:
+  vg_json: true
+  yolo_txt: true
+  h5: true
+  dir: outputs/annotations
