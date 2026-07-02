@@ -36,25 +36,26 @@ def check_torch_cuda() -> str:
 def check_depth(image_path: str, device: str) -> None:
     from PIL import Image
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from src.dataset import load_rgb
     from src.depth import DepthEstimator
 
     log("loading Depth Anything v2 Small ...")
     est = DepthEstimator(device=device).load()
-    img = Image.open(image_path).convert("RGB")
+    img = Image.fromarray(load_rgb(image_path))  # EXIF-corrected orientation
     depth = est.estimate(img)
     log(f"depth map: shape={depth.shape}, min={depth.min():.3f}, max={depth.max():.3f} OK")
 
 
 def check_sam2(image_path: str, device: str) -> None:
-    from PIL import Image
     import numpy as np
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from src.dataset import load_rgb
     from src.segment import Segmenter
 
     log("loading SAM2 (facebook/sam2.1-hiera-small) ...")
     seg = Segmenter(device=device).load()
 
-    img = np.array(Image.open(image_path).convert("RGB"))
+    img = load_rgb(image_path)  # EXIF-corrected orientation
     h, w = img.shape[:2]
     # a central box prompt (no detector in the smoke test) just to confirm output
     box = [w * 0.3, h * 0.3, w * 0.7, h * 0.85]

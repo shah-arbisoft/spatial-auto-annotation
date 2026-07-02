@@ -22,11 +22,10 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
 from tqdm import tqdm
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from src.dataset import SpatialDataset
+from src.dataset import SpatialDataset, load_rgb
 from src.pipeline import annotate_image, load_config
 from src.writers import write_vg_json, write_yolo_txt, write_h5
 
@@ -84,7 +83,7 @@ def main():
     for gt in tqdm(images, desc="annotating"):
         if not gt.image_path.exists() or len(gt.objects) == 0:
             continue
-        image = np.array(Image.open(gt.image_path).convert("RGB"))
+        image = load_rgb(gt.image_path)  # EXIF-corrected: annotations are in the upright frame
         h, w = image.shape[:2]
         boxes = px_boxes(gt.objects, w, h)
         labels = [o.label for o in gt.objects]

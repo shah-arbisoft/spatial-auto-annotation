@@ -28,11 +28,29 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterator, Optional
 
+import numpy as np
+
 # The seven target spatial predicates and their dataset IDs (see predicates.py).
 from .predicates import PREDICATE_IDS
 
 ID_TO_PREDICATE = {v: k for k, v in PREDICATE_IDS.items()}
 TARGET_PREDICATE_IDS = set(PREDICATE_IDS.values())
+
+
+def load_rgb(path: str | Path) -> np.ndarray:
+    """Load an image as an upright RGB array, honouring EXIF orientation.
+
+    883 of the dataset's 884 images are stored 180-degree rotated with EXIF
+    Orientation=3 (robot camera mount). Viewers and the annotation tool apply
+    the flag, so the human annotations are in the UPRIGHT frame — but a plain
+    PIL/numpy load returns the rotated raw pixels, silently misaligning every
+    box-prompted mask and depth sample. Always load images through this helper.
+    """
+    from PIL import Image, ImageOps  # noqa: PLC0415
+
+    img = Image.open(path)
+    img = ImageOps.exif_transpose(img)
+    return np.array(img.convert("RGB"))
 
 
 @dataclass

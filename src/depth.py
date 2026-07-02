@@ -32,17 +32,20 @@ class DepthEstimator:
     def estimate(self, image) -> np.ndarray:
         """Return a relative depth map (H x W float array), SMALLER = NEARER.
 
-        The Depth Anything v2 HF pipeline's `depth` output already has smaller =
-        nearer the camera, matching the convention in docs/predicate_spec.md and
-        src/predicates.py, so we do NOT invert it. This was verified empirically:
-        an earlier inversion gave only ~20% agreement with the human front/behind
-        labels (i.e. it was flipped); removing it yields ~80%. We just normalise
-        to [0, 1] for stable thresholds, preserving the ordering.
+        The HF `depth` output has LARGER = nearer the camera, so we invert it to
+        match the smaller = nearer convention in docs/predicate_spec.md and
+        src/predicates.py, then min-max normalise to [0, 1] (order preserved).
+
+        Verified on EXIF-corrected (upright) images: without inversion,
+        front/behind agreement with the human labels is ~26%; with inversion,
+        ~74%. (An earlier check that suggested the opposite was run on images fed
+        to the model upside-down — see src.dataset.load_rgb — and was wrong.)
         """
         if self._pipe is None:
             self.load()
         out = self._pipe(image)
         depth = np.asarray(out["depth"], dtype=float)
+        depth = depth.max() - depth          # HF output is larger=nearer -> invert
         rng = depth.max() - depth.min()
         if rng > 0:
             depth = (depth - depth.min()) / rng

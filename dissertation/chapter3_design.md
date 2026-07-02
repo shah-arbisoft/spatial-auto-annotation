@@ -83,9 +83,11 @@ image ─ boxes+classes ─→ SAM2 masks ─→ depth map ─→ per-object geo
 | Writers | byte-compatible VG JSON / YOLO / h5 | own schema + converter | drop-in comparability (requirement 2); verified against real exports |
 
 All coordinates are normalised by image size so thresholds transfer across
-resolutions; depth is min–max normalised per image (with the ordering
-preserved — smaller is nearer, verified empirically after an initial inversion
-flipped front/behind and was caught by the fidelity numbers).
+resolutions; depth is inverted to "smaller is nearer" and min–max normalised per
+image (the HF model emits larger = nearer; the sign was fixed after front/behind
+agreement rose from ~26% to ~74%). Images are loaded through an EXIF-aware helper
+so the 180°-rotated captures are made upright before any box, mask or depth is
+read — the boxes are stored in the upright frame.
 
 ## 3.4 The seven rules
 
@@ -105,10 +107,17 @@ rationale in brief:
   camera view, so the ego frame is the faithful choice). An ambiguity band
   (0.02) abstains and flags when centres nearly coincide.
 - **in front of / behind** compare per-object depths with an abstention band
-  (0.03). Relative depth makes these the hardest predicates (recall 0.32/0.39
+  (0.03). Relative depth makes these the hardest predicates (recall 0.52/0.55
   *(measured)*): objects on the same surface often differ by less than the
   depth model can resolve. The band converts that uncertainty into flags rather
   than coin-flips; its width is a recall/precision lever swept in the ablations.
+  Two implementation pitfalls, both caught and fixed, sit behind this number and
+  are worth recording as method: the HF depth output is *larger = nearer* and
+  must be inverted to the smaller = nearer convention (verified by front/behind
+  agreement, ~26% → ~74%); and the dataset's images carry a 180° EXIF rotation
+  that a naive load ignores, so depth and masks were initially sampled from an
+  upside-down frame while the boxes were upright — a discrepancy invisible to the
+  box-based predicates and to the unit tests, but obvious on one annotated image.
 - **near** is a size-relative proximity test: edge-to-edge box gap divided by
   mean object size, below a fitted threshold, and **never on contact pairs** —
   measured, `near` co-occurs with on/under on 0 of 469 human pairs; annotators
