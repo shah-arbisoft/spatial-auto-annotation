@@ -60,6 +60,22 @@ def test_lateral_ambiguous_flag():
     assert "to the left of" not in res.predicates and "to the right of" not in res.predicates
 
 
+def test_near_uses_relative_gap_and_contact_exclusion():
+    # two books side by side, small gap relative to size -> near (both directions)
+    a = make(0, "book", (0.30, 0.40, 0.45, 0.60), depth=0.5)
+    b = make(1, "book", (0.50, 0.40, 0.65, 0.60), depth=0.5)
+    res = evaluate_pair(a, b, T)
+    assert "near" in res.predicates
+
+    # cup resting on a box: contact pair -> on, and near is suppressed
+    cup = make(0, "cube", (0.40, 0.30, 0.60, 0.50), depth=0.5)
+    box = make(1, "box", (0.30, 0.50, 0.70, 0.80), depth=0.5)
+    res_on = evaluate_pair(cup, box, T)
+    assert "on" in res_on.predicates and "near" not in res_on.predicates
+    res_under = evaluate_pair(box, cup, T)
+    assert "under" in res_under.predicates and "near" not in res_under.predicates
+
+
 def test_near_threshold_fit_recovers_separating_value():
     # distances clearly separable at ~0.5; humans call <0.5 "near".
     distances = np.array([0.1, 0.2, 0.3, 0.7, 0.8, 0.9])

@@ -89,6 +89,34 @@ normalised `(x1,y1,x2,y2)`, divide a `boxes_1024` entry by the resized dims
 and is **not** used. ~1.8% of boxes overflow [0,1] by ≤0.0007 (sub-pixel resize
 rounding); clamped in the loader.
 
+## The `near` predicate — measured inter-annotator inconsistency
+
+The paper reports "inconsistencies, particularly with the 'near' predicate".
+Measured on the released labels, this is quantifiable and severe:
+
+- **Only 3 of the 9 annotator groups ever used `near`**: group_0 (244 labels),
+  group_4 (129), group_8 (93); group_2 has 3; the other five groups have 0.
+- `near` **never co-occurs with `on`/`under`** (0 of 469 pairs), and 74% of near
+  pairs carry *only* near — annotators treated it as "close but no contact
+  relation".
+- At a single size-relative gap threshold (T = 1.372, fitted on groups 0+4),
+  **recall is 1.000 for all three near-using annotators** — everything anyone
+  called near lies within one common threshold — but precision per annotator is
+  0.41 / 0.63 / 0.16: each labelled only a fraction of the equally-close pairs.
+  The human labels are directionally consistent but **non-exhaustive**, and the
+  degree of exhaustiveness varies ~4× between annotators.
+- Consequence for metric choice: per-image relative depth makes 3D-centroid
+  distances incomparable across scenes — every centroid-based variant transfers
+  to held-out annotators at F1 ≤ 0.024, so the rule uses the size-relative 2D
+  box gap instead.
+
+Implication: `near` cannot be validated as simple agreement with "the human
+consensus" — for this predicate there isn't one. The fitted threshold is instead
+presented as the **consistent operational definition** the paper's future work
+asks for ("spatial thresholds for near"), with per-annotator agreement reported
+against it, and the manual audit (RQ1) checking whether threshold-only pairs the
+humans skipped are genuinely near.
+
 ## Implications for the project
 
 1. **Ground truth scale:** 838 images / 8,928 target triplets.

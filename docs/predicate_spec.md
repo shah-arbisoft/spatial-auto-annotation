@@ -46,9 +46,10 @@ never absolute across images. This is a deliberate limitation discussed in the
 critical chapter.
 
 **Normalisation.** Distances and gaps are normalised by image dimensions (x by
-width, y by height) so a single threshold transfers across image sizes. The 3D
-position used for `near` is `(X, Y, Z)` with `X, Y` normalised image coordinates
-and `Z` a depth scaled to comparable units (see §7).
+width, y by height) so a single threshold transfers across image sizes. The
+lifted 3D position `P = (X, Y, Z)` (normalised image coordinates plus scaled
+depth) is retained per object for the downstream classifier's features; the
+`near` rule itself uses a size-relative 2D box gap (see §7).
 
 All predicates are defined for an **ordered pair (A, B)** — A is the subject,
 B is the object — to match the dataset's subject→object triplet format.
@@ -72,6 +73,14 @@ horizontally. Three conditions, all required:
 Justification: contact + support is the everyday meaning of "on"; encoding it as
 *above + touching + horizontal overlap* avoids labelling a cup floating in front
 of a shelf as "on" it.
+
+**Known edge case (containment).** Viewed from a shallow angle, a small object
+resting on a large one can project *inside* the support's box (e.g. a remote on
+a box seen from above): the vertical gap is then strongly negative and the rule
+misses the `on`. Candidate refinements — a mask-contact test, or accepting
+nested boxes whose bottom edges nearly align — are evaluated against the full
+data in the ablation study rather than hand-tuned early. Failures of this type
+are tagged in the failure gallery.
 
 ## 2. `under(A, B)` — A is below and supports B
 
@@ -123,27 +132,40 @@ behind(A, B)  ==  (d_A > d_B)
 The inverse of `in front of`: `behind(A,B) == in_front_of(B,A)`. The same
 `depth_eps` ambiguity band applies.
 
-## 7. `near(A, B)` — A and B are close in 3D
+## 7. `near(A, B)` — A and B are close, relative to their size
 
 ```
-near(A, B)  ==  dist3D(P_A, P_B) <= near_T
+near(A, B)  ==  box_gap_rel(A, B) <= near_T   AND   not (on(A,B) or under(A,B))
 ```
 
-where `dist3D` is Euclidean distance between the two lifted 3D centroids
-`P = (X, Y, Z)`, and `near_T` is **fitted to the human labels**, not guessed:
+where `box_gap_rel` is the **edge-to-edge gap between the two (normalised)
+boxes, divided by the mean object size** (sqrt of box area): "near" scales with
+the objects — a small gap between two books reads as near; the same absolute gap
+between a person and a cube may not. The gap is 0 when boxes touch or overlap.
 
-- Sweep candidate `T` over a range; for each, compute agreement (F1) of the
-  resulting `near` labels against the human `near` annotations on the 900 images.
-- Choose the `T` that maximises agreement; **freeze and report** it in
-  `configs/default.yaml` and the dissertation.
+**Contact exclusion.** Measured on the human labels, `near` co-occurs with
+`on`/`under` on **0 of 469** pairs (74% of near pairs carry *only* near): the
+annotators used `near` as "close but no contact relation". The rule encodes
+this: a pair already labelled on/under is not additionally near.
 
-This directly addresses the paper's flagged problem that `near` was inconsistent
-between annotators and that future work should use a "spatial threshold for near."
-A single fitted threshold is, by construction, more self-consistent than nine
-people. `near` is symmetric: `near(A,B) == near(B,A)`.
+**Why not 3D centroid distance.** Monocular depth is normalised per image, so
+centroid distances are not comparable across scenes: in a metric bake-off, every
+3D-centroid variant transferred to held-out annotators at F1 ≤ 0.024, while the
+size-relative gap metric transfers with recall 1.0 (see DATASET_NOTES).
 
-Cases where `dist3D` falls within `flag_near_band` of `near_T` are **flagged**
-for optional human review (human-in-the-loop accelerator, not brittle full-auto).
+**Fitting protocol (annotator-aware).** Only 3 of the 9 annotator groups ever
+used `near` (group_0: 244, group_4: 129, group_8: 93 labels; the rest 0–3).
+`near_T` is therefore fitted on the near-using groups inside the training split
+(groups 0 and 4), on human-annotated non-contact pairs, and evaluated on the
+held-out near-using annotator (group_8). Fitted **T = 1.372**; held-out
+**recall = 1.000** (every pair that annotator called near is within T), with
+precision differences across annotators (0.16–0.63) reflecting how exhaustively
+each applied the label, not geometric disagreement. The deterministic threshold
+applies one definition uniformly — precisely the "spatial thresholds for near"
+the source paper's future work calls for.
+
+`near` is symmetric: `near(A,B) == near(B,A)`. Cases within `flag_near_band` of
+`near_T` (gap units) are **flagged** for optional human review.
 
 ---
 
@@ -186,7 +208,7 @@ genuinely ambiguous minority.
 | `right of` | `cx_A > cx_B` | `lateral_center_eps` | `right(A,B)=left(B,A)` |
 | `in front of` | `d_A < d_B` | `depth_eps` | `front(A,B)=behind(B,A)` |
 | `behind` | `d_A > d_B` | `depth_eps` | `behind(A,B)=front(B,A)` |
-| `near` | `dist3D <= near_T` | `near_T` (fitted) | symmetric |
+| `near` | `box_gap_rel <= near_T`, no contact | `near_T` (fitted), `flag_near_band` | symmetric |
 
 All thresholds are declared in `configs/default.yaml`; `near_T` is fitted in
-`eval/fidelity.py` and frozen there.
+`eval/fit_near.py` (annotator-aware protocol above) and frozen there.

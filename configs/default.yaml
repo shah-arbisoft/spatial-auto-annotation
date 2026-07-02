@@ -26,11 +26,17 @@ depth:
   variant: Small               # Apache-2.0; avoid Base/Large (non-commercial)
   hf_model: depth-anything/Depth-Anything-V2-Small-hf
 
+# --- geometry ---
+geometry:
+  z_scale: 1.0                 # scales depth into the 3D position's Z; tuned with near_T
+
 # --- predicate thresholds (see docs/predicate_spec.md) ---
 # These are the explicit, graded thresholds. `near_T` is FITTED to the human
-# labels in eval/ and then frozen here; the value below is a placeholder default.
+# labels (eval/fit_near.py: trained on groups 0-5, held-out 6-8) and frozen here.
 predicates:
-  near_T: 0.30                 # 3D distance threshold for `near`, normalised units
+  near_T: 1.372                # `near`: size-relative box gap (gap / mean object
+                               # size); fitted to the annotators who used `near`.
+                               # Contact pairs (on/under) are never near.
   on_vertical_gap: 0.05        # max normalised vertical gap to count as touching
   on_horizontal_overlap: 0.20  # min IoU-of-x-extent to count as horizontal overlap
   lateral_center_eps: 0.02     # |x_A - x_B| below this => left/right ambiguous (flag)
@@ -40,7 +46,7 @@ predicates:
 correction:
   enabled: true                # reject geometrically impossible label sets
 confidence:
-  flag_near_band: 0.05         # flag `near` cases within +/- this of near_T
+  flag_near_band: 0.15         # flag `near` cases within +/- this of near_T (gap units)
   flag_lateral: true           # flag left/right when centres nearly coincide
 
 # --- output formats ---

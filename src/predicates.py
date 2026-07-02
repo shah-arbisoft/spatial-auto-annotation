@@ -114,8 +114,30 @@ def _vertical_gap(top: Obj, bottom: Obj) -> float:
 def dist3d(a: Obj, b: Obj) -> float:
     """Euclidean distance between two lifted 3D centroids."""
     if a.pos3d is None or b.pos3d is None:
-        raise ValueError("pos3d required for near(); run geometry.lift first")
+        raise ValueError("pos3d required; run geometry.lift first")
     return float(np.linalg.norm(a.pos3d - b.pos3d))
+
+
+def box_gap_rel(a: Obj, b: Obj) -> float:
+    """Size-relative 2D gap between two boxes — the `near` metric.
+
+    Edge-to-edge gap between the (normalised) boxes, divided by the mean of the
+    two objects' sizes (sqrt of box area), so "near" scales with the objects:
+    a small gap between two books is near, the same absolute gap between a
+    person and a cube may not be. 0 when the boxes touch or overlap.
+
+    Chosen empirically over 3D-centroid distance: per-image relative depth made
+    centroid distances incomparable across scenes, and human `near` labels are
+    reproduced far better by this metric (see docs/DATASET_NOTES.md).
+    """
+    ax1, ay1, ax2, ay2 = a.box
+    bx1, by1, bx2, by2 = b.box
+    gap_x = max(0.0, ax1 - bx2, bx1 - ax2)
+    gap_y = max(0.0, ay1 - by2, by1 - ay2)
+    gap = float(np.hypot(gap_x, gap_y))
+    size_a = float(np.sqrt(max(1e-9, (ax2 - ax1) * (ay2 - ay1))))
+    size_b = float(np.sqrt(max(1e-9, (bx2 - bx1) * (by2 - by1))))
+    return gap / ((size_a + size_b) / 2)
 
 
 # --------------------------------------------------------------------------- #
@@ -156,8 +178,12 @@ def is_behind(a: Obj, b: Obj, t: Thresholds) -> bool:
 
 
 def is_near(a: Obj, b: Obj, t: Thresholds) -> bool:
-    """A and B are within the fitted 3D distance threshold."""
-    return dist3d(a, b) <= t.near_T
+    """A and B are within the fitted size-relative gap threshold.
+
+    Contact exclusion (near never co-occurs with on/under in the human labels —
+    0 of 469 pairs) is applied in evaluate_pair, which sees the on/under result.
+    """
+    return box_gap_rel(a, b) <= t.near_T
 
 
 # --------------------------------------------------------------------------- #
@@ -196,12 +222,16 @@ def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True) -> PairRe
     else:
         res.flags.append("depth_ambiguous")  # depths nearly equal
 
-    # --- near (only if 3D positions available) ---
-    if a.pos3d is not None and b.pos3d is not None:
-        d = dist3d(a, b)
-        if d <= t.near_T:
+    # --- near: size-relative box gap, suppressed for contact pairs ---
+    # Measured on the human labels: near co-occurs with on/under on 0 of 469
+    # pairs — annotators used `near` as "close but no contact relation", so a
+    # pair already labelled on/under is not additionally near.
+    contact = "on" in res.predicates or "under" in res.predicates
+    gap = box_gap_rel(a, b)
+    if not contact:
+        if gap <= t.near_T:
             res.predicates.append("near")
-        if abs(d - t.near_T) <= t.flag_near_band:
+        if abs(gap - t.near_T) <= t.flag_near_band:
             res.flags.append("near_threshold_edge")
 
     return res
