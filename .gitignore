@@ -17,10 +17,9 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# outputs (figures/tables are regenerated; keep the dir, ignore bulk artefacts)
-outputs/**/*.png
-outputs/**/*.pdf
-outputs/**/*.csv
+# outputs are regenerable artefacts (annotations, geometry cache, reports,
+# figures) — keep the directory, not its contents
+outputs/*
 !outputs/.gitkeep
 
 # os / editor

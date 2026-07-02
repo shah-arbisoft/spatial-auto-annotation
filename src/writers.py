@@ -90,8 +90,8 @@ def write_h5(image_name: str, width: int, height: int,
     boxes_512 = [_norm_xyxy_to_center_xywh(o["box"], 512, width, height) for o in objects]
     with h5py.File(out_path, "w") as f:
         f.attrs["image-name"] = image_name
-        f.attrs["width"] = width
-        f.attrs["height"] = height
+        f.attrs["width"] = np.int64(width)    # int64, matching the real exports
+        f.attrs["height"] = np.int64(height)
         i32 = lambda a: np.asarray(a, dtype=np.int32)
         f.create_dataset("boxes_1024", data=i32(boxes_1024))
         f.create_dataset("boxes_512", data=i32(boxes_512))
@@ -109,9 +109,13 @@ def write_yolo_txt(objects: list[dict], out_path: str | Path) -> None:
     """
     lines = []
     for o in objects:
+        cls = LABEL_IDS.get(o["label"])
+        if cls is None:
+            # out-of-vocabulary object (e.g. the dataset's two nameless id=7
+            # instances) — skipping beats silently mislabelling it as class 0
+            continue
         x1, y1, x2, y2 = o["box"]
         cx, cy = (x1 + x2) / 2, (y1 + y2) / 2
         w, h = x2 - x1, y2 - y1
-        cls_id = LABEL_IDS.get(o["label"], 1) - 1
-        lines.append(f"{cls_id} {cx:.6f} {cy:.6f} {w:.6f} {h:.6f}")
+        lines.append(f"{cls - 1} {cx:.6f} {cy:.6f} {w:.6f} {h:.6f}")
     Path(out_path).write_text("\n".join(lines) + ("\n" if lines else ""), encoding="utf-8")

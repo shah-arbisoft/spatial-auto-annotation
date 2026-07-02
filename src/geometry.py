@@ -52,7 +52,17 @@ def lift(
         z_scale:  scales depth into units comparable to normalised X, Y so the
                   3D distance used by `near` is balanced across axes. Tune
                   alongside near_T during fitting.
+
+    If the mask is empty (failed segmentation or a zero-area box after
+    rounding), fall back to the box region so the centroid/depth describe the
+    object's location, not the whole image.
     """
+    if mask is None or not mask.any():
+        x1, y1, x2, y2 = (int(round(v)) for v in box_xyxy)
+        mask = np.zeros((height, width), dtype=bool)
+        mask[max(0, y1):max(min(height, y2), y1 + 1),
+             max(0, x1):max(min(width, x2), x1 + 1)] = True
+
     cx, cy = mask_centroid_norm(mask, width, height)
     d = sample_depth(depth_map, mask)
 
