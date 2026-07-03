@@ -169,32 +169,46 @@ the source paper's future work calls for.
 
 ---
 
-## 8. Correction step — reject geometrically impossible labels
+## 8. Correction step — consistency by construction, plus active corrections
 
-After computing all predicates for a pair, enforce mutual exclusivity:
+Geometric consistency is enforced at two levels, and it is worth being precise
+about which is which:
 
-- Not both `on(A,B)` and `under(A,B)`.
-- Not both `left of(A,B)` and `right of(A,B)`.
-- Not both `in front of(A,B)` and `behind(A,B)`.
-- `on`/`under` implies vertical adjacency; if depth simultaneously says the
-  objects are far in `Z` while geometry says `on`, prefer the contact evidence
-  and flag the conflict.
+**By construction.** With the shipped rules the three mutually exclusive
+families can never co-occur on an ordered pair: `on(A,B)` and `under(A,B)`
+require strictly opposite centroid orderings; `left/right` and `front/behind`
+use strict comparisons separated by an ambiguity band. Inverses mirror exactly
+across the two orderings (`on(A,B) ⇔ under(B,A)`, etc.). These invariants are
+pinned by a randomised test over thousands of scenes
+(`tests/test_invariants.py`); the runtime conflict check therefore acts as an
+assertion/safety net for future rule variants rather than a filter that fires
+in practice.
 
-If a contradiction survives the per-rule thresholds (e.g. due to mask/depth
-noise), the pair is **demoted to a flag**, never emitted as a contradictory
-triplet. This is the Open3D-VQA-style error-correction idea applied to our rules.
+**Active corrections** (the Open3D-VQA-style error-correction idea, adapted):
 
-## 9. Confidence flags — what gets marked for review
+- `near` is **suppressed on contact pairs** — measured, near co-occurs with
+  on/under on 0 of 469 human pairs (§7).
+- Ambiguous cases are **abstained and flagged** rather than guessed (§9): the
+  rule emits nothing when the geometric evidence is inside an ambiguity band.
+
+## 9. Confidence flags — what gets marked, and the honest cost
 
 A pair is flagged (not dropped) when any of:
 
-- `near` distance within `flag_near_band` of `near_T` (§7).
+- `near` gap within `flag_near_band` of `near_T` (§7).
 - `left/right` centres within `lateral_center_eps` (§3–4).
 - `front/behind` depths within `depth_eps` (§5–6).
-- the correction step found and resolved a contradiction (§8).
 
-Flags are written alongside the triplets so a human can review only the
-genuinely ambiguous minority.
+Flags are written alongside the triplets. Measured on the full dataset, ~40% of
+ordered pairs carry some flag — dominated by `depth_ambiguous` (~30% of pairs),
+i.e. pairs at similar depth where the tool abstains from front/behind entirely
+(humans typically don't label those pairs either). The flag types serve
+different purposes and are reported separately: depth/lateral flags mark
+*abstentions* (no wrong label was emitted; nothing to fix), while
+`near_threshold_edge` (~8% of pairs) is the genuine *review queue* for the
+borderline-near cases. The evaluation reports per-type flag rates rather than a
+single number, and the human-in-the-loop claim is costed on the review-queue
+flags, not the abstentions.
 
 ---
 
