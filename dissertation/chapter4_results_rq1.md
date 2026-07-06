@@ -219,3 +219,29 @@ false contacts suppress fewer proximity labels — `near` recall rises 0.87 →
 more trustworthy label set. The residual false fires are same-depth cluster
 neighbours, which depth cannot separate by construction; the mask-contact test
 (planned) addresses these.
+
+
+## 4.10 Failure gallery: every miss diagnosed
+
+Each of the 2,299 missed human triplets was diagnosed automatically by
+re-checking the rule's individual conditions against the cached geometry
+(`scripts/make_failure_gallery.py`; seeded rendered examples in
+`outputs/failure_gallery/`). The cause distribution:
+
+| Predicate | Dominant causes (share of that predicate's misses) |
+|---|---|
+| in front of | abstained in ambiguity band 71% · convention-inverted annotators 28% · **genuine depth error 1%** |
+| behind | abstained 64% · convention-inverted 32% · **genuine depth error 4%** |
+| on | containment (nested boxes, shallow angle) 88% · depth-gate suppressed 12% |
+| under | containment 79% · depth-gate suppressed 12% · vertical gap 9% |
+| near | contact-exclusion conflict 100% (33 cases — the support/proximity boundary) |
+| to the left/right of | centre flip 71–89% · abstained in band 11–29% (tiny absolute counts: 52) |
+
+The headline: **genuine depth-ordering errors account for only 1–4% of
+front/behind misses** — the pooled 0.52/0.55 recall is almost entirely
+abstention (a calibrated, tunable trade documented in ablation A2) plus the
+measured annotator convention inversion (§4.5), not model error. On the support
+pair, the containment case dominates exactly as the design chapter predicted,
+and it is the one failure mode whose repair (a mask-contact test) requires
+richer perception rather than a threshold change. Misses attributable to
+avoidable tool error across all seven predicates: roughly 6% of all misses.
