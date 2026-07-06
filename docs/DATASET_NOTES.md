@@ -117,6 +117,25 @@ asks for ("spatial thresholds for near"), with per-annotator agreement reported
 against it, and the manual audit (RQ1) checking whether threshold-only pairs the
 humans skipped are genuinely near.
 
+## The front/behind direction convention — a second measured inconsistency
+
+Found during the RQ1 fidelity study (`eval/fidelity.py`,
+front_behind_decomposition). Where the tool commits to a depth direction,
+agreement with the human label is 0.95–1.00 for six of the eight annotator
+groups with meaningful counts — but **groups 6 and 8 agree only 2–3% of the
+time, and flipping their labels recovers 0.72/0.47 recall**: those annotators
+applied the opposite direction convention for *in front of / behind*. Separately,
+groups 2 and 3 agree near-perfectly when the tool commits but their scenes sit
+largely inside the depth-ambiguity band (emit rates 0.30/0.08). Pooled
+front/behind recall 0.53 → 0.67 under per-group convention alignment (one
+disclosed bit per group).
+
+Together with the `near` findings (3/9 groups used it; ~4× exhaustiveness
+variance), this is the dataset's second quantified annotation-consistency
+defect — strong evidence for the paper's own call for clearer annotation
+guidelines, and exactly the kind of inconsistency a deterministic annotator
+eliminates by construction.
+
 ## Implications for the project
 
 1. **Ground truth scale:** 838 images / 8,928 target triplets.
