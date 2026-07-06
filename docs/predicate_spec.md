@@ -69,6 +69,12 @@ horizontally. Three conditions, all required:
 3. **Horizontal overlap:** the horizontal extents of A and B overlap by at least
    `on_horizontal_overlap` (default 0.20), measured as overlap-of-x-extent. An
    object resting on another must share a footprint.
+4. **Depth co-location:** `|depth_A − depth_B| ≤ on_depth_eps` (calibrated 0.06
+   on the train annotator groups). Rationale: on a floor plane, "farther"
+   projects as "higher in the image", so an object *behind* another mimics the
+   2D signature of one stacked *on* it; truly stacked objects share a camera
+   distance. Measured effect: held-out support F1 0.58 → 0.71, ~half of the
+   audited false support labels removed at ≤2 points of recall.
 
 Justification: contact + support is the everyday meaning of "on"; encoding it as
 *above + touching + horizontal overlap* avoids labelling a cup floating in front

@@ -76,6 +76,18 @@ def test_near_uses_relative_gap_and_contact_exclusion():
     assert "under" in res_under.predicates and "near" not in res_under.predicates
 
 
+def test_on_requires_depth_colocation():
+    """A behind-pair that mimics a stack in 2D must not fire `on`.
+
+    On a floor plane, farther projects higher: the boxes touch vertically and
+    overlap horizontally, but the depths differ - the depth gate rejects it."""
+    front = make(0, "remote", (0.40, 0.55, 0.60, 0.65), depth=0.30)
+    back = make(1, "cube", (0.42, 0.45, 0.58, 0.56), depth=0.60)
+    assert not is_on(back, front, T)          # depth gap 0.30 > on_depth_eps
+    stacked_top = make(0, "cube", (0.42, 0.45, 0.58, 0.56), depth=0.31)
+    assert is_on(stacked_top, front, T)       # same geometry, co-located depth
+
+
 def test_near_threshold_fit_recovers_separating_value():
     # distances clearly separable at ~0.5; humans call <0.5 "near".
     distances = np.array([0.1, 0.2, 0.3, 0.7, 0.8, 0.9])

@@ -31,13 +31,13 @@ groups 0–5; groups 6–8 are held out.
 
 | Predicate | Gold | Ours | Ours (held-out) | Random | Majority | Box-only |
 |---|---|---|---|---|---|---|
-| on | 1465 | 0.84 | 0.92 | 0.13 | 0.00 | 0.84 |
-| under | 1001 | 0.77 | 0.98 | 0.16 | 0.00 | 0.77 |
+| on | 1465 | 0.82 | 0.89 | 0.13 | 0.00 | 0.84 |
+| under | 1001 | 0.74 | 0.96 | 0.16 | 0.00 | 0.77 |
 | to the left of | 972 | 0.97 | 0.95 | 0.13 | 0.00 | 0.97 |
 | to the right of | 1174 | 0.98 | 0.99 | 0.13 | 0.00 | 0.99 |
 | in front of | 2013 | 0.52 | 0.17 | 0.13 | 1.00* | 0.00 |
 | behind | 1584 | 0.55 | 0.26 | 0.16 | 0.00 | 0.00 |
-| near | 717 | 0.87 | 0.98 | 0.16 | 0.00 | 0.87 |
+| near | 717 | 0.95 | 1.00 | 0.16 | 0.00 | 0.87 |
 | **mean** | 8,926 | **0.79** | **0.75** | 0.14 | 0.14 | 0.63 |
 
 \* the majority baseline emits "in front of" everywhere, trivially recalling
@@ -65,13 +65,13 @@ are excluded (Chapter 3).
 
 | Predicate | P | R | F1 | support |
 |---|---|---|---|---|
-| on | 0.57 | 0.84 | 0.68 | 1465 |
-| under | 0.42 | 0.77 | 0.55 | 1001 |
+| on | 0.73 | 0.82 | 0.77 | 1465 |
+| under | 0.60 | 0.74 | 0.66 | 1001 |
 | to the left of | 0.35 | 0.96 | 0.51 | 972 |
 | to the right of | 0.42 | 0.98 | 0.59 | 1174 |
 | in front of | 0.47 | 0.52 | 0.49 | 2013 |
 | behind | 0.41 | 0.55 | 0.47 | 1584 |
-| near | 0.13 | 0.87 | 0.23 | 717 |
+| near | 0.12 | 0.95 | 0.21 | 717 |
 
 Restricted to the 8,790 human-annotated ordered pairs, precision is bounded
 below by construction: on an annotated pair the human typically recorded one or
@@ -81,6 +81,27 @@ case — the tool emits `near` densely wherever the fitted gap threshold holds,
 while only 3 of 9 annotator groups ever used the label — and is exactly why the
 protocol includes the audit (§4.4) rather than reading these columns at face
 value.
+
+### 4.3.1 Confusion: what the tool said when it missed
+
+For each human triplet the tool failed to recover, the labels it *did* emit on
+that pair identify the failure mode directly:
+
+| Gold predicate | Missed | Most frequent co-emissions on missed pairs |
+|---|---|---|
+| on | 235/1465 | near (235), behind (88) — support demoted to proximity/depth |
+| under | 227/1001 | near (203), in front of (95) |
+| to the left of | 34/972 | near (24), to the right of (24) — flips at the centre band |
+| to the right of | 18/1174 | to the left of (16) |
+| in front of | 972/2013 | near (456), to the left of (324), behind (281) |
+| behind | 717/1584 | near (316), in front of (260) |
+| near | 94/717 | under (49), on (45) — the contact-exclusion boundary |
+
+Two structural signatures stand out: missed front/behind pairs carrying the
+*opposite* direction (281 + 260) are almost entirely the convention-inverted
+groups of §4.5, and missed `near` pairs carrying `on`/`under` are the two rules
+disputing the contact boundary — the same support-rule frontier the audit
+(§4.4) identifies from the precision side.
 
 ## 4.4 Manual audit of extra predictions (true-precision estimate)
 
@@ -178,3 +199,21 @@ attributable, in measured proportions, to abstention and to a direction
 convention two annotators inverted. The tool's headline cost is dense
 over-labelling relative to sparse human habits, which the audit quantifies as
 true precision rather than leaving as an artefact of the sparse gold.
+
+
+## 4.9 Shipped from the ablations: the support depth-co-location gate
+
+The audit's support-precision failure has a geometric cause: on a floor plane,
+"farther" projects as "higher in the image", so a behind-pair produces the same
+2D box signature as a stacked pair. The repair is a depth co-location condition
+on `on`/`under` — truly stacked objects share a camera distance — calibrated on
+the train groups (`on_depth_eps` = 0.06) and validated held-out (ablation A1):
+support F1 on never-seen annotators rises 0.58 → 0.71. Downstream effects on
+the headline table: support recall −2/−3 points, `on` restricted precision
+0.57 → 0.73, 44% fewer support emissions (of the 26 audited false positives,
+the gate removes 12 while keeping all 4 true positives), and — because fewer
+false contacts suppress fewer proximity labels — `near` recall rises 0.87 →
+0.95 (held-out 1.00). Mean recall is unchanged at 0.79 with a substantially
+more trustworthy label set. The residual false fires are same-depth cluster
+neighbours, which depth cannot separate by construction; the mask-contact test
+(planned) addresses these.

@@ -39,6 +39,8 @@ predicates:
                                # Contact pairs (on/under) are never near.
   on_vertical_gap: 0.05        # max normalised vertical gap to count as touching
   on_horizontal_overlap: 0.20  # min IoU-of-x-extent to count as horizontal overlap
+  on_depth_eps: 0.06           # support requires depth co-location; calibrated on
+                               # train groups (held-out support F1 0.58 -> 0.71)
   lateral_center_eps: 0.02     # |x_A - x_B| below this => left/right ambiguous (flag)
   depth_eps: 0.03              # |depth_A - depth_B| below this => front/behind ambiguous
 
