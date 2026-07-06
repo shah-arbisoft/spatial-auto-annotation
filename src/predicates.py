@@ -71,6 +71,8 @@ class Thresholds:
     on_vertical_gap: float = 0.05
     on_horizontal_overlap: float = 0.20
     on_depth_eps: float = 0.06     # support requires depth co-location (see is_on)
+    on_contact_min: float = 0.30   # min mask-contact fraction (used when masks
+                                   # are available; box test is the fallback)
     lateral_center_eps: float = 0.02
     depth_eps: float = 0.03
     flag_near_band: float = 0.15
@@ -144,28 +146,37 @@ def box_gap_rel(a: Obj, b: Obj) -> float:
 # --------------------------------------------------------------------------- #
 # The seven predicate tests (boolean cores; flags handled in evaluate_pair)
 # --------------------------------------------------------------------------- #
-def is_on(a: Obj, b: Obj, t: Thresholds) -> bool:
-    """A rests on B: above, touching, horizontally overlapping, AND co-located
-    in depth.
+def is_on(a: Obj, b: Obj, t: Thresholds, contact: Optional[float] = None) -> bool:
+    """A rests on B.
 
-    The depth gate (|depth_A - depth_B| <= on_depth_eps) exists because, on a
-    floor plane, "farther away" projects as "higher in the image": an object
-    BEHIND another produces the same 2D box signature as one stacked ON it.
-    Truly stacked objects share a camera distance; behind-pairs do not.
-    Measured on the manual audit sample, the gate removes ~half the false
-    support labels at <1 point of recall (calibrated on train groups).
+    Two evidence paths, both gated on depth co-location:
+
+    - **Mask contact** (preferred, when segmentation masks were available):
+      `contact` is the fraction of A's mask-bottom columns with B's mask
+      directly below (src/contact.py). This captures the containment case the
+      box test misses (nested boxes at shallow view angles - 79-88% of support
+      misses in the failure gallery) and rejects cluster neighbours whose
+      boxes touch but masks don't.
+    - **Box adjacency** (fallback): above + touching + horizontal overlap.
+
+    The depth gate (|depth_A - depth_B| <= on_depth_eps) applies to both paths:
+    on a floor plane, "farther" projects as "higher in the image", so a
+    behind-pair mimics a stacked pair in 2D; truly stacked objects share a
+    camera distance (calibrated on train groups, held-out F1 0.58 -> 0.71).
     """
     above = a.cy < b.cy
+    co_depth = abs(a.depth - b.depth) <= t.on_depth_eps
+    if contact is not None:
+        return above and co_depth and contact >= t.on_contact_min
     gap = _vertical_gap(top=a, bottom=b)
     touching = -t.on_vertical_gap <= gap <= t.on_vertical_gap
     overlap = _x_extent_overlap(a, b) >= t.on_horizontal_overlap
-    co_depth = abs(a.depth - b.depth) <= t.on_depth_eps
     return above and touching and overlap and co_depth
 
 
-def is_under(a: Obj, b: Obj, t: Thresholds) -> bool:
+def is_under(a: Obj, b: Obj, t: Thresholds, contact_ba: Optional[float] = None) -> bool:
     """A is under B == B is on A (strict inverse)."""
-    return is_on(b, a, t)
+    return is_on(b, a, t, contact_ba)
 
 
 def is_left_of(a: Obj, b: Obj, t: Thresholds) -> bool:
@@ -200,14 +211,19 @@ def is_near(a: Obj, b: Obj, t: Thresholds) -> bool:
 # --------------------------------------------------------------------------- #
 # Correction + confidence: evaluate a single ordered pair
 # --------------------------------------------------------------------------- #
-def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True) -> PairResult:
+def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True,
+                  contact_ab: Optional[float] = None,
+                  contact_ba: Optional[float] = None) -> PairResult:
     """Compute every predicate for ordered pair (A, B), correct contradictions,
-    and attach ambiguity flags. See docs/predicate_spec.md §8–9."""
+    and attach ambiguity flags. See docs/predicate_spec.md §8–9.
+
+    contact_ab/contact_ba are the mask-contact fractions for (a on b) and
+    (b on a) when masks were available; None selects the box fallback."""
     res = PairResult(subject=a.idx, object=b.idx)
 
     # --- vertical: on / under (mutually exclusive by construction) ---
-    on = is_on(a, b, t)
-    under = is_under(a, b, t)
+    on = is_on(a, b, t, contact_ab)
+    under = is_under(a, b, t, contact_ba)
     if correct and on and under:
         # Geometrically impossible; demote to a flag rather than emit both.
         res.flags.append("on_under_conflict")
@@ -248,14 +264,24 @@ def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True) -> PairRe
     return res
 
 
-def evaluate_scene(objs: list[Obj], t: Thresholds, correct: bool = True) -> list[PairResult]:
-    """Compute predicates for every ordered pair of distinct objects in a scene."""
+def evaluate_scene(objs: list[Obj], t: Thresholds, correct: bool = True,
+                   contact: Optional[dict] = None) -> list[PairResult]:
+    """Compute predicates for every ordered pair of distinct objects in a scene.
+
+    contact: optional {(i, j): fraction} mask-contact map from src/contact.py;
+    when omitted the support rule uses its box-adjacency fallback."""
     results: list[PairResult] = []
     for a in objs:
         for b in objs:
             if a.idx == b.idx:
                 continue
-            results.append(evaluate_pair(a, b, t, correct=correct))
+            # a missing entry in a computed contact map means "no contact"
+            # (0.0), NOT "unknown" - the box fallback applies only when the
+            # scene has no mask information at all (contact is None).
+            c_ab = contact.get((a.idx, b.idx), 0.0) if contact is not None else None
+            c_ba = contact.get((b.idx, a.idx), 0.0) if contact is not None else None
+            results.append(evaluate_pair(a, b, t, correct=correct,
+                                         contact_ab=c_ab, contact_ba=c_ba))
     return results
 
 

@@ -88,7 +88,7 @@ def main():
         boxes = px_boxes(gt.objects, w, h)
         labels = [o.label for o in gt.objects]
 
-        objs, pairs, _ = annotate_image(
+        objs, pairs, _, contact = annotate_image(
             image, boxes, labels, segmenter, depther, cfg, use_sam2=not args.no_sam2
         )
 
@@ -110,6 +110,10 @@ def main():
                 "cx": o.cx, "cy": o.cy, "depth": o.depth, "pos3d": o.pos3d.tolist()}
                for o in objs]
         (geo_dir / group / f"{stem}.json").write_text(json.dumps(geo), encoding="utf-8")
+        # cache the mask-contact map so rule changes stay offline-recomputable
+        (geo_dir / group / f"{stem}.contact.json").write_text(
+            json.dumps({f"{i}-{j}": v for (i, j), v in contact.items()}),
+            encoding="utf-8")
 
         # per-pair records
         from src.predicates import box_gap_rel
@@ -123,11 +127,11 @@ def main():
                 dist = float(np.linalg.norm(a.pos3d - b.pos3d))
                 gold = gmap.get((a.idx, b.idx), set())
                 gold_rev = gmap.get((b.idx, a.idx), set())
-                contact = bool({"on", "under"} & (gold | gold_rev))
+                has_contact_gold = bool({"on", "under"} & (gold | gold_rev))
                 pred = pred_map.get((a.idx, b.idx), [])
                 writer.writerow([gt.image_id, a.idx, b.idx, f"{gap:.6f}", f"{dist:.6f}",
                                  int("near" in gold), int(bool(gold or gold_rev)),
-                                 int(contact), ";".join(pred), ";".join(sorted(gold))])
+                                 int(has_contact_gold), ";".join(pred), ";".join(sorted(gold))])
         n_done += 1
 
     pairs_csv.close()

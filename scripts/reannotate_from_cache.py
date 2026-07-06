@@ -54,7 +54,12 @@ def main():
         geo = json.loads(gpath.read_text(encoding="utf-8"))
         objs = [Obj(o["idx"], o["label"], tuple(o["box"]), o["cx"], o["cy"],
                     o["depth"], np.array(o["pos3d"])) for o in geo]
-        pairs = annotate_objects(objs, cfg)
+        cpath = gpath.with_suffix("").with_suffix(".contact.json")
+        contact = None
+        if cpath.exists():
+            contact = {tuple(map(int, k.split("-"))): v
+                       for k, v in json.loads(cpath.read_text(encoding="utf-8")).items()}
+        pairs = annotate_objects(objs, cfg, contact)
 
         (ann_dir / group).mkdir(parents=True, exist_ok=True)
         obj_dicts = [{"label": o.label, "box": list(o.box)} for o in objs]

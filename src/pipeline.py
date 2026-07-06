@@ -36,6 +36,7 @@ def thresholds_from_config(cfg: dict) -> Thresholds:
         on_vertical_gap=p["on_vertical_gap"],
         on_horizontal_overlap=p["on_horizontal_overlap"],
         on_depth_eps=p.get("on_depth_eps", 0.06),
+        on_contact_min=p.get("on_contact_min", 0.30),
         lateral_center_eps=p["lateral_center_eps"],
         depth_eps=p["depth_eps"],
         flag_near_band=c["flag_near_band"],
@@ -61,10 +62,11 @@ def objects_from(boxes_px, labels, masks, depth_map, width, height, z_scale=1.0)
     ]
 
 
-def annotate_objects(objs: list[Obj], cfg: dict):
+def annotate_objects(objs: list[Obj], cfg: dict, contact: dict | None = None):
     """Run the predicate rules + correction over every ordered pair."""
     return evaluate_scene(
-        objs, thresholds_from_config(cfg), correct=cfg["correction"]["enabled"]
+        objs, thresholds_from_config(cfg), correct=cfg["correction"]["enabled"],
+        contact=contact,
     )
 
 
@@ -85,10 +87,16 @@ def run_perception(image_rgb: np.ndarray, boxes_px, segmenter, depther, use_sam2
 
 
 def annotate_image(image_rgb, boxes_px, labels, segmenter, depther, cfg, use_sam2=True):
-    """Full pipeline for one image. Returns (objs, pair_results, depth_map)."""
+    """Full pipeline for one image.
+
+    Returns (objs, pair_results, depth_map, contact) where contact is the
+    ordered mask-contact map used by the support rule (src/contact.py)."""
+    from .contact import pair_contacts  # noqa: PLC0415
+
     h, w = image_rgb.shape[:2]
     masks, depth_map = run_perception(image_rgb, boxes_px, segmenter, depther, use_sam2)
+    contact = pair_contacts(masks)
     z_scale = cfg.get("geometry", {}).get("z_scale", 1.0)
     objs = objects_from(boxes_px, labels, masks, depth_map, w, h, z_scale)
-    pairs = annotate_objects(objs, cfg)
-    return objs, pairs, depth_map
+    pairs = annotate_objects(objs, cfg, contact)
+    return objs, pairs, depth_map, contact

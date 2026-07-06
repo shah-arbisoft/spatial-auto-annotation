@@ -50,17 +50,23 @@ def load_scenes(cfg):
         gold: dict[tuple[int, int], set] = {}
         for r in gt.relations:
             gold.setdefault((r.subject, r.object), set()).add(r.predicate)
-        scenes.append((gt.image_id, group, objs, gold))
+        cpath = gp.parent / f"{gp.stem}.contact.json"
+        contact = None
+        if cpath.exists():
+            contact = {tuple(map(int, k.split("-"))): v
+                       for k, v in json.loads(cpath.read_text(encoding="utf-8")).items()}
+        scenes.append((gt.image_id, group, objs, gold, contact))
     return scenes
 
 
-def score(scenes, thresholds, correct=True):
+def score(scenes, thresholds, correct=True, use_contact=False):
     """Recall (all/held-out), restricted P/R/F1 and emissions, per predicate."""
     stats = {k: {"gold": 0, "rec": 0, "gold_ho": 0, "rec_ho": 0,
                  "tp": 0, "fp": 0, "fn": 0, "emit": 0} for k in PREDICATES}
-    for image_id, group, objs, gold in scenes:
+    for image_id, group, objs, gold, contact in scenes:
         pred = {(p.subject, p.object): set(p.predicates)
-                for p in evaluate_scene(objs, thresholds, correct=correct)}
+                for p in evaluate_scene(objs, thresholds, correct=correct,
+                                        contact=contact if use_contact else None)}
         ho = group not in TRAIN_GROUPS
         for pair, gset in gold.items():
             pset = pred.get(pair, set())
@@ -101,12 +107,13 @@ def sweep(scenes, base, param, values):
     return rows
 
 
-def support_f1_by_split(scenes, thresholds):
+def support_f1_by_split(scenes, thresholds, use_contact=False):
     """Restricted F1 over on+under, separately for train and held-out groups."""
     agg = {True: {"tp": 0, "fp": 0, "fn": 0}, False: {"tp": 0, "fp": 0, "fn": 0}}
-    for image_id, group, objs, gold in scenes:
+    for image_id, group, objs, gold, contact in scenes:
         pred = {(p.subject, p.object): set(p.predicates)
-                for p in evaluate_scene(objs, thresholds)}
+                for p in evaluate_scene(objs, thresholds,
+                                        contact=contact if use_contact else None)}
         a = agg[group in TRAIN_GROUPS]
         for pair, gset in gold.items():
             pset = pred.get(pair, set())
@@ -183,6 +190,27 @@ def main():
         near_curve.append((v, n["recall"], n["precision_restricted"]))
         md.append(f"| {v:.3f} | {fmt(n['recall'])} | {fmt(n['recall_ho'])} | "
                   f"{fmt(n['precision_restricted'])} | {n['emitted']} |")
+
+    # ---- 5. mask-contact support rule (requires contact cache from a GPU run) ----
+    if any(sc[4] is not None for sc in scenes):
+        md.append("\n## A5 - Mask-contact support rule (`on_contact_min`)\n")
+        md.append("| contact_min | on recall | on P(restr.) | under recall | support F1 train | support F1 held-out | on emitted |")
+        md.append("|---|---|---|---|---|---|---|")
+        bestc, best_trc = None, -1
+        for v in [0.10, 0.20, 0.30, 0.40, 0.50, 0.60]:
+            t = dataclasses.replace(base, on_contact_min=v)
+            s5 = score(scenes, t, use_contact=True)
+            tr_f1, ho_f1 = support_f1_by_split(scenes, t, use_contact=True)
+            on, un = s5["on"], s5["under"]
+            md.append(f"| {v:.2f} | {fmt(on['recall'])} | {fmt(on['precision_restricted'])} | "
+                      f"{fmt(un['recall'])} | {fmt(tr_f1)} | {fmt(ho_f1)} | {on['emitted']} |")
+            if tr_f1 > best_trc:
+                bestc, best_trc = v, tr_f1
+        md.append(f"\ncalibrated on_contact_min = **{bestc}** (train-group selection; "
+                  "compare the box-rule A1 row at the shipped on_depth_eps).\n")
+    else:
+        md.append("\n## A5 - Mask-contact support rule: contact cache not found; "
+                  "run scripts/run_annotator.py once to generate it.\n")
 
     Path("outputs/tables/ablations.md").write_text("\n".join(md), encoding="utf-8")
     print("\n".join(md))
