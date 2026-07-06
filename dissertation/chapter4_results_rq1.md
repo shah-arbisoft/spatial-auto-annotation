@@ -52,7 +52,14 @@ full pipeline's advantage is confined to the depth predicates (0.52/0.55 vs
 0.00), which raises a design question the ablations pursue: is SAM2 needed at
 all, or is its real contribution depth *sampling* quality? **(iii)** The
 held-out column is higher than the pooled column for on/under/near and far
-lower for front/behind — an annotator-behaviour signature unpacked in §4.5.
+lower for front/behind — annotator-behaviour signatures in both cases. For
+front/behind the cause is the convention inversion unpacked in §4.5; for
+on/under it is direction-usage asymmetry: several groups label only one
+direction of a support pair (group_2 records 188 *on* and zero *under*;
+group_8 only *under*), and the held-out groups' support labels happen to be
+canonical stackings the rules recover at 0.95–1.00. Gold totals here are 8,926
+rather than 8,928 because two stray annotation files without matching images
+are excluded (Chapter 3).
 
 ## 4.3 Precision on the annotated pairs
 
@@ -78,9 +85,34 @@ value.
 ## 4.4 Manual audit of extra predictions (true-precision estimate)
 
 105 extra predictions (15 per predicate, seeded stratified sample) were
-rendered with subject/object boxes and independently verdicted
-(`outputs/audit/audit_sheet.csv`). *Pending: verdict completion; per-predicate
-%correct will be reported here as the unbiased precision estimate.*
+rendered with subject/object boxes and manually verdicted, using a conservative
+rule — any case not clearly true was marked wrong
+(`outputs/audit/audit_sheet.csv`; verdicts to be independently spot-checked).
+
+| Predicate | Correct / n | Precision est. | Wilson 95% CI |
+|---|---|---|---|
+| on | 1 / 15 | 0.07 | [0.01, 0.30] |
+| under | 3 / 15 | 0.20 | [0.07, 0.45] |
+| to the left of | 15 / 15 | 1.00 | [0.80, 1.00] |
+| to the right of | 15 / 15 | 1.00 | [0.80, 1.00] |
+| in front of | 15 / 15 | 1.00 | [0.80, 1.00] |
+| behind | 15 / 15 | 1.00 | [0.80, 1.00] |
+| near | 15 / 15 | 1.00 | [0.80, 1.00] |
+
+The audit splits the predicates cleanly in two. For the lateral, depth and
+proximity predicates, **every sampled extra prediction was correct**: the low
+restricted precision in §4.3 is an artefact of sparse human labelling, exactly
+as the protocol anticipated, and the tool's dense labels on unannotated pairs
+are (within the sample's confidence bounds) trustworthy. For the support pair
+the picture inverts: extra `on`/`under` labels are mostly **false fires** — the
+box-adjacency test triggers on objects that merely project next to each other
+in clusters (a book *behind* a bottle, a cube on the floor with a remote lying
+in front). Combined with §4.2's containment misses, both error directions of
+the support rule point to the same repair — a mask-contact test instead of box
+adjacency — which the ablations evaluate. Two honest caveats: the sample is 15
+per predicate, so per-predicate estimates carry wide intervals; and depth
+verdicts on near-coincident objects were occasionally marginal (noted in the
+sheet).
 
 ## 4.5 The front/behind decomposition — a second measured annotation defect
 

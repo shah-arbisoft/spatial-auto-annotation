@@ -56,9 +56,10 @@ where things are and how far away; a deterministic rule decides the relationship
 This is valid precisely because the predicates are spatial.
 
 The one predicate the authors found unreliable, *near*, is handled by fitting a
-single distance threshold to the human labels and reporting it. A fixed,
-data-fitted threshold is by construction more self-consistent than nine separate
-human judgements, directly addressing the inconsistency the source paper flagged.
+single proximity threshold — a size-relative gap between the two objects — to
+the human labels and reporting it. A fixed, data-fitted threshold is by
+construction more self-consistent than nine separate human judgements, directly
+addressing the inconsistency the source paper flagged.
 
 ## 1.4 Research questions
 

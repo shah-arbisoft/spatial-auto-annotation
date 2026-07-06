@@ -80,6 +80,17 @@ python scripts/smoke_test.py --image assets/sample.jpg   # confirms depth + SAM2
 Everything is seeded (see `configs/default.yaml`) and version-pinned. A Dockerfile
 and reproducibility appendix are part of the deliverable. The dataset is CC-BY 4.0.
 
+Reproducing the results end to end:
+
+```bash
+python scripts/run_annotator.py          # full dataset (GPU, ~5 min)
+python eval/fit_near.py                  # fit + report the near threshold
+python eval/fidelity.py                  # RQ1 tables -> outputs/tables/
+python scripts/make_audit_pack.py        # manual-audit sample -> outputs/audit/
+python scripts/reannotate_from_cache.py  # re-run rules offline after any change
+pytest -q                                # rule-layer unit + invariant tests
+```
+
 ## Licences
 
 YOLO (Ultralytics) AGPL-3.0 · Depth Anything v2 **Small** Apache 2.0 (avoid
