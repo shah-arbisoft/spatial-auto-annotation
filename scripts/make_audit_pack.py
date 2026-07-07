@@ -57,6 +57,8 @@ def main():
     ap.add_argument("--pairs", default="outputs/pairs.csv")
     ap.add_argument("--config", default="configs/default.yaml")
     ap.add_argument("--per-predicate", type=int, default=15)
+    ap.add_argument("--predicates", default=None,
+                    help="comma-separated subset, e.g. 'on,under' (default: all)")
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--out", default="outputs/audit")
     args = ap.parse_args()
@@ -77,9 +79,10 @@ def main():
     out = Path(args.out)
     (out / "img").mkdir(parents=True, exist_ok=True)
 
+    wanted = (args.predicates.split(",") if args.predicates else list(PREDICATES))
     rows = []
     sample_id = 0
-    for k in PREDICATES:
+    for k in [k for k in PREDICATES if k in wanted]:
         pool = extras[k]
         take = rng.sample(pool, min(args.per_predicate, len(pool)))
         for image_id, subj, obj in take:

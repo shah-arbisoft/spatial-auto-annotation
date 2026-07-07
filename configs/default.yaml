@@ -41,9 +41,9 @@ predicates:
   on_horizontal_overlap: 0.20  # min IoU-of-x-extent to count as horizontal overlap
   on_depth_eps: 0.06           # support requires depth co-location; calibrated on
                                # train groups (held-out support F1 0.58 -> 0.71)
-  on_contact_min: 0.30         # min mask-contact fraction for the support rule
-                               # (placeholder until A5 calibration after the next
-                               # GPU pass; box test is the fallback without masks)
+  on_contact_min: 0.60         # min mask-contact fraction for the support rule;
+                               # calibrated on train groups (A5; train F1 plateau
+                               # 0.85, held-out 0.87). Box test = no-mask fallback.
   lateral_center_eps: 0.02     # |x_A - x_B| below this => left/right ambiguous (flag)
   depth_eps: 0.03              # |depth_A - depth_B| below this => front/behind ambiguous
 

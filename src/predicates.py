@@ -71,7 +71,7 @@ class Thresholds:
     on_vertical_gap: float = 0.05
     on_horizontal_overlap: float = 0.20
     on_depth_eps: float = 0.06     # support requires depth co-location (see is_on)
-    on_contact_min: float = 0.30   # min mask-contact fraction (used when masks
+    on_contact_min: float = 0.60   # min mask-contact fraction (used when masks
                                    # are available; box test is the fallback)
     lateral_center_eps: float = 0.02
     depth_eps: float = 0.03

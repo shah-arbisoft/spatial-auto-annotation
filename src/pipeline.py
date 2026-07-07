@@ -36,7 +36,7 @@ def thresholds_from_config(cfg: dict) -> Thresholds:
         on_vertical_gap=p["on_vertical_gap"],
         on_horizontal_overlap=p["on_horizontal_overlap"],
         on_depth_eps=p.get("on_depth_eps", 0.06),
-        on_contact_min=p.get("on_contact_min", 0.30),
+        on_contact_min=p.get("on_contact_min", 0.60),
         lateral_center_eps=p["lateral_center_eps"],
         depth_eps=p["depth_eps"],
         flag_near_band=c["flag_near_band"],

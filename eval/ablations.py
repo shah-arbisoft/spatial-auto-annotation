@@ -99,11 +99,11 @@ def score(scenes, thresholds, correct=True, use_contact=False):
     return out
 
 
-def sweep(scenes, base, param, values):
+def sweep(scenes, base, param, values, use_contact=False):
     rows = []
     for v in values:
         t = dataclasses.replace(base, **{param: v})
-        rows.append((v, score(scenes, t)))
+        rows.append((v, score(scenes, t, use_contact=use_contact)))
     return rows
 
 
@@ -185,7 +185,7 @@ def main():
     md.append("| T | near recall | near recall (held-out) | near P(restr.) | emitted |")
     md.append("|---|---|---|---|---|")
     near_curve = []
-    for v, s in sweep(scenes, base, "near_T", [0.6, 0.8, 1.0, 1.2, 1.372, 1.6, 1.9, 2.2]):
+    for v, s in sweep(scenes, base, "near_T", [0.6, 0.8, 1.0, 1.2, 1.372, 1.6, 1.9, 2.2], use_contact=True):
         n = s["near"]
         near_curve.append((v, n["recall"], n["precision_restricted"]))
         md.append(f"| {v:.3f} | {fmt(n['recall'])} | {fmt(n['recall_ho'])} | "
@@ -197,7 +197,7 @@ def main():
         md.append("| contact_min | on recall | on P(restr.) | under recall | support F1 train | support F1 held-out | on emitted |")
         md.append("|---|---|---|---|---|---|---|")
         bestc, best_trc = None, -1
-        for v in [0.10, 0.20, 0.30, 0.40, 0.50, 0.60]:
+        for v in [0.10, 0.20, 0.30, 0.40, 0.50, 0.60, 0.70, 0.80]:
             t = dataclasses.replace(base, on_contact_min=v)
             s5 = score(scenes, t, use_contact=True)
             tr_f1, ho_f1 = support_f1_by_split(scenes, t, use_contact=True)

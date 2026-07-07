@@ -33,14 +33,14 @@ groups 0–5; groups 6–8 are held out.
 
 | Predicate | Gold | Ours | Ours (held-out) | Random | Majority | Box-only |
 |---|---|---|---|---|---|---|
-| on | 1465 | 0.82 | 0.89 | 0.13 | 0.00 | 0.84 |
-| under | 1001 | 0.74 | 0.96 | 0.16 | 0.00 | 0.77 |
+| on | 1465 | 0.88 | 0.92 | 0.13 | 0.00 | 0.84 |
+| under | 1001 | 0.81 | 0.92 | 0.16 | 0.00 | 0.77 |
 | to the left of | 972 | 0.97 | 0.95 | 0.13 | 0.00 | 0.97 |
 | to the right of | 1174 | 0.98 | 0.99 | 0.13 | 0.00 | 0.99 |
 | in front of | 2013 | 0.52 | 0.17 | 0.13 | 1.00* | 0.00 |
 | behind | 1584 | 0.55 | 0.26 | 0.16 | 0.00 | 0.00 |
-| near | 717 | 0.95 | 1.00 | 0.16 | 0.00 | 0.87 |
-| **mean** | 8,926 | **0.79** | **0.75** | 0.14 | 0.14 | 0.63 |
+| near | 717 | 1.00 | 1.00 | 0.16 | 0.00 | 0.87 |
+| **mean** | 8,926 | **0.81** | **0.74** | 0.14 | 0.14 | 0.63 |
 
 \* the majority baseline emits "in front of" everywhere, trivially recalling
 that class and nothing else.
@@ -67,13 +67,13 @@ are excluded (Chapter 3).
 
 | Predicate | P | R | F1 | support |
 |---|---|---|---|---|
-| on | 0.73 | 0.82 | 0.77 | 1465 |
-| under | 0.60 | 0.74 | 0.66 | 1001 |
+| on | 0.88 | 0.88 | 0.88 | 1465 |
+| under | 0.84 | 0.81 | 0.83 | 1001 |
 | to the left of | 0.35 | 0.96 | 0.51 | 972 |
 | to the right of | 0.42 | 0.98 | 0.59 | 1174 |
 | in front of | 0.47 | 0.52 | 0.49 | 2013 |
 | behind | 0.41 | 0.55 | 0.47 | 1584 |
-| near | 0.12 | 0.95 | 0.21 | 717 |
+| near | 0.12 | 1.00 | 0.21 | 717 |
 
 Restricted to the 8,790 human-annotated ordered pairs, precision is bounded
 below by construction: on an annotated pair the human typically recorded one or
@@ -217,31 +217,45 @@ the gate removes 12 while keeping all 4 true positives), and — because fewer
 false contacts suppress fewer proximity labels — `near` recall rises 0.87 →
 0.95 (held-out 1.00). Mean recall is unchanged at 0.79 with a substantially
 more trustworthy label set. The residual false fires are same-depth cluster
-neighbours, which depth cannot separate by construction; the mask-contact test
-(planned) addresses these.
+neighbours, which depth cannot separate by construction — addressed next.
+
+**The mask-contact rule (shipped).** The support signature that boxes cannot
+see, masks can: A rests on B iff the pixels directly below A's mask-bottom
+boundary belong to B (`src/contact.py`), which captures both stacking and the
+containment case, and rejects side-by-side neighbours. Calibrated on the train
+groups (`on_contact_min` = 0.60; the train-F1 plateau is flat from 0.60–0.80,
+so the choice is uncritical), ablation A5: support F1 on held-out annotators
+rises again, 0.71 → **0.87**, with `on` recall 0.82 → 0.88 and restricted
+precision 0.73 → 0.88 simultaneously — the rare change that improves both
+error directions at once, exactly as the failure gallery and audit predicted.
+Knock-on: `near` recall reaches **1.00** (pooled and held-out) as the last
+contact-boundary suppressions disappear; headline mean recall 0.79 → **0.81**.
+A 30-sample re-audit of the new support extras confirms the precision claim
+independently: extras correct rise from 1/15 and 3/15 (box rule) to **11/15
+and 12/15** — estimated true support precision ~0.27 → ~0.9. The seven
+remaining wrong/uncertain extras have structure: a person *holding* a remote
+fires contact (holding ≠ resting — a class-aware guard is an obvious
+refinement), one occluded bottle-behind-bottle pair, and three distant
+clusters too small to verdict confidently.
 
 
 ## 4.10 Failure gallery: every miss diagnosed
 
-Each of the 2,299 missed human triplets was diagnosed automatically by
-re-checking the rule's individual conditions against the cached geometry
-(`scripts/make_failure_gallery.py`; seeded rendered examples in
-`outputs/failure_gallery/`). The cause distribution:
+Each missed human triplet is diagnosed automatically by re-checking the rule's
+individual conditions against the cached geometry and mask-contact maps
+(`scripts/make_failure_gallery.py`; rendered examples in
+`outputs/failure_gallery/`). With the shipped rule set (2,107 misses):
 
 | Predicate | Dominant causes (share of that predicate's misses) |
 |---|---|
 | in front of | abstained in ambiguity band 71% · convention-inverted annotators 28% · **genuine depth error 1%** |
 | behind | abstained 64% · convention-inverted 32% · **genuine depth error 4%** |
-| on | containment (nested boxes, shallow angle) 88% · depth-gate suppressed 12% |
-| under | containment 79% · depth-gate suppressed 12% · vertical gap 9% |
-| near | contact-exclusion conflict 100% (33 cases — the support/proximity boundary) |
-| to the left/right of | centre flip 71–89% · abstained in band 11–29% (tiny absolute counts: 52) |
+| on | mask contact below threshold 58% · depth-gate suppressed 40% |
+| under | contact below threshold 50% · depth-gate suppressed 33% · no contact measured (occlusion) 17% |
+| near | 2 remaining misses (contact boundary) |
+| to the left/right of | centre flip 71–89% · abstained 11–29% (52 cases total) |
 
-The headline: **genuine depth-ordering errors account for only 1–4% of
-front/behind misses** — the pooled 0.52/0.55 recall is almost entirely
-abstention (a calibrated, tunable trade documented in ablation A2) plus the
-measured annotator convention inversion (§4.5), not model error. On the support
-pair, the containment case dominates exactly as the design chapter predicted,
-and it is the one failure mode whose repair (a mask-contact test) requires
-richer perception rather than a threshold change. Misses attributable to
-avoidable tool error across all seven predicates: roughly 6% of all misses.
+Genuine depth-ordering errors remain 1–4% of front/behind misses; the support
+misses are now threshold/gate trades on real contact evidence rather than
+box-geometry artefacts; and `near` misses have all but vanished. Misses
+attributable to avoidable tool error across all seven predicates: ~6%.

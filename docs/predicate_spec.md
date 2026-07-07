@@ -80,13 +80,18 @@ Justification: contact + support is the everyday meaning of "on"; encoding it as
 *above + touching + horizontal overlap* avoids labelling a cup floating in front
 of a shelf as "on" it.
 
-**Known edge case (containment).** Viewed from a shallow angle, a small object
-resting on a large one can project *inside* the support's box (e.g. a remote on
-a box seen from above): the vertical gap is then strongly negative and the rule
-misses the `on`. Candidate refinements — a mask-contact test, or accepting
-nested boxes whose bottom edges nearly align — are evaluated against the full
-data in the ablation study rather than hand-tuned early. Failures of this type
-are tagged in the failure gallery.
+**Mask-contact evidence (primary when masks are available).** The box
+conditions above are the no-mask fallback. With SAM2 masks the rule instead
+uses the physical support signature: `contact_below(A, B)` = the fraction of
+A's mask-bottom columns with B's mask within 5 px below (`src/contact.py`);
+`on` requires `contact ≥ on_contact_min` (calibrated 0.60 on train groups;
+flat optimum 0.60–0.80) plus the depth gate and centroid order. This captures
+the containment case the box test misses (nested boxes at shallow view angles
+— formerly 79–88% of support misses) and rejects cluster neighbours whose
+boxes touch but masks don't. Measured: held-out support F1 0.71 → 0.87;
+re-audited extra-label precision 0.07/0.20 → 0.73/0.80 (on/under). Known
+residual failure mode: an object *held* by a person satisfies contact
+(holding ≠ resting); a class-aware guard is a documented refinement.
 
 ## 2. `under(A, B)` — A is below and supports B
 

@@ -41,7 +41,7 @@ INVERTED_GROUPS = {"group_6", "group_8"}
 FLIP = {"in front of": "behind", "behind": "in front of"}
 
 
-def diagnose(k, a, b, pset, group, t):
+def diagnose(k, a, b, pset, group, t, contact=None):
     """Return the cause tag for a missed gold triplet (a --k--> b)."""
     if k in ("in front of", "behind"):
         if abs(a.depth - b.depth) <= t.depth_eps:
@@ -51,11 +51,20 @@ def diagnose(k, a, b, pset, group, t):
         return "depth ordering error"
     if k in ("on", "under"):
         top, bottom = (a, b) if k == "on" else (b, a)
+        above = top.cy < bottom.cy
+        co = abs(a.depth - b.depth) <= t.on_depth_eps
+        if contact is not None:
+            c = contact.get((top.idx, bottom.idx), 0.0)
+            if c >= t.on_contact_min and not co:
+                return "depth gate suppressed (contact present, no co-location)"
+            if c >= t.on_contact_min and not above:
+                return "centroid order (subject not above)"
+            if 0.0 < c < t.on_contact_min:
+                return "mask contact below threshold"
+            return "no mask contact measured (occlusion / mask error)"
         gap = _vertical_gap(top=top, bottom=bottom)
         touching = -t.on_vertical_gap <= gap <= t.on_vertical_gap
         overlap = _x_extent_overlap(top, bottom) >= t.on_horizontal_overlap
-        above = top.cy < bottom.cy
-        co = abs(a.depth - b.depth) <= t.on_depth_eps
         if above and touching and overlap and not co:
             return "depth gate suppressed (no co-location)"
         if gap < -t.on_vertical_gap:
@@ -126,13 +135,19 @@ def main():
         objs = [Obj(o["idx"], o["label"], tuple(o["box"]), o["cx"], o["cy"],
                     o["depth"], np.array(o["pos3d"])) for o in geo]
         by = {o.idx: o for o in objs}
+        cpath = gp.parent / f"{gp.stem}.contact.json"
+        contact = None
+        if cpath.exists():
+            contact = {tuple(map(int, k.split("-"))): v
+                       for k, v in json.loads(cpath.read_text(encoding="utf-8")).items()}
         pred = {(p.subject, p.object): set(p.predicates)
-                for p in evaluate_scene(objs, t)}
+                for p in evaluate_scene(objs, t, contact=contact)}
         for r in gt.relations:
             pset = pred.get((r.subject, r.object), set())
             if r.predicate in pset:
                 continue
-            cause = diagnose(r.predicate, by[r.subject], by[r.object], pset, group, t)
+            cause = diagnose(r.predicate, by[r.subject], by[r.object], pset, group, t,
+                             contact=contact)
             counts[(r.predicate, cause)] += 1
             misses.append((r.predicate, cause, gt.image_id, gt.image_path,
                            objs, r.subject, r.object))
