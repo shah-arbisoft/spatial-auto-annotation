@@ -136,6 +136,26 @@ defect — strong evidence for the paper's own call for clearer annotation
 guidelines, and exactly the kind of inconsistency a deterministic annotator
 eliminates by construction.
 
+## The official annotation guidance (verified from the tool repository)
+
+Per the supervisor (2026-07), the annotators' rules live in the SGDET-Annotate
+repository (github.com/harvey-ph/SGDET-Annotate) as txt files. Verified against
+both branches: the files are **vocabulary lists only** — `new_labels.txt` (the
+six object names), `new_attributes.txt`, and `new_relationships.txt` (the 19
+relationship terms, identical to the dataset's relationships.json). **No
+operational definitions exist**: nothing specifies when two objects count as
+"near", which direction "in front of" denotes, or whether support pairs should
+be labelled in both directions.
+
+This explains the measured inconsistencies as the predictable consequence of
+undefined terms: `near` used by only 3 of 9 groups with ~4× exhaustiveness
+variance, the front/behind direction convention inverted in groups 6/8, and
+one-directional support labelling (group_2 all-`on`, group_8 all-`under`).
+It also sharpens the contribution: the predicate specification in this project
+is the first *operational* definition of the seven predicates for this dataset
+— precisely the "clear annotation guidelines (e.g., spatial thresholds for
+'near')" the source paper's future work calls for.
+
 ## Implications for the project
 
 1. **Ground truth scale:** 838 images / 8,928 target triplets.

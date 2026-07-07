@@ -1,7 +1,10 @@
 # Seven-Predicate Definition Document
 
 This is the authoritative specification for how each of the seven spatial
-predicates is **computed from geometry**. It is the reference that
+predicates is **computed from geometry**. It is also, verifiably, the first
+*operational* definition of these predicates for this dataset: the original
+annotators' guidance (SGDET-Annotate repository, confirmed 2026-07) consists
+of vocabulary lists with no definitions — see DATASET_NOTES. It is the reference that
 [`src/predicates.py`](../src/predicates.py) implements, and a graded part of the
 dissertation (problem analysis & design). Every rule is a small, readable
 function with explicit, justified thresholds.

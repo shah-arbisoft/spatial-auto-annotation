@@ -190,6 +190,19 @@ review queue. At a conservative 3 seconds per queued pair this is ≈6 hours of
 review for the full dataset, versus the original nine-annotator manual pass —
 and it is optional, not required, for the fidelity reported above.
 
+### 4.7.1 The missing guidelines, confirmed at the source
+
+The annotation guidance the annotators worked from (confirmed from the
+SGDET-Annotate repository the supervisor indicated) consists of vocabulary
+lists only — object names and 19 relationship terms — with no operational
+definitions. Every annotator behaviour this chapter measures — the selective
+use of `near`, the inverted front/behind convention, one-directional support
+labelling — is the predictable consequence of labelling with undefined terms.
+The geometric specification of Chapter 3 is therefore not a re-implementation
+of existing rules but the first operational definition of these predicates,
+and the fitted thresholds are exactly the "clear annotation guidelines" the
+source paper's future work requests.
+
 ## 4.8 Answer to RQ1 (interim, pre-ablation)
 
 Automated annotation reaches human-comparable quality on five of seven

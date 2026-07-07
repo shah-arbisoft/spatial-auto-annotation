@@ -214,6 +214,9 @@ def is_near(a: Obj, b: Obj, t: Thresholds) -> bool:
 def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True,
                   contact_ab: Optional[float] = None,
                   contact_ba: Optional[float] = None) -> PairResult:
+    # `correct` gates the ACTIVE correction: suppressing `near` on contact
+    # pairs (measured: near never co-occurs with on/under in the human labels).
+    # The exclusive-family consistency is by construction (tests/test_invariants).
     """Compute every predicate for ordered pair (A, B), correct contradictions,
     and attach ambiguity flags. See docs/predicate_spec.md §8–9.
 
@@ -253,7 +256,7 @@ def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True,
     # Measured on the human labels: near co-occurs with on/under on 0 of 469
     # pairs — annotators used `near` as "close but no contact relation", so a
     # pair already labelled on/under is not additionally near.
-    contact = "on" in res.predicates or "under" in res.predicates
+    contact = ("on" in res.predicates or "under" in res.predicates) if correct else False
     gap = box_gap_rel(a, b)
     if not contact:
         if gap <= t.near_T:

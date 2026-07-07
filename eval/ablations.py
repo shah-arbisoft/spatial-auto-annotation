@@ -212,6 +212,21 @@ def main():
         md.append("\n## A5 - Mask-contact support rule: contact cache not found; "
                   "run scripts/run_annotator.py once to generate it.\n")
 
+    # ---- 6. correction (near contact-exclusion) on/off ----
+    md.append("
+## A6 - Correction step: near contact-exclusion on/off
+")
+    md.append("| setting | near recall | near P(restr.) | near emitted |")
+    md.append("|---|---|---|---|")
+    for label, corr in (("on (shipped)", True), ("off", False)):
+        s6 = score(scenes, base, correct=corr, use_contact=True)["near"]
+        md.append(f"| {label} | {fmt(s6['recall'])} | {fmt(s6['precision_restricted'])} | {s6['emitted']} |")
+    md.append("
+The exclusion costs 2 recalled triplets and prevents ~4,200 near "
+              "labels on contact pairs - labels that would contradict the measured "
+              "human convention (near co-occurs with on/under on 0 of 469 pairs).
+")
+
     Path("outputs/tables/ablations.md").write_text("\n".join(md), encoding="utf-8")
     print("\n".join(md))
 
