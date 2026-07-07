@@ -39,11 +39,11 @@ groups 0–5; groups 6–8 are held out.
 | to the right of | 1174 | 0.98 | 0.99 | 0.13 | 0.00 | 0.99 |
 | in front of | 2013 | 0.52 | 0.17 | 0.13 | 1.00* | 0.00 |
 | behind | 1584 | 0.55 | 0.26 | 0.16 | 0.00 | 0.00 |
-| near | 717 | 1.00 | 1.00 | 0.16 | 0.00 | 0.87 |
+| near | 717 | 1.00* | 1.00 | 0.16 | 0.00 | 0.87 |
 | **mean** | 8,926 | **0.81** | **0.74** | 0.14 | 0.14 | 0.63 |
 
 \* the majority baseline emits "in front of" everywhere, trivially recalling
-that class and nothing else.
+that class and nothing else. The near cell rounds 715/717 = 0.997 (§4.9).
 
 Three observations. **(i)** The tool recovers 79% of all human triplets (75% on
 annotators whose data never influenced any threshold), against 14% for both
@@ -228,8 +228,12 @@ so the choice is uncritical), ablation A5: support F1 on held-out annotators
 rises again, 0.71 → **0.87**, with `on` recall 0.82 → 0.88 and restricted
 precision 0.73 → 0.88 simultaneously — the rare change that improves both
 error directions at once, exactly as the failure gallery and audit predicted.
-Knock-on: `near` recall reaches **1.00** (pooled and held-out) as the last
+Knock-on: `near` recall reaches **0.997 pooled (715/717; the two residual
+misses are contact-boundary cases, §4.10) and 1.00 held-out** as the last
 contact-boundary suppressions disappear; headline mean recall 0.79 → **0.81**.
+The A4 sweep confirms the fitted threshold sits exactly at the recall plateau's
+knee: recall is flat from T = 1.372 upward while emissions keep growing, so the
+fitted value is the least-permissive point achieving maximal agreement.
 A 30-sample re-audit of the new support extras confirms the precision claim
 independently: extras correct rise from 1/15 and 3/15 (box rule) to **11/15
 and 12/15** — estimated true support precision ~0.27 → ~0.9. The seven
