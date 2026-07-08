@@ -93,10 +93,12 @@ def main():
 
         triplets = []
         if dets:
+            from PIL import Image  # noqa: PLC0415
+
             boxes_px = [d["box_px"] for d in dets]
             labels = [d["label"] for d in dets]
             masks = segmenter.masks_from_boxes(image, boxes_px)
-            depth_map = depther.estimate(image)
+            depth_map = depther.estimate(Image.fromarray(image))
             contact = pair_contacts(masks)
             objs = objects_from(boxes_px, labels, masks, depth_map, w, h,
                                 cfg.get("geometry", {}).get("z_scale", 1.0))
