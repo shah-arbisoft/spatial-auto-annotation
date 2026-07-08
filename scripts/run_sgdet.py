@@ -27,14 +27,15 @@ from src.dataset import SpatialDataset, load_rgb
 from src.pipeline import annotate_objects, load_config, objects_from
 from src.contact import pair_contacts
 
-# text prompts -> dataset class names
+# text prompts -> dataset class names. Short noun phrases work best with
+# GroundingDINO; tuned once on the 20-image trial (see outputs/tables/sgdet.md).
 PROMPTS = {
-    "a book": "book",
-    "a plastic bottle": "bottle",
-    "a cardboard box": "box",
-    "a small cube": "cube",
-    "a person": "human",
-    "a remote control": "remote",
+    "book": "book",
+    "bottle": "bottle",
+    "box": "box",
+    "cube": "cube",
+    "person": "human",
+    "remote control": "remote",
 }
 
 

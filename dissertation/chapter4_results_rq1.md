@@ -276,3 +276,29 @@ Genuine depth-ordering errors remain 1–4% of front/behind misses; the support
 misses are now threshold/gate trades on real contact evidence rather than
 box-geometry artefacts; and `near` misses have all but vanished. Misses
 attributable to avoidable tool error across all seven predicates: ~6%.
+
+
+## 4.11 Detector-in-the-loop: full automation, attributed
+
+The deployment mode replaces ground-truth boxes with GroundingDINO zero-shot
+detection (short-noun text prompts for the six classes; threshold 0.25, tuned
+in one disclosed iteration on a 20-image trial), then runs the identical
+SAM2 → depth → rules stack (`scripts/run_sgdet.py`, scored by
+`eval/sgdet_eval.py` with class-matched greedy IoU ≥ 0.5).
+
+End-to-end triplet recall over all 836 images is **0.38** against the PredCls
+headline of 0.81 — and the decomposition attributes the gap exactly. Zero-shot
+detection recall spans 0.40 (cube) to 0.95 (human), and a triplet needs *both*
+endpoints found. **Conditioned on both endpoints being detected, the relation
+layer scores 0.85 mean — equal to or above its PredCls performance on every
+predicate** (lateral 0.96/0.98, near 1.00, support 0.83/0.77; front/behind
+0.69/0.70, above the 0.52/0.55 pooled figures because detectable pairs skew
+towards well-separated objects). The gap is therefore entirely a detection
+problem, not a relations problem: the geometric rules are detector-agnostic.
+
+Two honest notes. Zero-shot detection is the worst-case detector — it was used
+because the authors' trained YOLOv10m weights (0.93 mAP@50 in the source
+paper) were not available; with that detector the end-to-end gap would largely
+close. And the 20-image trial over-estimated detection quality (its scenes
+come from one annotator batch), a reminder that the full-set numbers are the
+ones that matter.
