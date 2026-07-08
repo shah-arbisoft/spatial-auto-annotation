@@ -203,18 +203,19 @@ of existing rules but the first operational definition of these predicates,
 and the fitted thresholds are exactly the "clear annotation guidelines" the
 source paper's future work requests.
 
-## 4.8 Answer to RQ1 (interim, pre-ablation)
+## 4.8 Answer to RQ1
 
-Automated annotation reaches human-comparable quality on five of seven
-predicates outright (0.77–0.98 recall), matches the human notion of `near`
-once the label's inconsistent usage is accounted for (held-out recall 0.98 at
-the fitted threshold), and on the depth pair agrees near-perfectly with every
-consistently-labelled annotator where it commits — with the pooled shortfall
-attributable, in measured proportions, to abstention and to a direction
-convention two annotators inverted. The tool's headline cost is dense
-over-labelling relative to sparse human habits, which the audit quantifies as
-true precision rather than leaving as an artefact of the sparse gold.
-
+Automated annotation reaches human-comparable quality on six of seven
+predicates outright (0.81–1.00 recall of the human triplets; mean 0.81, with
+0.74 on annotators no threshold ever saw), matches the human notion of `near`
+completely once the label's inconsistent usage is accounted for (0.997 pooled,
+1.00 held-out at the fitted threshold), and on the depth pair agrees with every
+consistently-labelled annotator 95–100% of the time where it commits — the
+pooled shortfall decomposing, in measured proportions, into calibrated
+abstention and a direction convention two annotators inverted. The audits bound
+true precision: ~1.0 for the lateral, depth and proximity predicates, ~0.9 for
+support after the contact rule. The tool's residual cost is the ~8% borderline
+review queue, and its labels are 20× denser than the human set.
 
 ## 4.9 Shipped from the ablations: the support depth-co-location gate
 
