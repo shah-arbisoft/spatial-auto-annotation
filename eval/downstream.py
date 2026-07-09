@@ -94,6 +94,15 @@ def train_and_eval(X_tr, y_tr, X_te, gold_te, seed=42):
 
 
 def main():
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--seeds", default="42,43,44",
+                    help="comma-separated seeds; results are averaged (the "
+                         "human-trained model is sensitive to sampling noise, "
+                         "so single-seed numbers over/under-state it)")
+    args = ap.parse_args()
+    seeds = [int(x) for x in args.seeds.split(",")]
+
     cfg = load_config("configs/default.yaml")
     print("building the feature matrix from the cache ...")
     X, yh, ya, tr = load_matrix(cfg)
@@ -102,19 +111,30 @@ def main():
     gold_te = yh[~tr]
     results = {}
     for name, labels in (("human-trained", yh), ("auto-trained", ya)):
-        print(f"training {name} (7 classifiers) ...")
-        results[name] = train_and_eval(X[tr], labels[tr], X[~tr], gold_te)
+        per_seed = []
+        for seed in seeds:
+            print(f"training {name}, seed {seed} ...")
+            per_seed.append(train_and_eval(X[tr], labels[tr], X[~tr], gold_te, seed=seed))
+        agg = {}
+        for k in PREDICATES:
+            rs = [r[k]["recall"] for r in per_seed]
+            agg[k] = {"recall": float(np.mean(rs)),
+                      "recall_min": float(np.min(rs)), "recall_max": float(np.max(rs)),
+                      "support": per_seed[0][k]["support"]}
+        results[name] = agg
 
     md = ["# RQ2 — downstream classifier: human vs automatic training labels\n",
-          "Identical features, model, seed, oversampling and split; evaluated "
-          "against held-out human gold (groups 6-8). Only the label source differs.\n",
-          "| predicate | human-trained recall | auto-trained recall | gold (held-out) |",
+          f"Identical features, model, oversampling and split; averaged over "
+          f"seeds {seeds}; evaluated against held-out human gold (groups 6-8). "
+          "Only the label source differs.\n",
+          "| predicate | human-trained recall (min–max) | auto-trained recall (min–max) | gold (held-out) |",
           "|---|---|---|---|"]
     hv, av = [], []
     for k in PREDICATES:
         h, a = results["human-trained"][k], results["auto-trained"][k]
         hv.append(h["recall"]); av.append(a["recall"])
-        md.append(f"| {k} | {h['recall']:.2f} | {a['recall']:.2f} | {h['support']} |")
+        md.append(f"| {k} | {h['recall']:.2f} ({h['recall_min']:.2f}–{h['recall_max']:.2f}) | "
+                  f"{a['recall']:.2f} ({a['recall_min']:.2f}–{a['recall_max']:.2f}) | {h['support']} |")
     md.append(f"| **mean** | **{np.mean(hv):.2f}** | **{np.mean(av):.2f}** | |")
 
     Path("outputs/tables/rq2.md").write_text("\n".join(md), encoding="utf-8")

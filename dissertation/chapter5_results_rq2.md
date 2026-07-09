@@ -14,7 +14,10 @@ features, architecture, seed, positive-oversampling and group split**, once on
 the human labels and once on the tool's labels, then evaluated against the
 **held-out human gold** (annotator groups 6–8, whose data influenced no
 threshold, no calibration, and no training). The only difference between the
-two runs is the supervision source.
+two runs is the supervision source. (Training uses a fixed 60-iteration budget
+for every classifier — some do not fully converge, identically for both
+sources; the comparison is between supervision signals under equal compute,
+not between tuned models.)
 
 Each source labels the same ordered pairs its own way: the human source marks
 the ~10% of pairs the annotators chose to label; the automatic source marks
