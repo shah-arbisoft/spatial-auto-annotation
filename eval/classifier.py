@@ -9,6 +9,8 @@ geometry/contact maps, so the experiment is offline and exactly reproducible.
 
 from __future__ import annotations
 
+import math
+
 import numpy as np
 
 from src.predicates import Obj, box_gap_rel, _vertical_gap, _x_extent_overlap
@@ -62,7 +64,7 @@ def oversample_positives(X, y, cap_ratio: float = 0.10, seed: int = 42):
     neg = np.where(y == 0)[0]
     if len(pos) == 0 or len(pos) >= cap_ratio * len(neg):
         return X, y
-    need = int(cap_ratio * len(neg)) - len(pos)
+    need = math.ceil(cap_ratio * len(neg)) - len(pos)
     extra = rng.choice(pos, size=need, replace=True)
     idx = np.concatenate([np.arange(len(y)), extra])
     rng.shuffle(idx)

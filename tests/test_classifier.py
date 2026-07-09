@@ -1,6 +1,7 @@
 """RQ2 building blocks: pair features and the oversampling helper."""
 
 import numpy as np
+import pytest
 
 from eval.classifier import FEATURE_NAMES, oversample_positives, pair_features
 from src.predicates import Obj
@@ -18,8 +19,8 @@ def test_pair_features_shape_and_values():
     f = pair_features(a, b, contact_ab=0.8, contact_ba=0.0)
     assert f.shape == (len(FEATURE_NAMES),)
     named = dict(zip(FEATURE_NAMES, f))
-    assert named["dx"] == 0.4                       # b is to the right
-    assert named["ddepth"] == 0.3                   # b is farther
+    assert named["dx"] == pytest.approx(0.4)        # b is to the right
+    assert named["ddepth"] == pytest.approx(0.3)    # b is farther
     assert named["contact_ab"] == 0.8 and named["contact_ba"] == 0.0
     assert named["x_overlap"] == 0.0                # disjoint x-extents
     # features must be finite for any well-formed pair
@@ -31,8 +32,8 @@ def test_pair_features_direction_antisymmetry():
     b = obj(1, (0.50, 0.40, 0.70, 0.60), 0.50)
     fab = dict(zip(FEATURE_NAMES, pair_features(a, b, 0.0, 0.0)))
     fba = dict(zip(FEATURE_NAMES, pair_features(b, a, 0.0, 0.0)))
-    assert fab["dx"] == -fba["dx"]
-    assert fab["ddepth"] == -fba["ddepth"]
+    assert fab["dx"] == pytest.approx(-fba["dx"])
+    assert fab["ddepth"] == pytest.approx(-fba["ddepth"])
     assert fab["gap_rel"] == fba["gap_rel"]         # symmetric metric
 
 
