@@ -26,19 +26,25 @@ source's character — that contrast is the experiment.
 
 ## 5.2 Result
 
+Averaged over three seeds (42/43/44); each cell shows mean (min–max):
+
 | predicate | human-trained recall | auto-trained recall | gold (held-out) |
 |---|---|---|---|
-| on | 0.88 | 0.93 | 348 |
-| under | 0.45 | 0.92 | 192 |
-| to the left of | 0.22 | 0.95 | 446 |
-| to the right of | 0.39 | 0.99 | 550 |
-| in front of | 0.12 | 0.16 | 609 |
-| behind | 0.13 | 0.26 | 580 |
-| near | 0.12 | 1.00 | 93 |
-| **mean** | **0.33** | **0.74** | |
+| on | 0.84 (0.83–0.86) | 0.92 (0.92–0.93) | 348 |
+| under | 0.44 (0.36–0.53) | 0.93 (0.92–0.93) | 192 |
+| to the left of | 0.22 (0.18–0.29) | 0.95 (0.95–0.95) | 446 |
+| to the right of | 0.25 (0.22–0.31) | 0.99 (0.99–0.99) | 550 |
+| in front of | 0.09 (0.08–0.10) | 0.16 (0.16–0.17) | 609 |
+| behind | 0.15 (0.12–0.17) | 0.26 (0.26–0.27) | 580 |
+| near | 0.08 (0.00–0.19) | 1.00 (1.00–1.00) | 93 |
+| **mean** | **0.30** | **0.74** | |
 
-Training on the automatic labels **more than doubles** downstream mean recall
-against the human annotators' own held-out labels: 0.74 vs 0.33.
+Training on the automatic labels multiplies downstream mean recall by ~2.5
+against the human annotators' own held-out labels: 0.74 vs 0.30. The seed
+spreads carry a second result: the auto-trained model's recall varies by at
+most 0.01 across seeds on every predicate, while the human-trained model's
+varies by up to 0.19 (`near` spans 0.00–0.19) — sparse supervision is not
+just weaker, it is *unstable*, its outcome hostage to sampling noise.
 
 ## 5.3 Why — and two consistency checks
 
@@ -47,7 +53,7 @@ labels are *sparse* (~10% of pairs) and *inconsistent* (three of nine
 annotators used `near`; two inverted the front/behind convention; support was
 often labelled in one direction only). A classifier trained on sparse,
 inconsistent supervision learns above all to be silent — its recall collapses
-exactly where human labelling was thinnest (`near` 0.12, lateral 0.22–0.39).
+exactly where human labelling was thinnest (`near` 0.08, lateral 0.22–0.25).
 The automatic labels are dense and rule-consistent, so the same model actually
 learns the geometry (near 1.00, lateral 0.95–0.99, support 0.92–0.93).
 
