@@ -77,7 +77,31 @@ removes. Finally, the front/behind rows are depressed for both models by the
 held-out groups' inverted convention (Chapter 4); the comparison between
 sources remains fair because the penalty is shared.
 
-## 5.5 Answer to RQ2
+## 5.5 From labels to robots: where this sits in the source paper's chain
+
+The source paper's end goal is explicit: spatial understanding exists so that
+robots can plan — their motivating example shows an LLM planner failing to
+remove a cube before grasping the book beneath it until SGG-derived relations
+are supplied, after which it "generates executable, spatially-aware plans."
+The paper's own evaluation of that chain stops at SGG quality: six models
+benchmarked on the human labels, topping out at mR@100 = 0.49 (VCTree), with
+every model saturating by epoch 2–6 and `near` stuck at 0.22–0.25.
+
+Each of those benchmark symptoms has a cause this dissertation measured and a
+remedy it built. Saturation within six epochs is what training on 9,313 sparse
+triplets looks like — the automatic labels provide 20× the supervision on the
+same images. The universal `near` failure is what training on an undefined,
+three-annotator label looks like — the fitted-threshold labels are perfectly
+learnable (this chapter's proxy reaches 1.00). And the depth predicates were
+being actively taught two opposite conventions by different annotators — the
+automatic labels apply one. The controlled experiment above is the proxy for
+the SGG step of the chain, and it measures the effect as large. The direct
+test — training the paper's own benchmark models on automatic versus human
+labels and comparing mR@100 — is the designed next experiment (Chapter 7),
+with three concrete predictions: later saturation, a higher plateau, and the
+recovery of `near`.
+
+## 5.6 Answer to RQ2
 
 Yes — with more than was asked. The automatic labels are not merely "good
 enough" to train a relation model: at this dataset's scale of human
