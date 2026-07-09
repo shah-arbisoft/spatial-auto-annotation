@@ -147,6 +147,12 @@ operational definitions exist**: nothing specifies when two objects count as
 "near", which direction "in front of" denotes, or whether support pairs should
 be labelled in both directions.
 
+**Supervisor clarification (2026-07, by email):** `near` was intended to mean
+**"next to"** — the team originally had both labels and merged them. This
+confirms adjacency semantics and directly supports the size-relative *gap*
+metric over centroid distance: "next to" is about touching-distance relative
+to the objects, which is precisely what the fitted rule measures.
+
 This explains the measured inconsistencies as the predictable consequence of
 undefined terms: `near` used by only 3 of 9 groups with ~4× exhaustiveness
 variance, the front/behind direction convention inverted in groups 6/8, and

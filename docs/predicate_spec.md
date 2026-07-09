@@ -157,6 +157,11 @@ boxes, divided by the mean object size** (sqrt of box area): "near" scales with
 the objects — a small gap between two books reads as near; the same absolute gap
 between a person and a cube may not. The gap is 0 when boxes touch or overlap.
 
+**Intended semantics (supervisor, by email):** `near` meant **"next to"** —
+the annotation team merged an earlier separate "next to" label into it. An
+adjacency reading supports the gap metric and the contact-boundary behaviour
+below.
+
 **Contact exclusion.** Measured on the human labels, `near` co-occurs with
 `on`/`under` on **0 of 469** pairs (74% of near pairs carry *only* near): the
 annotators used `near` as "close but no contact relation". The rule encodes
