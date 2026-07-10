@@ -37,21 +37,23 @@ groups 0–5; groups 6–8 are held out.
 | under | 1001 | 0.81 | 0.92 | 0.16 | 0.00 | 0.77 |
 | to the left of | 972 | 0.97 | 0.95 | 0.13 | 0.00 | 0.97 |
 | to the right of | 1174 | 0.98 | 0.99 | 0.13 | 0.00 | 0.99 |
-| in front of | 2013 | 0.52 | 0.17 | 0.13 | 1.00* | 0.00 |
-| behind | 1584 | 0.55 | 0.26 | 0.16 | 0.00 | 0.00 |
+| in front of | 2013 | 0.64 | 0.20 | 0.13 | 1.00* | 0.00 |
+| behind | 1584 | 0.66 | 0.35 | 0.16 | 0.00 | 0.00 |
 | near | 717 | 1.00* | 1.00 | 0.16 | 0.00 | 0.87 |
-| **mean** | 8,926 | **0.81** | **0.74** | 0.14 | 0.14 | 0.63 |
+| **mean** | 8,926 | **0.85** | **0.76** | 0.14 | 0.14 | 0.63 |
 
 \* the majority baseline emits "in front of" everywhere, trivially recalling
 that class and nothing else. The near cell rounds 715/717 = 0.997 (§4.9).
 
-Three observations. **(i)** The tool recovers 76% of all human triplets
-(6,819 of 8,926; mean per-predicate recall 0.81, and 0.74 on annotators whose
+Three observations. **(i)** The tool recovers 81% of all human triplets
+(7,237 of 8,926; mean per-predicate recall 0.85, and 0.76 on annotators whose
 data never influenced any threshold), against 14% for both trivial baselines. **(ii)** The box-only baseline matches the full pipeline on
 every box-computable predicate — the segmentation masks contribute essentially
 nothing to on/under/left/right/near recall (mask centroids ≈ box centres). The
-full pipeline's advantage is confined to the depth predicates (0.52/0.55 vs
-0.00), which raises a design question the ablations pursue: is SAM2 needed at
+full pipeline's advantage is confined to the depth predicates (0.64/0.66 vs
+0.00) — and even the ground-plane fallback, a pure box cue, needs masks to
+fire, because its elevation guard is the mask-contact evidence (§4.9). This
+raises a design question the ablations pursue: is SAM2 needed at
 all, or is its real contribution depth *sampling* quality? **(iii)** The
 held-out column is higher than the pooled column for on/under/near and far
 lower for front/behind — annotator-behaviour signatures in both cases. For
@@ -71,8 +73,8 @@ are excluded (Chapter 3).
 | under | 0.84 | 0.81 | 0.83 | 1001 |
 | to the left of | 0.35 | 0.96 | 0.51 | 972 |
 | to the right of | 0.42 | 0.98 | 0.59 | 1174 |
-| in front of | 0.47 | 0.52 | 0.49 | 2013 |
-| behind | 0.41 | 0.55 | 0.47 | 1584 |
+| in front of | 0.43 | 0.64 | 0.51 | 2013 |
+| behind | 0.36 | 0.66 | 0.46 | 1584 |
 | near | 0.12 | 1.00 | 0.21 | 717 |
 
 Restricted to the 8,790 human-annotated ordered pairs, precision is bounded
@@ -91,19 +93,21 @@ that pair identify the failure mode directly:
 
 | Gold predicate | Missed | Most frequent co-emissions on missed pairs |
 |---|---|---|
-| on | 268/1465 | near (268), behind (115) — support demoted to proximity/depth |
-| under | 257/1001 | near (236), in front of (119) |
+| on | 177/1465 | near (177), behind (155) — support demoted to proximity/depth |
+| under | 187/1001 | in front of (167), near (166) |
 | to the left of | 34/972 | near (33), to the right of (24) — flips at the centre band |
 | to the right of | 18/1174 | to the left of (16) |
-| in front of | 972/2013 | near (549), to the left of (324), behind (281) |
-| behind | 717/1584 | near (409), in front of (260) |
-| near | 33/717 | on (19), under (14) — the contact-exclusion boundary |
+| in front of | 725/2013 | near (572), behind (422), to the left of (261) |
+| behind | 546/1584 | near (421), in front of (353) |
+| near | 2/717 | on (2) — the contact-exclusion boundary |
 
 Two structural signatures stand out: missed front/behind pairs carrying the
-*opposite* direction (281 + 260) are almost entirely the convention-inverted
-groups of §4.5, and missed `near` pairs carrying `on`/`under` are the two rules
-disputing the contact boundary — the same support-rule frontier the audit
-(§4.4) identifies from the precision side.
+*opposite* direction (422 + 353) are almost entirely the convention-inverted
+groups of §4.5 — and their count *rose* with the ground-plane fallback,
+because pairs the tool used to abstain on are now committed in the direction
+those groups invert; and the two remaining missed `near` pairs carry
+`on`/`under` — the two rules disputing the contact boundary, the same
+support-rule frontier the audit (§4.4) identifies from the precision side.
 
 ## 4.4 Manual audit of extra predictions (true-precision estimate)
 
@@ -145,57 +149,65 @@ sheet).
 
 | Group | Gold | Emit rate | Agreement when committed | Convention | Raw recall | Aligned recall |
 |---|---|---|---|---|---|---|
-| group_0 | 724 | 0.85 | 1.00 | same | 0.85 | 0.85 |
-| group_1 | 639 | 0.83 | 1.00 | same | 0.83 | 0.83 |
-| group_2 | 351 | 0.30 | 1.00 | same | 0.30 | 0.30 |
-| group_3 | 258 | 0.08 | 0.95 | same | 0.07 | 0.07 |
+| group_0 | 724 | 0.92 | 0.95 | same | 0.88 | 0.88 |
+| group_1 | 639 | 0.98 | 1.00 | same | 0.98 | 0.98 |
+| group_2 | 351 | 0.58 | 1.00 | same | 0.58 | 0.58 |
+| group_3 | 258 | 0.54 | 0.98 | same | 0.53 | 0.53 |
 | group_4 | 65 | 1.00 | 0.57 | same | 0.57 | 0.57 |
-| group_5 | 371 | 0.95 | 0.99 | same | 0.94 | 0.94 |
-| group_6 | 415 | 0.73 | **0.02** | **inverted** | 0.02 | 0.72 |
-| group_7 | 330 | 0.73 | 1.00 | same | 0.73 | 0.73 |
-| group_8 | 444 | 0.48 | **0.03** | **inverted** | 0.01 | 0.47 |
-| **overall** | 3597 | | | | **0.53** | **0.67** |
+| group_5 | 371 | 1.00 | 0.99 | same | 0.98 | 0.98 |
+| group_6 | 415 | 0.98 | **0.05** | **inverted** | 0.05 | 0.93 |
+| group_7 | 330 | 0.90 | 1.00 | same | 0.90 | 0.90 |
+| group_8 | 444 | 0.73 | **0.02** | **inverted** | 0.01 | 0.71 |
+| **overall** | 3597 | | | | **0.65** | **0.84** |
 
-The pooled 0.53 decomposes into three distinct causes:
+(The table reports the shipped cascade — depth ordering plus the ground-plane
+fallback of §4.9; the fallback roughly doubled the emit rates of the
+abstention-heavy groups 2 and 3.) The pooled 0.65 decomposes into three
+distinct causes:
 
 1. **Direction agreement is near-perfect where the tool commits.** For six of
    the eight groups with meaningful counts, agreement *when a direction is
    emitted* is 0.95–1.00. Genuine depth-ordering errors are rare.
 2. **Two annotator groups used the inverted convention.** Groups 6 and 8 agree
-   with the committed direction 2–3% of the time — flipping their labels
-   recovers 0.72/0.47. After the `near` findings, this is a *second*,
+   with the committed direction 2–5% of the time — flipping their labels
+   recovers 0.93/0.71. After the `near` findings, this is a *second*,
    independent, measured annotation-consistency defect in the dataset: the
    direction convention for in front of/behind was not applied uniformly
    across annotators. This is the reference-frame ambiguity RoboSpatial
    formalises (§2.3) observed in the wild: with no frame declared in the
    guidance, two annotator teams resolved it in opposite directions.
-   (Aligned overall recall: 0.67. Alignment uses one
+   (Aligned overall recall: 0.84. Alignment uses one
    disclosed bit per group — the majority direction of that group's own
    labels.)
 3. **The remaining gap is abstention, not error.** Groups 2 and 3 agree with
    the tool almost perfectly when it commits, but their scenes place object
-   pairs inside the `depth_eps` ambiguity band (emit rates 0.30 and 0.08), so
-   the tool abstains. The `depth_eps` sweep in the ablations trades this
-   abstention against precision explicitly.
+   pairs inside the `depth_eps` ambiguity band *and* out of the ground-plane
+   fallback's reach (elevated objects, near-tied bottom edges), so the tool
+   abstains (emit rates 0.58 and 0.54, roughly doubled by the fallback from
+   0.30 and 0.08). The `depth_eps` and `plane_band` sweeps in the ablations
+   trade this abstention against precision explicitly.
 
 ## 4.6 The tenth annotator
 
 Per-group recall of each annotator's triplets (all predicates):
-group_0 0.86 · group_1 0.86 · group_2 0.78 · group_3 0.45 · group_4 0.87 ·
-group_5 0.91 · group_6 0.57 · group_7 0.84 · group_8 0.57. The dispersion is
-driven almost entirely by the front/behind effects above (groups 3, 6, 8): the
-tool agrees with the *consistent* annotators at 0.78–0.91 — comfortably inside
-the range the annotators would plausibly agree with each other, though
-inter-annotator overlap on images does not exist to measure this directly.
+group_0 0.87 · group_1 0.93 · group_2 0.86 · group_3 0.72 · group_4 0.87 ·
+group_5 0.93 · group_6 0.58 · group_7 0.91 · group_8 0.57. The dispersion is
+now driven almost entirely by the two convention-inverted groups (6, 8): the
+tool agrees with the *consistent* annotators at 0.72–0.93 (0.86–0.93 outside
+the abstention-heavy group 3) — comfortably inside the range the annotators
+would plausibly agree with each other, though inter-annotator overlap on
+images does not exist to measure this directly.
 
 ## 4.7 Flags: the honest human cost
 
-39.8% of ordered pairs carry a flag: depth-ambiguous 29.5% and
-lateral-ambiguous 10.0% are *abstentions* (no label emitted; nothing to
-review), while the borderline-near band — 8.5% of pairs — is the genuine
-review queue. At a conservative 3 seconds per queued pair this is ≈6 hours of
-review for the full dataset, versus the original nine-annotator manual pass —
-and it is optional, not required, for the fidelity reported above.
+31.5% of ordered pairs carry a flag: depth-ambiguous 19.3% (down from 29.5%
+before the ground-plane fallback, which resolved a third of the depth
+abstentions) and lateral-ambiguous 10.0% are *abstentions* (no label emitted;
+nothing to review), while the borderline-near band — 8.5% of pairs — is the
+genuine review queue. At a conservative 3 seconds per queued pair this is
+≈6 hours of review for the full dataset, versus the original nine-annotator
+manual pass — and it is optional, not required, for the fidelity reported
+above.
 
 ### 4.7.1 The missing guidelines, confirmed at the source
 
@@ -215,18 +227,21 @@ source paper's future work requests.
 ## 4.8 Answer to RQ1
 
 Automated annotation reaches human-comparable quality on six of seven
-predicates outright (0.81–1.00 recall of the human triplets; mean 0.81, with
-0.74 on annotators no threshold ever saw), matches the human notion of `near`
+predicates outright (0.81–1.00 recall of the human triplets; mean 0.85, with
+0.76 on annotators no threshold ever saw), matches the human notion of `near`
 completely once the label's inconsistent usage is accounted for (0.997 pooled,
 1.00 held-out at the fitted threshold) — resolving the one predicate the source
 paper reports as failing for every model it benchmarks (§2.2) — and on the
-depth pair agrees with every
-consistently-labelled annotator 95–100% of the time where it commits — the
-pooled shortfall decomposing, in measured proportions, into calibrated
-abstention and a direction convention two annotators inverted. The audits bound
-true precision: ~1.0 for the lateral, depth and proximity predicates, ~0.9 for
-support after the contact rule. The tool's residual cost is the ~8% borderline
-review queue, and its labels are 20× denser than the human set.
+depth pair, after the depth-plus-ground-plane cascade, recalls 0.64/0.66
+pooled and agrees with every consistently-labelled annotator 95–100% of the
+time where it commits; aligned for the two inverted-convention groups, depth
+recall is 0.84. The remaining shortfall decomposes, in measured proportions,
+into calibrated abstention and that inverted convention. The audits bound true
+precision: ~1.0 for the lateral and proximity predicates and for depth-decided
+front/behind, ~0.9 for support after the contact rule, and ~0.73 conservative
+for the ground-plane fallback's added commits (§4.9). The tool's residual cost
+is the ~8% borderline review queue, and its labels are 20× denser than the
+human set.
 
 ## 4.9 Shipped from the ablations: the support depth-co-location gate
 
@@ -269,27 +284,52 @@ fires contact (holding ≠ resting — a class-aware guard is an obvious
 refinement), one occluded bottle-behind-bottle pair, and three distant
 clusters too small to verdict confidently.
 
+**The ground-plane fallback (shipped).** The depth abstention band was the
+single largest miss cause, and most of it is resolvable without depth at all:
+two objects standing on the same floor are depth-ordered by pure projection —
+the nearer object's box bottom sits lower in the image, a pixel-precise cue
+exactly where relative depth is noisiest. The shipped rule fires only where
+the depth rule abstained, only when *neither* object rests on another object
+by the tool's own contact evidence (an elevated object's box bottom locates
+its support, not itself), and only outside a small bottom-edge band
+(`plane_band` = 0.005, calibrated on the train groups; ablation A7). On the
+train groups the fallback adds 386 committed directions at 0.91 agreement; on
+held-out group 7 it adds 54 and **every one agrees with the annotator**.
+Effect on the headline: front/behind recall 0.52/0.55 → **0.64/0.66** (aligned
+overall 0.67 → **0.84**), mean recall 0.81 → **0.85**, and the depth-ambiguous
+flag rate falls 29.5% → 19.3%. A seeded 15-sample audit of the fallback's
+*extra* predictions (pairs no human labelled) estimates true precision
+conservatively at **11/15 ≈ 0.73** — and the four wrong/uncertain cases share
+one structure: an object resting on something the detector has no box for (a
+book on an unannotated case; a stacked-book pair whose contact fell below
+threshold), i.e. elevation the guard cannot see. That residual mode is
+documented, bounded, and exactly the class-aware/undetected-support refinement
+the support audit already motivates.
+
 
 ## 4.10 Failure gallery: every miss diagnosed
 
 Each missed human triplet is diagnosed automatically by re-checking the rule's
 individual conditions against the cached geometry and mask-contact maps
 (`scripts/make_failure_gallery.py`; rendered examples in
-`outputs/failure_gallery/`). With the shipped rule set (2,107 misses):
+`outputs/failure_gallery/`). With the shipped rule set (1,689 misses):
 
 | Predicate | Dominant causes (share of that predicate's misses) |
 |---|---|
-| in front of | abstained in ambiguity band 71% · convention-inverted annotators 28% · **genuine depth error 1%** |
-| behind | abstained 64% · convention-inverted 32% · **genuine depth error 4%** |
+| in front of | abstained in ambiguity band 61% · convention-inverted annotators 38% · **genuine depth error 1%** |
+| behind | abstained 52% · convention-inverted 42% · **genuine depth error 5%** |
 | on | mask contact below threshold 58% · depth-gate suppressed 40% |
 | under | contact below threshold 50% · depth-gate suppressed 33% · no contact measured (occlusion) 17% |
 | near | 2 remaining misses (contact boundary) |
 | to the left/right of | centre flip 71–89% · abstained 11–29% (52 cases total) |
 
-Genuine depth-ordering errors remain 1–4% of front/behind misses; the support
-misses are now threshold/gate trades on real contact evidence rather than
-box-geometry artefacts; and `near` misses have all but vanished. Misses
-attributable to avoidable tool error across all seven predicates: ~6%.
+Genuine depth-ordering errors remain 1–5% of front/behind misses; the support
+misses are threshold/gate trades on real contact evidence rather than
+box-geometry artefacts; and `near` misses have all but vanished. The
+convention-inverted *share* grew (38–42%, from 28–32%) not because those
+misses increased but because the ground-plane fallback shrank the abstention
+share around them — total misses fell from 2,107 to 1,689. Misses
+attributable to avoidable tool error across all seven predicates: ~7%.
 
 
 ## 4.11 Detector-in-the-loop: full automation, attributed
@@ -301,14 +341,15 @@ SAM2 → depth → rules stack (`scripts/run_sgdet.py`, scored by
 `eval/sgdet_eval.py` with class-matched greedy IoU ≥ 0.5).
 
 End-to-end triplet recall over all 836 images is **0.38** against the PredCls
-headline of 0.81 — and the decomposition attributes the gap exactly. Zero-shot
+headline — and the decomposition attributes the gap exactly. Zero-shot
 detection recall spans 0.40 (cube) to 0.95 (human), and a triplet needs *both*
 endpoints found. **Conditioned on both endpoints being detected, the relation
-layer scores 0.85 mean — equal to or above its PredCls performance on every
-predicate** (lateral 0.96/0.98, near 1.00, support 0.83/0.77; front/behind
-0.69/0.70, above the 0.52/0.55 pooled figures because detectable pairs skew
-towards well-separated objects). The gap is therefore entirely a detection
-problem, not a relations problem: the geometric rules are detector-agnostic.
+layer scores 0.85 mean — matching its PredCls performance** (lateral
+0.96/0.98, near 1.00, support 0.83/0.77; front/behind 0.69/0.70, computed
+before the ground-plane fallback shipped, so the conditional depth numbers are
+a floor — detectable pairs also skew towards well-separated objects). The gap
+is therefore entirely a detection problem, not a relations problem: the
+geometric rules are detector-agnostic.
 
 Two honest notes. Zero-shot open-vocabulary detection is the worst-case
 detector — exactly the reach-versus-per-class-recall trade §2.4 identifies —

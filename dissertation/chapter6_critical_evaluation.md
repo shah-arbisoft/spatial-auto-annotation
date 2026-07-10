@@ -14,17 +14,18 @@ audited true precision ≈ 1.0, and for `near` a perfect held-out score against
 the one annotator who used the label and never influenced the threshold. For
 support, after two evidence upgrades motivated by measurement (depth
 co-location, mask contact), recall is 0.88/0.81 with audited precision around
-0.9 — comfortably comparable. For the depth pair the pooled number (0.52/0.55)
-looks weak until decomposed: where the tool commits, it agrees with every
-consistently-labelled annotator 95–100% of the time; the shortfall is
-calibrated abstention plus a direction convention that two annotators inverted.
+0.9 — comfortably comparable. For the depth pair the cascade of relative depth
+and the ground-plane fallback reaches 0.64/0.66 pooled — 0.84 once the two
+inverted-convention groups are aligned — and where the tool commits it agrees
+with every consistently-labelled annotator 95–100% of the time; the remaining
+shortfall is calibrated abstention plus that inverted direction convention.
 "Comparable to human quality" understates that case: on front/behind the tool
 is more consistent than the human process it is measured against.
 
 **RQ2** asked whether the automatic labels can train a relation model as well
 as human labels. The controlled experiment answered more strongly than the
 question was posed: with identical features, model, seed and split, the
-auto-trained classifier reaches 0.74 mean recall against held-out *human* gold
+auto-trained classifier reaches 0.76 mean recall against held-out *human* gold
 versus 0.30 for its human-trained twin. At this dataset's annotation scale,
 the automatic labels are better training material than the labels they were
 validated against. The mechanism is not mysterious — density (20× more
@@ -39,21 +40,22 @@ predicates have operational geometric definitions, every fitted threshold was
 calibrated on train annotators only and generalised to held-out ones (near
 recall 1.0, support F1 0.87 held-out); **O3** — per-predicate fidelity is
 measured against baselines and ablations with audited true precision
-(Chapter 4); **O4** — all 2,107 misses are attributed to a cause, with genuine
+(Chapter 4); **O4** — all 1,689 misses are attributed to a cause, with genuine
 tool error bounded at ~6% of miss mass (§6.2); **O5** — the controlled
-label-source experiment is the 0.74-versus-0.30 result above (Chapter 5).
+label-source experiment is the 0.76-versus-0.30 result above (Chapter 5).
 
 ## 6.2 What the remaining failures are made of
 
-The failure gallery diagnoses every one of the 2,107 missed human triplets by
+The failure gallery diagnoses every one of the 1,689 missed human triplets by
 re-checking rule conditions, so the failure analysis is exhaustive rather than
 anecdotal. Three observations matter most.
 
-First, **genuine tool error is rare**: depth-ordering mistakes are 1–4% of
+First, **genuine tool error is rare**: depth-ordering mistakes are 1–5% of
 front/behind misses; across all predicates, misses attributable to avoidable
-error are roughly 6%. The bulk of the miss mass is calibrated abstention
-(depth ambiguity band, 64–71% of front/behind misses) and measured annotator
-defects (28–32%).
+error are roughly 7%. The bulk of the miss mass is calibrated abstention
+(depth ambiguity band, 52–61% of front/behind misses) and measured annotator
+defects (38–42% — a share that *grew* as the ground-plane fallback shrank the
+abstention share around it).
 
 Second, **the support arc shows the method working as a method**. The box rule
 shipped with ~0.27 true precision; the audit localised the failure (projection
@@ -65,12 +67,17 @@ held-out. The residual failure mode is itself precisely characterised: a
 person *holding* an object satisfies pixel contact (3 of the 7 remaining
 audited errors); a class-aware guard is the documented next refinement.
 
-Third, **the honest ceiling is depth resolution, not rules**. Two objects at
-similar camera distance on the same surface cannot be ordered by relative
-monocular depth; the `depth_eps` sweep makes the recall/precision trade
-explicit (recall up to ~0.71 at ε=0 for ~0.26–0.36 precision), and the choice
-of operating point is a documented, revisable decision rather than a hidden
-constant.
+Third, **what looked like a depth-resolution ceiling was mostly a rules
+ceiling — and it moved**. Two objects at similar camera distance cannot be
+ordered by relative monocular depth (the `depth_eps` sweep bounds that trade:
+recall up to ~0.71 at ε=0 for ~0.26–0.36 precision), but the ground-plane
+fallback showed that most of the abstention band is recoverable *without*
+depth, from pure projection, once the tool's own contact evidence guards
+against elevated objects. The residual ceiling is narrower and precisely
+characterised: objects resting on supports the detector has no box for
+(the fallback's audited failure mode), and pairs whose bottom edges tie
+within the band. Both operating points are documented, revisable decisions
+rather than hidden constants (ablations A2, A7).
 
 ## 6.3 The dataset's annotation process, examined
 
@@ -83,8 +90,8 @@ quantifies how much further the guideline problem goes:
    labels sit inside one fitted threshold (held-out recall 1.0): consistent
    *notion*, non-exhaustive *application*.
 2. Two annotator groups applied the **inverted direction convention** for
-   in front of / behind (2–3% agreement where the tool commits; flipping
-   recovers 0.72/0.47).
+   in front of / behind (2–5% agreement where the tool commits; flipping
+   recovers 0.93/0.71).
 3. Support pairs were often labelled in **one direction only** (one group
    all-`on`, another all-`under`).
 4. The official guidance — confirmed at the annotation tool's repository —
@@ -97,7 +104,7 @@ response — per-annotator reporting, annotator-aware calibration, and
 operational definitions as the deliverable — is, to our knowledge, the first
 time this dataset's label semantics have been made explicit. The "tenth
 annotator" framing survives contact with the data: where annotators are
-self-consistent, the tool agrees with them at 0.78–0.91 overall and 95–100% on
+self-consistent, the tool agrees with them at 0.72–0.93 overall and 95–100% on
 committed depth directions, a range that plausibly brackets what the
 annotators would score against each other — though, absent overlapping
 assignments, inter-annotator agreement cannot be computed directly, and that
@@ -176,6 +183,7 @@ guideline-free human annotation, which is exactly the regime the source
 dataset occupies — under which they are decisively better for downstream
 learning. The scaling claim now has teeth beyond throughput: 836 images were
 labelled in five minutes with 20× the human label density, and a model trained
-on those labels doubles the downstream performance of one trained on the
-original annotations. The bottleneck this project removes was not only slowing
-the dataset down; it was limiting what the dataset could teach.
+on those labels reaches two and a half times the downstream recall of one
+trained on the original annotations. The bottleneck this project removes was
+not only slowing the dataset down; it was limiting what the dataset could
+teach.

@@ -34,15 +34,15 @@ Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 | under | 0.44 (0.36–0.53) | 0.93 (0.92–0.93) | 192 |
 | to the left of | 0.22 (0.18–0.29) | 0.95 (0.95–0.95) | 446 |
 | to the right of | 0.25 (0.22–0.31) | 0.99 (0.99–0.99) | 550 |
-| in front of | 0.09 (0.08–0.10) | 0.16 (0.16–0.17) | 609 |
-| behind | 0.15 (0.12–0.17) | 0.26 (0.26–0.27) | 580 |
+| in front of | 0.09 (0.08–0.10) | 0.19 (0.19–0.19) | 609 |
+| behind | 0.15 (0.12–0.17) | 0.33 (0.32–0.34) | 580 |
 | near | 0.08 (0.00–0.19) | 1.00 (1.00–1.00) | 93 |
-| **mean** | **0.30** | **0.74** | |
+| **mean** | **0.30** | **0.76** | |
 
 Training on the automatic labels multiplies downstream mean recall by ~2.5
-against the human annotators' own held-out labels: 0.74 vs 0.30. The seed
+against the human annotators' own held-out labels: 0.76 vs 0.30. The seed
 spreads carry a second result: the auto-trained model's recall varies by at
-most 0.01 across seeds on every predicate, while the human-trained model's
+most 0.02 across seeds on every predicate, while the human-trained model's
 varies by up to 0.19 (`near` spans 0.00–0.19) — sparse supervision is not
 just weaker, it is *unstable*, its outcome hostage to sampling noise.
 
@@ -62,8 +62,8 @@ supervision — not model capacity — is the bottleneck.
 
 Two checks argue the result is real rather than an artefact. First, the
 auto-trained model's profile almost exactly reproduces the rule layer's own
-held-out performance (mean 0.74; front/behind 0.16/0.26 ≈ the rules' held-out
-0.17/0.26): the classifier *distilled the annotator*, which is precisely what
+held-out performance (mean 0.76; front/behind 0.19/0.33 ≈ the rules' held-out
+0.20/0.35): the classifier *distilled the annotator*, which is precisely what
 "the labels are learnable" means. Second, both models face identical
 conditions everywhere — the same features, the same oversampling cap, the same
 held-out gold including the convention-inverted annotators, which penalises

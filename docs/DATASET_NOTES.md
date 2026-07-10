@@ -122,13 +122,14 @@ humans skipped are genuinely near.
 Found during the RQ1 fidelity study (`eval/fidelity.py`,
 front_behind_decomposition). Where the tool commits to a depth direction,
 agreement with the human label is 0.95–1.00 for six of the eight annotator
-groups with meaningful counts — but **groups 6 and 8 agree only 2–3% of the
-time, and flipping their labels recovers 0.72/0.47 recall**: those annotators
+groups with meaningful counts — but **groups 6 and 8 agree only 2–5% of the
+time, and flipping their labels recovers 0.93/0.71 recall**: those annotators
 applied the opposite direction convention for *in front of / behind*. Separately,
 groups 2 and 3 agree near-perfectly when the tool commits but their scenes sit
-largely inside the depth-ambiguity band (emit rates 0.30/0.08). Pooled
-front/behind recall 0.53 → 0.67 under per-group convention alignment (one
-disclosed bit per group).
+largely inside the depth-ambiguity band (emit rates 0.58/0.54 with the
+ground-plane fallback; 0.30/0.08 on depth alone). Pooled front/behind recall
+0.65 → 0.84 under per-group convention alignment (one disclosed bit per
+group).
 
 Together with the `near` findings (3/9 groups used it; ~4× exhaustiveness
 variance), this is the dataset's second quantified annotation-consistency

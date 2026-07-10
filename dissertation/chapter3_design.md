@@ -106,12 +106,21 @@ rationale in brief:
   distinguishes ego/world/object frames; this dataset's tool shows the
   camera view, so the ego frame is the faithful choice). An ambiguity band
   (0.02) abstains and flags when centres nearly coincide.
-- **in front of / behind** compare per-object depths with an abstention band
-  (0.03). Relative depth makes these the hardest predicates (recall 0.52/0.55
-  *(measured)*): objects on the same surface often differ by less than the
-  depth model can resolve. The band converts that uncertainty into flags rather
-  than coin-flips; its width is a recall/precision lever swept in the ablations.
-  Two implementation pitfalls, both caught and fixed, sit behind this number and
+- **in front of / behind** is a two-stage cascade. Depth ordering decides
+  first, with an abstention band (0.03): relative depth makes these the hardest
+  predicates — objects on the same surface often differ by less than the depth
+  model can resolve. Where depth abstains, a **ground-plane fallback** decides
+  from pure projection: two objects standing on the same floor are depth-ordered
+  by which box bottom sits lower in the image, a pixel-precise cue exactly where
+  depth is noisiest. The fallback is guarded by the tool's own support evidence
+  — it never fires when either object rests on another object (mask contact
+  ≥ 0.60 with any partner), because an elevated object's box bottom says where
+  its *support* is, not where it is — and by its own small band (0.005,
+  calibrated on train groups; on held-out group 7 every commit the fallback
+  added was correct). Pairs both stages abstain on are flagged rather than
+  guessed (recall 0.64/0.66 *(measured)*, from 0.52/0.55 depth-only; both
+  bands are recall/precision levers swept in the ablations).
+  Two implementation pitfalls, both caught and fixed, sit behind depth and
   are worth recording as method: the HF depth output is *larger = nearer* and
   must be inverted to the smaller = nearer convention (verified by front/behind
   agreement, ~26% → ~74%); and the dataset's images carry a 180° EXIF rotation
@@ -196,6 +205,7 @@ test that verifies the perception models on first setup.
 | Depth Anything v2 Small, relative | metric/stereo depth; larger variants | data is mono RGB; 6 GB budget; licence |
 | Median masked depth | mean | robust to mask edge bleed |
 | Abstention bands + flags | forced binary decisions | converts model uncertainty into measurable human cost |
+| Ground-plane fallback for depth ties | metric depth models; multi-frame fusion | free 2D cue, pixel-precise in the depth band; guarded by own contact evidence; metric depth needs new capture, multi-frame breaks the single-image contract |
 | `near` = relative box gap + contact exclusion | 3D centroid distance | measured: centroid metrics don't transfer (F1 ≤ 0.024); near never co-occurs with contact (0/469) |
 | Annotator-aware `near` fit | fit/test across all groups | only 3/9 groups used the label; naive protocol conflates annotator habits with tool error |
 | Byte-compatible writers | own format + converter | RQ1/RQ2 comparability; verified zero-error |
