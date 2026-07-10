@@ -46,6 +46,11 @@ predicates:
                                # 0.85, held-out 0.87). Box test = no-mask fallback.
   lateral_center_eps: 0.02     # |x_A - x_B| below this => left/right ambiguous (flag)
   depth_eps: 0.03              # |depth_A - depth_B| below this => front/behind ambiguous
+  plane_band: 0.005            # ground-plane fallback for depth-ambiguous pairs:
+                               # min normalised bottom-edge difference. Fires only
+                               # when neither object rests on another by the tool's
+                               # own contact evidence. Calibrated on train groups
+                               # (held-out group 7: all 54 added commits correct).
 
 # --- correction & confidence ---
 correction:

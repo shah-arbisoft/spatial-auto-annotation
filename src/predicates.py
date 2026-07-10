@@ -75,6 +75,8 @@ class Thresholds:
                                    # are available; box test is the fallback)
     lateral_center_eps: float = 0.02
     depth_eps: float = 0.03
+    plane_band: float = 0.005      # ground-plane fallback: min normalised
+                                   # bottom-edge difference (see plane_fallback)
     flag_near_band: float = 0.15
 
 
@@ -199,6 +201,37 @@ def is_behind(a: Obj, b: Obj, t: Thresholds) -> bool:
     return (a.depth - b.depth) > t.depth_eps
 
 
+def plane_fallback(a: Obj, b: Obj, t: Thresholds,
+                   elevated_a: Optional[bool],
+                   elevated_b: Optional[bool]) -> Optional[str]:
+    """Ground-plane depth ordering for pairs the depth rule abstains on.
+
+    Two objects standing on the same ground plane are depth-ordered by pure
+    projection: the nearer object's box bottom sits LOWER in the image (larger
+    y2). This is pixel-precise where relative monocular depth is noisy, so it
+    recovers most of the depth_eps abstention band (calibrated on train
+    groups: band 0.005 adds 386 commits at 0.91 agreement; held-out group 7:
+    54 commits, all correct).
+
+    The assumption fails for objects resting ON other objects, so the fallback
+    requires mask evidence: it only fires when both objects have contact
+    information (elevated_* is not None) and NEITHER rests on another object
+    by the tool's own support evidence (contact >= on_contact_min with any
+    partner). Without masks (box-only mode) the fallback stays off and the
+    pair is flagged exactly as before.
+    """
+    if elevated_a is None or elevated_b is None:
+        return None                       # no mask evidence -> no fallback
+    if elevated_a or elevated_b:
+        return None                       # not both on the ground plane
+    d = a.box[3] - b.box[3]               # bottom edges; +ve = A lower = nearer
+    if d > t.plane_band:
+        return "in front of"
+    if d < -t.plane_band:
+        return "behind"
+    return None
+
+
 def is_near(a: Obj, b: Obj, t: Thresholds) -> bool:
     """A and B are within the fitted size-relative gap threshold.
 
@@ -213,7 +246,9 @@ def is_near(a: Obj, b: Obj, t: Thresholds) -> bool:
 # --------------------------------------------------------------------------- #
 def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True,
                   contact_ab: Optional[float] = None,
-                  contact_ba: Optional[float] = None) -> PairResult:
+                  contact_ba: Optional[float] = None,
+                  elevated_a: Optional[bool] = None,
+                  elevated_b: Optional[bool] = None) -> PairResult:
     # `correct` gates the ACTIVE correction: suppressing `near` on contact
     # pairs (measured: near never co-occurs with on/under in the human labels).
     # The exclusive-family consistency is by construction (tests/test_invariants).
@@ -221,7 +256,10 @@ def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True,
     and attach ambiguity flags. See docs/predicate_spec.md §8–9.
 
     contact_ab/contact_ba are the mask-contact fractions for (a on b) and
-    (b on a) when masks were available; None selects the box fallback."""
+    (b on a) when masks were available; None selects the box fallback.
+    elevated_a/elevated_b say whether each object rests on some other object by
+    the tool's own contact evidence (None = no mask evidence in this scene);
+    they gate the ground-plane depth fallback."""
     res = PairResult(subject=a.idx, object=b.idx)
 
     # --- vertical: on / under (mutually exclusive by construction) ---
@@ -244,13 +282,18 @@ def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True,
     else:
         res.flags.append("lateral_ambiguous")  # centres nearly coincide
 
-    # --- depth: in front of / behind, with ambiguity band ---
+    # --- depth: in front of / behind, with ambiguity band + plane fallback ---
     if is_in_front_of(a, b, t):
         res.predicates.append("in front of")
     elif is_behind(a, b, t):
         res.predicates.append("behind")
     else:
-        res.flags.append("depth_ambiguous")  # depths nearly equal
+        # depth cannot separate them; try the ground-plane projection cue
+        v = plane_fallback(a, b, t, elevated_a, elevated_b)
+        if v is not None:
+            res.predicates.append(v)
+        else:
+            res.flags.append("depth_ambiguous")  # depths nearly equal
 
     # --- near: size-relative box gap, suppressed for contact pairs ---
     # Measured on the human labels: near co-occurs with on/under on 0 of 469
@@ -274,6 +317,13 @@ def evaluate_scene(objs: list[Obj], t: Thresholds, correct: bool = True,
     contact: optional {(i, j): fraction} mask-contact map from src/contact.py;
     when omitted the support rule uses its box-adjacency fallback."""
     results: list[PairResult] = []
+    # An object is "elevated" when the tool's own support evidence says it
+    # rests on some other object; such objects are off the ground plane, so
+    # the depth fallback must not reason about them. None (no mask evidence)
+    # disables the fallback entirely.
+    elevated: Optional[set[int]] = None
+    if contact is not None:
+        elevated = {i for (i, _j), v in contact.items() if v >= t.on_contact_min}
     for a in objs:
         for b in objs:
             if a.idx == b.idx:
@@ -283,8 +333,11 @@ def evaluate_scene(objs: list[Obj], t: Thresholds, correct: bool = True,
             # scene has no mask information at all (contact is None).
             c_ab = contact.get((a.idx, b.idx), 0.0) if contact is not None else None
             c_ba = contact.get((b.idx, a.idx), 0.0) if contact is not None else None
+            e_a = (a.idx in elevated) if elevated is not None else None
+            e_b = (b.idx in elevated) if elevated is not None else None
             results.append(evaluate_pair(a, b, t, correct=correct,
-                                         contact_ab=c_ab, contact_ba=c_ba))
+                                         contact_ab=c_ab, contact_ba=c_ba,
+                                         elevated_a=e_a, elevated_b=e_b))
     return results
 
 

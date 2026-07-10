@@ -39,6 +39,7 @@ def thresholds_from_config(cfg: dict) -> Thresholds:
         on_contact_min=p.get("on_contact_min", 0.60),
         lateral_center_eps=p["lateral_center_eps"],
         depth_eps=p["depth_eps"],
+        plane_band=p.get("plane_band", 0.005),
         flag_near_band=c["flag_near_band"],
     )
 

@@ -130,12 +130,34 @@ flagged. `right_of(A,B) == left_of(B,A)`.
 
 ## 5. `in front of(A, B)` — A is nearer the camera than B
 
+Two-stage cascade. Stage 1 — depth ordering:
+
 ```
 in_front_of(A, B)  ==  (d_A < d_B)    (smaller depth = nearer)
 ```
 
-`|d_A - d_B|` below `depth_eps` (default 0.03) ⇒ depths nearly equal ⇒ flagged
-ambiguous, not labelled.
+`|d_A - d_B|` below `depth_eps` (default 0.03) ⇒ depths nearly equal ⇒ stage 2.
+
+Stage 2 — **ground-plane fallback** (only where stage 1 abstained): two
+objects standing on the same floor are depth-ordered by projection — the
+nearer object's box bottom sits lower in the image.
+
+```
+plane(A, B)  ==  (y2_A - y2_B) > plane_band     ⇒  in front of
+             ==  (y2_A - y2_B) < -plane_band    ⇒  behind
+```
+
+with `plane_band` = 0.005 (normalised image height; calibrated on train
+groups, ablation A7). Guard: the fallback fires **only when neither object is
+elevated** — no mask-contact ≥ `on_contact_min` with any partner object (an
+elevated object's box bottom locates its support, not itself) — and only when
+mask evidence exists at all (box-only mode: fallback off). Pairs both stages
+abstain on are flagged ambiguous, not labelled.
+
+Worked example (encoded in `tests/test_predicates.py`): bottle with box
+bottom 0.80 vs book with box bottom 0.60, depths 0.50/0.51 (inside
+`depth_eps`), both floor-standing ⇒ bottle `in front of` book. Same pair with
+either object elevated ⇒ flagged.
 
 ## 6. `behind(A, B)` — A is farther from the camera than B
 
@@ -144,7 +166,8 @@ behind(A, B)  ==  (d_A > d_B)
 ```
 
 The inverse of `in front of`: `behind(A,B) == in_front_of(B,A)`. The same
-`depth_eps` ambiguity band applies.
+cascade applies — `depth_eps` band, then the guarded ground-plane fallback,
+then the flag.
 
 ## 7. `near(A, B)` — A and B are close, relative to their size
 
@@ -216,7 +239,9 @@ A pair is flagged (not dropped) when any of:
 
 - `near` gap within `flag_near_band` of `near_T` (§7).
 - `left/right` centres within `lateral_center_eps` (§3–4).
-- `front/behind` depths within `depth_eps` (§5–6).
+- `front/behind` depths within `depth_eps` AND the ground-plane fallback
+  unable to decide (elevated object, no mask evidence, or bottom edges within
+  `plane_band`) (§5–6).
 
 Flags are written alongside the triplets. Measured on the full dataset, ~40% of
 ordered pairs carry some flag — dominated by `depth_ambiguous` (~30% of pairs),

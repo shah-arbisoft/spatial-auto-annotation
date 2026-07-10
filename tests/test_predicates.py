@@ -88,6 +88,64 @@ def test_on_requires_depth_colocation():
     assert is_on(stacked_top, front, T)       # same geometry, co-located depth
 
 
+def test_plane_fallback_orders_floor_objects_in_depth_band():
+    """Depth-ambiguous floor pair: lower box bottom = nearer wins the fallback.
+
+    Depths are inside depth_eps so the depth rule abstains; both objects have
+    contact evidence saying they rest on nothing -> the bottom edges decide."""
+    front = make(0, "bottle", (0.30, 0.40, 0.40, 0.80), depth=0.50)
+    back = make(1, "book", (0.55, 0.35, 0.70, 0.60), depth=0.51)  # |dz| < 0.03
+    res = evaluate_pair(front, back, T, contact_ab=0.0, contact_ba=0.0,
+                        elevated_a=False, elevated_b=False)
+    assert "in front of" in res.predicates       # bottom 0.80 vs 0.60
+    assert "depth_ambiguous" not in res.flags
+    rev = evaluate_pair(back, front, T, contact_ab=0.0, contact_ba=0.0,
+                        elevated_a=False, elevated_b=False)
+    assert "behind" in rev.predicates
+
+
+def test_plane_fallback_blocked_by_elevation_and_masklessness():
+    """An elevated object (rests on another) or a maskless scene keeps the flag."""
+    a = make(0, "cube", (0.30, 0.40, 0.40, 0.60), depth=0.50)
+    b = make(1, "book", (0.55, 0.35, 0.70, 0.80), depth=0.51)
+    # a rests on something -> ground-plane reasoning invalid for the pair
+    res = evaluate_pair(a, b, T, contact_ab=0.0, contact_ba=0.0,
+                        elevated_a=True, elevated_b=False)
+    assert not {"in front of", "behind"} & set(res.predicates)
+    assert "depth_ambiguous" in res.flags
+    # no mask evidence at all (box-only mode) -> fallback off, behaviour as before
+    res2 = evaluate_pair(a, b, T)
+    assert not {"in front of", "behind"} & set(res2.predicates)
+    assert "depth_ambiguous" in res2.flags
+
+
+def test_plane_fallback_abstains_inside_band():
+    """Bottom edges closer than plane_band: still ambiguous, still flagged."""
+    a = make(0, "book", (0.30, 0.40, 0.45, 0.600), depth=0.50)
+    b = make(1, "book", (0.55, 0.40, 0.70, 0.602), depth=0.51)  # |dbottom| < 0.005
+    res = evaluate_pair(a, b, T, contact_ab=0.0, contact_ba=0.0,
+                        elevated_a=False, elevated_b=False)
+    assert not {"in front of", "behind"} & set(res.predicates)
+    assert "depth_ambiguous" in res.flags
+
+
+def test_evaluate_scene_derives_elevation_from_contact_map():
+    """The scene evaluator must gate the fallback with its own contact map:
+    a cube stacked on a box is elevated, so its depth-ambiguous pair with a
+    bystander stays flagged, while two floor objects get plane-ordered."""
+    from src.predicates import evaluate_scene
+    cube = make(0, "cube", (0.40, 0.30, 0.60, 0.50), depth=0.50)   # on the box
+    box = make(1, "box", (0.30, 0.50, 0.70, 0.80), depth=0.50)
+    bottle = make(2, "bottle", (0.05, 0.20, 0.15, 0.60), depth=0.505)
+    contact = {(0, 1): 0.9}                     # cube rests on box
+    res = {(r.subject, r.object): r for r in evaluate_scene([cube, box, bottle], T,
+                                                            contact=contact)}
+    # cube (elevated) vs bottle: fallback blocked despite different bottoms
+    assert "depth_ambiguous" in res[(0, 2)].flags
+    # box vs bottle: both floor-standing, bottoms 0.80 vs 0.60 -> box in front
+    assert "in front of" in res[(1, 2)].predicates
+
+
 def test_near_threshold_fit_recovers_separating_value():
     # distances clearly separable at ~0.5; humans call <0.5 "near".
     distances = np.array([0.1, 0.2, 0.3, 0.7, 0.8, 0.9])
