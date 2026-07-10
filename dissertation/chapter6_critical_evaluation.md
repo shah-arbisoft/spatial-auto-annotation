@@ -1,6 +1,6 @@
 # Chapter 6 — Critical Evaluation
 
-> Draft, Week 6. Every quantitative claim below is established in Chapters 4–5
+> Every quantitative claim below is established in Chapters 4–5
 > and reproducible from the repository; this chapter interprets, connects and
 > stress-tests them.
 
@@ -25,12 +25,23 @@ is more consistent than the human process it is measured against.
 as human labels. The controlled experiment answered more strongly than the
 question was posed: with identical features, model, seed and split, the
 auto-trained classifier reaches 0.74 mean recall against held-out *human* gold
-versus 0.33 for its human-trained twin. At this dataset's annotation scale,
+versus 0.30 for its human-trained twin. At this dataset's annotation scale,
 the automatic labels are better training material than the labels they were
 validated against. The mechanism is not mysterious — density (20× more
 triplets) and consistency (one definition, uniformly applied) — but it converts
 the project's premise from "removing the bottleneck loses little" to "removing
 the bottleneck gains".
+
+Against the five objectives set in §1.4, each is met and evidenced: **O1** —
+the pipeline annotates all 836 images in ~5 minutes with no human decision,
+byte-compatible with the dataset's formats (Chapter 3); **O2** — all seven
+predicates have operational geometric definitions, every fitted threshold was
+calibrated on train annotators only and generalised to held-out ones (near
+recall 1.0, support F1 0.87 held-out); **O3** — per-predicate fidelity is
+measured against baselines and ablations with audited true precision
+(Chapter 4); **O4** — all 2,107 misses are attributed to a cause, with genuine
+tool error bounded at ~6% of miss mass (§6.2); **O5** — the controlled
+label-source experiment is the 0.74-versus-0.30 result above (Chapter 5).
 
 ## 6.2 What the remaining failures are made of
 
@@ -86,7 +97,7 @@ response — per-annotator reporting, annotator-aware calibration, and
 operational definitions as the deliverable — is, to our knowledge, the first
 time this dataset's label semantics have been made explicit. The "tenth
 annotator" framing survives contact with the data: where annotators are
-self-consistent, the tool agrees with them at 0.76–0.92 overall and 95–100% on
+self-consistent, the tool agrees with them at 0.78–0.91 overall and 95–100% on
 committed depth directions, a range that plausibly brackets what the
 annotators would score against each other — though, absent overlapping
 assignments, inter-annotator agreement cannot be computed directly, and that

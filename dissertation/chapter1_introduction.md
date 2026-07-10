@@ -1,7 +1,7 @@
 # Chapter 1 — Introduction
 
-> Draft, Week 1. Write-as-you-go. Prose to be tightened in Weeks 6–8; the
-> argument and structure are the point at this stage.
+> Chapter summary: the manual-annotation bottleneck, the compute-not-predict
+> idea, the research questions and objectives, and the shape of the argument.
 
 ## 1.1 Motivation
 
@@ -72,6 +72,24 @@ addressing the inconsistency the source paper flagged.
 
 RQ1 asks whether the labels are *accurate*; RQ2 asks whether they are *useful*.
 
+The research questions decompose into five verifiable objectives:
+
+- **O1 — Build.** A fully-automatic pipeline (detection, segmentation, depth,
+  geometric rules) that annotates the complete dataset in its native formats
+  (VG JSON / YOLO / h5) with no human in the labelling loop. *(Chapter 3)*
+- **O2 — Specify and calibrate.** An operational geometric definition of all
+  seven predicates, with every threshold fitted only on a subset of annotator
+  groups and validated on held-out annotators. *(Chapter 3)*
+- **O3 — Validate.** Per-predicate fidelity against the human annotations,
+  with trivial and box-only baselines, ablations, and manually audited true
+  precision — answering RQ1. *(Chapter 4)*
+- **O4 — Diagnose.** Every disagreement with the human labels attributed to a
+  cause: calibrated abstention, annotator behaviour, or genuine tool error.
+  *(Chapters 4, 6)*
+- **O5 — Test downstream utility.** A controlled experiment in which the same
+  classifier is trained once on human and once on automatic labels, isolating
+  the label source — answering RQ2. *(Chapter 5)*
+
 ## 1.5 Contributions
 
 1. The first fully-automatic spatial-relationship annotator for this robot
@@ -93,7 +111,26 @@ vision-language task-planning comparison, scaling on new robot captures, and
 copy-paste augmentation. These protect the timeline and strengthen the
 future-work discussion rather than weakening the contribution.
 
-## 1.7 Dissertation structure
+## 1.7 Methodology framing
+
+The project follows the CRISP-DM structure that organises data-science work
+from problem understanding through to evaluation and deployment. The mapping
+below is descriptive, not decorative: two of the project's findings (the
+dataset's stored image orientation and the three measured annotator
+behaviours) came directly from the Data Understanding stage, and the
+audit-driven repair of the support rules is a documented iteration between
+Evaluation and Modelling — CRISP-DM's loop, made explicit rather than hidden.
+
+| CRISP-DM stage | In this project | Where |
+|---|---|---|
+| Business understanding | the manual-annotation bottleneck; RQ1/RQ2 | Ch. 1–2 |
+| Data understanding | dataset audit: image-orientation defect, ~10% label sparsity, three measured annotator behaviours | Ch. 3–4 |
+| Data preparation | orientation-corrected loading, geometry caching, native-format writers | Ch. 3 |
+| Modelling | perception stack + geometric rule layer; threshold calibration; downstream classifiers | Ch. 3, 5 |
+| Evaluation | fidelity protocol (baselines, ablations, audits), controlled label-source comparison, exhaustive failure attribution | Ch. 4–6 |
+| Deployment | detector-in-the-loop mode, runtime/VRAM footprint, reproducibility package | Ch. 4, appendices |
+
+## 1.8 Dissertation structure
 
 Chapter 2 reviews the automatic-annotation lineage and positions the gap.
 Chapter 3 gives the problem analysis and the geometric design of the seven
