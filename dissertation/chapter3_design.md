@@ -1,6 +1,6 @@
 # Chapter 3 — Problem Analysis and Design
 
-> Draft, Week 2. Written alongside the build, so every design claim below is
+> Written alongside the build, so every design claim below is
 > implemented and, where stated, measured. Numbers marked *(measured)* come from
 > runs over the released dataset (836 annotated images); the fitting protocol and
 > per-annotator analysis are reproducible from `eval/fit_near.py` and
