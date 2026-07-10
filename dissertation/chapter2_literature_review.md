@@ -1,14 +1,8 @@
 # Chapter 2 — Literature Review
 
-> Draft, Week 1 (expanded). The marking scheme weights this chapter at 20% and
-> rewards a **critical comparison** that exposes a gap, not a catalogue. The
-> structure and the comparison table in §2.6 are the analytical spine.
->
-> **Citation status.** Facts attributed to the source paper are verified against
-> its arXiv full text (2506.12525). SpatialVLM, SpatialRGPT, RoboSpatial,
-> Open3D-VQA, VQASynth, SCLIP, PrimitiveAnything and REACT++ are verified against
-> their papers/repos (links at the end). Page/section numbers and formal
-> bibliography entries are still to be added in the writing weeks.
+> Facts attributed to the source paper are verified against its arXiv full
+> text (2506.12525); all other cited works are verified against their published
+> versions. Full bibliography entries: [references.md](references.md).
 
 ## 2.1 Scene graphs and spatial relationships in robotics
 
@@ -143,7 +137,29 @@ relevant design space — and the basis of the **detector-swap ablation** — is
 ## 2.5 Learned scene-graph generation (the consumer of our output)
 
 Scene-graph generation (SGG) models **predict** relationships from learned visual
-patterns. **REACT++** (Neau & Falomir, 2026) is a real-time SGG model with a YOLO
+patterns. The field's shape was set by **Visual Genome** (Krishna et al., 2017) —
+108k images with crowdsourced relationship triplets, whose JSON format this
+dataset (and this project's output writer) inherits — and by the model lineage
+benchmarked on it. **Neural Motifs** (Zellers et al., CVPR 2018) demonstrated
+that global context and label statistics dominate relation prediction: their
+frequency baseline (predict the most common predicate for a given object pair,
+ignoring the image) proved notoriously hard to beat, a warning that relation
+"accuracy" can be memorised co-occurrence rather than understood geometry.
+**VCTree** (Tang et al., CVPR 2019) composes dynamic tree structures over
+objects to capture context — and is the best-performing model in the source
+paper's own benchmark (mR@100 = 0.49). **Unbiased SGG** (Tang et al., CVPR 2020)
+then showed formally that models trained on crowdsourced scene graphs largely
+absorb the *annotation distribution* — its long tail and its biases — and
+proposed counterfactual debiasing to recover the visual signal. Two lessons
+transfer directly. First, the models consuming this dataset's labels are known
+bias-absorbers, so whatever the annotation carries — here, measured inverted
+conventions and selective `near` usage (Chapter 4) — becomes the training
+signal; cleaning the supply is attacking the cause, debiasing the model is
+treating the symptom. Second, Motifs' frequency-baseline lesson dictates this
+project's baseline discipline: every fidelity number in Chapter 4 is read
+against trivial random/majority baselines for exactly this reason.
+
+**REACT++** (Neau & Falomir, 2026) is a real-time SGG model with a YOLO
 backbone, reportedly ~20% faster and ~10% more accurate on relation prediction
 than its predecessor, small enough to run onboard a robot; it ships in the open
 **SGG-Benchmark** framework. The essential point for positioning this project:
@@ -151,10 +167,44 @@ such models **require labelled training data and therefore sit downstream of an
 annotator**. This project *computes* labels from geometry and runs *before* any
 SGG model — it is the **supplier**, and REACT++ is a natural **consumer**. Using
 REACT++/SGG-Benchmark to train on our auto-labels versus the human labels is the
-*optional* heavyweight version of RQ2 (the lightweight classifier is the
-controlled main experiment); it is deferred unless the core lands early.
+heavyweight version of RQ2 (the lightweight classifier is the controlled main
+experiment) and is the designed follow-on benchmark test.
 
-## 2.6 Critical comparison and the gap
+## 2.6 Label quality: weak supervision and annotator disagreement
+
+The project's premise — replace scarce human labels with dense computed ones —
+has an established name: **weak supervision**. **Snorkel** (Ratner et al.,
+2017) formalised *data programming*: instead of labelling examples, experts
+write labelling functions — heuristics, rules, distant supervision — whose
+noisy, overlapping votes are combined into training labels, trading per-label
+human authority for coverage and consistency. Its deployments repeatedly
+matched or beat hand-labelled baselines wherever the labelled set, not the
+model, was the bottleneck. This project's geometric rules are labelling
+functions in precisely that sense — deterministic, auditable, dense — with two
+departures from the Snorkel setting: measured geometry gives near-exact rather
+than noisy votes for most predicates (the audit estimates true precision ≈ 1.0
+for five of seven), so no probabilistic label aggregation is needed; and the
+computed labels are *validated against* the human labels they replace (RQ1)
+rather than assumed comparable.
+
+The complementary literature dismantles the premise that human annotation is a
+single reliable gold standard. **Uma et al.'s (2021) survey of learning from
+disagreement** documents systematic annotator disagreement across vision and
+language tasks — driven by ambiguous guidelines, subjective category
+boundaries and annotator-specific conventions — and reviews methods that treat
+disagreement as signal rather than noise. That frame fits this dataset
+exactly: Chapter 4 measures three annotator behaviours (selective `near`
+usage, an inverted front/behind convention in two groups, one-directional
+support labelling) which make "agreement with the humans" a per-annotator
+rather than a global quantity. This motivates two design decisions taken in
+Chapters 3–4: evaluation is reported per annotator group, never only pooled;
+and thresholds are calibrated only on annotators who actually used a label,
+with other annotators held out. It also sharpens RQ2 into a question the
+weak-supervision literature predicts but rarely tests this directly: can
+consistent computed labels *out-teach* inconsistent human ones on the humans'
+own held-out annotations?
+
+## 2.7 Critical comparison and the gap
 
 The table is the analytical core: it shows every neighbour either targets a
 different output, is a reference recipe rather than an annotator, operates outside
@@ -180,12 +230,15 @@ quantifies agreement with the human consensus on the same images. The
 geometry-to-label *method* is borrowed and well-precedented; its instantiation as
 a validated automatic annotator for this dataset is new.
 
-## 2.7 Summary and positioning
+## 2.8 Summary and positioning
 
 The literature establishes (i) that spatial relations are **computable from
 geometry** (SpatialVLM and its lineage), (ii) that **depth-grounded region
-reasoning** works (SpatialRGPT, RoboSpatial), and (iii) that **learned SGG**
-consumes labelled triplets (REACT++). It also leaves a precise gap: there is no
+reasoning** works (SpatialRGPT, RoboSpatial), (iii) that **learned SGG**
+consumes labelled triplets and absorbs their biases (Visual Genome lineage,
+REACT++), and (iv) that **dense rule-based supervision is a proven substitute
+for scarce human labels** when validated carefully (Snorkel; the disagreement
+literature). It also leaves a precise gap: there is no
 automatic, geometry-based annotator that emits this robot dataset's seven spatial
 predicates in its native formats and is validated against its human labels — even
 though the dataset's authors explicitly ask for automation-friendly fixes
@@ -196,17 +249,5 @@ geometric rules over measured perception**, not a learned relation predictor tha
 would merely re-import human labelling bias. This motivates the design developed
 in Chapter 3.
 
----
-
-## Reference links (to formalise into the bibliography)
-- Source paper (ACM MM 2025): https://doi.org/10.1145/3746027.3758293 · full text https://arxiv.org/abs/2506.12525
-- SpatialVLM (CVPR 2024): https://arxiv.org/abs/2401.12168
-- SpatialRGPT (NeurIPS 2024): https://arxiv.org/abs/2406.01584 · https://github.com/AnjieCheng/SpatialRGPT
-- RoboSpatial (CVPR 2025): https://arxiv.org/abs/2411.16537 · https://github.com/NVlabs/RoboSpatial
-- SCLIP (ECCV 2024): https://arxiv.org/abs/2312.01597 · https://github.com/wangf3014/SCLIP
-- CLIP (2021): https://github.com/openai/CLIP
-- GroundingDINO; SAM2; Depth Anything v2 — building blocks (add canonical citations)
-- PrimitiveAnything (SIGGRAPH 2025): https://arxiv.org/abs/2505.04622
-- REACT++ (2026): https://arxiv.org/abs/2603.06386 · SGG-Benchmark https://github.com/Maelic/SGG-Benchmark
-- VQASynth (remyxai): https://github.com/remyxai/VQASynth
-- Open3D-VQA (ACM MM 2025): https://arxiv.org/abs/2503.11094 · https://github.com/EmbodiedCity/Open3D-VQA.code
+Full citation details for every work discussed in this chapter are given in
+[references.md](references.md).
