@@ -223,11 +223,49 @@ def fig_near_sweep():
     print(f"figure -> {out.relative_to(ROOT)}")
 
 
+# --- Figure 5: video-demo temporal stability -------------------------------
+def fig_video_stability():
+    import json
+    clips = [("clip 1 — moving camera, static scene",
+              ROOT / "outputs" / "video" / "clip1" / "frames.jsonl"),
+             ("clip 2 — static camera, moving hands",
+              ROOT / "outputs" / "video" / "clip2" / "frames.jsonl")]
+    if not all(p.exists() for _, p in clips):
+        print("video frames.jsonl not found; skipped video_stability")
+        return
+
+    def jac(a, b):
+        return 1.0 if not a and not b else len(a & b) / len(a | b)
+
+    fig, axes = plt.subplots(1, 2, figsize=(10.5, 3.8), sharey=True)
+    for ax, (title, path) in zip(axes, clips):
+        fr = [json.loads(l) for l in open(path, encoding="utf-8")]
+        raw = [set(map(tuple, f["triplets_raw"])) for f in fr]
+        smo = [set(map(tuple, f["triplets_smoothed"])) for f in fr]
+        t = [f["time"] for f in fr][1:]
+        ax.plot(t, [jac(raw[i], raw[i + 1]) for i in range(len(raw) - 1)],
+                color=C_GRAY, lw=1.2, label="raw")
+        ax.plot(t, [jac(smo[i], smo[i + 1]) for i in range(len(smo) - 1)],
+                color=C_MAIN, lw=1.6, label="smoothed (±2 frames)")
+        ax.set_title(title, fontsize=10.5)
+        ax.set_xlabel("time (s)")
+        ax.set_ylim(0, 1.02)
+        _style(ax)
+    axes[0].set_ylabel("frame-to-frame\ntriplet agreement (Jaccard)")
+    axes[1].legend(loc="lower right", frameon=False)
+    out = FIG / "video_stability.png"
+    fig.tight_layout()
+    fig.savefig(out)
+    plt.close(fig)
+    print(f"figure -> {out.relative_to(ROOT)}")
+
+
 def main():
     fig_rq1_recall()
     fig_rq2_comparison()
     fig_front_behind()
     fig_near_sweep()
+    fig_video_stability()
 
 
 if __name__ == "__main__":

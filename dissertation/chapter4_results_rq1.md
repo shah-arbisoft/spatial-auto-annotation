@@ -358,3 +358,39 @@ the source paper) were not available; with that detector the end-to-end gap woul
 close. And the 20-image trial over-estimated detection quality (its scenes
 come from one annotator batch), a reminder that the full-set numbers are the
 ones that matter.
+
+## 4.12 Video demonstration
+
+Two short royalty-free stock clips (sources in Appendix A) were processed
+per frame by the deployment-mode stack of §4.11 with open-vocabulary prompts,
+greedy IoU tracking for stable object identities, and a ±2-frame temporal
+majority vote over each pair's predicates (`scripts/run_video.py`; overlays
+and per-frame records in `outputs/video/`). The clips were chosen as
+complementary regimes: a **moving camera over a static desk scene** (clip 1,
+99 processed frames), where relations should stay constant and any variation
+is measurement noise; and a **static overhead camera with moving hands**
+(clip 2, 79 frames), where relations genuinely change and smoothing must not
+erase the change.
+
+Three observations. **(i) Relations are stable wherever identity is stable.**
+For object pairs co-visible in ≥20 frames, the emitted predicate persists at
+0.90/0.92 mean across the two clips (80–85% of pair-predicates present in
+≥90% of their co-visible frames). Frame-to-frame triplet agreement (Jaccard
+0.89 for clip 1, 0.70 for clip 2) is dominated by zero-shot detection churn
+and, in clip 2, genuine hand motion — the dips in the stability trace align
+with the hands picking objects up. This mirrors §4.11's attribution exactly:
+the variation is detection, not relations. **(ii) The rules transfer to
+objects they were never calibrated on**: the pen resting on the notepad and a
+wallet-and-photograph stack are labelled with the same contact evidence
+fitted on the dataset's six classes. **(iii) The camera-frame semantics are
+visible**: in the bird's-eye clip, in front of/behind re-maps to distance
+from the viewer's edge of the desk — the reference-frame dependence §2.3
+cites from RoboSpatial, demonstrated rather than asserted. The open-vocabulary
+quirks are equally visible and worth recording: content displayed *on the
+laptop's screen* is detected as real objects, and items outside the prompt
+list snap to the nearest prompted class (an earbuds case becomes a `cup`).
+
+This is a demonstration, not an experiment — no video ground truth exists —
+but it establishes that the annotator is video-ready at ~2–3 s per frame,
+with SAM2's native mask propagation (it is a video model used here frame-wise)
+as the designed upgrade path for true temporal consistency.

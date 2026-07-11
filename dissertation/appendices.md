@@ -13,6 +13,11 @@ this dissertation blur faces, and the dataset is used strictly as released.
 self-assessment ethics form is required for secondary use of the published
 dataset, and insert the completed form or approval confirmation here. -->
 
+**Demonstration footage.** The two video clips in §4.12 are royalty-free
+stock footage used under their free licence.
+<!-- TODO(user): paste the two source URLs (e.g. Pexels/Mixkit page links)
+here so the licence trail is complete. -->
+
 ## Appendix B — Reproducibility
 
 Environment: Windows 11, Python 3.11.9 (virtual environment), PyTorch 2.5.1
