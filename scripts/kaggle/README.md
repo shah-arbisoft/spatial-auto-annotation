@@ -13,10 +13,12 @@ relation labels only.
 2. Zip and upload the exported data as ONE Kaggle Dataset (slug `spatial-sgg`):
 
        cd datasets
-       tar -a -cf spatial_sgg_upload.zip spatial_sgg spatial_sgg_yolo
+       python -c "import zipfile; from pathlib import Path; z = zipfile.ZipFile('spatial_sgg_upload.zip','w',zipfile.ZIP_DEFLATED); [z.write(p, p.as_posix()) for root in ('spatial_sgg','spatial_sgg_yolo') for p in sorted(Path(root).rglob('*')) if p.is_file()]; z.write('spatial_sgg_react.yaml','spatial_sgg_react.yaml'); z.close()"
 
-   (Regenerate anytime: `python scripts/export_sgg_benchmark.py` and
-   `python scripts/export_yolo_det.py`.)
+   (Windows tar does not write real zip files. Regenerate the data anytime:
+   `python scripts/export_sgg_benchmark.py` and
+   `python scripts/export_yolo_det.py`; the config copy lives at
+   `datasets/spatial_sgg_react.yaml`.)
 3. New Kaggle notebook → Add data → your `spatial-sgg` dataset → enable GPU +
    internet.
 
