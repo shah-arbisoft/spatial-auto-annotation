@@ -31,7 +31,10 @@ relation labels only.
 ```bash
 %%bash
 git clone https://github.com/Maelic/SGG-Benchmark.git
-cd SGG-Benchmark && pip install -e . -q && pip install ultralytics -q
+cd SGG-Benchmark && pip install -e . -q
+pip install -q ultralytics hydra-core omegaconf
+# hydra-core/omegaconf are not pulled by the framework's install but its
+# config layer imports them; ultralytics is for the detector in Cell 3.
 ```
 
 **Cell 2 — data into a writable tree**
