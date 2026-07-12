@@ -63,10 +63,17 @@ from ultralytics import YOLO
 m = YOLO("yolov8m.pt")
 m.train(data=yp, epochs=60, imgsz=640, batch=16,
         project="det", name="yolov8m_spatial")
-# expect mAP50 ≈ 0.9+ (the source paper's YOLOv10m reached 0.93)
+# mAP50 lands ~0.65-0.70 on the 500-image train split (bottle/book/human
+# strong, cube/box weak). Lower than the paper's 0.93 because we train on the
+# train split only; both experiment arms share this frozen detector, so the
+# label-source comparison stays fair (detection is a shared ceiling).
+import glob
 os.makedirs("checkpoints/BACKBONES", exist_ok=True)
-shutil.copy("det/yolov8m_spatial/weights/best.pt",
-            "checkpoints/BACKBONES/yolov8m_spatial.pt")
+# Ultralytics saves under runs/detect/<project>/ and auto-numbers on rerun.
+src = max(glob.glob("runs/detect/det/yolov8m_spatial*/weights/best.pt"),
+          key=os.path.getmtime)
+shutil.copy(src, "checkpoints/BACKBONES/yolov8m_spatial.pt")
+print("detector copied from", src)
 ```
 
 **Cell 4 — experiment config**
