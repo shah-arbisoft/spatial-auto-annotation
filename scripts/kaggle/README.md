@@ -41,13 +41,26 @@ cp -r /kaggle/input/spatial-sgg/spatial_sgg_yolo datasets/
 
 **Cell 3 — detector, trained once (~15 min)**
 ```python
-%cd SGG-Benchmark
+import os, yaml, shutil
+os.chdir("/kaggle/working/SGG-Benchmark")
+
+# sanity: the images must have copied in Cell 2
+assert os.path.isdir("datasets/spatial_sgg_yolo/images/train"), "run Cell 2 first"
+print("train images:", len(os.listdir("datasets/spatial_sgg_yolo/images/train")))
+
+# Ultralytics resolves a relative `path:` against the CWD, not the yaml's
+# folder — so rewrite it to the absolute dataset root.
+yp = "datasets/spatial_sgg_yolo/data.yaml"
+d = yaml.safe_load(open(yp))
+d["path"] = os.path.abspath("datasets/spatial_sgg_yolo")
+yaml.safe_dump(d, open(yp, "w"))
+print("data root ->", d["path"])
+
 from ultralytics import YOLO
 m = YOLO("yolov8m.pt")
-m.train(data="datasets/spatial_sgg_yolo/data.yaml", epochs=60, imgsz=640,
-        batch=16, project="det", name="yolov8m_spatial")
+m.train(data=yp, epochs=60, imgsz=640, batch=16,
+        project="det", name="yolov8m_spatial")
 # expect mAP50 ≈ 0.9+ (the source paper's YOLOv10m reached 0.93)
-import shutil, os
 os.makedirs("checkpoints/BACKBONES", exist_ok=True)
 shutil.copy("det/yolov8m_spatial/weights/best.pt",
             "checkpoints/BACKBONES/yolov8m_spatial.pt")
