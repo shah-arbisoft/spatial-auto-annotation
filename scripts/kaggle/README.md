@@ -9,7 +9,10 @@ relation labels only.
 ## One-time setup
 
 1. Kaggle account, phone-verified (Settings → Phone verification) — unlocks
-   GPU (30 h/week). Pick a **T4 x2 or P100** notebook.
+   GPU (30 h/week). Pick **GPU T4 x2**. (Avoid P100: the current Kaggle
+   PyTorch build dropped Pascal/sm_60 support, so P100 throws
+   "no kernel image is available for execution on the device". T4 is
+   Turing/sm_75 and works.)
 2. Zip and upload the exported data as ONE Kaggle Dataset (slug `spatial-sgg`):
 
        cd datasets
