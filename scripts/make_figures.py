@@ -260,12 +260,44 @@ def fig_video_stability():
     print(f"figure -> {out.relative_to(ROOT)}")
 
 
+# --- Figure 6: SGG-Benchmark training curves (Week-7 experiment) ------------
+def fig_sgg_curves():
+    import json
+    p = ROOT / "outputs" / "sgg_benchmark" / "curves.json"
+    if not p.exists():
+        print("sgg curves.json not found; skipped sgg_curves")
+        return
+    curves = json.loads(p.read_text())
+    fig, ax = plt.subplots(figsize=(7.6, 4.2))
+    styles = {"react_human": (C_GRAY, "trained on human labels"),
+              "react_auto": (C_MAIN, "trained on automatic labels")}
+    for arm, (color, label) in styles.items():
+        mr = curves[arm]["val_mr_per_epoch"]
+        ax.plot(range(len(mr)), mr, color=color, lw=1.8, label=label)
+        b = curves[arm]["best_epoch"]
+        ax.plot(b, mr[b], "o", color=color, ms=7)
+        ax.annotate(f"best {mr[b]:.3f} (ep {b})", (b, mr[b]),
+                    textcoords="offset points", xytext=(8, 6),
+                    fontsize=9, color=color)
+    ax.set_xlabel("epoch")
+    ax.set_ylabel("validation mR@100\n(each arm vs its own training-source labels)")
+    ax.set_ylim(0, None)
+    _style(ax)
+    ax.legend(loc="lower right", frameon=False)
+    out = FIG / "sgg_training_curves.png"
+    fig.tight_layout()
+    fig.savefig(out)
+    plt.close(fig)
+    print(f"figure -> {out.relative_to(ROOT)}")
+
+
 def main():
     fig_rq1_recall()
     fig_rq2_comparison()
     fig_front_behind()
     fig_near_sweep()
     fig_video_stability()
+    fig_sgg_curves()
 
 
 if __name__ == "__main__":

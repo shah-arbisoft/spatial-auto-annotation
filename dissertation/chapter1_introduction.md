@@ -137,4 +137,6 @@ Chapter 3 gives the problem analysis and the geometric design of the seven
 predicates with per-choice justifications. Chapter 4 presents the fidelity study
 (RQ1) and ablations. Chapter 5 presents the downstream study (RQ2). Chapter 6 is
 a critical evaluation tying results to causes and to prior work. Chapter 7
+reports the direct benchmark test — the source paper's own SGG models trained
+on each label source — against three pre-registered predictions. Chapter 8
 concludes and sets out future work.
