@@ -60,7 +60,9 @@ def main():
                     auto[r["image_id"]].append((int(r["subj"]), int(r["obj"]), k))
 
     pred_to_id = {k: i for i, k in enumerate(PREDICATES)}
-    rel_categories = [{"id": i, "name": k} for i, k in enumerate(PREDICATES)]
+    # index 0 = __no_relation__; predicates occupy 1..7 (see predicate_id +1)
+    rel_categories = [{"id": 0, "name": "__no_relation__"}]
+    rel_categories += [{"id": i + 1, "name": k} for i, k in enumerate(PREDICATES)]
 
     label_ids: dict[str, int] = {}
     data = {s: {"images": [], "annotations": [], "human": [], "auto": []}
@@ -103,7 +105,8 @@ def main():
             obj2ann[oi] = aid
             data[s]["annotations"].append({
                 "id": aid, "image_id": img_id,
-                "category_id": label_ids[o.label],
+                # +1: SGG-Benchmark reserves object index 0 for __background__
+                "category_id": label_ids[o.label] + 1,
                 "bbox": [round(bx, 1), round(by, 1), round(bw, 1), round(bh, 1)],
                 "area": round(bw * bh, 1), "iscrowd": 0,
             })
@@ -117,7 +120,8 @@ def main():
             data[s][variant].append({
                 "id": rid, "image_id": img_id,
                 "subject_id": obj2ann[subj], "object_id": obj2ann[obj],
-                "predicate_id": pred_to_id[pred],
+                # +1: relation index 0 is reserved for __no_relation__
+                "predicate_id": pred_to_id[pred] + 1,
             })
             counters[s][variant] += 1
 
@@ -130,8 +134,10 @@ def main():
             for subj, obj, pred in auto.get(gt.image_id, []):
                 add("auto", subj, obj, pred)
 
-    categories = [{"id": i, "name": n, "supercategory": "none"}
-                  for n, i in sorted(label_ids.items(), key=lambda kv: kv[1])]
+    # index 0 = __background__; object classes occupy 1..6 (see category_id +1)
+    categories = [{"id": 0, "name": "__background__", "supercategory": "none"}]
+    categories += [{"id": i + 1, "name": n, "supercategory": "none"}
+                   for n, i in sorted(label_ids.items(), key=lambda kv: kv[1])]
     for s in SPLITS:
         for variant in ("human", "auto"):
             doc = {"images": data[s]["images"],
