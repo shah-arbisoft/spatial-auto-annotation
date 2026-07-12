@@ -14,9 +14,10 @@ self-assessment ethics form is required for secondary use of the published
 dataset, and insert the completed form or approval confirmation here. -->
 
 **Demonstration footage.** The two video clips in §4.12 are royalty-free
-stock footage used under their free licence.
-<!-- TODO(user): paste the two source URLs (e.g. Pexels/Mixkit page links)
-here so the licence trail is complete. -->
+stock footage from Pexels, used under the Pexels licence (free use, no
+attribution required): clip 1 (desk scene, moving camera)
+https://www.pexels.com/video/6558513/ and clip 2 (overhead desk, moving
+hands) https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-using-a-modern-camera-3250234/.
 
 ## Appendix B — Reproducibility
 
@@ -35,6 +36,13 @@ Key commands:
 - `python eval/downstream.py --seeds 42,43,44` — the RQ2 experiment
 - `python scripts/make_figures.py` — regenerate all figures from cached results
 - `pytest -q` — unit and invariant tests
+
+The Chapter 7 experiment is reproducible from `scripts/kaggle/`: the dataset
+converters (`export_sgg_benchmark.py`, `export_yolo_det.py`), the adapted
+REACT++ configuration, the run recipe (`README.md`, `notebook_cells.md`), and
+the executed evaluation notebook with its outputs (`eval_notebook.ipynb`) —
+the recorded provenance of every number in Chapter 7's tables. Training logs
+and parsed results: `outputs/sgg_benchmark/`.
 
 (The full walk-through — installation, dataset layout, expected outputs and
 runtimes per script — is completed in the final assembly, together with the
