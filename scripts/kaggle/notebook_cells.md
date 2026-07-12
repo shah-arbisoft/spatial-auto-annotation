@@ -127,3 +127,16 @@ cd /kaggle/working/SGG-Benchmark
 zip -rq /kaggle/working/results.zip checkpoints/spatial -x "*.pth" -x "*.pt"
 echo "RESULTS -> /kaggle/working/results.zip"; ls -la /kaggle/working/results.zip
 ```
+
+## Post-run note: recovering the test-set evaluation
+
+The framework's final/`--eval-only` evaluation is silently a no-op with this
+config: `eval_only()` iterates `zip(hydra_cfg.datasets.test, loaders)` and,
+unlike the train/val path, applies no name fallback — with `datasets.test`
+undeclared the list is empty and "Evaluation completed!" prints instantly
+(same-millisecond timestamps). Training and per-epoch validation are
+unaffected. Workaround: pass `"++datasets.test=[SpatialRobot_test]"` on the
+eval command line. The committed run's version output preserves the trained
+`best_model_epoch_*.pth` and the detector, so the eval-only pass needs no
+retraining: attach the previous notebook's output as an input, stage the
+checkpoints, and run the two eval cells with the override (~5 min each).
