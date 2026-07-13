@@ -67,6 +67,21 @@ stated. One result points sharply the other way: on triplet *types never
 seen in training*, the auto-trained arm recalls 0.157 against the human
 arm's 0.004 — a 39× gap in compositional generalisation.
 
+Two follow-up evaluations decompose the headline (same checkpoints, test
+slices re-scored):
+
+| test slice (mR@100) | human-trained | auto-trained |
+|---|---|---|
+| full test, as annotated | **0.346** | 0.277 |
+| full test, conventions aligned* | **0.387** | 0.312 |
+| group 6 alone (inverted convention) | **0.382** | 0.261 |
+| **group 7 alone (consistent annotator)** | 0.323 | **0.334** |
+| group 8 alone (inverted, dense `near` user) | **0.190** | 0.116 |
+
+\* groups 6/8's front/behind gold flipped, one disclosed bit per group, as in
+§4.5. On group 7 the zero-shot gap persists: zR@100 0.221 (auto) vs 0.008
+(human).
+
 ## 7.4 Why the verdict flipped between Chapter 5 and this chapter
 
 The same labels, the same held-out human gold, and two opposite outcomes:
@@ -89,14 +104,32 @@ arm, by contrast, learned the annotators' *labelling prior* — which pairs a
 human bothers to record — which is exactly what a ranking metric against
 human-selected gold rewards.
 
-**(ii) Convention mismatch on two of three test groups.** Both arms were
-trained on consistent-convention front/behind (the tool's by construction;
-groups 0–4's by measurement), while groups 6 and 8 — two thirds of the test
-gold — invert it (§4.5). The dense arm commits harder to the consistent
-convention and is punished more systematically for it; the sparse arm's
-weaker, noisier direction preferences scatter across both conventions and
-are accidentally rewarded. Depth predicates: 0.124/0.195 (human) vs
-0.101/0.109 (auto), both far below what either model knows.
+**(ii) Convention mismatch is a shared penalty — not, as first
+hypothesised, a differential one.** Both arms were trained on
+consistent-convention front/behind (the tool's by construction; groups
+0–4's by measurement), while groups 6 and 8 — two thirds of the test gold —
+invert it (§4.5). Re-scoring against convention-aligned gold lifts the two
+arms almost equally (+0.041 human, +0.035 auto; the human arm's *in front
+of* recall jumps 0.124 → 0.386, the auto arm's 0.101 → 0.248): both models
+learned the consistent convention, both pay the same tax on inverted gold,
+and the gap between them barely moves. The initial hypothesis that the
+denser arm is punished *harder* for its confidence is refuted by this
+measurement and withdrawn.
+
+**(ii′) Where the gap actually lives: the two defective test groups.** The
+per-group decomposition is decisive. On **group 7 — the one test annotator
+with consistent conventions — the auto-trained arm wins outright** (mR@100
+0.334 vs 0.323, with its zero-shot advantage intact at 0.221 vs 0.008). The
+human arm's entire headline lead is manufactured on groups 6 and 8, the two
+annotators this dissertation had already convicted of convention inversion
+(and, for group 8, idiosyncratic `near` usage and one-directional support).
+Group 6 shows the clearest fingerprint of annotation-prior matching: its
+*lateral* gold — geometrically unambiguous relations both models predict
+freely — is recalled at 0.49/0.69 by the human arm against 0.12/0.21 by the
+auto arm. Laterals have no convention to invert; what differs is *which*
+pairs the annotator selected, and the human-trained model ranks exactly
+those pairs highly because it learned human selection habits, not because
+it knows more geometry.
 
 **(iii) `near` gold is a single idiosyncratic annotator.** All 93 test
 `near` labels come from group 8, whose usage is sparse and non-exhaustive
@@ -121,13 +154,14 @@ replicate. Read critically: the ranking metric inherits every defect this
 dissertation measured in the gold — sparsity that penalises true
 predictions, inverted conventions in two of three test groups, a
 single-annotator `near` — so it partly measures agreement with those defects
-rather than spatial understanding; the zero-shot result, the audits and the
-Chapter 5 experiment jointly indicate the auto-trained model knows the
-geometry at least as well while generalising far better. Distinguishing the
-readings empirically is the designed follow-up: per-group test evaluation
-(the consistent group 7 versus the inverted 6/8) and a manual audit of the
-auto arm's top-ranked "false positives", both direct analogues of Chapter
-4's instruments.
+rather than spatial understanding. The per-group decomposition executed
+above adjudicates between the readings more directly than expected: against
+the only test annotator whose labels this dissertation's earlier chapters
+did *not* convict of a measured defect, the auto-trained model is the better
+one — while against the two convicted annotators it loses, in proportion to
+their idiosyncrasy. The one remaining instrument is a manual audit of the
+auto arm's top-ranked "false positives" (the direct analogue of §4.4), left
+as designed follow-up.
 
 ## 7.6 What Chapter 5's predictions got right and wrong
 
