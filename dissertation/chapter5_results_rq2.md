@@ -31,7 +31,7 @@ Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 | predicate | human-trained recall | auto-trained recall | gold (held-out) |
 |---|---|---|---|
 | on | 0.84 (0.83–0.86) | 0.92 (0.92–0.93) | 348 |
-| under | 0.44 (0.36–0.53) | 0.93 (0.92–0.93) | 192 |
+| under | 0.44 (0.36–0.53) | 0.92 (0.92–0.93) | 192 |
 | to the left of | 0.22 (0.18–0.29) | 0.95 (0.95–0.95) | 446 |
 | to the right of | 0.25 (0.22–0.31) | 0.99 (0.99–0.99) | 550 |
 | in front of | 0.09 (0.08–0.10) | 0.19 (0.19–0.19) | 609 |
@@ -55,7 +55,7 @@ often labelled in one direction only). A classifier trained on sparse,
 inconsistent supervision learns above all to be silent — its recall collapses
 exactly where human labelling was thinnest (`near` 0.08, lateral 0.22–0.25).
 The automatic labels are dense and rule-consistent, so the same model actually
-learns the geometry (near 1.00, lateral 0.95–0.99, support 0.92–0.93). This is
+learns the geometry (near 1.00, lateral 0.95–0.99, support 0.92). This is
 the weak-supervision prediction (§2.6) confirmed under controlled conditions:
 dense, consistent programmatic labels out-teach scarce gold labels when
 supervision — not model capacity — is the bottleneck.
