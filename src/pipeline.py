@@ -40,6 +40,7 @@ def thresholds_from_config(cfg: dict) -> Thresholds:
         lateral_center_eps=p["lateral_center_eps"],
         depth_eps=p["depth_eps"],
         plane_band=p.get("plane_band", 0.005),
+        no_support_classes=tuple(p.get("no_support_classes", ["human"])),
         flag_near_band=c["flag_near_band"],
     )
 
@@ -63,11 +64,12 @@ def objects_from(boxes_px, labels, masks, depth_map, width, height, z_scale=1.0)
     ]
 
 
-def annotate_objects(objs: list[Obj], cfg: dict, contact: dict | None = None):
+def annotate_objects(objs: list[Obj], cfg: dict, contact: dict | None = None,
+                     extra_elevated: set | None = None):
     """Run the predicate rules + correction over every ordered pair."""
     return evaluate_scene(
         objs, thresholds_from_config(cfg), correct=cfg["correction"]["enabled"],
-        contact=contact,
+        contact=contact, extra_elevated=extra_elevated,
     )
 
 

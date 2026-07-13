@@ -78,6 +78,12 @@ class Thresholds:
     plane_band: float = 0.005      # ground-plane fallback: min normalised
                                    # bottom-edge difference (see plane_fallback)
     flag_near_band: float = 0.15
+    no_support_classes: tuple = ("human",)
+                                   # classes that never take part in on/under.
+                                   # Measured: 0 of 2,466 gold support triplets
+                                   # involve a person on either side; a held
+                                   # object satisfies pixel contact but is not
+                                   # resting (3/7 remaining audited errors).
 
 
 @dataclass
@@ -263,8 +269,13 @@ def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True,
     res = PairResult(subject=a.idx, object=b.idx)
 
     # --- vertical: on / under (mutually exclusive by construction) ---
-    on = is_on(a, b, t, contact_ab)
-    under = is_under(a, b, t, contact_ba)
+    # Class-aware guard: annotators never use support relations with a person
+    # on either side (0/2,466 gold triplets), and pixel contact cannot tell
+    # holding from resting - so support is not evaluated for these classes.
+    support_blocked = correct and (a.label in t.no_support_classes
+                                   or b.label in t.no_support_classes)
+    on = (not support_blocked) and is_on(a, b, t, contact_ab)
+    under = (not support_blocked) and is_under(a, b, t, contact_ba)
     if correct and on and under:
         # Geometrically impossible; demote to a flag rather than emit both.
         res.flags.append("on_under_conflict")
@@ -311,11 +322,16 @@ def evaluate_pair(a: Obj, b: Obj, t: Thresholds, correct: bool = True,
 
 
 def evaluate_scene(objs: list[Obj], t: Thresholds, correct: bool = True,
-                   contact: Optional[dict] = None) -> list[PairResult]:
+                   contact: Optional[dict] = None,
+                   extra_elevated: Optional[set] = None) -> list[PairResult]:
     """Compute predicates for every ordered pair of distinct objects in a scene.
 
     contact: optional {(i, j): fraction} mask-contact map from src/contact.py;
-    when omitted the support rule uses its box-adjacency fallback."""
+    when omitted the support rule uses its box-adjacency fallback.
+    extra_elevated: optional object indices known to rest on surfaces outside
+    the annotated classes (tables, cases - see scripts/run_surface_guard.py);
+    they join the contact-derived elevation set that gates the ground-plane
+    fallback."""
     results: list[PairResult] = []
     # An object is "elevated" when the tool's own support evidence says it
     # rests on some other object; such objects are off the ground plane, so
@@ -324,6 +340,8 @@ def evaluate_scene(objs: list[Obj], t: Thresholds, correct: bool = True,
     elevated: Optional[set[int]] = None
     if contact is not None:
         elevated = {i for (i, _j), v in contact.items() if v >= t.on_contact_min}
+        if extra_elevated:
+            elevated |= set(extra_elevated)
     for a in objs:
         for b in objs:
             if a.idx == b.idx:

@@ -23,8 +23,8 @@ segmentation:
 
 depth:
   backend: depth_anything_v2
-  variant: Small               # Apache-2.0; avoid Base/Large (non-commercial)
-  hf_model: depth-anything/Depth-Anything-V2-Small-hf
+  variant: Base                # A8 ablation: larger depth model (CC-BY-NC; fine for academic use - the shipped tool stays Small/Apache-2.0)
+  hf_model: depth-anything/Depth-Anything-V2-Base-hf
 
 # --- geometry ---
 geometry:

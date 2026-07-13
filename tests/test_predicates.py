@@ -146,6 +146,21 @@ def test_evaluate_scene_derives_elevation_from_contact_map():
     assert "in front of" in res[(1, 2)].predicates
 
 
+def test_person_never_takes_part_in_support():
+    """A held object satisfies pixel contact but must not fire on/under:
+    annotators never label person-support (0 of 2,466 gold triplets)."""
+    remote = make(0, "remote", (0.45, 0.35, 0.55, 0.45), depth=0.5)
+    person = make(1, "human", (0.30, 0.40, 0.70, 0.95), depth=0.5)
+    res = evaluate_pair(remote, person, T, contact_ab=0.9, contact_ba=0.0)
+    assert "on" not in res.predicates and "under" not in res.predicates
+    rev = evaluate_pair(person, remote, T, contact_ab=0.0, contact_ba=0.9)
+    assert "on" not in rev.predicates and "under" not in rev.predicates
+    # a normal stack is unaffected by the guard
+    cube = make(0, "cube", (0.40, 0.30, 0.60, 0.50), depth=0.5)
+    box = make(1, "box", (0.30, 0.50, 0.70, 0.80), depth=0.5)
+    assert "on" in evaluate_pair(cube, box, T, contact_ab=0.9).predicates
+
+
 def test_near_threshold_fit_recovers_separating_value():
     # distances clearly separable at ~0.5; humans call <0.5 "near".
     distances = np.array([0.1, 0.2, 0.3, 0.7, 0.8, 0.9])

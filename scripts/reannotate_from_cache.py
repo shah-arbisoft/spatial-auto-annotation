@@ -59,7 +59,11 @@ def main():
         if cpath.exists():
             contact = {tuple(map(int, k.split("-"))): v
                        for k, v in json.loads(cpath.read_text(encoding="utf-8")).items()}
-        pairs = annotate_objects(objs, cfg, contact)
+        spath = gpath.with_suffix("").with_suffix(".surfelev.json")
+        extra_elev = None
+        if spath.exists():
+            extra_elev = set(json.loads(spath.read_text(encoding="utf-8"))["elevated"])
+        pairs = annotate_objects(objs, cfg, contact, extra_elevated=extra_elev)
 
         (ann_dir / group).mkdir(parents=True, exist_ok=True)
         obj_dicts = [{"label": o.label, "box": list(o.box)} for o in objs]
