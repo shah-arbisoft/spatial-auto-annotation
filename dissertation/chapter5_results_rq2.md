@@ -99,10 +99,10 @@ learnable (this chapter's proxy reaches 1.00). And the depth predicates were
 being actively taught two opposite conventions by different annotators — the
 automatic labels apply one. The controlled experiment above is the proxy for
 the SGG step of the chain, and it measures the effect as large. The direct
-test — training the paper's own benchmark models on automatic versus human
-labels and comparing mR@100 — is the designed next experiment (Chapter 7),
-with three concrete predictions: later saturation, a higher plateau, and the
-recovery of `near`.
+test — training the paper's own benchmark model on automatic versus human
+labels and comparing mR@100 — is executed in Chapter 7. Three concrete
+predictions are registered here, before that run: later saturation, a higher
+plateau, and the recovery of `near`. Chapter 7 judges all three.
 
 ## 5.6 Answer to RQ2
 

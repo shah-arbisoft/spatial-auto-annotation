@@ -168,7 +168,7 @@ annotator**. This project *computes* labels from geometry and runs *before* any
 SGG model — it is the **supplier**, and REACT++ is a natural **consumer**. Using
 REACT++/SGG-Benchmark to train on our auto-labels versus the human labels is the
 heavyweight version of RQ2 (the lightweight classifier is the controlled main
-experiment) and is the designed follow-on benchmark test.
+experiment); that test is executed and reported in Chapter 7.
 
 ## 2.6 Label quality: weak supervision and annotator disagreement
 

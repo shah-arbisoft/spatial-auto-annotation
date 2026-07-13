@@ -105,8 +105,9 @@ The research questions decompose into five verifiable objectives:
 ## 1.6 Scope
 
 In scope: the automatic annotator; the fidelity study with baselines and
-ablations; the controlled downstream classifier; a critical evaluation chapter.
-Deferred to future work: retraining a full SGG model (REACT++), a
+ablations; the controlled downstream classifier; the direct benchmark test —
+the source paper's own SGG framework (REACT++) trained on each label source
+(Chapter 7); a critical evaluation chapter. Deferred to future work: a
 vision-language task-planning comparison, scaling on new robot captures, and
 copy-paste augmentation. These protect the timeline and strengthen the
 future-work discussion rather than weakening the contribution.
