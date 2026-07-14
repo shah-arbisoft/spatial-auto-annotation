@@ -202,7 +202,7 @@ test that verifies the perception models on first setup.
 | Compute relations from geometry | learned relation model | supplies (not consumes) training labels; auditable; valid for spatial predicates |
 | PredCls evaluation | detector-in-the-loop RQ1 | isolates the contribution; detection already established by the paper |
 | SAM2 masks, multimask best-score | box-only geometry | robustness (empty-mask failure measured); box-only kept as ablation |
-| Depth Anything v2 Small, relative | metric/stereo depth; larger variants | data is mono RGB; 6 GB budget; licence |
+| Depth Anything v2 Small, relative | metric/stereo depth; larger variants | data is mono RGB; 6 GB budget; Apache-2.0 licence; **and measured: the Base model gives identical accuracy (A8), so the limit is monocular ambiguity, not model capacity** |
 | Median masked depth | mean | robust to mask edge bleed |
 | Abstention bands + flags | forced binary decisions | converts model uncertainty into measurable human cost |
 | Ground-plane fallback for depth ties | metric depth models; multi-frame fusion | free 2D cue, pixel-precise in the depth band; guarded by own contact evidence; metric depth needs new capture, multi-frame breaks the single-image contract |
