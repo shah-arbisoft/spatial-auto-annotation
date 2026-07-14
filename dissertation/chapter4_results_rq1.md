@@ -280,9 +280,13 @@ A 30-sample re-audit of the new support extras confirms the precision claim
 independently: extras correct rise from 1/15 and 3/15 (box rule) to **11/15
 and 12/15** — estimated true support precision ~0.27 → ~0.9. The seven
 remaining wrong/uncertain extras have structure: a person *holding* a remote
-fires contact (holding ≠ resting — a class-aware guard is an obvious
-refinement), one occluded bottle-behind-bottle pair, and three distant
-clusters too small to verdict confidently.
+fires contact (holding ≠ resting), one occluded bottle-behind-bottle pair, and
+three distant clusters too small to verdict confidently. The person-holding
+mode is closed by a **class-aware guard**: annotators never label
+person-support (0 of 2,466 gold support triplets involve a person on either
+side), so `on`/`under` are simply not evaluated for that class — removing ~130
+false emissions at no recall cost, since the person side carried no gold to
+recover.
 
 **The ground-plane fallback (shipped).** The depth abstention band was the
 single largest miss cause, and most of it is resolvable without depth at all:
@@ -303,8 +307,38 @@ conservatively at **11/15 ≈ 0.73** — and the four wrong/uncertain cases shar
 one structure: an object resting on something the detector has no box for (a
 book on an unannotated case; a stacked-book pair whose contact fell below
 threshold), i.e. elevation the guard cannot see. That residual mode is
-documented, bounded, and exactly the class-aware/undetected-support refinement
-the support audit already motivates.
+documented, bounded, and exactly the undetected-support refinement the support
+audit already motivates.
+
+**Three follow-up refinements, measured; one shipped, two declined.** The
+class-aware guard *shipped*: annotators never label person-support (0 of
+2,466 gold triplets), so support is no longer evaluated when either object is
+a person — removing ~130 held-object emissions at zero recall cost and
+eliminating the person-holding audit mode by construction. Two further
+candidates were built, measured, and rejected on the evidence. (i)
+*Guard-only surface detection* (zero-shot prompts for tables, cases and trays
+feeding the elevation guard; `scripts/run_surface_guard.py`) suppressed 6% of
+the fallback's extra commits at a cost of 0.01 behind recall — but blocked
+none of the four audited failures, whose supports are either annotated-class
+objects with below-threshold contact (flat stacked books) or surfaces the
+detector missed; the machinery and its cache are retained as an ablation
+(`outputs/surface_guard_ablation/`). (ii) *A larger depth model* (Depth
+Anything v2 Base, 4× the parameters) moved front/behind recall by
++0.001/+0.002 — the remaining depth ambiguity lives in the scenes, not in
+model capacity, and the Small variant's Apache licence is kept. Both null
+results bound where further engineering can and cannot help.
+
+**Why a geometric cue, not a bigger depth model (ablation A8).** It is worth
+asking whether the depth pair would improve simply by using a stronger depth
+network. It does not: swapping Depth Anything v2 Small for the 4× larger Base
+variant and re-running the whole dataset moves front/behind recall by +0.005
+(0.636/0.652 → 0.641/0.656) and mean recall by +0.000. The depth-predicate
+limit is *monocular ambiguity* — two objects at a similar camera distance are
+inseparable by any monocular model, regardless of its fidelity — not the
+network's quality. This is precisely why the fallback that worked is a
+geometric projection cue rather than a heavier perception model, and it
+justifies shipping the Small variant: identical accuracy, an Apache-2.0
+licence, and half the VRAM.
 
 
 ## 4.10 Failure gallery: every miss diagnosed
