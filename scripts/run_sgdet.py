@@ -38,6 +38,21 @@ PROMPTS = {
     "remote control": "remote",
 }
 
+# Fallback vocabulary for footage whose contents are unknown (--common-objects
+# in annotate_image.py / run_video.py): ~60 everyday indoor object types.
+# Broader vocabulary trades some detection sharpness for zero setup.
+COMMON_OBJECTS = [
+    "person", "chair", "table", "desk", "sofa", "bed", "cup", "mug", "bottle",
+    "glass", "plate", "bowl", "book", "notebook", "pen", "pencil", "laptop",
+    "computer monitor", "keyboard", "mouse", "phone", "tablet", "television",
+    "remote control", "lamp", "potted plant", "vase", "box", "bag", "backpack",
+    "shoe", "clock", "picture frame", "mirror", "pillow", "blanket", "towel",
+    "toy", "ball", "scissors", "knife", "fork", "spoon", "pan", "pot",
+    "kettle", "microwave", "toaster", "refrigerator", "sink", "door",
+    "window", "curtain", "shelf", "cabinet", "drawer", "trash can", "basket",
+    "camera", "headphones",
+]
+
 
 def detect(detector, image, threshold):
     from PIL import Image  # noqa: PLC0415

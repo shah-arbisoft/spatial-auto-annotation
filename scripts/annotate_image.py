@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.dataset import load_rgb
 from src.pipeline import annotate_objects, load_config, objects_from
 from src.contact import pair_contacts
-from run_sgdet import PROMPTS, detect  # reuse the proven detection wrapper
+from run_sgdet import PROMPTS, detect, COMMON_OBJECTS  # reuse the proven detection wrapper
 
 EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 
@@ -78,6 +78,9 @@ def main():
     ap.add_argument("--prompts", default=None,
                     help="comma-separated extra objects to look for "
                          "(e.g. 'cup,laptop,plant'); added to the six defaults")
+    ap.add_argument("--common-objects", action="store_true",
+                    help="search a built-in list of ~60 everyday object types "
+                         "instead of naming them (for unknown footage)")
     ap.add_argument("--only-prompts", action="store_true",
                     help="use --prompts INSTEAD of the six dataset classes")
     ap.add_argument("--threshold", type=float, default=0.30)
@@ -89,6 +92,9 @@ def main():
     if not paths:
         raise SystemExit(f"no images found at {args.images}")
 
+    if args.common_objects:
+        PROMPTS.clear()
+        PROMPTS.update({p: p.replace(" ", "_") for p in COMMON_OBJECTS})
     if args.prompts:
         extra = {p.strip(): p.strip().replace(" ", "_")
                  for p in args.prompts.split(",") if p.strip()}

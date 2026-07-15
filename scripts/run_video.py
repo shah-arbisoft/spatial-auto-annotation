@@ -31,7 +31,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from src.pipeline import annotate_objects, load_config, objects_from
 from src.contact import pair_contacts
-from run_sgdet import PROMPTS, detect
+from run_sgdet import PROMPTS, detect, COMMON_OBJECTS
 
 COLOURS = ["#e6194b", "#4363d8", "#3cb44b", "#f58231", "#911eb4", "#46f0f0",
            "#f032e6", "#bcf60c", "#008080", "#9a6324", "#800000", "#000075"]
@@ -143,6 +143,9 @@ def main():
     ap.add_argument("--config", default="configs/default.yaml")
     ap.add_argument("--prompts", default=None,
                     help="comma-separated objects to look for")
+    ap.add_argument("--common-objects", action="store_true",
+                    help="search a built-in list of ~60 everyday object types "
+                         "instead of naming them (for unknown footage)")
     ap.add_argument("--only-prompts", action="store_true",
                     help="use --prompts INSTEAD of the six dataset classes")
     ap.add_argument("--threshold", type=float, default=0.30)
@@ -158,6 +161,9 @@ def main():
 
     import cv2  # noqa: PLC0415
 
+    if args.common_objects:
+        PROMPTS.clear()
+        PROMPTS.update({p: p.replace(" ", "_") for p in COMMON_OBJECTS})
     if args.prompts:
         extra = {p.strip(): p.strip().replace(" ", "_")
                  for p in args.prompts.split(",") if p.strip()}
