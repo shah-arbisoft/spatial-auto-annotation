@@ -52,6 +52,10 @@ groups 0–5; groups 6–8 are held out.
 
 \* the majority baseline emits "in front of" everywhere, trivially recalling
 that class and nothing else. The near cell rounds 715/717 = 0.997 (§4.9).
+The held-out front/behind cells (0.20/0.35) are dominated by two held-out
+annotator groups that labelled the pair with the *opposite direction
+convention*; §4.5 decomposes this, and convention-aligned depth recall is
+0.84.
 
 Three observations. **(i)** The tool recovers 81% of all human triplets
 (7,237 of 8,926; mean per-predicate recall 0.85, and 0.76 on annotators whose
@@ -252,7 +256,12 @@ for the ground-plane fallback's added commits (§4.9). The tool's residual cost
 is the ~8% borderline review queue, and its labels are 20× denser than the
 human set.
 
-## 4.9 Shipped from the ablations: the support depth-co-location gate
+## 4.9 Shipped from the ablations
+
+Four rule changes came out of the audit-and-ablation loop; each is reported
+with its calibration, its held-out validation and its audit.
+
+### 4.9.1 The support depth-co-location gate
 
 The audit's support-precision failure has a geometric cause: on a floor plane,
 "farther" projects as "higher in the image", so a behind-pair produces the same
@@ -271,7 +280,9 @@ more trustworthy label set. The residual false fires are same-depth cluster
 neighbours, which depth cannot separate by construction; they are addressed
 next.
 
-**The mask-contact rule (shipped).** The support signature that boxes cannot
+### 4.9.2 The mask-contact rule
+
+The support signature that boxes cannot
 see, masks can: A rests on B iff the pixels directly below A's mask-bottom
 boundary belong to B (`src/contact.py`), which captures both stacking and the
 containment case, and rejects side-by-side neighbours. Calibrated on the train
@@ -298,7 +309,9 @@ side), so `on`/`under` are simply not evaluated for that class, removing ~130
 false emissions at no recall cost, since the person side carried no gold to
 recover.
 
-**The ground-plane fallback (shipped).** The depth abstention band was the
+### 4.9.3 The ground-plane fallback
+
+The depth abstention band was the
 single largest miss cause, and most of it is resolvable without depth at all:
 two objects standing on the same floor are depth-ordered by pure projection.
 The nearer object's box bottom sits lower in the image, a pixel-precise cue
@@ -320,7 +333,9 @@ threshold), i.e. elevation the guard cannot see. That residual mode is
 documented, bounded, and exactly the undetected-support refinement the support
 audit already motivates.
 
-**Three follow-up refinements, measured; one shipped, two declined.** The
+### 4.9.4 Follow-up refinements: one shipped, two declined
+
+The
 class-aware guard *shipped*: annotators never label person-support (0 of
 2,466 gold triplets), so support is no longer evaluated when either object is
 a person, removing ~130 held-object emissions at zero recall cost and
@@ -338,7 +353,9 @@ Anything v2 Base, 4× the parameters) moved front/behind recall by
 model capacity, and the Small variant's Apache licence is kept. Both null
 results bound where further engineering can and cannot help.
 
-**Why a geometric cue, not a bigger depth model (ablation A8).** It is worth
+### 4.9.5 Why a geometric cue, not a bigger depth model (ablation A8)
+
+It is worth
 asking whether the depth pair would improve simply by using a stronger depth
 network. It does not: swapping Depth Anything v2 Small for the 4× larger Base
 variant and re-running the whole dataset moves front/behind recall by +0.005

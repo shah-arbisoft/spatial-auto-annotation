@@ -125,8 +125,11 @@ measurement and withdrawn.
 
 **(ii′) Where the gap actually lives: the two defective test groups.** The
 per-group decomposition is decisive. On **group 7, the one test annotator
-with consistent conventions, the auto-trained arm wins outright** (mR@100
-0.334 vs 0.323, with its zero-shot advantage intact at 0.221 vs 0.008). The
+with consistent conventions, the auto-trained arm comes out ahead** (mR@100
+0.334 vs 0.323). That margin is small, comes from a single training run per
+arm on a 73-image slice, and is reported as observed rather than tested for
+significance; the durable group-7 evidence is the zero-shot gap, which is
+not marginal (zR@100 0.221 vs 0.008). The
 human arm's entire headline lead is manufactured on groups 6 and 8, the two
 annotators this dissertation had already convicted of convention inversion
 (and, for group 8, idiosyncratic `near` usage and one-directional support).
@@ -164,11 +167,13 @@ single-annotator `near`), so it partly measures agreement with those defects
 rather than spatial understanding. The per-group decomposition executed
 above adjudicates between the readings more directly than expected: against
 the only test annotator whose labels this dissertation's earlier chapters
-did *not* convict of a measured defect, the auto-trained model is the better
-one, while against the two convicted annotators it loses, in proportion to
-their idiosyncrasy. The one remaining instrument is a manual audit of the
-auto arm's top-ranked "false positives" (the direct analogue of §4.4), left
-as designed follow-up.
+did *not* convict of a measured defect, the auto-trained model edges ahead
+on the ranking metric and wins decisively on zero-shot recall, while against
+the two convicted annotators it loses, in proportion to their idiosyncrasy.
+(The ranking-metric margin on that single group is within plausible run-to-
+run noise; replicating the two arms across seeds is the designed check.)
+The one remaining instrument is a manual audit of the auto arm's top-ranked
+"false positives" (the direct analogue of §4.4), left as designed follow-up.
 
 ## 7.6 What Chapter 5's predictions got right and wrong
 

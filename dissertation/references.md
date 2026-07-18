@@ -27,6 +27,10 @@ Krishna, R. et al. (2017) 'Visual Genome: connecting language and vision using
 crowdsourced dense image annotations', *International Journal of Computer
 Vision*, 123(1), pp. 32–73.
 
+Lee, D.-H. (2013) 'Pseudo-label: the simple and efficient semi-supervised
+learning method for deep neural networks', *ICML Workshop on Challenges in
+Representation Learning*.
+
 Liu, S. et al. (2024) 'Grounding DINO: marrying DINO with grounded pre-training
 for open-set object detection', *Proceedings of the European Conference on
 Computer Vision (ECCV)*. Available at: https://arxiv.org/abs/2303.05499
@@ -49,6 +53,9 @@ preprint. Available at: https://arxiv.org/abs/2408.00714
 Remyx AI (2024) *VQASynth* [computer program]. Available at:
 https://github.com/remyxai/VQASynth
 
+Settles, B. (2009) *Active learning literature survey*. Computer Sciences
+Technical Report 1648, University of Wisconsin–Madison.
+
 Song, C.H., Blukis, V., Tremblay, J., Tyree, S., Su, Y. and Birchfield, S.
 (2025) 'RoboSpatial: teaching spatial understanding to 2D and 3D
 vision-language models for robotics', *Proceedings of the IEEE/CVF Conference
@@ -67,6 +74,9 @@ Uma, A.N., Fornaciari, T., Hovy, D., Paun, S., Plank, B. and Poesio, M. (2021)
 'Learning from disagreement: a survey', *Journal of Artificial Intelligence
 Research*, 72, pp. 1385–1470. doi:10.1613/jair.1.12752
 
+van Engelen, J.E. and Hoos, H.H. (2020) 'A survey on semi-supervised
+learning', *Machine Learning*, 109(2), pp. 373–440.
+
 Wang, A. et al. (2024) 'YOLOv10: real-time end-to-end object detection',
 *Advances in Neural Information Processing Systems (NeurIPS)*. Available at:
 https://arxiv.org/abs/2405.14458
@@ -82,6 +92,10 @@ Conference on Multimedia (MM '25)*. doi:10.1145/3746027.3758293
 Wirth, R. and Hipp, J. (2000) 'CRISP-DM: towards a standard process model for
 data mining', *Proceedings of the 4th International Conference on the
 Practical Applications of Knowledge Discovery and Data Mining*, pp. 29–39.
+
+Xie, Q., Luong, M.-T., Hovy, E. and Le, Q.V. (2020) 'Self-training with
+Noisy Student improves ImageNet classification', *Proceedings of the IEEE/CVF
+Conference on Computer Vision and Pattern Recognition (CVPR)*.
 
 Yang, L. et al. (2024) 'Depth Anything V2', *Advances in Neural Information
 Processing Systems (NeurIPS)*. Available at: https://arxiv.org/abs/2406.09414
