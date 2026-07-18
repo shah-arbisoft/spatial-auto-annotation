@@ -1,5 +1,12 @@
 # References
 
+Artstein, R. and Poesio, M. (2008) 'Inter-coder agreement for computational
+linguistics', *Computational Linguistics*, 34(4), pp. 555–596.
+
+Azevedo, A. and Santos, M.F. (2008) 'KDD, SEMMA and CRISP-DM: a parallel
+overview', *Proceedings of the IADIS European Conference on Data Mining*,
+pp. 182–185.
+
 Chen, B., Xu, Z., Kirmani, S., Ichter, B., Driess, D., Florence, P., Sadigh, D.,
 Guibas, L. and Xia, F. (2024) 'SpatialVLM: endowing vision-language models with
 spatial reasoning capabilities', *Proceedings of the IEEE/CVF Conference on
@@ -9,6 +16,12 @@ https://arxiv.org/abs/2401.12168
 Cheng, A.-C. et al. (2024) 'SpatialRGPT: grounded spatial reasoning in
 vision-language models', *Advances in Neural Information Processing Systems
 (NeurIPS)*. Available at: https://arxiv.org/abs/2406.01584
+
+Cohen, J. (1960) 'A coefficient of agreement for nominal scales',
+*Educational and Psychological Measurement*, 20(1), pp. 37–46.
+
+Fayyad, U., Piatetsky-Shapiro, G. and Smyth, P. (1996) 'From data mining to
+knowledge discovery in databases', *AI Magazine*, 17(3), pp. 37–54.
 
 Krishna, R. et al. (2017) 'Visual Genome: connecting language and vision using
 crowdsourced dense image annotations', *International Journal of Computer
@@ -65,6 +78,10 @@ Computer Vision (ECCV)*. Available at: https://arxiv.org/abs/2312.01597
 Wang, P., Pham, M.H., Guo, Z. and Zhou, W. (2025) 'A spatial relationship
 aware dataset for robotics', *Proceedings of the 33rd ACM International
 Conference on Multimedia (MM '25)*. doi:10.1145/3746027.3758293
+
+Wirth, R. and Hipp, J. (2000) 'CRISP-DM: towards a standard process model for
+data mining', *Proceedings of the 4th International Conference on the
+Practical Applications of Knowledge Discovery and Data Mining*, pp. 29–39.
 
 Yang, L. et al. (2024) 'Depth Anything V2', *Advances in Neural Information
 Processing Systems (NeurIPS)*. Available at: https://arxiv.org/abs/2406.09414

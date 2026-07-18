@@ -1,39 +1,49 @@
-# Chapter 2 — Literature Review
+# Chapter 2: Literature Review
 
 > Facts attributed to the source paper are verified against its arXiv full
 > text (2506.12525); all other cited works are verified against their published
 > versions. Full bibliography entries: [references.md](references.md).
+
+This chapter reviews the work this project builds on and the work it must be
+distinguished from. It proceeds from the representation (scene graphs, §2.1)
+to the dataset and its bottleneck (§2.2), the geometry-to-label lineage the
+method belongs to (§2.3), the perception components it stands on (§2.4), the
+learned models that consume its output (§2.5), and the label-quality
+literature that frames its validation (§2.6). Section 2.7 then states the
+research gap in the form of a critical comparison.
 
 ## 2.1 Scene graphs and spatial relationships in robotics
 
 A robot acting in a human environment must represent not only *what* objects are
 present but *how they are spatially arranged*. The structured representation for
 this is the **scene graph**: objects as nodes and pairwise relationships as
-labelled, directed edges (subject → predicate → object). Spatial predicates —
-*on*, *under*, *left/right of*, *in front of / behind*, *near* — are the edges
+labelled, directed edges (subject → predicate → object). Spatial predicates
+(*on*, *under*, *left/right of*, *in front of / behind*, *near*) are the edges
 that matter for manipulation, navigation and instruction following, because they
-encode the geometry an agent must respect to act. This review concentrates on how
-such spatial edges are **produced**: by hand, by learned prediction, or — as this
-project argues — by computation from measured geometry.
+encode the geometry an agent must respect to act. A planner told only "cube,
+book, table" cannot decide what to move first; a planner told "the cube is on
+the book" can. This review concentrates on how such spatial edges are
+**produced**: by hand, by learned prediction, or, as this project argues, by
+computation from measured geometry.
 
 ## 2.2 The source dataset and its annotation bottleneck
 
-Wang et al. introduce *A Spatial Relationship Aware Dataset for Robotics*
-(ACM MM 2025), captured by a Boston Dynamics Spot robot. Verified specifics from
+Wang et al. (2025) introduce *A Spatial Relationship Aware Dataset for
+Robotics*, captured by a Boston Dynamics Spot robot. Verified specifics from
 the paper:
 
 - **Scale:** "nearly 1,000 robot-acquired indoor images" collected; after quality
   control "approximately 900" remain. (The released GitHub subset used here
-  contains 884 images / **838 annotated** — see [DATASET_NOTES.md](../docs/DATASET_NOTES.md).)
+  contains 884 images / **838 annotated**; see [DATASET_NOTES.md](../docs/DATASET_NOTES.md).)
 - **Annotation:** "Nine trained annotators worked independently in batches of 100
   images," using the manual **SGDET-Annotate** tool (every box drawn, every class
   and relationship clicked), with a majority-vote cleaning pass. The released data
   is organised into nine groups of ~100, matching this exactly.
-- **Vocabulary:** exactly seven predicates — *behind, in front of, on, to the left
-  of, to the right of, under, near* — over six object classes (book, bottle, box,
+- **Vocabulary:** exactly seven predicates (*behind, in front of, on, to the left
+  of, to the right of, under, near*) over six object classes (book, bottle, box,
   cube, human, remote).
-- **Detector baseline:** a YOLOv10m backbone reaches ≈0.92 precision, 0.90 recall
-  and **0.93 mAP@50** (mAP@50-95 ≈0.68).
+- **Detector baseline:** a YOLOv10m backbone (Wang, A. et al., 2024) reaches
+  ≈0.92 precision, 0.90 recall and **0.93 mAP@50** (mAP@50-95 ≈0.68).
 
 Three limitations the authors themselves flag motivate this project. First,
 **early saturation**: "all predictors reached their peak mR@100 well before the
@@ -45,8 +55,8 @@ Third, their future-work prescription is explicit: "augment under-represented
 relations while enforcing clear annotation guidelines (e.g., spatial thresholds
 for 'near')."
 
-The common cause is the **manual annotation bottleneck**: SGDET-Annotate only
-*accelerates* human labelling — a human still decides every edge — so the dataset
+The common cause is the **manual annotation bottleneck**. SGDET-Annotate only
+*accelerates* human labelling (a human still decides every edge), so the dataset
 cannot grow cheaply, diversity stays low, and inter-annotator disagreement
 (worst on `near`) is baked in. **No automatic annotator exists for this dataset.**
 This is the gap the project fills, and the fitted `near` threshold is a direct,
@@ -59,45 +69,50 @@ predicting them from learned relational patterns. This is the methodological
 ancestry of the present project, but each member outputs something other than a
 scene-graph annotation for this dataset's seven predicates.
 
-- **SpatialVLM** (Chen et al., CVPR 2024) is the foundational geometry-to-label
-  method. It builds an *automatic* 3D spatial-VQA data-generation framework —
+- **SpatialVLM** (Chen et al., 2024) is the foundational geometry-to-label
+  method. It builds an *automatic* 3D spatial-VQA data-generation framework,
   lifting internet images to metric 3D via monocular depth and segmentation, then
   emitting up to ~2B spatial question–answer pairs from ~10M images. It
   establishes the central premise we adopt: spatial relations can be *derived from
   measured geometry without human relational labels*. But its output is
   **free-form VQA text**, its domain is **internet images**, and it targets no
-  fixed predicate set — it is not an annotator for a robot scene-graph dataset.
+  fixed predicate set. It is not an annotator for a robot scene-graph dataset.
 
-- **SpatialRGPT** (Cheng et al., NeurIPS 2024) extends this with a data-curation
+- **SpatialRGPT** (Cheng et al., 2024) extends this with a data-curation
   pipeline that learns regional representations from **3D scene graphs** and a
   **depth "plugin"** that injects relative depth (via Depth Anything) into a VLM's
   visual encoder. It is the cleanest published RGB→depth→relation recipe and a key
   reference for our depth use, but the artefact is a **region-reasoning VLM**, not
   a deterministic labeller producing VG-format triplets.
 
-- **VQASynth** (remyxai) is an open reproduction of the SpatialVLM pipeline: a
-  chain of expert models (SAM2 for localisation refinement, monocular depth, and
-  grounded captioning) that infers spatial relationships to **create a spatial-VQA
-  dataset**. It is the most reusable code reference; its output stage produces
-  **QA pairs**, which we would replace with a scene-graph-triplet writer. (Its
-  depth backend has shifted over time — e.g. DepthPro → VGGT — so we pin our own.)
+- **VQASynth** (Remyx AI, 2024) is an open reproduction of the SpatialVLM
+  pipeline: a chain of expert models (SAM2 for localisation refinement, monocular
+  depth, and grounded captioning) that infers spatial relationships to **create a
+  spatial-VQA dataset**. It is the most reusable code reference; its output stage
+  produces **QA pairs**, which we would replace with a scene-graph-triplet
+  writer. (Its depth backend has shifted over time, e.g. DepthPro → VGGT, so we
+  pin our own.)
 
-- **Open3D-VQA** (Zhang et al., ACM MM 2025; arXiv 2503.11094) is the source of
-  our **error-correction** idea. It is an embodied spatial-reasoning benchmark for
-  *open/aerial* space (89k QA pairs over seven spatial tasks, visual + point
-  cloud) whose generation pipeline "extracts 3D spatial relationships from a
-  single RGB image" with a **multi-modal correction flow to ensure quality**. We
-  adapt that correction principle — rejecting geometrically impossible labels —
-  into our correction step (spec §8), in a different domain (indoor tabletop, not
-  aerial) and for a different output (triplets, not QA).
+- **Open3D-VQA** (Zhang et al., 2025) is the source of our **error-correction**
+  idea. It is an embodied spatial-reasoning benchmark for *open/aerial* space
+  (89k QA pairs over seven spatial tasks, visual + point cloud) whose generation
+  pipeline "extracts 3D spatial relationships from a single RGB image" with a
+  **multi-modal correction flow to ensure quality**. We adapt that correction
+  principle, rejecting geometrically impossible labels, into our correction step
+  (spec §8), in a different domain (indoor tabletop, not aerial) and for a
+  different output (triplets, not QA).
 
-- **RoboSpatial** (Song et al., CVPR 2025, oral) is the closest robotics-domain
+- **RoboSpatial** (Song et al., 2025) is the closest robotics-domain
   match, cited by the source paper. It teaches spatial understanding to 2D/3D VLMs
   from real indoor/tabletop scans (≈1M images, ≈3M annotated spatial relations).
-  Critically for our design, it formalises **reference frames** — ego-centric,
-  world-centric, object-centric — which directly justifies our explicit choice to
-  express *left/right* in the **camera (ego) frame** (predicate spec §0). Its
-  output is spatial QA over three frames, not a fixed seven-predicate annotation.
+  Critically for our design, it formalises **reference frames**: ego-centric,
+  world-centric and object-centric readings of the same spatial phrase. The same
+  sentence ("the cup is left of the box") is true in one frame and false in
+  another, so an annotator must pin the frame before any label is well defined.
+  This directly justifies our explicit choice to express *left/right* in the
+  **camera (ego) frame** (predicate spec §0), which is also the frame the
+  dataset's annotators saw on screen. Its output is spatial QA over three
+  frames, not a fixed seven-predicate annotation.
 
 **Synthesis.** Every pipeline in this lineage either (a) targets a *different
 output* (VQA text, not VG triplets), (b) operates in a *different domain*
@@ -108,80 +123,118 @@ this dataset's human labels** is not.
 
 ## 2.4 Perception components and the open-vocabulary family
 
-Our pipeline is geometry-first, but it stands on off-the-shelf perception. The
-relevant design space — and the basis of the **detector-swap ablation** — is:
+Our pipeline is geometry-first, but it stands on off-the-shelf perception, and
+each component was chosen against alternatives from the recent literature. The
+relevant design space, which is also the basis of the **detector-swap
+ablation**, is:
 
-- **Detection.** *Closed-set:* **YOLOv10m**, the dataset's own baseline (six
-  classes; 0.93 mAP@50). *Open-vocabulary:* **GroundingDINO** detects arbitrary
-  text-named objects, enabling extension beyond the six classes. The ablation
-  contrasts these to quantify how detector choice propagates into relation
-  fidelity.
-- **Open-vocabulary classification/segmentation (CLIP family).** **CLIP** (Radford
-  et al., 2021) gives zero-shot image–text matching; **SCLIP** (Wang et al.,
-  ECCV 2024) makes CLIP dense via a training-free *Correlative Self-Attention*,
-  reaching 38.2% zero-shot mIoU for open-vocabulary segmentation. These matter for
-  the **open-vocabulary scaling** direction (labelling object types beyond the six
-  classes) but add nothing to the *relation* logic; for the closed-set core they
-  are positioned as **alternatives and future work**, not components.
-- **Segmentation.** **SAM2** turns each detector box into a precise mask
-  (box-prompted), which we use for centroids and masked depth sampling.
-- **Monocular depth.** **Depth Anything v2 (Small)** yields a *relative* depth map
-  on the 6 GB GPU; relativity restricts depth comparisons to be **ordinal and
-  within-image**, a limitation carried into the critical chapter.
+- **Detection.** *Closed-set:* **YOLOv10m** (Wang, A. et al., 2024), the
+  dataset's own baseline (six classes; 0.93 mAP@50). YOLOv10 removes the
+  non-maximum-suppression stage of earlier YOLO versions with a consistent
+  dual-assignment training scheme, which is why it can run in real time onboard
+  a robot. *Open-vocabulary:* **Grounding DINO** (Liu et al., 2024) marries a
+  DETR-style detector with grounded language pre-training, so it detects
+  arbitrary text-named objects at some cost in per-class sharpness. This
+  enables extension beyond the six classes; the deployment-mode experiment in
+  Chapter 4 uses it precisely because it is the worst reasonable case, so the
+  detection-quality bound it produces is conservative.
+- **Segmentation.** **SAM2** (Ravi et al., 2024) is a promptable segmentation
+  model: given a box prompt it returns the pixel mask of the object inside it,
+  and it is trained to do so for arbitrary objects rather than a fixed class
+  list. The pipeline uses it to turn each detector box into a silhouette, which
+  matters twice: depth is sampled only from object pixels rather than the
+  background inside the box, and the support rule's contact test (Chapter 3)
+  needs to know where an object's bottom edge actually runs, pixel by pixel.
+- **Monocular depth.** **Depth Anything v2** (Yang et al., 2024) is a monocular
+  depth estimator distilled from a large teacher trained on synthetic data and
+  pseudo-labelled real images. Its output is *relative*, not metric: it orders
+  pixels by distance but assigns no unit. That property shapes the rule design
+  in Chapter 3: depth comparisons are **ordinal and within-image**, and no rule
+  may use an absolute distance. The Small variant runs in under a gigabyte of
+  VRAM, which keeps the whole pipeline on a 6 GB consumer GPU; Chapter 4's
+  ablation A8 tests whether the larger Base variant would change the results.
+- **Open-vocabulary classification/segmentation (CLIP family).** **CLIP**
+  (Radford et al., 2021) gives zero-shot image–text matching; **SCLIP**
+  (Wang, F. et al., 2024) makes CLIP dense via a training-free *Correlative
+  Self-Attention*, reaching 38.2% zero-shot mIoU for open-vocabulary
+  segmentation. These matter for the **open-vocabulary scaling** direction
+  (labelling object types beyond the six classes) but add nothing to the
+  *relation* logic; for the closed-set core they are positioned as
+  **alternatives and future work**, not components.
 - **3D primitive abstraction (out of scope).** **PrimitiveAnything**
-  (Ye et al., SIGGRAPH 2025) decomposes *3D shapes* into primitive assemblies
+  (Ye et al., 2025) decomposes *3D shapes* into primitive assemblies
   (cuboids, cylinders, ellipsoids). It assumes clean 3D input we do not have
   (only monocular RGB + relative depth), so it is noted only as a speculative
   future representation, not used here.
 
+The division of labour is deliberate: the neural components above only
+*measure* (where an object is, which pixels belong to it, how far away it
+looks), and every relationship decision is made by an explicit rule over those
+measurements. Chapter 3 argues this split is what makes the annotator
+auditable, and Chapter 4's box-only ablation quantifies what each perception
+component actually contributes.
+
 ## 2.5 Learned scene-graph generation (the consumer of our output)
 
 Scene-graph generation (SGG) models **predict** relationships from learned visual
-patterns. The field's shape was set by **Visual Genome** (Krishna et al., 2017) —
+patterns. The field's shape was set by **Visual Genome** (Krishna et al., 2017),
 108k images with crowdsourced relationship triplets, whose JSON format this
-dataset (and this project's output writer) inherits — and by the model lineage
-benchmarked on it. **Neural Motifs** (Zellers et al., CVPR 2018) demonstrated
+dataset (and this project's output writer) inherits, and by the model lineage
+benchmarked on it. **Neural Motifs** (Zellers et al., 2018) demonstrated
 that global context and label statistics dominate relation prediction: their
 frequency baseline (predict the most common predicate for a given object pair,
 ignoring the image) proved notoriously hard to beat, a warning that relation
 "accuracy" can be memorised co-occurrence rather than understood geometry.
-**VCTree** (Tang et al., CVPR 2019) composes dynamic tree structures over
-objects to capture context — and is the best-performing model in the source
-paper's own benchmark (mR@100 = 0.49). **Unbiased SGG** (Tang et al., CVPR 2020)
+**VCTree** (Tang et al., 2019) composes dynamic tree structures over
+objects to capture context, and is the best-performing model in the source
+paper's own benchmark (mR@100 = 0.49). **Unbiased SGG** (Tang et al., 2020)
 then showed formally that models trained on crowdsourced scene graphs largely
-absorb the *annotation distribution* — its long tail and its biases — and
-proposed counterfactual debiasing to recover the visual signal. Two lessons
-transfer directly. First, the models consuming this dataset's labels are known
-bias-absorbers, so whatever the annotation carries — here, measured inverted
-conventions and selective `near` usage (Chapter 4) — becomes the training
-signal; cleaning the supply is attacking the cause, debiasing the model is
-treating the symptom. Second, Motifs' frequency-baseline lesson dictates this
-project's baseline discipline: every fidelity number in Chapter 4 is read
+absorb the *annotation distribution*, its long tail and its biases, and
+proposed counterfactual debiasing to recover the visual signal.
+
+The lineage also fixes the evaluation vocabulary used in Chapters 4 and 7.
+SGG models are scored by recall of the annotated triplets among their top K
+ranked predictions: **R@K** pools all predicates (so frequent predicates
+dominate), **mR@K** averages recall per predicate (so rare predicates count
+equally), and **zero-shot recall (zR@K)** scores only subject–predicate–object
+combinations never seen in training, isolating compositional generalisation
+from memorisation (Tang et al., 2020). Two settings matter: **PredCls**
+supplies ground-truth boxes and classes and asks only for the relations,
+isolating the relation model, while **SGDet** requires detection, labelling
+and relations end to end. This project adopts both conventions so its numbers
+can be read against the source paper's tables.
+
+Two lessons transfer directly. First, the models consuming this dataset's
+labels are known bias-absorbers, so whatever the annotation carries (here,
+measured inverted conventions and selective `near` usage; Chapter 4) becomes
+the training signal. Cleaning the supply attacks the cause; debiasing the
+model treats the symptom. Second, Motifs' frequency-baseline lesson dictates
+this project's baseline discipline: every fidelity number in Chapter 4 is read
 against trivial random/majority baselines for exactly this reason.
 
-**REACT++** (Neau & Falomir, 2026) is a real-time SGG model with a YOLO
+**REACT++** (Neau and Falomir, 2026) is a real-time SGG model with a YOLO
 backbone, reportedly ~20% faster and ~10% more accurate on relation prediction
 than its predecessor, small enough to run onboard a robot; it ships in the open
 **SGG-Benchmark** framework. The essential point for positioning this project:
 such models **require labelled training data and therefore sit downstream of an
 annotator**. This project *computes* labels from geometry and runs *before* any
-SGG model — it is the **supplier**, and REACT++ is a natural **consumer**. Using
+SGG model. It is the **supplier**, and REACT++ is a natural **consumer**. Using
 REACT++/SGG-Benchmark to train on our auto-labels versus the human labels is the
 heavyweight version of RQ2 (the lightweight classifier is the controlled main
 experiment); that test is executed and reported in Chapter 7.
 
 ## 2.6 Label quality: weak supervision and annotator disagreement
 
-The project's premise — replace scarce human labels with dense computed ones —
+The project's premise, replacing scarce human labels with dense computed ones,
 has an established name: **weak supervision**. **Snorkel** (Ratner et al.,
 2017) formalised *data programming*: instead of labelling examples, experts
-write labelling functions — heuristics, rules, distant supervision — whose
+write labelling functions (heuristics, rules, distant supervision) whose
 noisy, overlapping votes are combined into training labels, trading per-label
 human authority for coverage and consistency. Its deployments repeatedly
 matched or beat hand-labelled baselines wherever the labelled set, not the
 model, was the bottleneck. This project's geometric rules are labelling
-functions in precisely that sense — deterministic, auditable, dense — with two
-departures from the Snorkel setting: measured geometry gives near-exact rather
+functions in precisely that sense: deterministic, auditable and dense, with two
+departures from the Snorkel setting. Measured geometry gives near-exact rather
 than noisy votes for most predicates (the audit estimates true precision ≈ 1.0
 for five of seven), so no probabilistic label aggregation is needed; and the
 computed labels are *validated against* the human labels they replace (RQ1)
@@ -190,8 +243,8 @@ rather than assumed comparable.
 The complementary literature dismantles the premise that human annotation is a
 single reliable gold standard. **Uma et al.'s (2021) survey of learning from
 disagreement** documents systematic annotator disagreement across vision and
-language tasks — driven by ambiguous guidelines, subjective category
-boundaries and annotator-specific conventions — and reviews methods that treat
+language tasks, driven by ambiguous guidelines, subjective category
+boundaries and annotator-specific conventions, and reviews methods that treat
 disagreement as signal rather than noise. That frame fits this dataset
 exactly: Chapter 4 measures three annotator behaviours (selective `near`
 usage, an inverted front/behind convention in two groups, one-directional
@@ -199,16 +252,26 @@ support labelling) which make "agreement with the humans" a per-annotator
 rather than a global quantity. This motivates two design decisions taken in
 Chapters 3–4: evaluation is reported per annotator group, never only pooled;
 and thresholds are calibrated only on annotators who actually used a label,
-with other annotators held out. It also sharpens RQ2 into a question the
-weak-supervision literature predicts but rarely tests this directly: can
-consistent computed labels *out-teach* inconsistent human ones on the humans'
-own held-out annotations?
+with other annotators held out.
 
-## 2.7 Critical comparison and the gap
+Where human judgements must themselves be evaluated, the measurement
+tradition supplies the instruments. Chance-corrected agreement between two
+verdict sets is measured by **Cohen's kappa** (Cohen, 1960), and the
+reliability of a pool of raters by chance-corrected coefficients such as
+Krippendorff's alpha; Artstein and Poesio (2008) survey both and their
+pitfalls, including the prevalence effect that depresses kappa when one
+answer dominates. Chapter 4's independent validation of the automatic labels
+(crowd judgements of sampled predictions, scored against the author's own
+audit verdicts) applies exactly these instruments. It also sharpens RQ2 into
+a question the weak-supervision literature predicts but rarely tests this
+directly: can consistent computed labels *out-teach* inconsistent human ones
+on the humans' own held-out annotations?
+
+## 2.7 Critical comparison and the research gap
 
 The table is the analytical core: it shows every neighbour either targets a
 different output, is a reference recipe rather than an annotator, operates outside
-this dataset, or *predicts* rather than *computes* relations — and that **none
+this dataset, or *predicts* rather than *computes* relations, and that **none
 provides a fully-automatic annotator for this dataset's seven predicates,
 validated against its human labels**.
 
@@ -216,7 +279,7 @@ validated against its human labels**.
 |---|---|---|---|---|---|---|
 | Wang et al. (source) | 2025 ACM MM | human-labelled | VG JSON / YOLO / h5 triplets | manual (SGDET-Annotate) | defines them | is the human label |
 | SpatialVLM | 2024 CVPR | compute (geometry) | spatial VQA text | partial (QA gen) | no | no |
-| VQASynth | — | compute (geometry) | spatial VQA text | partial (QA gen) | no | no |
+| VQASynth | 2024 | compute (geometry) | spatial VQA text | partial (QA gen) | no | no |
 | SpatialRGPT | 2024 NeurIPS | compute (geometry+depth) | region-reasoning VLM | reference recipe | no | no |
 | Open3D-VQA | 2025 ACM MM | compute (+correction) | 3D/aerial VQA | partial | no | no |
 | RoboSpatial | 2025 CVPR | compute (geometry) | spatial QA (3 frames) | partial | no | no |
@@ -224,7 +287,7 @@ validated against its human labels**.
 | **This work** | 2026 | **compute (geometry)** | **VG JSON / YOLO / h5 triplets** | **yes, fully automatic** | **yes** | **yes (RQ1)** |
 
 Two columns isolate the contribution. The *"this dataset's 7 predicates"* column
-shows only Wang et al. and this work address them — and Wang et al. do so
+shows only Wang et al. and this work address them, and Wang et al. do so
 manually. The *"validated vs. these human labels"* column shows only this work
 quantifies agreement with the human consensus on the same images. The
 geometry-to-label *method* is borrowed and well-precedented; its instantiation as
@@ -240,7 +303,7 @@ REACT++), and (iv) that **dense rule-based supervision is a proven substitute
 for scarce human labels** when validated carefully (Snorkel; the disagreement
 literature). It also leaves a precise gap: there is no
 automatic, geometry-based annotator that emits this robot dataset's seven spatial
-predicates in its native formats and is validated against its human labels — even
+predicates in its native formats and is validated against its human labels, even
 though the dataset's authors explicitly ask for automation-friendly fixes
 ("spatial thresholds for near," augmenting under-represented relations).
 
