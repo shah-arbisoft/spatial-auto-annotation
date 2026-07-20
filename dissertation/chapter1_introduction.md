@@ -152,5 +152,6 @@ sense: Chapter 4 presents the fidelity study (RQ1) and ablations, Chapter 5 the
 controlled downstream study (RQ2), and Chapter 7 the direct benchmark test, in
 which the source paper's own SGG models are trained on each label source and
 compared against three pre-registered predictions. Chapter 6 is a critical
-evaluation tying results to causes and to prior work. Chapter 8 concludes and
-sets out future work.
+evaluation tying results to causes and to prior work. Chapter 8 assesses the
+legal, social, ethical and professional dimensions of automating annotation.
+Chapter 9 concludes and sets out future work.

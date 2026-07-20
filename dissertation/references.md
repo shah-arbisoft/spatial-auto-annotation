@@ -3,6 +3,10 @@
 Artstein, R. and Poesio, M. (2008) 'Inter-coder agreement for computational
 linguistics', *Computational Linguistics*, 34(4), pp. 555–596.
 
+BCS (2022) *BCS Code of Conduct*. Swindon: BCS, The Chartered Institute for
+IT. Available at:
+https://www.bcs.org/membership-and-registrations/become-a-member/bcs-code-of-conduct/
+
 Azevedo, A. and Santos, M.F. (2008) 'KDD, SEMMA and CRISP-DM: a parallel
 overview', *Proceedings of the IADIS European Conference on Data Mining*,
 pp. 182–185.
@@ -19,6 +23,9 @@ vision-language models', *Advances in Neural Information Processing Systems
 
 Cohen, J. (1960) 'A coefficient of agreement for nominal scales',
 *Educational and Psychological Measurement*, 20(1), pp. 37–46.
+
+Data Protection Act 2018, c. 12. Available at:
+https://www.legislation.gov.uk/ukpga/2018/12
 
 Fayyad, U., Piatetsky-Shapiro, G. and Smyth, P. (1996) 'From data mining to
 knowledge discovery in databases', *AI Magazine*, 17(3), pp. 37–54.
