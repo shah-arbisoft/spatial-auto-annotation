@@ -49,6 +49,8 @@ Key commands:
   estimated human-human agreement bounds → `outputs/tables/annotator_agreement.md`
 - `python eval/ablations.py`: ablations A1–A6 → `outputs/tables/ablations.md`
 - `python eval/depth_ablation.py`: the A8 depth-model comparison
+- `python eval/seed_stats.py`: aggregates the benchmark arms across seeds →
+  `outputs/tables/seed_replication.md`
 - `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment, all three
   label sources (human, self-trained, automatic)
 - `python analysis/score_votes.py votes.csv`: scores the independent

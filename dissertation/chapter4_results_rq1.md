@@ -555,9 +555,21 @@ instructions restate the operational definitions of Chapter 3: camera-frame
 laterality, "in front of" as nearer the camera, support as physically
 resting rather than held, and an explicit instruction to answer WRONG when
 unsure, which reproduces the conservative rule used in the author's audits.
-Items are assigned least-covered-first so coverage stays even, each browser
-receives a random identifier that prevents repeat judgements without
-identifying anybody, and faces are anonymised in every image (Chapter 8).
+Each browser receives a random identifier that prevents repeat judgements
+without identifying anybody, and faces are anonymised in every image
+(Chapter 8).
+
+Coverage is stratified by what each analysis requires. An aggregate
+precision estimate needs only one judgement per claim, since the sample is
+random either way, so ordinary claims target a single rater. The 147 claims
+that also carry an author verdict target three raters each, because the
+crowd-versus-author comparison and the inter-rater reliability figure both
+need several independent judgements on the *same* item; those claims are
+served first. The design therefore needs about 2,300 judgements rather than
+the 6,000 a uniform three-rater target would demand, and it fails
+gracefully: the author-comparison subset completes after roughly 30
+participants, so that analysis survives a thin turnout while any further
+response widens the precision estimate.
 
 **What it measures.** Three things the author-verdicted audits cannot. First,
 crowd precision per predicate with binomial confidence intervals, at a sample
