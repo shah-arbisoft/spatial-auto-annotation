@@ -61,7 +61,7 @@ inconsistent supervision learns above all to be silent; its recall collapses
 exactly where human labelling was thinnest (`near` 0.08, lateral 0.22–0.25).
 The automatic labels are dense and rule-consistent, so the same model actually
 learns the geometry (near 1.00, lateral 0.95–0.99, support 0.92). This is
-the weak-supervision prediction (§2.6) confirmed under controlled conditions:
+the weak-supervision prediction (§2.3) confirmed under controlled conditions:
 dense, consistent programmatic labels out-teach scarce gold labels when
 supervision, not model capacity, is the bottleneck.
 
@@ -94,7 +94,7 @@ win under any featurisation. Three things keep the comparison meaningful:
 the human-trained twin receives the identical features, so the featurisation
 advantages neither source; "the labels are learnable" is itself the property
 RQ2 asks about, since a downstream consumer must extract a consistent signal
-from the labels; and Chapter 7 removes the circularity entirely by repeating
+from the labels; and Chapter 6 removes the circularity entirely by repeating
 the comparison in a full scene-graph model with visual features, where the
 density and consistency effects persist in the training dynamics and the
 zero-shot generalisation even though the headline verdict changes.
@@ -119,9 +119,9 @@ being actively taught two opposite conventions by different annotators; the
 automatic labels apply one. The controlled experiment above is the proxy for
 the SGG step of the chain, and it measures the effect as large. The direct
 test, training the paper's own benchmark model on automatic versus human
-labels and comparing mR@100, is executed in Chapter 7. Three concrete
+labels and comparing mR@100, is executed in Chapter 6. Three concrete
 predictions are registered here, before that run: later saturation, a higher
-plateau, and the recovery of `near`. Chapter 7 judges all three.
+plateau, and the recovery of `near`. Chapter 6 judges all three.
 
 ## 5.6 Answer to RQ2
 

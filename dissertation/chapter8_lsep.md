@@ -57,7 +57,7 @@ all; the entire pipeline runs on a consumer 6 GB GPU.
 planner consuming wrong spatial relations can act wrongly in physical space.
 This is precisely why the project's evaluation centres on audited precision,
 abstention instead of guessing, and per-failure attribution, and why
-Chapter 7 distinguishes labels that are *correct* from labels that are
+Chapter 6 distinguishes labels that are *correct* from labels that are
 *human-like*. Trust in automated labels should be calibrated by exactly the
 kind of evidence this dissertation supplies, not assumed.
 
@@ -81,8 +81,8 @@ are collected; an information panel states the purpose and data handling
 before play; and the collection runs under the University's ethics
 self-assessment process (Appendix A). Third, research integrity in
 reporting: predictions were registered before the benchmark run and two of
-the three are reported as refuted (§7.6); a withdrawn hypothesis remains in
-the text (§7.4); and two built refinements are reported as measured and
+the three are reported as refuted (§6.6); a withdrawn hypothesis remains in
+the text (§6.4); and two built refinements are reported as measured and
 declined (§4.9.4). The dissertation treats honest negative results as
 results.
 
@@ -90,7 +90,7 @@ results.
 
 The work is conducted to the standards of the BCS Code of Conduct (BCS,
 2022): public interest (privacy safeguards above), professional competence
-and integrity (claims bounded by measurements; limitations stated in §6.6),
+and integrity (claims bounded by measurements; limitations stated in §7.6),
 and duty to the profession (methods and failures documented so others can
 build on both). Professional practice in the engineering itself: version
 control with a clean history, a unit-and-invariant test suite run before

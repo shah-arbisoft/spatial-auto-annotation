@@ -95,7 +95,7 @@ perception models used (SAM2, Depth Anything) only *measure* where things are;
 no learned component decides a relationship.
 
 **Evaluation setting.** The relation stage is evaluated with ground-truth boxes
-and classes (the SGG literature's *PredCls* setting, §2.5). This isolates the
+and classes (the SGG literature's *PredCls* setting, §2.7). This isolates the
 contribution, since the paper already establishes detection at 0.93 mAP@50 with
 YOLOv10m and re-deriving that number adds nothing, and it makes object
 indices line up one-to-one with the human relationship records, so no fragile

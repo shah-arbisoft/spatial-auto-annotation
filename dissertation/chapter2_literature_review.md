@@ -5,14 +5,23 @@
 > versions. Full bibliography entries: [references.md](references.md).
 
 This chapter reviews the work this project builds on and the work it must be
-distinguished from. It proceeds from the representation (scene graphs, §2.1)
-to the dataset and its bottleneck (§2.2), the geometry-to-label lineage the
-method belongs to (§2.3), the perception components it stands on (§2.4), the
-learned models that consume its output (§2.5), and the label-quality
-literature that frames its validation (§2.6). Section 2.7 examines the main
-rival family of solutions to expensive annotation, semi-supervised and
-active learning, and argues why it does not fit this problem. Section 2.8
-then states the research gap in the form of a critical comparison.
+distinguished from. Its organising question is **label quality**, because
+that is what the project's evidence ultimately turns on: not whether spatial
+relations can be computed, which the literature already settles, but whether
+computed labels are better or worse than the human labels they replace, and
+how anyone would know.
+
+The chapter therefore moves from the representation (scene graphs, §2.1) to
+the dataset whose annotation bottleneck motivates the work (§2.2); then to
+the literature on what makes labels good or bad, covering weak supervision,
+annotator disagreement, and the statistics used to measure agreement (§2.3);
+then to the rival remedies that stretch scarce labels rather than replacing
+them, semi-supervised and active learning, with the argument for why they do
+not fit this dataset (§2.4). Only then does it turn to the approach this
+project takes and its lineage (§2.5), the perception components it stands on
+(§2.6), and the learned models that consume its output (§2.7). Section 2.8
+states the research gap as a critical comparison, and §2.9 positions the
+work against it.
 
 ## 2.1 Scene graphs and spatial relationships in robotics
 
@@ -64,7 +73,93 @@ cannot grow cheaply, diversity stays low, and inter-annotator disagreement
 This is the gap the project fills, and the fitted `near` threshold is a direct,
 data-driven realisation of the authors' own "spatial thresholds for near."
 
-## 2.3 Geometry-to-label pipelines (the lineage we build on)
+## 2.3 Label quality: weak supervision and annotator disagreement
+
+The project's premise, replacing scarce human labels with dense computed ones,
+has an established name: **weak supervision**. **Snorkel** (Ratner et al.,
+2017) formalised *data programming*: instead of labelling examples, experts
+write labelling functions (heuristics, rules, distant supervision) whose
+noisy, overlapping votes are combined into training labels, trading per-label
+human authority for coverage and consistency. Its deployments repeatedly
+matched or beat hand-labelled baselines wherever the labelled set, not the
+model, was the bottleneck. This project's geometric rules are labelling
+functions in precisely that sense: deterministic, auditable and dense, with two
+departures from the Snorkel setting. Measured geometry gives near-exact rather
+than noisy votes for most predicates (the audit estimates true precision ≈ 1.0
+for five of seven), so no probabilistic label aggregation is needed; and the
+computed labels are *validated against* the human labels they replace (RQ1)
+rather than assumed comparable.
+
+The complementary literature dismantles the premise that human annotation is a
+single reliable gold standard. **Uma et al.'s (2021) survey of learning from
+disagreement** documents systematic annotator disagreement across vision and
+language tasks, driven by ambiguous guidelines, subjective category
+boundaries and annotator-specific conventions, and reviews methods that treat
+disagreement as signal rather than noise. That frame fits this dataset
+exactly: Chapter 4 measures three annotator behaviours (selective `near`
+usage, an inverted front/behind convention in two groups, one-directional
+support labelling) which make "agreement with the humans" a per-annotator
+rather than a global quantity. This motivates two design decisions taken in
+Chapters 3–4: evaluation is reported per annotator group, never only pooled;
+and thresholds are calibrated only on annotators who actually used a label,
+with other annotators held out.
+
+Where human judgements must themselves be evaluated, the measurement
+tradition supplies the instruments. Chance-corrected agreement between two
+verdict sets is measured by **Cohen's kappa** (Cohen, 1960), and the
+reliability of a pool of raters by chance-corrected coefficients such as
+Krippendorff's alpha; Artstein and Poesio (2008) survey both and their
+pitfalls, including the prevalence effect that depresses kappa when one
+answer dominates. Chapter 4's independent validation of the automatic labels
+(crowd judgements of sampled predictions, scored against the author's own
+audit verdicts) applies exactly these instruments. It also sharpens RQ2 into
+a question the weak-supervision literature predicts but rarely tests this
+directly: can consistent computed labels *out-teach* inconsistent human ones
+on the humans' own held-out annotations?
+
+## 2.4 The rival family: semi-supervised and active learning
+
+Computing labels from geometry is not the only established answer to
+expensive annotation, and an honest review must position the project against
+the stronger rival: use the labels that exist and stretch them.
+**Active learning** (Settles, 2009) reduces annotation cost by choosing
+*which* examples a human labels next, concentrating effort where the model is
+most uncertain. **Semi-supervised learning** trains on a small labelled set
+plus a large unlabelled one (van Engelen and Hoos, 2020); its simplest and
+most widely used instrument is **pseudo-labelling** (Lee, 2013), in which a
+model trained on the labelled seed labels the unlabelled data for its own
+retraining, and its strongest modern form is noisy self-training (Xie et al.,
+2020), which scaled the idea to ImageNet with a teacher–student loop.
+
+Applied here, the recipe would be: train a relation model on the ~10% of
+pairs the annotators labelled, pseudo-label the remaining 90%, retrain. Three
+properties of this dataset argue against it, each measured in this
+dissertation rather than assumed. First, self-training *amplifies its seed*:
+the pseudo-labels inherit whatever the seed model learned, and the seed here
+is sparse and internally inconsistent (selective `near` usage, two inverted
+front/behind conventions, one-directional support; §2.2, Chapter 4). A
+teacher trained on contradictory conventions teaches its student the same
+contradictions, with added confidence. Second, the seed is not merely small
+but *selectively* small: annotators labelled the pairs they found salient,
+so the labelled 10% is not an unbiased sample of the 90% to be filled in,
+violating the assumption under which pseudo-labelling is well behaved.
+Third, the empirical anchor: Chapter 5's human-trained classifier, which is
+precisely the seed model such a loop would start from, collapses on the
+sparsely-labelled predicates (recall 0.08–0.25) and is unstable across
+seeds. A self-training loop built on that teacher has nothing reliable to
+amplify. Active learning fails differently: it still buys *human* labels,
+so it reduces the bottleneck's slope without removing it, and it cannot fix
+inconsistency between annotators, only ration it.
+
+The geometric route sidesteps all three failure modes because its labelling
+function does not derive from the flawed seed at all: the rules are fitted to
+a handful of thresholds (with the fit itself validated on held-out
+annotators) and are exactly as consistent on the 90% as on the 10%. The
+comparison is not merely argued: RQ2 trains the same model on each label
+source and measures which teaches better, which is the head-to-head test the
+semi-supervised literature rarely runs against a programmatic labeller.
+
+## 2.5 Geometry-to-label pipelines (the lineage we build on)
 
 A line of work *computes* spatial facts from perceived geometry rather than
 predicting them from learned relational patterns. This is the methodological
@@ -123,7 +218,7 @@ than a deployable annotator. The geometry-to-label *idea* is established; its
 application as a **fully-automatic seven-predicate annotator validated against
 this dataset's human labels** is not.
 
-## 2.4 Perception components and the open-vocabulary family
+## 2.6 Perception components and the open-vocabulary family
 
 Our pipeline is geometry-first, but it stands on off-the-shelf perception, and
 each component was chosen against alternatives from the recent literature. The
@@ -176,7 +271,7 @@ measurements. Chapter 3 argues this split is what makes the annotator
 auditable, and Chapter 4's box-only ablation quantifies what each perception
 component actually contributes.
 
-## 2.5 Learned scene-graph generation (the consumer of our output)
+## 2.7 Learned scene-graph generation (the consumer of our output)
 
 Scene-graph generation (SGG) models **predict** relationships from learned visual
 patterns. The field's shape was set by **Visual Genome** (Krishna et al., 2017),
@@ -223,93 +318,7 @@ annotator**. This project *computes* labels from geometry and runs *before* any
 SGG model. It is the **supplier**, and REACT++ is a natural **consumer**. Using
 REACT++/SGG-Benchmark to train on our auto-labels versus the human labels is the
 heavyweight version of RQ2 (the lightweight classifier is the controlled main
-experiment); that test is executed and reported in Chapter 7.
-
-## 2.6 Label quality: weak supervision and annotator disagreement
-
-The project's premise, replacing scarce human labels with dense computed ones,
-has an established name: **weak supervision**. **Snorkel** (Ratner et al.,
-2017) formalised *data programming*: instead of labelling examples, experts
-write labelling functions (heuristics, rules, distant supervision) whose
-noisy, overlapping votes are combined into training labels, trading per-label
-human authority for coverage and consistency. Its deployments repeatedly
-matched or beat hand-labelled baselines wherever the labelled set, not the
-model, was the bottleneck. This project's geometric rules are labelling
-functions in precisely that sense: deterministic, auditable and dense, with two
-departures from the Snorkel setting. Measured geometry gives near-exact rather
-than noisy votes for most predicates (the audit estimates true precision ≈ 1.0
-for five of seven), so no probabilistic label aggregation is needed; and the
-computed labels are *validated against* the human labels they replace (RQ1)
-rather than assumed comparable.
-
-The complementary literature dismantles the premise that human annotation is a
-single reliable gold standard. **Uma et al.'s (2021) survey of learning from
-disagreement** documents systematic annotator disagreement across vision and
-language tasks, driven by ambiguous guidelines, subjective category
-boundaries and annotator-specific conventions, and reviews methods that treat
-disagreement as signal rather than noise. That frame fits this dataset
-exactly: Chapter 4 measures three annotator behaviours (selective `near`
-usage, an inverted front/behind convention in two groups, one-directional
-support labelling) which make "agreement with the humans" a per-annotator
-rather than a global quantity. This motivates two design decisions taken in
-Chapters 3–4: evaluation is reported per annotator group, never only pooled;
-and thresholds are calibrated only on annotators who actually used a label,
-with other annotators held out.
-
-Where human judgements must themselves be evaluated, the measurement
-tradition supplies the instruments. Chance-corrected agreement between two
-verdict sets is measured by **Cohen's kappa** (Cohen, 1960), and the
-reliability of a pool of raters by chance-corrected coefficients such as
-Krippendorff's alpha; Artstein and Poesio (2008) survey both and their
-pitfalls, including the prevalence effect that depresses kappa when one
-answer dominates. Chapter 4's independent validation of the automatic labels
-(crowd judgements of sampled predictions, scored against the author's own
-audit verdicts) applies exactly these instruments. It also sharpens RQ2 into
-a question the weak-supervision literature predicts but rarely tests this
-directly: can consistent computed labels *out-teach* inconsistent human ones
-on the humans' own held-out annotations?
-
-## 2.7 The rival family: semi-supervised and active learning
-
-Computing labels from geometry is not the only established answer to
-expensive annotation, and an honest review must position the project against
-the stronger rival: use the labels that exist and stretch them.
-**Active learning** (Settles, 2009) reduces annotation cost by choosing
-*which* examples a human labels next, concentrating effort where the model is
-most uncertain. **Semi-supervised learning** trains on a small labelled set
-plus a large unlabelled one (van Engelen and Hoos, 2020); its simplest and
-most widely used instrument is **pseudo-labelling** (Lee, 2013), in which a
-model trained on the labelled seed labels the unlabelled data for its own
-retraining, and its strongest modern form is noisy self-training (Xie et al.,
-2020), which scaled the idea to ImageNet with a teacher–student loop.
-
-Applied here, the recipe would be: train a relation model on the ~10% of
-pairs the annotators labelled, pseudo-label the remaining 90%, retrain. Three
-properties of this dataset argue against it, each measured in this
-dissertation rather than assumed. First, self-training *amplifies its seed*:
-the pseudo-labels inherit whatever the seed model learned, and the seed here
-is sparse and internally inconsistent (selective `near` usage, two inverted
-front/behind conventions, one-directional support; §2.2, Chapter 4). A
-teacher trained on contradictory conventions teaches its student the same
-contradictions, with added confidence. Second, the seed is not merely small
-but *selectively* small: annotators labelled the pairs they found salient,
-so the labelled 10% is not an unbiased sample of the 90% to be filled in,
-violating the assumption under which pseudo-labelling is well behaved.
-Third, the empirical anchor: Chapter 5's human-trained classifier, which is
-precisely the seed model such a loop would start from, collapses on the
-sparsely-labelled predicates (recall 0.08–0.25) and is unstable across
-seeds. A self-training loop built on that teacher has nothing reliable to
-amplify. Active learning fails differently: it still buys *human* labels,
-so it reduces the bottleneck's slope without removing it, and it cannot fix
-inconsistency between annotators, only ration it.
-
-The geometric route sidesteps all three failure modes because its labelling
-function does not derive from the flawed seed at all: the rules are fitted to
-a handful of thresholds (with the fit itself validated on held-out
-annotators) and are exactly as consistent on the 90% as on the 10%. The
-comparison is not merely argued: RQ2 trains the same model on each label
-source and measures which teaches better, which is the head-to-head test the
-semi-supervised literature rarely runs against a programmatic labeller.
+experiment); that test is executed and reported in Chapter 6.
 
 ## 2.8 Critical comparison and the research gap
 
@@ -347,7 +356,7 @@ REACT++), (iv) that **dense rule-based supervision is a proven substitute
 for scarce human labels** when validated carefully (Snorkel; the disagreement
 literature), and (v) that the standard annotation-stretching remedies,
 active and semi-supervised learning, presuppose a consistent labelled seed
-this dataset does not provide (§2.7). It also leaves a precise gap: there is no
+this dataset does not provide (§2.4). It also leaves a precise gap: there is no
 automatic, geometry-based annotator that emits this robot dataset's seven spatial
 predicates in its native formats and is validated against its human labels, even
 though the dataset's authors explicitly ask for automation-friendly fixes

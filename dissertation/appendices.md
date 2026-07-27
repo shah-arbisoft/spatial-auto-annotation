@@ -48,11 +48,11 @@ Key commands:
 - `python scripts/make_figures.py`: regenerate all figures from cached results
 - `pytest -q`: unit and invariant tests
 
-The Chapter 7 experiment is reproducible from `scripts/kaggle/`: the dataset
+The Chapter 6 experiment is reproducible from `scripts/kaggle/`: the dataset
 converters (`export_sgg_benchmark.py`, `export_yolo_det.py`), the adapted
 REACT++ configuration, the run recipe (`README.md`, `notebook_cells.md`), and
 the executed evaluation notebook with its outputs (`eval_notebook.ipynb`),
-which is the recorded provenance of every number in Chapter 7's tables.
+which is the recorded provenance of every number in Chapter 6's tables.
 Training logs and parsed results: `outputs/sgg_benchmark/`.
 
 (The full walk-through, covering installation, dataset layout, expected

@@ -57,6 +57,20 @@ annotator groups that labelled the pair with the *opposite direction
 convention*; §4.5 decomposes this, and convention-aligned depth recall is
 0.84.
 
+These recalls are computed over every human triplet in the dataset, so they
+are population values rather than estimates from a sample. The question a
+reader still has is whether another batch from the same process would give
+the same numbers, and that is answered by a cluster bootstrap over images
+(`eval/uncertainty.py`; 2,000 resamples, whole images resampled with
+replacement so that triplets sharing a scene, a depth map and an annotator
+stay together). The 95% intervals are narrow for the predicates the tool
+handles well, on 0.879 (0.863–0.895), left 0.965 (0.954–0.975), right 0.985
+(0.977–0.992), near 0.997 (0.993–1.000), and materially wider for the depth
+pair, in front of 0.640 (0.602–0.678) and behind 0.655 (0.615–0.692), which
+is the expected signature of a predicate whose outcome depends on scene
+composition rather than on a stable rule. The held-out intervals appear with
+the per-annotator analysis in §4.6.
+
 Three observations. **(i)** The tool recovers 81% of all human triplets
 (7,237 of 8,926; mean per-predicate recall 0.85, and 0.76 on annotators whose
 data never influenced any threshold), against 14% for both trivial baselines.
@@ -187,7 +201,7 @@ distinct causes:
    independent, measured annotation-consistency defect in the dataset: the
    direction convention for in front of/behind was not applied uniformly
    across annotators. This is the reference-frame ambiguity RoboSpatial
-   formalises (§2.3) observed in the wild: with no frame declared in the
+   formalises (§2.5) observed in the wild: with no frame declared in the
    guidance, two annotator teams resolved it in opposite directions.
    (Aligned overall recall: 0.84. Alignment uses one
    disclosed bit per group, the majority direction of that group's own
@@ -200,16 +214,55 @@ distinct causes:
    0.30 and 0.08). The `depth_eps` and `plane_band` sweeps in the ablations
    trade this abstention against precision explicitly.
 
-## 4.6 The tenth annotator
+## 4.6 The tenth annotator, and what the annotators would score against each other
 
 Per-group recall of each annotator's triplets (all predicates):
 group_0 0.87 · group_1 0.93 · group_2 0.86 · group_3 0.72 · group_4 0.87 ·
 group_5 0.93 · group_6 0.58 · group_7 0.91 · group_8 0.57. The dispersion is
-now driven almost entirely by the two convention-inverted groups (6, 8): the
+driven almost entirely by the two convention-inverted groups (6, 8): the
 tool agrees with the *consistent* annotators at 0.72–0.93 (0.86–0.93 outside
-the abstention-heavy group 3), comfortably inside the range the annotators
-would plausibly agree with each other, though inter-annotator overlap on
-images does not exist to measure this directly.
+the abstention-heavy group 3).
+
+On the held-out annotators specifically, the cluster-bootstrap intervals of
+§4.2 are: on 0.922 (0.891–0.951), under 0.922 (0.879–0.960), left 0.953
+(0.937–0.970), right 0.985 (0.974–0.996), near 1.000 (1.000–1.000), against
+in front of 0.197 (0.147–0.255) and behind 0.347 (0.281–0.417). Five of the
+seven predicates generalise to unseen annotators with intervals entirely
+above 0.87; the two depth predicates are separated from them by a gap far
+wider than the sampling uncertainty, which is what makes the convention
+explanation below a claim about the labels rather than about noise.
+
+Reading those numbers as a quality verdict requires a yardstick the dataset
+does not supply: how well would two *human* annotators agree with each
+other? The groups labelled disjoint image batches, so the quantity cannot be
+measured directly, and that absence is itself a finding about the dataset's
+construction. Two things can nevertheless be recovered by treating the
+automatic annotator as a fixed common reference
+(`eval/annotator_agreement.py`).
+
+**Annotator heterogeneity, measured without assumptions.** The tool is
+deterministic: it is literally the same labeller for every group, applying
+one definition. Any variation in its agreement across annotators is
+therefore variation in the *annotators*. Across the seven consistent groups
+that variation spans 0.717 to 0.933, a spread of 0.216 (sd 0.068). Before any
+inference about human-human agreement, this alone establishes that the
+annotators are not interchangeable, and it puts a number on how far apart
+they are.
+
+**Bounds on human-human agreement.** For any common reference, if annotator
+A agrees with it on a fraction p_A of items and B on p_B, their mutual
+agreement p_AB obeys the Fréchet inequalities
+max(0, p_A + p_B − 1) ≤ p_AB ≤ 1 − |p_A − p_B|. Averaged over all 21 pairs of
+consistent annotators, these place annotator-to-annotator agreement in
+**[0.74, 0.92]**. The tool's own mean agreement with those annotators,
+**0.869, lies inside that interval**. In other words, the automatic
+annotator agrees with the human annotators about as well as the evidence
+permits them to agree with each other. One assumption is required and is
+stated rather than buried: because the batches are disjoint, the bounds
+presume each annotator's agreement rate would carry over to another
+~100-image batch. The interval is therefore an estimate, not a measurement,
+and the independent validation study (§4.13) is what tests the underlying
+precision claim without it.
 
 ## 4.7 Flags: the honest human cost
 
@@ -231,7 +284,7 @@ definitions. Every annotator behaviour this chapter measures (the selective
 use of `near`, the inverted front/behind convention, one-directional support
 labelling) is the predictable consequence of labelling with undefined terms,
 the exact failure mode the annotator-disagreement literature documents across
-vision and language tasks (§2.6).
+vision and language tasks (§2.3).
 The geometric specification of Chapter 3 is therefore not a re-implementation
 of existing rules but the first operational definition of these predicates,
 and the fitted thresholds are exactly the "clear annotation guidelines" the
@@ -268,7 +321,7 @@ The audit's support-precision failure has a geometric cause: on a floor plane,
 2D box signature as a stacked pair. The repair is a depth co-location condition
 on `on`/`under` (truly stacked objects share a camera distance), an instance
 of the reject-the-geometrically-impossible correction principle adapted from
-Open3D-VQA (Zhang et al., 2025; §2.3), calibrated on the train groups
+Open3D-VQA (Zhang et al., 2025; §2.5), calibrated on the train groups
 (`on_depth_eps` = 0.06) and validated held-out (ablation A1):
 support F1 on never-seen annotators rises 0.58 → 0.71. Downstream effects on
 the headline table: support recall −2/−3 points, `on` restricted precision
@@ -414,7 +467,7 @@ is therefore entirely a detection problem, not a relations problem: the
 geometric rules are detector-agnostic.
 
 Two honest notes. Zero-shot open-vocabulary detection is the worst-case
-detector, exactly the reach-versus-per-class-recall trade §2.4 identifies,
+detector, exactly the reach-versus-per-class-recall trade §2.6 identifies,
 and it was used because the authors' trained YOLOv10m weights (0.93 mAP@50 in
 the source paper) were not available; with that detector the end-to-end gap
 would largely close. And the 20-image trial over-estimated detection quality
@@ -446,7 +499,7 @@ objects they were never calibrated on**: the pen resting on the notepad and a
 wallet-and-photograph stack are labelled with the same contact evidence
 fitted on the dataset's six classes. **(iii) The camera-frame semantics are
 visible**: in the bird's-eye clip, in front of/behind re-maps to distance
-from the viewer's edge of the desk, the reference-frame dependence §2.3
+from the viewer's edge of the desk, the reference-frame dependence §2.5
 cites from RoboSpatial, demonstrated rather than asserted. The open-vocabulary
 quirks are equally visible and worth recording: content displayed *on the
 laptop's screen* is detected as real objects, and items outside the prompt
@@ -456,3 +509,70 @@ This is a demonstration, not an experiment (no video ground truth exists),
 but it establishes that the annotator is video-ready at ~2–3 s per frame,
 with SAM2's native mask propagation (it is a video model used here frame-wise)
 as the designed upgrade path for true temporal consistency.
+
+**It is also the project's only out-of-domain evidence, and worth reading as
+such.** The clips share nothing with the dataset the rules were calibrated
+on: different scenes (an office desk and an overhead worktop, not a
+laboratory floor), a different camera and viewpoint, and objects drawn
+almost entirely from outside the six annotated classes (a monitor, keyboard,
+mouse, mug, spectacles, potted plants, a lamp, a notepad, a laptop, a
+cactus, a wallet, photographs, an earbuds case). No threshold was retuned:
+`near_T`, the depth band, the contact fraction and the plane band are the
+values fitted on annotator groups 0–5 of the robot dataset. The support
+relations that emerge (a pen resting on a notepad, a wallet-and-photograph
+stack) are decided by the same mask-contact evidence, and the camera-frame
+semantics behave exactly as the design predicts when the viewpoint changes
+to bird's-eye.
+
+The limits of that evidence should be equally clear: with no ground truth
+these are qualitative judgements over two clips, so they support the claim
+that the *rules* carry to new object types and viewpoints, and they say
+nothing quantitative about accuracy in a new domain. A labelled cross-domain
+sample is the measurement this substitutes for, and it remains future work
+(§7.6). What the clips do settle is that transfer is not blocked by the
+object vocabulary: the failures visible in them are detection failures
+(screen content detected as real objects, unprompted items snapping to the
+nearest prompted class), which is the same attribution §4.11 makes for the
+dataset itself.
+
+## 4.13 Independent validation of the precision estimate
+
+The true-precision estimates of §4.4 and §4.9 have one methodological
+weakness that no amount of sampling fixes: they were verdicted by the author
+of the tool being evaluated. Conservative rules and published evidence
+mitigate the risk, but they do not remove it, and the honest description of
+those numbers is "author-verdicted". A separate study was therefore designed
+to re-estimate precision with judges who have no stake in the result.
+
+**Protocol.** A stratified sample of 2,002 automatic labels (286 per
+predicate) is drawn from the tool's *extra* predictions, meaning ordered
+pairs the human annotators never labelled, which is exactly the population
+with no ground truth to score against. Each claim is rendered as the source
+photograph with the subject outlined in red and the object in blue, and
+presented with a single sentence ("the book is on the box") to volunteers
+recruited by open link, who answer TRUE or WRONG / can't tell. The
+instructions restate the operational definitions of Chapter 3: camera-frame
+laterality, "in front of" as nearer the camera, support as physically
+resting rather than held, and an explicit instruction to answer WRONG when
+unsure, which reproduces the conservative rule used in the author's audits.
+Items are assigned least-covered-first so coverage stays even, each browser
+receives a random identifier that prevents repeat judgements without
+identifying anybody, and faces are anonymised in every image (Chapter 8).
+
+**What it measures.** Three things the author-verdicted audits cannot. First,
+crowd precision per predicate with binomial confidence intervals, at a sample
+size two orders of magnitude larger than the n = 15 per predicate of §4.4.
+Second, an author-bias check: the 147 items carrying the author's own
+verdicts are retained inside the pool, so crowd majority and author verdict
+can be compared directly by percentage agreement and Cohen's kappa (Cohen,
+1960). Third, whether the *task* is well posed at all, through
+crowd-internal reliability across raters (Krippendorff's alpha), which
+distinguishes "the tool is wrong" from "this claim is genuinely ambiguous",
+a distinction the annotator-disagreement literature insists on (§2.3).
+
+Scoring is fully specified in advance (`analysis/score_votes.py`): ties
+resolve to WRONG, matching the audit protocol; reflex-speed responses and
+raters who disagree systematically with everyone else can be excluded by
+pre-declared filters. The instrument is complete and collection is under
+way; the results are reported at submission, and the limitation stated in
+§7.4 stands until they are.

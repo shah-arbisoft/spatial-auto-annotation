@@ -1,4 +1,4 @@
-# Chapter 7: The Direct Benchmark Test: Training REACT++ on Both Label Sources
+# Chapter 6: The Direct Benchmark Test: Training REACT++ on Both Label Sources
 
 > Numbers generated on Kaggle (T4 GPU) with SGG-Benchmark; training logs and
 > the exact per-epoch series in `outputs/sgg_benchmark/`; conversion by
@@ -6,12 +6,12 @@
 
 This chapter is the third analysis iteration: the heavyweight version of the
 RQ2 experiment, run in the source paper's own framework. Section 7.1 gives
-the design and the three predictions registered in advance, §7.2–7.3 the
-training dynamics and test results, §7.4 the decomposition of why the verdict
-differs from Chapter 5, §7.5 both readings of the evidence, and §7.6–7.7 the
+the design and the three predictions registered in advance, §6.2–7.3 the
+training dynamics and test results, §6.4 the decomposition of why the verdict
+differs from Chapter 5, §6.5 both readings of the evidence, and §6.6–7.7 the
 prediction verdicts and the conditional answer.
 
-## 7.1 Design
+## 6.1 Design
 
 Chapter 5's controlled experiment used a deliberately small classifier; this
 chapter runs the heavyweight version on the source paper's own terms: a
@@ -32,7 +32,7 @@ identical held-out test set. The isolation mirrors RQ2 exactly:
   human-label arm saturates early, replicating the source paper; (2) the
   auto-label arm reaches a higher plateau; (3) `near` recovers.
 
-## 7.2 Training dynamics: prediction 1 confirmed
+## 6.2 Training dynamics: prediction 1 confirmed
 
 The human-label arm reaches 95% of its best validation score by **epoch 4**,
 peaks at epoch 12, and then declines, showing mild overfitting on 5,421 sparse
@@ -45,7 +45,7 @@ triplet types during training against the human arm's 94. (Figure:
 `sgg_training_curves.png`. The two validation series use each arm's own
 label source, so only their *shapes* are compared, never their heights.)
 
-## 7.3 Test results: predictions 2 and 3 refuted on the ranking metric
+## 6.3 Test results: predictions 2 and 3 refuted on the ranking metric
 
 Both best checkpoints evaluated on the identical test set (210 images,
 human gold, groups 6–8):
@@ -89,7 +89,7 @@ slices re-scored):
 §4.5. On group 7 the zero-shot gap persists: zR@100 0.221 (auto) vs 0.008
 (human).
 
-## 7.4 Why the verdict flipped between Chapter 5 and this chapter
+## 6.4 Why the verdict flipped between Chapter 5 and this chapter
 
 The same labels, the same held-out human gold, and two opposite outcomes:
 per-pair recall (Chapter 5) says automatic labels teach better (0.76 vs
@@ -153,7 +153,7 @@ auto-trained arm's 39× advantage (0.157 vs 0.004) shows what density and
 consistency actually bought: geometry that composes to unseen combinations,
 rather than a lookup of previously-labelled ones.
 
-## 7.5 An honest reading, both ways
+## 6.5 An honest reading, both ways
 
 Two interpretations survive the evidence, and the dissertation records both.
 Read charitably toward the benchmark: if the downstream consumer will be
@@ -175,7 +175,7 @@ run noise; replicating the two arms across seeds is the designed check.)
 The one remaining instrument is a manual audit of the auto arm's top-ranked
 "false positives" (the direct analogue of §4.4), left as designed follow-up.
 
-## 7.6 What Chapter 5's predictions got right and wrong
+## 6.6 What Chapter 5's predictions got right and wrong
 
 Registered before the run, judged after: prediction 1 (early human-arm
 saturation) is **confirmed**, and it replicates the source paper. Prediction
@@ -186,7 +186,7 @@ reward dense `near` prediction. The value of pre-registration is precisely
 that these verdicts are checkable; the mechanism analysis above is what the
 misses taught.
 
-## 7.7 Answer, at the level the source paper measures
+## 6.7 Answer, at the level the source paper measures
 
 At the level the source paper itself evaluates robot-readiness (SGG metrics
 on human-annotated gold), automatic labels train a model that trains longer,

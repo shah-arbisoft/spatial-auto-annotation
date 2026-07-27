@@ -1,17 +1,17 @@
-# Chapter 6: Critical Evaluation
+# Chapter 7: Critical Evaluation
 
-> Every quantitative claim below is established in Chapters 4–5
+> Every quantitative claim below is established in Chapters 4–6
 > and reproducible from the repository; this chapter interprets, connects and
 > stress-tests them.
 
 This chapter discusses the results rather than reporting new ones. Section
 6.1 evaluates the achievement against the research questions and objectives,
-§6.2 dissects what the remaining failures are made of, §6.3 examines the
-dataset's annotation process in the light of the measurements, §6.4 reflects
-on the methodology itself, §6.5 compares the outcome with the prior work of
-Chapter 2, and §6.6 states limitations and threats to validity.
+§7.2 dissects what the remaining failures are made of, §7.3 examines the
+dataset's annotation process in the light of the measurements, §7.4 reflects
+on the methodology itself, §7.5 compares the outcome with the prior work of
+Chapter 2, and §7.6 states limitations and threats to validity.
 
-## 6.1 Achievement against the research questions
+## 7.1 Achievement against the research questions
 
 **RQ1** asked whether spatial-relationship annotation can be automated at a
 quality comparable to human annotation. The answer is predicate-shaped rather
@@ -48,10 +48,10 @@ calibrated on train annotators only and generalised to held-out ones (near
 recall 1.0, support F1 0.87 held-out). **O3**: per-predicate fidelity is
 measured against baselines and ablations with audited true precision
 (Chapter 4). **O4**: all 1,689 misses are attributed to a cause, with genuine
-tool error bounded at ~6% of miss mass (§6.2). **O5**: the controlled
+tool error bounded at ~6% of miss mass (§7.2). **O5**: the controlled
 label-source experiment is the 0.76-versus-0.30 result above (Chapter 5).
 
-## 6.2 What the remaining failures are made of
+## 7.2 What the remaining failures are made of
 
 The failure gallery diagnoses every one of the 1,689 missed human triplets by
 re-checking rule conditions, so the failure analysis is exhaustive rather than
@@ -86,7 +86,7 @@ characterised: objects resting on supports the detector has no box for
 within the band. Both operating points are documented, revisable decisions
 rather than hidden constants (ablations A2, A7).
 
-## 6.3 The dataset's annotation process, examined
+## 7.3 The dataset's annotation process, examined
 
 The source paper flagged `near` as inconsistent and called for "clear
 annotation guidelines (e.g., spatial thresholds for 'near')". This project
@@ -109,15 +109,24 @@ This reframes the evaluation itself: for several predicates there is no human
 consensus to agree with, only per-annotator behaviours. The dissertation's
 response (per-annotator reporting, annotator-aware calibration, and
 operational definitions as the deliverable) is, to our knowledge, the first
-time this dataset's label semantics have been made explicit. The "tenth
-annotator" framing survives contact with the data: where annotators are
-self-consistent, the tool agrees with them at 0.72–0.93 overall and 95–100% on
-committed depth directions, a range that plausibly brackets what the
-annotators would score against each other. Absent overlapping assignments,
-inter-annotator agreement cannot be computed directly, and that absence is
-itself a finding about the dataset's construction.
+time this dataset's label semantics have been made explicit.
 
-## 6.4 Methodological reflection
+The "tenth annotator" framing survives contact with the data, and §4.6 puts
+numbers on it. Because the tool is deterministic it is the same labeller for
+every group, so the 0.216 spread in its agreement across the seven
+consistent annotators (0.717 to 0.933) measures the annotators' own
+heterogeneity rather than the tool's inconsistency. Applying Fréchet bounds
+with the tool as common reference places annotator-to-annotator agreement in
+[0.74, 0.92], an interval containing the tool's own 0.869. The claim this
+licenses is deliberately modest, because the bounds require assuming the
+image batches are exchangeable: the automatic annotator cannot be shown to
+agree with the human annotators any less well than they can be shown to
+agree with one another. Absent overlapping assignments the quantity cannot
+be measured outright, and that absence is itself a finding about the
+dataset's construction, one a replication should design away by having two
+annotators share a batch from the outset.
+
+## 7.4 Methodological reflection
 
 Choices that proved right: the **PredCls isolation** (without it, every rule
 result would be confounded by detection; the SGDet decomposition shows the
@@ -130,7 +139,9 @@ near recall 1.0, support F1 0.87 on annotators the thresholds never saw).
 
 Choices a stricter replication should improve: the **audits were verdicted by
 the author** (conservatively, with verdicts and rendered evidence published
-for spot-checking, but blind double-verdicting would be stronger); the
+for spot-checking; the independent validation study of §4.13 is the designed
+remedy, and blind external verdicting should have been the instrument from
+the first audit rather than the last); the
 **support-rule iteration used the same audit machinery twice**, so the second
 audit is confirmatory rather than fully independent; the SGDet **prompt/
 threshold tuning used one disclosed iteration on a trial slice** that
@@ -138,7 +149,7 @@ over-estimated full-set detection quality, a small, instructive example of
 trial-set optimism; and 2,000-scene invariant fuzzing pins rule consistency
 but not rule *truth*, which only the audits address.
 
-## 6.5 Synthesis against the geometry-to-label lineage
+## 7.5 Synthesis against the geometry-to-label lineage
 
 The pipeline borrows its skeleton from the SpatialVLM family: lift perception
 to geometry, derive spatial facts deterministically. What this project adds is
@@ -157,16 +168,24 @@ in the design chapter to justify camera-frame laterality, turned out to be the
 right lens for a *measured* phenomenon: the front/behind convention inversion
 is a reference-frame disagreement inside a single dataset's annotation team.
 
-## 6.6 Limitations and threats to validity
+## 7.6 Limitations and threats to validity
 
 **Internal.** Thresholds are fitted to six annotator groups of one dataset;
-audits are author-verdicted (§6.4); the two-stage audit shares machinery with
+audits are author-verdicted (§7.4); the two-stage audit shares machinery with
 the rule change it evaluates.
 
 **External.** One laboratory domain, six object classes, one camera and
 mounting; the fitted constants (`near_T`, ε values, contact threshold) are
 dataset-specific by design. The *procedure* (fit on some annotators, validate
-on held-out ones) is the transferable artefact, not the numbers. Full
+on held-out ones) is the transferable artefact, not the numbers. The one
+piece of out-of-domain evidence is qualitative: the video clips of §4.12 run
+the unretuned thresholds over different scenes, a different viewpoint and
+objects almost entirely outside the six classes, and the support and lateral
+relations behave correctly there, with the visible failures attributable to
+detection rather than to the rules. That supports transfer of the rule layer
+but measures nothing, since no labelled out-of-domain gold exists; a modest
+labelled cross-domain sample is the missing experiment, and it is cheap
+enough that a replication should simply include one. Full
 automation is currently detection-bounded (0.38 end-to-end with a worst-case
 zero-shot detector; the authors' trained detector would close most of that
 gap, but this remains unverified without their weights).
@@ -180,7 +199,7 @@ guideline-driven human annotation, a regime this dataset does not contain.
 **Ethics.** Scene images contain identifiable people; figures for publication
 use the dataset as released (CC-BY 4.0) with faces blurred as a courtesy.
 
-## 6.7 Aims, revisited
+## 7.7 Aims, revisited
 
 Both research questions are answered with evidence that survived held-out
 validation, independent audits and exhaustive failure diagnosis. The

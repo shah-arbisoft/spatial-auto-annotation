@@ -85,7 +85,7 @@ The research questions decompose into five verifiable objectives:
   precision, answering RQ1. *(Chapter 4)*
 - **O4 (diagnose).** Every disagreement with the human labels attributed to a
   cause: calibrated abstention, annotator behaviour, or genuine tool error.
-  *(Chapters 4, 6)*
+  *(Chapters 4, 7)*
 - **O5 (test downstream utility).** A controlled experiment in which the same
   classifier is trained once on human and once on automatic labels, isolating
   the label source, answering RQ2. *(Chapter 5)*
@@ -107,7 +107,7 @@ The research questions decompose into five verifiable objectives:
 In scope: the automatic annotator; the fidelity study with baselines and
 ablations; the controlled downstream classifier; the direct benchmark test, in
 which the source paper's own SGG framework (REACT++) is trained on each label
-source (Chapter 7); a critical evaluation chapter. Deferred to future work: a
+source (Chapter 6); a critical evaluation chapter. Deferred to future work: a
 vision-language task-planning comparison, scaling on new robot captures, and
 copy-paste augmentation. These protect the timeline and strengthen the
 future-work discussion rather than weakening the contribution.
@@ -144,14 +144,17 @@ under the University's ethics self-assessment process.
 
 ## 1.8 Dissertation structure
 
-Chapter 2 reviews the automatic-annotation lineage and positions the gap.
-Chapter 3 gives the research methodology and the geometric design of the seven
-predicates with per-choice justifications. Chapters 4, 5 and 7 are the analysis
-chapters, presented as three iterations of increasing scope in the CRISP-DM
-sense: Chapter 4 presents the fidelity study (RQ1) and ablations, Chapter 5 the
-controlled downstream study (RQ2), and Chapter 7 the direct benchmark test, in
-which the source paper's own SGG models are trained on each label source and
-compared against three pre-registered predictions. Chapter 6 is a critical
-evaluation tying results to causes and to prior work. Chapter 8 assesses the
+Chapter 2 reviews the literature with label quality as its organising
+question and positions the research gap. Chapter 3 gives the research
+methodology and the geometric design of the seven predicates with per-choice
+justifications. Chapters 4, 5 and 6 are the analysis chapters, presented as
+three iterations of increasing scope in the CRISP-DM sense: Chapter 4
+presents the fidelity study (RQ1), its ablations and the independent
+validation of its precision estimates; Chapter 5 the controlled downstream
+study (RQ2), including a self-training arm that tests the standard rival
+remedy for scarce labels; and Chapter 6 the direct benchmark test, in which
+the source paper's own SGG model is trained on each label source and judged
+against three pre-registered predictions. Chapter 7 is a critical evaluation
+tying all three iterations to causes and to prior work. Chapter 8 assesses the
 legal, social, ethical and professional dimensions of automating annotation.
 Chapter 9 concludes and sets out future work.
