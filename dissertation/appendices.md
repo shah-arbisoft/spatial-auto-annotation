@@ -67,9 +67,70 @@ the executed evaluation notebook with its outputs (`eval_notebook.ipynb`),
 which is the recorded provenance of every number in Chapter 6's tables.
 Training logs and parsed results: `outputs/sgg_benchmark/`.
 
-(The full walk-through, covering installation, dataset layout, expected
-outputs and runtimes per script, is completed in the final assembly, together
-with the Dockerfile.)
+### Full reproduction walk-through
+
+**1. Environment.** Either build the container (`docker build -t
+spatial-annotator .`; the `Dockerfile` at the repository root pins Python
+3.11, torch 2.5.1 + cu121 and installs SAM2 from GitHub, and runs the test
+suite at build time), or create a Python 3.11/3.12 venv and follow the three
+numbered notes at the top of `requirements.txt`. The known pitfall is
+documented there: installing SAM2 can silently replace CUDA torch with a
+CPU wheel, fixed by reinstalling torch with `--no-deps --force-reinstall`
+from the cu121 index. Verify with `python scripts/smoke_test.py --image
+assets/sample.jpg`, which loads SAM2 and Depth Anything and reports CUDA
+availability and peak memory (~0.65 GB).
+
+**2. Data.** Clone the released dataset (CC-BY 4.0) and point
+`dataset.root` in `configs/default.yaml` at it. The loader expects the
+release's own layout (`img_data/group_N/*.jpg` plus the annotation JSONs)
+and corrects the images' 180° EXIF orientation itself; nothing is
+preprocessed on disk.
+
+**3. One GPU pass, then everything is offline.**
+`python scripts/run_annotator.py` (~5 min on the RTX 2060) writes the
+annotations in all three native formats plus the geometry, contact and
+depth caches under `outputs/`, and `outputs/pairs.csv`. Every experiment
+below runs from those caches on CPU:
+
+| command | produces | time |
+|---|---|---|
+| `pytest -q` | 25 unit + invariant tests | <1 min |
+| `python scripts/reannotate_from_cache.py` | re-runs the rules after any threshold change | ~20 s |
+| `python eval/fit_near.py` | the near-threshold protocol, `near_fit.json` | ~1 min |
+| `python eval/fidelity.py` | the RQ1 battery, `fidelity_report.json` | ~2 min |
+| `python eval/uncertainty.py --iters 2000` | cluster-bootstrap CIs | ~2 min |
+| `python eval/annotator_agreement.py` | heterogeneity + Fréchet bounds | <1 min |
+| `python eval/ablations.py` | A1–A6 sweeps | ~10 min |
+| `python eval/depth_ablation.py` | A8 (needs the `outputs_base` pass) | <1 min |
+| `python eval/downstream.py --seeds 42,43,44` | RQ2, three arms | ~4 h CPU |
+| `python scripts/make_figures.py` | every figure | ~1 min |
+
+The two GPU extras: `python scripts/run_sgdet.py --threshold 0.25` for the
+deployment-mode pass (~47 min) and `python scripts/run_annotator.py
+--config configs/depth_base.yaml --out outputs_base` for A8's Base-model
+pass (~7 min).
+
+**4. The benchmark (Chapter 6)** runs on Kaggle rather than locally
+(REACT++ training needs more than 6 GB): upload
+`datasets/spatial_sgg_upload.zip` (built by
+`scripts/export_sgg_benchmark.py` and `scripts/export_yolo_det.py`), then
+commit the notebooks in `scripts/kaggle/` in order (the training run in
+`notebook_cells.md`, the seed replication in `seed_replication.ipynb`, and
+the re-evaluation in `reeval_seeds_and_groups.ipynb`) on a T4 x2
+accelerator. Download each committed version's outputs into
+`outputs/sgg_benchmark/` and run `python eval/seed_stats.py`. The two
+framework traps are documented in the notebooks themselves: class index 0
+is reserved (patched idempotently in a cell), and `--eval-only` is silently
+a no-op with this config, so evaluation calls `inference()` directly.
+
+**5. The validation study** lives in its own public repository
+(`robot-factcheck`): `tools/build_validation_set.py` regenerates the claim
+set and site images from this repository's caches, and
+`analysis/score_votes.py` scores the exported votes sheet. The private
+answer key never enters the public repository.
+
+Every reported number traces to one of the JSON/markdown artefacts these
+commands write; no figure or table in this dissertation is produced by hand.
 
 ## Appendix C: Predicate specification
 
