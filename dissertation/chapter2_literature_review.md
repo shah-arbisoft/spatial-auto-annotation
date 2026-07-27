@@ -146,18 +146,23 @@ violating the assumption under which pseudo-labelling is well behaved.
 Third, the empirical anchor: Chapter 5's human-trained classifier, which is
 precisely the seed model such a loop would start from, collapses on the
 sparsely-labelled predicates (recall 0.08–0.25) and is unstable across
-seeds. A self-training loop built on that teacher has nothing reliable to
-amplify. Active learning fails differently: it still buys *human* labels,
-so it reduces the bottleneck's slope without removing it, and it cannot fix
-inconsistency between annotators, only ration it.
+seeds. A self-training loop built on that teacher has little that is
+reliable to amplify. Active learning fails differently: it still buys
+*human* labels, so it reduces the bottleneck's slope without removing it,
+and it cannot fix inconsistency between annotators, only ration it.
 
 The geometric route sidesteps all three failure modes because its labelling
 function does not derive from the flawed seed at all: the rules are fitted to
 a handful of thresholds (with the fit itself validated on held-out
-annotators) and are exactly as consistent on the 90% as on the 10%. The
-comparison is not merely argued: RQ2 trains the same model on each label
-source and measures which teaches better, which is the head-to-head test the
-semi-supervised literature rarely runs against a programmatic labeller.
+annotators) and are exactly as consistent on the 90% as on the 10%.
+
+None of this is left as argument. Chapter 5 implements the rival directly as
+a third arm of the controlled experiment, running the standard
+teacher-student self-training loop over the same features, model, split and
+seeds, so that pseudo-labelling and programmatic labelling are compared
+head to head on the humans' own held-out annotations. That is a comparison
+the weak-supervision and semi-supervised literatures each motivate but
+rarely run against one another.
 
 ## 2.5 Geometry-to-label pipelines (the lineage we build on)
 

@@ -43,8 +43,17 @@ Key commands:
   from the geometry cache (~20 s, no GPU)
 - `python eval/fit_near.py`: fit and report the `near` threshold
 - `python eval/fidelity.py`: the RQ1 battery → `outputs/`
+- `python eval/uncertainty.py --iters 2000`: cluster-bootstrap intervals for
+  every headline recall → `outputs/tables/uncertainty.md`
+- `python eval/annotator_agreement.py`: annotator heterogeneity and the
+  estimated human-human agreement bounds → `outputs/tables/annotator_agreement.md`
 - `python eval/ablations.py`: ablations A1–A6 → `outputs/tables/ablations.md`
-- `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment
+- `python eval/depth_ablation.py`: the A8 depth-model comparison
+- `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment, all three
+  label sources (human, self-trained, automatic)
+- `python analysis/score_votes.py votes.csv`: scores the independent
+  validation study (crowd precision, author-bias kappa, rater reliability);
+  lives with the study's own repository
 - `python scripts/make_figures.py`: regenerate all figures from cached results
 - `pytest -q`: unit and invariant tests
 
