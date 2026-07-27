@@ -163,4 +163,6 @@ the source paper's own SGG model is trained on each label source and judged
 against three pre-registered predictions. Chapter 7 is a critical evaluation
 tying all three iterations to causes and to prior work. Chapter 8 assesses the
 legal, social, ethical and professional dimensions of automating annotation.
-Chapter 9 concludes and sets out future work.
+Chapter 9 concludes: it reports the objectives against their evidence, states
+the contributions, turns each limitation into the experiment that would
+resolve it, and reflects on how the project was actually conducted.
