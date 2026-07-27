@@ -95,6 +95,7 @@ def fig_rq1_recall():
 def fig_rq2_comparison():
     rep = json.loads((ROOT / "outputs" / "rq2_report.json").read_text())
     hu, au = rep["human-trained"], rep["auto-trained"]
+    ps = rep.get("pseudo-labelled")
     labels = [PRED_SHORT[p] for p in PRED_ORDER]
 
     def series(d):
@@ -106,26 +107,40 @@ def fig_rq2_comparison():
     hv, herr = series(hu)
     av, aerr = series(au)
     x = range(len(labels))
-    w = 0.38
     fig, ax = plt.subplots(figsize=(9.2, 4.6))
     ekw = dict(ecolor="#555", capsize=3, elinewidth=1.1)
-    ax.bar([i - w / 2 for i in x], hv, w, yerr=herr, color=C_GRAY,
-           label="trained on human labels", error_kw=ekw)
-    ax.bar([i + w / 2 for i in x], av, w, yerr=aerr, color=C_MAIN,
-           label="trained on automatic labels", error_kw=ekw)
 
-    hu_mean = sum(hv) / len(hv)
-    au_mean = sum(av) / len(av)
+    if ps:  # three arms: human, self-trained, automatic
+        pv, perr = series(ps)
+        w = 0.27
+        ax.bar([i - w for i in x], hv, w, yerr=herr, color=C_GRAY,
+               label="trained on human labels", error_kw=ekw)
+        ax.bar(list(x), pv, w, yerr=perr, color="#9ecae1",
+               label="human labels + self-training", error_kw=ekw)
+        ax.bar([i + w for i in x], av, w, yerr=aerr, color=C_MAIN,
+               label="trained on automatic labels", error_kw=ekw)
+        note = (f"mean recall:  human {sum(hv)/len(hv):.2f}    "
+                f"self-trained {sum(pv)/len(pv):.2f}    auto {sum(av)/len(av):.2f}")
+        ncol = 3
+    else:
+        w = 0.38
+        ax.bar([i - w / 2 for i in x], hv, w, yerr=herr, color=C_GRAY,
+               label="trained on human labels", error_kw=ekw)
+        ax.bar([i + w / 2 for i in x], av, w, yerr=aerr, color=C_MAIN,
+               label="trained on automatic labels", error_kw=ekw)
+        note = (f"mean recall:  human {sum(hv)/len(hv):.2f}    "
+                f"auto {sum(av)/len(av):.2f}")
+        ncol = 2
+
     ax.set_ylabel("Recall vs held-out human gold")
     ax.set_ylim(0, 1.12)
     ax.set_xticks(list(x))
     ax.set_xticklabels(labels, rotation=20, ha="right")
     _style(ax)
-    ax.text(0.015, 0.98,
-            f"mean recall:  human {hu_mean:.2f}    auto {au_mean:.2f}",
+    ax.text(0.015, 0.98, note,
             transform=ax.transAxes, fontsize=9.5, color="#333", va="top")
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.01),
-              ncol=2, frameon=False, columnspacing=2.0, handlelength=1.3)
+              ncol=ncol, frameon=False, columnspacing=1.6, handlelength=1.3)
     out = FIG / "rq2_comparison.png"
     fig.savefig(out)
     plt.close(fig)
