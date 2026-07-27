@@ -147,6 +147,20 @@ precision for five predicates and confirmed it for support); and **train-only
 calibration with held-out annotators** (every fitted threshold generalised:
 near recall 1.0, support F1 0.87 on annotators the thresholds never saw).
 
+One choice proved its worth only after the fact. The benchmark of Chapter 6
+originally ran a single seed per arm, and an early reading of its per-group
+table reported that the auto arm wins on the one defect-free test annotator.
+Retraining both arms at two further seeds showed the arms tied there, and
+the claim was withdrawn (§6.3.1). Two lessons follow. The narrow one is that
+a 0.011 margin on 73 images should never have been characterised as a win;
+the honest description before replication was "indistinguishable". The
+broader one is that the discipline this project applied faithfully to
+thresholds, fitting on some annotators and validating on others, was applied
+late to *model training variance*, and the fix was cheap: four extra runs on
+a free GPU tier. A replication designed from the start would have trained
+every arm at three seeds and reported ranges throughout, which is what the
+final version does.
+
 Choices a stricter replication should improve: the **audits were verdicted by
 the author** (conservatively, with verdicts and rendered evidence published
 for spot-checking; the independent validation study of §4.13 is the designed
