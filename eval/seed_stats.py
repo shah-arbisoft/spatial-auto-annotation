@@ -1,21 +1,28 @@
 """Aggregate the benchmark arms across seeds.
 
-The Week-7 experiment ran one seed per arm, so chapter 6 reports its margins
-as observed rather than tested. The replication adds seeds 43 and 44 (see
-scripts/kaggle/notebook_cells_seeds.md), giving three runs per arm. This
-script reads them all and reports mean and spread, which is what turns
-"the auto arm is ahead on group 7" into a claim with a stated uncertainty.
+The Week-7 experiment ran one seed per arm, so chapter 6 reported its margins
+as observed rather than tested. The replication adds seeds 43 and 44, giving
+three runs per arm, and this script reports mean and spread for each metric
+and each test slice.
 
-Input layout, after unzipping the Kaggle output:
+Two input shapes are accepted:
 
-    outputs/sgg_benchmark/test_results.json          seed 42 (the original run)
-    outputs/sgg_benchmark/seeds/eval_react_human_s43/...
-    outputs/sgg_benchmark/seeds/eval_react_auto_s43/...
-    outputs/sgg_benchmark/seeds/eval_react_human_s44/...
-    outputs/sgg_benchmark/seeds/eval_react_auto_s44/...
+1. `outputs/sgg_benchmark/reeval_results.json` - written by the
+   re-evaluation notebook, one record per (run, slice), covering the full
+   test set and each annotator group. Preferred, because its zero-shot
+   numbers use one fixed reference set for both arms.
+2. `outputs/sgg_benchmark/seeds/**/eval_results_top_100.json` - the raw
+   per-run evaluation folders. Pooled metrics only.
 
-Each eval folder is searched for whatever the framework wrote (a json result
-file, or the log text), so the parser is deliberately forgiving.
+Seed 42 is read from `outputs/sgg_benchmark/test_results.json`.
+
+A note on zero-shot recall: it is scored against the triplet types seen in
+whatever is staged as the training split at evaluation time. The first
+replication run left the auto arm's labels staged, so every arm was scored
+against its 213 seen types instead of the human arm's 94, and all four
+zero-shot numbers collapsed to zero. Those values are ignored here unless
+the re-evaluation output is present; R/mR/F1 never consult training
+statistics and are always used.
 
     python eval/seed_stats.py
 """
@@ -26,119 +33,164 @@ import json
 import re
 import statistics
 import sys
+from collections import defaultdict
 from pathlib import Path
 
 ROOT = Path("outputs/sgg_benchmark")
+REEVAL = ROOT / "reeval_results.json"
 SEED_DIR = ROOT / "seeds"
 OUT_MD = Path("outputs/tables/seed_replication.md")
 OUT_JSON = ROOT / "seed_replication.json"
-METRICS = ["R@100", "mR@100", "zR@100"]
+METRICS = ["R@100", "mR@100", "F1@100", "zR@100"]
 
 
-def from_original():
-    """Seed 42 numbers already parsed into test_results.json."""
+def load_original():
+    """Seed 42, already parsed into test_results.json (pooled + per-group)."""
     p = ROOT / "test_results.json"
     if not p.exists():
-        return {}
+        return []
     d = json.loads(p.read_text(encoding="utf-8"))
+    rows = []
+    for arm in ("human", "auto"):
+        if arm not in d:
+            continue
+        rows.append({"arm": arm, "seed": 42, "slice": "full",
+                     **{m: d[arm].get(m) for m in METRICS if m in d[arm]}})
+    # per-group sharpeners, if the original recorded them
+    sharp = d.get("sharpeners", {})
+    for key, val in sharp.items() if isinstance(sharp, dict) else []:
+        g = re.search(r"group[_ ]?(\d)", str(key))
+        if not g or not isinstance(val, dict):
+            continue
+        for arm in ("human", "auto"):
+            if arm in val and isinstance(val[arm], (int, float)):
+                rows.append({"arm": arm, "seed": 42, "slice": f"group_{g.group(1)}",
+                             "mR@100": val[arm]})
+    return rows
+
+
+def load_reeval():
+    if not REEVAL.exists():
+        return []
+    d = json.loads(REEVAL.read_text(encoding="utf-8"))
+    rows = []
+    for rec in d.values():
+        rows.append({"arm": rec["arm"], "seed": rec["seed"], "slice": rec["slice"],
+                     **{m: rec.get(m) for m in METRICS},
+                     "n_zeroshot": rec.get("n_zeroshot")})
+    return rows
+
+
+def load_raw_seed_folders():
+    """Fallback: the first replication's per-run folders (pooled, no valid zR)."""
+    rows = []
+    for f in sorted(SEED_DIR.rglob("eval_results_top_100.json")):
+        m = re.search(r"eval_react_(human|auto)_s(\d+)", str(f))
+        if not m:
+            continue
+        d = json.loads(f.read_text(encoding="utf-8"))
+        rec = {"arm": m.group(1), "seed": int(m.group(2)), "slice": "full"}
+        if d.get("sgdet_recall", {}).get("100"):
+            rec["R@100"] = statistics.mean(d["sgdet_recall"]["100"])
+        rec["mR@100"] = d.get("sgdet_mean_recall", {}).get("100")
+        rec["F1@100"] = d.get("sgdet_f1_score", {}).get("100")
+        # zR deliberately omitted: staged against the wrong reference set
+        rows.append(rec)
+    return rows
+
+
+def summarise(rows, slice_name, metric):
     out = {}
     for arm in ("human", "auto"):
-        if arm in d:
-            out[(arm, 42)] = {m: d[arm].get(m) for m in METRICS if m in d[arm]}
+        xs = [r[metric] for r in rows
+              if r["arm"] == arm and r["slice"] == slice_name
+              and isinstance(r.get(metric), (int, float))]
+        if xs:
+            out[arm] = {"mean": statistics.mean(xs), "n": len(xs),
+                        "min": min(xs), "max": max(xs),
+                        "sd": statistics.pstdev(xs) if len(xs) > 1 else 0.0}
     return out
 
 
-def parse_folder(folder: Path):
-    """Pull R@100 / mR@100 / zR@100 out of whatever the framework left behind."""
-    vals = {}
-    # 1) a json result file, if the framework wrote one
-    for jf in folder.rglob("*.json"):
-        try:
-            d = json.loads(jf.read_text(encoding="utf-8"))
-        except Exception:
-            continue
-        if isinstance(d, dict):
-            flat = json.dumps(d)
-            for m in METRICS:
-                key = m.replace("@", "_at_")
-                for pat in (rf'"{re.escape(m)}"\s*:\s*([\d.]+)',
-                            rf'"{key}"\s*:\s*([\d.]+)'):
-                    hit = re.search(pat, flat)
-                    if hit and m not in vals:
-                        vals[m] = float(hit.group(1))
-    # 2) otherwise scrape the log text
-    if len(vals) < len(METRICS):
-        for lf in list(folder.rglob("*.txt")) + list(folder.rglob("*.log")):
-            text = lf.read_text(encoding="utf-8", errors="ignore")
-            for m, pat in (("R@100", r"R @ 100:\s*([\d.]+)"),
-                           ("mR@100", r"mR @ 100:\s*([\d.]+)"),
-                           ("zR@100", r"zR @ 100:\s*([\d.]+)")):
-                hit = re.findall(pat, text)
-                if hit and m not in vals:
-                    vals[m] = float(hit[-1])
-    return vals
-
-
 def main():
-    results = from_original()
-    if SEED_DIR.exists():
-        for folder in sorted(SEED_DIR.glob("eval_react_*")):
-            m = re.search(r"eval_react_(human|auto)_s(\d+)", folder.name)
-            if not m:
-                continue
-            arm, seed = m.group(1), int(m.group(2))
-            vals = parse_folder(folder)
-            if vals:
-                results[(arm, seed)] = vals
-            else:
-                print(f"WARNING: no metrics parsed from {folder}")
+    rows = load_original()
+    reeval = load_reeval()
+    if reeval:
+        # re-evaluation supersedes the raw folders for any (arm, seed, slice)
+        seen = {(r["arm"], r["seed"], r["slice"]) for r in reeval}
+        rows = [r for r in rows if (r["arm"], r["seed"], r["slice"]) not in seen] + reeval
+        source = "re-evaluation (fixed zero-shot reference, per-group slices)"
     else:
-        print(f"note: {SEED_DIR} not present yet — reporting the original seed only")
+        raw = load_raw_seed_folders()
+        seen = {(r["arm"], r["seed"], r["slice"]) for r in raw}
+        rows = [r for r in rows if (r["arm"], r["seed"], r["slice"]) not in seen] + raw
+        source = "first replication (pooled only; zero-shot omitted, see docstring)"
 
-    if not results:
-        sys.exit("no results found; unzip the Kaggle output into outputs/sgg_benchmark/")
+    if not rows:
+        sys.exit("no results found under outputs/sgg_benchmark/")
 
-    seeds = sorted({s for _, s in results})
-    print(f"arms found: {sorted({a for a, _ in results})}   seeds: {seeds}\n")
+    slices = sorted({r["slice"] for r in rows},
+                    key=lambda s: (s != "full", s))
+    seeds = sorted({r["seed"] for r in rows})
+    print(f"source: {source}\nseeds: {seeds}   slices: {slices}\n")
 
-    summary, md = {}, [
-        "# Benchmark replication across seeds\n",
-        f"Seeds {seeds}; identical data, split and frozen detector in every "
-        "run, so the spread is the relation model's own training variance.\n",
-        "| metric | human-trained | auto-trained |", "|---|---|---|",
-    ]
-    for m in METRICS:
-        row = {}
-        for arm in ("human", "auto"):
-            xs = [results[(a, s)][m] for (a, s) in results
-                  if a == arm and m in results[(a, s)]]
-            if xs:
-                row[arm] = {"mean": statistics.mean(xs), "n": len(xs),
-                            "min": min(xs), "max": max(xs),
-                            "sd": statistics.pstdev(xs) if len(xs) > 1 else 0.0}
-        summary[m] = row
-        if len(row) == 2:
-            h, a = row["human"], row["auto"]
-            md.append(f"| {m} | {h['mean']:.3f} ({h['min']:.3f}-{h['max']:.3f}, n={h['n']}) "
-                      f"| {a['mean']:.3f} ({a['min']:.3f}-{a['max']:.3f}, n={a['n']}) |")
+    md = ["# Benchmark replication across seeds\n",
+          f"Seeds {seeds}. Identical data, split and frozen detector in every "
+          "run, so the spread is the relation model's own training variance. "
+          f"Source: {source}.\n"]
+    summary = defaultdict(dict)
 
-    # the claim the replication exists to test
-    if "mR@100" in summary and len(summary["mR@100"]) == 2:
-        h, a = summary["mR@100"]["human"], summary["mR@100"]["auto"]
-        overlap = not (a["min"] > h["max"] or h["min"] > a["max"])
-        md += ["",
-               f"Pooled mR@100: human {h['mean']:.3f} vs auto {a['mean']:.3f}. "
-               f"The per-seed ranges {'overlap' if overlap else 'do not overlap'}, "
-               f"so the pooled difference is "
-               f"{'within run-to-run variation' if overlap else 'larger than run-to-run variation'} "
-               f"at n={h['n']} seeds per arm."]
-        summary["ranges_overlap"] = overlap
+    for sl in slices:
+        avail = [m for m in METRICS
+                 if summarise(rows, sl, m).get("human") or summarise(rows, sl, m).get("auto")]
+        if not avail:
+            continue
+        md += [f"## {sl}\n",
+               "| metric | human-trained | auto-trained | ranges overlap |",
+               "|---|---|---|---|"]
+        for m in avail:
+            s = summarise(rows, sl, m)
+            summary[sl][m] = s
+            if len(s) < 2:
+                continue
+            h, a = s["human"], s["auto"]
+            ov = not (h["min"] > a["max"] or a["min"] > h["max"])
+            md.append(
+                f"| {m} | {h['mean']:.3f} ({h['min']:.3f}-{h['max']:.3f}, n={h['n']}) "
+                f"| {a['mean']:.3f} ({a['min']:.3f}-{a['max']:.3f}, n={a['n']}) "
+                f"| {'yes' if ov else 'no'} |")
+        md.append("")
+
+    # the two claims the replication exists to test
+    notes = []
+    full_mr = summary.get("full", {}).get("mR@100", {})
+    if len(full_mr) == 2:
+        h, a = full_mr["human"], full_mr["auto"]
+        ov = not (h["min"] > a["max"] or a["min"] > h["max"])
+        notes.append(
+            f"Pooled mR@100: human {h['mean']:.3f} vs auto {a['mean']:.3f}; per-seed "
+            f"ranges {'overlap' if ov else 'do not overlap'}, so the human arm's "
+            f"headline advantage is {'within' if ov else 'larger than'} run-to-run "
+            f"variation at n={h['n']} seeds per arm.")
+    g7 = summary.get("group_7", {}).get("mR@100", {})
+    if len(g7) == 2:
+        h, a = g7["human"], g7["auto"]
+        ov = not (h["min"] > a["max"] or a["min"] > h["max"])
+        who = "auto" if a["mean"] > h["mean"] else "human"
+        notes.append(
+            f"Group 7 (the one test annotator with no measured convention defect): "
+            f"human {h['mean']:.3f} vs auto {a['mean']:.3f}. The {who} arm leads on "
+            f"the mean and the per-seed ranges {'overlap' if ov else 'do not overlap'}, "
+            f"so the margin is {'not separable from' if ov else 'larger than'} "
+            f"seed variance.")
+    if notes:
+        md += ["## What the replication settles\n"] + [f"- {n}" for n in notes]
 
     OUT_MD.parent.mkdir(parents=True, exist_ok=True)
     OUT_MD.write_text("\n".join(md), encoding="utf-8")
     OUT_JSON.write_text(json.dumps(
-        {"per_run": {f"{a}_s{s}": v for (a, s), v in results.items()},
-         "summary": summary}, indent=2), encoding="utf-8")
+        {"source": source, "per_run": rows, "summary": summary}, indent=2),
+        encoding="utf-8")
     print("\n".join(md))
     print(f"\nreport -> {OUT_JSON} ; table -> {OUT_MD}")
 
