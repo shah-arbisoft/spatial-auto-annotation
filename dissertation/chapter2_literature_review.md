@@ -33,9 +33,13 @@ labelled, directed edges (subject → predicate → object). Spatial predicates
 that matter for manipulation, navigation and instruction following, because they
 encode the geometry an agent must respect to act. A planner told only "cube,
 book, table" cannot decide what to move first; a planner told "the cube is on
-the book" can. This review concentrates on how such spatial edges are
-**produced**: by hand, by learned prediction, or, as this project argues, by
-computation from measured geometry.
+the book" can. The pattern is general: language-driven robot planners ground
+their instructions in a structured account of scene state (Ahn et al., 2022),
+and scene graphs extended to 3D have been proposed as exactly that unifying
+structure, tying semantics, space and camera into one queryable
+representation (Armeni et al., 2019). This review concentrates on how such
+spatial edges are **produced**: by hand, by learned prediction, or, as this
+project argues, by computation from measured geometry.
 
 ## 2.2 The source dataset and its annotation bottleneck
 
@@ -117,6 +121,27 @@ a question the weak-supervision literature predicts but rarely tests this
 directly: can consistent computed labels *out-teach* inconsistent human ones
 on the humans' own held-out annotations?
 
+Label quality is not only a training concern; it contaminates *evaluation*.
+Northcutt, Athalye and Mueller (2021) measured label errors in the test sets
+of ten of the most-used benchmarks (an average error rate of 3.3%, including
+6% of ImageNet's validation labels) and showed that correcting them changes
+model rankings: practitioners may have been selecting the wrong model
+because the yardstick itself was wrong. Spatial-relation benchmarks have
+grappled with a related problem from the collection side. SpatialSense
+(Yang, Russakovsky and Deng, 2019) was built by *adversarial* crowdsourcing,
+instructing annotators to find relations that defeat naive predictors,
+precisely because relations collected without such pressure are dominated by
+guessable co-occurrences rather than spatial reasoning; and Rel3D (Goyal et
+al., 2020) rebuilt spatial-relation grounding on 3D scenes with minimally
+contrastive pairs after finding that 2D datasets let models score well
+without using spatial information at all. Both projects are responses to the
+same underlying fact this dissertation measures in its own dataset: what a
+relation benchmark appears to test and what its annotation actually rewards
+can diverge, and the divergence is invisible until someone measures the
+labels themselves. Chapter 6 shows the consequence for this dataset's
+benchmark, and Northcutt et al.'s conclusion, that rankings flip when gold
+is corrected, is exactly the shape of the result found there.
+
 ## 2.4 The rival family: semi-supervised and active learning
 
 Computing labels from geometry is not the only established answer to
@@ -167,8 +192,16 @@ rarely run against one another.
 ## 2.5 Geometry-to-label pipelines (the lineage we build on)
 
 A line of work *computes* spatial facts from perceived geometry rather than
-predicting them from learned relational patterns. This is the methodological
-ancestry of the present project, but each member outputs something other than a
+predicting them from learned relational patterns. The idea is older than its
+current instantiations: CLEVR (Johnson et al., 2017) generated hundreds of
+thousands of scenes whose spatial relations were emitted *by the renderer*,
+exact by construction, and became the standard diagnostic for compositional
+reasoning precisely because programmatic labels carry no annotator noise to
+memorise. What CLEVR sidesteps is the hard half of the problem: its
+geometry is known because the scenes are synthetic, whereas an annotator for
+real photographs must first *recover* geometry from pixels before any rule
+can fire. The works below take up that harder half. Each is methodological
+ancestry for the present project, but each outputs something other than a
 scene-graph annotation for this dataset's seven predicates.
 
 - **SpatialVLM** (Chen et al., 2024) is the foundational geometry-to-label
@@ -208,17 +241,37 @@ scene-graph annotation for this dataset's seven predicates.
   match, cited by the source paper. It teaches spatial understanding to 2D/3D VLMs
   from real indoor/tabletop scans (≈1M images, ≈3M annotated spatial relations).
   Critically for our design, it formalises **reference frames**: ego-centric,
-  world-centric and object-centric readings of the same spatial phrase. The same
-  sentence ("the cup is left of the box") is true in one frame and false in
-  another, so an annotator must pin the frame before any label is well defined.
+  world-centric and object-centric readings of the same spatial phrase. The
+  ambiguity is not an engineering nuisance but a documented property of
+  spatial language itself; Landau and Jackendoff (1993) showed that natural
+  language encodes object location through a small set of frame-dependent
+  primitives, so the same sentence ("the cup is left of the box") is true in
+  one frame and false in another, and an annotator must pin the frame before
+  any label is well defined.
   This directly justifies our explicit choice to express *left/right* in the
   **camera (ego) frame** (predicate spec §0), which is also the frame the
   dataset's annotators saw on screen. Its output is spatial QA over three
   frames, not a fixed seven-predicate annotation.
 
+One adjacent family deserves explicit separation, because it looks closest
+from a robotics standpoint. Online 3D scene-graph *mapping* systems build a
+spatial-semantic graph of an environment as a robot moves through it: Hydra
+constructs and optimises a multi-layer scene graph in real time from
+depth-equipped SLAM (Hughes, Chang and Carlone, 2022), and ConceptGraphs
+makes the node vocabulary open by fusing foundation-model features into an
+RGB-D map for downstream planning (Gu et al., 2024). These systems *consume*
+depth sensors and *produce* maps for a live robot; they do not emit
+dataset-format annotation for existing monocular images, and none is
+validated against human annotators, which is the deliverable and the test
+this project is defined by. They are where automatically-derived spatial
+graphs are heading in deployment, and they strengthen rather than weaken the
+case for automatic annotation: the training data such systems' learned
+components need is exactly what an annotator supplies.
+
 **Synthesis.** Every pipeline in this lineage either (a) targets a *different
-output* (VQA text, not VG triplets), (b) operates in a *different domain*
-(internet/scan data, not this Spot dataset), or (c) is a *reference recipe* rather
+output* (VQA text or a live map, not VG triplets), (b) operates in a
+*different domain or sensor suite* (internet images, scans, RGB-D, not this
+Spot dataset's monocular captures), or (c) is a *reference recipe* rather
 than a deployable annotator. The geometry-to-label *idea* is established; its
 application as a **fully-automatic seven-predicate annotator validated against
 this dataset's human labels** is not.
@@ -247,7 +300,7 @@ ablation**, is:
   matters twice: depth is sampled only from object pixels rather than the
   background inside the box, and the support rule's contact test (Chapter 3)
   needs to know where an object's bottom edge actually runs, pixel by pixel.
-- **Monocular depth.** **Depth Anything v2** (Yang et al., 2024) is a monocular
+- **Monocular depth.** **Depth Anything v2** (Yang, L. et al., 2024) is a monocular
   depth estimator distilled from a large teacher trained on synthetic data and
   pseudo-labelled real images. Its output is *relative*, not metric: it orders
   pixels by distance but assigns no unit. That property shapes the rule design
@@ -279,10 +332,15 @@ component actually contributes.
 ## 2.7 Learned scene-graph generation (the consumer of our output)
 
 Scene-graph generation (SGG) models **predict** relationships from learned visual
-patterns. The field's shape was set by **Visual Genome** (Krishna et al., 2017),
-108k images with crowdsourced relationship triplets, whose JSON format this
-dataset (and this project's output writer) inherits, and by the model lineage
-benchmarked on it. **Neural Motifs** (Zellers et al., 2018) demonstrated
+patterns. Visual relationship detection as a task predates the scene-graph
+framing (Lu et al., 2016, whose language priors already leaned on label
+statistics rather than geometry), but the field's shape was set by
+**Visual Genome** (Krishna et al., 2017), 108k images with crowdsourced
+relationship triplets, whose JSON format this dataset (and this project's
+output writer) inherits, and by the model lineage benchmarked on it; Chang
+et al. (2023) survey that lineage and identify annotation cost and label
+bias as its two persistent constraints, which is this project's premise
+stated from the consumer's side. **Neural Motifs** (Zellers et al., 2018) demonstrated
 that global context and label statistics dominate relation prediction: their
 frequency baseline (predict the most common predicate for a given object pair,
 ignoring the image) proved notoriously hard to beat, a warning that relation
@@ -292,7 +350,12 @@ objects to capture context, and is the best-performing model in the source
 paper's own benchmark (mR@100 = 0.49). **Unbiased SGG** (Tang et al., 2020)
 then showed formally that models trained on crowdsourced scene graphs largely
 absorb the *annotation distribution*, its long tail and its biases, and
-proposed counterfactual debiasing to recover the visual signal.
+proposed counterfactual debiasing to recover the visual signal. The field's
+own corrective direction is telling: panoptic scene graph generation (Yang,
+J. et al., 2022) replaced box-level grounding with pixel-accurate masks
+after showing that box annotations systematically mislocalise the very
+objects whose relations are being learned, the same reasoning that puts
+SAM2 masks rather than boxes at the centre of this project's support rule.
 
 The lineage also fixes the evaluation vocabulary used in Chapters 4 and 7.
 SGG models are scored by recall of the annotated triplets among their top K

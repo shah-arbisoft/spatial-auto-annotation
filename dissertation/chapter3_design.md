@@ -69,7 +69,7 @@ Three properties of the dataset, established in Chapter 2 and verified directly
 on the released files, drive specific design responses:
 
 - **Monocular RGB only.** No metric depth exists, so depth must be estimated,
-  and estimated depth is *relative and per-image* (Yang et al., 2024). Design
+  and estimated depth is *relative and per-image* (Yang, L. et al., 2024). Design
   response: all depth comparisons are ordinal and within-image; no rule
   consumes absolute depth.
 - **Sparse annotation.** Humans labelled ~10% of object pairs *(measured:
@@ -115,7 +115,7 @@ image ─ boxes+classes ─→ SAM2 masks ─→ depth map ─→ per-object geo
 |---|---|---|---|
 | Boxes | ground truth (study); YOLOv10m / Grounding DINO (deployment) | detector inside RQ1 | isolate the relation stage (§3.3) |
 | Masks | SAM2 (Ravi et al., 2024), box-prompted, small variant; multimask + best score | boxes only | mask centroids and masked depth are robust to box slack; single-mask mode returned empty masks on loose boxes *(measured)*; box-only kept as an ablation |
-| Depth | Depth Anything v2 **Small** (Yang et al., 2024), HF pipeline | Base/Large; stereo/metric methods | 6 GB budget; Apache-2.0 (Base/Large are non-commercial); no metric depth exists for this data |
+| Depth | Depth Anything v2 **Small** (Yang, L. et al., 2024), HF pipeline | Base/Large; stereo/metric methods | 6 GB budget; Apache-2.0 (Base/Large are non-commercial); no metric depth exists for this data |
 | Lift | centroid (x, y) + **median** depth over the mask | mean depth; full 3D reconstruction | median resists edge bleed where masks overlap background; reconstruction is unnecessary for ordinal tests |
 | Fallback | empty mask → box region | image centre / drop object | a failed segmentation must not move the object; regression-tested |
 | Rules | explicit thresholds, one function per predicate | learned relation head | the graded contribution; auditable and fittable |
