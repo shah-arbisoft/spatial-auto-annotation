@@ -28,7 +28,7 @@ identical held-out test set. The isolation mirrors RQ2 exactly:
   5,421 human vs 119,020 automatic relations; the 22× density difference is
   the treatment), validation = group 5, test = groups 6–8 (human gold in both
   arms; the framework's loader retains 210 of the 236 test images).
-- **Three predictions were registered in §5.5 before the run**: (1) the
+- **Three predictions were registered in §5.6 before the run**: (1) the
   human-label arm saturates early, replicating the source paper; (2) the
   auto-label arm reaches a higher plateau; (3) `near` recovers.
 

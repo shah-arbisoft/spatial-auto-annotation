@@ -40,6 +40,15 @@ triplets) and consistency (one definition, uniformly applied). But it converts
 the project's premise from "removing the bottleneck loses little" to "removing
 the bottleneck gains".
 
+The third arm is what makes that claim hard to dismiss. Self-training on the
+human labels, the standard semi-supervised remedy for exactly this problem,
+reaches 0.36 and closes only 15% of the gap, and its bookkeeping shows why:
+the teacher contributes about a thousand confident *negative* pseudo-labels
+for every positive one, propagating the annotators' silence rather than their
+judgement, and on `near` it drives recall below the human baseline it started
+from. The comparison therefore is not against doing nothing, but against the
+obvious alternative, under identical conditions.
+
 Against the five objectives set in §1.4, each is met and evidenced. **O1**:
 the pipeline annotates all 836 images in ~5 minutes with no human decision,
 byte-compatible with the dataset's formats (Chapter 3). **O2**: all seven
@@ -49,7 +58,8 @@ recall 1.0, support F1 0.87 held-out). **O3**: per-predicate fidelity is
 measured against baselines and ablations with audited true precision
 (Chapter 4). **O4**: all 1,689 misses are attributed to a cause, with genuine
 tool error bounded at ~6% of miss mass (§7.2). **O5**: the controlled
-label-source experiment is the 0.76-versus-0.30 result above (Chapter 5).
+label-source experiment is the 0.76-versus-0.36-versus-0.30 result above
+(Chapter 5), with the middle arm testing the standard rival remedy.
 
 ## 7.2 What the remaining failures are made of
 

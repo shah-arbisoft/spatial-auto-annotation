@@ -29,9 +29,10 @@ measured properties of the human annotation itself, including two annotator
 groups that labelled the pair with opposite conventions, rather than to tool
 error (~7% of misses). In a controlled downstream experiment, a classifier
 trained on the automatic labels reaches 0.76 mean recall against held-out
-human annotations, versus 0.30 when trained on the human labels: at this
-dataset's
-annotation scale, dense and consistent computed labels are better training
-material than the sparse human labels they replace. The annotation bottleneck
+human annotations, versus 0.30 when trained on the human labels and 0.36 when
+those labels are stretched by self-training, the standard semi-supervised
+remedy: at this dataset's annotation scale, dense and consistent computed
+labels are better training material than the sparse human labels they
+replace, and better than any attempt to extrapolate from them. The annotation bottleneck
 this pipeline removes was not only limiting dataset size; it was limiting what
 the dataset could teach.

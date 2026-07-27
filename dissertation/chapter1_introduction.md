@@ -99,8 +99,14 @@ The research questions decompose into five verifiable objectives:
    confidence flags that mark ambiguous cases for optional human review.
 3. A *near* threshold fitted to the human labels, addressing a limitation the
    dataset authors explicitly named.
-4. A fidelity study (RQ1) with multiple baselines and ablations, and a controlled
-   downstream study (RQ2) that isolates the effect of the label source.
+4. A fidelity study (RQ1) with multiple baselines and ablations, and a
+   controlled downstream study (RQ2) that isolates the effect of the label
+   source across three arms, including a self-training arm that tests the
+   standard semi-supervised alternative to automatic labelling.
+5. Two measurements of the dataset's own annotation process that its authors
+   did not have: the quantified annotator behaviours of Chapter 4, and an
+   estimate of how well the annotators would agree with one another, obtained
+   by using the deterministic annotator as a common reference.
 
 ## 1.6 Scope
 
