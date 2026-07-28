@@ -137,6 +137,33 @@ def cmd_doctor(args):
         print(f"(the current default, {args.model}, is not callable with this key)")
 
 
+class QuotaExhausted(Exception):
+    """The key's daily allowance for this model is spent."""
+
+
+def _quota_info(err_body: str):
+    """(is_daily_quota, retry_delay_seconds) from a 429 body."""
+    try:
+        err = json.loads(err_body)["error"]
+    except Exception:
+        return False, None
+    daily, delay = False, None
+    for d in err.get("details", []):
+        kind = d.get("@type", "").rsplit(".", 1)[-1]
+        if kind == "QuotaFailure":
+            for v in d.get("violations", []):
+                if "PerDay" in (v.get("quotaId") or ""):
+                    daily = True
+        elif kind == "RetryInfo":
+            raw = str(d.get("retryDelay", ""))
+            if raw.endswith("s"):
+                try:
+                    delay = float(raw[:-1])
+                except ValueError:
+                    pass
+    return daily, delay
+
+
 def call_gemini(prompt: str, model: str, api_key: str, retries: int = 4) -> str:
     url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
            f"{model}:generateContent?key={api_key}")
@@ -153,32 +180,82 @@ def call_gemini(prompt: str, model: str, api_key: str, retries: int = 4) -> str:
             parts = data["candidates"][0]["content"]["parts"]
             return "\n".join(p.get("text", "") for p in parts).strip()
         except urllib.error.HTTPError as e:
-            if e.code in (429, 500, 503) and attempt < retries - 1:
-                wait = 15 * (attempt + 1)
-                print(f"    HTTP {e.code}, retrying in {wait}s ...", flush=True)
-                time.sleep(wait)
+            body = e.read().decode("utf-8", "replace")
+            if e.code == 429:
+                daily, delay = _quota_info(body)
+                if daily:
+                    # a per-day cap: no amount of waiting helps within this run
+                    raise QuotaExhausted(model) from None
+                if attempt < retries - 1:
+                    wait = delay if delay else 15 * (attempt + 1)
+                    print(f"    rate limited, waiting {wait:.0f}s ...", flush=True)
+                    time.sleep(wait)
+                    continue
+            elif e.code in (500, 503) and attempt < retries - 1:
+                time.sleep(10 * (attempt + 1))
                 continue
             raise
     raise RuntimeError("unreachable")
 
 
 def cmd_run(args):
+    """Answer prompts a whole scene at a time.
+
+    Scene-atomic on purpose. The free tier caps requests per day *per model*,
+    so a long run can stop midway and be resumed later with a different
+    model. If that boundary fell inside a scene, that scene's conditions
+    would no longer be comparable, since the whole design rests on A, B and C
+    differing only in the relations supplied. A scene is therefore written
+    only once all three of its conditions succeed with the same model.
+    """
     key = api_key()
     prompts = load_jsonl(PROMPTS)
-    done = {(r["scene"], r["condition"]) for r in load_jsonl(REPLIES)} if REPLIES.exists() else set()
-    todo = [p for p in prompts if (p["scene"], p["condition"]) not in done]
-    print(f"{len(prompts)} prompts, {len(done)} already answered, {len(todo)} to go "
+    done = load_jsonl(REPLIES) if REPLIES.exists() else []
+    have = {(r["scene"], r["condition"]) for r in done}
+
+    by_scene = {}
+    for p in prompts:
+        by_scene.setdefault(p["scene"], []).append(p)
+    complete = [s for s, ps in by_scene.items()
+                if all((s, p["condition"]) in have for p in ps)]
+    todo = [s for s in sorted(by_scene) if s not in complete]
+
+    print(f"{len(by_scene)} scenes: {len(complete)} complete, {len(todo)} to go "
           f"(model {args.model})")
-    with open(REPLIES, "a", encoding="utf-8") as f:
-        for i, p in enumerate(todo, 1):
-            tag = f"scene{p['scene']}-{p['condition']}"
-            print(f"  [{i}/{len(todo)}] {tag} ...", flush=True)
-            reply = call_gemini(p["prompt"], args.model, key)
-            f.write(json.dumps({"scene": p["scene"], "condition": p["condition"],
-                                "model": args.model, "reply": reply}) + "\n")
-            f.flush()
-            time.sleep(args.sleep)
-    print(f"done -> {REPLIES}")
+    if not todo:
+        print("nothing to do; next: python scripts/run_planner_llm.py --make-sheet")
+        return
+
+    written = 0
+    try:
+        for n, scene in enumerate(todo, 1):
+            batch = []
+            for p in by_scene[scene]:
+                if (scene, p["condition"]) in have:
+                    continue
+                print(f"  [scene {scene}: {n}/{len(todo)}] {p['condition']} ...", flush=True)
+                reply = call_gemini(p["prompt"], args.model, key)
+                batch.append({"scene": scene, "condition": p["condition"],
+                              "model": args.model, "reply": reply})
+                time.sleep(args.sleep)
+            with open(REPLIES, "a", encoding="utf-8") as f:   # commit whole scene
+                for rec in batch:
+                    f.write(json.dumps(rec) + "\n")
+            written += len(batch)
+    except QuotaExhausted as e:
+        print(f"\nDaily quota for {e} is spent. The partly-answered scene was "
+              f"discarded so no scene mixes models.")
+        print(f"{written} replies added this run; {len(complete)} of "
+              f"{len(by_scene)} scenes complete in total.")
+        print("\nOptions:")
+        print("  * wait for the quota to reset and re-run the same command")
+        print("  * use a model with its own allowance, e.g. "
+              "--model gemini-flash-lite-latest (record it: scenes then differ "
+              "in model, though A/B/C within a scene never do)")
+        print("  * enable billing on the key's project to lift the cap")
+        sys.exit(2)
+
+    print(f"done: {written} replies added -> {REPLIES}")
     print("next: python scripts/run_planner_llm.py --make-sheet")
 
 
@@ -244,6 +321,41 @@ def cmd_score(_args):
     print(f"\n-> {OUT / 'results.json'} ; {OUT / 'results.md'}")
 
 
+def cmd_status(_args):
+    """Progress, and drop any scene left half-answered by an interrupted run."""
+    prompts = load_jsonl(PROMPTS)
+    by_scene = {}
+    for p in prompts:
+        by_scene.setdefault(p["scene"], set()).add(p["condition"])
+    recs = load_jsonl(REPLIES) if REPLIES.exists() else []
+
+    got = {}
+    for r in recs:
+        got.setdefault(r["scene"], set()).add(r["condition"])
+    partial = [s for s, cs in got.items() if cs != by_scene.get(s, set())]
+
+    if partial:
+        keep = [r for r in recs if r["scene"] not in partial]
+        REPLIES.write_text("".join(json.dumps(r) + "\n" for r in keep), encoding="utf-8")
+        print(f"dropped {len(recs) - len(keep)} replies from partly-answered "
+              f"scene(s) {partial}: a scene must be answered by one model or "
+              f"its conditions are not comparable.")
+        recs = keep
+        got = {}
+        for r in recs:
+            got.setdefault(r["scene"], set()).add(r["condition"])
+
+    complete = sorted(s for s, cs in got.items() if cs == by_scene.get(s, set()))
+    models = sorted({r["model"] for r in recs})
+    print(f"scenes complete: {len(complete)}/{len(by_scene)}  "
+          f"({len(recs)}/{len(prompts)} replies)")
+    print(f"models used: {', '.join(models) if models else 'none yet'}")
+    if len(complete) < len(by_scene):
+        print("\nresume with: python scripts/run_planner_llm.py")
+    else:
+        print("\nnext: python scripts/run_planner_llm.py --make-sheet")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     # A model can appear in ListModels and still refuse generateContent with
@@ -256,11 +368,15 @@ def main():
     mode = ap.add_mutually_exclusive_group()
     mode.add_argument("--doctor", action="store_true",
                       help="check the key and list callable models")
+    mode.add_argument("--status", action="store_true",
+                      help="progress so far; clears any half-answered scene")
     mode.add_argument("--make-sheet", action="store_true")
     mode.add_argument("--score", action="store_true")
     args = ap.parse_args()
     if args.doctor:
         cmd_doctor(args)
+    elif args.status:
+        cmd_status(args)
     elif args.make_sheet:
         cmd_make_sheet(args)
     elif args.score:
