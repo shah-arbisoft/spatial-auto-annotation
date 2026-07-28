@@ -103,9 +103,11 @@ so the spread below is the relation model's own variance and nothing else.
 | full test | mR@100 | **0.326** (0.304–0.346) | 0.278 (0.268–0.288) | yes |
 | full test | zR@100 | 0.003 (0.000–0.004) | **0.172** (0.157–0.196) | yes |
 | group 6 | mR@100 | **0.366** (0.343–0.382) | 0.286 (0.261–0.304) | yes |
+| group 6 | zR@100 | 0.000 (0.000–0.000) | **0.300** (0.152–0.379) | yes |
 | group 7 | mR@100 | 0.308 (0.298–0.323) | 0.307 (0.289–0.334) | **no** |
 | group 7 | zR@100 | 0.005 (0.000–0.008) | **0.165** (0.094–0.221) | yes |
 | group 8 | mR@100 | **0.174** (0.150–0.196) | 0.111 (0.088–0.127) | yes |
+| group 8 | zR@100 | 0.000 (0.000–0.000) | **0.036** (0.018–0.061) | yes |
 
 Mean over three seeds, with the per-seed range in brackets; "separable"
 records whether the two arms' ranges are disjoint.
@@ -130,9 +132,15 @@ the human arm's lead on defective gold demands an explanation.
 
 Second, **the zero-shot result is robust and larger than first reported.**
 Pooled zR@100 is 0.172 for the auto arm against 0.003 for the human arm, a
-factor of roughly sixty, with disjoint ranges; on group 7 alone it is 0.165
-against 0.005. Unlike the ranking metrics, this gap is not a near-run thing
-at any seed or on any slice. It is the finding this chapter rests on.
+factor of roughly sixty, with disjoint ranges. The pattern is not an artefact
+of pooling: the auto arm leads on *every* annotator taken separately (0.300
+against 0.000 on group 6, 0.165 against 0.005 on group 7, 0.036 against
+0.000 on group 8), and the human arm recalls literally nothing outside its
+training combinations on two of the three. Unlike the ranking metrics, this
+gap is not a near-run thing at any seed or on any slice, and unlike the
+ranking metrics it points the same way on defective and clean annotators
+alike, which is what distinguishes a property of the labels from a property
+of the gold. It is the finding this chapter rests on.
 
 ## 6.4 Why the verdict flipped between Chapter 5 and this chapter
 
