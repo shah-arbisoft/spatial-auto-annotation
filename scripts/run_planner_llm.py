@@ -42,6 +42,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[1]
 OUT = Path("outputs/planner")
 PROMPTS = OUT / "prompts.jsonl"
 REPLIES = OUT / "replies.jsonl"
@@ -57,6 +58,69 @@ CRITERIA = [
 
 def load_jsonl(path):
     return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()]
+
+
+def api_key() -> str:
+    """From the environment, else a KEY=VALUE line in .env at the repo root."""
+    key = os.environ.get("GEMINI_API_KEY", "").strip()
+    if not key:
+        env = ROOT / ".env"
+        if env.exists():
+            for line in env.read_text(encoding="utf-8").splitlines():
+                line = line.strip()
+                if line.startswith("#") or "=" not in line:
+                    continue
+                name, _, value = line.partition("=")
+                if name.strip() == "GEMINI_API_KEY":
+                    key = value.strip().strip("\"'")
+                    break
+    if not key:
+        sys.exit("No GEMINI_API_KEY. Copy .env.example to .env and paste your "
+                 "key, or set the environment variable.")
+    if key.startswith("AQ."):
+        sys.exit("That looks like a Gemini CLI OAuth token (keys of this shape "
+                 "begin 'AQ.'). The REST endpoint used here needs a Google AI "
+                 "Studio API key, which begins 'AIza'. Create one at "
+                 "https://aistudio.google.com/apikey and put it in .env.")
+    return key
+
+
+def list_models(key: str):
+    url = f"https://generativelanguage.googleapis.com/v1beta/models?key={key}"
+    with urllib.request.urlopen(url, timeout=60) as r:
+        data = json.loads(r.read().decode("utf-8"))
+    out = []
+    for m in data.get("models", []):
+        if "generateContent" in m.get("supportedGenerationMethods", []):
+            out.append(m["name"].removeprefix("models/"))
+    return out
+
+
+def cmd_doctor(args):
+    """Check the credential and report which models it can actually call."""
+    key = api_key()
+    print(f"key loaded: {len(key)} chars, starts {key[:4]}...")
+    try:
+        names = list_models(key)
+    except urllib.error.HTTPError as e:
+        body = e.read().decode("utf-8", "replace")[:300]
+        print(f"\nListModels failed: HTTP {e.code}")
+        print(body)
+        if e.code in (400, 403):
+            print("\n-> the key is not valid for this API. Create an AI Studio "
+                  "key at https://aistudio.google.com/apikey")
+        sys.exit(1)
+    print(f"\n{len(names)} models available to this key for generateContent:")
+    for n in names:
+        print("   ", n)
+    flash = [n for n in names if "flash" in n and "thinking" not in n]
+    if flash:
+        pick = sorted(flash, key=len)[0]
+        print(f"\nSuggested: --model {pick}")
+        print(f"   python scripts/run_planner_llm.py --model {pick}")
+    if args.model not in names:
+        print(f"\nNote: the current default ({args.model}) is NOT in the list "
+              "above, which is what produces HTTP 404.")
 
 
 def call_gemini(prompt: str, model: str, api_key: str, retries: int = 4) -> str:
@@ -85,9 +149,7 @@ def call_gemini(prompt: str, model: str, api_key: str, retries: int = 4) -> str:
 
 
 def cmd_run(args):
-    api_key = os.environ.get("GEMINI_API_KEY", "").strip()
-    if not api_key:
-        sys.exit("set GEMINI_API_KEY first (aistudio.google.com/apikey)")
+    key = api_key()
     prompts = load_jsonl(PROMPTS)
     done = {(r["scene"], r["condition"]) for r in load_jsonl(REPLIES)} if REPLIES.exists() else set()
     todo = [p for p in prompts if (p["scene"], p["condition"]) not in done]
@@ -97,7 +159,7 @@ def cmd_run(args):
         for i, p in enumerate(todo, 1):
             tag = f"scene{p['scene']}-{p['condition']}"
             print(f"  [{i}/{len(todo)}] {tag} ...", flush=True)
-            reply = call_gemini(p["prompt"], args.model, api_key)
+            reply = call_gemini(p["prompt"], args.model, key)
             f.write(json.dumps({"scene": p["scene"], "condition": p["condition"],
                                 "model": args.model, "reply": reply}) + "\n")
             f.flush()
@@ -174,10 +236,14 @@ def main():
     ap.add_argument("--sleep", type=float, default=5.0,
                     help="seconds between API calls (free-tier friendly)")
     mode = ap.add_mutually_exclusive_group()
+    mode.add_argument("--doctor", action="store_true",
+                      help="check the key and list callable models")
     mode.add_argument("--make-sheet", action="store_true")
     mode.add_argument("--score", action="store_true")
     args = ap.parse_args()
-    if args.make_sheet:
+    if args.doctor:
+        cmd_doctor(args)
+    elif args.make_sheet:
         cmd_make_sheet(args)
     elif args.score:
         cmd_score(args)
