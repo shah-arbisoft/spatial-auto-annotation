@@ -5,11 +5,13 @@
 > stress-tests them.
 
 This chapter discusses the results rather than reporting new ones. Section
-6.1 evaluates the achievement against the research questions and objectives,
-§7.2 dissects what the remaining failures are made of, §7.3 examines the
+7.1 evaluates the achievement against the two research questions, §7.2
+dissects what the remaining failures are made of, §7.3 examines the
 dataset's annotation process in the light of the measurements, §7.4 reflects
 on the methodology itself, §7.5 compares the outcome with the prior work of
-Chapter 2, and §7.6 states limitations and threats to validity.
+Chapter 2, and §7.6 states limitations and threats to validity. The
+objective-by-objective audit belongs with the conclusions and is given in
+§9.1.
 
 ## 7.1 Achievement against the research questions
 
@@ -49,17 +51,9 @@ judgement, and on `near` it drives recall below the human baseline it started
 from. The comparison therefore is not against doing nothing, but against the
 obvious alternative, under identical conditions.
 
-Against the five objectives set in §1.4, each is met and evidenced. **O1**:
-the pipeline annotates all 836 images in ~5 minutes with no human decision,
-byte-compatible with the dataset's formats (Chapter 3). **O2**: all seven
-predicates have operational geometric definitions, every fitted threshold was
-calibrated on train annotators only and generalised to held-out ones (near
-recall 1.0, support F1 0.87 held-out). **O3**: per-predicate fidelity is
-measured against baselines and ablations with audited true precision
-(Chapter 4). **O4**: all 1,689 misses are attributed to a cause, with genuine
-tool error bounded at ~6% of miss mass (§7.2). **O5**: the controlled
-label-source experiment is the 0.76-versus-0.36-versus-0.30 result above
-(Chapter 5), with the middle arm testing the standard rival remedy.
+The five objectives of §1.4 are audited against their evidence in §9.1; this
+chapter is concerned with what the results *mean* rather than with whether
+each objective was discharged.
 
 ## 7.2 What the remaining failures are made of
 
