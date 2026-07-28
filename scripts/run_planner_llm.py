@@ -77,11 +77,6 @@ def api_key() -> str:
     if not key:
         sys.exit("No GEMINI_API_KEY. Copy .env.example to .env and paste your "
                  "key, or set the environment variable.")
-    if key.startswith("AQ."):
-        sys.exit("That looks like a Gemini CLI OAuth token (keys of this shape "
-                 "begin 'AQ.'). The REST endpoint used here needs a Google AI "
-                 "Studio API key, which begins 'AIza'. Create one at "
-                 "https://aistudio.google.com/apikey and put it in .env.")
     return key
 
 
@@ -110,17 +105,36 @@ def cmd_doctor(args):
             print("\n-> the key is not valid for this API. Create an AI Studio "
                   "key at https://aistudio.google.com/apikey")
         sys.exit(1)
-    print(f"\n{len(names)} models available to this key for generateContent:")
-    for n in names:
-        print("   ", n)
-    flash = [n for n in names if "flash" in n and "thinking" not in n]
-    if flash:
-        pick = sorted(flash, key=len)[0]
-        print(f"\nSuggested: --model {pick}")
-        print(f"   python scripts/run_planner_llm.py --model {pick}")
-    if args.model not in names:
-        print(f"\nNote: the current default ({args.model}) is NOT in the list "
-              "above, which is what produces HTTP 404.")
+    print(f"{len(names)} models are listed for generateContent.\n")
+
+    # Listing is not permission: versioned names such as gemini-2.5-flash are
+    # still catalogued but answer generateContent with 404 "no longer
+    # available to new users". The only reliable check is to call each one.
+    candidates = [args.model] + [n for n in names
+                                 if "flash" in n and n != args.model][:6]
+    print("probing generateContent (listed is not the same as callable):")
+    working = []
+    for name in candidates:
+        try:
+            call_gemini("Reply with the single word: ok", name, key, retries=1)
+            print(f"   {name:28s} OK")
+            working.append(name)
+        except urllib.error.HTTPError as e:
+            body = e.read().decode("utf-8", "replace")
+            try:
+                msg = json.loads(body)["error"]["message"][:70]
+            except Exception:
+                msg = body[:70]
+            print(f"   {name:28s} HTTP {e.code}  {msg}")
+
+    if not working:
+        print("\nNo model answered. If every line says 429 the key is over its "
+              "quota (wait, or use a different key); if they say 404 the names "
+              "have moved on again and the -latest aliases are the safe pick.")
+        sys.exit(1)
+    print(f"\nUse: python scripts/run_planner_llm.py --model {working[0]}")
+    if working[0] != args.model:
+        print(f"(the current default, {args.model}, is not callable with this key)")
 
 
 def call_gemini(prompt: str, model: str, api_key: str, retries: int = 4) -> str:
@@ -232,7 +246,11 @@ def cmd_score(_args):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--model", default="gemini-2.5-flash")
+    # A model can appear in ListModels and still refuse generateContent with
+    # "no longer available to new users" (a 404), which is what versioned
+    # names like gemini-2.5-flash now do. The floating -latest aliases keep
+    # working, so one is the default and --doctor verifies before a long run.
+    ap.add_argument("--model", default="gemini-flash-latest")
     ap.add_argument("--sleep", type=float, default=5.0,
                     help="seconds between API calls (free-tier friendly)")
     mode = ap.add_mutually_exclusive_group()
