@@ -238,7 +238,19 @@ real: on this dataset's test annotation the human-trained model ranks
 better, and a practitioner scoring against such annotation should expect
 that. The interpretation is equally real: the advantage is concentrated
 exactly where the annotation is defective and absent where it is not, which
-is what a metric measuring annotation-prior agreement would look like. The
+is what a metric measuring annotation-prior agreement would look like.
+
+The critical reading is not novel to this project, which is what makes it
+credible rather than self-serving. Neural Motifs (Zellers et al., 2018)
+established that a frequency baseline ignoring the image is hard to beat on
+scene-graph benchmarks, and Unbiased SGG (Tang et al., 2020) formalised how
+thoroughly such models absorb the annotation distribution. Northcutt,
+Athalye and Mueller (2021) then showed that erroneous test labels reorder
+model rankings across ten standard benchmarks. What this chapter adds is a
+case where the confound is *isolated by construction*: because the two arms
+differ only in label source and share a frozen detector, and because the
+per-annotator defects were measured beforehand in Chapter 4, the advantage
+can be attributed to annotation practice rather than inferred from it. The
 one remaining instrument is a manual audit of the auto arm's top-ranked
 "false positives" (the direct analogue of §4.4), left as designed follow-up.
 

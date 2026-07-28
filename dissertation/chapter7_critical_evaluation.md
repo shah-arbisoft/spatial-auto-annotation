@@ -169,22 +169,47 @@ but not rule *truth*, which only the audits address.
 
 ## 7.5 Synthesis against the geometry-to-label lineage
 
-The pipeline borrows its skeleton from the SpatialVLM family: lift perception
-to geometry, derive spatial facts deterministically. What this project adds is
-not the skeleton but the parts the lineage leaves implicit. SpatialVLM and
-VQASynth generate *training text* at internet scale and never confront a fixed
-predicate vocabulary with human ground truth; SpatialRGPT curates region
-representations with depth but validates downstream, not against annotators.
-This project's contributions to the recipe are: **annotator-aware
+The pipeline borrows its skeleton from the SpatialVLM family (Chen et al.,
+2024): lift perception to geometry, derive spatial facts deterministically.
+The idea is older still, since CLEVR (Johnson et al., 2017) obtained exact
+relations from a renderer; what neither can supply is the recovery of
+geometry from real photographs, which is where the difficulty of this project
+sits. What it adds is not the skeleton but the parts the lineage leaves
+implicit. SpatialVLM and VQASynth (Remyx AI, 2024) generate *training text* at
+internet scale and never confront a fixed predicate vocabulary with human
+ground truth; SpatialRGPT (Cheng et al., 2024) curates region representations
+with depth but validates downstream, not against annotators. This project's
+contributions to the recipe are: **annotator-aware
 calibration** (fit thresholds only on annotators who used a label; hold out
 annotators, not just images), **contact as the support signature** (mask-bottom
 adjacency, which the box-geometry lineage does not use and which repaired both
-error directions at once), and **loss attribution as methodology** (every miss
+error directions at once, and which parallels the argument for pixel-accurate
+grounding made by panoptic scene-graph generation (Yang, J. et al., 2022)),
+and **loss attribution as methodology** (every miss
 diagnosed to a cause; every gap decomposed into abstention vs annotator vs
-error, detection vs relations). RoboSpatial's reference-frame taxonomy, cited
-in the design chapter to justify camera-frame laterality, turned out to be the
-right lens for a *measured* phenomenon: the front/behind convention inversion
-is a reference-frame disagreement inside a single dataset's annotation team.
+error, detection vs relations). RoboSpatial's reference-frame taxonomy (Song
+et al., 2025), cited in the design chapter to justify camera-frame laterality,
+turned out to be the right lens for a *measured* phenomenon: the front/behind
+convention inversion is a reference-frame disagreement inside a single
+dataset's annotation team, and therefore an instance of the frame-dependence
+of spatial language that Landau and Jackendoff (1993) describe.
+
+Two results connect this project to literatures outside its immediate
+lineage. The benchmark finding of Chapter 6 is a specific case of the general
+problem Northcutt, Athalye and Mueller (2021) demonstrated across ten
+standard benchmarks, that errors in test annotation change model rankings and
+can therefore select the wrong model; here the defect is not random label
+noise but systematic annotator convention, and the ranking it distorts is
+between two label *sources* rather than two architectures. The
+diagnosis also matches the motivation for SpatialSense (Yang, K.,
+Russakovsky and Deng, 2019) and Rel3D (Goyal et al., 2020), both of which
+were built after their authors found that relation benchmarks could be
+scored well without using spatial information; this dissertation observes the
+mirror image, a model scoring well by reproducing annotator selection habits.
+The RQ2 result, meanwhile, is the weak-supervision prediction of Ratner et
+al. (2017) confirmed in a domain the original work did not address, with the
+addition that the standard semi-supervised alternative (Lee, 2013) was
+implemented and measured rather than argued away.
 
 ## 7.6 Limitations and threats to validity
 
