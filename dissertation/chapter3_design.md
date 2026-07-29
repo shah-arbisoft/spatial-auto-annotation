@@ -12,8 +12,9 @@ methodology that structures the work. Section 3.2 analyses the problem and its
 constraints, §3.3 states the central design principle, §3.4 gives the pipeline
 architecture with per-stage justifications, §3.5 the seven predicate rules,
 §3.6 the correction and confidence machinery, §3.7 output compatibility,
-§3.8 the calibration protocol for `near`, and §3.9 the reproducibility
-measures. Section 3.10 collects every design decision in one table.
+§3.8 the calibration protocol for `near`, §3.9 how the detector is kept
+replaceable, and §3.10 the reproducibility measures. Section 3.11 collects
+every design decision in one table.
 
 ## 3.1 Research methodology
 
@@ -226,7 +227,37 @@ near" the source paper's future work requests. Whether the tool's extra near
 pairs (the precision gap) are genuinely near is checked by a manual audit in
 the evaluation chapter rather than assumed.
 
-## 3.9 Reproducibility by construction
+## 3.9 Modularity: the detector as the replaceable part
+
+The claim that the rules are detector-agnostic (§4.11) is an architectural
+property, not a description of intent. The rule layer (`src/predicates.py`)
+imports nothing but `numpy` and never receives an image; the pipeline's entry
+point takes boxes as an argument, `annotate_image(image_rgb, boxes_px,
+labels, segmenter, depther, cfg)`. A detector is therefore not wired into the
+pipeline at all, it is simply what supplies that argument.
+
+That is what makes the conditional measurement in §4.11 meaningful. Holding
+the boxes fixed, the relation layer scores the same whether they came from a
+detector or from ground truth, so detector quality and relation quality are
+separately attributable, and a better detector improves the system without a
+line of rule code changing.
+
+To make the property usable rather than merely true, the contract is stated
+explicitly (`src/detectors.py`) as a single method returning pixel boxes,
+class names and scores, with three implementations: open-vocabulary
+prompting for images with no trained model available, an adapter for any
+ultralytics checkpoint including the source paper's own YOLOv10m weights, and
+a reader for detections computed by some entirely external system. Ten unit
+tests pin the contract, including one that drives the rule layer from a
+detector written against the documentation alone. Two coupling points remain
+and are documented rather than hidden: the support guard keys on the literal
+class name `human`, and the fitted thresholds assume boxes of roughly the
+tightness the dataset's annotators drew, so a detector with systematically
+different boxes should re-run the calibration procedure of §3.8 (twenty
+seconds offline from the geometry cache). A worked example is in
+`docs/CUSTOM_DETECTOR.md`.
+
+## 3.10 Reproducibility by construction
 
 Every threshold, seed and model identifier lives in `configs/default.yaml`;
 the runner caches each object's lifted geometry, so any rule or threshold
@@ -237,7 +268,7 @@ and the rule layer is covered by unit tests encoding the spec's worked
 examples (10 tests). The full pipeline is a public repository with a smoke
 test that verifies the perception models on first setup.
 
-## 3.10 Summary of design decisions
+## 3.11 Summary of design decisions
 
 | Decision | Alternative rejected | Why |
 |---|---|---|
