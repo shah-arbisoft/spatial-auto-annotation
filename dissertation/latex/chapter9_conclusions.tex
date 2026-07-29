@@ -1,7 +1,7 @@
 
 This chapter closes the dissertation. Section 9.1 states how each objective was met and what the two research questions were answered with, \S9.2 sets out the contributions and who can use them, \S9.3 states the limitations honestly and turns each into the work that would resolve it, and \S9.4 is a personal reflection on how the project was actually conducted.
 
-\section{Summary: the objectives and the answers}
+\section{Summary of the dissertation}
 
 The aim was to determine whether spatial-relationship annotation for robot-acquired images can be automated, and whether the resulting labels are good enough to replace the human ones. Five objectives carried that aim, and each is met with evidence rather than assertion.
 
@@ -21,7 +21,7 @@ The aim was to determine whether spatial-relationship annotation for robot-acqui
 
 The single sentence the evidence supports: \textbf{automatic labels are the better supervision wherever ground truth means geometry; human labels remain better wherever ground truth means human annotation practice.} Robot planning needs the former.
 
-\section{Contributions}
+\section{Research contributions}
 
 \textbf{For the source dataset and its authors.} An annotator that labels the existing images 20 times more densely in five minutes, in the dataset's own formats, and the written operational definitions the annotation process never had. The fitted \texttt{near} threshold is a direct answer to the future-work request in Wang et al. (2025) for "spatial thresholds for near". Two annotation defects are quantified for the first time: an inverted front/behind convention in two of nine annotator groups, and \texttt{near} used by only three groups with fourfold variation in exhaustiveness.
 
@@ -31,7 +31,7 @@ The single sentence the evidence supports: \textbf{automatic labels are the bett
 
 \textbf{Methodologically.} Calibration held out by \textit{annotator} rather than by image; a sparse-gold evaluation protocol that pairs recall with audited precision; exhaustive loss attribution; and a way to estimate what annotators would score against one another when they never labelled the same images, by using a deterministic annotator as a fixed common reference (\S4.6).
 
-\section{Limitations, and the work that would resolve them}
+\section{Limitations, and future research and development}
 
 Each limitation below is stated with the specific experiment that would settle it, because that is more useful than an apology.
 

@@ -3,7 +3,7 @@
 > Chapter summary: the manual-annotation bottleneck, the compute-not-predict
 > idea, the research questions and objectives, and the shape of the argument.
 
-## 1.1 Motivation
+## 1.1 Background
 
 For a robot to act usefully in a human environment it must understand not just
 *what* objects are present but *how they are spatially related*: that a cup is
@@ -24,7 +24,7 @@ labelled by hand. Nine trained annotators, working independently in batches of
 object to set each relationship, using a manual tool (SGDET-Annotate), with a
 majority-vote cleaning pass.
 
-## 1.2 Problem statement
+### 1.1.1 The annotation bottleneck
 
 Manual annotation is the bottleneck. It is slow, expensive, and does not scale,
 which keeps the dataset small and limits what models trained on it can learn.
@@ -35,7 +35,7 @@ and that future work should "augment under-represented relations" and adopt
 this dataset**. SGDET-Annotate only accelerates manual labelling; a human still
 decides every label.
 
-## 1.3 Key idea and approach
+## 1.2 Research aim and objectives
 
 This project removes the human from the labelling loop. The seven predicates are
 *spatial*, and spatial relationships are *computable from geometry*. Given a raw
@@ -61,7 +61,7 @@ the human labels and reporting it. A fixed, data-fitted threshold is by
 construction more self-consistent than nine separate human judgements, directly
 addressing the inconsistency the source paper flagged.
 
-## 1.4 Research questions
+### 1.2.1 Research questions and objectives
 
 - **RQ1 (accuracy).** Can spatial-relationship annotation for robot images be
   automated to a quality comparable to human annotation? Measured against the
@@ -90,7 +90,7 @@ The research questions decompose into five verifiable objectives:
   classifier is trained once on human and once on automatic labels, isolating
   the label source, answering RQ2. *(Chapter 5)*
 
-## 1.5 Contributions
+### 1.2.2 Contributions
 
 1. The first fully-automatic spatial-relationship annotator for this robot
    scene-graph dataset and its seven predicates.
@@ -108,7 +108,7 @@ The research questions decompose into five verifiable objectives:
    estimate of how well the annotators would agree with one another, obtained
    by using the deterministic annotator as a common reference.
 
-## 1.6 Scope
+### 1.2.3 Scope
 
 In scope: the automatic annotator; the fidelity study with baselines and
 ablations; the controlled downstream classifier; the direct benchmark test, in
@@ -118,7 +118,7 @@ vision-language task-planning comparison, scaling on new robot captures, and
 copy-paste augmentation. These protect the timeline and strengthen the
 future-work discussion rather than weakening the contribution.
 
-## 1.7 Methodology framing and ethics
+## 1.3 Research approach
 
 The project follows the CRISP-DM structure that organises data-science work
 from problem understanding through to evaluation and deployment; the choice
@@ -148,7 +148,7 @@ human validation of the automatic labels (Chapter 4) collects anonymous
 true/false judgements only, with no names, contact details, or IP addresses,
 under the University's ethics self-assessment process.
 
-## 1.8 Dissertation structure
+## 1.4 Dissertation outline
 
 Chapter 2 reviews the literature with label quality as its organising
 question and positions the research gap. Chapter 3 gives the research

@@ -6,7 +6,7 @@ out the contributions and who can use them, §9.3 states the limitations
 honestly and turns each into the work that would resolve it, and §9.4 is a
 personal reflection on how the project was actually conducted.
 
-## 9.1 Summary: the objectives and the answers
+## 9.1 Summary of the dissertation
 
 The aim was to determine whether spatial-relationship annotation for
 robot-acquired images can be automated, and whether the resulting labels are
@@ -70,7 +70,7 @@ supervision wherever ground truth means geometry; human labels remain better
 wherever ground truth means human annotation practice.** Robot planning
 needs the former.
 
-## 9.2 Contributions
+## 9.2 Research contributions
 
 **For the source dataset and its authors.** An annotator that labels the
 existing images 20 times more densely in five minutes, in the dataset's own
@@ -104,7 +104,7 @@ annotators would score against one another when they never labelled the same
 images, by using a deterministic annotator as a fixed common reference
 (§4.6).
 
-## 9.3 Limitations, and the work that would resolve them
+## 9.3 Limitations, and future research and development
 
 Each limitation below is stated with the specific experiment that would
 settle it, because that is more useful than an apology.

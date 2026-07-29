@@ -1,6 +1,6 @@
 # Appendices
 
-## Appendix A: Ethics
+## Appendix A: Ethical Approval
 
 This project performs secondary analysis of an existing, published research
 dataset (Wang et al., 2025; released under CC-BY 4.0), collected by the

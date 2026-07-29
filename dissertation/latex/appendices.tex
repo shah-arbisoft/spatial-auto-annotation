@@ -1,5 +1,5 @@
+\chapter{Ethical Approval}
 
-\section{Appendix A: Ethics}
 
 This project performs secondary analysis of an existing, published research dataset (Wang et al., 2025; released under CC-BY 4.0), collected by the project supervisor's research group using a Boston Dynamics Spot robot. No new personal data was collected for the annotation study. Scene images in the dataset contain identifiable people; all figures reproduced in this dissertation blur faces, and the dataset is used strictly as released.
 
@@ -9,7 +9,9 @@ The independent validation of the automatic labels (Chapter 4) collects anonymou
 
 \textbf{Demonstration footage.} The two video clips in \S4.12 are royalty-free stock footage from Pexels, used under the Pexels licence (free use, no attribution required): clip 1 (desk scene, moving camera) https://www.pexels.com/video/6558513/ and clip 2 (overhead desk, moving hands) https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-using-a-modern-camera-3250234/.
 
-\section{Appendix B: Reproducibility}
+
+\chapter{Reproducibility}
+
 
 Environment: Windows 11, Python 3.11.9 (virtual environment), PyTorch 2.5.1 (CUDA 12.1), single NVIDIA RTX 2060 (6 GB). All thresholds, seeds and model identifiers are pinned in \texttt{configs/default.yaml}.
 
@@ -80,6 +82,8 @@ The two GPU extras: \texttt{python scripts/run\_sgdet.py --threshold 0.25} for t
 
 Every reported number traces to one of the JSON/markdown artefacts these commands write; no figure or table in this dissertation is produced by hand.
 
-\section{Appendix C: Predicate specification}
+
+\chapter{Predicate specification}
+
 
 The complete geometric specification of the seven predicates (definitions, thresholds, worked examples, and the correction and flagging rules) is maintained in the repository at \texttt{docs/predicate\_spec.md} and is reproduced in the submitted version of this document.

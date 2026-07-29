@@ -41,10 +41,10 @@ linear models do not describe: the audit of support-rule precision (Chapter 4)
 sent the work back to the modelling phase twice (a depth gate, then a
 mask-contact test), each pass re-validated on held-out annotators. The mapping
 of every CRISP-DM phase to a concrete part of this dissertation is given in
-Chapter 1 (§1.7), including the two findings that came directly out of the
+Chapter 1 (§1.3), including the two findings that came directly out of the
 Data Understanding phase: the dataset's stored image orientation and the three
 measured annotator behaviours. Ethical considerations attached to the data and
-to the human validation study are summarised in §1.7 and detailed in
+to the human validation study are summarised in §1.3 and detailed in
 Appendix A.
 
 ## 3.2 Problem analysis

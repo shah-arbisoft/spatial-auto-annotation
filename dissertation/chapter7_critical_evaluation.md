@@ -51,7 +51,7 @@ judgement, and on `near` it drives recall below the human baseline it started
 from. The comparison therefore is not against doing nothing, but against the
 obvious alternative, under identical conditions.
 
-The five objectives of §1.4 are audited against their evidence in §9.1; this
+The five objectives of §1.2.1 are audited against their evidence in §9.1; this
 chapter is concerned with what the results *mean* rather than with whether
 each objective was discharged.
 

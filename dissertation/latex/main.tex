@@ -19,6 +19,13 @@
 \onehalfspacing
 \sloppy
 
+% The template's contents page lists chapters as "CHAPTER 1: INTRODUCTION",
+% so the chapter heading is formatted to match rather than the report
+% class's default "Chapter 1 / Title" on two lines.
+\titleformat{\chapter}[hang]
+  {\normalfont\Large\bfseries\MakeUppercase}{\chaptertitlename\ \thechapter:}{0.5em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\small A Fully-Automatic Spatial-Relationship Annotation Pipeline}
@@ -107,6 +114,28 @@ will be penalised.
 \tableofcontents
 \listoftables
 \listoffigures
+
+%==================== Abbreviations ====================
+% The template's LaTeX variant offers a list of abbreviations; this document
+% uses enough metric and setting names to warrant one.
+\chapter*{List of Abbreviations}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+\begin{description}[leftmargin=6em, style=nextline, font=\normalfont\bfseries]
+  \item[CRISP-DM] Cross-Industry Standard Process for Data Mining
+  \item[EXIF] Exchangeable Image File Format (carries image orientation)
+  \item[IoU] Intersection over Union
+  \item[mAP] mean Average Precision
+  \item[mR@K] mean Recall at K, averaged per predicate
+  \item[PredCls] Predicate Classification (ground-truth boxes and classes given)
+  \item[RQ] Research Question
+  \item[R@K] Recall at K, pooled over predicates
+  \item[SAM2] Segment Anything Model 2
+  \item[SGDet] Scene Graph Detection (detection, classification and relations end to end)
+  \item[SGG] Scene Graph Generation
+  \item[VG] Visual Genome (the annotation format this dataset inherits)
+  \item[YOLO] You Only Look Once (single-stage object detector family)
+  \item[zR@K] zero-shot Recall at K, over triplet types unseen in training
+\end{description}
 \cleardoublepage
 
 \pagenumbering{arabic}
@@ -145,8 +174,10 @@ will be penalised.
 \input{references}
 
 %==================== Appendices ====================
+% Named as the template's contents page requires: Appendix A is the ethics
+% record, later appendices are supplementary material.
 \appendix
-\chapter{Appendices}
+\renewcommand{\chaptertitlename}{Appendix}
 \input{appendices}
 
 \end{document}
