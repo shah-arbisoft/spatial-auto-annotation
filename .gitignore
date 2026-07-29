@@ -41,3 +41,16 @@ notes/
 demo_video*.mp4
 datasets/
 outputs_base/
+
+# LaTeX build products (main.tex and the .tex chapters are generated too,
+# but tracked so the submitted source is versioned)
+dissertation/latex/*.aux
+dissertation/latex/*.log
+dissertation/latex/*.out
+dissertation/latex/*.toc
+dissertation/latex/*.lof
+dissertation/latex/*.lot
+dissertation/latex/*.fls
+dissertation/latex/*.fdb_latexmk
+dissertation/latex/*.synctex.gz
+dissertation/latex/main.pdf
