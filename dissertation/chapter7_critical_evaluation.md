@@ -92,9 +92,10 @@ rather than hidden constants (ablations A2, A7).
 
 The viewpoint-stability test of §4.14 sharpens that third point into
 something stronger than the ablations alone could establish. If what remains
-of the front/behind gap were depth *noise* — estimates jittering either side
-of a decision boundary — then moving the camera would flip verdicts, because
-that is precisely the perturbation such noise responds to. Measured across
+of the front/behind gap were depth *noise*, meaning estimates jittering
+either side of a decision boundary, then moving the camera would flip
+verdicts, because that is precisely the perturbation such noise responds
+to. Measured across
 viewpoints of the same scene, front/behind reproduces itself 0.955 of the
 time, above `on` and `under`, and holds at 0.924 under viewpoint changes
 large enough to compress the sequence 89-fold. A predicate that recovers

@@ -608,10 +608,10 @@ of the chapter cannot make.
 group is simultaneously an annotator identity *and* a temporal block holding
 one arrangement of objects. The held-out split of §4.1 is therefore held out
 by annotator *and* by scene, not by annotator alone as described. The
-annotator reading survives — a systematically inverted front/behind
+annotator reading survives, since a systematically inverted front/behind
 convention (§4.5) and a `near` label used by three groups in nine (§3.2) are
 properties of labelling behaviour, and no arrangement of furniture can
-produce them — but the held-out figures carry a domain shift alongside the
+produce them, but the held-out figures carry a domain shift alongside the
 annotator shift. The direction of that confound is favourable, in that 0.76
 on held-out groups is generalisation to an unseen annotator *and* an unseen
 arrangement, which is the harder of the two readings; it is recorded here
@@ -627,7 +627,7 @@ decided by a coin-toss at a decision boundary should not.
 
 Frames were segmented by content drift (§3.10) and each segment's predicates
 propagated from its keyframe to the remaining frames, matching objects by
-class and box overlap because object indices are not stable across frames —
+class and box overlap because object indices are not stable across frames:
 the annotators recorded different subsets of the scene from frame to frame,
 and `group_0` alone contains 43 distinct object orderings
 (`eval/keyframe_propagation.py`).
@@ -637,7 +637,7 @@ reduction, and every one of the eight known layout changes is recovered
 within five frames (boundary recall 1.00). Precision against those eight is
 low by construction and not a defect: viewpoint changes within a block are
 genuine content changes, merely finer-grained than the layout changes. The
-comparison worth recording is with the standard alternative — thresholding
+comparison worth recording is with the standard alternative. Thresholding
 consecutive-frame differences, the basis of shot detection, finds *one*
 boundary in the entire 2,650 frames.
 
@@ -670,7 +670,7 @@ expected.** Front/behind was predicted to be the least stable predicate, on
 the assumption that its errors come from monocular depth noise near the
 decision boundary; noise of that kind should flip verdicts when the camera
 moves. It does not. Front/behind agrees with itself across viewpoint changes
-0.955 of the time — above `on`/`under` at 0.909 — and still 0.924 when the
+0.955 of the time, above `on`/`under` at 0.909, and still 0.924 when the
 segmentation is coarsened to 89× compression, where segment members are
 substantially different views. A predicate whose recall against human labels
 is 0.60 while its agreement with itself across viewpoints is 0.96 is not
@@ -693,8 +693,8 @@ direction. Stability is computed only on object pairs that could be matched
 between keyframe and frame, and those are pairs whose objects moved least in
 the image, which is plausibly the easier population; the figures are
 therefore an upper bound on stability over all pairs. And matched coverage
-falls sharply as segments grow — 88.7% of pairs at τ = 5, 58.5% at τ = 10,
-26.5% at τ = 20 — so aggressive compression leaves most pairs uncovered
+falls sharply as segments grow, from 88.7% of pairs at τ = 5 to 58.5% at
+τ = 10 and 26.5% at τ = 20, so aggressive compression leaves most pairs uncovered
 rather than mislabelled. The cause is box drift under camera motion rather
 than missing annotation: at τ = 20, 65% of skipped frames carry an identical
 object count to their keyframe, and relaxing the overlap criterion from 0.5
