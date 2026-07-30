@@ -90,6 +90,26 @@ characterised: objects resting on supports the detector has no box for
 within the band. Both operating points are documented, revisable decisions
 rather than hidden constants (ablations A2, A7).
 
+The viewpoint-stability test of §4.14 sharpens that third point into
+something stronger than the ablations alone could establish. If what remains
+of the front/behind gap were depth *noise* — estimates jittering either side
+of a decision boundary — then moving the camera would flip verdicts, because
+that is precisely the perturbation such noise responds to. Measured across
+viewpoints of the same scene, front/behind reproduces itself 0.955 of the
+time, above `on` and `under`, and holds at 0.924 under viewpoint changes
+large enough to compress the sequence 89-fold. A predicate that recovers
+0.60 of the human labels while agreeing with itself 0.96 of the time is not
+guessing; it is applying a consistent criterion that the annotators did not
+share. Read together with A8, where quadrupling the depth model changed
+nothing, and §4.5, where two groups labelled the pair in the opposite
+direction outright, the weight of the front/behind shortfall sits on
+definitional disagreement rather than on perception. This does not dissolve
+monocular ambiguity, which genuinely bounds the predicate for objects at
+equal camera distance; it relocates most of the measured gap away from it.
+The practical implication is unglamorous and worth stating plainly: the
+intervention with the best expected return on this predicate is a written
+annotation guideline, not a better depth network.
+
 ## 7.3 The dataset's annotation process, examined
 
 The source paper flagged `near` as inconsistent and called for "clear

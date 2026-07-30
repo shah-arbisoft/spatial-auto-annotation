@@ -9,6 +9,17 @@ personal data was collected for the annotation study. Scene images in the
 dataset contain identifiable people; all figures reproduced in this
 dissertation blur faces, and the dataset is used strictly as released.
 
+A second body of data is used in §4.14 and §9.3: the complete 2,650-frame
+capture from which the released images were cut, supplied directly by the
+supervising group. Frames 000000–000883 are the released dataset itself,
+verified by exact pixel match; the remaining 1,766 frames carry no
+annotation and are **not** covered by the CC-BY release. They are used here
+only to measure the pipeline's behaviour on unlabelled input, they are not
+redistributed with this work, and no figure reproduces a frame from them
+without the supervisor's specific agreement. They show the same laboratory
+and the same people as the released portion, and the face-anonymisation rule
+above applies to them unchanged.
+
 The independent validation of the automatic labels (Chapter 4) collects
 anonymous true/false judgements from adult volunteers through a purpose-built
 web quiz. No names, email addresses, IP addresses or any other personal data
@@ -51,6 +62,9 @@ Key commands:
 - `python eval/depth_ablation.py`: the A8 depth-model comparison
 - `python eval/seed_stats.py`: aggregates the benchmark arms across seeds →
   `outputs/tables/seed_replication.md`
+- `python eval/keyframe_propagation.py --sweep 5,10,20,30`: content-adaptive
+  frame selection and the viewpoint-stability measurement of §4.14 →
+  `outputs/keyframe_propagation.json`
 - `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment, all three
   label sources (human, self-trained, automatic)
 - `python analysis/score_votes.py votes.csv`: scores the independent
@@ -100,6 +114,7 @@ below runs from those caches on CPU:
 | `python eval/fidelity.py` | the RQ1 battery, `fidelity_report.json` | ~2 min |
 | `python eval/uncertainty.py --iters 2000` | cluster-bootstrap CIs | ~2 min |
 | `python eval/annotator_agreement.py` | heterogeneity + Fréchet bounds | <1 min |
+| `python eval/keyframe_propagation.py --sweep 5,10,20,30` | §4.14 segmentation, stability, propagation cost | ~3 min |
 | `python eval/ablations.py` | A1–A6 sweeps | ~10 min |
 | `python eval/depth_ablation.py` | A8 (needs the `outputs_base` pass) | <1 min |
 | `python eval/downstream.py --seeds 42,43,44` | RQ2, three arms | ~4 h CPU |

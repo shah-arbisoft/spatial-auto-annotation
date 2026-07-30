@@ -11,8 +11,10 @@ headline recall against every human label (§4.2) with restricted precision
 (§4.3) and an audited true-precision estimate (§4.4), decomposes the hardest
 predicate pair per annotator (§4.5), costs the residual human effort (§4.7),
 and closes with the audit-driven rule repairs (§4.9), a diagnosis of every
-remaining miss (§4.10), the fully-automatic deployment mode (§4.11) and a
-video demonstration (§4.12).
+remaining miss (§4.10), the fully-automatic deployment mode (§4.11), a video
+demonstration (§4.12), the independent validation study (§4.13), and a
+reliability test that uses the images' origin as consecutive frames of one
+robot capture to ask whether the labels survive the camera moving (§4.14).
 
 ## 4.1 Protocol
 
@@ -35,7 +37,10 @@ random predicate, majority predicate, and **box-only geometry** (box centres,
 no masks, no depth). Object boxes and classes are ground truth throughout (the
 PredCls setting), so box IoU agreement is not applicable; detector-in-the-loop
 results appear with the ablations. Thresholds were fitted only on annotator
-groups 0–5; groups 6–8 are held out.
+groups 0–5; groups 6–8 are held out. A group is also a contiguous block of
+the underlying capture, so that split holds out an unseen object arrangement
+as well as an unseen annotator; §4.14 establishes this and discusses what it
+qualifies.
 
 ## 4.2 Headline: recall of the human triplets
 
@@ -588,3 +593,112 @@ raters who disagree systematically with everyone else can be excluded by
 pre-declared filters. The instrument is complete and collection is under
 way; the results are reported at submission, and the limitation stated in
 §7.4 stands until they are.
+
+## 4.14 Temporal redundancy and stability under viewpoint change
+
+The 884 released images are not independent photographs. Pixel-matching them
+against the 2,650-frame raw capture the supervising group later supplied
+identifies them exactly: they are frames 000000–000883 of one continuous
+walk, and each annotator group is a contiguous 100-frame block
+(`group_0` = frames 0–99, `group_1` = 100–199, and so on). This has two
+consequences, one methodological and one that yields a measurement the rest
+of the chapter cannot make.
+
+**The methodological one first, because it qualifies earlier results.** A
+group is simultaneously an annotator identity *and* a temporal block holding
+one arrangement of objects. The held-out split of §4.1 is therefore held out
+by annotator *and* by scene, not by annotator alone as described. The
+annotator reading survives — a systematically inverted front/behind
+convention (§4.5) and a `near` label used by three groups in nine (§3.2) are
+properties of labelling behaviour, and no arrangement of furniture can
+produce them — but the held-out figures carry a domain shift alongside the
+annotator shift. The direction of that confound is favourable, in that 0.76
+on held-out groups is generalisation to an unseen annotator *and* an unseen
+arrangement, which is the harder of the two readings; it is recorded here
+because the design was described as one thing and the data supports a
+slightly stronger one.
+
+**The measurement.** Because the frames are consecutive, a scene appears
+repeatedly from different viewpoints, and the pipeline's verdicts can be
+compared across those viewpoints without any human labels. The comparison is
+a reliability test of a kind sparse human annotation cannot supply: a
+relation determined by geometry should survive the camera moving, and one
+decided by a coin-toss at a decision boundary should not.
+
+Frames were segmented by content drift (§3.10) and each segment's predicates
+propagated from its keyframe to the remaining frames, matching objects by
+class and box overlap because object indices are not stable across frames —
+the annotators recorded different subsets of the scene from frame to frame,
+and `group_0` alone contains 43 distinct object orderings
+(`eval/keyframe_propagation.py`).
+
+*Segmentation.* At τ = 10 the sequence collapses to 892 segments, a 3.0×
+reduction, and every one of the eight known layout changes is recovered
+within five frames (boundary recall 1.00). Precision against those eight is
+low by construction and not a defect: viewpoint changes within a block are
+genuine content changes, merely finer-grained than the layout changes. The
+comparison worth recording is with the standard alternative — thresholding
+consecutive-frame differences, the basis of shot detection, finds *one*
+boundary in the entire 2,650 frames.
+
+*Stability and cost.* Table 4.14 reports, per predicate, how often the
+keyframe's verdict matches what the pipeline computes on the frame directly,
+alongside recall of that frame's human triplets under propagation and under
+per-frame computation.
+
+| Predicate | Stability | Recall (propagated) | Recall (per frame) |
+|---|---|---|---|
+| on | 0.909 | 0.897 | 0.864 |
+| under | 0.909 | 0.829 | 0.795 |
+| to the left of | 0.989 | 0.959 | 0.966 |
+| to the right of | 0.989 | 0.989 | 0.989 |
+| in front of | 0.955 | 0.627 | 0.601 |
+| behind | 0.955 | 0.601 | 0.613 |
+| near | 0.966 | 1.000 | 1.000 |
+| **Mean** | **0.953** | **0.843** | **0.832** |
+
+Skipping frames costs nothing measurable. Mean recall under propagation is
+0.843 against 0.832 computed per frame, and the ordering holds at every
+threshold tested (0.879 against 0.861 at τ = 20, a 4.0× reduction). The
+small advantage is plausibly an artefact of the selection rule rather than a
+benefit of propagation: the segment representative is the frame nearest the
+segment mean, which on a moving camera is less likely to be caught
+mid-transition than an arbitrary frame.
+
+**The finding that matters is in the first column, and it is not the one
+expected.** Front/behind was predicted to be the least stable predicate, on
+the assumption that its errors come from monocular depth noise near the
+decision boundary; noise of that kind should flip verdicts when the camera
+moves. It does not. Front/behind agrees with itself across viewpoint changes
+0.955 of the time — above `on`/`under` at 0.909 — and still 0.924 when the
+segmentation is coarsened to 89× compression, where segment members are
+substantially different views. A predicate whose recall against human labels
+is 0.60 while its agreement with itself across viewpoints is 0.96 is not
+making random errors. It is making the same call repeatedly and disagreeing
+with the annotators systematically.
+
+That converges with two independent results. Ablation A8 (§4.9) showed a
+depth model four times larger does not improve front/behind, which is what
+one expects if the limit is not depth resolution; and §4.5 measured two
+annotator groups labelling the pair in the opposite direction, which is a
+disagreement about what the words mean. The viewpoint-stability figure adds
+the evidence those two could not: the tool's verdicts are reproducible under
+exactly the perturbation that would expose measurement noise. Monocular
+ambiguity remains a real bound on the predicate (§9.3), but the gap between
+0.64 and 1.00 on this dataset is dominated by definitional disagreement
+rather than by an unsteady depth estimate.
+
+**Limits of this measurement.** Two, both restricting scope rather than
+direction. Stability is computed only on object pairs that could be matched
+between keyframe and frame, and those are pairs whose objects moved least in
+the image, which is plausibly the easier population; the figures are
+therefore an upper bound on stability over all pairs. And matched coverage
+falls sharply as segments grow — 88.7% of pairs at τ = 5, 58.5% at τ = 10,
+26.5% at τ = 20 — so aggressive compression leaves most pairs uncovered
+rather than mislabelled. The cause is box drift under camera motion rather
+than missing annotation: at τ = 20, 65% of skipped frames carry an identical
+object count to their keyframe, and relaxing the overlap criterion from 0.5
+to 0.1 cuts unmatched objects from 5.6 to 2.2 per frame. Carrying object
+identity with a tracker, which `scripts/run_video.py` already does for video,
+rather than with per-frame overlap, is the change that would recover it, and
+it is a straightforward extension rather than a research question.

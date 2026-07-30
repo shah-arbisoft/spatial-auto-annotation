@@ -13,8 +13,10 @@ constraints, §3.3 states the central design principle, §3.4 gives the pipeline
 architecture with per-stage justifications, §3.5 the seven predicate rules,
 §3.6 the correction and confidence machinery, §3.7 output compatibility,
 §3.8 the calibration protocol for `near`, §3.9 how the detector is kept
-replaceable, and §3.10 the reproducibility measures. Section 3.11 collects
-every design decision in one table.
+replaceable, §3.10 how frames are selected when the input is a continuous
+robot capture rather than a set of independent images, and §3.11 the
+reproducibility measures. Section 3.12 collects every design decision in one
+table.
 
 ## 3.1 Research methodology
 
@@ -257,7 +259,46 @@ different boxes should re-run the calibration procedure of §3.8 (twenty
 seconds offline from the geometry cache). A worked example is in
 `docs/CUSTOM_DETECTOR.md`.
 
-## 3.10 Reproducibility by construction
+## 3.10 Selecting frames by content
+
+The images this project annotates are not independent photographs. They are
+consecutive frames of a continuous robot capture, and the sequence they were
+cut from oversamples the scene severely: across its 2,650 frames the mean
+optical flow between neighbours is 0.08 px, with 0.9% of pixels moving more
+than one pixel. A per-frame pipeline therefore spends a full perception pass
+(detector, segmentation and depth) recomputing relations that have not moved.
+The remedy is to annotate one frame per *viewpoint* rather than one per frame,
+which requires deciding where one viewpoint ends and the next begins.
+
+The standard tool does not apply. Shot-boundary detection thresholds the
+difference between consecutive frames, which presumes cuts; a robot walking
+through a room produces none, and consecutive-frame differencing finds exactly
+one boundary in the whole 2,650-frame sequence. The failure is structural
+rather than a matter of threshold choice: motion arriving at 0.08 px per frame
+is indistinguishable from sensor noise at every step, however low the bar is
+set, while the same motion integrated over forty frames displaces the image by
+13 px.
+
+`segment_sequence` (`src/keyframes.py`) therefore measures drift from the
+*anchor* of the current segment rather than from the preceding frame, opening
+a new segment when that drift exceeds a threshold τ. Gradual motion
+accumulates instead of being repeatedly rounded away, and a genuine cut still
+crosses the threshold in a single step, so one mechanism serves both regimes.
+Distances are mean absolute differences over 64×48 mean-subtracted greyscale
+thumbnails; subtracting the mean discards the global exposure shifts of an
+auto-exposing camera, which would otherwise be the largest signal present and
+would fire boundaries of their own. Each segment nominates the frame closest
+to its mean signature, which on a moving camera is a better representative
+than the first frame, that one usually being mid-transition.
+
+A single parameter spans two uses. Small τ isolates near-duplicates, so each
+segment is one viewpoint and the representative can stand for the rest; large
+τ groups several viewpoints of one arrangement, which is what the
+cross-viewpoint consistency measurement of §4.14 consumes. The threshold is
+chosen from the data by sweep rather than assumed, and §4.14 reports both what
+the segmentation recovers and what skipping the intervening frames costs.
+
+## 3.11 Reproducibility by construction
 
 Every threshold, seed and model identifier lives in `configs/default.yaml`;
 the runner caches each object's lifted geometry, so any rule or threshold
@@ -268,7 +309,7 @@ and the rule layer is covered by unit tests encoding the spec's worked
 examples (10 tests). The full pipeline is a public repository with a smoke
 test that verifies the perception models on first setup.
 
-## 3.11 Summary of design decisions
+## 3.12 Summary of design decisions
 
 | Decision | Alternative rejected | Why |
 |---|---|---|
