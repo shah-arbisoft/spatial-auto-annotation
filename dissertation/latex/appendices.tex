@@ -3,6 +3,8 @@
 
 This project performs secondary analysis of an existing, published research dataset (Wang et al., 2025; released under CC-BY 4.0), collected by the project supervisor's research group using a Boston Dynamics Spot robot. No new personal data was collected for the annotation study. Scene images in the dataset contain identifiable people; all figures reproduced in this dissertation blur faces, and the dataset is used strictly as released.
 
+A second body of data is used in \S4.14 and \S9.3: the complete 2,650-frame capture from which the released images were cut, supplied directly by the supervising group. Frames 000000--000883 are the released dataset itself, verified by exact pixel match; the remaining 1,766 frames carry no annotation and are \textbf{not} covered by the CC-BY release. They are used here only to measure the pipeline's behaviour on unlabelled input, they are not redistributed with this work, and no figure reproduces a frame from them without the supervisor's specific agreement. They show the same laboratory and the same people as the released portion, and the face-anonymisation rule above applies to them unchanged.
+
 The independent validation of the automatic labels (Chapter 4) collects anonymous true/false judgements from adult volunteers through a purpose-built web quiz. No names, email addresses, IP addresses or any other personal data are recorded; each browser receives a random identifier used only to spread item coverage and remove duplicate answers. Participation is voluntary, takes about three minutes, and can be abandoned at any point; an information panel on the first screen states the purpose, the data collected, and a contact address. Faces in all quiz images are pixelated before publication, and items where anonymisation would obscure the object under judgement were removed rather than shown. The collection is covered by the University's ethics self-assessment process.
 
 <!-- TODO(user): insert the completed self-assessment form / approval confirmation here once submitted. -->
@@ -31,6 +33,8 @@ estimated human-human agreement bounds $\rightarrow$ \texttt{outputs/tables/anno
 \item \texttt{python eval/depth\_ablation.py}: the A8 depth-model comparison
 \item \texttt{python eval/seed\_stats.py}: aggregates the benchmark arms across seeds $\rightarrow$
 \texttt{outputs/tables/seed\_replication.md}
+\item \texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30}: content-adaptive
+frame selection and the viewpoint-stability measurement of \S4.14 $\rightarrow$ \texttt{outputs/keyframe\_propagation.json}
 \item \texttt{python eval/downstream.py --seeds 42,43,44}: the RQ2 experiment, all three
 label sources (human, self-trained, automatic)
 \item \texttt{python analysis/score\_votes.py votes.csv}: scores the independent
@@ -66,6 +70,7 @@ command & produces & time \\
 \texttt{python eval/fidelity.py} & the RQ1 battery, \texttt{fidelity\_report.json} & \textasciitilde{}2 min \\
 \texttt{python eval/uncertainty.py --iters 2000} & cluster-bootstrap CIs & \textasciitilde{}2 min \\
 \texttt{python eval/annotator\_agreement.py} & heterogeneity + Fréchet bounds & <1 min \\
+\texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30} & \S4.14 segmentation, stability, propagation cost & \textasciitilde{}3 min \\
 \texttt{python eval/ablations.py} & A1--A6 sweeps & \textasciitilde{}10 min \\
 \texttt{python eval/depth\_ablation.py} & A8 (needs the \texttt{outputs\_base} pass) & <1 min \\
 \texttt{python eval/downstream.py --seeds 42,43,44} & RQ2, three arms & \textasciitilde{}4 h CPU \\
