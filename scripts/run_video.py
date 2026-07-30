@@ -45,6 +45,26 @@ def iou(a, b):
     return inter / ua if ua > 0 else 0.0
 
 
+def adaptive_indices(cap, idxs, tau):
+    """Keep one frame per content segment instead of one every `stride`.
+
+    Decoding and thumbnailing the whole sequence first is cheap next to a
+    perception pass, so the selection is made before any GPU work starts.
+    """
+    import cv2  # noqa: PLC0415
+    from src.keyframes import segment_sequence, thumbnail  # noqa: PLC0415
+
+    thumbs = []
+    for fi in idxs:
+        cap.set(cv2.CAP_PROP_POS_FRAMES, fi)
+        ok, bgr = cap.read()
+        if not ok:
+            break
+        thumbs.append(thumbnail(cv2.cvtColor(bgr, cv2.COLOR_BGR2GRAY)))
+    segs = segment_sequence(thumbs, tau)
+    return [idxs[s.keyframe] for s in segs]
+
+
 class Tracker:
     """Greedy same-class IoU matching frame to frame — stable object ids."""
 
@@ -149,6 +169,11 @@ def main():
     ap.add_argument("--only-prompts", action="store_true",
                     help="use --prompts INSTEAD of the six dataset classes")
     ap.add_argument("--threshold", type=float, default=0.30)
+    ap.add_argument("--adaptive", type=float, default=None, metavar="TAU",
+                    help="content-adaptive selection: skip frames within TAU "
+                         "grey levels of the current segment anchor (try 10). "
+                         "A fixed stride spends a full perception pass on "
+                         "near-duplicates; this spends one per viewpoint.")
     ap.add_argument("--stride", type=int, default=2,
                     help="process every Nth frame")
     ap.add_argument("--width", type=int, default=1280,
@@ -199,6 +224,13 @@ def main():
     z_scale = cfg.get("geometry", {}).get("z_scale", 1.0)
 
     idxs = list(range(0, n_total, args.stride))
+    if args.adaptive is not None:
+        idxs = adaptive_indices(cap, idxs, args.adaptive)
+        print(f"adaptive selection: {len(idxs)} keyframes from "
+              f"{n_total // args.stride} sampled frames "
+              f"({(n_total // args.stride) / max(len(idxs), 1):.1f}x fewer "
+              f"perception passes)")
+
     for fi in tqdm(idxs, desc="frames"):
         cap.set(cv2.CAP_PROP_POS_FRAMES, fi)
         ok, bgr = cap.read()

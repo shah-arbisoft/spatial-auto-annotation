@@ -71,6 +71,29 @@ def collect_images(path: Path) -> list[Path]:
     return [path]
 
 
+def select_keyframes(paths, tau):
+    """Drop frames whose content matches one already selected.
+
+    Robot captures oversample: the perception pass is the expensive part, so
+    the frames are thumbnailed and segmented first and only the segment
+    representatives reach the GPU.
+    """
+    import numpy as np  # noqa: PLC0415
+    from PIL import Image, ImageOps  # noqa: PLC0415
+
+    from src.keyframes import segment_sequence, thumbnail  # noqa: PLC0415
+
+    thumbs = []
+    for p in paths:
+        img = ImageOps.exif_transpose(Image.open(p)).convert("L")
+        thumbs.append(thumbnail(np.asarray(img)))
+    segs = segment_sequence(thumbs, tau)
+    keep = [paths[s.keyframe] for s in segs]
+    print(f"keyframes: {len(keep)} of {len(paths)} frames "
+          f"({len(paths) / max(len(keep), 1):.1f}x fewer perception passes)")
+    return keep
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("images", help="an image file or a folder of images")
@@ -84,6 +107,10 @@ def main():
     ap.add_argument("--only-prompts", action="store_true",
                     help="use --prompts INSTEAD of the six dataset classes")
     ap.add_argument("--threshold", type=float, default=0.30)
+    ap.add_argument("--keyframes", type=float, default=None, metavar="TAU",
+                    help="for a folder holding consecutive robot/video frames: "
+                         "annotate one frame per content segment instead of "
+                         "all of them (try 10). Files are ordered by name.")
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--out", default="outputs/demo")
     args = ap.parse_args()
@@ -91,6 +118,9 @@ def main():
     paths = collect_images(Path(args.images))
     if not paths:
         raise SystemExit(f"no images found at {args.images}")
+
+    if args.keyframes is not None:
+        paths = select_keyframes(paths, args.keyframes)
 
     if args.common_objects:
         PROMPTS.clear()
