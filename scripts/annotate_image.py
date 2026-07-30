@@ -111,6 +111,10 @@ def main():
                     help="for a folder holding consecutive robot/video frames: "
                          "annotate one frame per content segment instead of "
                          "all of them (try 10). Files are ordered by name.")
+    ap.add_argument("--no-overlay", action="store_true",
+                    help="write only the JSON. On a batch of hundreds of "
+                         "frames the overlay render, not the perception "
+                         "pass, is the slower half.")
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--out", default="outputs/demo")
     args = ap.parse_args()
@@ -171,7 +175,8 @@ def main():
         (out / f"{stem}.json").write_text(
             json.dumps({"image": str(path), "detections": dets,
                         "triplets": named}, indent=1), encoding="utf-8")
-        overlay(image, objs, named, out / f"{stem}.png")
+        if not args.no_overlay:
+            overlay(image, objs, named, out / f"{stem}.png")
 
         print(f"\n{path.name}: {len(dets)} objects, {len(named)} triplets")
         for s, k, o in named:

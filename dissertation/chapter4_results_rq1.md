@@ -702,3 +702,46 @@ to 0.1 cuts unmatched objects from 5.6 to 2.2 per frame. Carrying object
 identity with a tracker, which `scripts/run_video.py` already does for video,
 rather than with per-frame overlap, is the change that would recover it, and
 it is a straightforward extension rather than a research question.
+
+## 4.15 Scale, measured rather than extrapolated
+
+Throughput and density elsewhere in this chapter are measured on the 836
+annotated images, which leaves the claim that the method extends to new
+captures resting on an extrapolation. The 1,766 unannotated frames of the
+raw sequence (§4.14, Appendix A) remove that gap: they are robot output
+nobody has labelled, from the same platform and laboratory but from later in
+the session, with arrangements and rooms the tool has never been shown.
+
+No accuracy claim is available here, since there is no ground truth, and
+none is made. What the run establishes is operational, and there are three
+parts to it.
+
+*Cost.* Content-adaptive selection reduces 1,766 frames to 562 keyframes,
+3.1×. In deployment mode the pipeline sustains 3.33 s per frame on the
+RTX 2060 (1,080 frames per hour, JSON only; rendering an inspection overlay
+for every frame roughly doubles that). The keyframe pass therefore takes
+31 minutes where annotating every frame would take 98.
+
+*Yield.* The run emits 185,242 triplets over 562 frames, 330 per frame from
+11.7 detected objects. No frame produced an empty graph. For comparison, the
+human process recorded 8,926 triplets across 836 images, about 11 per image.
+
+*Behaviour.* The risk with unfamiliar input is not loud failure but quiet
+drift, a pipeline that keeps emitting labels whose distribution has silently
+changed. Compared against the same detector on the annotated images, the
+predicate distribution is close to unchanged: total variation distance
+0.032, with the largest single shift 0.015 (in front of, 0.181 to 0.195).
+The `on`/`under` share is low in both runs, 0.006 annotated against 0.003
+here, which is a property of open-vocabulary detection rather than of the
+new frames: more detected objects means more pairs, and most pairs are not
+in contact. Density per frame is lower than on the annotated portion
+(330 against 633 triplets) for the same reason in reverse, since the later
+arrangements hold fewer objects (11.7 detections against 16.9) and pair
+count grows with the square of that.
+
+The honest summary is that the scaling claim now rests on a run rather than
+an argument, and that what it demonstrates is capacity and stability, not
+correctness. Establishing correctness on this portion needs labels that do
+not exist; the viewpoint-consistency measurement of §4.14 is the closest
+available substitute, and it is a check on self-agreement rather than on
+truth.

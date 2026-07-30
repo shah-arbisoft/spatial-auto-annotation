@@ -99,10 +99,17 @@ propagating the annotators' silence rather than their judgement.
 
 **Methodologically.** Calibration held out by *annotator* rather than by
 image; a sparse-gold evaluation protocol that pairs recall with audited
-precision; exhaustive loss attribution; and a way to estimate what
-annotators would score against one another when they never labelled the same
-images, by using a deterministic annotator as a fixed common reference
-(§4.6).
+precision; exhaustive loss attribution; a way to estimate what annotators
+would score against one another when they never labelled the same images, by
+using a deterministic annotator as a fixed common reference (§4.6); and a
+reliability check that needs no labels at all, obtained by recovering the
+fact that an image dataset was cut from a continuous capture and asking
+whether its labels survive the camera moving (§4.14). The last of these is
+the one most likely to transfer. Many robotics datasets are sequences
+presented as image sets, and wherever that is true, a predicate's agreement
+with itself across viewpoints separates a rule that is wrong from a rule
+that is merely uncertain, which is a distinction sparse human annotation
+cannot draw.
 
 ## 9.3 Limitations, and future research and development
 
@@ -144,11 +151,31 @@ scores 0.85. The gap is detection, not relations, and the source paper's own
 trained detector (0.93 mAP@50) would close most of it. That check needs only
 the released weights.
 
-**Scale is demonstrated in principle, not in practice.** Throughput and
-density are measured on 836 images. Applying the pipeline to genuinely new
-robot captures, which the supervising group can supply, is the natural next
-step and the one that would make the scaling claim concrete rather than
-extrapolated.
+**Scale is demonstrated without ground truth.** The supervising group
+supplied the full 2,650-frame capture the released images were cut from, and
+the pipeline was run over the 1,766 frames nobody has annotated: 562
+keyframes after content-adaptive selection, 31 minutes, 185,242 triplets, a
+predicate distribution 0.032 in total variation from the annotated portion
+(§4.15). Capacity and stability on unfamiliar input are therefore measured
+rather than argued. Correctness on that portion is not, and cannot be
+without labels; §4.14's viewpoint-consistency check substitutes
+self-agreement for truth and should be read as the weaker thing it is. The
+experiment that would close this is a modest labelled sample from the
+unannotated frames, a few hundred triplets, which is an afternoon of
+annotation rather than a research programme.
+
+**The capture is stereo, and only one eye was used.** The supplied folder is
+named `rightimg`, which implies a left counterpart held by the supervising
+group. True stereo would attack the front/behind bound directly, supplying
+disparity where this project has only monocular relative depth, and would do
+so at every frame rather than requiring the robot to move. Multi-frame
+structure is the weaker fallback if no left channel survives: measured on
+this sequence, consecutive frames carry 0.08 px of motion, far too little
+for parallax, with usable baselines appearing only around 20 to 40 frames
+apart. That route also changes the method's premise, since depth recovered
+from twenty frames of robot walking is not available to a single-image
+annotator, so it belongs to a validation instrument rather than to the
+pipeline.
 
 ## 9.4 Personal reflections
 
