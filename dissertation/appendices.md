@@ -61,6 +61,9 @@ Key commands:
   estimated human-human agreement bounds → `outputs/tables/annotator_agreement.md`
 - `python eval/ablations.py`: ablations A1–A6 → `outputs/tables/ablations.md`
 - `python eval/depth_ablation.py`: the A8 depth-model comparison
+- `python eval/parallax_ablation.py --method triangulate --gap 10`: the
+  A9 multi-frame depth comparison; needs the raw capture (§4.9.6) →
+  `outputs/parallax_ablation.json`
 - `python eval/seed_stats.py`: aggregates the benchmark arms across seeds →
   `outputs/tables/seed_replication.md`
 - `python eval/keyframe_propagation.py --sweep 5,10,20,30`: content-adaptive

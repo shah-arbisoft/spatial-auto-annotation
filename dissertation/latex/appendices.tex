@@ -31,6 +31,8 @@ every headline recall $\rightarrow$ \texttt{outputs/tables/uncertainty.md}
 estimated human-human agreement bounds $\rightarrow$ \texttt{outputs/tables/annotator\_agreement.md}
 \item \texttt{python eval/ablations.py}: ablations A1--A6 $\rightarrow$ \texttt{outputs/tables/ablations.md}
 \item \texttt{python eval/depth\_ablation.py}: the A8 depth-model comparison
+\item \texttt{python eval/parallax\_ablation.py --method triangulate --gap 10}: the
+A9 multi-frame depth comparison; needs the raw capture (\S4.9.6) $\rightarrow$ \texttt{outputs/parallax\_ablation.json}
 \item \texttt{python eval/seed\_stats.py}: aggregates the benchmark arms across seeds $\rightarrow$
 \texttt{outputs/tables/seed\_replication.md}
 \item \texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30}: content-adaptive

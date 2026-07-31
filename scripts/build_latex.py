@@ -159,6 +159,8 @@ TABLES = {
         "Front/behind by annotator group: emission rate, agreement where the "
         "tool commits, and the effect of aligning the direction convention.",
         "Diagnosed cause of every missed human triplet, by predicate.",
+        "Ablation A9: two-view triangulation against the monocular cascade "
+        "on the same front/behind pairs.",
         "Stability of each predicate across viewpoints of the same scene, "
         "with recall under keyframe propagation against per-frame "
         "computation.",

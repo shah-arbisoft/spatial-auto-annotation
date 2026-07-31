@@ -433,6 +433,67 @@ justifies shipping the Small variant: identical accuracy, an Apache-2.0
 licence, and half the VRAM.
 
 
+### 4.9.6 Why not multi-frame depth either (ablation A9)
+
+Ablation A8 rules out a bigger *monocular* model, but it leaves the sharper
+objection open. The images are consecutive frames of a robot walk (§4.14), so
+neighbouring frames exist that view the same scene from a different camera
+position. Two views constrain depth geometrically, without any learned prior,
+and that is the classical remedy for exactly the ambiguity A8 blames. If the
+front/behind shortfall is a depth problem, this is what should fix it.
+
+Two multi-frame estimators were built and scored against the same gold, on
+the seven annotator groups that use the standard direction convention, so
+that a geometrically correct answer is not penalised by the inversion of §4.5
+(`eval/parallax_ablation.py`).
+
+The first reads *residual displacement*: under camera translation a nearer
+object sweeps further across the image, so after subtracting the median
+motion, which is the part rotation contributes equally to every object,
+the larger residual should be the nearer object. It performs at chance,
+0.445 to 0.512 across baselines from 5 to 60 frames. The reason is that the
+assumption is wrong for this motion: a walking robot translates forward as
+well as sideways, and forward motion produces flow radiating from the focus
+of expansion, where displacement depends on an object's distance from that
+point as much as on its depth. An object near the focus of expansion barely
+moves however close it is.
+
+The second recovers the camera pose properly, estimating the essential matrix
+from whole-image correspondences, decomposing it into rotation and
+translation, and triangulating the points inside each object's box. Focal
+length is assumed rather than calibrated, which is tolerable because only the
+depth *ordering* is read and that is insensitive to moderate focal error.
+This is the correct construction and it does much better than the first, but
+not well enough:
+
+| Depth cue | Ordering accuracy | Pairs answered |
+|---|---|---|
+| Two-view triangulation (10-frame baseline) | 0.706 | 337 of 3,597 |
+| Monocular cascade, same pairs | 0.875 | 337 of 3,597 |
+
+Both numbers fall on the same pairs, so the comparison is like for like. The
+multi-frame estimate is 0.17 worse where it applies, and the two disagree on
+27% of pairs, with the monocular cascade right more often in that
+disagreement. Coverage is the harsher problem: triangulation returns an
+answer for 9% of the depth-labelled pairs, because it needs several trackable
+corners inside an object's box and the dataset's objects are small,
+low-texture cubes and boxes photographed at 640×480 in greyscale. Widening
+the baseline trades coverage for geometry without helping accuracy: at 40
+frames, accuracy falls to 0.610.
+
+The honest scope of this result is that it rules out the cheap version of the
+idea rather than the idea itself. A careful multi-view reconstruction over
+many frames, with bundle adjustment and real intrinsics, would estimate depth
+better than two views and an assumed focal length. What the ablation
+establishes is that geometric depth is not free here, that the obvious
+implementations lose to the monocular cascade on both accuracy and coverage,
+and, read with §4.14, that the return on any of them is bounded: a predicate
+that already reproduces its own verdict 0.955 of the time across viewpoints
+does not have much room to gain from measuring depth more precisely. There is
+also a design cost that no accuracy figure captures. Every multi-frame method
+requires neighbouring frames at inference time, which the single-image
+annotator this project set out to build does not have.
+
 ## 4.10 Failure gallery: every miss diagnosed
 
 Each missed human triplet is diagnosed automatically by re-checking the rule's

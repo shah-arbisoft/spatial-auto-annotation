@@ -25,7 +25,7 @@ threshold generalises perfectly to the held-out annotator who used the label
 (recall 1.00), and the support rules reach held-out F1 0.87.
 
 **O3, validate.** Per-predicate fidelity against all 8,926 human triplets,
-against three baselines, with eight ablations and manually audited precision
+against three baselines, with nine ablations and manually audited precision
 (Chapter 4): mean recall 0.85, and 0.76 on annotators no threshold ever saw.
 Cluster-bootstrap intervals accompany every headline figure, and an
 independent validation study re-estimates precision with judges who have no
@@ -152,12 +152,19 @@ six classes. A labelled cross-domain sample of a few dozen images would turn
 that into a measurement, and it is cheap enough that a replication should
 simply include one.
 
-**Front/behind is bounded by monocular ambiguity.** Two objects at similar
-camera distance cannot be ordered from one image, and a larger depth model
-does not help (A8). The routes out are additional evidence rather than
-better models: stereo or RGB-D capture, multi-frame structure, or wider
-surface detection to extend the ground-plane guard, the last of which was
-built, measured and declined on this dataset (§4.9.4).
+**Front/behind is bounded, but less by depth than the number suggests.**
+Two objects at similar camera distance cannot be ordered from one image, and
+neither a larger depth model (A8) nor multi-frame geometry (A9) closes the
+gap: two-view triangulation over the raw capture answers 9% of the depth
+pairs and is 0.17 less accurate than the monocular cascade where it does
+(§4.9.6). Read with the viewpoint stability of §4.14, where the predicate
+reproduces its own verdict 0.955 of the time, the remaining shortfall is
+mostly a disagreement about what the words mean rather than a measurement
+failure, and the intervention with the best expected return is a written
+annotation guideline. The measurement routes that stay open are a calibrated
+stereo pair or RGB-D capture, and wider surface detection to extend the
+ground-plane guard, the last of which was built, measured and declined on
+this dataset (§4.9.4).
 
 **Detection bounds full automation.** With a zero-shot detector the
 end-to-end recall is 0.38, while the relation layer conditional on detection
@@ -181,15 +188,15 @@ annotation rather than a research programme.
 **The capture is stereo, and only one eye was used.** The supplied folder is
 named `rightimg`, which implies a left counterpart held by the supervising
 group. True stereo would attack the front/behind bound directly, supplying
-disparity where this project has only monocular relative depth, and would do
-so at every frame rather than requiring the robot to move. Multi-frame
-structure is the weaker fallback if no left channel survives: measured on
-this sequence, consecutive frames carry 0.08 px of motion, far too little
-for parallax, with usable baselines appearing only around 20 to 40 frames
-apart. That route also changes the method's premise, since depth recovered
-from twenty frames of robot walking is not available to a single-image
-annotator, so it belongs to a validation instrument rather than to the
-pipeline.
+disparity at every frame from a known, fixed baseline, which is precisely
+what the multi-frame estimators of A9 lack: those must recover the camera's
+motion before they can use it, and on small low-texture objects they return
+an answer for only 9% of pairs and are 0.17 less accurate than the monocular
+cascade where they do (§4.9.6). A calibrated stereo pair removes both
+problems at once and is the single cheapest experiment left on this
+predicate. It also keeps the method's premise intact, since stereo is
+available at capture time, whereas depth recovered from a robot walking
+twenty frames is not available to a single-image annotator at all.
 
 ## 9.4 Personal reflections
 
