@@ -46,9 +46,9 @@ Learned scene-graph generators (REACT++ and predecessors; Neau and Falomir, 2026
 \section{Pipeline architecture}
 
 \begin{verbatim}
-image ─ boxes+classes ─→ SAM2 masks ─→ depth map ─→ per-object geometry
-                                                        │
-        writers (VG JSON / YOLO / h5)  ←─ flags ←─ correction ←─ 7 rules
+image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
+                                                            |
+        writers (VG JSON / YOLO / h5) <-- flags <-- correction <-- 7 rules
 \end{verbatim}
 
 \begin{center}
@@ -123,9 +123,9 @@ The images this project annotates are not independent photographs. They are cons
 
 The standard tool does not apply. Shot-boundary detection thresholds the difference between consecutive frames, which presumes cuts, and a robot walking through a room produces none. The failure is structural rather than a matter of threshold choice, which \S4.14 verifies by sweeping the threshold: no setting separates the sequence's known content changes from its noise, because motion arriving at 0.08 px per frame is not larger than the noise at any single step, while the same motion integrated over forty frames displaces the image by 13 px. Only the accumulated drift carries the signal.
 
-\texttt{segment\_sequence} (\texttt{src/keyframes.py}) therefore measures drift from the \textit{anchor} of the current segment rather than from the preceding frame, opening a new segment when that drift exceeds a threshold τ. Gradual motion accumulates instead of being repeatedly rounded away, and a genuine cut still crosses the threshold in a single step, so one mechanism serves both regimes. Distances are mean absolute differences over 64$\times$48 mean-subtracted greyscale thumbnails; subtracting the mean discards the global exposure shifts of an auto-exposing camera, which would otherwise be the largest signal present and would fire boundaries of their own. Each segment nominates the frame closest to its mean signature, which on a moving camera is a better representative than the first frame, that one usually being mid-transition.
+\texttt{segment\_sequence} (\texttt{src/keyframes.py}) therefore measures drift from the \textit{anchor} of the current segment rather than from the preceding frame, opening a new segment when that drift exceeds a threshold $\tau$. Gradual motion accumulates instead of being repeatedly rounded away, and a genuine cut still crosses the threshold in a single step, so one mechanism serves both regimes. Distances are mean absolute differences over 64$\times$48 mean-subtracted greyscale thumbnails; subtracting the mean discards the global exposure shifts of an auto-exposing camera, which would otherwise be the largest signal present and would fire boundaries of their own. Each segment nominates the frame closest to its mean signature, which on a moving camera is a better representative than the first frame, that one usually being mid-transition.
 
-A single parameter spans two uses. Small τ isolates near-duplicates, so each segment is one viewpoint and the representative can stand for the rest; large τ groups several viewpoints of one arrangement, which is what the cross-viewpoint consistency measurement of \S4.14 consumes. The threshold is chosen from the data by sweep rather than assumed, and \S4.14 reports both what the segmentation recovers and what skipping the intervening frames costs.
+A single parameter spans two uses. Small $\tau$ isolates near-duplicates, so each segment is one viewpoint and the representative can stand for the rest; large $\tau$ groups several viewpoints of one arrangement, which is what the cross-viewpoint consistency measurement of \S4.14 consumes. The threshold is chosen from the data by sweep rather than assumed, and \S4.14 reports both what the segmentation recovers and what skipping the intervening frames costs.
 
 \section{Reproducibility by construction}
 

@@ -109,9 +109,9 @@ an ablation and as the deployment mode for genuinely new images.
 ## 3.4 Pipeline architecture
 
 ```
-image ─ boxes+classes ─→ SAM2 masks ─→ depth map ─→ per-object geometry
-                                                        │
-        writers (VG JSON / YOLO / h5)  ←─ flags ←─ correction ←─ 7 rules
+image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
+                                                            |
+        writers (VG JSON / YOLO / h5) <-- flags <-- correction <-- 7 rules
 ```
 
 | Stage | Choice | Rejected alternative | Justification |

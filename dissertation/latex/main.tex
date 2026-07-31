@@ -11,7 +11,24 @@
 \usepackage{longtable}
 \usepackage{tocloft}
 \usepackage{enumitem}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath}
+\usepackage{textcomp}
+
+% Any stray unicode the Markdown converter did not map would otherwise stop
+% the build with "Unicode character not set up for use with LaTeX". These
+% definitions make it print instead. The converter should catch them first;
+% this is the net under it.
+\DeclareUnicodeCharacter{03C4}{$\tau$}
+\DeclareUnicodeCharacter{03B5}{$\varepsilon$}
+\DeclareUnicodeCharacter{2212}{-}
+\DeclareUnicodeCharacter{2260}{$\neq$}
+\DeclareUnicodeCharacter{00B7}{$\cdot$}
+\DeclareUnicodeCharacter{2192}{$\rightarrow$}
+\DeclareUnicodeCharacter{2190}{$\leftarrow$}
+\DeclareUnicodeCharacter{2500}{-}
+\DeclareUnicodeCharacter{2502}{|}
+\DeclareUnicodeCharacter{2026}{\dots}
 \usepackage[hidelinks]{hyperref}
 
 \setlength{\parindent}{0pt}
@@ -142,31 +159,31 @@ will be penalised.
 
 %==================== Chapters ====================
 \chapter{Introduction}
-\input{chapter1_introduction}
+\input{chapter1-introduction}
 
 \chapter{Literature Review}
-\input{chapter2_literature_review}
+\input{chapter2-literature-review}
 
 \chapter{Research Methodology and Design}
-\input{chapter3_design}
+\input{chapter3-design}
 
 \chapter{Fidelity against the Human Annotations (RQ1)}
-\input{chapter4_results_rq1}
+\input{chapter4-results-rq1}
 
 \chapter{Downstream Utility (RQ2)}
-\input{chapter5_results_rq2}
+\input{chapter5-results-rq2}
 
 \chapter{The Direct Benchmark Test}
-\input{chapter6_benchmark}
+\input{chapter6-benchmark}
 
 \chapter{Critical Evaluation}
-\input{chapter7_critical_evaluation}
+\input{chapter7-critical-evaluation}
 
 \chapter{Legal, Social, Ethical and Professional Considerations}
-\input{chapter8_lsep}
+\input{chapter8-lsep}
 
 \chapter{Conclusions and Future Work}
-\input{chapter9_conclusions}
+\input{chapter9-conclusions}
 
 %==================== References ====================
 \chapter*{References}
