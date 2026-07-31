@@ -271,13 +271,13 @@ The remedy is to annotate one frame per *viewpoint* rather than one per frame,
 which requires deciding where one viewpoint ends and the next begins.
 
 The standard tool does not apply. Shot-boundary detection thresholds the
-difference between consecutive frames, which presumes cuts; a robot walking
-through a room produces none, and consecutive-frame differencing finds exactly
-one boundary in the whole 2,650-frame sequence. The failure is structural
-rather than a matter of threshold choice: motion arriving at 0.08 px per frame
-is indistinguishable from sensor noise at every step, however low the bar is
-set, while the same motion integrated over forty frames displaces the image by
-13 px.
+difference between consecutive frames, which presumes cuts, and a robot
+walking through a room produces none. The failure is structural rather than a
+matter of threshold choice, which §4.14 verifies by sweeping the threshold:
+no setting separates the sequence's known content changes from its noise,
+because motion arriving at 0.08 px per frame is not larger than the noise at
+any single step, while the same motion integrated over forty frames displaces
+the image by 13 px. Only the accumulated drift carries the signal.
 
 `segment_sequence` (`src/keyframes.py`) therefore measures drift from the
 *anchor* of the current segment rather than from the preceding frame, opening

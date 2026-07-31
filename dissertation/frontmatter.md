@@ -12,7 +12,7 @@
 - Academic year: 2025–2026
 - Title: A Fully-Automatic Spatial-Relationship Annotation Pipeline for
   Robot-Acquired Images, Validated Against Human Annotation
-- Submitted by: Shah Hussain [+ student ID at assembly]
+- Submitted by: Shah Hussain (6949963)
 - Supervised by: Dr Peng Wang
 - University of Surrey, Guildford, Surrey GU2 7XH
 

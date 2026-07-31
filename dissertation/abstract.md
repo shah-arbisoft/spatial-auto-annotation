@@ -20,22 +20,22 @@ Validated against 8,926 human-annotated relationships, the automatic labels
 match or exceed the human process on five of seven predicates (0.85 mean
 recall, 0.76 on held-out annotators; audited precision ≈ 1.0 for the lateral
 and proximity predicates and ≈ 0.9 for support). The hardest pair, in front
-of/behind, is decided by a two-stage cascade of relative depth and a ground-
-plane projection cue, and diagnosing every remaining disagreement attributes
+of/behind, is decided by a two-stage cascade of relative depth and a
+ground-plane projection cue, and diagnosing every remaining disagreement attributes
 the residual gap to measured properties of the human annotation itself,
 including two annotator groups that labelled the pair with opposite
 conventions, rather than to tool error (~7% of misses). Because the images
 are consecutive frames of one robot capture, the labels can also be checked
 against themselves without ground truth: across viewpoints of the same scene
 the pipeline reproduces its front/behind verdict 0.96 of the time, so a
-predicate recovering 0.60 of the human labels is applying a criterion the
+predicate recovering 0.64 of the human labels is applying a criterion the
 annotators did not share rather than guessing at a noisy boundary.
 
 In a controlled downstream experiment a classifier trained on the automatic
 labels reaches 0.76 mean recall against held-out human annotations, versus
 0.30 for human labels and 0.36 when those are stretched by self-training,
-the standard semi-supervised remedy: dense consistent computed labels out-
-teach the sparse human labels they replace.
+the standard semi-supervised remedy: dense consistent computed labels
+out-teach the sparse human labels they replace.
 
 Repeated in the source paper's own benchmark framework, with a shared frozen
 detector and three seeds per arm, the verdict splits. The human-trained

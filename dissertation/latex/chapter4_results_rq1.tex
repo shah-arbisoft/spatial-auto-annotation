@@ -16,6 +16,7 @@ The evaluation therefore uses: (1) per-predicate \textbf{recall of the human tri
 \begin{center}
 \small
 \begin{longtable}{lrrrrrr}
+\caption{Per-predicate recall of the human triplets, pooled and on held-out annotators, against three baselines.}\\
 \hline
 Predicate & Gold & Ours & Ours (held-out) & Random & Majority & Box-only \\
 \hline
@@ -54,6 +55,7 @@ Three observations. \textbf{(i)} The tool recovers 81\% of all human triplets (7
 \begin{center}
 \small
 \begin{longtable}{lrrrr}
+\caption{Precision, recall and F1 restricted to the human-annotated pairs.}\\
 \hline
 Predicate & P & R & F1 & support \\
 \hline
@@ -82,6 +84,7 @@ For each human triplet the tool failed to recover, the labels it \textit{did} em
 \begin{center}
 \small
 \begin{longtable}{lrr}
+\caption{For each missed human triplet, the predicates the tool emitted instead.}\\
 \hline
 Gold predicate & Missed & Most frequent co-emissions on missed pairs \\
 \hline
@@ -117,6 +120,7 @@ Two structural signatures stand out. Missed front/behind pairs carrying the \tex
 \begin{center}
 \small
 \begin{longtable}{lrrr}
+\caption{Manual audit of a stratified sample of extra predictions, with Wilson intervals.}\\
 \hline
 Predicate & Correct / n & Precision est. & Wilson 95\% CI \\
 \hline
@@ -143,6 +147,7 @@ The audit splits the predicates cleanly in two. For the lateral, depth and proxi
 \begin{center}
 \small
 \begin{longtable}{lrrrrrr}
+\caption{Front/behind by annotator group: emission rate, agreement where the tool commits, and the effect of aligning the direction convention.}\\
 \hline
 Group & Gold & Emit rate & Agreement when committed & Convention & Raw recall & Aligned recall \\
 \hline
@@ -175,6 +180,13 @@ with the committed direction 2--5\% of the time; flipping their labels recovers 
 \item \textbf{The remaining gap is abstention, not error.} Groups 2 and 3 agree with
 the tool almost perfectly when it commits, but their scenes place object pairs inside the \texttt{depth\_eps} ambiguity band \textit{and} out of the ground-plane fallback's reach (elevated objects, near-tied bottom edges), so the tool abstains (emit rates 0.58 and 0.54, roughly doubled by the fallback from 0.30 and 0.08). The \texttt{depth\_eps} and \texttt{plane\_band} sweeps in the ablations trade this abstention against precision explicitly.
 \end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/front-behind-decomposition.png}
+\caption{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
+\label{fig:front-behind-decomposition}
+\end{figure}
 
 \section{The tenth annotator, and what the annotators would score against each other}
 
@@ -232,6 +244,7 @@ Each missed human triplet is diagnosed automatically by re-checking the rule's i
 \begin{center}
 \small
 \begin{longtable}{ll}
+\caption{Diagnosed cause of every missed human triplet, by predicate.}\\
 \hline
 Predicate & Dominant causes (share of that predicate's misses) \\
 \hline
@@ -302,13 +315,16 @@ The 884 released images are not independent photographs. Pixel-matching them aga
 
 Frames were segmented by content drift (\S3.10) and each segment's predicates propagated from its keyframe to the remaining frames, matching objects by class and box overlap because object indices are not stable across frames: the annotators recorded different subsets of the scene from frame to frame, and \texttt{group\_0} alone contains 43 distinct object orderings (\texttt{eval/keyframe\_propagation.py}).
 
-\textit{Segmentation.} At τ = 10 the sequence collapses to 892 segments, a 3.0$\times$ reduction, and every one of the eight known layout changes is recovered within five frames (boundary recall 1.00). Precision against those eight is low by construction and not a defect: viewpoint changes within a block are genuine content changes, merely finer-grained than the layout changes. The comparison worth recording is with the standard alternative. Thresholding consecutive-frame differences, the basis of shot detection, finds \textit{one} boundary in the entire 2,650 frames.
+\textit{Segmentation.} At τ = 10 the full 2,650-frame sequence collapses to 892 segments, a 3.0$\times$ reduction; over the 884 annotated frames alone it gives 331 segments, 2.7$\times$. Scored on the annotated portion, where the eight layout changes are known, every one is recovered within five frames (boundary recall 1.00). Precision against those eight is low by construction and not a defect: viewpoint changes within a block are genuine content changes, merely finer-grained than the layout changes.
 
-\textit{Stability and cost.} Table 4.14 reports, per predicate, how often the keyframe's verdict matches what the pipeline computes on the frame directly, alongside recall of that frame's human triplets under propagation and under per-frame computation.
+The comparison worth recording is with the standard alternative. Thresholding consecutive-frame differences, the basis of shot detection, does not merely perform worse here, it has no usable operating point at all. At a threshold of 15 grey levels it fires 13 times across the annotated frames and finds none of the eight; lowering it to 5 finds all eight but among 604 firings, a precision of 0.013, and lowering it further only adds firings. There is no setting at which the layout changes separate from the noise, because the per-step signal they produce is not larger than the noise; only the accumulated drift is.
+
+\textit{Stability and cost.} Measured over the 802 annotated frames carrying pair records, at τ = 10, the table below reports per predicate how often the keyframe's verdict matches what the pipeline computes on the frame directly, alongside recall of that frame's human triplets under propagation and under per-frame computation.
 
 \begin{center}
 \small
 \begin{longtable}{lrrr}
+\caption{Stability of each predicate across viewpoints of the same scene, with recall under keyframe propagation against per-frame computation.}\\
 \hline
 Predicate & Stability & Recall (propagated) & Recall (per frame) \\
 \hline

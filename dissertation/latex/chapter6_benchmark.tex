@@ -22,6 +22,13 @@ human-label arm saturates early, replicating the source paper; (2) the auto-labe
 
 The human-label arm reaches 95\% of its best validation score by \textbf{epoch 4}, peaks at epoch 12, and then declines, showing mild overfitting on 5,421 sparse triplets. This replicates the source paper's central training observation ("all predictors reached their peak mR@100 well before the final epoch") on its own dataset with a current model, and adds the cause: sparse supervision is exhausted early. The auto-label arm is still improving at epoch 9 and peaks at epoch 18 with no decline; it also exposes the model to 213 distinct triplet types during training against the human arm's 94. (Figure: \texttt{sgg\_training\_curves.png}. The two validation series use each arm's own label source, so only their \textit{shapes} are compared, never their heights.)
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/sgg-training-curves.png}
+\caption{Validation curves for both benchmark arms, each against its own training-source labels, so only the shapes are comparable. The human arm peaks early and declines; the automatic arm does not.}
+\label{fig:sgg-training-curves}
+\end{figure}
+
 \section{Test results: predictions 2 and 3 refuted on the ranking metric}
 
 Both best checkpoints evaluated on the identical test set (210 images, human gold, groups 6--8):
@@ -29,6 +36,7 @@ Both best checkpoints evaluated on the identical test set (210 images, human gol
 \begin{center}
 \small
 \begin{longtable}{lrr}
+\caption{Benchmark test results (SGDet) for the human-trained and auto-trained arms.}\\
 \hline
 metric (test, sgdet) & human-trained & auto-trained \\
 \hline
@@ -48,6 +56,7 @@ zero-shot recall zR@100 & 0.004 & \textbf{0.157} \\
 \begin{center}
 \small
 \begin{longtable}{lrr}
+\caption{Per-predicate mean recall at 100 for both arms.}\\
 \hline
 per-predicate mR@100 & human-trained & auto-trained \\
 \hline
@@ -74,6 +83,7 @@ Two follow-up evaluations decompose the headline (same checkpoints, test slices 
 \begin{center}
 \small
 \begin{longtable}{lrr}
+\caption{Mean recall at 100 by test slice for both arms.}\\
 \hline
 test slice (mR@100) & human-trained & auto-trained \\
 \hline
@@ -100,6 +110,7 @@ Every number above comes from one training run per arm. Two of the margins are s
 \begin{center}
 \small
 \begin{longtable}{lrrrr}
+\caption{Seed replication: which differences separate across three seeds per arm.}\\
 \hline
 slice & metric & human-trained & auto-trained & separable? \\
 \hline
@@ -132,7 +143,7 @@ Second, \textbf{the zero-shot result is robust and larger than first reported.} 
 
 The same labels, the same held-out human gold, and two opposite outcomes: per-pair recall (Chapter 5) says automatic labels teach better (0.76 vs 0.30); ranked evaluation against sparse gold says the reverse. Because the labels and gold are identical across the two experiments, the flip localises in the \textbf{structure of the metric}, and decomposing it yields the chapter's real findings.
 
-\textbf{(i) Ranking dilution by true-but-unlabelled predictions.} R@K is a per-image ranking budget: only the top-K predictions count, and any prediction absent from the gold consumes budget as a miss. The auto-trained model behaves like its supervision. It predicts relations densely, and Chapter 4's audits established that such dense extras are overwhelmingly \textit{true} (sampled true precision $\approx$1.0 for lateral/proximity/depth, $\approx$0.9 for support). Against gold that annotates \textasciitilde{}10\% of pairs, those true predictions rank above the annotated ones and are scored as errors: the restricted- precision artefact of \S4.3, reproduced at benchmark level. The human-trained arm, by contrast, learned the annotators' \textit{labelling prior} (which pairs a human bothers to record), which is exactly what a ranking metric against human-selected gold rewards.
+\textbf{(i) Ranking dilution by true-but-unlabelled predictions.} R@K is a per-image ranking budget: only the top-K predictions count, and any prediction absent from the gold consumes budget as a miss. The auto-trained model behaves like its supervision. It predicts relations densely, and Chapter 4's audits established that such dense extras are overwhelmingly \textit{true} (sampled true precision $\approx$1.0 for lateral/proximity/depth, $\approx$0.9 for support). Against gold that annotates \textasciitilde{}10\% of pairs, those true predictions rank above the annotated ones and are scored as errors: the restricted-precision artefact of \S4.3, reproduced at benchmark level. The human-trained arm, by contrast, learned the annotators' \textit{labelling prior} (which pairs a human bothers to record), which is exactly what a ranking metric against human-selected gold rewards.
 
 \textbf{(ii) Convention mismatch is a shared penalty, not, as first hypothesised, a differential one.} Both arms were trained on consistent-convention front/behind (the tool's by construction; groups 0--4's by measurement), while groups 6 and 8, two thirds of the test gold, invert it (\S4.5). Re-scoring against convention-aligned gold lifts the two arms almost equally (+0.041 human, +0.035 auto; the human arm's \textit{in front of} recall jumps 0.124 $\rightarrow$ 0.386, the auto arm's 0.101 $\rightarrow$ 0.248): both models learned the consistent convention, both pay the same tax on inverted gold, and the gap between them barely moves. The initial hypothesis that the denser arm is punished \textit{harder} for its confidence is refuted by this measurement and withdrawn.
 

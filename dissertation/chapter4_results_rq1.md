@@ -632,16 +632,26 @@ the annotators recorded different subsets of the scene from frame to frame,
 and `group_0` alone contains 43 distinct object orderings
 (`eval/keyframe_propagation.py`).
 
-*Segmentation.* At τ = 10 the sequence collapses to 892 segments, a 3.0×
-reduction, and every one of the eight known layout changes is recovered
-within five frames (boundary recall 1.00). Precision against those eight is
-low by construction and not a defect: viewpoint changes within a block are
-genuine content changes, merely finer-grained than the layout changes. The
-comparison worth recording is with the standard alternative. Thresholding
-consecutive-frame differences, the basis of shot detection, finds *one*
-boundary in the entire 2,650 frames.
+*Segmentation.* At τ = 10 the full 2,650-frame sequence collapses to 892
+segments, a 3.0× reduction; over the 884 annotated frames alone it gives 331
+segments, 2.7×. Scored on the annotated portion, where the eight layout
+changes are known, every one is recovered within five frames (boundary
+recall 1.00). Precision against those eight is low by construction and not a
+defect: viewpoint changes within a block are genuine content changes, merely
+finer-grained than the layout changes.
 
-*Stability and cost.* Table 4.14 reports, per predicate, how often the
+The comparison worth recording is with the standard alternative.
+Thresholding consecutive-frame differences, the basis of shot detection,
+does not merely perform worse here, it has no usable operating point at all.
+At a threshold of 15 grey levels it fires 13 times across the annotated
+frames and finds none of the eight; lowering it to 5 finds all eight but
+among 604 firings, a precision of 0.013, and lowering it further only adds
+firings. There is no setting at which the layout changes separate from the
+noise, because the per-step signal they produce is not larger than the
+noise; only the accumulated drift is.
+
+*Stability and cost.* Measured over the 802 annotated frames carrying pair
+records, at τ = 10, the table below reports per predicate how often the
 keyframe's verdict matches what the pipeline computes on the frame directly,
 alongside recall of that frame's human triplets under propagation and under
 per-frame computation.

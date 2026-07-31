@@ -54,6 +54,7 @@ image ─ boxes+classes ─→ SAM2 masks ─→ depth map ─→ per-object geo
 \begin{center}
 \small
 \begin{longtable}{lrrr}
+\caption{Pipeline stages, the alternative rejected at each stage, and the justification.}\\
 \hline
 Stage & Choice & Rejected alternative & Justification \\
 \hline
@@ -120,7 +121,7 @@ To make the property usable rather than merely true, the contract is stated expl
 
 The images this project annotates are not independent photographs. They are consecutive frames of a continuous robot capture, and the sequence they were cut from oversamples the scene severely: across its 2,650 frames the mean optical flow between neighbours is 0.08 px, with 0.9\% of pixels moving more than one pixel. A per-frame pipeline therefore spends a full perception pass (detector, segmentation and depth) recomputing relations that have not moved. The remedy is to annotate one frame per \textit{viewpoint} rather than one per frame, which requires deciding where one viewpoint ends and the next begins.
 
-The standard tool does not apply. Shot-boundary detection thresholds the difference between consecutive frames, which presumes cuts; a robot walking through a room produces none, and consecutive-frame differencing finds exactly one boundary in the whole 2,650-frame sequence. The failure is structural rather than a matter of threshold choice: motion arriving at 0.08 px per frame is indistinguishable from sensor noise at every step, however low the bar is set, while the same motion integrated over forty frames displaces the image by 13 px.
+The standard tool does not apply. Shot-boundary detection thresholds the difference between consecutive frames, which presumes cuts, and a robot walking through a room produces none. The failure is structural rather than a matter of threshold choice, which \S4.14 verifies by sweeping the threshold: no setting separates the sequence's known content changes from its noise, because motion arriving at 0.08 px per frame is not larger than the noise at any single step, while the same motion integrated over forty frames displaces the image by 13 px. Only the accumulated drift carries the signal.
 
 \texttt{segment\_sequence} (\texttt{src/keyframes.py}) therefore measures drift from the \textit{anchor} of the current segment rather than from the preceding frame, opening a new segment when that drift exceeds a threshold τ. Gradual motion accumulates instead of being repeatedly rounded away, and a genuine cut still crosses the threshold in a single step, so one mechanism serves both regimes. Distances are mean absolute differences over 64$\times$48 mean-subtracted greyscale thumbnails; subtracting the mean discards the global exposure shifts of an auto-exposing camera, which would otherwise be the largest signal present and would fire boundaries of their own. Each segment nominates the frame closest to its mean signature, which on a moving camera is a better representative than the first frame, that one usually being mid-transition.
 
@@ -135,6 +136,7 @@ Every threshold, seed and model identifier lives in \texttt{configs/default.yaml
 \begin{center}
 \small
 \begin{longtable}{lrr}
+\caption{Summary of the design decisions, the alternatives rejected and the reasons.}\\
 \hline
 Decision & Alternative rejected & Why \\
 \hline

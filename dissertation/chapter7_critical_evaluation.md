@@ -99,7 +99,7 @@ to. Measured across
 viewpoints of the same scene, front/behind reproduces itself 0.955 of the
 time, above `on` and `under`, and holds at 0.924 under viewpoint changes
 large enough to compress the sequence 89-fold. A predicate that recovers
-0.60 of the human labels while agreeing with itself 0.96 of the time is not
+0.64 of the human labels while agreeing with itself 0.96 of the time is not
 guessing; it is applying a consistent criterion that the annotators did not
 share. Read together with A8, where quadrupling the depth model changed
 nothing, and §4.5, where two groups labelled the pair in the opposite

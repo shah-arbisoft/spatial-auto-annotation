@@ -14,12 +14,9 @@ With no local TeX installation, upload this whole folder to Overleaf
 (New Project > Upload Project) and compile there. It needs only packages
 present in a standard TeX Live.
 
-Before submitting, fill the three placeholders in main.tex:
-    [INSERT STUDENT ID]
+Before submitting, fill the one remaining placeholder in main.tex:
     [INSERT ACKNOWLEDGEMENTS...]
-    [INSERT WORD COUNT]
 
-Word count for the declaration (chapters only, excluding front matter,
-references and appendices):
-
-    python -c "import glob,pathlib; print(sum(len(pathlib.Path(f).read_text(encoding='utf-8').split()) for f in sorted(glob.glob('dissertation/chapter*.md'))))"
+The student ID is set, and the declaration's word count is computed at build
+time from the chapter sources (front matter, references and appendices
+excluded), so it cannot drift out of date the way a hand-typed figure does.

@@ -130,7 +130,59 @@ def inline(text: str) -> str:
     return re.sub(r"\x00(\d+)\x00", pop, text)
 
 
-def table(rows: list[str]) -> str:
+# Table captions, in order of appearance per source file. The template
+# requires a List of Tables, and an uncaptioned tabular never reaches it, so
+# every table needs an entry here or the list comes out empty.
+TABLES = {
+    "chapter1_introduction.md": [
+        "Mapping of the CRISP-DM phases onto the chapters and artefacts of "
+        "this project.",
+    ],
+    "chapter2_literature_review.md": [
+        "Related work assessed against the requirements of a fully-automatic "
+        "spatial-relationship annotator.",
+    ],
+    "chapter3_design.md": [
+        "Pipeline stages, the alternative rejected at each stage, and the "
+        "justification.",
+        "Summary of the design decisions, the alternatives rejected and the "
+        "reasons.",
+    ],
+    "chapter4_results_rq1.md": [
+        "Per-predicate recall of the human triplets, pooled and on held-out "
+        "annotators, against three baselines.",
+        "Precision, recall and F1 restricted to the human-annotated pairs.",
+        "For each missed human triplet, the predicates the tool emitted "
+        "instead.",
+        "Manual audit of a stratified sample of extra predictions, with "
+        "Wilson intervals.",
+        "Front/behind by annotator group: emission rate, agreement where the "
+        "tool commits, and the effect of aligning the direction convention.",
+        "Diagnosed cause of every missed human triplet, by predicate.",
+        "Stability of each predicate across viewpoints of the same scene, "
+        "with recall under keyframe propagation against per-frame "
+        "computation.",
+    ],
+    "chapter5_results_rq2.md": [
+        "Downstream recall against held-out human gold for the three label "
+        "sources.",
+    ],
+    "chapter6_benchmark.md": [
+        "Benchmark test results (SGDet) for the human-trained and "
+        "auto-trained arms.",
+        "Per-predicate mean recall at 100 for both arms.",
+        "Mean recall at 100 by test slice for both arms.",
+        "Seed replication: which differences separate across three seeds "
+        "per arm.",
+    ],
+    "appendices.md": [
+        "Commands reproducing every experiment from the cached geometry, "
+        "with run times.",
+    ],
+}
+
+
+def table(rows: list[str], caption: str = "") -> str:
     """A Markdown pipe table -> longtable (survives page breaks)."""
     cells = [[c.strip() for c in r.strip().strip("|").split("|")] for r in rows]
     cells = [c for c in cells if not all(set(x) <= set("-: ") for x in c)]
@@ -141,11 +193,16 @@ def table(rows: list[str]) -> str:
     head += [""] * (ncol - len(head))
     spec = "l" + "r" * (ncol - 1) if ncol > 2 else "l" * ncol
     out = [r"\begin{center}", r"\small",
-           r"\begin{longtable}{" + spec + "}", r"\hline",
-           " & ".join(inline(h) for h in head) + r" \\", r"\hline",
-           r"\endfirsthead", r"\hline",
-           " & ".join(inline(h) for h in head) + r" \\", r"\hline",
-           r"\endhead"]
+           r"\begin{longtable}{" + spec + "}"]
+    if caption:
+        # longtable takes its caption as the first row; this is what puts the
+        # table into \listoftables and gives it a number.
+        out.append(r"\caption{" + inline(caption) + r"}\\")
+    out += [r"\hline",
+            " & ".join(inline(h) for h in head) + r" \\", r"\hline",
+            r"\endfirsthead", r"\hline",
+            " & ".join(inline(h) for h in head) + r" \\", r"\hline",
+            r"\endhead"]
     for r in body:
         r += [""] * (ncol - len(r))
         out.append(" & ".join(inline(c) for c in r[:ncol]) + r" \\")
@@ -153,21 +210,27 @@ def table(rows: list[str]) -> str:
     return "\n".join(out)
 
 
-def convert(md: str, figures: list[tuple[str, str, str]]) -> str:
+def convert(md: str, figures: list[tuple[str, str, str]],
+            captions: list[str] | None = None) -> str:
     """Markdown chapter body -> LaTeX (chapter heading handled by main.tex)."""
     lines = md.splitlines()
     out: list[str] = []
     i, in_code, buf_tbl, list_stack = 0, False, [], []
+    caps = list(captions or [])
+    n_tables = 0
+    placed_figs: set[str] = set()
 
     def close_lists():
         while list_stack:
             out.append(r"\end{" + list_stack.pop() + "}")
 
     def flush_table():
-        nonlocal buf_tbl
+        nonlocal buf_tbl, n_tables
         if buf_tbl:
             close_lists()
-            out.append(table(buf_tbl))
+            cap = caps[n_tables] if n_tables < len(caps) else ""
+            out.append(table(buf_tbl, cap))
+            n_tables += 1
             buf_tbl = []
 
     while i < len(lines):
@@ -200,10 +263,14 @@ def convert(md: str, figures: list[tuple[str, str, str]]) -> str:
             depth = len(m.group(1))
             cmd = {2: "section", 3: "subsection", 4: "subsubsection"}[min(depth, 4)]
             title = m.group(2).strip()
-            # any figure anchored to this heading goes just before it
+            # any figure anchored to this heading goes just before it.
+            # Prefix match, not equality: section titles get reworded, and an
+            # anchor that silently stops matching used to drop the figure
+            # from the PDF without a word (it dropped two).
             for fname, caption, anchor in figures:
-                if anchor and line.strip() == anchor.strip():
+                if anchor and line.strip().startswith(anchor.strip()):
                     out.append(figure_block(fname, caption))
+                    placed_figs.add(fname)
             out.append("\\" + cmd + "{" + inline(title) + "}")
             i += 1
             continue
@@ -253,6 +320,14 @@ def convert(md: str, figures: list[tuple[str, str, str]]) -> str:
     close_lists()
     if in_code:
         out.append(r"\end{verbatim}")
+
+    # A figure declared for this chapter whose anchor never matched would
+    # otherwise vanish from the PDF in silence. Append it and say so loudly.
+    for fname, caption, _anchor in figures:
+        if fname not in placed_figs:
+            print(f"    WARNING: no anchor matched for {fname}; "
+                  f"appended at the end of the chapter")
+            out.append(figure_block(fname, caption))
     return "\n".join(out)
 
 
@@ -300,10 +375,15 @@ def main():
         md = (SRC / md_name).read_text(encoding="utf-8")
         figs = [(f, c, a) for f, (owner, c, a) in FIGURES.items()
                 if owner == md_name and (FIGDIR / f).exists()]
-        tex = convert(md, figs)
+        tex = convert(md, figs, TABLES.get(md_name))
         placed = sum(1 for f, _c, a in figs if a and a in md)
+        n_tab = tex.count(r"\begin{longtable}")
+        n_cap = tex.count(r"\caption{") - sum(1 for f, _c, a in figs
+                                              if (FIGDIR / f).exists())
         (out / (Path(md_name).stem + ".tex")).write_text(tex, encoding="utf-8")
-        print(f"  {md_name:34s} -> {Path(md_name).stem}.tex  ({placed} figures)")
+        note = "" if n_cap == n_tab else f"  WARNING: {n_tab - n_cap} UNCAPTIONED"
+        print(f"  {md_name:34s} -> {Path(md_name).stem}.tex  "
+              f"({placed} figures, {n_tab} tables){note}")
 
     (out / "abstract.tex").write_text(
         convert((SRC / "abstract.md").read_text(encoding="utf-8"), []), encoding="utf-8")
@@ -313,9 +393,15 @@ def main():
     app_md = (SRC / "appendices.md").read_text(encoding="utf-8")
     parts = re.split(r"(?m)^##\s+Appendix\s+[A-Z]\s*[:.]?\s*(.+)$", app_md)
     chunks = []
+    app_caps = list(TABLES.get("appendices.md", []))
     for title, body in zip(parts[1::2], parts[2::2]):
+        # captions are consumed in document order across the appendices
+        n_here = sum(1 for ln in body.splitlines() if ln.strip().startswith("|"))
+        take = app_caps[:1] if n_here else []
+        if n_here:
+            app_caps = app_caps[1:]
         chunks.append("\\chapter{" + inline(title.strip()) + "}\n"
-                      + convert(body, []))
+                      + convert(body, [], take))
     (out / "appendices.tex").write_text(
         "\n\n".join(chunks) if chunks else convert(app_md, []), encoding="utf-8")
     print(f"  appendices.md{'':21s} -> appendices.tex  ({len(chunks)} appendices)")
@@ -323,9 +409,18 @@ def main():
         build_references((SRC / "references.md").read_text(encoding="utf-8")),
         encoding="utf-8")
 
-    (out / "main.tex").write_text(MAIN, encoding="utf-8")
+    # The declaration's word count is computed here rather than typed in, so
+    # it cannot drift as chapters are edited. Chapters plus abstract; front
+    # matter, references and appendices excluded, and the editorial ">" notes
+    # at the top of each chapter with them.
+    words = len((SRC / "abstract.md").read_text(encoding="utf-8").split())
+    for md_name, _title in CHAPTERS:
+        body = (SRC / md_name).read_text(encoding="utf-8")
+        words += len(re.sub(r"(?m)^>.*$", "", body).split())
+    (out / "main.tex").write_text(
+        MAIN.replace("__WORDCOUNT__", f"{words:,}"), encoding="utf-8")
     (out / "README.txt").write_text(README, encoding="utf-8")
-    print(f"\nwrote {out}")
+    print(f"\nwrote {out}  (declared word count {words:,})")
     print("compile:  cd dissertation/latex && latexmk -pdf main.tex")
     print("or upload the folder to Overleaf and compile there.")
 
@@ -379,7 +474,7 @@ MAIN = r"""% GENERATED by scripts/build_latex.py -- do not edit by hand.
     {\large Academic Year 2025--2026}\\[2cm]
 
     {\large A project report submitted by: \textbf{Shah Hussain}}\\[0.3cm]
-    {\large Student ID: \textbf{[INSERT STUDENT ID]}}\\[0.5cm]
+    {\large Student ID: \textbf{6949963}}\\[0.5cm]
     {\large A project supervised by: \textbf{Dr Peng Wang}}\\[1.5cm]
 
     {\large A report submitted in partial fulfilment of the requirement\\
@@ -438,7 +533,7 @@ will be penalised.
 \noindent Signature: \rule{6cm}{0.4pt} \hfill Date: \rule{4cm}{0.4pt}
 
 \vspace{1cm}
-\noindent \textbf{Total Number of Words:} [INSERT WORD COUNT]
+\noindent \textbf{Total Number of Words:} __WORDCOUNT__
 
 \cleardoublepage
 
@@ -531,15 +626,12 @@ With no local TeX installation, upload this whole folder to Overleaf
 (New Project > Upload Project) and compile there. It needs only packages
 present in a standard TeX Live.
 
-Before submitting, fill the three placeholders in main.tex:
-    [INSERT STUDENT ID]
+Before submitting, fill the one remaining placeholder in main.tex:
     [INSERT ACKNOWLEDGEMENTS...]
-    [INSERT WORD COUNT]
 
-Word count for the declaration (chapters only, excluding front matter,
-references and appendices):
-
-    python -c "import glob,pathlib; print(sum(len(pathlib.Path(f).read_text(encoding='utf-8').split()) for f in sorted(glob.glob('dissertation/chapter*.md'))))"
+The student ID is set, and the declaration's word count is computed at build
+time from the chapter sources (front matter, references and appendices
+excluded), so it cannot drift out of date the way a hand-typed figure does.
 """
 
 
