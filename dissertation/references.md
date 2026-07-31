@@ -24,10 +24,10 @@ Chang, X., Ren, P., Xu, P., Li, W., Yi, X. and Hauptmann, A. (2023) 'A
 comprehensive survey of scene graphs: generation and application', *IEEE
 Transactions on Pattern Analysis and Machine Intelligence*, 45(1), pp. 1-26.
 
-Chen, B., Xu, Z., Kirmani, S., Ichter, B., Driess, D., Florence, P., Sadigh, D.,
-Guibas, L. and Xia, F. (2024) 'SpatialVLM: endowing vision-language models with
-spatial reasoning capabilities', *Proceedings of the IEEE/CVF Conference on
-Computer Vision and Pattern Recognition (CVPR)*. Available at:
+Chen, B., Xu, Z., Kirmani, S., Ichter, B., Driess, D., Florence, P., Sadigh,
+D., Guibas, L. and Xia, F. (2024) 'SpatialVLM: endowing vision-language
+models with spatial reasoning capabilities', *Proceedings of the IEEE/CVF
+Conference on Computer Vision and Pattern Recognition (CVPR)*. Available at:
 https://arxiv.org/abs/2401.12168
 
 Cheng, A.-C. et al. (2024) 'SpatialRGPT: grounded spatial reasoning in
@@ -71,9 +71,10 @@ Lee, D.-H. (2013) 'Pseudo-label: the simple and efficient semi-supervised
 learning method for deep neural networks', *ICML Workshop on Challenges in
 Representation Learning*.
 
-Liu, S. et al. (2024) 'Grounding DINO: marrying DINO with grounded pre-training
-for open-set object detection', *Proceedings of the European Conference on
-Computer Vision (ECCV)*. Available at: https://arxiv.org/abs/2303.05499
+Liu, S. et al. (2024) 'Grounding DINO: marrying DINO with grounded
+pre-training for open-set object detection', *Proceedings of the European
+Conference on Computer Vision (ECCV)*. Available at:
+https://arxiv.org/abs/2303.05499
 
 Lu, C., Krishna, R., Bernstein, M. and Fei-Fei, L. (2016) 'Visual
 relationship detection with language priors', *Proceedings of the European

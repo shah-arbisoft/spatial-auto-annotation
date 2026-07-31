@@ -26,8 +26,9 @@ co-location, mask contact), recall is 0.88/0.81 with audited precision around
 0.9, comfortably comparable. For the depth pair the cascade of relative depth
 and the ground-plane fallback reaches 0.64/0.66 pooled (0.84 once the two
 inverted-convention groups are aligned), and where the tool commits it agrees
-with every consistently-labelled annotator 95–100% of the time; the remaining
-shortfall is calibrated abstention plus that inverted direction convention.
+at 0.95–1.00 with six of the seven same-convention annotators, the seventh
+being the dataset's smallest sample at 65 triplets; the remaining shortfall
+is calibrated abstention plus that inverted direction convention.
 "Comparable to human quality" understates that case: on front/behind the tool
 is more consistent than the human process it is measured against.
 
@@ -194,26 +195,27 @@ The pipeline borrows its skeleton from the SpatialVLM family (Chen et al.,
 2024): lift perception to geometry, derive spatial facts deterministically.
 The idea is older still, since CLEVR (Johnson et al., 2017) obtained exact
 relations from a renderer; what neither can supply is the recovery of
-geometry from real photographs, which is where the difficulty of this project
-sits. What it adds is not the skeleton but the parts the lineage leaves
-implicit. SpatialVLM and VQASynth (Remyx AI, 2024) generate *training text* at
-internet scale and never confront a fixed predicate vocabulary with human
-ground truth; SpatialRGPT (Cheng et al., 2024) curates region representations
-with depth but validates downstream, not against annotators. This project's
-contributions to the recipe are: **annotator-aware
+geometry from real photographs, which is where the difficulty of this
+project sits. What it adds is not the skeleton but the parts the lineage
+leaves implicit. SpatialVLM and VQASynth (Remyx AI, 2024) generate *training
+text* at internet scale and never confront a fixed predicate vocabulary with
+human ground truth; SpatialRGPT (Cheng et al., 2024) curates region
+representations with depth but validates downstream, not against annotators.
+This project's contributions to the recipe are: **annotator-aware
 calibration** (fit thresholds only on annotators who used a label; hold out
-annotators, not just images), **contact as the support signature** (mask-bottom
-adjacency, which the box-geometry lineage does not use and which repaired both
-error directions at once, and which parallels the argument for pixel-accurate
-grounding made by panoptic scene-graph generation (Yang, J. et al., 2022)),
-and **loss attribution as methodology** (every miss
-diagnosed to a cause; every gap decomposed into abstention vs annotator vs
-error, detection vs relations). RoboSpatial's reference-frame taxonomy (Song
-et al., 2025), cited in the design chapter to justify camera-frame laterality,
-turned out to be the right lens for a *measured* phenomenon: the front/behind
-convention inversion is a reference-frame disagreement inside a single
-dataset's annotation team, and therefore an instance of the frame-dependence
-of spatial language that Landau and Jackendoff (1993) describe.
+annotators, not just images), **contact as the support signature**
+(mask-bottom adjacency, which the box-geometry lineage does not use and
+which repaired both error directions at once, and which parallels the
+argument for pixel-accurate grounding made by panoptic scene-graph
+generation (Yang, J. et al., 2022)), and **loss attribution as methodology**
+(every miss diagnosed to a cause; every gap decomposed into abstention vs
+annotator vs error, detection vs relations). RoboSpatial's reference-frame
+taxonomy (Song et al., 2025), cited in the design chapter to justify
+camera-frame laterality, turned out to be the right lens for a *measured*
+phenomenon: the front/behind convention inversion is a reference-frame
+disagreement inside a single dataset's annotation team, and therefore an
+instance of the frame-dependence of spatial language that Landau and
+Jackendoff (1993) describe.
 
 Two results connect this project to literatures outside its immediate
 lineage. The benchmark finding of Chapter 6 is a specific case of the general

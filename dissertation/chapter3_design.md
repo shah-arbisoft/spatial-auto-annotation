@@ -51,11 +51,11 @@ Appendix A.
 
 ## 3.2 Problem analysis
 
-The task is to produce, from a raw robot-acquired RGB image, the same artefact a
-human annotator produces with SGDET-Annotate: a scene graph over the dataset's
-six object classes with the seven spatial predicates (*on, under, to the left
-of, to the right of, in front of, behind, near*) exported in Visual Genome
-JSON, YOLO txt and h5. Four requirements shape the design:
+The task is to produce, from a raw robot-acquired RGB image, the same
+artefact a human annotator produces with SGDET-Annotate: a scene graph over
+the dataset's six object classes with the seven spatial predicates (*on,
+under, to the left of, to the right of, in front of, behind, near*) exported
+in Visual Genome JSON, YOLO txt and h5. Four requirements shape the design:
 
 1. **No human decides any label.** The point is to remove the per-image human
    bottleneck; a rule may abstain and flag, but it may not ask.
@@ -68,8 +68,8 @@ JSON, YOLO txt and h5. Four requirements shape the design:
 4. **Reproducibility.** Every threshold in one config, every run seeded, and
    rule changes re-evaluable without re-running perception.
 
-Three properties of the dataset, established in Chapter 2 and verified directly
-on the released files, drive specific design responses:
+Three properties of the dataset, established in Chapter 2 and verified
+directly on the released files, drive specific design responses:
 
 - **Monocular RGB only.** No metric depth exists, so depth must be estimated,
   and estimated depth is *relative and per-image* (Yang, L. et al., 2024). Design
@@ -97,14 +97,14 @@ spatial: each is decidable from positions, extents and depth order. The
 perception models used (SAM2, Depth Anything) only *measure* where things are;
 no learned component decides a relationship.
 
-**Evaluation setting.** The relation stage is evaluated with ground-truth boxes
-and classes (the SGG literature's *PredCls* setting, §2.7). This isolates the
-contribution, since the paper already establishes detection at 0.93 mAP@50 with
-YOLOv10m and re-deriving that number adds nothing, and it makes object
-indices line up one-to-one with the human relationship records, so no fragile
-box-matching stage sits inside the RQ1 comparison. Detector-in-the-loop
-operation (YOLOv10m vs. Grounding DINO) is retained as an ablation and as the
-deployment mode for genuinely new images.
+**Evaluation setting.** The relation stage is evaluated with ground-truth
+boxes and classes (the SGG literature's *PredCls* setting, §2.7). This
+isolates the contribution, since the paper already establishes detection at
+0.93 mAP@50 with YOLOv10m and re-deriving that number adds nothing, and it
+makes object indices line up one-to-one with the human relationship records,
+so no fragile box-matching stage sits inside the RQ1 comparison.
+Detector-in-the-loop operation (YOLOv10m vs. Grounding DINO) is retained as
+an ablation and as the deployment mode for genuinely new images.
 
 ## 3.4 Pipeline architecture
 
@@ -127,11 +127,11 @@ image ─ boxes+classes ─→ SAM2 masks ─→ depth map ─→ per-object geo
 | Writers | byte-compatible VG JSON / YOLO / h5 | own schema + converter | drop-in comparability (requirement 2); verified against real exports |
 
 All coordinates are normalised by image size so thresholds transfer across
-resolutions; depth is inverted to "smaller is nearer" and min–max normalised per
-image (the HF model emits larger = nearer; the sign was fixed after front/behind
-agreement rose from ~26% to ~74%). Images are loaded through an EXIF-aware helper
-so the 180°-rotated captures are made upright before any box, mask or depth is
-read; the boxes are stored in the upright frame.
+resolutions; depth is inverted to "smaller is nearer" and min–max normalised
+per image (the HF model emits larger = nearer; the sign was fixed after
+front/behind agreement rose from ~26% to ~74%). Images are loaded through an
+EXIF-aware helper so the 180°-rotated captures are made upright before any
+box, mask or depth is read; the boxes are stored in the upright frame.
 
 ## 3.5 The seven rules
 
@@ -199,9 +199,10 @@ The writers reproduce the SGDET-Annotate structure exactly: centre-form
 `attribute` arrays, `relationships` as subject–object index pairs with a
 parallel `predicates` ID array, and the same six-dataset h5 layout with
 int64 attributes. Verified against the real files: a load→write round trip
-reproduces `boxes_1024` and `labels` with zero error, and the h5 matches a real
-export key-for-key, dtype-for-dtype *(measured)*. Auto-labels are therefore
-drop-in replacements for human labels, which is the property RQ2 depends on.
+reproduces `boxes_1024` and `labels` with zero error, and the h5 matches a
+real export key-for-key, dtype-for-dtype *(measured)*. Auto-labels are
+therefore drop-in replacements for human labels, which is the property RQ2
+depends on.
 
 ## 3.8 Calibrating `near`: an annotator-aware protocol
 
@@ -221,13 +222,13 @@ near-using annotator (group 8), who contributed nothing to the fit.
 Results *(measured)*: fitted **T = 1.372** (gap/mean-size units); held-out
 recall **1.000**, meaning every pair the unseen annotator called near lies
 within the threshold, with per-annotator precision 0.41 / 0.63 / 0.16 at the
-same T. Since recall is 1.0 for all three annotators simultaneously, the human
-labels are directionally consistent with a single threshold; what varies (by
-~4×) is how exhaustively each annotator applied the label. The fitted threshold
-applies one definition uniformly, which is exactly the "spatial thresholds for
-near" the source paper's future work requests. Whether the tool's extra near
-pairs (the precision gap) are genuinely near is checked by a manual audit in
-the evaluation chapter rather than assumed.
+same T. Since recall is 1.0 for all three annotators simultaneously, the
+human labels are directionally consistent with a single threshold; what
+varies (by ~4×) is how exhaustively each annotator applied the label. The
+fitted threshold applies one definition uniformly, which is exactly the
+"spatial thresholds for near" the source paper's future work requests.
+Whether the tool's extra near pairs (the precision gap) are genuinely near
+is checked by a manual audit in the evaluation chapter rather than assumed.
 
 ## 3.9 Modularity: the detector as the replaceable part
 

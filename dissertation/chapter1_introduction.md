@@ -5,35 +5,36 @@
 
 ## 1.1 Background
 
-For a robot to act usefully in a human environment it must understand not just
-*what* objects are present but *how they are spatially related*: that a cup is
-*on* a box, a book is *to the left of* a bottle, a person is *in front of* a
-shelf. These spatial relationships are the substrate of scene understanding,
-manipulation planning, and instruction following. The structured representation
-that captures them is a **scene graph**: objects as nodes, spatial relationships
-as labelled edges.
+For a robot to act usefully in a human environment it must understand not
+just *what* objects are present but *how they are spatially related*: that a
+cup is *on* a box, a book is *to the left of* a bottle, a person is *in
+front of* a shelf. These spatial relationships are the substrate of scene
+understanding, manipulation planning, and instruction following. The
+structured representation that captures them is a **scene graph**: objects
+as nodes, spatial relationships as labelled edges.
 
 Learning to predict such relationships requires training data in which the
 relationships are already labelled. Wang et al. (2025) introduced a spatial
-relationship aware dataset captured by a Boston Dynamics Spot robot: nearly a
-thousand indoor images (approximately 900 after cleaning; 838 annotated in the
-released subset), annotated with seven spatial predicates: *behind, in front of,
-on, to the left of, to the right of, under, near*. Every relationship in it was
-labelled by hand. Nine trained annotators, working independently in batches of
-100, drew every bounding box, assigned every class, and clicked subject then
-object to set each relationship, using a manual tool (SGDET-Annotate), with a
-majority-vote cleaning pass.
+relationship aware dataset captured by a Boston Dynamics Spot robot: nearly
+a thousand indoor images (approximately 900 after cleaning; 838 annotated in
+the released subset), annotated with seven spatial predicates: *behind, in
+front of, on, to the left of, to the right of, under, near*. Every
+relationship in it was labelled by hand. Nine trained annotators, working
+independently in batches of 100, drew every bounding box, assigned every
+class, and clicked subject then object to set each relationship, using a
+manual tool (SGDET-Annotate), with a majority-vote cleaning pass.
 
 ### 1.1.1 The annotation bottleneck
 
-Manual annotation is the bottleneck. It is slow, expensive, and does not scale,
-which keeps the dataset small and limits what models trained on it can learn.
-The dataset's authors themselves report that training saturates early because of
-limited diversity, that the *near* predicate was inconsistent between annotators,
-and that future work should "augment under-represented relations" and adopt
-"spatial thresholds for near." Crucially, **no automatic annotator exists for
-this dataset**. SGDET-Annotate only accelerates manual labelling; a human still
-decides every label.
+Manual annotation is the bottleneck. It is slow, expensive, and does not
+scale, which keeps the dataset small and limits what models trained on it
+can learn. The dataset's authors themselves report that training saturates
+early because of limited diversity, that the *near* predicate was
+inconsistent between annotators, and that future work should "augment
+under-represented relations" and adopt "spatial thresholds for near."
+Crucially, **no automatic annotator exists for this dataset**.
+SGDET-Annotate only accelerates manual labelling; a human still decides
+every label.
 
 The cost is structural rather than incidental, and it grows faster than the
 data does. Objects in an image can be related pairwise, so an image holding
@@ -61,29 +62,30 @@ annotators, because both scale with the number of humans involved.
 
 ## 1.2 Research aim and objectives
 
-This project removes the human from the labelling loop. The seven predicates are
-*spatial*, and spatial relationships are *computable from geometry*. Given a raw
-RGB image, the proposed pipeline detects objects, segments them, estimates
-monocular depth, lifts each object to a simple 3D position, and then **computes**
-each predicate for every ordered pair of objects from explicit geometric rules.
-The output is a scene graph in the dataset's own formats (Visual Genome JSON,
-YOLO txt, h5).
+This project removes the human from the labelling loop. The seven predicates
+are *spatial*, and spatial relationships are *computable from geometry*.
+Given a raw RGB image, the proposed pipeline detects objects, segments them,
+estimates monocular depth, lifts each object to a simple 3D position, and
+then **computes** each predicate for every ordered pair of objects from
+explicit geometric rules. The output is a scene graph in the dataset's own
+formats (Visual Genome JSON, YOLO txt, h5).
 
 A distinction at the heart of this work must be stated plainly. Scene-graph
 generation (SGG) models such as REACT++ *predict* relationships from learned
-visual patterns; they exist only because humans first labelled their training
-data. This pipeline instead *computes* relationships from measured geometry, with
-no human, and runs *before* any learned relation model. It is therefore the
-**supplier** of the labelled data such models consume, not a competitor to them.
-The perception components used (detector, segmentation, depth) only *measure*
-where things are and how far away; a deterministic rule decides the relationship.
-This is valid precisely because the predicates are spatial.
+visual patterns; they exist only because humans first labelled their
+training data. This pipeline instead *computes* relationships from measured
+geometry, with no human, and runs *before* any learned relation model. It is
+therefore the **supplier** of the labelled data such models consume, not a
+competitor to them. The perception components used (detector, segmentation,
+depth) only *measure* where things are and how far away; a deterministic
+rule decides the relationship. This is valid precisely because the
+predicates are spatial.
 
-The one predicate the authors found unreliable, *near*, is handled by fitting a
-single proximity threshold (a size-relative gap between the two objects) to
-the human labels and reporting it. A fixed, data-fitted threshold is by
-construction more self-consistent than nine separate human judgements, directly
-addressing the inconsistency the source paper flagged.
+The one predicate the authors found unreliable, *near*, is handled by
+fitting a single proximity threshold (a size-relative gap between the two
+objects) to the human labels and reporting it. A fixed, data-fitted
+threshold is by construction more self-consistent than nine separate human
+judgements, directly addressing the inconsistency the source paper flagged.
 
 ### 1.2.1 Research questions and objectives
 
@@ -94,7 +96,8 @@ addressing the inconsistency the source paper flagged.
   relation-prediction model as effectively as human labels are? Measured with a
   controlled lightweight classifier trained once on each label source.
 
-RQ1 asks whether the labels are *accurate*; RQ2 asks whether they are *useful*.
+RQ1 asks whether the labels are *accurate*; RQ2 asks whether they are
+*useful*.
 
 The research questions decompose into five verifiable objectives:
 
@@ -192,13 +195,14 @@ three iterations of increasing scope in the CRISP-DM sense: Chapter 4
 presents the fidelity study (RQ1), its ablations, the independent validation
 of its precision estimates, and two measurements that leave the annotated
 gold behind: whether the labels survive the camera moving, and what the
-pipeline does on robot frames nobody has labelled; Chapter 5 the controlled downstream
-study (RQ2), including a self-training arm that tests the standard rival
-remedy for scarce labels; and Chapter 6 the direct benchmark test, in which
-the source paper's own SGG model is trained on each label source and judged
-against three pre-registered predictions. Chapter 7 is a critical evaluation
-tying all three iterations to causes and to prior work. Chapter 8 assesses the
-legal, social, ethical and professional dimensions of automating annotation.
-Chapter 9 concludes: it reports the objectives against their evidence, states
-the contributions, turns each limitation into the experiment that would
-resolve it, and reflects on how the project was actually conducted.
+pipeline does on robot frames nobody has labelled; Chapter 5 the controlled
+downstream study (RQ2), including a self-training arm that tests the
+standard rival remedy for scarce labels; and Chapter 6 the direct benchmark
+test, in which the source paper's own SGG model is trained on each label
+source and judged against three pre-registered predictions. Chapter 7 is a
+critical evaluation tying all three iterations to causes and to prior work.
+Chapter 8 assesses the legal, social, ethical and professional dimensions of
+automating annotation. Chapter 9 concludes: it reports the objectives
+against their evidence, states the contributions, turns each limitation into
+the experiment that would resolve it, and reflects on how the project was
+actually conducted.

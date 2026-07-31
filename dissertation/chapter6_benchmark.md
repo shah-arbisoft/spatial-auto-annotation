@@ -159,10 +159,10 @@ Chapter 4's audits established that such dense extras are overwhelmingly
 *true* (sampled true precision ≈1.0 for lateral/proximity/depth, ≈0.9 for
 support). Against gold that annotates ~10% of pairs, those true predictions
 rank above the annotated ones and are scored as errors: the
-restricted-precision artefact of §4.3, reproduced at benchmark level. The human-trained
-arm, by contrast, learned the annotators' *labelling prior* (which pairs a
-human bothers to record), which is exactly what a ranking metric against
-human-selected gold rewards.
+restricted-precision artefact of §4.3, reproduced at benchmark level. The
+human-trained arm, by contrast, learned the annotators' *labelling prior*
+(which pairs a human bothers to record), which is exactly what a ranking
+metric against human-selected gold rewards.
 
 **(ii) Convention mismatch is a shared penalty, not, as first
 hypothesised, a differential one.** Both arms were trained on

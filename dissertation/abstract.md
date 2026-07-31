@@ -21,9 +21,9 @@ match or exceed the human process on five of seven predicates (0.85 mean
 recall, 0.76 on held-out annotators; audited precision ≈ 1.0 for the lateral
 and proximity predicates and ≈ 0.9 for support). The hardest pair, in front
 of/behind, is decided by a two-stage cascade of relative depth and a
-ground-plane projection cue, and diagnosing every remaining disagreement attributes
-the residual gap to measured properties of the human annotation itself,
-including two annotator groups that labelled the pair with opposite
+ground-plane projection cue, and diagnosing every remaining disagreement
+attributes the residual gap to measured properties of the human annotation
+itself, including two annotator groups that labelled the pair with opposite
 conventions, rather than to tool error (~7% of misses). Because the images
 are consecutive frames of one robot capture, the labels can also be checked
 against themselves without ground truth: across viewpoints of the same scene

@@ -48,9 +48,10 @@ audited precision ≈ 1.0), and `near` is solved outright, resolving the one
 predicate the source paper reports as failing for every model it
 benchmarked. The depth pair reaches 0.64/0.66 pooled and 0.84 once two
 annotator groups' inverted conventions are accounted for; where the tool
-commits it agrees with every consistently-labelled annotator 95 to 100% of
-the time. The residual limit is monocular ambiguity, which ablation A8 shows
-a four-times-larger depth model does not fix.
+commits it agrees at 0.95 to 1.00 with six of the seven same-convention
+annotators, the seventh being the smallest sample in the dataset. The
+residual limit is monocular ambiguity, which ablation A8 shows a
+four-times-larger depth model does not fix.
 
 **RQ2, utility.** Yes, and by a wide margin at this dataset's annotation
 scale. The auto-trained classifier reaches 0.76 mean recall against held-out

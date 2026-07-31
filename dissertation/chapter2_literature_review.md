@@ -25,21 +25,22 @@ work against it.
 
 ## 2.1 Scene graphs and spatial relationships in robotics
 
-A robot acting in a human environment must represent not only *what* objects are
-present but *how they are spatially arranged*. The structured representation for
-this is the **scene graph**: objects as nodes and pairwise relationships as
-labelled, directed edges (subject → predicate → object). Spatial predicates
-(*on*, *under*, *left/right of*, *in front of / behind*, *near*) are the edges
-that matter for manipulation, navigation and instruction following, because they
-encode the geometry an agent must respect to act. A planner told only "cube,
-book, table" cannot decide what to move first; a planner told "the cube is on
-the book" can. The pattern is general: language-driven robot planners ground
-their instructions in a structured account of scene state (Ahn et al., 2022),
-and scene graphs extended to 3D have been proposed as exactly that unifying
-structure, tying semantics, space and camera into one queryable
-representation (Armeni et al., 2019). This review concentrates on how such
-spatial edges are **produced**: by hand, by learned prediction, or, as this
-project argues, by computation from measured geometry.
+A robot acting in a human environment must represent not only *what* objects
+are present but *how they are spatially arranged*. The structured
+representation for this is the **scene graph**: objects as nodes and
+pairwise relationships as labelled, directed edges (subject → predicate →
+object). Spatial predicates (*on*, *under*, *left/right of*, *in front of /
+behind*, *near*) are the edges that matter for manipulation, navigation and
+instruction following, because they encode the geometry an agent must
+respect to act. A planner told only "cube, book, table" cannot decide what
+to move first; a planner told "the cube is on the book" can. The pattern is
+general: language-driven robot planners ground their instructions in a
+structured account of scene state (Ahn et al., 2022), and scene graphs
+extended to 3D have been proposed as exactly that unifying structure, tying
+semantics, space and camera into one queryable representation (Armeni et
+al., 2019). This review concentrates on how such spatial edges are
+**produced**: by hand, by learned prediction, or, as this project argues, by
+computation from measured geometry.
 
 ## 2.2 The source dataset and its annotation bottleneck
 
@@ -61,38 +62,39 @@ the paper:
   ≈0.92 precision, 0.90 recall and **0.93 mAP@50** (mAP@50-95 ≈0.68).
 
 Three limitations the authors themselves flag motivate this project. First,
-**early saturation**: "all predictors reached their peak mR@100 well before the
-final epoch," which they attribute to the fact that "the dataset's limited
-diversity exhausts relational learning capacity early." Second, the **`near`
-predicate is unreliable**: they report "inconsistencies, particularly with the
-'near' predicate," and it "remains challenging for all models (0.2247–0.2494)."
-Third, their future-work prescription is explicit: "augment under-represented
-relations while enforcing clear annotation guidelines (e.g., spatial thresholds
-for 'near')."
+**early saturation**: "all predictors reached their peak mR@100 well before
+the final epoch," which they attribute to the fact that "the dataset's
+limited diversity exhausts relational learning capacity early." Second, the
+**`near` predicate is unreliable**: they report "inconsistencies,
+particularly with the 'near' predicate," and it "remains challenging for all
+models (0.2247–0.2494)." Third, their future-work prescription is explicit:
+"augment under-represented relations while enforcing clear annotation
+guidelines (e.g., spatial thresholds for 'near')."
 
-The common cause is the **manual annotation bottleneck**. SGDET-Annotate only
-*accelerates* human labelling (a human still decides every edge), so the dataset
-cannot grow cheaply, diversity stays low, and inter-annotator disagreement
-(worst on `near`) is baked in. **No automatic annotator exists for this dataset.**
-This is the gap the project fills, and the fitted `near` threshold is a direct,
-data-driven realisation of the authors' own "spatial thresholds for near."
+The common cause is the **manual annotation bottleneck**. SGDET-Annotate
+only *accelerates* human labelling (a human still decides every edge), so
+the dataset cannot grow cheaply, diversity stays low, and inter-annotator
+disagreement (worst on `near`) is baked in. **No automatic annotator exists
+for this dataset.** This is the gap the project fills, and the fitted `near`
+threshold is a direct, data-driven realisation of the authors' own "spatial
+thresholds for near."
 
 ## 2.3 Label quality: weak supervision and annotator disagreement
 
-The project's premise, replacing scarce human labels with dense computed ones,
-has an established name: **weak supervision**. **Snorkel** (Ratner et al.,
-2017) formalised *data programming*: instead of labelling examples, experts
-write labelling functions (heuristics, rules, distant supervision) whose
-noisy, overlapping votes are combined into training labels, trading per-label
-human authority for coverage and consistency. Its deployments repeatedly
-matched or beat hand-labelled baselines wherever the labelled set, not the
-model, was the bottleneck. This project's geometric rules are labelling
-functions in precisely that sense: deterministic, auditable and dense, with two
-departures from the Snorkel setting. Measured geometry gives near-exact rather
-than noisy votes for most predicates (the audit estimates true precision ≈ 1.0
-for five of seven), so no probabilistic label aggregation is needed; and the
-computed labels are *validated against* the human labels they replace (RQ1)
-rather than assumed comparable.
+The project's premise, replacing scarce human labels with dense computed
+ones, has an established name: **weak supervision**. **Snorkel** (Ratner et
+al., 2017) formalised *data programming*: instead of labelling examples,
+experts write labelling functions (heuristics, rules, distant supervision)
+whose noisy, overlapping votes are combined into training labels, trading
+per-label human authority for coverage and consistency. Its deployments
+repeatedly matched or beat hand-labelled baselines wherever the labelled
+set, not the model, was the bottleneck. This project's geometric rules are
+labelling functions in precisely that sense: deterministic, auditable and
+dense, with two departures from the Snorkel setting. Measured geometry gives
+near-exact rather than noisy votes for most predicates (the audit estimates
+true precision ≈ 1.0 for five of seven), so no probabilistic label
+aggregation is needed; and the computed labels are *validated against* the
+human labels they replace (RQ1) rather than assumed comparable.
 
 The complementary literature dismantles the premise that human annotation is a
 single reliable gold standard. **Uma et al.'s (2021) survey of learning from
@@ -331,31 +333,32 @@ component actually contributes.
 
 ## 2.7 Learned scene-graph generation (the consumer of our output)
 
-Scene-graph generation (SGG) models **predict** relationships from learned visual
-patterns. Visual relationship detection as a task predates the scene-graph
-framing (Lu et al., 2016, whose language priors already leaned on label
-statistics rather than geometry), but the field's shape was set by
+Scene-graph generation (SGG) models **predict** relationships from learned
+visual patterns. Visual relationship detection as a task predates the
+scene-graph framing (Lu et al., 2016, whose language priors already leaned
+on label statistics rather than geometry), but the field's shape was set by
 **Visual Genome** (Krishna et al., 2017), 108k images with crowdsourced
 relationship triplets, whose JSON format this dataset (and this project's
 output writer) inherits, and by the model lineage benchmarked on it; Chang
 et al. (2023) survey that lineage and identify annotation cost and label
 bias as its two persistent constraints, which is this project's premise
-stated from the consumer's side. **Neural Motifs** (Zellers et al., 2018) demonstrated
-that global context and label statistics dominate relation prediction: their
-frequency baseline (predict the most common predicate for a given object pair,
-ignoring the image) proved notoriously hard to beat, a warning that relation
-"accuracy" can be memorised co-occurrence rather than understood geometry.
-**VCTree** (Tang et al., 2019) composes dynamic tree structures over
-objects to capture context, and is the best-performing model in the source
-paper's own benchmark (mR@100 = 0.49). **Unbiased SGG** (Tang et al., 2020)
-then showed formally that models trained on crowdsourced scene graphs largely
-absorb the *annotation distribution*, its long tail and its biases, and
-proposed counterfactual debiasing to recover the visual signal. The field's
-own corrective direction is telling: panoptic scene graph generation (Yang,
-J. et al., 2022) replaced box-level grounding with pixel-accurate masks
-after showing that box annotations systematically mislocalise the very
-objects whose relations are being learned, the same reasoning that puts
-SAM2 masks rather than boxes at the centre of this project's support rule.
+stated from the consumer's side. **Neural Motifs** (Zellers et al., 2018)
+demonstrated that global context and label statistics dominate relation
+prediction: their frequency baseline (predict the most common predicate for
+a given object pair, ignoring the image) proved notoriously hard to beat, a
+warning that relation "accuracy" can be memorised co-occurrence rather than
+understood geometry. **VCTree** (Tang et al., 2019) composes dynamic tree
+structures over objects to capture context, and is the best-performing model
+in the source paper's own benchmark (mR@100 = 0.49). **Unbiased SGG** (Tang
+et al., 2020) then showed formally that models trained on crowdsourced scene
+graphs largely absorb the *annotation distribution*, its long tail and its
+biases, and proposed counterfactual debiasing to recover the visual signal.
+The field's own corrective direction is telling: panoptic scene graph
+generation (Yang, J. et al., 2022) replaced box-level grounding with
+pixel-accurate masks after showing that box annotations systematically
+mislocalise the very objects whose relations are being learned, the same
+reasoning that puts SAM2 masks rather than boxes at the centre of this
+project's support rule.
 
 The lineage also fixes the evaluation vocabulary used in Chapters 4 and 7.
 SGG models are scored by recall of the annotated triplets among their top K
@@ -378,23 +381,24 @@ this project's baseline discipline: every fidelity number in Chapter 4 is read
 against trivial random/majority baselines for exactly this reason.
 
 **REACT++** (Neau and Falomir, 2026) is a real-time SGG model with a YOLO
-backbone, reportedly ~20% faster and ~10% more accurate on relation prediction
-than its predecessor, small enough to run onboard a robot; it ships in the open
-**SGG-Benchmark** framework. The essential point for positioning this project:
-such models **require labelled training data and therefore sit downstream of an
-annotator**. This project *computes* labels from geometry and runs *before* any
-SGG model. It is the **supplier**, and REACT++ is a natural **consumer**. Using
-REACT++/SGG-Benchmark to train on our auto-labels versus the human labels is the
-heavyweight version of RQ2 (the lightweight classifier is the controlled main
-experiment); that test is executed and reported in Chapter 6.
+backbone, reportedly ~20% faster and ~10% more accurate on relation
+prediction than its predecessor, small enough to run onboard a robot; it
+ships in the open **SGG-Benchmark** framework. The essential point for
+positioning this project: such models **require labelled training data and
+therefore sit downstream of an annotator**. This project *computes* labels
+from geometry and runs *before* any SGG model. It is the **supplier**, and
+REACT++ is a natural **consumer**. Using REACT++/SGG-Benchmark to train on
+our auto-labels versus the human labels is the heavyweight version of RQ2
+(the lightweight classifier is the controlled main experiment); that test is
+executed and reported in Chapter 6.
 
 ## 2.8 Critical comparison and the research gap
 
 The table is the analytical core: it shows every neighbour either targets a
-different output, is a reference recipe rather than an annotator, operates outside
-this dataset, or *predicts* rather than *computes* relations, and that **none
-provides a fully-automatic annotator for this dataset's seven predicates,
-validated against its human labels**.
+different output, is a reference recipe rather than an annotator, operates
+outside this dataset, or *predicts* rather than *computes* relations, and
+that **none provides a fully-automatic annotator for this dataset's seven
+predicates, validated against its human labels**.
 
 | Work | Year/venue | Relations: compute vs. predict | Output | Auto-annotator? | This dataset's 7 predicates? | Validated vs. these human labels? |
 |---|---|---|---|---|---|---|
@@ -407,12 +411,12 @@ validated against its human labels**.
 | REACT++ / SGG-Benchmark | 2026 | **predict** (learned) | scene-graph triplets | no (needs labels) | no | n/a |
 | **This work** | 2026 | **compute (geometry)** | **VG JSON / YOLO / h5 triplets** | **yes, fully automatic** | **yes** | **yes (RQ1)** |
 
-Two columns isolate the contribution. The *"this dataset's 7 predicates"* column
-shows only Wang et al. and this work address them, and Wang et al. do so
-manually. The *"validated vs. these human labels"* column shows only this work
-quantifies agreement with the human consensus on the same images. The
-geometry-to-label *method* is borrowed and well-precedented; its instantiation as
-a validated automatic annotator for this dataset is new.
+Two columns isolate the contribution. The *"this dataset's 7 predicates"*
+column shows only Wang et al. and this work address them, and Wang et al. do
+so manually. The *"validated vs. these human labels"* column shows only this
+work quantifies agreement with the human consensus on the same images. The
+geometry-to-label *method* is borrowed and well-precedented; its
+instantiation as a validated automatic annotator for this dataset is new.
 
 ## 2.9 Summary and positioning
 
@@ -421,19 +425,20 @@ geometry** (SpatialVLM and its lineage), (ii) that **depth-grounded region
 reasoning** works (SpatialRGPT, RoboSpatial), (iii) that **learned SGG**
 consumes labelled triplets and absorbs their biases (Visual Genome lineage,
 REACT++), (iv) that **dense rule-based supervision is a proven substitute
-for scarce human labels** when validated carefully (Snorkel; the disagreement
-literature), and (v) that the standard annotation-stretching remedies,
-active and semi-supervised learning, presuppose a consistent labelled seed
-this dataset does not provide (§2.4). It also leaves a precise gap: there is no
-automatic, geometry-based annotator that emits this robot dataset's seven spatial
-predicates in its native formats and is validated against its human labels, even
-though the dataset's authors explicitly ask for automation-friendly fixes
-("spatial thresholds for near," augmenting under-represented relations).
+for scarce human labels** when validated carefully (Snorkel; the
+disagreement literature), and (v) that the standard annotation-stretching
+remedies, active and semi-supervised learning, presuppose a consistent
+labelled seed this dataset does not provide (§2.4). It also leaves a precise
+gap: there is no automatic, geometry-based annotator that emits this robot
+dataset's seven spatial predicates in its native formats and is validated
+against its human labels, even though the dataset's authors explicitly ask
+for automation-friendly fixes ("spatial thresholds for near," augmenting
+under-represented relations).
 
-Because the seven predicates are spatial, the appropriate instrument is **explicit
-geometric rules over measured perception**, not a learned relation predictor that
-would merely re-import human labelling bias. This motivates the design developed
-in Chapter 3.
+Because the seven predicates are spatial, the appropriate instrument is
+**explicit geometric rules over measured perception**, not a learned
+relation predictor that would merely re-import human labelling bias. This
+motivates the design developed in Chapter 3.
 
 Full citation details for every work discussed in this chapter are given in
 [references.md](references.md).

@@ -25,13 +25,13 @@ has labelled.
 ## 4.1 Protocol
 
 RQ1 asks whether the automatic labels reach a quality comparable to human
-annotation. Two properties of the ground truth shape the protocol. First, the
-human annotations are **sparse**: 8,790 of 84,880 ordered object pairs (~10%)
-carry a human label, so an automatic label absent from the gold is not
-necessarily wrong, and raw precision against the gold systematically
-undercounts. Second, annotator behaviour is **uneven** (Chapter 3 measured this
-for `near`; §4.5 adds a second case), so agreement is reported per annotator
-group as well as pooled.
+annotation. Two properties of the ground truth shape the protocol. First,
+the human annotations are **sparse**: 8,790 of 84,880 ordered object pairs
+(~10%) carry a human label, so an automatic label absent from the gold is
+not necessarily wrong, and raw precision against the gold systematically
+undercounts. Second, annotator behaviour is **uneven** (Chapter 3 measured
+this for `near`; §4.5 adds a second case), so agreement is reported per
+annotator group as well as pooled.
 
 The evaluation therefore uses: (1) per-predicate **recall of the human
 triplets** as the primary metric, consistent with the recall-based convention
@@ -116,13 +116,13 @@ are excluded (Chapter 3).
 | near | 0.12 | 1.00 | 0.21 | 717 |
 
 Restricted to the 8,790 human-annotated ordered pairs, precision is bounded
-below by construction: on an annotated pair the human typically recorded one or
-two relations, while several are geometrically true at once (a pair can be
-near, left-of and in-front-of simultaneously). The `near` row is the extreme
-case, since the tool emits `near` densely wherever the fitted gap threshold
-holds while only 3 of 9 annotator groups ever used the label, and it is exactly
-why the protocol includes the audit (§4.4) rather than reading these columns at
-face value.
+below by construction: on an annotated pair the human typically recorded one
+or two relations, while several are geometrically true at once (a pair can
+be near, left-of and in-front-of simultaneously). The `near` row is the
+extreme case, since the tool emits `near` densely wherever the fitted gap
+threshold holds while only 3 of 9 annotator groups ever used the label, and
+it is exactly why the protocol includes the audit (§4.4) rather than reading
+these columns at face value.
 
 ### 4.3.1 Confusion: what the tool said when it missed
 
@@ -150,13 +150,13 @@ support-rule frontier the audit (§4.4) identifies from the precision side.
 ## 4.4 Manual audit of extra predictions (true-precision estimate)
 
 105 extra predictions (15 per predicate, seeded stratified sample) were
-rendered with subject/object boxes and manually verdicted, using a conservative
-rule under which any case not clearly true was marked wrong
-(`outputs/audit/audit_sheet.csv`; verdicts to be independently spot-checked).
-This audit was run against the *pre-gate box rule* and is reported as found
-because it motivated the support-rule repairs; §4.9 re-audits the shipped rules
-(support precision ~0.27 → ~0.9), so the support rows below describe a fixed
-failure, not the final tool.
+rendered with subject/object boxes and manually verdicted, using a
+conservative rule under which any case not clearly true was marked wrong
+(`outputs/audit/audit_sheet.csv`; verdicts to be independently
+spot-checked). This audit was run against the *pre-gate box rule* and is
+reported as found because it motivated the support-rule repairs; §4.9
+re-audits the shipped rules (support precision ~0.27 → ~0.9), so the support
+rows below describe a fixed failure, not the final tool.
 
 | Predicate | Correct / n | Precision est. | Wilson 95% CI |
 |---|---|---|---|
@@ -310,8 +310,9 @@ completely once the label's inconsistent usage is accounted for (0.997 pooled,
 1.00 held-out at the fitted threshold), resolving the one predicate the source
 paper reports as failing for every model it benchmarks (§2.2). On the
 depth pair, after the depth-plus-ground-plane cascade, it recalls 0.64/0.66
-pooled and agrees with every consistently-labelled annotator 95–100% of the
-time where it commits; aligned for the two inverted-convention groups, depth
+pooled and, where it commits, agrees with six of the seven same-convention
+annotators at 0.95–1.00 (the seventh on 65 triplets, the smallest sample in
+the dataset, at 0.57); aligned for the two inverted-convention groups, depth
 recall is 0.84. The remaining shortfall decomposes, in measured proportions,
 into calibrated abstention and that inverted convention. The audits bound true
 precision: ~1.0 for the lateral and proximity predicates and for depth-decided
@@ -327,51 +328,51 @@ with its calibration, its held-out validation and its audit.
 
 ### 4.9.1 The support depth-co-location gate
 
-The audit's support-precision failure has a geometric cause: on a floor plane,
-"farther" projects as "higher in the image", so a behind-pair produces the same
-2D box signature as a stacked pair. The repair is a depth co-location condition
-on `on`/`under` (truly stacked objects share a camera distance), an instance
-of the reject-the-geometrically-impossible correction principle adapted from
-Open3D-VQA (Zhang et al., 2025; §2.5), calibrated on the train groups
-(`on_depth_eps` = 0.06) and validated held-out (ablation A1):
-support F1 on never-seen annotators rises 0.58 → 0.71. Downstream effects on
-the headline table: support recall −2/−3 points, `on` restricted precision
-0.57 → 0.73, 44% fewer support emissions (of the 26 audited false positives,
-the gate removes 12 while keeping all 4 true positives), and, because fewer
-false contacts suppress fewer proximity labels, `near` recall rises 0.87 →
-0.95 (held-out 1.00). Mean recall is unchanged at 0.79 with a substantially
-more trustworthy label set. The residual false fires are same-depth cluster
-neighbours, which depth cannot separate by construction; they are addressed
-next.
+The audit's support-precision failure has a geometric cause: on a floor
+plane, "farther" projects as "higher in the image", so a behind-pair
+produces the same 2D box signature as a stacked pair. The repair is a depth
+co-location condition on `on`/`under` (truly stacked objects share a camera
+distance), an instance of the reject-the-geometrically-impossible correction
+principle adapted from Open3D-VQA (Zhang et al., 2025; §2.5), calibrated on
+the train groups (`on_depth_eps` = 0.06) and validated held-out (ablation
+A1): support F1 on never-seen annotators rises 0.58 → 0.71. Downstream
+effects on the headline table: support recall −2/−3 points, `on` restricted
+precision 0.57 → 0.73, 44% fewer support emissions (of the 26 audited false
+positives, the gate removes 12 while keeping all 4 true positives), and,
+because fewer false contacts suppress fewer proximity labels, `near` recall
+rises 0.87 → 0.95 (held-out 1.00). Mean recall is unchanged at 0.79 with a
+substantially more trustworthy label set. The residual false fires are
+same-depth cluster neighbours, which depth cannot separate by construction;
+they are addressed next.
 
 ### 4.9.2 The mask-contact rule
 
-The support signature that boxes cannot
-see, masks can: A rests on B iff the pixels directly below A's mask-bottom
-boundary belong to B (`src/contact.py`), which captures both stacking and the
-containment case, and rejects side-by-side neighbours. Calibrated on the train
-groups (`on_contact_min` = 0.60; the train-F1 plateau is flat from 0.60–0.80,
-so the choice is uncritical), ablation A5: support F1 on held-out annotators
+The support signature that boxes cannot see, masks can: A rests on B iff the
+pixels directly below A's mask-bottom boundary belong to B
+(`src/contact.py`), which captures both stacking and the containment case,
+and rejects side-by-side neighbours. Calibrated on the train groups
+(`on_contact_min` = 0.60; the train-F1 plateau is flat from 0.60–0.80, so
+the choice is uncritical), ablation A5: support F1 on held-out annotators
 rises again, 0.71 → **0.87**, with `on` recall 0.82 → 0.88 and restricted
 precision 0.73 → 0.88 simultaneously, the rare change that improves both
-error directions at once, exactly as the failure gallery and audit predicted.
-Knock-on: `near` recall reaches **0.997 pooled (715/717; the two residual
-misses are contact-boundary cases, §4.10) and 1.00 held-out** as the last
-contact-boundary suppressions disappear; headline mean recall 0.79 → **0.81**.
-The A4 sweep confirms the fitted threshold sits exactly at the recall plateau's
-knee: recall is flat from T = 1.372 upward while emissions keep growing, so the
-fitted value is the least-permissive point achieving maximal agreement.
-A 30-sample re-audit of the new support extras confirms the precision claim
-independently: extras correct rise from 1/15 and 3/15 (box rule) to **11/15
-and 12/15**, an estimated true support precision of ~0.27 → ~0.9. The seven
-remaining wrong/uncertain extras have structure: a person *holding* a remote
-fires contact (holding ≠ resting), one occluded bottle-behind-bottle pair, and
-three distant clusters too small to verdict confidently. The person-holding
-mode is closed by a **class-aware guard**: annotators never label
-person-support (0 of 2,466 gold support triplets involve a person on either
-side), so `on`/`under` are simply not evaluated for that class, removing ~130
-false emissions at no recall cost, since the person side carried no gold to
-recover.
+error directions at once, exactly as the failure gallery and audit
+predicted. Knock-on: `near` recall reaches **0.997 pooled (715/717; the two
+residual misses are contact-boundary cases, §4.10) and 1.00 held-out** as
+the last contact-boundary suppressions disappear; headline mean recall 0.79
+→ **0.81**. The A4 sweep confirms the fitted threshold sits exactly at the
+recall plateau's knee: recall is flat from T = 1.372 upward while emissions
+keep growing, so the fitted value is the least-permissive point achieving
+maximal agreement. A 30-sample re-audit of the new support extras confirms
+the precision claim independently: extras correct rise from 1/15 and 3/15
+(box rule) to **11/15 and 12/15**, an estimated true support precision of
+~0.27 → ~0.9. The seven remaining wrong/uncertain extras have structure: a
+person *holding* a remote fires contact (holding ≠ resting), one occluded
+bottle-behind-bottle pair, and three distant clusters too small to verdict
+confidently. The person-holding mode is closed by a **class-aware guard**:
+annotators never label person-support (0 of 2,466 gold support triplets
+involve a person on either side), so `on`/`under` are simply not evaluated
+for that class, removing ~130 false emissions at no recall cost, since the
+person side carried no gold to recover.
 
 ### 4.9.3 The ground-plane fallback
 

@@ -39,7 +39,8 @@ confirmation here once submitted. -->
 stock footage from Pexels, used under the Pexels licence (free use, no
 attribution required): clip 1 (desk scene, moving camera)
 https://www.pexels.com/video/6558513/ and clip 2 (overhead desk, moving
-hands) https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-using-a-modern-camera-3250234/.
+hands)
+https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-using-a-modern-camera-3250234/.
 
 ## Appendix B: Reproducibility
 
