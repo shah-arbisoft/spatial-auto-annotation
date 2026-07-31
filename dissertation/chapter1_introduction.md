@@ -35,6 +35,30 @@ and that future work should "augment under-represented relations" and adopt
 this dataset**. SGDET-Annotate only accelerates manual labelling; a human still
 decides every label.
 
+The cost is structural rather than incidental, and it grows faster than the
+data does. Objects in an image can be related pairwise, so an image holding
+*n* annotated objects presents *n(n−1)* ordered pairs a conscientious
+annotator would have to consider. This dataset averages 101 ordered pairs per
+image, so a genuinely exhaustive pass would mean a hundred judgements per
+photograph. Relationship annotation is therefore never exhaustive in
+practice: Visual Genome, the reference corpus for the task, records about
+eighteen relationships per image over scenes holding roughly twenty objects,
+a small fraction of the pairs available (Krishna et al., 2017), and in the
+dataset studied here humans recorded labels on about 10% of the ordered
+pairs. Sparsity of this kind is not laziness but arithmetic,
+and it has a consequence the field routinely absorbs without comment: a model
+evaluated against such labels is rewarded for reproducing which pairs
+annotators happened to record, not only which relationships actually hold.
+Chapter 6 shows that this is measurable rather than theoretical.
+
+A second cost is consistency. Nine annotators working independently in
+batches, with no written definition of what "near" or "in front of" means,
+produce nine slightly different labelling conventions. The source paper
+identifies this for one predicate; Chapter 4 measures it for three, including
+two annotator groups that recorded *in front of* and *behind* in opposite
+directions from everyone else. Neither cost is solved by hiring more
+annotators, because both scale with the number of humans involved.
+
 ## 1.2 Research aim and objectives
 
 This project removes the human from the labelling loop. The seven predicates are
@@ -107,16 +131,26 @@ The research questions decompose into five verifiable objectives:
    did not have: the quantified annotator behaviours of Chapter 4, and an
    estimate of how well the annotators would agree with one another, obtained
    by using the deterministic annotator as a common reference.
+6. A label-free reliability check, obtained by recovering the fact that the
+   released images are consecutive frames of one robot capture and asking
+   whether a predicate survives the camera moving. It separates a rule that
+   is wrong from one that is merely uncertain, a distinction sparse human
+   annotation cannot draw, and it applies to any image dataset cut from a
+   sequence.
 
 ### 1.2.3 Scope
 
 In scope: the automatic annotator; the fidelity study with baselines and
 ablations; the controlled downstream classifier; the direct benchmark test, in
 which the source paper's own SGG framework (REACT++) is trained on each label
-source (Chapter 6); a critical evaluation chapter. Deferred to future work: a
-vision-language task-planning comparison, scaling on new robot captures, and
-copy-paste augmentation. These protect the timeline and strengthen the
-future-work discussion rather than weakening the contribution.
+source (Chapter 6); and a critical evaluation chapter. Scaling to robot
+captures beyond the annotated release was planned as future work and became
+possible mid-project when the supervising group supplied the full capture the
+release was cut from; §4.15 reports it, with the limits that follow from
+those frames having no ground truth. Deferred to future work: a
+vision-language task-planning comparison and copy-paste augmentation. These
+protect the timeline and strengthen the future-work discussion rather than
+weakening the contribution.
 
 ## 1.3 Research approach
 
@@ -155,8 +189,10 @@ question and positions the research gap. Chapter 3 gives the research
 methodology and the geometric design of the seven predicates with per-choice
 justifications. Chapters 4, 5 and 6 are the analysis chapters, presented as
 three iterations of increasing scope in the CRISP-DM sense: Chapter 4
-presents the fidelity study (RQ1), its ablations and the independent
-validation of its precision estimates; Chapter 5 the controlled downstream
+presents the fidelity study (RQ1), its ablations, the independent validation
+of its precision estimates, and two measurements that leave the annotated
+gold behind: whether the labels survive the camera moving, and what the
+pipeline does on robot frames nobody has labelled; Chapter 5 the controlled downstream
 study (RQ2), including a self-training arm that tests the standard rival
 remedy for scarce labels; and Chapter 6 the direct benchmark test, in which
 the source paper's own SGG model is trained on each label source and judged

@@ -11,10 +11,16 @@ headline recall against every human label (§4.2) with restricted precision
 (§4.3) and an audited true-precision estimate (§4.4), decomposes the hardest
 predicate pair per annotator (§4.5), costs the residual human effort (§4.7),
 and closes with the audit-driven rule repairs (§4.9), a diagnosis of every
-remaining miss (§4.10), the fully-automatic deployment mode (§4.11), a video
-demonstration (§4.12), the independent validation study (§4.13), and a
-reliability test that uses the images' origin as consecutive frames of one
-robot capture to ask whether the labels survive the camera moving (§4.14).
+remaining miss (§4.10), and the fully-automatic deployment mode (§4.11).
+
+The last four sections leave the annotated gold behind, because every measure
+above is bounded by the quality of the labels it is scored against. Section
+4.12 runs the pipeline on video from outside the calibration domain, §4.13
+sets out the independent study that re-estimates precision with judges who
+have no stake in the result, §4.14 uses the images' origin as consecutive
+frames of one robot capture to ask whether the labels survive the camera
+moving, and §4.15 reports what the pipeline does on 1,766 robot frames nobody
+has labelled.
 
 ## 4.1 Protocol
 
@@ -479,7 +485,7 @@ would largely close. And the 20-image trial over-estimated detection quality
 (its scenes come from one annotator batch), a reminder that the full-set
 numbers are the ones that matter.
 
-## 4.12 Video demonstration
+## 4.12 Video, and the only out-of-domain evidence
 
 Two short royalty-free stock clips (sources in Appendix A) were processed
 per frame by the deployment-mode stack of §4.11 with open-vocabulary prompts,
@@ -487,63 +493,49 @@ greedy IoU tracking for stable object identities, and a ±2-frame temporal
 majority vote over each pair's predicates (`scripts/run_video.py`; overlays
 and per-frame records in `outputs/video/`). The clips were chosen as
 complementary regimes: a **moving camera over a static desk scene** (clip 1,
-99 processed frames), where relations should stay constant and any variation
-is measurement noise; and a **static overhead camera with moving hands**
+99 frames), where relations should stay constant and any variation is
+measurement noise; and a **static overhead camera with moving hands**
 (clip 2, 79 frames), where relations genuinely change and smoothing must not
 erase the change.
+
+The clips matter chiefly because they are the project's only evidence from
+outside the calibration domain. They share nothing with the robot dataset:
+different scenes, a different camera and viewpoint, and objects drawn almost
+entirely from outside the six annotated classes (a monitor, keyboard, mouse,
+mug, spectacles, plants, a lamp, a notepad, a laptop, a wallet, an earbuds
+case). No threshold was retuned; `near_T`, the depth band, the contact
+fraction and the plane band are the values fitted on groups 0–5.
 
 Three observations. **(i) Relations are stable wherever identity is stable.**
 For object pairs co-visible in ≥20 frames, the emitted predicate persists at
 0.90/0.94 mean across the two clips, with 81% and 89% of pair-predicates
-present in ≥90% of their co-visible frames (`eval/video_stability.py`, which
-derives these from the recorded per-frame files; co-visible means both track
-identities appear in that frame). The temporal vote is what separates the
-two clips: it lifts persistence from 0.896 to 0.902 on the static-scene clip
-and from 0.915 to 0.938 on the one with moving hands, which is the clip
-where per-frame detection actually churns. Frame-to-frame triplet agreement
-(Jaccard 0.89 for clip 1, 0.70 for clip 2) is dominated by zero-shot detection churn
-and, in clip 2, genuine hand motion; the dips in the stability trace align
-with the hands picking objects up. This mirrors §4.11's attribution exactly:
-the variation is detection, not relations. **(ii) The rules transfer to
-objects they were never calibrated on**: the pen resting on the notepad and a
-wallet-and-photograph stack are labelled with the same contact evidence
-fitted on the dataset's six classes. **(iii) The camera-frame semantics are
-visible**: in the bird's-eye clip, in front of/behind re-maps to distance
-from the viewer's edge of the desk, the reference-frame dependence §2.5
-cites from RoboSpatial, demonstrated rather than asserted. The open-vocabulary
-quirks are equally visible and worth recording: content displayed *on the
-laptop's screen* is detected as real objects, and items outside the prompt
-list snap to the nearest prompted class (an earbuds case becomes a `cup`).
+present in ≥90% of their co-visible frames (`eval/video_stability.py`;
+co-visible means both track identities appear in that frame). The temporal
+vote separates the two regimes: it lifts persistence from 0.896 to 0.902 on
+the static-scene clip and from 0.915 to 0.938 on the one with moving hands,
+which is where per-frame detection actually churns. Frame-to-frame triplet
+agreement (Jaccard 0.89 and 0.70) is dominated by zero-shot detection churn
+and, in clip 2, genuine hand motion, with the dips aligning to the hands
+picking objects up. This mirrors §4.11's attribution: the variation is
+detection, not relations. **(ii) The rules transfer to objects they were
+never calibrated on**: a pen resting on a notepad and a wallet-and-photograph
+stack are labelled by the same mask-contact evidence fitted on the dataset's
+six classes. **(iii) The camera-frame semantics behave as designed**: in the
+bird's-eye clip, in front of/behind re-maps to distance from the viewer's
+edge of the desk, the reference-frame dependence §2.5 cites from RoboSpatial,
+demonstrated rather than asserted. The open-vocabulary failures are equally
+visible and worth recording: content displayed *on the laptop screen* is
+detected as real objects, and items outside the prompt list snap to the
+nearest prompted class (an earbuds case becomes a `cup`).
 
-This is a demonstration, not an experiment (no video ground truth exists),
-but it establishes that the annotator is video-ready at ~2–3 s per frame,
-with SAM2's native mask propagation (it is a video model used here frame-wise)
-as the designed upgrade path for true temporal consistency.
-
-**It is also the project's only out-of-domain evidence, and worth reading as
-such.** The clips share nothing with the dataset the rules were calibrated
-on: different scenes (an office desk and an overhead worktop, not a
-laboratory floor), a different camera and viewpoint, and objects drawn
-almost entirely from outside the six annotated classes (a monitor, keyboard,
-mouse, mug, spectacles, potted plants, a lamp, a notepad, a laptop, a
-cactus, a wallet, photographs, an earbuds case). No threshold was retuned:
-`near_T`, the depth band, the contact fraction and the plane band are the
-values fitted on annotator groups 0–5 of the robot dataset. The support
-relations that emerge (a pen resting on a notepad, a wallet-and-photograph
-stack) are decided by the same mask-contact evidence, and the camera-frame
-semantics behave exactly as the design predicts when the viewpoint changes
-to bird's-eye.
-
-The limits of that evidence should be equally clear: with no ground truth
-these are qualitative judgements over two clips, so they support the claim
-that the *rules* carry to new object types and viewpoints, and they say
-nothing quantitative about accuracy in a new domain. A labelled cross-domain
-sample is the measurement this substitutes for, and it remains future work
-(§7.6). What the clips do settle is that transfer is not blocked by the
-object vocabulary: the failures visible in them are detection failures
-(screen content detected as real objects, unprompted items snapping to the
-nearest prompted class), which is the same attribution §4.11 makes for the
-dataset itself.
+The limits should be equally clear. With no video ground truth these are
+qualitative judgements over two clips: they support the claim that the
+*rules* carry to new object types and viewpoints, and say nothing
+quantitative about accuracy in a new domain. A labelled cross-domain sample
+is the measurement this substitutes for, and it remains future work (§7.6).
+What the clips do settle is that transfer is not blocked by the object
+vocabulary, because the failures visible in them are detection failures,
+which is the same attribution §4.11 makes for the dataset itself.
 
 ## 4.13 Independent validation of the precision estimate
 
@@ -605,67 +597,49 @@ The 884 released images are not independent photographs. Pixel-matching them
 against the 2,650-frame raw capture the supervising group later supplied
 identifies them exactly: they are frames 000000–000883 of one continuous
 walk, and each annotator group is a contiguous 100-frame block
-(`group_0` = frames 0–99, `group_1` = 100–199, and so on). This has two
-consequences, one methodological and one that yields a measurement the rest
-of the chapter cannot make.
+(`group_0` = frames 0–99, and so on). That has one consequence for the
+results already reported and enables one measurement they could not make.
 
-**The methodological one first, because it qualifies earlier results.** A
-group is simultaneously an annotator identity *and* a temporal block holding
-one arrangement of objects. The held-out split of §4.1 is therefore held out
-by annotator *and* by scene, not by annotator alone as described. The
-annotator reading survives, since a systematically inverted front/behind
-convention (§4.5) and a `near` label used by three groups in nine (§3.2) are
-properties of labelling behaviour, and no arrangement of furniture can
-produce them, but the held-out figures carry a domain shift alongside the
-annotator shift. The direction of that confound is favourable, in that 0.76
-on held-out groups is generalisation to an unseen annotator *and* an unseen
-arrangement, which is the harder of the two readings; it is recorded here
-because the design was described as one thing and the data supports a
-slightly stronger one.
+**The qualification first.** A group is simultaneously an annotator identity
+*and* a temporal block holding one arrangement of objects, so the held-out
+split of §4.1 is held out by scene as well as by annotator. The annotator
+reading survives, since an inverted front/behind convention (§4.5) and a
+`near` label used by three groups in nine (§3.2) are properties of labelling
+behaviour that no arrangement of furniture can produce. The confound also
+runs in the favourable direction: 0.76 on held-out groups is generalisation
+to an unseen annotator *and* an unseen arrangement. It is recorded because
+the design was described as one thing and the data supports a slightly
+stronger one.
 
-**The measurement.** Because the frames are consecutive, a scene appears
-repeatedly from different viewpoints, and the pipeline's verdicts can be
-compared across those viewpoints without any human labels. The comparison is
-a reliability test of a kind sparse human annotation cannot supply: a
-relation determined by geometry should survive the camera moving, and one
-decided by a coin-toss at a decision boundary should not.
-
-Frames were segmented by content drift (§3.10) and each segment's predicates
-propagated from its keyframe to the remaining frames, matching objects by
-class and box overlap because object indices are not stable across frames:
-the annotators recorded different subsets of the scene from frame to frame,
-and `group_0` alone contains 43 distinct object orderings
-(`eval/keyframe_propagation.py`).
+**The measurement.** Consecutive frames show a scene from different
+viewpoints, so the pipeline's verdicts can be checked against themselves
+with no human labels: a relation fixed by geometry should survive the camera
+moving, and one decided by a coin toss at a threshold should not. Frames
+were segmented by content drift (§3.10) and each segment's predicates
+propagated from its keyframe to the rest, matching objects by class and box
+overlap because object indices are not stable across frames, the annotators
+having recorded different subsets of the scene from frame to frame
+(`group_0` alone contains 43 distinct object orderings;
+`eval/keyframe_propagation.py`).
 
 *Segmentation.* At τ = 10 the full 2,650-frame sequence collapses to 892
-segments, a 3.0× reduction; over the 884 released frames alone it gives 331
-segments, 2.7×. Scored on that released portion, where the eight layout
-changes are known, every one is recovered within five frames (boundary
-recall 1.00). Precision against those eight is low by construction and not a
-defect: viewpoint changes within a block are genuine content changes, merely
-finer-grained than the layout changes.
-
-The comparison worth recording is with the standard alternative.
-Thresholding consecutive-frame differences, the basis of shot detection,
-does not merely perform worse here, it has no usable operating point at all.
-At a threshold of 15 grey levels it fires 13 times across the annotated
-frames and finds none of the eight; lowering it to 5 finds all eight but
-among 604 firings, a precision of 0.013, and lowering it further only adds
-firings. There is no setting at which the layout changes separate from the
-noise, because the per-step signal they produce is not larger than the
-noise; only the accumulated drift is.
+segments, a 3.0× reduction; over the 884 released frames it gives 331, 2.7×.
+Scored on the released portion, where the eight layout changes are known,
+every one is recovered within five frames (boundary recall 1.00). Precision
+against those eight is low by construction and not a defect: viewpoint
+changes within a block are genuine content changes, merely finer-grained.
+The standard alternative has no usable operating point at all on this
+material, for the reason §3.10 gives: thresholding consecutive-frame
+differences at 15 grey levels fires 13 times and finds none of the eight,
+and at 5 it finds all eight among 604 firings, a precision of 0.013.
 
 *Stability and cost.* The propagation runs over the 802 annotated frames
-that carry pair records, segmented within each group so no segment straddles
-two arrangements. At τ = 10 that yields 568 keyframes, leaving 234 frames
-whose predicates are propagated rather than computed, and 11,352 object
-pairs on which the two can be compared. (The compression here is lower than
-the 2.7× quoted above because these 802 frames are a subset of the sequence:
-consecutive members sit further apart in the original capture, so more drift
-accumulates between them.) The table below reports per predicate how often
-the keyframe's verdict matches what the pipeline computes on the frame
-directly, alongside recall of that frame's human triplets under propagation
-and under per-frame computation.
+carrying pair records, segmented within each group so no segment straddles
+two arrangements. At τ = 10 that leaves 234 frames whose predicates are
+propagated rather than computed, and 11,352 object pairs on which the two
+can be compared. (Compression is lower here than the 2.7× above because
+these 802 frames are a subset: consecutive members sit further apart in the
+original capture.)
 
 | Predicate | Stability | Recall (propagated) | Recall (per frame) |
 |---|---|---|---|
@@ -681,48 +655,38 @@ and under per-frame computation.
 Skipping frames costs nothing measurable. Mean recall under propagation is
 0.843 against 0.832 computed per frame, and the ordering holds at every
 threshold tested (0.879 against 0.861 at τ = 20, a 4.0× reduction). The
-small advantage is plausibly an artefact of the selection rule rather than a
+small advantage is likely an artefact of the selection rule rather than a
 benefit of propagation: the segment representative is the frame nearest the
 segment mean, which on a moving camera is less likely to be caught
 mid-transition than an arbitrary frame.
 
-**The finding that matters is in the first column, and it is not the one
-expected.** Front/behind was predicted to be the least stable predicate, on
-the assumption that its errors come from monocular depth noise near the
-decision boundary; noise of that kind should flip verdicts when the camera
-moves. It does not. Front/behind agrees with itself across viewpoint changes
-0.955 of the time, above `on`/`under` at 0.909, and still 0.924 when the
-segmentation is coarsened to 89× compression, where segment members are
-substantially different views. A predicate whose recall against human labels
-is 0.60 while its agreement with itself across viewpoints is 0.96 is not
-making random errors. It is making the same call repeatedly and disagreeing
-with the annotators systematically.
+**The first column holds the finding, and it is not the one expected.**
+Front/behind was the predicted loser, on the assumption that its errors are
+depth noise near the decision boundary, which is exactly what a viewpoint
+change perturbs. It does not behave that way. Front/behind agrees with
+itself across viewpoints 0.955 of the time, above `on` and `under` at 0.909,
+and still 0.924 when the segmentation is coarsened to 89× compression, where
+segment members are substantially different views. A predicate whose recall
+against human labels is 0.64 while its agreement with itself is 0.955 is not
+making random errors; it is making the same call repeatedly and disagreeing
+with the annotators systematically. That converges with ablation A8, where a
+depth model four times larger did not improve the pair, and with §4.5, where
+two annotator groups labelled it in the opposite direction. §7.2 develops
+what follows for where the remaining effort should go.
 
-That converges with two independent results. Ablation A8 (§4.9) showed a
-depth model four times larger does not improve front/behind, which is what
-one expects if the limit is not depth resolution; and §4.5 measured two
-annotator groups labelling the pair in the opposite direction, which is a
-disagreement about what the words mean. The viewpoint-stability figure adds
-the evidence those two could not: the tool's verdicts are reproducible under
-exactly the perturbation that would expose measurement noise. Monocular
-ambiguity remains a real bound on the predicate (§9.3), but the gap between
-0.64 and 1.00 on this dataset is dominated by definitional disagreement
-rather than by an unsteady depth estimate.
-
-**Limits of this measurement.** Two, both restricting scope rather than
-direction. Stability is computed only on object pairs that could be matched
-between keyframe and frame, and those are pairs whose objects moved least in
-the image, which is plausibly the easier population; the figures are
-therefore an upper bound on stability over all pairs. And matched coverage
-falls sharply as segments grow, from 88.7% of pairs at τ = 5 to 58.5% at
-τ = 10 and 26.5% at τ = 20, so aggressive compression leaves most pairs uncovered
+**Limits.** Two, both restricting scope rather than direction. Stability is
+computed only on pairs that could be matched between keyframe and frame, and
+those are the pairs whose objects moved least in the image, plausibly the
+easier population, so the figures are an upper bound. And matched coverage
+falls as segments grow, from 88.7% of pairs at τ = 5 to 58.5% at τ = 10 and
+26.5% at τ = 20, so aggressive compression leaves most pairs uncovered
 rather than mislabelled. The cause is box drift under camera motion rather
 than missing annotation: at τ = 20, 65% of skipped frames carry an identical
 object count to their keyframe, and relaxing the overlap criterion from 0.5
 to 0.1 cuts unmatched objects from 5.6 to 2.2 per frame. Carrying object
-identity with a tracker, which `scripts/run_video.py` already does for video,
-rather than with per-frame overlap, is the change that would recover it, and
-it is a straightforward extension rather than a research question.
+identity with a tracker, as `scripts/run_video.py` already does for video,
+rather than with per-frame overlap, is the straightforward extension that
+would recover it.
 
 ## 4.15 Scale, measured rather than extrapolated
 
