@@ -54,3 +54,4 @@ dissertation/latex/*.fls
 dissertation/latex/*.fdb_latexmk
 dissertation/latex/*.synctex.gz
 dissertation/latex/main.pdf
+outputs/vlm_pilot/img/
