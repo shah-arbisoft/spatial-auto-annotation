@@ -65,6 +65,12 @@ Key commands:
 - `python eval/keyframe_propagation.py --sweep 5,10,20,30`: content-adaptive
   frame selection and the viewpoint-stability measurement of §4.14 →
   `outputs/keyframe_propagation.json`
+- `python eval/video_stability.py`: the persistence and Jaccard figures of
+  §4.12, derived from the recorded per-frame files →
+  `outputs/video_stability.json`
+- `python eval/extension_scale.py`: throughput, density and predicate
+  distribution on the unannotated capture (§4.15) →
+  `outputs/extension_scale.json`
 - `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment, all three
   label sources (human, self-trained, automatic)
 - `python analysis/score_votes.py votes.csv`: scores the independent

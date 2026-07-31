@@ -494,9 +494,14 @@ erase the change.
 
 Three observations. **(i) Relations are stable wherever identity is stable.**
 For object pairs co-visible in ≥20 frames, the emitted predicate persists at
-0.90/0.92 mean across the two clips (80–85% of pair-predicates present in
-≥90% of their co-visible frames). Frame-to-frame triplet agreement (Jaccard
-0.89 for clip 1, 0.70 for clip 2) is dominated by zero-shot detection churn
+0.90/0.94 mean across the two clips, with 81% and 89% of pair-predicates
+present in ≥90% of their co-visible frames (`eval/video_stability.py`, which
+derives these from the recorded per-frame files; co-visible means both track
+identities appear in that frame). The temporal vote is what separates the
+two clips: it lifts persistence from 0.896 to 0.902 on the static-scene clip
+and from 0.915 to 0.938 on the one with moving hands, which is the clip
+where per-frame detection actually churns. Frame-to-frame triplet agreement
+(Jaccard 0.89 for clip 1, 0.70 for clip 2) is dominated by zero-shot detection churn
 and, in clip 2, genuine hand motion; the dips in the stability trace align
 with the hands picking objects up. This mirrors §4.11's attribution exactly:
 the variation is detection, not relations. **(ii) The rules transfer to
@@ -633,8 +638,8 @@ and `group_0` alone contains 43 distinct object orderings
 (`eval/keyframe_propagation.py`).
 
 *Segmentation.* At τ = 10 the full 2,650-frame sequence collapses to 892
-segments, a 3.0× reduction; over the 884 annotated frames alone it gives 331
-segments, 2.7×. Scored on the annotated portion, where the eight layout
+segments, a 3.0× reduction; over the 884 released frames alone it gives 331
+segments, 2.7×. Scored on that released portion, where the eight layout
 changes are known, every one is recovered within five frames (boundary
 recall 1.00). Precision against those eight is low by construction and not a
 defect: viewpoint changes within a block are genuine content changes, merely

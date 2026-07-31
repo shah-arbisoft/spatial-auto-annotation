@@ -35,6 +35,10 @@ estimated human-human agreement bounds $\rightarrow$ \texttt{outputs/tables/anno
 \texttt{outputs/tables/seed\_replication.md}
 \item \texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30}: content-adaptive
 frame selection and the viewpoint-stability measurement of \S4.14 $\rightarrow$ \texttt{outputs/keyframe\_propagation.json}
+\item \texttt{python eval/video\_stability.py}: the persistence and Jaccard figures of
+\S4.12, derived from the recorded per-frame files $\rightarrow$ \texttt{outputs/video\_stability.json}
+\item \texttt{python eval/extension\_scale.py}: throughput, density and predicate
+distribution on the unannotated capture (\S4.15) $\rightarrow$ \texttt{outputs/extension\_scale.json}
 \item \texttt{python eval/downstream.py --seeds 42,43,44}: the RQ2 experiment, all three
 label sources (human, self-trained, automatic)
 \item \texttt{python analysis/score\_votes.py votes.csv}: scores the independent
