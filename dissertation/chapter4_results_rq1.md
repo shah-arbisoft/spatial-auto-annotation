@@ -655,11 +655,17 @@ firings. There is no setting at which the layout changes separate from the
 noise, because the per-step signal they produce is not larger than the
 noise; only the accumulated drift is.
 
-*Stability and cost.* Measured over the 802 annotated frames carrying pair
-records, at τ = 10, the table below reports per predicate how often the
-keyframe's verdict matches what the pipeline computes on the frame directly,
-alongside recall of that frame's human triplets under propagation and under
-per-frame computation.
+*Stability and cost.* The propagation runs over the 802 annotated frames
+that carry pair records, segmented within each group so no segment straddles
+two arrangements. At τ = 10 that yields 568 keyframes, leaving 234 frames
+whose predicates are propagated rather than computed, and 11,352 object
+pairs on which the two can be compared. (The compression here is lower than
+the 2.7× quoted above because these 802 frames are a subset of the sequence:
+consecutive members sit further apart in the original capture, so more drift
+accumulates between them.) The table below reports per predicate how often
+the keyframe's verdict matches what the pipeline computes on the frame
+directly, alongside recall of that frame's human triplets under propagation
+and under per-frame computation.
 
 | Predicate | Stability | Recall (propagated) | Recall (per frame) |
 |---|---|---|---|
