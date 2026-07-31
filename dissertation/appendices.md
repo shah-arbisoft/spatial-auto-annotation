@@ -72,6 +72,11 @@ Key commands:
 - `python eval/extension_scale.py`: throughput, density and predicate
   distribution on the unannotated capture (§4.15) →
   `outputs/extension_scale.json`
+- `python scripts/run_planner_llm.py` then `python eval/score_planner.py`:
+  the §5.7 planner experiment (75 prompts over 25 scenes in three
+  conditions) and its rule-based blind scoring →
+  `outputs/planner/`, `outputs/planner_scores.json`. Add `--sample N` to
+  print plans with their verdicts for manual checking.
 - `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment, all three
   label sources (human, self-trained, automatic)
 - `python analysis/score_votes.py votes.csv`: scores the independent

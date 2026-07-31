@@ -166,6 +166,9 @@ TABLES = {
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "
         "sources.",
+        "Planner experiment: whether the plan clears the occluding object "
+        "before grasping the target, over 25 held-out scenes under each "
+        "label source.",
     ],
     "chapter6_benchmark.md": [
         "Benchmark test results (SGDet) for the human-trained and "

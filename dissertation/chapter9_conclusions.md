@@ -38,9 +38,11 @@ roughly 7% of misses; the remainder is calibrated abstention and measured
 annotator behaviour (§4.10, §7.2).
 
 **O5, test downstream utility.** A controlled experiment trains the same
-classifier on three label sources under identical conditions (Chapter 5),
-and the comparison is repeated in the source paper's own benchmark
-framework with a shared frozen detector and three seeds per arm (Chapter 6).
+classifier on three label sources under identical conditions (Chapter 5);
+the comparison is repeated in the source paper's own benchmark framework
+with a shared frozen detector and three seeds per arm (Chapter 6); and the
+chain is followed one link further, to an LLM planner asked to produce a
+safe grasp plan for 25 held-out scenes under each label source (§5.7).
 
 **RQ1, accuracy.** Yes, with one qualification. On five of seven predicates
 the automatic labels match or exceed the human process (0.81 to 1.00 recall,
@@ -65,6 +67,13 @@ model generalises about sixty times better to unseen relation compositions
 advantage is concentrated entirely on the two test annotators carrying
 measured labelling defects, disappearing against the only one without
 (0.308 against 0.307).
+
+One link further down the chain the answer is unambiguous. Asked for a safe
+grasp plan on 25 held-out scenes where an object rests on the target, an LLM
+planner clears that object in 0 of 25 scenes when told only what objects are
+present, 25 of 25 when given the human relationships, and 22 of 25 when
+given the automatic ones, with every failure traced to a missing support
+relation rather than to faulty reasoning (§5.7).
 
 The single sentence the evidence supports: **automatic labels are the better
 supervision wherever ground truth means geometry; human labels remain better
@@ -117,13 +126,17 @@ cannot draw.
 Each limitation below is stated with the specific experiment that would
 settle it, because that is more useful than an apology.
 
-**The chain stops short of the robot.** The strongest evidence reaches
-label quality and model quality; no experiment in this dissertation shows a
-robot completing more tasks. The instrument exists: 75 prompts across 25
-held-out scenes in three conditions (no relations, human relations,
-automatic relations), with a blind scoring sheet, built and ready to run.
-This is the single most valuable next experiment, and it is the one that
-would convert a supported inference into a demonstration.
+**The chain reaches the plan, not the robot.** The planner experiment
+(§5.7) closes one of the two remaining links: across 25 held-out scenes an
+LLM planner never clears an occluding object when given objects alone
+(0/25), always clears it when given the human relationships (25/25), and
+does so on 22 of 25 with the automatic ones, with all three failures traced
+to a missing support relation rather than to faulty reasoning. What is still
+missing is execution. No robot moved during this project, so the evidence
+runs from labels to models to plans and stops there. Putting the same three
+conditions on a physical Spot, or in a simulator with contact physics, is
+the experiment that would close the last link, and it is now the only one
+left in the chain.
 
 **Precision estimates remain partly author-verdicted.** The independent
 validation study (§4.13) is deployed and collecting, with coverage
@@ -219,8 +232,11 @@ What I would do differently, given the time again, is front-load the
 experiments that answer the question the project actually asks. I spent
 considerable effort proving that the labels are correct and that they train
 models well, and comparatively little on whether they help a robot decide
-what to do, which is the entire motivation. The planner experiment should
-have run in week five rather than sitting built and unrun at the end. I
+what to do, which is the entire motivation. The planner experiment ran, but
+it ran last, and it turned out to be the clearest single result in the
+dissertation: 0 of 25 against 25 of 25 needs no statistics. Had it run in
+week five it would have pointed the intervening work at supply of the
+support relation, which is where its only failures came from. I
 would also have arranged for two people to annotate the same fifty images in
 week two: that one afternoon would have produced the inter-annotator
 agreement figure that the whole "comparable to human quality" claim needs,
