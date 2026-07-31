@@ -231,11 +231,15 @@ agreement with careful manual reading says it is.
 | C | automatic relationships | 22 / 25 |
 
 The effect of stating relations at all is total: without them the planner
-never clears the occluder, in twenty-five scenes out of twenty-five. Its
-plans are not careless, they are confidently wrong in a specific way, typically
-proposing to "lift the target vertically to clear all surrounding objects"
-while the object resting on top of it goes unmentioned. That is the paper's
-illustrated failure, reproduced at scale rather than asserted.
+never clears the occluder, in twenty-five scenes out of twenty-five. The
+failure is more specific than inattention. In seven of those twenty-five
+plans the planner *names* the occluding object, but only ever as something
+to steer around: "maintaining a clear path above cube0, book2, book3", or
+"lift box0 to a safe height to clear book1". It sees the object and
+misreads its role, treating something resting on the target as a neighbour
+to avoid rather than a load to remove, which is exactly the distinction a
+support relation encodes and nothing else in the prompt does. That is the
+paper's illustrated failure, reproduced at scale rather than asserted.
 
 **Where the automatic labels lose, and why.** All three C failures have the
 same cause, and it is not a planning failure: in each, the automatic relation

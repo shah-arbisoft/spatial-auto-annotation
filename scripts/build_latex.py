@@ -161,6 +161,8 @@ TABLES = {
         "Diagnosed cause of every missed human triplet, by predicate.",
         "Ablation A9: two-view triangulation against the monocular cascade "
         "on the same front/behind pairs.",
+        "Ablation A9 by depth separation: multi-frame ordering accuracy is at "
+        "chance where the two objects sit at nearly equal camera distance.",
         "Stability of each predicate across viewpoints of the same scene, "
         "with recall under keyframe propagation against per-frame "
         "computation.",

@@ -481,6 +481,31 @@ low-texture cubes and boxes photographed at 640×480 in greyscale. Widening
 the baseline trades coverage for geometry without helping accuracy: at 40
 frames, accuracy falls to 0.610.
 
+Splitting those pairs by how far apart the two triangulated depths actually
+are says more than the aggregate does, and it is the check that separates a
+weak estimator from a broken one:
+
+| Relative depth separation | Pairs | Ordering accuracy |
+|---|---|---|
+| 0.000–0.014 | 86 | 0.453 |
+| 0.014–0.045 | 85 | 0.776 |
+| 0.045–0.124 | 86 | 0.895 |
+| 0.124 and above | 86 | 0.721 |
+
+The estimator is real. Given objects at moderately different depths it
+reaches 0.895, which is the monocular cascade's own accuracy on this slice,
+so the implementation is not the thing holding it back. What it cannot do is
+the part that matters: on the quartile of pairs whose depths are nearly
+equal it performs at chance, 0.453. Those are precisely the pairs the
+monocular cascade abstains on, and the reason is the same for both methods.
+Two objects at genuinely similar camera distance are not separated by
+measuring depth more carefully, because the quantity being measured is
+almost the same for each of them. Multi-view geometry inherits that limit
+rather than removing it. The fall to 0.721 in the top quartile is the
+opposite failure and a real weakness of two-view triangulation: a handful of
+badly conditioned points produce depths that are wrong *and* far apart, so
+the largest separations include the worst outliers.
+
 The honest scope of this result is that it rules out the cheap version of the
 idea rather than the idea itself. A careful multi-view reconstruction over
 many frames, with bundle adjustment and real intrinsics, would estimate depth
