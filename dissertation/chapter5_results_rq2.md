@@ -203,7 +203,18 @@ move the occluder first. Each scene is put to an LLM planner
 state about the scene: **A** lists the objects and nothing else, **B** adds
 the human-annotated relationships, **C** adds the automatically computed
 ones. The task sentence, the object list and the instruction to give a
-minimal numbered plan are identical across conditions. All three conditions
+minimal numbered plan are identical across conditions. Both relation
+conditions are passed through the *same* filter before being written into
+the prompt, keeping the support relations among the mentioned objects plus
+the target's one-hop neighbourhood, canonicalised and deduplicated
+(`scripts/planner_experiment.py`). Without that step the comparison would
+confound label quality with prompt length. It does not equalise them, and
+cannot: after identical filtering the automatic condition still carries 22.6
+relations per prompt against the human condition's 3.1, because the
+automatic labels are twenty times denser to begin with, and discarding true
+relations to match a sparser source would be a different experiment. What
+the filter guarantees is that neither source is given a relation the other
+would have been denied. All three conditions
 of a scene are answered by one model in one sitting, so no scene can be split
 across models by a quota interruption (`scripts/run_planner_llm.py`).
 
