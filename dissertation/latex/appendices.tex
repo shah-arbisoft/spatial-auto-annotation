@@ -42,7 +42,7 @@ frame selection and the viewpoint-stability measurement of \S4.14 $\rightarrow$ 
 \item \texttt{python eval/extension\_scale.py}: throughput, density and predicate
 distribution on the unannotated capture (\S4.15) $\rightarrow$ \texttt{outputs/extension\_scale.json}
 \item \texttt{python scripts/run\_vlm\_pilot.py --make} then \texttt{python scripts/run\_vlm\_pilot.py}
-then \texttt{python eval/score\_vlm\_pilot.py}: the \S4.16 vision-language comparison (30 numbered-box images, RQ1 battery, self-consistency diagnostics) $\rightarrow$ \texttt{outputs/vlm\_pilot/}
+then \texttt{python eval/score\_vlm\_pilot.py}: the \S4.16 vision-language comparison (30 numbered-box images, RQ1 battery, self-consistency diagnostics) $\rightarrow$ \texttt{outputs/vlm\_pilot/}. \texttt{python scripts/vlm\_manual\_check.py} then writes a pack that lets the comparison be redone by hand in a browser: the image the model saw, the prompt verbatim, and the human, pipeline and model answers side by side, so the scoring script can be checked without running it.
 \item \texttt{python scripts/run\_planner\_llm.py} then \texttt{python eval/score\_planner.py}:
 the \S5.7 planner experiment (75 prompts over 25 scenes in three conditions) and its rule-based blind scoring $\rightarrow$ \texttt{outputs/planner/}, \texttt{outputs/planner\_scores.json}. Add \texttt{--sample N} to print plans with their verdicts for manual checking.
 \item \texttt{python eval/downstream.py --seeds 42,43,44}: the RQ2 experiment, all three

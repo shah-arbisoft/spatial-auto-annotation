@@ -78,7 +78,11 @@ Key commands:
 - `python scripts/run_vlm_pilot.py --make` then `python scripts/run_vlm_pilot.py`
   then `python eval/score_vlm_pilot.py`: the §4.16 vision-language
   comparison (30 numbered-box images, RQ1 battery, self-consistency
-  diagnostics) → `outputs/vlm_pilot/`
+  diagnostics) → `outputs/vlm_pilot/`. `python
+  scripts/vlm_manual_check.py` then writes a pack that lets the comparison
+  be redone by hand in a browser: the image the model saw, the prompt
+  verbatim, and the human, pipeline and model answers side by side, so the
+  scoring script can be checked without running it.
 - `python scripts/run_planner_llm.py` then `python eval/score_planner.py`:
   the §5.7 planner experiment (75 prompts over 25 scenes in three
   conditions) and its rule-based blind scoring →
