@@ -101,7 +101,9 @@ Training logs and parsed results: `outputs/sgg_benchmark/`.
 **1. Environment.** Either build the container (`docker build -t
 spatial-annotator .`; the `Dockerfile` at the repository root pins Python
 3.11, torch 2.5.1 + cu121 and installs SAM2 from GitHub, and runs the test
-suite at build time), or create a Python 3.11/3.12 venv and follow the three
+suite at build time; a `.dockerignore` holds the build context to the 94
+source files that belong in an image, keeping the caches, the dataset and
+the credentials file out of it), or create a Python 3.11/3.12 venv and follow the three
 numbered notes at the top of `requirements.txt`. The known pitfall is
 documented there: installing SAM2 can silently replace CUDA torch with a
 CPU wheel, fixed by reinstalling torch with `--no-deps --force-reinstall`

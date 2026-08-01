@@ -1,0 +1,45 @@
+# Keep the build context to the source that actually goes in the image.
+#
+# Without this, `COPY . .` in the Dockerfile takes everything: the caches and
+# rendered frames under outputs/, the benchmark upload zip, the git history,
+# and, worst of all, the .env holding the API key, which would then sit
+# inside any image that got shared.
+
+# secrets: never inside an image
+.env
+*.key
+**/_key_do_not_share.csv
+
+# generated results; the container writes these to a mounted volume instead
+outputs/
+outputs_base/
+
+# the benchmark upload artefacts (~90 MB) are built by a script when needed
+datasets/
+
+# the dataset is mounted at /data, never baked in (CC-BY, ~1 GB)
+SpatialAwareRobotDataset*/
+extended_raw_data/
+
+# local environments and caches
+.venv/
+venv/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# version control and editor state
+.git/
+.gitignore
+.idea/
+.vscode/
+
+# generated LaTeX tree and its zip; the Markdown chapters are the source
+dissertation/latex/
+dissertation/latex.zip
+
+# demo media kept out of the repo and out of the image
+*.mp4
+*.gif
