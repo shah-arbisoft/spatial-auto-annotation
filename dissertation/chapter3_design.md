@@ -250,7 +250,7 @@ explicitly (`src/detectors.py`) as a single method returning pixel boxes,
 class names and scores, with three implementations: open-vocabulary
 prompting for images with no trained model available, an adapter for any
 ultralytics checkpoint including the source paper's own YOLOv10m weights, and
-a reader for detections computed by some entirely external system. Ten unit
+a reader for detections computed by some entirely external system. Twelve unit
 tests pin the contract, including one that drives the rule layer from a
 detector written against the documentation alone. Two coupling points remain
 and are documented rather than hidden: the support guard keys on the literal
@@ -307,7 +307,7 @@ change re-evaluates the entire dataset offline in ~20 seconds without touching
 the GPU (`scripts/reannotate_from_cache.py`); the environment is pinned
 (Python 3.11, CUDA torch 2.5.1) with the known install pitfalls documented;
 and the rule layer is covered by unit tests encoding the spec's worked
-examples (10 tests). The full pipeline is a public repository with a smoke
+examples (13 tests). The full pipeline is a public repository with a smoke
 test that verifies the perception models on first setup.
 
 ## 3.12 Summary of design decisions

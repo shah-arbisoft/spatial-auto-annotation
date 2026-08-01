@@ -125,7 +125,7 @@ below runs from those caches on CPU:
 
 | command | produces | time |
 |---|---|---|
-| `pytest -q` | 25 unit + invariant tests | <1 min |
+| `pytest -q` | 66 unit and invariant tests | <1 min |
 | `python scripts/reannotate_from_cache.py` | re-runs the rules after any threshold change | ~20 s |
 | `python eval/fit_near.py` | the near-threshold protocol, `near_fit.json` | ~1 min |
 | `python eval/fidelity.py` | the RQ1 battery, `fidelity_report.json` | ~2 min |
