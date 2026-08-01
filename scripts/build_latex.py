@@ -168,6 +168,8 @@ TABLES = {
         "Stability of each predicate across viewpoints of the same scene, "
         "with recall under keyframe propagation against per-frame "
         "computation.",
+        "A vision-language model against the geometric pipeline on the same "
+        "30 images, the same pairs and the same human gold.",
     ],
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "

@@ -118,6 +118,66 @@ def main():
         print(f"{g:10s} {d['gold']:6d} {d['vlm'] / max(1, d['gold']):8.3f} "
               f"{d['pipe'] / max(1, d['gold']):10.3f}{tag}")
 
+    # --- how it fails, not just how often -------------------------------
+    # Recall alone cannot distinguish a model that answers wrongly from one
+    # that declines to answer, and the difference decides what the VLM is
+    # for. These three checks separate them.
+    INV = {"to the left of": "to the right of",
+           "to the right of": "to the left of",
+           "in front of": "behind", "behind": "in front of",
+           "on": "under", "under": "on"}
+    contradiction = 0
+    asserted, no_inverse = defaultdict(int), defaultdict(int)
+    silent, opposite, other, gold_tot = (defaultdict(int), defaultdict(int),
+                                         defaultdict(int), defaultdict(int))
+
+    for r in replies:
+        emitted = {(s, p, o) for s, p, o in r["relations"]}
+        for s, p, o in emitted:
+            asserted[p] += 1
+            if p in INV and (s, INV[p], o) in emitted:
+                contradiction += 1
+            if p in INV and (o, INV[p], s) not in emitted:
+                no_inverse[p] += 1
+        if r["image_id"] not in pairs:
+            continue
+        vlm = defaultdict(set)
+        for s, p, o in r["relations"]:
+            vlm[(s, o)].add(p)
+        for (s, o), (g, _pipe) in pairs[r["image_id"]].items():
+            v = vlm.get((s, o), set())
+            for p in g:
+                gold_tot[p] += 1
+                if p in v:
+                    continue
+                if p in INV and INV[p] in v:
+                    opposite[p] += 1
+                elif not v:
+                    silent[p] += 1
+                else:
+                    other[p] += 1
+
+    print(f"\nself-consistency of the VLM's own output")
+    print(f"  direct contradictions (a pair given a predicate and its "
+          f"opposite): {contradiction // 2}")
+    print(f"  {'predicate':16s} {'asserted':>9s} {'inverse absent':>15s} {'rate':>6s}")
+    for p in PREDICATES:
+        if p in INV and asserted[p]:
+            print(f"  {p:16s} {asserted[p]:9d} {no_inverse[p]:15d} "
+                  f"{no_inverse[p] / asserted[p]:6.2f}")
+
+    print(f"\nwhen it misses a human triplet, what does it say instead")
+    print(f"  {'gold':16s} {'n':>5s} {'silent':>8s} {'opposite':>9s} {'other':>7s}")
+    for p in PREDICATES:
+        if gold_tot[p]:
+            print(f"  {p:16s} {gold_tot[p]:5d} {silent[p]:8d} "
+                  f"{opposite[p]:9d} {other[p]:7d}")
+    fb = sum(gold_tot[p] for p in ("in front of", "behind"))
+    fo = sum(opposite[p] for p in ("in front of", "behind"))
+    if fb:
+        print(f"\n  front/behind misses in the opposite direction: {fo}/{fb} "
+              f"= {fo / fb:.2f}  (an inverted convention would approach 1.0)")
+
     bad = sum(len(r.get("problems", [])) for r in replies)
     print(f"\nmalformed records dropped from the VLM output: {bad}")
     print("\nverdict guide: a fourth arm needs the VLM to match or beat the")
@@ -136,6 +196,12 @@ def main():
         "pipeline_emitted": dict(pipe_emitted),
         "per_group": {k: dict(v) for k, v in per_group.items()},
         "malformed_dropped": bad,
+        "contradictions": contradiction // 2,
+        "asserted": dict(asserted),
+        "inverse_absent": dict(no_inverse),
+        "miss_silent": dict(silent),
+        "miss_opposite": dict(opposite),
+        "miss_other": dict(other),
     }, indent=2), encoding="utf-8")
     print(f"\nwrote {args.out}")
 

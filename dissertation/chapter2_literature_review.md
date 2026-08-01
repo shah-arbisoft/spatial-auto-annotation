@@ -222,6 +222,21 @@ scene-graph annotation for this dataset's seven predicates.
   reference for our depth use, but the artefact is a **region-reasoning VLM**, not
   a deterministic labeller producing VG-format triplets.
 
+  This line of work raises the obvious alternative to the present project:
+  rather than computing relations geometrically, simply ask a capable
+  vision-language model to name them. That alternative is tested rather than
+  argued away. Section 4.16 puts a current model through the same battery, on
+  the same images, with the same boxes and the same written definitions, and
+  finds it recovers 0.40 of the human triplets against the geometric
+  pipeline's 0.83, winning no predicate. More informative than the gap is its
+  shape: the model does not contradict itself and does not invert the
+  front/behind convention, it simply says nothing on most pairs, and asserts
+  one direction of a symmetric relation without the other in a third of
+  cases. Those are the two defects §4.5 measures in the *human* annotation.
+  A vision-language model asked to annotate reproduces the failure mode of
+  the process this project set out to replace, which is why the gap in the
+  literature is not filled by pointing a larger model at the problem.
+
 - **VQASynth** (Remyx AI, 2024) is an open reproduction of the SpatialVLM
   pipeline: a chain of expert models (SAM2 for localisation refinement, monocular
   depth, and grounded captioning) that infers spatial relationships to **create a

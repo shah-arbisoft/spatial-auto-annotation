@@ -9,7 +9,7 @@ The aim was to determine whether spatial-relationship annotation for robot-acqui
 
 \textbf{O2, specify and calibrate.} All seven predicates have written operational definitions with explicit thresholds, every one fitted on annotator groups 0 to 5 alone and reported on the held-out groups (Chapter 3). The \texttt{near} threshold generalises perfectly to the held-out annotator who used the label (recall 1.00), and the support rules reach held-out F1 0.87.
 
-\textbf{O3, validate.} Per-predicate fidelity against all 8,926 human triplets, against three baselines, with nine ablations and manually audited precision (Chapter 4): mean recall 0.85, and 0.76 on annotators no threshold ever saw. Cluster-bootstrap intervals accompany every headline figure, and an independent validation study re-estimates precision with judges who have no stake in the result (\S4.13).
+\textbf{O3, validate.} Per-predicate fidelity against all 8,926 human triplets, against three trivial baselines and a vision-language model given the same boxes and the same definitions (\S4.16), with nine ablations and manually audited precision (Chapter 4): mean recall 0.85, and 0.76 on annotators no threshold ever saw. Cluster-bootstrap intervals accompany every headline figure, and an independent validation study re-estimates precision with judges who have no stake in the result (\S4.13).
 
 \textbf{O4, diagnose.} Every one of the 1,689 missed human triplets is attributed to a cause by re-checking rule conditions, so the failure analysis is exhaustive rather than illustrative. Genuine tool error accounts for roughly 7\% of misses; the remainder is calibrated abstention and measured annotator behaviour (\S4.10, \S7.2).
 

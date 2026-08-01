@@ -25,8 +25,10 @@ threshold generalises perfectly to the held-out annotator who used the label
 (recall 1.00), and the support rules reach held-out F1 0.87.
 
 **O3, validate.** Per-predicate fidelity against all 8,926 human triplets,
-against three baselines, with nine ablations and manually audited precision
-(Chapter 4): mean recall 0.85, and 0.76 on annotators no threshold ever saw.
+against three trivial baselines and a vision-language model given the same
+boxes and the same definitions (§4.16), with nine ablations and manually
+audited precision (Chapter 4): mean recall 0.85, and 0.76 on annotators no
+threshold ever saw.
 Cluster-bootstrap intervals accompany every headline figure, and an
 independent validation study re-estimates precision with judges who have no
 stake in the result (§4.13).

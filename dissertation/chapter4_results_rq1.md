@@ -19,8 +19,9 @@ above is bounded by the quality of the labels it is scored against. Section
 sets out the independent study that re-estimates precision with judges who
 have no stake in the result, §4.14 uses the images' origin as consecutive
 frames of one robot capture to ask whether the labels survive the camera
-moving, and §4.15 reports what the pipeline does on 1,766 robot frames nobody
-has labelled.
+moving, §4.15 reports what the pipeline does on 1,766 robot frames nobody
+has labelled, and §4.16 asks whether a vision-language model would have done
+the job instead.
 
 ## 4.1 Protocol
 
@@ -817,3 +818,82 @@ correctness. Establishing correctness on this portion needs labels that do
 not exist; the viewpoint-consistency measurement of §4.14 is the closest
 available substitute, and it is a check on self-agreement rather than on
 truth.
+
+## 4.16 Would a vision-language model do this instead?
+
+The three baselines of §4.2 are deliberately weak, and a reader is entitled
+to ask about the strong one. Modern vision-language models describe spatial
+arrangements fluently, and §2.6 reviews a research line built on exactly
+that capability. If one of them annotates this dataset as well as the
+geometric pipeline does, the pipeline is unnecessary. The question is
+settled here by measurement rather than assertion.
+
+**Protocol.** Thirty images, stratified across all nine annotator groups, are
+put to `gemini-flash-latest` with the ground-truth boxes drawn on the image
+and numbered, and the model answers using those indices
+(`scripts/run_vlm_pilot.py`). That places it in the same PredCls setting the
+pipeline is evaluated in, so neither is scored on detection. The prompt
+carries Chapter 3's operational definitions verbatim, including that *in
+front of* means nearer the camera, without which the run would measure the
+reference-frame ambiguity of §2.5 rather than accuracy. Scoring is the RQ1
+battery on identical pairs, with the pipeline's answer beside it
+(`eval/score_vlm_pilot.py`). Every reply parsed; no record was malformed.
+
+| Predicate | Gold | VLM | Pipeline |
+|---|---|---|---|
+| on | 57 | 0.667 | 0.912 |
+| under | 47 | 0.660 | 0.851 |
+| to the left of | 49 | 0.408 | 0.918 |
+| to the right of | 49 | 0.327 | 0.939 |
+| in front of | 80 | 0.188 | 0.600 |
+| behind | 65 | 0.169 | 0.615 |
+| near | 34 | 0.382 | 1.000 |
+| **Mean** | **381** | **0.400** | **0.834** |
+
+The model does not win a single predicate. It is closest on support, at 0.67
+against 0.91, and furthest on the depth pair, where 0.19 against 0.60 leaves
+it below even the geometric method's known weak point. On this evidence it
+is neither a fourth label source nor a useful adjudicator, since an
+adjudicator must be better than the tool somewhere and it is better nowhere.
+
+**How it fails is the interesting part, and it is not the way a
+badly-calibrated model fails.** Three diagnostics separate wrong answers
+from absent ones.
+
+It does not contradict itself: across 1,187 emitted relations there is not
+one case of a pair given both a predicate and its opposite. Nor is its
+front/behind convention inverted in the manner of annotator groups 6 and 8;
+only 8 of 145 depth-pair misses name the opposite direction, against a rate
+approaching 1.0 for a genuine convention flip.
+
+What it does instead is **fall silent**. Of the human triplets it misses,
+the majority are pairs on which it said nothing at all: 27 of 49 for *to the
+left of*, 31 of 49 for *to the right of*, 45 of 80 for *in front of*. It
+emits about 40 relations per image where the pipeline emits several hundred.
+
+And its silence is uneven in a familiar way. It asserts *to the left of* 374
+times but supplies the matching *to the right of* on the swapped pair in
+only 65% of those cases, leaving 131 assertions whose inverse it never
+states, while support relations carry their inverse 100% of the time. That
+is the same defect §4.5 measures in the human annotation, where one group
+recorded 188 instances of *on* and no instances of *under*.
+
+**The conclusion is worth stating plainly, because it is the project's
+argument arriving from an unexpected direction.** Asked to annotate, a
+capable vision-language model reproduces the characteristic failure of the
+human annotation process rather than the characteristic failure of a
+geometric one. It is sparse, it labels one direction of a symmetric pair and
+not the other, and it is at its weakest exactly where the humans were. It is
+not a cheaper annotator; it is a faster instance of the thing this project
+was built to replace, and it inherits the properties that made replacing it
+worthwhile. The pipeline's advantage over it is not fluency but exhaustiveness
+and the guaranteed anti-symmetry of §3.6.
+
+Three limits on this result. It is thirty images and one model at one prompt;
+a larger model, a chain-of-thought prompt or a fine-tune could all move the
+numbers, and the pilot was scoped to decide a role rather than to establish
+a bound. The prompt asks for every pair that stands in a relationship, so
+part of the silence may be the model's own judgement about what is worth
+recording, which is itself the annotator behaviour under discussion rather
+than an artefact. And the comparison rewards density on a recall metric, as
+§4.3 explains for the pipeline too; what it cannot be is a precision claim.
