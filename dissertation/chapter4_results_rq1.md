@@ -850,11 +850,53 @@ battery on identical pairs, with the pipeline's answer beside it
 | near | 34 | 0.382 | 1.000 |
 | **Mean** | **381** | **0.400** | **0.834** |
 
-The model does not win a single predicate. It is closest on support, at 0.67
+On recall the model loses everywhere. It is closest on support, at 0.67
 against 0.91, and furthest on the depth pair, where 0.19 against 0.60 leaves
-it below even the geometric method's known weak point. On this evidence it
-is neither a fourth label source nor a useful adjudicator, since an
-adjudicator must be better than the tool somewhere and it is better nowhere.
+it below even the geometric method's known weak point.
+
+Recall alone would be an unfair verdict, and it is worth saying why before
+reading anything into it. The metric rewards whoever asserts more: on the
+374 pairs the humans judged, the pipeline makes 868 assertions to the
+model's 344, so it has two and a half times as many chances to cover any
+given gold triplet. A sparse labeller can be right more often about what it
+does say and still lose on recall. Restricting both to the judged pairs,
+where precision is defined, tests exactly that.
+
+| Predicate | VLM precision | Pipeline precision | VLM F1 | Pipeline F1 |
+|---|---|---|---|---|
+| on | **0.950** | 0.897 | 0.784 | **0.904** |
+| under | 0.886 | **0.909** | 0.756 | **0.879** |
+| to the left of | **0.408** | 0.385 | 0.408 | **0.542** |
+| to the right of | 0.381 | **0.387** | 0.352 | **0.548** |
+| in front of | **0.484** | 0.356 | 0.270 | **0.447** |
+| behind | **0.478** | 0.308 | 0.250 | **0.410** |
+| near | 0.105 | **0.128** | 0.165 | **0.227** |
+| **micro** | **0.419** | 0.351 | 0.397 | **0.488** |
+
+**The model is the more precise labeller**, on four of the seven predicates
+and on the pooled figure, 0.42 against 0.35. The margin is widest exactly
+where the pipeline is weakest: on front/behind it is right 0.48 of the times
+it commits, against the pipeline's 0.36. What it buys that precision with is
+silence, and the price is steep enough that it loses F1 on every predicate
+without exception, 0.40 against 0.49 pooled.
+
+Two things follow and they point in opposite directions, so both belong
+here. The model is not a fourth label source: it recovers under half the
+human record and loses F1 everywhere. But an earlier draft of this section
+said it won nothing, and that was an artefact of scoring recall alone. Where
+it does speak it agrees with the annotators more often than the pipeline
+does, which is the beginning of a case for it as an adjudicator on the depth
+pair; §7.6 takes that up rather than settling it here.
+
+One asymmetry must be stated or the precision comparison will be read as
+stronger than it is. The pipeline's apparent false positives were audited
+(§4.4) and found to be largely *correct but unrecorded*, relations that hold
+geometrically which the annotators did not write down, giving audited true
+precision near 1.0 on the lateral and proximity predicates. Its 0.35 here is
+therefore a floor set by sparse gold rather than a measure of error. No
+equivalent audit exists for the model's assertions, so its 0.42 is not known
+to be a floor in the same way. The two are comparable as agreement with the
+human record, and are not comparable as truthfulness.
 
 **How it fails is the interesting part, and it is not the way a
 badly-calibrated model fails.** Three diagnostics separate wrong answers
@@ -886,7 +928,10 @@ geometric one. It is sparse, it labels one direction of a symmetric pair and
 not the other, and it is at its weakest exactly where the humans were. It is
 not a cheaper annotator; it is a faster instance of the thing this project
 was built to replace, and it inherits the properties that made replacing it
-worthwhile. The pipeline's advantage over it is not fluency but exhaustiveness
+worthwhile, including the one that flatters it here. Being conservative is
+why its precision beats the pipeline's, and being conservative is also why
+most of the relations in a scene go unrecorded. The pipeline's advantage
+over it is not fluency and not per-assertion agreement, it is exhaustiveness
 and the guaranteed anti-symmetry of §3.6.
 
 Three limits on this result. It is thirty images and one model at one prompt;
@@ -895,5 +940,6 @@ numbers, and the pilot was scoped to decide a role rather than to establish
 a bound. The prompt asks for every pair that stands in a relationship, so
 part of the silence may be the model's own judgement about what is worth
 recording, which is itself the annotator behaviour under discussion rather
-than an artefact. And the comparison rewards density on a recall metric, as
-§4.3 explains for the pipeline too; what it cannot be is a precision claim.
+than an artefact. And the recall column rewards density, which is why the
+precision comparison is reported beside it; neither column alone is a
+verdict.

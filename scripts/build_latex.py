@@ -169,7 +169,10 @@ TABLES = {
         "with recall under keyframe propagation against per-frame "
         "computation.",
         "A vision-language model against the geometric pipeline on the same "
-        "30 images, the same pairs and the same human gold.",
+        "30 images, the same pairs and the same human gold: recall.",
+        "The same comparison restricted to the pairs carrying a human label, "
+        "where precision is defined. The model is the more precise labeller "
+        "and loses F1 on every predicate.",
     ],
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "

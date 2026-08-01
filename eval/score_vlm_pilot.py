@@ -110,6 +110,64 @@ def main():
     print(f"{'MEAN':16s} {sum(gold_n.values()):6d} {mean(v_rec):8.3f} "
           f"{mean(p_rec):10.3f}")
 
+    # --- precision, because recall alone favours whoever asserts more -----
+    # A sparse labeller can look worse on recall while being right more often
+    # about what it does assert, so both are also scored on the pairs the
+    # humans judged. Neither number is an absolute precision: humans record
+    # one or two of the several relations true of a pair (§4.3), which
+    # depresses both. The comparison between them is still fair.
+    judged = defaultdict(lambda: [0, 0, 0])   # tp, asserted, gold
+    judged_v = defaultdict(lambda: [0, 0, 0])
+    n_judged = 0
+    for r in replies:
+        iid = r["image_id"]
+        if iid not in pairs:
+            continue
+        vlm = defaultdict(set)
+        for s, p, o in r["relations"]:
+            vlm[(s, o)].add(p)
+        for (s, o), (g, pipe) in pairs[iid].items():
+            if not g:
+                continue
+            n_judged += 1
+            v = vlm.get((s, o), set())
+            for p in PREDICATES:
+                if p in v:
+                    judged_v[p][1] += 1
+                    if p in g:
+                        judged_v[p][0] += 1
+                if p in pipe:
+                    judged[p][1] += 1
+                    if p in g:
+                        judged[p][0] += 1
+                if p in g:
+                    judged_v[p][2] += 1
+                    judged[p][2] += 1
+
+    def prf(tp, a, g):
+        pr = tp / a if a else 0.0
+        rc = tp / g if g else 0.0
+        return pr, rc, (2 * pr * rc / (pr + rc) if pr + rc else 0.0)
+
+    print(f"\nrestricted to the {n_judged} pairs carrying a human label, so "
+          f"precision is defined")
+    print(f"{'predicate':16s} {'VLM P':>7s} {'VLM F1':>7s} | "
+          f"{'pipe P':>7s} {'pipe F1':>8s}")
+    tv = [0, 0, 0]
+    tp_ = [0, 0, 0]
+    for p in PREDICATES:
+        vp, _vr, vf = prf(*judged_v[p])
+        pp, _pr, pf = prf(*judged[p])
+        for i in range(3):
+            tv[i] += judged_v[p][i]
+            tp_[i] += judged[p][i]
+        print(f"{p:16s} {vp:7.3f} {vf:7.3f} | {pp:7.3f} {pf:8.3f}")
+    vp, vr, vf = prf(*tv)
+    pp, pr, pf = prf(*tp_)
+    print(f"{'micro':16s} {vp:7.3f} {vf:7.3f} | {pp:7.3f} {pf:8.3f}")
+    print(f"  assertions on judged pairs: VLM {tv[1]}, pipeline {tp_[1]} "
+          f"({tp_[1] / max(1, tv[1]):.1f}x denser)")
+
     print(f"\n{'group':10s} {'gold':>6s} {'VLM':>8s} {'pipeline':>10s}"
           "   (groups 6 and 8 use the inverted front/behind convention)")
     for g in sorted(per_group):

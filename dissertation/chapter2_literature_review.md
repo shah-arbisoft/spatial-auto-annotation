@@ -228,11 +228,13 @@ scene-graph annotation for this dataset's seven predicates.
   argued away. Section 4.16 puts a current model through the same battery, on
   the same images, with the same boxes and the same written definitions, and
   finds it recovers 0.40 of the human triplets against the geometric
-  pipeline's 0.83, winning no predicate. More informative than the gap is its
-  shape: the model does not contradict itself and does not invert the
-  front/behind convention, it simply says nothing on most pairs, and asserts
-  one direction of a symmetric relation without the other in a third of
-  cases. Those are the two defects §4.5 measures in the *human* annotation.
+  pipeline's 0.83, and loses F1 on every predicate. It is not simply worse:
+  restricted to the pairs the humans judged it is the *more precise* of the
+  two, 0.42 against 0.35, because it asserts far less. More informative than
+  either number is the shape of its output: it does not contradict itself and
+  does not invert the front/behind convention, it simply says nothing on most
+  pairs, and asserts one direction of a symmetric relation without the other
+  in a third of cases. Those are the two defects §4.5 measures in the *human* annotation.
   A vision-language model asked to annotate reproduces the failure mode of
   the process this project set out to replace, which is why the gap in the
   literature is not filled by pointing a larger model at the problem.
