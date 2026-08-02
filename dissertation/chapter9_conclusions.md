@@ -159,14 +159,14 @@ Two objects at similar camera distance cannot be ordered from one image, and
 neither a larger depth model (A8) nor multi-frame geometry (A9) closes the
 gap: two-view triangulation over the raw capture answers 9% of the depth
 pairs and is 0.17 less accurate than the monocular cascade where it does
-(§4.9.6). Read with the viewpoint stability of §4.14, where the predicate
+(§4.9, Appendix D.6). Read with the viewpoint stability of §4.14, where the predicate
 reproduces its own verdict 0.955 of the time, the remaining shortfall is
 mostly a disagreement about what the words mean rather than a measurement
 failure, and the intervention with the best expected return is a written
 annotation guideline. The measurement routes that stay open are a calibrated
 stereo pair or RGB-D capture, and wider surface detection to extend the
 ground-plane guard, the last of which was built, measured and declined on
-this dataset (§4.9.4).
+this dataset (Appendix D.4).
 
 **Detection bounds full automation.** With a zero-shot detector the
 end-to-end recall is 0.38, while the relation layer conditional on detection
@@ -194,7 +194,7 @@ disparity at every frame from a known, fixed baseline, which is precisely
 what the multi-frame estimators of A9 lack: those must recover the camera's
 motion before they can use it, and on small low-texture objects they return
 an answer for only 9% of pairs and are 0.17 less accurate than the monocular
-cascade where they do (§4.9.6). A calibrated stereo pair removes both
+cascade where they do (§4.9, Appendix D.6). A calibrated stereo pair removes both
 problems at once and is the single cheapest experiment left on this
 predicate. It also keeps the method's premise intact, since stereo is
 available at capture time, whereas depth recovered from a robot walking

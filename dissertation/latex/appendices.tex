@@ -32,7 +32,7 @@ estimated human-human agreement bounds $\rightarrow$ \texttt{outputs/tables/anno
 \item \texttt{python eval/ablations.py}: ablations A1--A6 $\rightarrow$ \texttt{outputs/tables/ablations.md}
 \item \texttt{python eval/depth\_ablation.py}: the A8 depth-model comparison
 \item \texttt{python eval/parallax\_ablation.py --method triangulate --gap 10}: the
-A9 multi-frame depth comparison; needs the raw capture (\S4.9.6) $\rightarrow$ \texttt{outputs/parallax\_ablation.json}
+A9 multi-frame depth comparison; needs the raw capture (Appendix D.6) $\rightarrow$ \texttt{outputs/parallax\_ablation.json}
 \item \texttt{python eval/seed\_stats.py}: aggregates the benchmark arms across seeds $\rightarrow$
 \texttt{outputs/tables/seed\_replication.md}
 \item \texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30}: content-adaptive
@@ -113,3 +113,112 @@ Every reported number traces to one of the JSON/markdown artefacts these command
 
 
 The complete geometric specification of the seven predicates (definitions, thresholds, worked examples, and the correction and flagging rules) is maintained in the repository at \texttt{docs/predicate\_spec.md} and is reproduced in the submitted version of this document.
+
+
+\chapter{Ablation derivations}
+
+
+Chapter 4 (\S4.9) summarises the nine ablations and their verdicts. This appendix gives the derivations: how each shipped parameter was calibrated on the training annotator groups, what the held-out groups then reported, and what the audits of the affected predictions found. The two declined refinements are included in full, because a negative result is only useful if the reader can see what was actually tried.
+
+\subsection{D.1 The support depth co-location gate (ablation A1)}
+
+The audit's support-precision failure has a geometric cause: on a floor plane, "farther" projects as "higher in the image", so a behind-pair produces the same 2D box signature as a stacked pair. The repair is a depth co-location condition on \texttt{on}/\texttt{under} (truly stacked objects share a camera distance), an instance of the reject-the-geometrically-impossible correction principle adapted from Open3D-VQA (Zhang et al., 2025; \S2.5), calibrated on the train groups (\texttt{on\_depth\_eps} = 0.06) and validated held-out (ablation A1): support F1 on never-seen annotators rises 0.58 $\rightarrow$ 0.71. Downstream effects on the headline table: support recall -2/-3 points, \texttt{on} restricted precision 0.57 $\rightarrow$ 0.73, 44\% fewer support emissions (of the 26 audited false positives, the gate removes 12 while keeping all 4 true positives), and, because fewer false contacts suppress fewer proximity labels, \texttt{near} recall rises 0.87 $\rightarrow$ 0.95 (held-out 1.00). Mean recall is unchanged at 0.79 with a substantially more trustworthy label set. The residual false fires are same-depth cluster neighbours, which depth cannot separate by construction; they are addressed next.
+
+\subsection{D.2 The mask-contact rule (ablation A5)}
+
+The support signature that boxes cannot see, masks can: A rests on B iff the pixels directly below A's mask-bottom boundary belong to B (\texttt{src/contact.py}), which captures both stacking and the containment case, and rejects side-by-side neighbours. Calibrated on the train groups (\texttt{on\_contact\_min} = 0.60; the train-F1 plateau is flat from 0.60--0.80, so the choice is uncritical), ablation A5: support F1 on held-out annotators rises again, 0.71 $\rightarrow$ \textbf{0.87}, with \texttt{on} recall 0.82 $\rightarrow$ 0.88 and restricted precision 0.73 $\rightarrow$ 0.88 simultaneously, the rare change that improves both error directions at once, exactly as the failure gallery and audit predicted. Knock-on: \texttt{near} recall reaches \textbf{0.997 pooled (715/717; the two residual misses are contact-boundary cases, \S4.10) and 1.00 held-out} as the last contact-boundary suppressions disappear; headline mean recall 0.79 $\rightarrow$ \textbf{0.81}. The A4 sweep confirms the fitted threshold sits exactly at the recall plateau's knee: recall is flat from T = 1.372 upward while emissions keep growing, so the fitted value is the least-permissive point achieving maximal agreement. A 30-sample re-audit of the new support extras confirms the precision claim independently: extras correct rise from 1/15 and 3/15 (box rule) to \textbf{11/15 and 12/15}, an estimated true support precision of \textasciitilde{}0.27 $\rightarrow$ \textasciitilde{}0.9. The seven remaining wrong/uncertain extras have structure: a person \textit{holding} a remote fires contact (holding $\neq$ resting), one occluded bottle-behind-bottle pair, and three distant clusters too small to verdict confidently. The person-holding mode is closed by a \textbf{class-aware guard}: annotators never label person-support (0 of 2,466 gold support triplets involve a person on either side), so \texttt{on}/\texttt{under} are simply not evaluated for that class, removing \textasciitilde{}130 false emissions at no recall cost, since the person side carried no gold to recover.
+
+\subsection{D.3 The ground-plane fallback (ablation A7)}
+
+The depth abstention band was the single largest miss cause, and most of it is resolvable without depth at all: two objects standing on the same floor are depth-ordered by pure projection. The nearer object's box bottom sits lower in the image, a pixel-precise cue exactly where relative depth is noisiest. The shipped rule fires only where the depth rule abstained, only when \textit{neither} object rests on another object by the tool's own contact evidence (an elevated object's box bottom locates its support, not itself), and only outside a small bottom-edge band (\texttt{plane\_band} = 0.005, calibrated on the train groups; ablation A7). On the train groups the fallback adds 386 committed directions at 0.91 agreement; on held-out group 7 it adds 54 and \textbf{every one agrees with the annotator}. Effect on the headline: front/behind recall 0.52/0.55 $\rightarrow$ \textbf{0.64/0.66} (aligned overall 0.67 $\rightarrow$ \textbf{0.84}), mean recall 0.81 $\rightarrow$ \textbf{0.85}, and the depth-ambiguous flag rate falls 29.5\% $\rightarrow$ 19.3\%. A seeded 15-sample audit of the fallback's \textit{extra} predictions (pairs no human labelled) estimates true precision conservatively at \textbf{11/15 $\approx$ 0.73}, and the four wrong/uncertain cases share one structure: an object resting on something the detector has no box for (a book on an unannotated case; a stacked-book pair whose contact fell below threshold), i.e. elevation the guard cannot see. That residual mode is documented, bounded, and exactly the undetected-support refinement the support audit already motivates.
+
+\subsection{D.4 Follow-up refinements: one shipped, two declined}
+
+The class-aware guard \textit{shipped}: annotators never label person-support (0 of 2,466 gold triplets), so support is no longer evaluated when either object is a person, removing \textasciitilde{}130 held-object emissions at zero recall cost and eliminating the person-holding audit mode by construction. Two further candidates were built, measured, and rejected on the evidence. (i) \textit{Guard-only surface detection} (zero-shot prompts for tables, cases and trays feeding the elevation guard; \texttt{scripts/run\_surface\_guard.py}) suppressed 6\% of the fallback's extra commits at a cost of 0.01 behind recall, but blocked none of the four audited failures, whose supports are either annotated-class objects with below-threshold contact (flat stacked books) or surfaces the detector missed; the machinery and its cache are retained as an ablation (\texttt{outputs/surface\_guard\_ablation/}). (ii) \textit{A larger depth model} (Depth Anything v2 Base, 4$\times$ the parameters) moved front/behind recall by +0.001/+0.002: the remaining depth ambiguity lives in the scenes, not in model capacity, and the Small variant's Apache licence is kept. Both null results bound where further engineering can and cannot help.
+
+\subsection{D.5 Why a geometric cue, not a bigger depth model (ablation A8)}
+
+It is worth asking whether the depth pair would improve simply by using a stronger depth network. It does not: swapping Depth Anything v2 Small for the 4$\times$ larger Base variant and re-running the whole dataset moves front/behind recall by +0.005 (0.636/0.652 $\rightarrow$ 0.641/0.656) and mean recall by +0.000. The depth-predicate limit is \textit{monocular ambiguity} (two objects at a similar camera distance are inseparable by any monocular model, regardless of its fidelity), not the network's quality. This is precisely why the fallback that worked is a geometric projection cue rather than a heavier perception model, and it justifies shipping the Small variant: identical accuracy, an Apache-2.0 licence, and half the VRAM.
+
+
+\subsection{D.6 Why not multi-frame depth either (ablation A9)}
+
+Ablation A8 rules out a bigger \textit{monocular} model, but it leaves the sharper objection open. The images are consecutive frames of a robot walk (\S4.14), so neighbouring frames exist that view the same scene from a different camera position. Two views constrain depth geometrically, without any learned prior, and that is the classical remedy for exactly the ambiguity A8 blames. If the front/behind shortfall is a depth problem, this is what should fix it.
+
+Two multi-frame estimators were built and scored against the same gold, on the seven annotator groups that use the standard direction convention, so that a geometrically correct answer is not penalised by the inversion of \S4.5 (\texttt{eval/parallax\_ablation.py}).
+
+The first reads \textit{residual displacement}: under camera translation a nearer object sweeps further across the image, so after subtracting the median motion, which is the part rotation contributes equally to every object, the larger residual should be the nearer object. It performs at chance, 0.445 to 0.512 across baselines from 5 to 60 frames. The reason is that the assumption is wrong for this motion: a walking robot translates forward as well as sideways, and forward motion produces flow radiating from the focus of expansion, where displacement depends on an object's distance from that point as much as on its depth. An object near the focus of expansion barely moves however close it is.
+
+The second recovers the camera pose properly, estimating the essential matrix from whole-image correspondences, decomposing it into rotation and translation, and triangulating the points inside each object's box. Focal length is assumed rather than calibrated, which is tolerable because only the depth \textit{ordering} is read and that is insensitive to moderate focal error. This is the correct construction and it does much better than the first, but not well enough:
+
+\begin{center}
+\small
+\begin{longtable}{lrr}
+\hline
+Depth cue & Ordering accuracy & Pairs answered \\
+\hline
+\endfirsthead
+\hline
+Depth cue & Ordering accuracy & Pairs answered \\
+\hline
+\endhead
+Two-view triangulation (10-frame baseline) & 0.706 & 337 of 3,597 \\
+Monocular cascade, same pairs & 0.875 & 337 of 3,597 \\
+\hline
+\end{longtable}
+\end{center}
+
+Both numbers fall on the same pairs, so the comparison is like for like. The multi-frame estimate is 0.17 worse where it applies, and the two disagree on 27\% of pairs, with the monocular cascade right more often in that disagreement. Coverage is the harsher problem: triangulation returns an answer for 9\% of the depth-labelled pairs, because it needs several trackable corners inside an object's box and the dataset's objects are small, low-texture cubes and boxes photographed at 640$\times$480 in greyscale. Widening the baseline trades coverage for geometry without helping accuracy: at 40 frames, accuracy falls to 0.610.
+
+Splitting those pairs by how far apart the two triangulated depths actually are says more than the aggregate does, and it is the check that separates a weak estimator from a broken one:
+
+\begin{center}
+\small
+\begin{longtable}{lrr}
+\hline
+Relative depth separation & Pairs & Ordering accuracy \\
+\hline
+\endfirsthead
+\hline
+Relative depth separation & Pairs & Ordering accuracy \\
+\hline
+\endhead
+0.000--0.014 & 86 & 0.453 \\
+0.014--0.045 & 85 & 0.776 \\
+0.045--0.124 & 86 & 0.895 \\
+0.124 and above & 86 & 0.721 \\
+\hline
+\end{longtable}
+\end{center}
+
+The estimator is real. Given objects at moderately different depths it reaches 0.895, which is the monocular cascade's own accuracy on this slice, so the implementation is not the thing holding it back. What it cannot do is the part that matters: on the quartile of pairs whose depths are nearly equal it performs at chance, 0.453. Those are precisely the pairs the monocular cascade abstains on, and the reason is the same for both methods. Two objects at genuinely similar camera distance are not separated by measuring depth more carefully, because the quantity being measured is almost the same for each of them. Multi-view geometry inherits that limit rather than removing it. The fall to 0.721 in the top quartile is the opposite failure and a real weakness of two-view triangulation: a handful of badly conditioned points produce depths that are wrong \textit{and} far apart, so the largest separations include the worst outliers.
+
+The honest scope of this result is that it rules out the cheap version of the idea rather than the idea itself. A careful multi-view reconstruction over many frames, with bundle adjustment and real intrinsics, would estimate depth better than two views and an assumed focal length. What the ablation establishes is that geometric depth is not free here, that the obvious implementations lose to the monocular cascade on both accuracy and coverage, and, read with \S4.14, that the return on any of them is bounded: a predicate that already reproduces its own verdict 0.955 of the time across viewpoints does not have much room to gain from measuring depth more precisely. There is also a design cost that no accuracy figure captures. Every multi-frame method requires neighbouring frames at inference time, which the single-image annotator this project set out to build does not have.
+
+
+\chapter{Extended validation studies}
+
+
+Two studies in Chapter 4 report their headline result in the chapter and their supporting detail here: the vision-language baseline of \S4.16, whose diagnostics are what make its failure interpretable rather than merely worse, and the viewpoint-stability measurement of \S4.14, whose segmentation evidence and coverage limits qualify how far the stability figures reach.
+
+\subsection{E.1 The vision-language baseline: diagnostics and limits}
+
+One asymmetry must be stated or the precision comparison will be read as stronger than it is. The pipeline's apparent false positives were audited (\S4.4) and found to be largely \textit{correct but unrecorded}, relations that hold geometrically which the annotators did not write down, giving audited true precision near 1.0 on the lateral and proximity predicates. Its 0.35 here is therefore a floor set by sparse gold rather than a measure of error. No equivalent audit exists for the model's assertions, so its 0.42 is not known to be a floor in the same way. The two are comparable as agreement with the human record, and are not comparable as truthfulness.
+
+\textbf{How it fails is the interesting part, and it is not the way a badly-calibrated model fails.} Three diagnostics separate wrong answers from absent ones.
+
+It does not contradict itself: across 1,187 emitted relations there is not one case of a pair given both a predicate and its opposite. Nor is its front/behind convention inverted in the manner of annotator groups 6 and 8; only 8 of 145 depth-pair misses name the opposite direction, against a rate approaching 1.0 for a genuine convention flip.
+
+What it does instead is \textbf{fall silent}. Of the human triplets it misses, the majority are pairs on which it said nothing at all: 27 of 49 for \textit{to the left of}, 31 of 49 for \textit{to the right of}, 45 of 80 for \textit{in front of}. It emits about 40 relations per image where the pipeline emits several hundred.
+
+And its silence is uneven in a familiar way. It asserts \textit{to the left of} 374 times but supplies the matching \textit{to the right of} on the swapped pair in only 65\% of those cases, leaving 131 assertions whose inverse it never states, while support relations carry their inverse 100\% of the time. That is the same defect \S4.5 measures in the human annotation, where one group recorded 188 instances of \textit{on} and no instances of \textit{under}.
+
+\textbf{The conclusion is worth stating plainly, because it is the project's argument arriving from an unexpected direction.} Asked to annotate, a capable vision-language model reproduces the characteristic failure of the human annotation process rather than the characteristic failure of a geometric one. It is sparse, it labels one direction of a symmetric pair and not the other, and it is at its weakest exactly where the humans were. It is not a cheaper annotator; it is a faster instance of the thing this project was built to replace, and it inherits the properties that made replacing it worthwhile, including the one that flatters it here. Being conservative is why its precision beats the pipeline's, and being conservative is also why most of the relations in a scene go unrecorded. The pipeline's advantage over it is not fluency and not per-assertion agreement, it is exhaustiveness and the guaranteed anti-symmetry of \S3.6.
+
+Three limits on this result. It is thirty images and one model at one prompt; a larger model, a chain-of-thought prompt or a fine-tune could all move the numbers, and the pilot was scoped to decide a role rather than to establish a bound. The prompt asks for every pair that stands in a relationship, so part of the silence may be the model's own judgement about what is worth recording, which is itself the annotator behaviour under discussion rather than an artefact. And the recall column rewards density, which is why the precision comparison is reported beside it; neither column alone is a verdict.
+
+\subsection{E.2 Viewpoint stability: segmentation evidence and coverage}
+
+\textit{Segmentation.} At $\tau$ = 10 the full 2,650-frame sequence collapses to 892 segments, a 3.0$\times$ reduction; over the 884 released frames it gives 331, 2.7$\times$. Scored on the released portion, where the eight layout changes are known, every one is recovered within five frames (boundary recall 1.00). Precision against those eight is low by construction and not a defect: viewpoint changes within a block are genuine content changes, merely finer-grained. The standard alternative has no usable operating point at all on this material, for the reason \S3.10 gives: thresholding consecutive-frame differences at 15 grey levels fires 13 times and finds none of the eight, and at 5 it finds all eight among 604 firings, a precision of 0.013.
+
+\textbf{Limits.} Two, both restricting scope rather than direction. Stability is computed only on pairs that could be matched between keyframe and frame, and those are the pairs whose objects moved least in the image, plausibly the easier population, so the figures are an upper bound. And matched coverage falls as segments grow, from 88.7\% of pairs at $\tau$ = 5 to 58.5\% at $\tau$ = 10 and 26.5\% at $\tau$ = 20, so aggressive compression leaves most pairs uncovered rather than mislabelled. The cause is box drift under camera motion rather than missing annotation: at $\tau$ = 20, 65\% of skipped frames carry an identical object count to their keyframe, and relaxing the overlap criterion from 0.5 to 0.1 cuts unmatched objects from 5.6 to 2.2 per frame. Carrying object identity with a tracker, as \texttt{scripts/run\_video.py} already does for video, rather than with per-frame overlap, is the straightforward extension that would recover it.

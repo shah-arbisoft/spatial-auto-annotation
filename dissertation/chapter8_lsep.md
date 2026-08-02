@@ -23,7 +23,7 @@ engineering requirement, not an afterthought, and in one case it shaped the
 pipeline: Depth Anything v2 is released under Apache-2.0 only in its Small
 variant, while the larger variants carry a non-commercial licence, so the
 Small variant was preferred, a choice later justified independently on
-accuracy grounds by ablation A8 (§4.9.5). SAM2 and Grounding DINO are
+accuracy grounds by ablation A8 (Appendix D.5). SAM2 and Grounding DINO are
 Apache-2.0. The YOLO training used for the benchmark detector relies on the
 `ultralytics` library, which is AGPL-3.0; this is compatible with academic
 research use, but a commercial deployment of that component would need a
@@ -83,7 +83,7 @@ self-assessment process (Appendix A). Third, research integrity in
 reporting: predictions were registered before the benchmark run and two of
 the three are reported as refuted (§6.6); a withdrawn hypothesis remains in
 the text (§6.4); and two built refinements are reported as measured and
-declined (§4.9.4). The dissertation treats honest negative results as
+declined (Appendix D.4). The dissertation treats honest negative results as
 results.
 
 ## 8.4 Professional considerations
