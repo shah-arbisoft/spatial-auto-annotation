@@ -119,15 +119,24 @@ The `Dockerfile` at the repository root pins Python 3.11, torch 2.5.1 +
 cu121 and installs SAM2 from GitHub, applying that same fix in the build
 itself, and a `.dockerignore` holds the build context to the 94 source files
 that belong in an image, keeping the caches, the dataset and the credentials
-file out of it. The build has been run rather than merely written, and its
-log is kept at `outputs/docker/build_full.log`: base image 193 s, system
-packages 31 s, Python dependencies 328 s, then a final stage that runs the
-test suite inside the container and reports **66 passed** followed by a
-successful import of the rule layer, so a broken environment cannot produce
-an image at all. That verifies the build. Running the finished image was not
-completed, because the Docker daemon on the development machine became
-unreliable after the export stage, so the container run commands quoted in
-the `Dockerfile` header are given as written rather than as executed.
+file out of it.
+
+The build was attempted and its log is kept at
+`outputs/docker/build_summary.txt`. What it establishes, and what it does
+not, are worth separating. Every construction stage completed: the base
+image in 193 s, system packages in 31 s, and the Python dependencies,
+including SAM2 and the forced CUDA torch reinstall, in 328 s. The final
+stage then ran the project's test suite *inside the container* and reported
+**66 passed**, followed by a successful import of the rule layer. Those are
+the parts that test the recipe, and they passed. What did not complete was
+the last step, unpacking the exported image into the local image store: the
+development machine ran out of disk during that step, the daemon became
+unresponsive, and `docker build` returned a non-zero status. The image was
+therefore never run, and the container commands in the `Dockerfile` header
+are given as written rather than as executed. The environment specification
+is verified to build and to pass its tests; the packaged artefact is not
+verified, and a reader with more disk than this project had should expect
+the build to complete where it stopped here.
 
 **2. Data.** Clone the released dataset (CC-BY 4.0) and point
 `dataset.root` in `configs/default.yaml` at it. The loader expects the
