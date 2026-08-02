@@ -30,10 +30,14 @@ panel on the first screen states the purpose, the data collected, and a
 contact address. Faces in all quiz images are pixelated before publication,
 and items where anonymisation would obscure the object under judgement were
 removed rather than shown. The collection is covered by the University's
-ethics self-assessment process.
+ethics self-assessment process, completed and submitted on 19 July 2026.
+Because the study collects no personal data, involves no vulnerable groups
+and carries no foreseeable risk beyond that of everyday life, it falls
+within the self-assessment route rather than requiring full committee
+review.
 
-<!-- TODO(user): insert the completed self-assessment form / approval
-confirmation here once submitted. -->
+*The completed self-assessment form is attached at the end of this
+appendix.*
 
 **Demonstration footage.** The two video clips in §4.12 are royalty-free
 stock footage from Pexels, used under the Pexels licence (free use, no

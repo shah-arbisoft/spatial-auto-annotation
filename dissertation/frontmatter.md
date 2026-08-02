@@ -27,9 +27,24 @@
 
 ## Acknowledgements
 
-[To write personally before submission: supervisor (Dr Peng Wang, for the
-dataset, the annotation-tool pointers and the guidance), family/friends, and
-anyone who volunteered judgements in the validation quiz.]
+I thank my supervisor, Dr Peng Wang, for the dataset this project is built
+on, for the pointers to the annotation and scene-graph tooling that shaped
+its early direction, and for steady guidance throughout. I am grateful to
+his research group both for collecting and releasing the dataset and for
+supplying the full robot capture from which the released images were cut,
+which made the scale and viewpoint-stability measurements possible.
+
+I thank the volunteers who gave their time to judge sampled predictions in
+the validation study, without which the precision estimates would have
+rested on my own verdicts alone.
+
+Finally, I thank my family and friends for their patience and support over
+the course of this work.
+
+> Personalise before submission if you wish to name individuals; the text
+> above is accurate as it stands. The built copy of this section lives in
+> the `MAIN` template in `scripts/build_latex.py`, which is what the LaTeX
+> assembly reads, so edit both or edit there.
 
 ## Declaration of originality
 
@@ -49,5 +64,8 @@ Signature: ................................  Date: ....................
 
 ## Word count
 
-TOTAL NUMBER OF WORDS: [insert at assembly; chapters only, excluding title
-page, abstract, acknowledgements, contents, references and appendices]
+TOTAL NUMBER OF WORDS: computed at assembly by `scripts/build_latex.py` and
+written into the declaration page, so it cannot drift as chapters are
+edited. The count covers the abstract and the nine chapters, excluding the
+editorial notes at the top of each chapter, the front matter, the references
+and the appendices.
