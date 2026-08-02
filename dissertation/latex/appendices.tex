@@ -29,7 +29,7 @@ from the geometry cache (\textasciitilde{}20 s, no GPU)
 every headline recall $\rightarrow$ \texttt{outputs/tables/uncertainty.md}
 \item \texttt{python eval/annotator\_agreement.py}: annotator heterogeneity and the
 estimated human-human agreement bounds $\rightarrow$ \texttt{outputs/tables/annotator\_agreement.md}
-\item \texttt{python eval/ablations.py}: ablations A1--A6 $\rightarrow$ \texttt{outputs/tables/ablations.md}
+\item \texttt{python eval/ablations.py}: ablations A1--A7 $\rightarrow$ \texttt{outputs/tables/ablations.md}
 \item \texttt{python eval/depth\_ablation.py}: the A8 depth-model comparison
 \item \texttt{python eval/parallax\_ablation.py --method triangulate --gap 10}: the
 A9 multi-frame depth comparison; needs the raw capture (Appendix D.6) $\rightarrow$ \texttt{outputs/parallax\_ablation.json}
@@ -203,6 +203,8 @@ Two studies in Chapter 4 report their headline result in the chapter and their s
 
 \subsection{E.1 The vision-language baseline: diagnostics and limits}
 
+The recall, precision and F1 tables this section refers to are in \S4.16, which reports the headline comparison: the model recovers 0.40 of the human triplets against the pipeline's 0.83, and is the more precise labeller on the judged pairs, 0.42 against 0.35, while losing F1 on every predicate.
+
 One asymmetry must be stated or the precision comparison will be read as stronger than it is. The pipeline's apparent false positives were audited (\S4.4) and found to be largely \textit{correct but unrecorded}, relations that hold geometrically which the annotators did not write down, giving audited true precision near 1.0 on the lateral and proximity predicates. Its 0.35 here is therefore a floor set by sparse gold rather than a measure of error. No equivalent audit exists for the model's assertions, so its 0.42 is not known to be a floor in the same way. The two are comparable as agreement with the human record, and are not comparable as truthfulness.
 
 \textbf{How it fails is the interesting part, and it is not the way a badly-calibrated model fails.} Three diagnostics separate wrong answers from absent ones.
@@ -213,7 +215,7 @@ What it does instead is \textbf{fall silent}. Of the human triplets it misses, t
 
 And its silence is uneven in a familiar way. It asserts \textit{to the left of} 374 times but supplies the matching \textit{to the right of} on the swapped pair in only 65\% of those cases, leaving 131 assertions whose inverse it never states, while support relations carry their inverse 100\% of the time. That is the same defect \S4.5 measures in the human annotation, where one group recorded 188 instances of \textit{on} and no instances of \textit{under}.
 
-\textbf{The conclusion is worth stating plainly, because it is the project's argument arriving from an unexpected direction.} Asked to annotate, a capable vision-language model reproduces the characteristic failure of the human annotation process rather than the characteristic failure of a geometric one. It is sparse, it labels one direction of a symmetric pair and not the other, and it is at its weakest exactly where the humans were. It is not a cheaper annotator; it is a faster instance of the thing this project was built to replace, and it inherits the properties that made replacing it worthwhile, including the one that flatters it here. Being conservative is why its precision beats the pipeline's, and being conservative is also why most of the relations in a scene go unrecorded. The pipeline's advantage over it is not fluency and not per-assertion agreement, it is exhaustiveness and the guaranteed anti-symmetry of \S3.6.
+Section 4.16 draws the conclusion these diagnostics support. One point belongs here rather than there, because it is a property of the pipeline rather than of the model: what the pipeline has over it is not fluency and not per-assertion agreement, but exhaustiveness and the guaranteed anti-symmetry of \S3.6.
 
 Three limits on this result. It is thirty images and one model at one prompt; a larger model, a chain-of-thought prompt or a fine-tune could all move the numbers, and the pilot was scoped to decide a role rather than to establish a bound. The prompt asks for every pair that stands in a relationship, so part of the silence may be the model's own judgement about what is worth recording, which is itself the annotator behaviour under discussion rather than an artefact. And the recall column rewards density, which is why the precision comparison is reported beside it; neither column alone is a verdict.
 

@@ -324,9 +324,6 @@ human set.
 
 ## 4.9 Shipped from the ablations
 
-Four rule changes came out of the audit-and-ablation loop; each is reported
-with its calibration, its held-out validation and its audit.
-
 Nine ablations were run. Seven sweep a shipped parameter over the cached
 geometry and are re-runnable offline in about twenty seconds
 (`eval/ablations.py`); two test whether a heavier perception stack would do
@@ -559,13 +556,12 @@ having recorded different subsets of the scene from frame to frame
 (`group_0` alone contains 43 distinct object orderings;
 `eval/keyframe_propagation.py`).
 
-*Segmentation.* At τ = 10 the full 2,650-frame sequence collapses to 892
-segments, a 3.0× reduction; over the 884 released frames it gives 331. Scored
-on the released portion, where the eight layout changes are known, every one
-is recovered within five frames (boundary recall 1.00). The standard
-alternative, thresholding consecutive-frame differences, has no usable
-operating point on this material at all, for the reason §3.10 gives;
-Appendix E gives the sweep.
+*Segmentation.* Drift-based segmentation compresses the released frames 2.7×
+at τ = 10 and locates all eight known layout changes within five frames of
+where they fall. The standard alternative, thresholding the difference
+between consecutive frames, has no usable operating point on this material
+at any setting, for the structural reason §3.10 gives. Appendix E.2 reports
+both sweeps.
 
 *Stability and cost.* The propagation runs over the 802 annotated frames
 carrying pair records, segmented within each group so no segment straddles
@@ -608,14 +604,13 @@ depth model four times larger did not improve the pair, and with §4.5, where
 two annotator groups labelled it in the opposite direction. §7.2 develops
 what follows for where the remaining effort should go.
 
-**Limits.** Two, both restricting scope rather than direction. Stability is
-computed only on pairs matchable between keyframe and frame, which are the
-pairs whose objects moved least and plausibly the easier population, so the
-figures are an upper bound; and matched coverage falls as segments grow, so
-aggressive compression leaves most pairs uncovered rather than mislabelled.
-The cause is box drift under camera motion rather than missing annotation,
-and carrying object identity with a tracker is the straightforward
-extension that would recover it. Appendix E gives the coverage figures.
+**Limits.** The figures above are an upper bound, because only pairs that
+could be matched between keyframe and frame contribute and those are the
+ones whose objects moved least in the image. Coverage also thins as segments
+grow, so aggressive compression leaves pairs uncovered rather than
+mislabelled. Appendix E.2 traces that to box drift under camera motion
+rather than to absent annotation, which makes carrying object identity with
+a tracker the straightforward remedy.
 
 ## 4.15 Scale, measured rather than extrapolated
 
@@ -734,11 +729,7 @@ it does speak it agrees with the annotators more often than the pipeline
 does, which is the beginning of a case for it as an adjudicator on the depth
 pair; §7.6 takes that up rather than settling it here.
 
-The model is not a fourth label source: it recovers under half the human
-record and loses F1 everywhere. But where it does speak it agrees with the
-annotators more often than the pipeline does, which is the beginning of a
-case for it as an adjudicator on the depth pair; §7.6 takes that up rather
-than settling it here. The comparison carries one asymmetry that stops it
+The comparison carries one asymmetry that stops it
 being read as truthfulness rather than agreement, and the model's failures
 have a diagnosable shape: it does not contradict itself and does not invert
 the front/behind convention, it simply falls silent, and it supplies one

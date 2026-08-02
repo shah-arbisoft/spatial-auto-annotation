@@ -63,7 +63,7 @@ Key commands:
   every headline recall → `outputs/tables/uncertainty.md`
 - `python eval/annotator_agreement.py`: annotator heterogeneity and the
   estimated human-human agreement bounds → `outputs/tables/annotator_agreement.md`
-- `python eval/ablations.py`: ablations A1–A6 → `outputs/tables/ablations.md`
+- `python eval/ablations.py`: ablations A1–A7 → `outputs/tables/ablations.md`
 - `python eval/depth_ablation.py`: the A8 depth-model comparison
 - `python eval/parallax_ablation.py --method triangulate --gap 10`: the
   A9 multi-frame depth comparison; needs the raw capture (Appendix D.6) →
@@ -436,6 +436,11 @@ evidence and coverage limits qualify how far the stability figures reach.
 
 ### E.1 The vision-language baseline: diagnostics and limits
 
+The recall, precision and F1 tables this section refers to are in §4.16,
+which reports the headline comparison: the model recovers 0.40 of the human
+triplets against the pipeline's 0.83, and is the more precise labeller on
+the judged pairs, 0.42 against 0.35, while losing F1 on every predicate.
+
 One asymmetry must be stated or the precision comparison will be read as
 stronger than it is. The pipeline's apparent false positives were audited
 (§4.4) and found to be largely *correct but unrecorded*, relations that hold
@@ -468,19 +473,11 @@ states, while support relations carry their inverse 100% of the time. That
 is the same defect §4.5 measures in the human annotation, where one group
 recorded 188 instances of *on* and no instances of *under*.
 
-**The conclusion is worth stating plainly, because it is the project's
-argument arriving from an unexpected direction.** Asked to annotate, a
-capable vision-language model reproduces the characteristic failure of the
-human annotation process rather than the characteristic failure of a
-geometric one. It is sparse, it labels one direction of a symmetric pair and
-not the other, and it is at its weakest exactly where the humans were. It is
-not a cheaper annotator; it is a faster instance of the thing this project
-was built to replace, and it inherits the properties that made replacing it
-worthwhile, including the one that flatters it here. Being conservative is
-why its precision beats the pipeline's, and being conservative is also why
-most of the relations in a scene go unrecorded. The pipeline's advantage
-over it is not fluency and not per-assertion agreement, it is exhaustiveness
-and the guaranteed anti-symmetry of §3.6.
+Section 4.16 draws the conclusion these diagnostics support. One point
+belongs here rather than there, because it is a property of the pipeline
+rather than of the model: what the pipeline has over it is not fluency and
+not per-assertion agreement, but exhaustiveness and the guaranteed
+anti-symmetry of §3.6.
 
 Three limits on this result. It is thirty images and one model at one prompt;
 a larger model, a chain-of-thought prompt or a fine-tune could all move the
