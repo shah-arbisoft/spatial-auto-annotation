@@ -1,0 +1,38 @@
+{
+  "images": 562,
+  "triplets": 185242,
+  "triplets_per_image": 329.61209964412814,
+  "detections_per_image": 11.667259786476869,
+  "images_with_no_triplet": 0,
+  "predicate_share": {
+    "on": 0.003039267552714827,
+    "under": 0.003039267552714827,
+    "to the left of": 0.19403267077660574,
+    "to the right of": 0.19403267077660574,
+    "in front of": 0.19542004513015407,
+    "behind": 0.19542004513015407,
+    "near": 0.21501603308105074
+  },
+  "predicate_counts": {
+    "on": 563,
+    "under": 563,
+    "to the left of": 35943,
+    "to the right of": 35943,
+    "in front of": 36200,
+    "behind": 36200,
+    "near": 39830
+  },
+  "class_counts": {
+    "cube": 2132,
+    "book": 1169,
+    "box": 1095,
+    "bottle": 1052,
+    "remote": 727,
+    "human": 382
+  },
+  "source_frames": 1766,
+  "frames_skipped": 1204,
+  "compression": 3.1423487544483986,
+  "seconds_per_image": 6.145981752511227,
+  "images_per_hour": 585.7485662935873
+}

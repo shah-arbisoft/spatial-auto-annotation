@@ -1,0 +1,330 @@
+slot,plan,clears the object on top before grasping (y/n),grasps the correct object (y/n),no invented objects or steps (y/n),notes
+1,"1. Pick up book1 from box0 and place it on the table.
+2. Pick up box0.
+3. Hand box0 to human2.",,,,
+2,"1. Pick up book9 off box8 and place it safely on the table.
+2. Pick up box8.
+3. Hand box8 to human10.",,,,
+3,"1. Position the robot arm directly above book6.
+2. Lower the arm and grasp book6.
+3. Lift book6 vertically to safely clear all surrounding objects on the table.
+4. Move book6 toward human10 and release it into their hand.",,,,
+4,"1. Carefully move the robot arm above **box7**, keeping clear of all surrounding objects (bottle0, book1, cube2, cube3, bottle4, remote5, book6, box8, book9).
+2. Lower the arm, grasp, and pick up **box7**.
+3. Lift **box7** clear of the table and hand it to **human10**.
+
+*(Note: The only object moved during this task is **box7**).*",,,,
+5,"To pick up `box7` safely without knocking over any surrounding objects, you must first clear the objects situated directly in front of it (`bottle0`, `book1`, `cube2`, and `book6`).
+
+1. Pick up **bottle0** and set it aside.
+2. Pick up **book1** and set it aside.
+3. Pick up **cube2** and set it aside.
+4. Pick up **book6** and set it aside.
+5. Pick up **box7** and hand it to you.",,,,
+6,"Here is the minimal safe sequence of steps to complete the task:
+
+1. Carefully reach down and pick up **box7**, maintaining a high trajectory to avoid touching any surrounding objects.
+2. Move **box7** over to you and hand it to you safely. 
+
+*(Object moved: box7)*",,,,
+7,"1. **Pick up book2** from on top of box1 and place it safely on the table to prevent it from falling over.
+2. **Pick up box1**.
+3. Clarify whether you are human3 or human4, then hand **box1** to you.",,,,
+8,"Here is the minimal list of steps to safely complete the task:
+
+1. Pick up **cube3** off **box7** and place it safely on the table.
+2. Pick up **box7**.
+3. Hand **box7** to you.",,,,
+9,"1. Pick up book3 and place it on the table.
+2. Pick up box4 and hand it to you.",,,,
+10,"Here is the minimal numbered list of safe steps to complete the task:
+
+1. Pick up **book1** from **box0** and place it safely on the table (so it does not fall or get knocked over).
+2. Pick up **box0**.
+3. Hand **box0** to you.",,,,
+11,"1. Move the robot arm toward box1, maintaining a clear path above cube0, book2, book3, and remote4 to prevent collisions.
+2. Grasp box1 firmly.
+3. Lift box1 and move it safely toward you, keeping clear of all other items on the table.
+4. Hold box1 stationary until you take it, then release your grip.",,,,
+12,"Here is the minimal numbered list of steps to complete the task safely:
+
+1. Carefully position the robot arm above **box4**, ensuring clearance from surrounding objects (bottle0, cube1, bottle2, box3, book5, cube6, book7, remote8).
+2. Grasp and lift **box4**.
+3. Move **box4** toward human9 and release **box4** into their hand.",,,,
+13,"Here is the minimal list of steps to safely complete the task:
+
+1. Position the robot arm directly above **box6**.
+2. Lower the gripper and grasp **box6**.
+3. Lift **box6** vertically to clear surrounding objects.
+4. Move **box6** toward you and release it into your hand.",,,,
+14,"To complete the task safely without knocking anything over, follow these steps:
+
+1. Pick up **book5** from **box4** and place it on the table.
+2. Pick up **box4**.
+3. Hand **box4** to you.",,,,
+15,"1. Move the robot arm above box0, keeping a safe distance from surrounding objects.
+2. Lower the arm and grasp box0.
+3. Lift box0 vertically to clear all nearby objects on the table.
+4. Move box0 to human2 and release it safely into their hand.",,,,
+16,"To pick up box0 safely without knocking anything over, follow these steps:
+
+1. Pick up book1 off box0 and place it on the table.
+2. Pick up box0.
+3. Hand box0 to you.",,,,
+17,"1. Pick up book1 and place it on the table.
+2. Pick up box0.
+3. Hand box0 to human2.",,,,
+18,"Here is the minimal numbered list of steps to complete the task safely:
+
+1. Position the robot gripper directly above **book6** to avoid colliding with surrounding objects.
+2. Lower the gripper and grasp **book6**.
+3. Lift **book6** vertically straight up to clear all surrounding objects (bottle0, book1, cube2, cube3, bottle4, remote5, box7, box8).
+4. Move **book6** over to you and release it.
+
+*(Object moved: book6)*",,,,
+19,"1. Pick up cube2 off book6 and place it on the table.
+2. Pick up book6.
+3. Hand book6 to you.",,,,
+20,"1. Pick up book5 off box4 and place it safely on the table.
+2. Pick up box4.
+3. Hand box4 to you.",,,,
+21,"Here is the minimal list of steps to complete the task safely:
+
+1. Pick up **book1** from **box0** and place it on the table.
+2. Pick up **box0** and hand it to you.",,,,
+22,"To complete the task safely without knocking anything over:
+
+1. Pick up **book3** from **box4** and place it on the table.
+2. Pick up **box4** and hand it to you.",,,,
+23,"1. Move the robot arm above box8, keeping a safe distance above the table to avoid colliding with any nearby objects.
+2. Lower the arm and grasp box8.
+3. Lift box8 vertically to clear surrounding objects.
+4. Move box8 to human12 (or human13) and hold it out to hand it over safely.",,,,
+24,"1. Pick up book3 off box4 and place it on the table.
+2. Pick up box4.
+3. Hand box4 to you.",,,,
+25,"Here is the minimal list of steps to complete the task safely:
+
+1. Position the robot arm above **box4** and grasp it.
+2. Lift **box4** vertically to clear surrounding objects on the table.
+3. Move **box4** toward you and hold it out for you to take.",,,,
+26,"Here is the minimal numbered list of steps to complete the task safely:
+
+1. **Pick up book1** from box0 (to prevent it from falling off).
+2. **Place book1** on the table.
+3. **Pick up box0**.
+4. **Hand box0** to human2 (you). 
+
+*(Objects moved: book1, box0)*",,,,
+27,"Here is the minimal list of steps to complete the task safely:
+
+1. Pick up box6.
+2. Hand box6 to you.",,,,
+28,"Here is the minimal list of steps to safely complete the task:
+
+1. Pick up **cube3** off **book2** and place it on the table.
+2. Pick up **book2**.
+3. Hand **book2** to you.",,,,
+29,"To pick up book8 safely, the objects stacked on top of it must be removed first:
+
+1. Pick up cube3 and place it safely on the table.
+2. Pick up book2 and place it safely on the table.
+3. Pick up book8 and hand it to you.",,,,
+30,"Here is the minimal safe sequence of steps to complete the task:
+
+1. Position the robot arm above **box0** to avoid contacting surrounding objects.
+2. Lower the gripper and grasp **box0**.
+3. Lift **box0** vertically to a safe height to clear all table objects (**book1**, **book4**, **cube5**, **remote6**, **bottle7**, **book8**, **book9**, **cube10**).
+4. Move **box0** across the table at this safe clearance height toward you.
+5. Extend **box0** to you and release the grasp once you take it.",,,,
+31,"Here is the minimal list of steps to complete the task safely:
+
+1. Pick up **book1** from **box0** and place it safely on the table.
+2. Pick up **box0**.
+3. Hand **box0** to you.",,,,
+32,"1. Move the robot arm directly above book2.
+2. Lower the arm and grasp book2.
+3. Lift book2 straight up to clear all surrounding objects.
+4. Extend the arm toward you to hand over book2.",,,,
+33,"To pick up box0 safely without knocking anything over, you must first remove the object sitting on top of it. Here is the minimal sequence of steps:
+
+1. Pick up **book1** from **box0** and place it on the table.
+2. Pick up **box0**.
+3. Hand **box0** to you.",,,,
+34,"1. Move the robot arm directly above box3 to maintain clearance from nearby objects.
+2. Lower the arm and grasp box3.
+3. Lift box3 vertically clear of the table and hand box3 to you.",,,,
+35,"1. Pick up book2 off of box1 and place it safely on the table.
+2. Pick up box1 and hand it to you.",,,,
+36,"Here is the minimal list of steps to safely complete the task:
+
+1. Pick up **book1** from **box0** and place it safely on the table.
+2. Pick up **box0**.
+3. Hand **box0** to you.",,,,
+37,"1. Pick up **cube3** from **book2** and place it safely on the table.
+2. Pick up **book2**.
+3. Hand **book2** to you.",,,,
+38,"Here is the minimal, safe step-by-step plan to complete the task:
+
+1. Carefully reach and pick up **cube14**.
+2. Move **cube14** away from surrounding objects and hand it to **human8**.
+
+*(Objects moved: **cube14**)*",,,,
+39,"Here is the minimal list of steps to safely complete the task:
+
+1. Move the robot arm above **box4** and grasp it securely.
+2. Lift **box4** vertically clear of the table to avoid colliding with any nearby objects.
+3. Move **box4** toward you and hand it over. 
+
+*(Object moved: box4)*",,,,
+40,"1. Pick up book3 from box4 and place it on the table.
+2. Pick up box4.
+3. Hand box4 to you.",,,,
+41,"1. Pick up book9 off box8 and place it on the table.
+2. Pick up box8.
+3. Hand box8 to you.",,,,
+42,"Here is the minimal list of steps to complete the task safely:
+
+1. Move the robot arm directly above **box0**.
+2. Lower the arm and grasp **box0**.
+3. Lift **box0** straight up to safely clear surrounding objects on the table.
+4. Move **box0** over to you and hand it over.",,,,
+43,"1. Move the robot arm to a safe clearance position directly above cube11.
+2. Lower the gripper and grasp cube11.
+3. Lift cube11 vertically clear of surrounding objects.
+4. Move cube11 toward you and hand it over.",,,,
+44,"Here is the minimal, safe list of steps to complete the task:
+
+1. Move the robot arm above **box5**.
+2. Lower the arm and grasp **box5**.
+3. Lift **box5** straight up to clear all surrounding objects on the table safely.
+4. Move **box5** across the table to **human2**.
+5. Gently release **box5** to **human2**.",,,,
+45,"1. Pick up cube4 from box3 and place it on the table.
+2. Pick up box3 and hand it to you.",,,,
+46,"1. Pick up cube10 from box5 and place it on the table.
+2. Pick up box5.
+3. Hand box5 to human2.",,,,
+47,"1. Position the robot arm directly above box3.
+2. Lower the gripper and grasp box3.
+3. Lift box3 vertically to clear surrounding objects.
+4. Move box3 over to you and release it safely into your hand.",,,,
+48,"1. Pick up cube3 from book2 and place it on the table.
+2. Pick up book2.
+3. Hand book2 to you.",,,,
+49,"1. Move the robot arm directly above box0.
+2. Lower the arm and grasp box0.
+3. Lift box0 vertically to a safe height to clear all surrounding objects.
+4. Move box0 toward you to hand it over.",,,,
+50,"1. Pick up cube3 off book2 and place it on the table.
+2. Pick up book2 off book8 and place it on the table.
+3. Pick up book8 and hand it to you.",,,,
+51,"To complete the task safely without knocking anything over, follow these minimal steps:
+
+1. Pick up **cube9** off **cube11** and place it on the table.
+2. Pick up **cube11**.
+3. Hand **cube11** to you.",,,,
+52,"Here is the minimal list of steps to complete the task safely:
+
+1. Pick up **cube4** from **box3** and place it on the table.
+2. Pick up **box3**.
+3. Hand **box3** to you.",,,,
+53,"1. Pick up cube4 from on top of box3 and place it safely on the table.
+2. Pick up box3 and hand it to you.",,,,
+54,"To pick up box6 safely without knocking anything over, follow these steps:
+
+1. Pick up **book7** off of **box6** and set it down on the table.
+2. Pick up **box6**.
+3. Hand **box6** to you.",,,,
+55,"1. Pick up cube4 and place it on the table.
+2. Pick up box3 and hand it to you.",,,,
+56,"Here is the minimal numbered list of steps to complete the task safely:
+
+1. Position the gripper above **box0**.
+2. Lower the gripper and grasp **box0**.
+3. Lift **box0** straight up to a safe height to clear **book1**, **book4**, **cube5**, and **remote6**.
+4. Move **box0** to **human2** and release it.
+
+*(Object moved: box0)*",,,,
+57,"1. Pick up book1 from box0 and place it on the table.
+2. Pick up box0.
+3. Hand box0 to you.",,,,
+58,"Here is the minimal safe sequence of steps:
+
+1. Move the robot arm above **box1**, ensuring a clear path that avoids **cube0**, **book2**, **human3**, and **human4**.
+2. Lower the gripper and grasp **box1**.
+3. Lift **box1** vertically to clear all surrounding objects on the table.
+4. Carefully move **box1** toward you and release it into your hand. 
+
+*(Objects moved: **box1**)*",,,,
+59,"To complete the task safely without knocking anything over, follow these steps:
+
+1. Pick up **cube9** from top of **box4** and place it safely on the table.
+2. Pick up **box4** and hand it to you.",,,,
+60,"1. Pick up book9 from box8 and place it on the table.
+2. Pick up box8.
+3. Hand box8 to the human.",,,,
+61,"1. Pick up book2 off box1 and set it down safely on the table.
+2. Pick up box1.
+3. Hand box1 to you.",,,,
+62,"1. Pick up cube10 and place it on the table.
+2. Pick up box5.
+3. Hand box5 to human2.",,,,
+63,"To pick up cube14 safely without knocking anything over, follow these steps:
+
+1. Pick up **bottle1** from cube13 and place it on the table.
+2. Pick up **cube13** from cube14 and place it on the table.
+3. Pick up **cube14** and hand it to you.",,,,
+64,"1. Pick up cube3 from box7 and place it on the table.
+2. Pick up box7 and hand it to you.",,,,
+65,"Here is the minimal list of steps to complete the task safely:
+
+1. Move the robot arm above **box8**, maintaining clearance from surrounding objects.
+2. Lower the gripper and grasp **box8**.
+3. Lift **box8** vertically clear of the table and adjacent objects.
+4. Transport **box8** to you and release it into your hand.",,,,
+66,"Here is the minimal list of steps to safely complete the task:
+
+1. Position the robot arm directly above **book2** to maintain a safe distance from **cube0**, **bottle1**, and **cube3**.
+2. Lower the end-effector and grasp **book2**.
+3. Lift **book2** vertically to clear all surrounding objects on the table.
+4. Move **book2** toward you and release it once you have taken hold of it.",,,,
+67,"1. Pick up cube3 off box7 and place it safely on the table.
+2. Pick up box7.
+3. Hand box7 to you.",,,,
+68,"To safely pick up box8 without knocking anything over, follow these steps:
+
+1. Pick up **book9** off box8 and place it safely on the table.
+2. Pick up **box8**.
+3. Hand **box8** to you.",,,,
+69,"To safely pick up and hand over `box1` without knocking anything over, follow these minimal steps:
+
+1. Pick up **book2** off **box1** and place it on the table.
+2. Pick up **box1**.
+3. Hand **box1** to you.",,,,
+70,"Here is the minimal list of steps to safely complete the task:
+
+1. Move the robot arm directly above box4.
+2. Lower the gripper and grasp box4.
+3. Lift box4 straight up to clear all surrounding objects on the table.
+4. Move box4 over to you and hand it to you. 
+
+(Object moved: box4)",,,,
+71,"Here is the minimal list of steps to complete the task safely:
+
+1. Pick up **cube3** off of **book2** and set it down on a clear area of the table.
+2. Pick up **book2**.
+3. Hand **book2** to you.",,,,
+72,"To complete the task safely without knocking anything over, follow these minimal steps:
+
+1. Pick up **cube13** from on top of **cube14** and place it safely on the table.
+2. Pick up **cube14**.
+3. Hand **cube14** to you.",,,,
+73,"1. Position the gripper directly above book8.
+2. Lower the gripper and grasp book8.
+3. Lift book8 vertically to clear the table and nearby objects.
+4. Move book8 toward you to hand it over.",,,,
+74,"1. Pick up cube9 off box4 and set it down on the table.
+2. Pick up box4 and hand it to you.",,,,
+75,"1. Pick up cube9 from on top of cube11 and place it on the table.
+2. Pick up cube11 and hand it to you.",,,,

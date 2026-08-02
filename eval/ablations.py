@@ -95,7 +95,8 @@ def score(scenes, thresholds, correct=True, use_contact=False):
         f1 = 2 * p * r / (p + r) if p + r else 0.0
         out[k] = {"recall": r,
                   "recall_ho": s["rec_ho"] / s["gold_ho"] if s["gold_ho"] else None,
-                  "precision_restricted": p, "f1_restricted": f1, "emitted": s["emit"]}
+                  "precision_restricted": p, "f1_restricted": f1, "emitted": s["emit"],
+                  "gold": s["gold"], "recalled": s["rec"]}
     return out
 
 
@@ -214,12 +215,19 @@ def main():
     md.append("\n## A6 - Correction step: near contact-exclusion on/off\n")
     md.append("| setting | near recall | near P(restr.) | near emitted |")
     md.append("|---|---|---|---|")
+    six = {}
     for label, corr in (("on (shipped)", True), ("off", False)):
         s6 = score(scenes, base, correct=corr, use_contact=True)["near"]
+        six[corr] = s6
         md.append(f"| {label} | {fmt(s6['recall'])} | {fmt(s6['precision_restricted'])} | {s6['emitted']} |")
-    md.append("\nThe exclusion costs 2 recalled triplets and prevents ~4,200 near "
-              "labels on contact pairs - labels that would contradict the measured "
-              "human convention (near co-occurs with on/under on 0 of 469 pairs).\n")
+    # counted from the two runs rather than quoted, so this sentence cannot
+    # drift away from the table above it
+    suppressed = six[False]["emitted"] - six[True]["emitted"]
+    lost = six[False]["recalled"] - six[True]["recalled"]
+    md.append(f"\nThe exclusion costs {lost} recalled triplets and prevents "
+              f"{suppressed:,} near labels on contact pairs - labels that would "
+              "contradict the measured human convention (near co-occurs with "
+              "on/under on 0 of 469 pairs).\n")
 
     # ---- 7. ground-plane fallback for depth-ambiguous pairs (`plane_band`) ----
     md.append("\n## A7 - Ground-plane depth fallback (`plane_band`)\n")

@@ -24,10 +24,28 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# outputs are regenerable artefacts (annotations, geometry cache, reports,
-# figures) — keep the directory, not its contents
+# Most of outputs/ is bulk that regenerates from a run: annotations, the
+# geometry cache, rendered audit and gallery images, video frames. Those stay
+# out; they are ~112 MB and one command rebuilds them.
 outputs/*
 !outputs/.gitkeep
+
+# The evidence does travel with the repository, because the dissertation
+# points readers at these files by name and a clone that lacks them cannot
+# check a single number. ~1.3 MB in total. The benchmark and planner
+# directories are here for a second reason: neither regenerates cheaply, one
+# needing GPU hours on Kaggle and the other paid API calls.
+!outputs/*.json
+!outputs/tables/
+!outputs/docker/
+!outputs/planner/
+!outputs/sgg_benchmark/
+outputs/sgg_benchmark/**/*.cache
+outputs/docker/build_full.log
+# the blind-scoring key stays out: it unblinds slot -> condition, and
+# eval/score_planner.py does not read it (scripts/planner_experiment.py
+# regenerates it for anyone re-running the study)
+outputs/planner/_key_do_not_share.csv
 
 # os / editor
 .DS_Store

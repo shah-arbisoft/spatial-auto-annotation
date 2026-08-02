@@ -330,8 +330,9 @@ results bound where further engineering can and cannot help.
 It is worth
 asking whether the depth pair would improve simply by using a stronger depth
 network. It does not: swapping Depth Anything v2 Small for the 4× larger Base
-variant and re-running the whole dataset moves front/behind recall by +0.005
-(0.636/0.652 → 0.641/0.656) and mean recall by +0.000. The depth-predicate
+variant and re-running the whole dataset moves front/behind recall by +0.001
+and +0.002 (0.640/0.654 → 0.641/0.656) and leaves mean recall marginally
+*lower*, 0.848 against 0.847. The depth-predicate
 limit is *monocular ambiguity* (two objects at a similar camera distance are
 inseparable by any monocular model, regardless of its fidelity), not the
 network's quality. This is precisely why the fallback that worked is a

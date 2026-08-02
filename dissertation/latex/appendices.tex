@@ -138,7 +138,7 @@ The class-aware guard \textit{shipped}: annotators never label person-support (0
 
 \subsection{D.5 Why a geometric cue, not a bigger depth model (ablation A8)}
 
-It is worth asking whether the depth pair would improve simply by using a stronger depth network. It does not: swapping Depth Anything v2 Small for the 4$\times$ larger Base variant and re-running the whole dataset moves front/behind recall by +0.005 (0.636/0.652 $\rightarrow$ 0.641/0.656) and mean recall by +0.000. The depth-predicate limit is \textit{monocular ambiguity} (two objects at a similar camera distance are inseparable by any monocular model, regardless of its fidelity), not the network's quality. This is precisely why the fallback that worked is a geometric projection cue rather than a heavier perception model, and it justifies shipping the Small variant: identical accuracy, an Apache-2.0 licence, and half the VRAM.
+It is worth asking whether the depth pair would improve simply by using a stronger depth network. It does not: swapping Depth Anything v2 Small for the 4$\times$ larger Base variant and re-running the whole dataset moves front/behind recall by +0.001 and +0.002 (0.640/0.654 $\rightarrow$ 0.641/0.656) and leaves mean recall marginally \textit{lower}, 0.848 against 0.847. The depth-predicate limit is \textit{monocular ambiguity} (two objects at a similar camera distance are inseparable by any monocular model, regardless of its fidelity), not the network's quality. This is precisely why the fallback that worked is a geometric projection cue rather than a heavier perception model, and it justifies shipping the Small variant: identical accuracy, an Apache-2.0 licence, and half the VRAM.
 
 
 \subsection{D.6 Why not multi-frame depth either (ablation A9)}

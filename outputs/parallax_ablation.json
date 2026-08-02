@@ -1,0 +1,35 @@
+[
+  {
+    "method": "triangulate",
+    "gap": 10,
+    "images": 109,
+    "images_skipped": 41,
+    "pairs": 232,
+    "parallax_accuracy": 0.6681034482758621,
+    "monocular_accuracy": 0.853448275862069,
+    "pairs_monocular_committed": 226,
+    "agreement_parallax_vs_monocular": 0.6858407079646017
+  },
+  {
+    "method": "triangulate",
+    "gap": 20,
+    "images": 113,
+    "images_skipped": 37,
+    "pairs": 240,
+    "parallax_accuracy": 0.6333333333333333,
+    "monocular_accuracy": 0.8416666666666667,
+    "pairs_monocular_committed": 234,
+    "agreement_parallax_vs_monocular": 0.6324786324786325
+  },
+  {
+    "method": "triangulate",
+    "gap": 40,
+    "images": 100,
+    "images_skipped": 50,
+    "pairs": 164,
+    "parallax_accuracy": 0.6097560975609756,
+    "monocular_accuracy": 0.8048780487804879,
+    "pairs_monocular_committed": 158,
+    "agreement_parallax_vs_monocular": 0.5569620253164557
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "per_group_agreement": {
+    "group_0": 0.8666,
+    "group_1": 0.9261,
+    "group_2": 0.8624,
+    "group_3": 0.7172,
+    "group_4": 0.868,
+    "group_5": 0.933,
+    "group_6": 0.5784,
+    "group_7": 0.9083,
+    "group_8": 0.5656
+  },
+  "inverted_groups": [
+    "group_6",
+    "group_8"
+  ],
+  "consistent_annotators": {
+    "n": 7,
+    "mean": 0.8688,
+    "min": 0.7172,
+    "max": 0.933,
+    "spread": 0.2158,
+    "sd": 0.0676
+  },
+  "human_human_estimate": {
+    "n_pairs": 21,
+    "mean_lower_bound": 0.7376,
+    "mean_upper_bound": 0.9222,
+    "tool_inside_interval": true,
+    "assumption": "batch exchangeability; see module docstring"
+  }
+}

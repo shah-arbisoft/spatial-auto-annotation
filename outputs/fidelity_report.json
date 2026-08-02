@@ -1,0 +1,452 @@
+{
+  "recall": {
+    "ours": {
+      "on": {
+        "gold": 1465,
+        "recall": 0.8791808873720136,
+        "gold_heldout": 348,
+        "recall_heldout": 0.9224137931034483
+      },
+      "under": {
+        "gold": 1001,
+        "recall": 0.8131868131868132,
+        "gold_heldout": 192,
+        "recall_heldout": 0.921875
+      },
+      "to the left of": {
+        "gold": 972,
+        "recall": 0.9650205761316872,
+        "gold_heldout": 446,
+        "recall_heldout": 0.952914798206278
+      },
+      "to the right of": {
+        "gold": 1174,
+        "recall": 0.9846678023850085,
+        "gold_heldout": 550,
+        "recall_heldout": 0.9854545454545455
+      },
+      "in front of": {
+        "gold": 2013,
+        "recall": 0.6398410332836563,
+        "gold_heldout": 609,
+        "recall_heldout": 0.19704433497536947
+      },
+      "behind": {
+        "gold": 1584,
+        "recall": 0.6553030303030303,
+        "gold_heldout": 580,
+        "recall_heldout": 0.34655172413793106
+      },
+      "near": {
+        "gold": 717,
+        "recall": 0.99721059972106,
+        "gold_heldout": 93,
+        "recall_heldout": 1.0
+      },
+      "MEAN": {
+        "recall": 0.8477729631976099,
+        "recall_heldout": 0.7608934565539389
+      }
+    },
+    "random": {
+      "on": {
+        "gold": 1465,
+        "recall": 0.1310580204778157,
+        "gold_heldout": 348,
+        "recall_heldout": 0.12643678160919541
+      },
+      "under": {
+        "gold": 1001,
+        "recall": 0.16083916083916083,
+        "gold_heldout": 192,
+        "recall_heldout": 0.13541666666666666
+      },
+      "to the left of": {
+        "gold": 972,
+        "recall": 0.1337448559670782,
+        "gold_heldout": 446,
+        "recall_heldout": 0.12780269058295965
+      },
+      "to the right of": {
+        "gold": 1174,
+        "recall": 0.13202725724020442,
+        "gold_heldout": 550,
+        "recall_heldout": 0.11818181818181818
+      },
+      "in front of": {
+        "gold": 2013,
+        "recall": 0.12816691505216096,
+        "gold_heldout": 609,
+        "recall_heldout": 0.13464696223316913
+      },
+      "behind": {
+        "gold": 1584,
+        "recall": 0.15593434343434343,
+        "gold_heldout": 580,
+        "recall_heldout": 0.1396551724137931
+      },
+      "near": {
+        "gold": 717,
+        "recall": 0.1603905160390516,
+        "gold_heldout": 93,
+        "recall_heldout": 0.13978494623655913
+      },
+      "MEAN": {
+        "recall": 0.14316586700711645,
+        "recall_heldout": 0.13170357684630876
+      }
+    },
+    "majority": {
+      "on": {
+        "gold": 1465,
+        "recall": 0.0,
+        "gold_heldout": 348,
+        "recall_heldout": 0.0
+      },
+      "under": {
+        "gold": 1001,
+        "recall": 0.0,
+        "gold_heldout": 192,
+        "recall_heldout": 0.0
+      },
+      "to the left of": {
+        "gold": 972,
+        "recall": 0.0,
+        "gold_heldout": 446,
+        "recall_heldout": 0.0
+      },
+      "to the right of": {
+        "gold": 1174,
+        "recall": 0.0,
+        "gold_heldout": 550,
+        "recall_heldout": 0.0
+      },
+      "in front of": {
+        "gold": 2013,
+        "recall": 1.0,
+        "gold_heldout": 609,
+        "recall_heldout": 1.0
+      },
+      "behind": {
+        "gold": 1584,
+        "recall": 0.0,
+        "gold_heldout": 580,
+        "recall_heldout": 0.0
+      },
+      "near": {
+        "gold": 717,
+        "recall": 0.0,
+        "gold_heldout": 93,
+        "recall_heldout": 0.0
+      },
+      "MEAN": {
+        "recall": 0.14285714285714285,
+        "recall_heldout": 0.14285714285714285
+      }
+    },
+    "majority_predicate": "in front of",
+    "box_only": {
+      "on": {
+        "gold": 1465,
+        "recall": 0.8395904436860068,
+        "gold_heldout": 348,
+        "recall_heldout": 0.9195402298850575
+      },
+      "under": {
+        "gold": 1001,
+        "recall": 0.7722277722277723,
+        "gold_heldout": 192,
+        "recall_heldout": 0.984375
+      },
+      "to the left of": {
+        "gold": 972,
+        "recall": 0.9681069958847737,
+        "gold_heldout": 446,
+        "recall_heldout": 0.9506726457399103
+      },
+      "to the right of": {
+        "gold": 1174,
+        "recall": 0.985519591141397,
+        "gold_heldout": 550,
+        "recall_heldout": 0.9872727272727273
+      },
+      "in front of": {
+        "gold": 2013,
+        "recall": 0.0,
+        "gold_heldout": 609,
+        "recall_heldout": 0.0
+      },
+      "behind": {
+        "gold": 1584,
+        "recall": 0.0,
+        "gold_heldout": 580,
+        "recall_heldout": 0.0
+      },
+      "near": {
+        "gold": 717,
+        "recall": 0.8688981868898187,
+        "gold_heldout": 93,
+        "recall_heldout": 0.978494623655914
+      },
+      "MEAN": {
+        "recall": 0.6334775699756812,
+        "recall_heldout": 0.6886221752219441
+      }
+    }
+  },
+  "restricted_prf": {
+    "on": {
+      "precision": 0.8786,
+      "recall": 0.8792,
+      "f1": 0.8789,
+      "support": 1465
+    },
+    "under": {
+      "precision": 0.8444,
+      "recall": 0.8132,
+      "f1": 0.8285,
+      "support": 1001
+    },
+    "to the left of": {
+      "precision": 0.3501,
+      "recall": 0.965,
+      "f1": 0.5138,
+      "support": 972
+    },
+    "to the right of": {
+      "precision": 0.4172,
+      "recall": 0.9847,
+      "f1": 0.5861,
+      "support": 1174
+    },
+    "in front of": {
+      "precision": 0.4293,
+      "recall": 0.6398,
+      "f1": 0.5139,
+      "support": 2013
+    },
+    "behind": {
+      "precision": 0.3556,
+      "recall": 0.6553,
+      "f1": 0.461,
+      "support": 1584
+    },
+    "near": {
+      "precision": 0.116,
+      "recall": 0.9972,
+      "f1": 0.2078,
+      "support": 717
+    },
+    "n_annotated_pairs": 8790
+  },
+  "confusion": {
+    "on": {
+      "n": 1465,
+      "responses": {
+        "correct": 1288,
+        "near": 177,
+        "behind": 155,
+        "to the right of": 48,
+        "to the left of": 46,
+        "in front of": 13
+      }
+    },
+    "under": {
+      "n": 1001,
+      "responses": {
+        "correct": 814,
+        "in front of": 167,
+        "near": 166,
+        "to the left of": 63,
+        "to the right of": 46,
+        "behind": 11
+      }
+    },
+    "to the left of": {
+      "n": 972,
+      "responses": {
+        "correct": 938,
+        "near": 33,
+        "in front of": 29,
+        "to the right of": 24,
+        "behind": 4
+      }
+    },
+    "to the right of": {
+      "n": 1174,
+      "responses": {
+        "correct": 1156,
+        "near": 17,
+        "to the left of": 16,
+        "in front of": 11,
+        "behind": 7
+      }
+    },
+    "in front of": {
+      "n": 2013,
+      "responses": {
+        "correct": 1288,
+        "near": 574,
+        "behind": 422,
+        "to the left of": 261,
+        "to the right of": 131,
+        "under": 93,
+        "on": 51
+      }
+    },
+    "behind": {
+      "n": 1584,
+      "responses": {
+        "correct": 1038,
+        "near": 421,
+        "in front of": 353,
+        "to the right of": 173,
+        "to the left of": 126,
+        "on": 91,
+        "under": 34
+      }
+    },
+    "near": {
+      "n": 717,
+      "responses": {
+        "correct": 715,
+        "on": 2
+      }
+    }
+  },
+  "per_group_recall": {
+    "group_0": {
+      "gold_triplets": 1949,
+      "recall": 0.8666
+    },
+    "group_1": {
+      "gold_triplets": 1489,
+      "recall": 0.9261
+    },
+    "group_2": {
+      "gold_triplets": 1192,
+      "recall": 0.8624
+    },
+    "group_3": {
+      "gold_triplets": 435,
+      "recall": 0.7172
+    },
+    "group_4": {
+      "gold_triplets": 356,
+      "recall": 0.868
+    },
+    "group_5": {
+      "gold_triplets": 687,
+      "recall": 0.933
+    },
+    "group_6": {
+      "gold_triplets": 970,
+      "recall": 0.5784
+    },
+    "group_7": {
+      "gold_triplets": 796,
+      "recall": 0.9083
+    },
+    "group_8": {
+      "gold_triplets": 1052,
+      "recall": 0.5656
+    }
+  },
+  "front_behind_decomposition": {
+    "group_0": {
+      "gold": 724,
+      "emit_rate": 0.9227,
+      "direction_agreement_when_committed": 0.9491,
+      "raw_recall": 0.8757,
+      "convention": "same",
+      "convention_aligned_recall": 0.8757
+    },
+    "group_1": {
+      "gold": 639,
+      "emit_rate": 0.9812,
+      "direction_agreement_when_committed": 1.0,
+      "raw_recall": 0.9812,
+      "convention": "same",
+      "convention_aligned_recall": 0.9812
+    },
+    "group_2": {
+      "gold": 351,
+      "emit_rate": 0.584,
+      "direction_agreement_when_committed": 1.0,
+      "raw_recall": 0.584,
+      "convention": "same",
+      "convention_aligned_recall": 0.584
+    },
+    "group_3": {
+      "gold": 258,
+      "emit_rate": 0.5426,
+      "direction_agreement_when_committed": 0.9786,
+      "raw_recall": 0.531,
+      "convention": "same",
+      "convention_aligned_recall": 0.531
+    },
+    "group_4": {
+      "gold": 65,
+      "emit_rate": 1.0,
+      "direction_agreement_when_committed": 0.5692,
+      "raw_recall": 0.5692,
+      "convention": "same",
+      "convention_aligned_recall": 0.5692
+    },
+    "group_5": {
+      "gold": 371,
+      "emit_rate": 0.9973,
+      "direction_agreement_when_committed": 0.9865,
+      "raw_recall": 0.9838,
+      "convention": "same",
+      "convention_aligned_recall": 0.9838
+    },
+    "group_6": {
+      "gold": 415,
+      "emit_rate": 0.9807,
+      "direction_agreement_when_committed": 0.0467,
+      "raw_recall": 0.0458,
+      "convention": "inverted",
+      "convention_aligned_recall": 0.9349
+    },
+    "group_7": {
+      "gold": 330,
+      "emit_rate": 0.897,
+      "direction_agreement_when_committed": 1.0,
+      "raw_recall": 0.897,
+      "convention": "same",
+      "convention_aligned_recall": 0.897
+    },
+    "group_8": {
+      "gold": 444,
+      "emit_rate": 0.7275,
+      "direction_agreement_when_committed": 0.0186,
+      "raw_recall": 0.0135,
+      "convention": "inverted",
+      "convention_aligned_recall": 0.714
+    },
+    "OVERALL": {
+      "gold": 3597,
+      "raw_recall": 0.6466,
+      "convention_aligned_recall": 0.8357
+    }
+  },
+  "flag_rates": {
+    "pairs_flagged": 26716,
+    "rate": 0.3148,
+    "by_type": {
+      "depth_ambiguous": {
+        "count": 16412,
+        "rate": 0.1934
+      },
+      "lateral_ambiguous": {
+        "count": 8454,
+        "rate": 0.0996
+      },
+      "near_threshold_edge": {
+        "count": 7200,
+        "rate": 0.0848
+      }
+    }
+  }
+}

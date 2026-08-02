@@ -1,0 +1,47 @@
+{
+  "fitted_near_T": 1.3719,
+  "train": {
+    "groups": [
+      "group_0",
+      "group_4"
+    ],
+    "n_pairs": 808,
+    "n_human_near": 373,
+    "precision": 0.4662,
+    "recall": 1.0,
+    "f1": 0.636
+  },
+  "holdout": {
+    "groups": [
+      "group_8"
+    ],
+    "n_pairs": 614,
+    "n_human_near": 93,
+    "precision": 0.1553,
+    "recall": 1.0,
+    "f1": 0.2688,
+    "tp": 93,
+    "fp": 506,
+    "fn": 0
+  },
+  "per_group_at_T": {
+    "group_0": {
+      "n_near": 244,
+      "precision": 0.4094,
+      "recall": 1.0,
+      "f1": 0.581
+    },
+    "group_4": {
+      "n_near": 129,
+      "precision": 0.6324,
+      "recall": 1.0,
+      "f1": 0.7748
+    },
+    "group_8": {
+      "n_near": 93,
+      "precision": 0.1553,
+      "recall": 1.0,
+      "f1": 0.2688
+    }
+  }
+}

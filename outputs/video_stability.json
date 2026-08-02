@@ -1,0 +1,36 @@
+{
+  "clip1": {
+    "frames": 99,
+    "raw": {
+      "eligible": 544,
+      "mean_persistence": 0.8957469772420753,
+      "share_above_90": 0.8014705882352942,
+      "median": 1.0
+    },
+    "smoothed": {
+      "eligible": 540,
+      "mean_persistence": 0.9020579100826014,
+      "share_above_90": 0.8074074074074075,
+      "median": 1.0
+    },
+    "jaccard_raw": 0.8815154249684477,
+    "jaccard_smoothed": 0.889621483991723
+  },
+  "clip2": {
+    "frames": 79,
+    "raw": {
+      "eligible": 876,
+      "mean_persistence": 0.9154986204421165,
+      "share_above_90": 0.8493150684931506,
+      "median": 1.0
+    },
+    "smoothed": {
+      "eligible": 858,
+      "mean_persistence": 0.9377855009374036,
+      "share_above_90": 0.8857808857808858,
+      "median": 1.0
+    },
+    "jaccard_raw": 0.6906193600921008,
+    "jaccard_smoothed": 0.7008025201539985
+  }
+}

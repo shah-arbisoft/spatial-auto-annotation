@@ -338,9 +338,9 @@ optimised against.
 | A3 | lateral abstention band | `lateral_center_eps` 0.02 | **shipped**; recall flat to 0.02 while precision rises |
 | A4 | proximity threshold | `near_T` 1.372 | **shipped**; the knee of the recall plateau, held-out recall 1.00 |
 | A5 | mask-contact support rule | `on_contact_min` 0.60 | **shipped**; held-out support F1 0.71 → 0.87, both error directions at once |
-| A6 | `near` contact exclusion | on | **shipped**; costs 2 recalled triplets, prevents ~4,200 labels contradicting the measured convention |
+| A6 | `near` contact exclusion | on | **shipped**; costs 2 recalled triplets, prevents 4,084 labels contradicting the measured convention |
 | A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.64/0.66, mean recall 0.81 → 0.85 |
-| A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.005 front/behind, +0.000 mean |
+| A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/+0.002 front/behind, mean recall marginally lower |
 | A9 | multi-frame depth (two-view triangulation) | n/a | **declined**; 0.706 against the monocular cascade's 0.875, on 9% of pairs |
 
 Three of these changed the headline table materially, and the order they
@@ -354,7 +354,8 @@ all. Each step was calibrated on the training groups and validated on
 annotators it had never seen.
 
 The two declined ablations bound where further engineering can help. A
-four-times-larger depth model moves front/behind by 0.005, and two-view
+four-times-larger depth model moves front/behind by 0.001 and 0.002 while
+leaving mean recall slightly lower, and two-view
 triangulation over the raw capture is 0.17 *worse* than the monocular
 cascade where it returns an answer at all, which is on 9% of pairs. The
 depth-predicate limit is monocular ambiguity in the scenes rather than model

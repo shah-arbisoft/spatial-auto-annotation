@@ -1,0 +1,29 @@
+#1 DONE 0.1s
+#2 DONE 0.5s
+#3 DONE 0.1s
+#4 [1/7] FROM docker.io/pytorch/pytorch:2.5.1-cuda12.1-cudnn9-runtime@sha256:831247999fbf7e08f61b3e39f6d77ee434f38f6f07f769d00db451e853878067
+#5 DONE 0.2s
+#4 [1/7] FROM docker.io/pytorch/pytorch:2.5.1-cuda12.1-cudnn9-runtime@sha256:831247999fbf7e08f61b3e39f6d77ee434f38f6f07f769d00db451e853878067
+#4 DONE 192.8s
+#4 [1/7] FROM docker.io/pytorch/pytorch:2.5.1-cuda12.1-cudnn9-runtime@sha256:831247999fbf7e08f61b3e39f6d77ee434f38f6f07f769d00db451e853878067
+#4 DONE 192.9s
+#6 [2/7] RUN apt-get update && apt-get install -y --no-install-recommends         git libgl1 libglib2.0-0 zip     && rm -rf /var/lib/apt/lists/*
+#6 DONE 30.8s
+#7 [3/7] WORKDIR /app
+#7 DONE 0.2s
+#8 [4/7] COPY requirements.txt .
+#8 DONE 0.2s
+#9 [5/7] RUN pip install --no-cache-dir "git+https://github.com/facebookresearch/sam2.git"     && pip install --no-cache-dir --no-deps --force-reinstall         torch==2.5.1 torchvision==0.20.1         --index-url https://download.pytorch.org/whl/cu121     && pip install --no-cache-dir -r requirements.txt
+#9 DONE 327.6s
+#10 [6/7] COPY . .
+#10 DONE 0.4s
+#11 [7/7] RUN python -m pytest -q tests/ && python -c "import src.predicates, src.pipeline; print('rule layer OK')"
+#11 1.904 66 passed in 1.08s
+#11 2.182 rule layer OK
+#11 DONE 2.2s
+#12 naming to docker.io/library/spatial-annotator:latest
+#12 naming to docker.io/library/spatial-annotator:latest 0.1s done
+
+EXIT=1  (docker build failed at "unpacking to docker.io/library/spatial-annotator:latest";
+        the machine ran out of disk during unpack. Stages 1-7 including the
+        in-container test run all completed: see "66 passed" above.)
