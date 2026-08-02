@@ -107,17 +107,27 @@ Training logs and parsed results: `outputs/sgg_benchmark/`.
 ### Full reproduction walk-through
 
 **1. Environment.** Either build the container (`docker build -t
-spatial-annotator .`; the `Dockerfile` at the repository root pins Python
-3.11, torch 2.5.1 + cu121 and installs SAM2 from GitHub, and runs the test
-suite at build time; a `.dockerignore` holds the build context to the 94
-source files that belong in an image, keeping the caches, the dataset and
-the credentials file out of it), or create a Python 3.11/3.12 venv and follow the three
+spatial-annotator .`) or create a Python 3.11/3.12 venv and follow the three
 numbered notes at the top of `requirements.txt`. The known pitfall is
-documented there: installing SAM2 can silently replace CUDA torch with a
-CPU wheel, fixed by reinstalling torch with `--no-deps --force-reinstall`
-from the cu121 index. Verify with `python scripts/smoke_test.py --image
-assets/sample.jpg`, which loads SAM2 and Depth Anything and reports CUDA
-availability and peak memory (~0.65 GB).
+documented in those notes: installing SAM2 can silently replace CUDA torch
+with a CPU wheel, fixed by reinstalling torch with `--no-deps
+--force-reinstall` from the cu121 index. Either way, verify with `python
+scripts/smoke_test.py --image assets/sample.jpg`, which loads SAM2 and Depth
+Anything and reports CUDA availability and peak memory (~0.65 GB).
+
+The `Dockerfile` at the repository root pins Python 3.11, torch 2.5.1 +
+cu121 and installs SAM2 from GitHub, applying that same fix in the build
+itself, and a `.dockerignore` holds the build context to the 94 source files
+that belong in an image, keeping the caches, the dataset and the credentials
+file out of it. The build has been run rather than merely written, and its
+log is kept at `outputs/docker/build_full.log`: base image 193 s, system
+packages 31 s, Python dependencies 328 s, then a final stage that runs the
+test suite inside the container and reports **66 passed** followed by a
+successful import of the rule layer, so a broken environment cannot produce
+an image at all. That verifies the build. Running the finished image was not
+completed, because the Docker daemon on the development machine became
+unreliable after the export stage, so the container run commands quoted in
+the `Dockerfile` header are given as written rather than as executed.
 
 **2. Data.** Clone the released dataset (CC-BY 4.0) and point
 `dataset.root` in `configs/default.yaml` at it. The loader expects the
