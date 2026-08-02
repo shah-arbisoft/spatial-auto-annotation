@@ -119,7 +119,11 @@ The `Dockerfile` at the repository root pins Python 3.11, torch 2.5.1 +
 cu121 and installs SAM2 from GitHub, applying that same fix in the build
 itself, and a `.dockerignore` holds the build context to the 94 source files
 that belong in an image, keeping the caches, the dataset and the credentials
-file out of it.
+file out of it. Both moving parts are pinned rather than tracked: the base
+image by digest, since a tag can be re-pointed upstream, and SAM2, which has
+no PyPI release, to commit `2b90b9f5`, since installing from a bare
+repository URL fetches whatever `main` happens to be on the day of the
+build.
 
 The build has been run rather than merely written, and its log is kept at
 `outputs/docker/build_summary.txt`: the base image in 193 s, system packages

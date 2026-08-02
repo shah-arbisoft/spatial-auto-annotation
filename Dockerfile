@@ -24,7 +24,9 @@
 # The dataset itself is not baked in (CC-BY, ~1 GB): mount it at /data and
 # point configs/default.yaml's dataset.root there, or override on the CLI.
 
-FROM pytorch/pytorch:2.5.1-cuda12.1-cudnn9-runtime
+# Pinned by digest, not by tag: the tag can be re-pointed upstream, and a
+# dissertation that cites its environment should not depend on that.
+FROM pytorch/pytorch:2.5.1-cuda12.1-cudnn9-runtime@sha256:831247999fbf7e08f61b3e39f6d77ee434f38f6f07f769d00db451e853878067
 
 # git for the SAM2 install; the OpenCV runtime libraries for cv2
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -34,9 +36,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /app
 
 # SAM2 first, then force the CUDA torch back if its resolver replaced it
-# (the known pitfall documented in requirements.txt)
+# (the known pitfall documented in requirements.txt). SAM2 has no PyPI
+# release, so it comes from git; pinned to the commit this project was
+# built and evaluated against rather than to a moving main.
 COPY requirements.txt .
-RUN pip install --no-cache-dir "git+https://github.com/facebookresearch/sam2.git" \
+RUN pip install --no-cache-dir "git+https://github.com/facebookresearch/sam2.git@2b90b9f5ceec907a1c18123530e92e794ad901a4" \
     && pip install --no-cache-dir --no-deps --force-reinstall \
         torch==2.5.1 torchvision==0.20.1 \
         --index-url https://download.pytorch.org/whl/cu121 \
