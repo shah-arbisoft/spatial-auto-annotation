@@ -147,6 +147,11 @@ the working tree, `/app` is 2.0 MB, and the dataset, the caches and the
 credentials file are absent, `.env.example` being the only environment file
 shipped.
 
+Given a `--gpus all` flag the container also sees the card: CUDA reports
+available, the RTX 2060 is enumerated, and a matrix product executes on the
+device, so the GPU commands in the `Dockerfile` header are reachable rather
+than aspirational.
+
 The end-to-end check is the one that matters for reproducibility. Mounting
 the dataset and the geometry cache read-only into the container and running
 `scripts/reannotate_from_cache.py` re-annotated all 836 images and produced
