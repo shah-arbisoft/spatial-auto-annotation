@@ -121,22 +121,35 @@ itself, and a `.dockerignore` holds the build context to the 94 source files
 that belong in an image, keeping the caches, the dataset and the credentials
 file out of it.
 
-The build was attempted and its log is kept at
-`outputs/docker/build_summary.txt`. What it establishes, and what it does
-not, are worth separating. Every construction stage completed: the base
-image in 193 s, system packages in 31 s, and the Python dependencies,
-including SAM2 and the forced CUDA torch reinstall, in 328 s. The final
-stage then ran the project's test suite *inside the container* and reported
-**66 passed**, followed by a successful import of the rule layer. Those are
-the parts that test the recipe, and they passed. What did not complete was
-the last step, unpacking the exported image into the local image store: the
-development machine ran out of disk during that step, the daemon became
-unresponsive, and `docker build` returned a non-zero status. The image was
-therefore never run, and the container commands in the `Dockerfile` header
-are given as written rather than as executed. The environment specification
-is verified to build and to pass its tests; the packaged artefact is not
-verified, and a reader with more disk than this project had should expect
-the build to complete where it stopped here.
+The build has been run rather than merely written, and its log is kept at
+`outputs/docker/build_summary.txt`: the base image in 193 s, system packages
+in 31 s, and the Python dependencies, including SAM2 and the forced CUDA
+torch reinstall, in 328 s. The final stage runs the project's test suite
+*inside the container* and reports **66 passed** followed by a successful
+import of the rule layer, so an environment that cannot import the rule
+layer cannot produce an image at all.
+
+The resulting image, 7.02 GB over eleven layers, was then checked as an
+artefact rather than trusted on the strength of its log, because the machine
+that built it ran out of disk during the export stage and a partly written
+layer is not always an obvious failure. Reading every one of the 84,972
+files in the image returned no errors, so no layer is truncated. Inside the
+finished image the test suite reports **66 passed** a second time, torch
+resolves to `2.5.1+cu121` rather than the CPU wheel the pitfall above
+produces, and `pip check` is clean apart from a platform-metadata note on
+`ninja`, a build-time dependency of SAM2. The 60 Python and YAML files under
+`src/`, `eval/`, `tests/`, `configs/` and `scripts/` are hash-identical to
+the working tree, `/app` is 2.0 MB, and the dataset, the caches and the
+credentials file are absent, `.env.example` being the only environment file
+shipped.
+
+The end-to-end check is the one that matters for reproducibility. Mounting
+the dataset and the geometry cache read-only into the container and running
+`scripts/reannotate_from_cache.py` re-annotated all 836 images and produced
+a `pairs.csv` byte-identical to the one in this repository, 84,881 rows
+sharing its SHA-256, together with the same 2,508 annotation files. The
+container therefore does not merely install; it reproduces the annotations
+this dissertation reports, exactly.
 
 **2. Data.** Clone the released dataset (CC-BY 4.0) and point
 `dataset.root` in `configs/default.yaml` at it. The loader expects the
