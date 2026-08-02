@@ -177,7 +177,7 @@ the released weights.
 **Scale is demonstrated without ground truth.** The supervising group
 supplied the full 2,650-frame capture the released images were cut from, and
 the pipeline was run over the 1,766 frames nobody has annotated: 562
-keyframes after content-adaptive selection, 31 minutes, 185,242 triplets, a
+keyframes after content-adaptive selection, 58 minutes, 185,242 triplets, a
 predicate distribution 0.032 in total variation from the annotated portion
 (§4.15). Capacity and stability on unfamiliar input are therefore measured
 rather than argued. Correctness on that portion is not, and cannot be

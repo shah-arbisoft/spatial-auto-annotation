@@ -365,7 +365,7 @@ Throughput and density elsewhere in this chapter are measured on the 836 annotat
 
 No accuracy claim is available here, since there is no ground truth, and none is made. What the run establishes is operational, and there are three parts to it.
 
-\textit{Cost.} Content-adaptive selection reduces 1,766 frames to 562 keyframes, 3.1$\times$. In deployment mode the pipeline sustains 3.33 s per frame on the RTX 2060 (1,080 frames per hour, JSON only; rendering an inspection overlay for every frame roughly doubles that). The keyframe pass therefore takes 31 minutes where annotating every frame would take 98.
+\textit{Cost.} Content-adaptive selection reduces 1,766 frames to 562 keyframes, 3.1$\times$. The recorded run took 6.15 s per frame on the RTX 2060, 586 frames per hour, so the keyframe pass completed in 58 minutes where annotating every frame at the same rate would have taken just over three hours (\texttt{outputs/extension\_scale.json}). That figure includes writing an inspection overlay for every frame, which this run did in order to make the output checkable by eye; the annotation itself is roughly half of it, so a deployment run emitting JSON alone would be expected near 3.3 s per frame. The measured number is quoted here in preference to that estimate, because it is the one the repository can reproduce.
 
 \textit{Yield.} The run emits 185,242 triplets over 562 frames, 330 per frame from 11.7 detected objects. No frame produced an empty graph. For comparison, the human process recorded 8,926 triplets across 836 images, about 11 per image.
 
