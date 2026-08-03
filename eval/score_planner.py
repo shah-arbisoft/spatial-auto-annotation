@@ -142,7 +142,8 @@ def main():
         per_cond[r["condition"]].append(s)
 
     NAMES = {"A": "A  no relations", "B": "B  human relations",
-             "C": "C  automatic relations"}
+             "C": "C  automatic relations",
+             "D": "D  vision-language relations"}
     print(f"{'condition':24s} {'clears first':>13s} {'grasps target':>14s} "
           f"{'no invented':>12s}  n")
     summary = {}
@@ -160,7 +161,10 @@ def main():
     for r in rows:
         by_scene[r["scene"]][r["condition"]] = r["clears_first"]
     pairs = {}
-    for x, y in (("A", "B"), ("A", "C"), ("B", "C")):
+    # every ordered pair present, so a fourth condition is compared against
+    # the three it needs to beat rather than only against the baseline
+    present = sorted({c for s in by_scene for c in by_scene[s]})
+    for x, y in [(a, b) for a in present for b in present if a < b]:
         both = [s for s in by_scene if x in by_scene[s] and y in by_scene[s]]
         win = sum(1 for s in both if by_scene[s][y] and not by_scene[s][x])
         loss = sum(1 for s in both if by_scene[s][x] and not by_scene[s][y])

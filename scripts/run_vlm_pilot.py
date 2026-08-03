@@ -188,6 +188,16 @@ def cmd_make(args):
     # only images the human annotators gave at least one relation, since the
     # battery scores recall of human triplets
     scored = [i for i, im in ds.items() if im.relations]
+    if args.only:
+        wanted = Path(args.only)
+        ids = [l.strip() for l in
+               (wanted.read_text(encoding="utf-8").splitlines()
+                if wanted.exists() else args.only.split(","))
+               if l.strip()]
+        missing_ids = [i for i in ids if i not in ds]
+        if missing_ids:
+            sys.exit(f"unknown image ids: {missing_ids[:5]}")
+        scored = [i for i in ids if ds[i].relations]
     if args.groups:
         want = {g.strip() for g in args.groups.split(",") if g.strip()}
         scored = [i for i in scored if i.split("/")[0] in want]
@@ -407,6 +417,9 @@ def main():
     ap.add_argument("--n", type=int, default=30,
                     help="how many images; -1 for every annotated image in "
                          "the selected groups")
+    ap.add_argument("--only", default=None,
+                    help="comma-separated image ids, or a file of them one "
+                         "per line; overrides the sampling")
     ap.add_argument("--groups", default=None,
                     help="comma-separated annotator groups to draw from, e.g. "
                          "group_0,group_1. Default: all")

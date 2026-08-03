@@ -56,8 +56,10 @@ def load_vlm_labels(path: Path) -> dict:
         r = json.loads(line)
         seen.add(r["image_id"])
         for rel in r.get("relations", []):
-            key = (r["image_id"], int(rel["s"]), int(rel["o"]))
-            out.setdefault(key, set()).add(rel["p"])
+            # parse_relations stores each relation as [subject, predicate,
+            # object]; JSON round-trips that as a list, not a mapping
+            s, pred, o = rel
+            out.setdefault((r["image_id"], int(s), int(o)), set()).add(pred)
     return {"rels": out, "images": seen}
 
 

@@ -215,7 +215,7 @@ def cmd_run(args):
     only once all three of its conditions succeed with the same model.
     """
     key = api_key()
-    prompts = load_jsonl(PROMPTS)
+    prompts = load_jsonl(Path(args.prompts))
     rp = replies_path(args)
     done = load_jsonl(rp) if rp.exists() else []
     have = {(r["scene"], r["condition"]) for r in done}
@@ -331,7 +331,7 @@ def cmd_score(args):
 
 def cmd_status(args):
     """Progress, and drop any scene left half-answered by an interrupted run."""
-    prompts = load_jsonl(PROMPTS)
+    prompts = load_jsonl(Path(args.prompts))
     by_scene = {}
     for p in prompts:
         by_scene.setdefault(p["scene"], set()).add(p["condition"])
@@ -372,6 +372,8 @@ def main():
     # names like gemini-2.5-flash now do. The floating -latest aliases keep
     # working, so one is the default and --doctor verifies before a long run.
     ap.add_argument("--model", default="gemini-flash-latest")
+    ap.add_argument("--prompts", default=str(PROMPTS),
+                    help="prompt file to answer")
     ap.add_argument("--replies", default=None,
                     help="reply file; give each model its own so runs stay "
                          "separable and neither can overwrite the other")

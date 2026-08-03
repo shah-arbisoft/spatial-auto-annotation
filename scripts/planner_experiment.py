@@ -87,12 +87,25 @@ def main():
     ap.add_argument("--n", type=int, default=25)
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--out", default="outputs/planner")
+    ap.add_argument("--vlm-replies", default=None, dest="vlm_replies",
+                    help="a VLM replies file; adds condition D, the same "
+                         "prompt built from that model's relations")
     args = ap.parse_args()
 
     rng = random.Random(args.seed)
     cfg = load_config(args.config)
     ds = SpatialDataset(cfg["dataset"]["root"])
     auto = load_auto(args.pairs)
+    vlm = None
+    if args.vlm_replies:
+        vlm = defaultdict(list)
+        for line in Path(args.vlm_replies).read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            r = json.loads(line)
+            for rel in r.get("relations", []):
+                s, pred, o = rel      # stored as [subject, predicate, object]
+                vlm[r["image_id"]].append((int(s), pred, int(o)))
 
     # candidate scenes: held-out groups, with a gold stack (task needs the
     # relation) and at least 4 objects (room for distractors)
@@ -129,6 +142,11 @@ def main():
             "B": filter_relations(human_rels, target, [top, bottom]),
             "C": filter_relations(auto_rels, target, [top, bottom]),
         }
+        # Condition D is built by the identical filter from a vision-language
+        # model's relations, so B, C and D differ only in who supplied them.
+        if vlm is not None:
+            rel_sets["D"] = filter_relations(vlm.get(gt.image_id, []),
+                                             target, [top, bottom])
 
         for cond, rels in rel_sets.items():
             lines = [
