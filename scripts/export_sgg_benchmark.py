@@ -187,6 +187,15 @@ def main():
         c = counters[s]
         print(f"{s:<6} {c['img']:>7} {c['ann']:>8}"
               + "".join(f"{c[v]:>12}" for v in variants))
+    if "vlm" in variants:
+        trainable = counters["train"]["img"] + counters["val"]["img"]
+        if len(vlm) < trainable:
+            print(f"\nWARNING: the VLM covers {len(vlm)} of {trainable} "
+                  f"train+val images. An arm trained on partial coverage "
+                  f"compares the label source with how much of the split it "
+                  f"saw, which is a different experiment from the one this "
+                  f"export is for. Finish the labelling run before reading "
+                  f"the arms against one another.")
     print(f"\nclasses: {[c['name'] for c in categories]}")
     print(f"predicates: {list(pred_to_id)}")
     print(f"-> {out_root}/  (copy the chosen variant to _annotations.coco.json)")
