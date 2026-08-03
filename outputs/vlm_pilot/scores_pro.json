@@ -1,0 +1,195 @@
+{
+  "models": [
+    "gemini-3.1-pro-preview"
+  ],
+  "images": 30,
+  "gold": {
+    "in front of": 80,
+    "near": 34,
+    "behind": 65,
+    "on": 57,
+    "under": 47,
+    "to the right of": 49,
+    "to the left of": 49
+  },
+  "vlm_recall": {
+    "on": 0.7368421052631579,
+    "under": 0.7659574468085106,
+    "to the left of": 0.46938775510204084,
+    "to the right of": 0.3877551020408163,
+    "in front of": 0.2375,
+    "behind": 0.13846153846153847,
+    "near": 0.38235294117647056
+  },
+  "pipeline_recall": {
+    "on": 0.9122807017543859,
+    "under": 0.851063829787234,
+    "to the left of": 0.9183673469387755,
+    "to the right of": 0.9387755102040817,
+    "in front of": 0.6,
+    "behind": 0.6153846153846154,
+    "near": 1.0
+  },
+  "vlm_mean": 0.4454652698360764,
+  "pipeline_mean": 0.833696000581299,
+  "vlm_emitted": {
+    "to the right of": 360,
+    "near": 356,
+    "behind": 252,
+    "on": 69,
+    "under": 69,
+    "to the left of": 427,
+    "in front of": 251
+  },
+  "pipeline_emitted": {
+    "to the right of": 1711,
+    "in front of": 1548,
+    "near": 1808,
+    "behind": 1548,
+    "to the left of": 1711,
+    "on": 82,
+    "under": 82
+  },
+  "per_group": {
+    "group_0": {
+      "gold": 80,
+      "vlm": 42,
+      "pipe": 72
+    },
+    "group_1": {
+      "gold": 62,
+      "vlm": 34,
+      "pipe": 58
+    },
+    "group_2": {
+      "gold": 44,
+      "vlm": 12,
+      "pipe": 37
+    },
+    "group_3": {
+      "gold": 17,
+      "vlm": 5,
+      "pipe": 15
+    },
+    "group_4": {
+      "gold": 18,
+      "vlm": 12,
+      "pipe": 16
+    },
+    "group_6": {
+      "gold": 27,
+      "vlm": 12,
+      "pipe": 16
+    },
+    "group_7": {
+      "gold": 29,
+      "vlm": 13,
+      "pipe": 28
+    },
+    "group_8": {
+      "gold": 81,
+      "vlm": 11,
+      "pipe": 42
+    },
+    "group_5": {
+      "gold": 23,
+      "vlm": 20,
+      "pipe": 21
+    }
+  },
+  "judged_pairs": 374,
+  "vlm_precision_judged": {
+    "on": 0.84,
+    "under": 0.8372093023255814,
+    "to the left of": 0.48936170212765956,
+    "to the right of": 0.3958333333333333,
+    "in front of": 0.475,
+    "behind": 0.28125,
+    "near": 0.08441558441558442
+  },
+  "vlm_f1_judged": {
+    "on": 0.7850467289719626,
+    "under": 0.8,
+    "to the left of": 0.47916666666666663,
+    "to the right of": 0.3917525773195876,
+    "in front of": 0.3166666666666667,
+    "behind": 0.18556701030927836,
+    "near": 0.13829787234042554
+  },
+  "pipeline_precision_judged": {
+    "on": 0.896551724137931,
+    "under": 0.9090909090909091,
+    "to the left of": 0.38461538461538464,
+    "to the right of": 0.3865546218487395,
+    "in front of": 0.35555555555555557,
+    "behind": 0.3076923076923077,
+    "near": 0.12830188679245283
+  },
+  "pipeline_f1_judged": {
+    "on": 0.9043478260869565,
+    "under": 0.8791208791208791,
+    "to the left of": 0.5421686746987951,
+    "to the right of": 0.5476190476190476,
+    "in front of": 0.4465116279069768,
+    "behind": 0.4102564102564103,
+    "near": 0.2274247491638796
+  },
+  "vlm_micro": {
+    "precision": 0.3888888888888889,
+    "recall": 0.4225721784776903,
+    "f1": 0.4050314465408805,
+    "assertions": 414
+  },
+  "pipeline_micro": {
+    "precision": 0.3513824884792627,
+    "recall": 0.800524934383202,
+    "f1": 0.48839071257005606,
+    "assertions": 868
+  },
+  "malformed_dropped": 0,
+  "contradictions": 0,
+  "asserted": {
+    "behind": 252,
+    "in front of": 251,
+    "to the right of": 360,
+    "to the left of": 427,
+    "on": 69,
+    "under": 69,
+    "near": 356
+  },
+  "inverse_absent": {
+    "to the left of": 67,
+    "behind": 4,
+    "in front of": 3,
+    "on": 0,
+    "under": 0,
+    "to the right of": 0
+  },
+  "miss_silent": {
+    "in front of": 30,
+    "behind": 25,
+    "on": 10,
+    "under": 6,
+    "to the right of": 27,
+    "near": 14,
+    "to the left of": 25
+  },
+  "miss_opposite": {
+    "on": 4,
+    "under": 4,
+    "in front of": 10,
+    "behind": 5,
+    "to the right of": 1,
+    "to the left of": 0,
+    "near": 0
+  },
+  "miss_other": {
+    "in front of": 21,
+    "behind": 26,
+    "near": 7,
+    "to the left of": 1,
+    "to the right of": 2,
+    "on": 1,
+    "under": 1
+  }
+}

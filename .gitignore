@@ -40,6 +40,13 @@ outputs/*
 !outputs/docker/
 !outputs/planner/
 !outputs/sgg_benchmark/
+# the VLM pilot's prompts, replies and scores: 2.5 MB, and every number in
+# §4.16 and the model-comparison figures traces to them. The rendered
+# numbered images stay out; they regenerate with --make.
+!outputs/vlm_pilot/
+outputs/vlm_pilot/img/
+outputs/vlm_pilot/browser_pack/
+outputs/vlm_pilot/manual_check/
 outputs/sgg_benchmark/**/*.cache
 outputs/docker/build_full.log
 # the blind-scoring key stays out: it unblinds slot -> condition, and

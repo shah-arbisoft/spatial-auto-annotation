@@ -39,6 +39,9 @@ C_MAIN = "#2b6cb0"   # ours / full pipeline / auto-trained
 C_SEC = "#8bb8de"    # box-only ablation
 C_GRAY = "#c4c4c4"   # random / human-trained baseline
 C_RED = "#c0392b"    # disagreement / inverted convention
+C_VLM = "#b8860b"    # vision-language model, reasoning
+C_VLM2 = "#e0c068"   # vision-language model, small
+C_GREEN = "#2e7d52"  # the two automatic sources combined
 
 PRED_ORDER = ["on", "under", "to the left of", "to the right of",
               "in front of", "behind", "near"]
@@ -86,6 +89,186 @@ def fig_rq1_recall():
     ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.01),
               ncol=3, frameon=False, columnspacing=1.4, handlelength=1.3)
     out = FIG / "rq1_recall.png"
+    fig.savefig(out)
+    plt.close(fig)
+    print(f"figure -> {out.relative_to(ROOT)}")
+
+
+# --- Figure 7: RQ1 recall with the vision-language baselines -----------------
+def fig_rq1_with_vlm():
+    """Pipeline against two VLMs on the pairs all three were scored on.
+
+    The 30-image pilot is its own population, so the pipeline column here is
+    the pipeline's score on those same 30 images rather than its full-dataset
+    figure. Mixing the two would compare different denominators.
+    """
+    a = ROOT / "outputs" / "vlm_pilot" / "scores.json"
+    b = ROOT / "outputs" / "vlm_pilot" / "scores_pro.json"
+    if not (a.exists() and b.exists()):
+        print("skip rq1_with_vlm: run eval/score_vlm_pilot.py for both models")
+        return
+    A, B = json.loads(a.read_text()), json.loads(b.read_text())
+    labels = [PRED_SHORT[p] for p in PRED_ORDER]
+    pipe = [A["pipeline_recall"][p] for p in PRED_ORDER]
+    flash = [A["vlm_recall"][p] for p in PRED_ORDER]
+    pro = [B["vlm_recall"][p] for p in PRED_ORDER]
+
+    x = range(len(labels))
+    w = 0.27
+    fig, ax = plt.subplots(figsize=(9.2, 4.6))
+    b1 = ax.bar([i - w for i in x], pipe, w, color=C_MAIN, label="Geometric pipeline")
+    ax.bar(list(x), pro, w, color=C_VLM, label="Gemini 3.1 Pro (reasoning)")
+    ax.bar([i + w for i in x], flash, w, color=C_VLM2, label="Gemini Flash")
+
+    _bar_labels(ax, b1)
+    ax.set_ylabel("Recall of human triplets")
+    ax.set_ylim(0, 1.12)
+    ax.set_xticks(list(x))
+    ax.set_xticklabels(labels, rotation=20, ha="right")
+    _style(ax)
+    ax.axhline(A["pipeline_mean"], color=C_MAIN, ls=":", lw=1.2, alpha=0.7)
+    ax.axhline(B["vlm_mean"], color=C_VLM, ls=":", lw=1.2, alpha=0.7)
+    ax.text(-0.62, A["pipeline_mean"] + 0.02,
+            f"pipeline mean {A['pipeline_mean']:.2f}", fontsize=8.5,
+            color=C_MAIN, ha="left")
+    ax.text(-0.62, B["vlm_mean"] + 0.02,
+            f"Gemini Pro mean {B['vlm_mean']:.2f}", fontsize=8.5,
+            color=C_VLM, ha="left")
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.01), ncol=3,
+              frameon=False, columnspacing=1.4, handlelength=1.3)
+    out = FIG / "rq1_with_vlm.png"
+    fig.savefig(out)
+    plt.close(fig)
+    print(f"figure -> {out.relative_to(ROOT)}")
+
+
+# --- Figure 8: what a planner does with each relation source ----------------
+def fig_planner_sources():
+    """Safe plans by relation source, including the union of the two automatic
+    sources. The union is the point: neither automatic source matches human
+    annotation alone, and together they do."""
+    f = ROOT / "outputs" / "planner_scores_abcde.json"
+    if not f.exists():
+        print("skip planner_sources: run eval/score_planner.py on the 5-condition set")
+        return
+    s = json.loads(f.read_text())["summary"]
+    order = ["A", "D", "C", "E", "B"]
+    names = {"A": "No relations", "B": "Human", "C": "Pipeline",
+             "D": "Gemini", "E": "Pipeline\n+ Gemini"}
+    vals = [s[c]["clears_first_count"] for c in order]
+    cols = {"A": C_GRAY, "B": "#4a4a4a", "C": C_MAIN, "D": C_VLM, "E": C_GREEN}
+
+    fig, ax = plt.subplots(figsize=(7.4, 4.4))
+    bars = ax.bar([names[c] for c in order], vals,
+                  color=[cols[c] for c in order], width=0.62)
+    for bar, v in zip(bars, vals):
+        ax.text(bar.get_x() + bar.get_width() / 2, v + 0.4, f"{v}/25",
+                ha="center", va="bottom", fontsize=10)
+    ax.set_ylabel("Scenes with a safe plan (of 25)")
+    ax.set_ylim(0, 28)
+    ax.axhline(25, color="#4a4a4a", ls=":", lw=1.1, alpha=0.6)
+    _style(ax)
+    ax.set_title("Occluder cleared before grasping, by relation source",
+                 pad=10)
+    out = FIG / "planner_sources.png"
+    fig.savefig(out)
+    plt.close(fig)
+    print(f"figure -> {out.relative_to(ROOT)}")
+
+
+# --- Figure 9: learning curves per label source, including a VLM ------------
+def fig_learning_curves():
+    """Held-out recall epoch by epoch for each label source.
+
+    The companion to the SGG training curves of Chapter 6, which cannot carry
+    a vision-language arm because they need a GPU run. Here every arm shares
+    features, architecture, seed and training pairs, so the curves differ only
+    by who supplied the labels.
+    """
+    f = ROOT / "outputs" / "learning_curves.json"
+    if not f.exists():
+        print("skip learning_curves: run eval/learning_curves.py first")
+        return
+    d = json.loads(f.read_text())
+    curves = d["curves"]
+    style = {"pipeline": (C_MAIN, "Pipeline labels", "-"),
+             "human":    ("#4a4a4a", "Human labels", "-"),
+             "vlm":      (C_VLM, "Gemini labels", "-")}
+
+    fig, ax = plt.subplots(figsize=(8.4, 4.6))
+    for name in ("pipeline", "human", "vlm"):
+        if name not in curves:
+            continue
+        y = curves[name]["mean"]
+        col, lab, ls = style[name]
+        ax.plot(range(1, len(y) + 1), y, ls, color=col, lw=2.0, label=lab)
+        best = max(y)
+        ax.plot(y.index(best) + 1, best, "o", color=col, ms=5)
+        ax.annotate(f"{best:.2f}", (y.index(best) + 1, best),
+                    textcoords="offset points", xytext=(6, 4),
+                    fontsize=9, color=col)
+
+    ax.set_xlabel("Training epoch")
+    ax.set_ylabel("Mean recall vs held-out human gold")
+    ax.set_xlim(1, d["epochs"])
+    ax.set_ylim(0, 1.0)
+    _style(ax)
+    ax.legend(loc="lower right", frameon=False)
+    n_img = d.get("vlm_images")
+    sub = f"{d['train_pairs']:,} training pairs"
+    if n_img:
+        sub += f" from {n_img} images"
+    ax.set_title(f"What each label source has to teach ({sub})", pad=10)
+    out = FIG / "learning_curves.png"
+    fig.savefig(out)
+    plt.close(fig)
+    print(f"figure -> {out.relative_to(ROOT)}")
+
+
+# --- Figure 10: RQ2 with a vision-language label source ---------------------
+def fig_rq2_with_vlm():
+    """Downstream recall by label source, with the VLM arm alongside.
+
+    Read from the four-arm report rather than the three-arm one, because in
+    that run every arm trains on the pairs the VLM covers; the two reports
+    are not interchangeable.
+    """
+    f = ROOT / "outputs" / "rq2_report_vlm.json"
+    if not f.exists():
+        print("skip rq2_with_vlm: run downstream.py --vlm-replies first")
+        return
+    rep = json.loads(f.read_text())
+    order = [("human-trained", "Human", "#4a4a4a"),
+             ("pseudo-labelled", "Human + self-training", C_GRAY),
+             ("vlm-trained", "Gemini", C_VLM),
+             ("auto-trained", "Pipeline", C_MAIN)]
+    order = [o for o in order if o[0] in rep]
+    labels = [PRED_SHORT[p] for p in PRED_ORDER]
+
+    x = range(len(labels))
+    w = 0.8 / len(order)
+    fig, ax = plt.subplots(figsize=(9.6, 4.8))
+    for j, (key, name, col) in enumerate(order):
+        d = rep[key]
+        vals = [d[p]["recall"] for p in PRED_ORDER]
+        off = (j - (len(order) - 1) / 2) * w
+        bars = ax.bar([i + off for i in x], vals, w, color=col, label=name)
+        if key == "auto-trained":
+            _bar_labels(ax, bars, dy=0.01, fontsize=8)
+
+    ax.set_ylabel("Recall vs held-out human gold")
+    ax.set_ylim(0, 1.12)
+    ax.set_xticks(list(x))
+    ax.set_xticklabels(labels, rotation=20, ha="right")
+    _style(ax)
+    means = {name: sum(rep[key][p]["recall"] for p in PRED_ORDER) / len(PRED_ORDER)
+             for key, name, _ in order}
+    sub = "   ".join(f"{n} {m:.2f}" for n, m in means.items())
+    ax.set_title(f"mean recall:   {sub}", pad=10, fontsize=10)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.08),
+              ncol=len(order), frameon=False, columnspacing=1.4,
+              handlelength=1.3)
+    out = FIG / "rq2_with_vlm.png"
     fig.savefig(out)
     plt.close(fig)
     print(f"figure -> {out.relative_to(ROOT)}")
@@ -308,6 +491,10 @@ def fig_sgg_curves():
 
 def main():
     fig_rq1_recall()
+    fig_rq1_with_vlm()
+    fig_planner_sources()
+    fig_learning_curves()
+    fig_rq2_with_vlm()
     fig_rq2_comparison()
     fig_front_behind()
     fig_near_sweep()
