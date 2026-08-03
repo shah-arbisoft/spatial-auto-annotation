@@ -60,6 +60,37 @@ REPLIES = OUT / "replies.jsonl"   # default; --replies overrides so a
 PREDICATES = ["on", "under", "to the left of", "to the right of",
               "in front of", "behind", "near"]
 
+# Models return the predicate in whatever style their JSON habits favour.
+# gemini-3.5-flash writes to_the_left_of and in_front_of; others drop the
+# article. These are spelling, not disagreement, and dropping them discards
+# real answers: on one 582-image run it silently lost 2,033 relations, 10.7%
+# of the output, concentrated in exactly the lateral and depth predicates the
+# comparison turns on.
+PRED_ALIASES = {
+    "to_the_left_of": "to the left of", "to_left_of": "to the left of",
+    "left_of": "to the left of", "left of": "to the left of",
+    "to_the_right_of": "to the right of", "to_right_of": "to the right of",
+    "right_of": "to the right of", "right of": "to the right of",
+    "in_front_of": "in front of", "in_front of": "in front of",
+    "infront of": "in front of", "front of": "in front of",
+    "is_on": "on", "on_top_of": "on", "on top of": "on",
+    "underneath": "under", "below": "under", "beneath": "under",
+    "next_to": "near", "next to": "near", "close_to": "near",
+}
+
+
+def canonical_predicate(raw: str) -> str | None:
+    """The dataset's spelling of a predicate, or None if it is not one.
+
+    Normalises separators first so a model's underscore style costs it
+    nothing, then checks membership. Anything still unrecognised is a real
+    disagreement about the vocabulary and is reported, not coerced.
+    """
+    p = " ".join(str(raw).strip().lower().replace("_", " ").split())
+    if p in PREDICATES:
+        return p
+    return PRED_ALIASES.get(p) or PRED_ALIASES.get(p.replace(" ", "_"))
+
 INSTRUCTIONS = """You are annotating spatial relationships in a photograph.
 
 The objects have been outlined and numbered for you. Use only these numbers.
@@ -197,7 +228,10 @@ def cmd_make(args):
         missing_ids = [i for i in ids if i not in ds]
         if missing_ids:
             sys.exit(f"unknown image ids: {missing_ids[:5]}")
-        scored = [i for i in ids if ds[i].relations]
+        # named explicitly, so the "must carry human relations" filter does
+        # not apply: an image with no human labels is still valid training
+        # data for a label source that does not depend on them
+        scored = list(ids)
     if args.groups:
         want = {g.strip() for g in args.groups.split(",") if g.strip()}
         scored = [i for i in scored if i.split("/")[0] in want]
@@ -332,9 +366,11 @@ def parse_relations(reply: str, n_objects: int) -> tuple[list, list]:
         except (KeyError, TypeError, ValueError):
             bad.append(f"malformed record {r}")
             continue
-        if p not in PREDICATES:
+        canon = canonical_predicate(p)
+        if canon is None:
             bad.append(f"unknown predicate {p!r}")
             continue
+        p = canon
         if not (0 <= s < n_objects and 0 <= o < n_objects) or s == o:
             bad.append(f"index out of range or self-pair ({s},{o})")
             continue

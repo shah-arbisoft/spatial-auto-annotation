@@ -68,6 +68,8 @@ def main():
 
     # a vision-language model's labels, same shape as the auto dict
     vlm = defaultdict(list)
+    vlm_asked: set[str] = set()   # images put to the model, including those
+                                  # it answered with no relations at all
     variants = ["human", "auto"]
     if args.vlm_replies:
         variants.append("vlm")
@@ -75,11 +77,12 @@ def main():
             if not line.strip():
                 continue
             r = json.loads(line)
+            vlm_asked.add(r["image_id"])
             for rel in r.get("relations", []):
                 s_, pred_, o_ = rel   # stored as [subject, predicate, object]
                 if pred_ in PREDICATES:
                     vlm[r["image_id"]].append((int(s_), int(o_), pred_))
-        covered = len(vlm)
+        covered = len(vlm_asked)
         print(f"VLM labels: {sum(len(v) for v in vlm.values())} relations "
               f"over {covered} images")
 
@@ -189,8 +192,11 @@ def main():
               + "".join(f"{c[v]:>12}" for v in variants))
     if "vlm" in variants:
         trainable = counters["train"]["img"] + counters["val"]["img"]
-        if len(vlm) < trainable:
-            print(f"\nWARNING: the VLM covers {len(vlm)} of {trainable} "
+        # asked, not answered-with-something: an image the model saw and
+        # reported nothing on is covered, and counting it as a gap would
+        # confuse a genuine negative with missing data
+        if len(vlm_asked) < trainable:
+            print(f"\nWARNING: the VLM covers {len(vlm_asked)} of {trainable} "
                   f"train+val images. An arm trained on partial coverage "
                   f"compares the label source with how much of the split it "
                   f"saw, which is a different experiment from the one this "
