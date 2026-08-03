@@ -143,7 +143,8 @@ def main():
 
     NAMES = {"A": "A  no relations", "B": "B  human relations",
              "C": "C  automatic relations",
-             "D": "D  vision-language relations"}
+             "D": "D  vision-language relations",
+             "E": "E  pipeline + VLM, union"}
     print(f"{'condition':24s} {'clears first':>13s} {'grasps target':>14s} "
           f"{'no invented':>12s}  n")
     summary = {}

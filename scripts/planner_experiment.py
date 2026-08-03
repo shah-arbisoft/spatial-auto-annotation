@@ -147,6 +147,12 @@ def main():
         if vlm is not None:
             rel_sets["D"] = filter_relations(vlm.get(gt.image_id, []),
                                              target, [top, bottom])
+            # E asks whether the two sources are complementary: same filter,
+            # applied to the union of what each supplied. If their misses are
+            # independent rather than nested, E beats both.
+            rel_sets["E"] = filter_relations(
+                list(auto_rels) + list(vlm.get(gt.image_id, [])),
+                target, [top, bottom])
 
         for cond, rels in rel_sets.items():
             lines = [
