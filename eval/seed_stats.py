@@ -41,6 +41,8 @@ REEVAL = ROOT / "reeval_results.json"
 SEED_DIR = ROOT / "seeds"
 OUT_MD = Path("outputs/tables/seed_replication.md")
 OUT_JSON = ROOT / "seed_replication.json"
+ARM_NAMES = ("human", "auto", "vlm")   # vlm is the vision-language arm;
+                                       # absent runs simply do not appear
 METRICS = ["R@100", "mR@100", "F1@100", "zR@100"]
 
 
@@ -51,7 +53,7 @@ def load_original():
         return []
     d = json.loads(p.read_text(encoding="utf-8"))
     rows = []
-    for arm in ("human", "auto"):
+    for arm in ARM_NAMES:
         if arm not in d:
             continue
         rows.append({"arm": arm, "seed": 42, "slice": "full",
@@ -62,7 +64,7 @@ def load_original():
         g = re.search(r"group[_ ]?(\d)", str(key))
         if not g or not isinstance(val, dict):
             continue
-        for arm in ("human", "auto"):
+        for arm in ARM_NAMES:
             if arm in val and isinstance(val[arm], (int, float)):
                 rows.append({"arm": arm, "seed": 42, "slice": f"group_{g.group(1)}",
                              "mR@100": val[arm]})
@@ -85,7 +87,7 @@ def load_raw_seed_folders():
     """Fallback: the first replication's per-run folders (pooled, no valid zR)."""
     rows = []
     for f in sorted(SEED_DIR.rglob("eval_results_top_100.json")):
-        m = re.search(r"eval_react_(human|auto)_s(\d+)", str(f))
+        m = re.search(r"eval_react_(" + "|".join(ARM_NAMES) + r")_s(\d+)", str(f))
         if not m:
             continue
         d = json.loads(f.read_text(encoding="utf-8"))
@@ -101,7 +103,7 @@ def load_raw_seed_folders():
 
 def summarise(rows, slice_name, metric):
     out = {}
-    for arm in ("human", "auto"):
+    for arm in ARM_NAMES:
         xs = [r[metric] for r in rows
               if r["arm"] == arm and r["slice"] == slice_name
               and isinstance(r.get(metric), (int, float))]
@@ -113,17 +115,24 @@ def summarise(rows, slice_name, metric):
 
 
 def main():
+    # Raw folders are always read, then better sources supersede them where
+    # they have data. Reading them only as a fallback meant an arm the
+    # re-evaluation predates was discarded in silence: its folders exist, no
+    # row is emitted, and the table simply lacks a column.
     rows = load_original()
+    raw = load_raw_seed_folders()
+    seen = {(r["arm"], r["seed"], r["slice"]) for r in raw}
+    rows = [r for r in rows if (r["arm"], r["seed"], r["slice"]) not in seen] + raw
     reeval = load_reeval()
     if reeval:
-        # re-evaluation supersedes the raw folders for any (arm, seed, slice)
         seen = {(r["arm"], r["seed"], r["slice"]) for r in reeval}
         rows = [r for r in rows if (r["arm"], r["seed"], r["slice"]) not in seen] + reeval
         source = "re-evaluation (fixed zero-shot reference, per-group slices)"
+        extra = sorted({r["arm"] for r in raw} - {r["arm"] for r in reeval})
+        if extra:
+            source += (f"; {', '.join(extra)} from raw folders, which the "
+                       f"re-evaluation predates")
     else:
-        raw = load_raw_seed_folders()
-        seen = {(r["arm"], r["seed"], r["slice"]) for r in raw}
-        rows = [r for r in rows if (r["arm"], r["seed"], r["slice"]) not in seen] + raw
         source = "first replication (pooled only; zero-shot omitted, see docstring)"
 
     if not rows:
@@ -140,31 +149,42 @@ def main():
           f"Source: {source}.\n"]
     summary = defaultdict(dict)
 
+    # columns follow the arms actually present, so a third arm appears without
+    # touching this code and its absence leaves the two-arm table unchanged
+    present = [a for a in ARM_NAMES if any(r["arm"] == a for r in rows)]
     for sl in slices:
         avail = [m for m in METRICS
-                 if summarise(rows, sl, m).get("human") or summarise(rows, sl, m).get("auto")]
+                 if any(summarise(rows, sl, m).get(a) for a in present)]
         if not avail:
             continue
         md += [f"## {sl}\n",
-               "| metric | human-trained | auto-trained | ranges overlap |",
-               "|---|---|---|---|"]
+               "| metric | " + " | ".join(f"{a}-trained" for a in present)
+               + " | ranges overlap |",
+               "|---|" + "---|" * (len(present) + 1)]
         for m in avail:
             s = summarise(rows, sl, m)
             summary[sl][m] = s
             if len(s) < 2:
                 continue
-            h, a = s["human"], s["auto"]
-            ov = not (h["min"] > a["max"] or a["min"] > h["max"])
-            md.append(
-                f"| {m} | {h['mean']:.3f} ({h['min']:.3f}-{h['max']:.3f}, n={h['n']}) "
-                f"| {a['mean']:.3f} ({a['min']:.3f}-{a['max']:.3f}, n={a['n']}) "
-                f"| {'yes' if ov else 'no'} |")
+            cells = []
+            for a in present:
+                v = s.get(a)
+                cells.append(f"{v['mean']:.3f} ({v['min']:.3f}-{v['max']:.3f}, "
+                             f"n={v['n']})" if v else "-")
+            # the overlap column stays the human-vs-auto question chapter 6
+            # asks; a third arm is reported, not folded into that test
+            ov = ""
+            if "human" in s and "auto" in s:
+                h, a_ = s["human"], s["auto"]
+                ov = "yes" if not (h["min"] > a_["max"]
+                                   or a_["min"] > h["max"]) else "no"
+            md.append(f"| {m} | " + " | ".join(cells) + f" | {ov} |")
         md.append("")
 
     # the two claims the replication exists to test
     notes = []
     full_mr = summary.get("full", {}).get("mR@100", {})
-    if len(full_mr) == 2:
+    if "human" in full_mr and "auto" in full_mr:
         h, a = full_mr["human"], full_mr["auto"]
         ov = not (h["min"] > a["max"] or a["min"] > h["max"])
         notes.append(
@@ -173,7 +193,7 @@ def main():
             f"headline advantage is {'within' if ov else 'larger than'} run-to-run "
             f"variation at n={h['n']} seeds per arm.")
     g7 = summary.get("group_7", {}).get("mR@100", {})
-    if len(g7) == 2:
+    if "human" in g7 and "auto" in g7:
         h, a = g7["human"], g7["auto"]
         ov = not (h["min"] > a["max"] or a["min"] > h["max"])
         who = "auto" if a["mean"] > h["mean"] else "human"
