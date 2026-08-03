@@ -66,16 +66,15 @@ PREDICATES = ["on", "under", "to the left of", "to the right of",
 # real answers: on one 582-image run it silently lost 2,033 relations, 10.7%
 # of the output, concentrated in exactly the lateral and depth predicates the
 # comparison turns on.
+# Spelling only. Mapping a different word onto a predicate, "next to" onto
+# `near` or "below" onto `under`, would score a different answer as correct;
+# the model was given seven terms with written definitions and is entitled to
+# be held to them. Every entry here is a separator or article variant of a
+# term the model was actually asked for.
 PRED_ALIASES = {
-    "to_the_left_of": "to the left of", "to_left_of": "to the left of",
-    "left_of": "to the left of", "left of": "to the left of",
-    "to_the_right_of": "to the right of", "to_right_of": "to the right of",
-    "right_of": "to the right of", "right of": "to the right of",
-    "in_front_of": "in front of", "in_front of": "in front of",
-    "infront of": "in front of", "front of": "in front of",
-    "is_on": "on", "on_top_of": "on", "on top of": "on",
-    "underneath": "under", "below": "under", "beneath": "under",
-    "next_to": "near", "next to": "near", "close_to": "near",
+    "to left of": "to the left of", "left of": "to the left of",
+    "to right of": "to the right of", "right of": "to the right of",
+    "front of": "in front of", "infront of": "in front of",
 }
 
 
