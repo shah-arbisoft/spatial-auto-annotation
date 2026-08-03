@@ -155,9 +155,11 @@ def main():
           f"{'pipe P':>7s} {'pipe F1':>8s}")
     tv = [0, 0, 0]
     tp_ = [0, 0, 0]
+    vlm_P, vlm_F1, pipe_P, pipe_F1 = {}, {}, {}, {}
     for p in PREDICATES:
         vp, _vr, vf = prf(*judged_v[p])
         pp, _pr, pf = prf(*judged[p])
+        vlm_P[p], vlm_F1[p], pipe_P[p], pipe_F1[p] = vp, vf, pp, pf
         for i in range(3):
             tv[i] += judged_v[p][i]
             tp_[i] += judged[p][i]
@@ -244,6 +246,7 @@ def main():
 
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps({
+        "models": sorted({r.get("model", "?") for r in replies}),
         "images": scored_images,
         "gold": dict(gold_n),
         "vlm_recall": v_rec,
@@ -253,6 +256,15 @@ def main():
         "vlm_emitted": dict(vlm_emitted),
         "pipeline_emitted": dict(pipe_emitted),
         "per_group": {k: dict(v) for k, v in per_group.items()},
+        "judged_pairs": n_judged,
+        "vlm_precision_judged": vlm_P,
+        "vlm_f1_judged": vlm_F1,
+        "pipeline_precision_judged": pipe_P,
+        "pipeline_f1_judged": pipe_F1,
+        "vlm_micro": {"precision": vp, "recall": vr, "f1": vf,
+                      "assertions": tv[1]},
+        "pipeline_micro": {"precision": pp, "recall": pr, "f1": pf,
+                           "assertions": tp_[1]},
         "malformed_dropped": bad,
         "contradictions": contradiction // 2,
         "asserted": dict(asserted),

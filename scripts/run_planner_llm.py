@@ -45,7 +45,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = Path("outputs/planner")
 PROMPTS = OUT / "prompts.jsonl"
-REPLIES = OUT / "replies.jsonl"
+REPLIES = OUT / "replies.jsonl"   # default; --replies overrides so a second
+                                  # model writes its own file
+
+
+def replies_path(args) -> Path:
+    """Where this invocation reads and writes replies."""
+    return Path(getattr(args, "replies", None) or REPLIES)
 BLIND = OUT / "scoring_sheet_blind.csv"
 FILLED = OUT / "scoring_sheet_filled.csv"
 KEY = OUT / "_key_do_not_share.csv"
@@ -210,7 +216,8 @@ def cmd_run(args):
     """
     key = api_key()
     prompts = load_jsonl(PROMPTS)
-    done = load_jsonl(REPLIES) if REPLIES.exists() else []
+    rp = replies_path(args)
+    done = load_jsonl(rp) if rp.exists() else []
     have = {(r["scene"], r["condition"]) for r in done}
 
     by_scene = {}
@@ -238,7 +245,7 @@ def cmd_run(args):
                 batch.append({"scene": scene, "condition": p["condition"],
                               "model": args.model, "reply": reply})
                 time.sleep(args.sleep)
-            with open(REPLIES, "a", encoding="utf-8") as f:   # commit whole scene
+            with open(rp, "a", encoding="utf-8") as f:   # commit whole scene
                 for rec in batch:
                     f.write(json.dumps(rec) + "\n")
             written += len(batch)
@@ -255,12 +262,13 @@ def cmd_run(args):
         print("  * enable billing on the key's project to lift the cap")
         sys.exit(2)
 
-    print(f"done: {written} replies added -> {REPLIES}")
+    print(f"done: {written} replies added -> {rp}")
     print("next: python scripts/run_planner_llm.py --make-sheet")
 
 
-def cmd_make_sheet(_args):
-    replies = {(r["scene"], r["condition"]): r["reply"] for r in load_jsonl(REPLIES)}
+def cmd_make_sheet(args):
+    replies = {(r["scene"], r["condition"]): r["reply"]
+               for r in load_jsonl(replies_path(args))}
     rows = list(csv.DictReader(open(BLIND, newline="", encoding="utf-8")))
     out_rows, missing = [], []
     for row in rows:
@@ -284,7 +292,7 @@ def cmd_make_sheet(_args):
           "identifiers). They fill the three y/n columns in slot order.")
 
 
-def cmd_score(_args):
+def cmd_score(args):
     key = {r["slot"]: r for r in csv.DictReader(open(KEY, newline="", encoding="utf-8"))}
     rows = list(csv.DictReader(open(FILLED, newline="", encoding="utf-8")))
     per = {c: {crit: [0, 0] for crit in CRITERIA} for c in "ABC"}
@@ -321,13 +329,14 @@ def cmd_score(_args):
     print(f"\n-> {OUT / 'results.json'} ; {OUT / 'results.md'}")
 
 
-def cmd_status(_args):
+def cmd_status(args):
     """Progress, and drop any scene left half-answered by an interrupted run."""
     prompts = load_jsonl(PROMPTS)
     by_scene = {}
     for p in prompts:
         by_scene.setdefault(p["scene"], set()).add(p["condition"])
-    recs = load_jsonl(REPLIES) if REPLIES.exists() else []
+    rp = replies_path(args)
+    recs = load_jsonl(rp) if rp.exists() else []
 
     got = {}
     for r in recs:
@@ -336,7 +345,7 @@ def cmd_status(_args):
 
     if partial:
         keep = [r for r in recs if r["scene"] not in partial]
-        REPLIES.write_text("".join(json.dumps(r) + "\n" for r in keep), encoding="utf-8")
+        rp.write_text("".join(json.dumps(r) + "\n" for r in keep), encoding="utf-8")
         print(f"dropped {len(recs) - len(keep)} replies from partly-answered "
               f"scene(s) {partial}: a scene must be answered by one model or "
               f"its conditions are not comparable.")
@@ -363,6 +372,9 @@ def main():
     # names like gemini-2.5-flash now do. The floating -latest aliases keep
     # working, so one is the default and --doctor verifies before a long run.
     ap.add_argument("--model", default="gemini-flash-latest")
+    ap.add_argument("--replies", default=None,
+                    help="reply file; give each model its own so runs stay "
+                         "separable and neither can overwrite the other")
     ap.add_argument("--sleep", type=float, default=5.0,
                     help="seconds between API calls (free-tier friendly)")
     mode = ap.add_mutually_exclusive_group()

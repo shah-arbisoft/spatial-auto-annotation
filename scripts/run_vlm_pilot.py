@@ -54,7 +54,8 @@ from src.pipeline import load_config
 OUT = ROOT / "outputs" / "vlm_pilot"
 IMG = OUT / "img"
 PROMPTS = OUT / "prompts.jsonl"
-REPLIES = OUT / "replies.jsonl"
+REPLIES = OUT / "replies.jsonl"   # default; --replies overrides so a
+                                  # second model writes its own file
 
 PREDICATES = ["on", "under", "to the left of", "to the right of",
               "in front of", "behind", "near"]
@@ -223,8 +224,19 @@ def cmd_make(args):
           f"the free tier allows 20 per day per model)")
 
 
+class Truncated(RuntimeError):
+    """The model ran out of output budget mid-answer.
+
+    Worth its own exception because the symptom is otherwise indistinguishable
+    from a model that writes bad JSON: the reply simply stops mid-token and
+    fails to parse. Reasoning models spend part of this budget on thinking
+    before any answer is emitted, so a ceiling that never bound a
+    non-reasoning model can bind a reasoning one on the same prompt.
+    """
+
+
 def call_gemini(prompt: str, image_path: Path, model: str, key: str,
-                retries: int = 4) -> str:
+                retries: int = 4, max_output_tokens: int = 8192) -> str:
     url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
            f"{model}:generateContent?key={key}")
     b64 = base64.b64encode(image_path.read_bytes()).decode("ascii")
@@ -233,15 +245,23 @@ def call_gemini(prompt: str, image_path: Path, model: str, key: str,
             {"inline_data": {"mime_type": "image/jpeg", "data": b64}},
             {"text": prompt},
         ]}],
-        "generationConfig": {"temperature": 0, "maxOutputTokens": 8192},
+        "generationConfig": {"temperature": 0,
+                             "maxOutputTokens": max_output_tokens},
     }).encode("utf-8")
     for attempt in range(retries):
         try:
             req = urllib.request.Request(
                 url, data=body, headers={"Content-Type": "application/json"})
-            with urllib.request.urlopen(req, timeout=180) as r:
+            with urllib.request.urlopen(req, timeout=300) as r:
                 data = json.loads(r.read().decode("utf-8"))
-            parts = data["candidates"][0]["content"]["parts"]
+            cand = data["candidates"][0]
+            if cand.get("finishReason") == "MAX_TOKENS":
+                used = data.get("usageMetadata", {})
+                raise Truncated(
+                    f"{model} hit maxOutputTokens={max_output_tokens} "
+                    f"(thoughts {used.get('thoughtsTokenCount', '?')}, "
+                    f"answer {used.get('candidatesTokenCount', '?')})")
+            parts = cand.get("content", {}).get("parts", [])
             return "\n".join(p.get("text", "") for p in parts).strip()
         except urllib.error.HTTPError as e:
             err = e.read().decode("utf-8", "replace")
@@ -298,7 +318,8 @@ def cmd_run(args):
     prompts = load_jsonl(PROMPTS)
     if not prompts:
         sys.exit("No prompts. Run with --make first.")
-    done = {r["image_id"] for r in load_jsonl(REPLIES)}
+    replies_path = Path(args.replies)
+    done = {r["image_id"] for r in load_jsonl(replies_path)}
     todo = [p for p in prompts if p["image_id"] not in done]
     if not todo:
         print(f"all {len(prompts)} images already answered. "
@@ -311,7 +332,17 @@ def cmd_run(args):
     for n, p in enumerate(todo, 1):
         print(f"  [{n}/{len(todo)}] {p['image_id']} ...", flush=True)
         try:
-            reply = call_gemini(p["prompt"], ROOT / p["image"], args.model, key)
+            reply = call_gemini(p["prompt"], ROOT / p["image"], args.model, key,
+                                max_output_tokens=args.max_output_tokens)
+        except Truncated as e:
+            # Not recorded. A truncated answer is an artefact of the budget,
+            # not evidence about the model's spatial judgement, and recording
+            # it would both understate the model and block the retry, since
+            # resumption keys on image_id.
+            print(f"\n  {e}\n"
+                  f"  {len(done) + n - 1}/{len(prompts)} images done. Re-run "
+                  f"with a larger --max-output-tokens to finish the rest.")
+            return
         except QuotaExhausted:
             print(f"\nDaily quota for {args.model} is spent. "
                   f"{len(done) + n - 1}/{len(prompts)} images done.\n"
@@ -320,7 +351,7 @@ def cmd_run(args):
                   f"model used is recorded per image).")
             return
         rels, bad = parse_relations(reply, p["n_objects"])
-        append_jsonl(REPLIES, [{"image_id": p["image_id"], "model": args.model,
+        append_jsonl(replies_path, [{"image_id": p["image_id"], "model": args.model,
                                 "relations": rels, "problems": bad,
                                 "reply": reply}])
         if bad:
@@ -334,7 +365,7 @@ def cmd_run(args):
 
 def cmd_status(args):
     prompts = load_jsonl(PROMPTS)
-    replies = load_jsonl(REPLIES)
+    replies = load_jsonl(Path(args.replies))
     print(f"images answered: {len(replies)}/{len(prompts)}")
     if replies:
         models = sorted({r.get("model", "?") for r in replies})
@@ -358,6 +389,14 @@ def main():
     ap.add_argument("--n", type=int, default=30)
     ap.add_argument("--seed", type=int, default=11)
     ap.add_argument("--model", default="gemini-flash-latest")
+    ap.add_argument("--max-output-tokens", type=int, default=8192,
+                    dest="max_output_tokens",
+                    help="output budget per call. Reasoning models spend part "
+                         "of it thinking, so they need more than the 8192 that "
+                         "sufficed for the non-reasoning run")
+    ap.add_argument("--replies", default=str(REPLIES),
+                    help="reply file; give each model its own so runs stay "
+                         "separable and neither can overwrite the other")
     ap.add_argument("--sleep", type=float, default=2.0)
     args = ap.parse_args()
 

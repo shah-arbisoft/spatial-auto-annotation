@@ -114,6 +114,9 @@ def main():
     ap.add_argument("--dir", default="outputs/planner")
     ap.add_argument("--sample", type=int, default=0,
                     help="print N plans with their verdicts for manual check")
+    ap.add_argument("--replies", default=None,
+                    help="reply file (default: <dir>/replies.jsonl); set it "
+                         "to score a second model's run")
     ap.add_argument("--out", default="outputs/planner_scores.json")
     args = ap.parse_args()
 
@@ -122,8 +125,9 @@ def main():
                for p in (json.loads(l) for l in
                          (root / "prompts.jsonl").read_text(encoding="utf-8").splitlines()
                          if l.strip())}
+    rp = Path(args.replies) if args.replies else root / "replies.jsonl"
     replies = [json.loads(l) for l in
-               (root / "replies.jsonl").read_text(encoding="utf-8").splitlines()
+               rp.read_text(encoding="utf-8").splitlines()
                if l.strip()]
 
     per_cond = defaultdict(list)
