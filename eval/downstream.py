@@ -41,11 +41,38 @@ from eval.classifier import make_mlp, oversample_positives, pair_features
 TRAIN_GROUPS = {f"group_{i}" for i in range(6)}
 
 
-def load_matrix(cfg):
-    """X, y_human, y_auto, is_train for every ordered pair in the cache."""
+def load_vlm_labels(path: Path) -> dict:
+    """(image_id, subj, obj) -> set of predicates, from a VLM replies file.
+
+    The VLM was shown the ground-truth boxes numbered by their position in
+    the dataset's object list, which is the same order the geometry cache
+    stores them in, so its indices are the cache's indices.
+    """
+    out: dict = {}
+    seen: set = set()
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        r = json.loads(line)
+        seen.add(r["image_id"])
+        for rel in r.get("relations", []):
+            key = (r["image_id"], int(rel["s"]), int(rel["o"]))
+            out.setdefault(key, set()).add(rel["p"])
+    return {"rels": out, "images": seen}
+
+
+def load_matrix(cfg, vlm=None):
+    """X, y_human, y_auto, is_train for every ordered pair in the cache.
+
+    With `vlm`, also returns the VLM's labels and a mask marking the pairs it
+    actually saw. Absence of a VLM reply for an image means "not asked", not
+    "no relations here", so those pairs are excluded from that arm's training
+    set rather than being fed to it as negatives.
+    """
     ds = SpatialDataset(cfg["dataset"]["root"])
     t = thresholds_from_config(cfg)
     X, yh, ya, tr = [], [], [], []
+    yv, vseen = [], []
     for gt in ds:
         group, stem = gt.image_id.split("/")
         gp = Path("outputs/geometry") / group / f"{stem}.json"
@@ -77,7 +104,14 @@ def load_matrix(cfg):
                 yh.append([int(k in g) for k in PREDICATES])
                 ya.append([int(k in p) for k in PREDICATES])
                 tr.append(is_tr)
-    return (np.array(X), np.array(yh), np.array(ya), np.array(tr))
+                if vlm is not None:
+                    v = vlm["rels"].get((gt.image_id, a.idx, b.idx), set())
+                    yv.append([int(k in v) for k in PREDICATES])
+                    vseen.append(gt.image_id in vlm["images"])
+    if vlm is None:
+        return (np.array(X), np.array(yh), np.array(ya), np.array(tr))
+    return (np.array(X), np.array(yh), np.array(ya), np.array(tr),
+            np.array(yv), np.array(vseen))
 
 
 def train_and_eval(X_tr, y_tr, X_te, gold_te, seed=42):
@@ -160,6 +194,11 @@ def train_pseudo_and_eval(X_tr, yh_tr, X_te, gold_te, seed=42, conf=0.90):
 def main():
     import argparse
     ap = argparse.ArgumentParser()
+    ap.add_argument("--vlm-replies", default=None, dest="vlm_replies",
+                    help="a VLM replies file; adds a fourth arm trained on "
+                         "that model's labels over the same pairs")
+    ap.add_argument("--out", default="outputs/rq2_report.json")
+    ap.add_argument("--table", default="outputs/tables/rq2.md")
     ap.add_argument("--seeds", default="42,43,44",
                     help="comma-separated seeds; results are averaged (the "
                          "human-trained model is sensitive to sampling noise, "
@@ -168,17 +207,37 @@ def main():
     seeds = [int(x) for x in args.seeds.split(",")]
 
     cfg = load_config("configs/default.yaml")
+    vlm = None
+    if args.vlm_replies:
+        vlm = load_vlm_labels(Path(args.vlm_replies))
+        print(f"VLM labels: {len(vlm['rels'])} labelled pairs over "
+              f"{len(vlm['images'])} images")
     print("building the feature matrix from the cache ...")
-    X, yh, ya, tr = load_matrix(cfg)
+    if vlm is None:
+        X, yh, ya, tr = load_matrix(cfg)
+        yv = vseen = None
+    else:
+        X, yh, ya, tr, yv, vseen = load_matrix(cfg, vlm)
     print(f"pairs: {len(X)} (train {int(tr.sum())}, held-out {int((~tr).sum())})")
 
     gold_te = yh[~tr]
+
+    # When a VLM arm is present every arm trains on exactly the pairs the VLM
+    # was asked about. Otherwise the comparison would confound the label
+    # source with how much data each source covers, which is a different
+    # experiment from the one this runs.
+    fit = tr if yv is None else (tr & vseen)
+    if yv is not None:
+        print(f"all arms restricted to the {int(fit.sum())} train pairs the "
+              f"VLM covers ({fit.sum() / max(1, tr.sum()):.1%} of the split, "
+              f"{len(vlm['images'])} images), so only the label source differs")
+
     results = {}
     for name, labels in (("human-trained", yh), ("auto-trained", ya)):
         per_seed = []
         for seed in seeds:
             print(f"training {name}, seed {seed} ...")
-            per_seed.append(train_and_eval(X[tr], labels[tr], X[~tr], gold_te, seed=seed))
+            per_seed.append(train_and_eval(X[fit], labels[fit], X[~tr], gold_te, seed=seed))
         agg = {}
         for k in PREDICATES:
             rs = [r[k]["recall"] for r in per_seed]
@@ -191,7 +250,7 @@ def main():
     per_seed, pstats = [], None
     for seed in seeds:
         print(f"training pseudo-labelled (self-training), seed {seed} ...")
-        r, pstats = train_pseudo_and_eval(X[tr], yh[tr], X[~tr], gold_te, seed=seed)
+        r, pstats = train_pseudo_and_eval(X[fit], yh[fit], X[~tr], gold_te, seed=seed)
         per_seed.append(r)
     agg = {}
     for k in PREDICATES:
@@ -201,6 +260,28 @@ def main():
                   "support": per_seed[0][k]["support"]}
     results["pseudo-labelled"] = agg
     results["_pseudo_label_counts"] = pstats
+
+    # fourth arm: a vision-language model as the label source. It trains only
+    # on pairs from images it was actually asked about, because a missing
+    # reply is missing data rather than an assertion that nothing holds.
+    if yv is not None:
+        per_seed = []
+        for seed in seeds:
+            print(f"training vlm-trained, seed {seed} ...")
+            per_seed.append(train_and_eval(X[fit], yv[fit], X[~tr], gold_te,
+                                           seed=seed))
+        agg = {}
+        for k in PREDICATES:
+            rs = [r[k]["recall"] for r in per_seed]
+            agg[k] = {"recall": float(np.mean(rs)),
+                      "recall_min": float(np.min(rs)),
+                      "recall_max": float(np.max(rs)),
+                      "support": per_seed[0][k]["support"]}
+        results["vlm-trained"] = agg
+        results["_vlm"] = {"images": len(vlm["images"]),
+                           "labelled_pairs": len(vlm["rels"]),
+                           "train_pairs_all_arms": int(fit.sum()),
+                           "replies_file": args.vlm_replies}
 
     md = ["# RQ2 - downstream classifier: human vs automatic vs self-trained labels\n",
           f"Identical features, model, oversampling and split; averaged over "
@@ -221,8 +302,9 @@ def main():
     md.append(f"| **mean** | **{np.mean(hv):.2f}** | **{np.mean(pv):.2f}** | "
               f"**{np.mean(av):.2f}** | |")
 
-    Path("outputs/tables/rq2.md").write_text("\n".join(md), encoding="utf-8")
-    Path("outputs/rq2_report.json").write_text(json.dumps(results, indent=2),
+    Path(args.table).parent.mkdir(parents=True, exist_ok=True)
+    Path(args.table).write_text("\n".join(md), encoding="utf-8")
+    Path(args.out).write_text(json.dumps(results, indent=2),
                                                encoding="utf-8")
     print("\n".join(md))
     print("\nreport -> outputs/rq2_report.json ; table -> outputs/tables/rq2.md")

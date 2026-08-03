@@ -188,6 +188,11 @@ def cmd_make(args):
     # only images the human annotators gave at least one relation, since the
     # battery scores recall of human triplets
     scored = [i for i, im in ds.items() if im.relations]
+    if args.groups:
+        want = {g.strip() for g in args.groups.split(",") if g.strip()}
+        scored = [i for i in scored if i.split("/")[0] in want]
+        if not scored:
+            sys.exit(f"no annotated images in groups {sorted(want)}")
     rng = random.Random(args.seed)
     rng.shuffle(scored)
     # stratify across annotator groups so no single convention dominates
@@ -196,18 +201,26 @@ def cmd_make(args):
         by_group[i.split("/")[0]].append(i)
     chosen: list[str] = []
     groups = sorted(by_group)
-    while len(chosen) < args.n:
+    target = len(scored) if args.n < 0 else args.n
+    while len(chosen) < target:
         added = False
         for g in groups:
-            if by_group[g] and len(chosen) < args.n:
+            if by_group[g] and len(chosen) < target:
                 chosen.append(by_group[g].pop())
                 added = True
         if not added:
             break
 
     rows = []
+    missing = []
     for image_id in chosen:
         im = ds[image_id]
+        # A handful of annotation files have no matching image (§4.2 excludes
+        # the same records from the fidelity totals). Skip rather than abort:
+        # a stray record should not stop a 600-image run.
+        if not Path(im.image_path).exists():
+            missing.append(image_id)
+            continue
         rgb = load_rgb(im.image_path)
         png = IMG / f"{image_id.replace('/', '_')}.jpg"
         render_numbered(rgb, im.objects, png)
@@ -216,10 +229,15 @@ def cmd_make(args):
                      "n_objects": len(im.objects),
                      "prompt": INSTRUCTIONS.format(objects=objects)})
 
-    PROMPTS.write_text("\n".join(json.dumps(r) for r in rows) + "\n",
-                       encoding="utf-8")
+    prompts_out = Path(args.prompts)
+    prompts_out.parent.mkdir(parents=True, exist_ok=True)
+    prompts_out.write_text("\n".join(json.dumps(r) for r in rows) + "\n",
+                           encoding="utf-8")
+    if missing:
+        print(f"skipped {len(missing)} annotation records with no image file: "
+              f"{', '.join(missing[:4])}{' ...' if len(missing) > 4 else ''}")
     print(f"{len(rows)} images rendered to {IMG}")
-    print(f"prompts -> {PROMPTS}")
+    print(f"prompts -> {prompts_out}")
     print(f"\nnext: python scripts/run_vlm_pilot.py   (needs {len(rows)} calls; "
           f"the free tier allows 20 per day per model)")
 
@@ -315,7 +333,7 @@ def parse_relations(reply: str, n_objects: int) -> tuple[list, list]:
 
 
 def cmd_run(args):
-    prompts = load_jsonl(PROMPTS)
+    prompts = load_jsonl(Path(args.prompts))
     if not prompts:
         sys.exit("No prompts. Run with --make first.")
     replies_path = Path(args.replies)
@@ -364,7 +382,7 @@ def cmd_run(args):
 
 
 def cmd_status(args):
-    prompts = load_jsonl(PROMPTS)
+    prompts = load_jsonl(Path(args.prompts))
     replies = load_jsonl(Path(args.replies))
     print(f"images answered: {len(replies)}/{len(prompts)}")
     if replies:
@@ -386,7 +404,14 @@ def main():
     ap.add_argument("--make", action="store_true",
                     help="render numbered images and build the prompts")
     ap.add_argument("--status", action="store_true")
-    ap.add_argument("--n", type=int, default=30)
+    ap.add_argument("--n", type=int, default=30,
+                    help="how many images; -1 for every annotated image in "
+                         "the selected groups")
+    ap.add_argument("--groups", default=None,
+                    help="comma-separated annotator groups to draw from, e.g. "
+                         "group_0,group_1. Default: all")
+    ap.add_argument("--prompts", default=str(PROMPTS),
+                    help="prompt file to write with --make and read otherwise")
     ap.add_argument("--seed", type=int, default=11)
     ap.add_argument("--model", default="gemini-flash-latest")
     ap.add_argument("--max-output-tokens", type=int, default=8192,
