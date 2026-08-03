@@ -1,0 +1,75 @@
+{"scene": 1, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box1, carefully avoiding cube0, book2, book3, remote4, human5, and human6 so nothing is knocked over.\n2. Grasp box1.\n3. Move the arm holding box1 to you, continuing to avoid all other objects.\n4. Release box1 into your hand."}
+{"scene": 1, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book2 from box1.\n2. Place book2 on the table.\n3. Pick up box1.\n4. Hand box1 to you."}
+{"scene": 1, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book2.\n2. Place book2 on the table.\n3. Pick up box1.\n4. Hand box1 to you."}
+{"scene": 2, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to box8.\n2. Grasp box8.\n3. Move to human10.\n4. Release box8."}
+{"scene": 2, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book9 from box8.\n2. Place book9 on the table.\n3. Pick up box8.\n4. Hand box8 to human10."}
+{"scene": 2, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book9.\n2. Put book9 on the table.\n3. Pick up bottle0.\n4. Put bottle0 on the table.\n5. Pick up cube3.\n6. Put cube3 on the table.\n7. Pick up bottle4.\n8. Put bottle4 on the table.\n9. Pick up remote5.\n10. Put remote5 on the table.\n11. Pick up book6.\n12. Put book6 on the table.\n13. Pick up box7.\n14. Put box7 on the table.\n15. Pick up box8.\n16. Hand box8 to human10."}
+{"scene": 3, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Carefully move the robot arm to box0, avoiding all other objects on the table.\n2. Pick up box0.\n3. Carefully move the robot arm to human2 (you), avoiding all other objects.\n4. Hand box0 to human2."}
+{"scene": 3, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Put book1 on the table.\n3. Pick up box0.\n4. Hand box0 to human2."}
+{"scene": 3, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Put book1 on the table.\n3. Pick up box0.\n4. Hand box0 to human2."}
+{"scene": 4, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box6.\n2. Grasp box6.\n3. Lift box6 straight up to avoid knocking over any other objects.\n4. Move the robot arm to the user.\n5. Release box6 to hand it to the user."}
+{"scene": 4, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book7 and place it on the table.\n2. Pick up box6 and hand it to the user."}
+{"scene": 4, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box6.\n2. Grasp box6.\n3. Lift box6.\n4. Move the robot arm to the user.\n5. Release box6 to hand it to the user."}
+{"scene": 5, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to cube11.\n2. Grasp cube11.\n3. Move the robot arm to the user.\n4. Release cube11."}
+{"scene": 5, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube9.\n2. Put cube9 down on the table.\n3. Pick up cube11.\n4. Hand cube11 to you."}
+{"scene": 5, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube9.\n2. Place cube9 on the table.\n3. Pick up cube11.\n4. Hand cube11 to you."}
+{"scene": 6, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box0.\n2. Grasp box0.\n3. Move the robot arm to the user.\n4. Release box0 to hand it to the user."}
+{"scene": 6, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Move book1 off box0.\n2. Move book2 away from the front of box0.\n3. Pick up box0.\n4. Hand box0 to you."}
+{"scene": 6, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Place book1 on the table.\n3. Pick up box0.\n4. Hand box0 to you."}
+{"scene": 7, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to book2, carefully avoiding cube0, bottle1, and cube3 so nothing is knocked over.\n2. Grasp book2.\n3. Lift book2 safely above the table.\n4. Move the arm to the user and release book2 to hand it to them."}
+{"scene": 7, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up **cube3** from on top of book2 and place it on the table.\n2. Pick up **book2** (lifting it straight up to avoid knocking over bottle1 in front of it) and hand it to me."}
+{"scene": 7, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3.\n2. Put down cube3.\n3. Pick up book2.\n4. Hand book2 to you."}
+{"scene": 8, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box3.\n2. Grasp box3.\n3. Hand box3 to the user."}
+{"scene": 8, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube4 and place it on the table.\n2. Pick up box3 and hand it to you."}
+{"scene": 8, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube4 and place it on the table.\n2. Pick up box3 and hand it to you."}
+{"scene": 9, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to box8.\n2. Grasp box8.\n3. Move to human12.\n4. Release box8."}
+{"scene": 9, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book9.\n2. Put book9 on the table.\n3. Pick up box8.\n4. Hand box8 to me."}
+{"scene": 9, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book9.\n2. Put book9 on the table.\n3. Pick up box8.\n4. Hand box8 to human12."}
+{"scene": 10, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to box0.\n2. Grasp box0.\n3. Move to human2.\n4. Hand box0 to human2."}
+{"scene": 10, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Move book1 off box0.\n2. Pick up box0.\n3. Hand box0 to human2."}
+{"scene": 10, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1.\n2. Put book1 on the table.\n3. Pick up box0.\n4. Hand box0 to human2."}
+{"scene": 11, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to book2, carefully avoiding cube0, bottle1, cube3, and remote4.\n2. Grasp book2.\n3. Lift and move book2 to the user, avoiding cube0, bottle1, cube3, and remote4 to ensure nothing is knocked over.\n4. Release book2 into the user's hand."}
+{"scene": 11, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up **cube3** from on top of book2 and place it on the table.\n2. Reach over bottle1 to pick up **book2**, lifting it straight up to avoid knocking the bottle over.\n3. Hand **book2** to you."}
+{"scene": 11, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3 from book2 and place it on the table.\n2. Pick up book2 and hand it to you."}
+{"scene": 12, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to book8, carefully avoiding all other objects on the table.\n2. Grasp book8.\n3. Move the robot arm to the user, ensuring no other objects are knocked over.\n4. Release book8 to hand it to the user."}
+{"scene": 12, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3 and place it on the table.\n2. Pick up book2 and place it on the table.\n3. Pick up book8.\n4. Hand book8 to you."}
+{"scene": 12, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3 and place it on the table.\n2. Pick up book2 and place it on the table.\n3. Pick up book8 and hand it to me."}
+{"scene": 13, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to box7.\n2. Grasp box7.\n3. Move to human10.\n4. Release box7."}
+{"scene": 13, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3.\n2. Place cube3 on the table.\n3. Pick up box7.\n4. Hand box7 to human10."}
+{"scene": 13, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Move bottle0 out of the way.\n2. Move book1 out of the way.\n3. Move cube2 out of the way.\n4. Move book6 out of the way.\n5. Move cube3 off box7.\n6. Pick up box7.\n7. Hand box7 to me."}
+{"scene": 14, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to box5.\n2. Pick up box5.\n3. Move to human2.\n4. Hand box5 to human2."}
+{"scene": 14, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube10 from box5.\n2. Put cube10 down on the table.\n3. Pick up box5.\n4. Hand box5 to human2."}
+{"scene": 14, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube10 from box5.\n2. Place cube10 on the table.\n3. Pick up box5.\n4. Hand box5 to human2."}
+{"scene": 15, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box4.\n2. Pick up box4.\n3. Move the robot arm to the user.\n4. Release box4 to hand it to the user."}
+{"scene": 15, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube9.\n2. Place cube9 on the table.\n3. Pick up box4.\n4. Hand box4 to the user."}
+{"scene": 15, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube9.\n2. Put down cube9.\n3. Pick up box4.\n4. Hand box4 to you."}
+{"scene": 16, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to box7.\n2. Grasp box7.\n3. Move to human10.\n4. Release box7."}
+{"scene": 16, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3.\n2. Place cube3 on the table.\n3. Pick up box7.\n4. Hand box7 to human10."}
+{"scene": 16, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Move bottle0 out of the way.\n2. Move book1 out of the way.\n3. Move cube2 out of the way.\n4. Move book6 out of the way.\n5. Pick up box7.\n6. Hand box7 to human10."}
+{"scene": 17, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box3.\n2. Grasp box3.\n3. Hand box3 to you."}
+{"scene": 17, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube4.\n2. Put down cube4.\n3. Pick up box3.\n4. Hand box3 to me."}
+{"scene": 17, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube4.\n2. Put down cube4.\n3. Pick up box3.\n4. Hand box3 to you."}
+{"scene": 18, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box0, carefully avoiding all other objects on the table.\n2. Pick up box0.\n3. Move the robot arm to the user.\n4. Release box0 to hand it to the user."}
+{"scene": 18, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 and place it on the table.\n2. Pick up box0 and hand it to the user."}
+{"scene": 18, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Put down book1.\n3. Pick up box0.\n4. Hand box0 to the user."}
+{"scene": 19, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box1, carefully avoiding cube0, book2, human3, and human4 to prevent knocking anything over.\n2. Pick up box1.\n3. Move the arm holding box1 to you (the human giving the command, either human3 or human4), avoiding cube0, book2, and the other human.\n4. Release box1 into your hands."}
+{"scene": 19, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Ask whether you are human3 or human4.\n2. Pick up book2 from box1.\n3. Place book2 on the table.\n4. Pick up box1.\n5. Hand box1 to you."}
+{"scene": 19, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book2 from box1.\n2. Place book2 on the table.\n3. Pick up box1.\n4. Hand box1 to you."}
+{"scene": 20, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box4.\n2. Grasp box4.\n3. Lift box4.\n4. Move the robot arm to the user.\n5. Release box4."}
+{"scene": 20, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book3.\n2. Put book3 down on the table.\n3. Pick up box4.\n4. Hand box4 to you."}
+{"scene": 20, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book3.\n2. Place book3 on the table.\n3. Pick up box4.\n4. Hand box4 to me."}
+{"scene": 21, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to cube14.\n2. Grasp cube14.\n3. Move to human8.\n4. Release cube14."}
+{"scene": 21, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube13.\n2. Put cube13 down on the table.\n3. Pick up cube14.\n4. Hand cube14 to human8."}
+{"scene": 21, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up bottle1 and place it on the table.\n2. Pick up cube13 and place it on the table.\n3. Pick up cube14 and hand it to me."}
+{"scene": 22, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box4, carefully avoiding bottle0, cube1, bottle2, box3, book5, cube6, book7, and remote8 so nothing is knocked over.\n2. Grasp box4.\n3. Move the robot arm holding box4 to you (human9 or human10), maintaining a safe distance from all other objects on the table.\n4. Release box4 into your hand."}
+{"scene": 22, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book5 from box4.\n2. Place book5 on the table.\n3. Pick up box4.\n4. Hand box4 to human9 (or human10)."}
+{"scene": 22, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book5.\n2. Put book5 down on the table.\n3. Pick up box4.\n4. Hand box4 to me."}
+{"scene": 23, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to box4.\n2. Grasp box4.\n3. Lift box4.\n4. Move the robot arm to the user.\n5. Release box4."}
+{"scene": 23, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book3.\n2. Put book3 down on the table.\n3. Pick up box4.\n4. Hand box4 to you."}
+{"scene": 23, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book3 and place it on the table.\n2. Pick up box4 and hand it to me."}
+{"scene": 24, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to book6.\n2. Grasp book6.\n3. Move to human10.\n4. Release book6."}
+{"scene": 24, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube2 and place it on the table.\n2. Pick up remote5 and place it on the table.\n3. Pick up box7 and place it on the table.\n4. Pick up book6.\n5. Hand book6 to human10."}
+{"scene": 24, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Move the robot arm to book6.\n2. Pick up book6.\n3. Hand book6 to human10."}
+{"scene": 25, "condition": "A", "model": "gemini-3.1-pro-preview", "reply": "1. Move to box0.\n2. Pick up box0.\n3. Move to human2.\n4. Hand box0 to human2."}
+{"scene": 25, "condition": "B", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Place book1 on the table.\n3. Pick up box0.\n4. Hand box0 to human2."}
+{"scene": 25, "condition": "C", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Put book1 on the table.\n3. Pick up box0.\n4. Hand box0 to me."}

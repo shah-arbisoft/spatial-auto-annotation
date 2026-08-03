@@ -671,7 +671,7 @@ geometric pipeline does, the pipeline is unnecessary. The question is
 settled here by measurement rather than assertion.
 
 **Protocol.** Thirty images, stratified across all nine annotator groups, are
-put to `gemini-flash-latest` with the ground-truth boxes drawn on the image
+put to the model with the ground-truth boxes drawn on the image
 and numbered, and the model answers using those indices
 (`scripts/run_vlm_pilot.py`). That places it in the same PredCls setting the
 pipeline is evaluated in, so neither is scored on detection. The prompt
@@ -681,46 +681,67 @@ reference-frame ambiguity of §2.5 rather than accuracy. Scoring is the RQ1
 battery on identical pairs, with the pipeline's answer beside it
 (`eval/score_vlm_pilot.py`). Every reply parsed; no record was malformed.
 
-| Predicate | Gold | VLM | Pipeline |
-|---|---|---|---|
-| on | 57 | 0.667 | 0.912 |
-| under | 47 | 0.660 | 0.851 |
-| to the left of | 49 | 0.408 | 0.918 |
-| to the right of | 49 | 0.327 | 0.939 |
-| in front of | 80 | 0.188 | 0.600 |
-| behind | 65 | 0.169 | 0.615 |
-| near | 34 | 0.382 | 1.000 |
-| **Mean** | **381** | **0.400** | **0.834** |
+Two models were run, because the obvious objection to a single one is that a
+larger model would close the gap. `gemini-flash-latest` is the small
+non-reasoning model; `gemini-3.1-pro-preview` is a reasoning model roughly
+an order of magnitude larger which spends most of its output budget
+deliberating before it answers. Nothing else differs between the two runs:
+same images, same numbered boxes, same definitions, same scored pairs
+(`eval/compare_vlm_models.py`).
 
-On recall the model loses everywhere. It is closest on support, at 0.67
-against 0.91, and furthest on the depth pair, where 0.19 against 0.60 leaves
-it below even the geometric method's known weak point.
+| Predicate | Gold | Flash | Pro | Pipeline |
+|---|---|---|---|---|
+| on | 57 | 0.667 | 0.737 | 0.912 |
+| under | 47 | 0.660 | 0.766 | 0.851 |
+| to the left of | 49 | 0.408 | 0.469 | 0.918 |
+| to the right of | 49 | 0.327 | 0.388 | 0.939 |
+| in front of | 80 | 0.188 | 0.237 | 0.600 |
+| behind | 65 | 0.169 | 0.138 | 0.615 |
+| near | 34 | 0.382 | 0.382 | 1.000 |
+| **Mean** | **381** | **0.400** | **0.445** | **0.834** |
+
+On recall both models lose everywhere. The larger one is better, and the
+size of the improvement is the point: mean recall moves from 0.400 to 0.445,
+which is real but leaves it at barely half the pipeline's 0.834. It is
+closest on support, 0.74 against 0.91, and furthest on the depth pair, where
+0.24 against 0.60 leaves it below even the geometric method's known weak
+point, and where `behind` actually falls, 0.169 to 0.138. Scaling the model
+does not scale the ability being measured.
 
 Recall alone would be an unfair verdict, and it is worth saying why before
 reading anything into it. The metric rewards whoever asserts more: on the
-374 pairs the humans judged, the pipeline makes 868 assertions to the
-model's 344, so it has two and a half times as many chances to cover any
-given gold triplet. A sparse labeller can be right more often about what it
-does say and still lose on recall. Restricting both to the judged pairs,
-where precision is defined, tests exactly that.
+374 pairs the humans judged, the pipeline makes 868 assertions against 344
+from the smaller model and 414 from the larger, so it has two to two and a
+half times as many chances to cover any given gold triplet. A sparse
+labeller can be right more often about what it does say and still lose on
+recall. Restricting all three to the judged pairs, where precision is
+defined, tests exactly that.
 
-| Predicate | VLM precision | Pipeline precision | VLM F1 | Pipeline F1 |
-|---|---|---|---|---|
-| on | **0.950** | 0.897 | 0.784 | **0.904** |
-| under | 0.886 | **0.909** | 0.756 | **0.879** |
-| to the left of | **0.408** | 0.385 | 0.408 | **0.542** |
-| to the right of | 0.381 | **0.387** | 0.352 | **0.548** |
-| in front of | **0.484** | 0.356 | 0.270 | **0.447** |
-| behind | **0.478** | 0.308 | 0.250 | **0.410** |
-| near | 0.105 | **0.128** | 0.165 | **0.227** |
-| **micro** | **0.419** | 0.351 | 0.397 | **0.488** |
+| Predicate | Flash P | Pro P | Pipeline P | Flash F1 | Pro F1 | Pipeline F1 |
+|---|---|---|---|---|---|---|
+| on | **0.950** | 0.840 | 0.897 | 0.784 | 0.785 | **0.904** |
+| under | 0.886 | 0.837 | **0.909** | 0.756 | 0.800 | **0.879** |
+| to the left of | 0.408 | **0.489** | 0.385 | 0.408 | 0.479 | **0.542** |
+| to the right of | 0.381 | **0.396** | 0.387 | 0.352 | 0.392 | **0.548** |
+| in front of | **0.484** | 0.475 | 0.356 | 0.270 | 0.317 | **0.447** |
+| behind | **0.478** | 0.281 | 0.308 | 0.250 | 0.186 | **0.410** |
+| near | 0.105 | 0.084 | **0.128** | 0.165 | 0.138 | **0.227** |
+| **micro** | **0.419** | 0.389 | 0.351 | 0.397 | 0.405 | **0.488** |
 
-**The model is the more precise labeller**, on four of the seven predicates
-and on the pooled figure, 0.42 against 0.35. The margin is widest exactly
-where the pipeline is weakest: on front/behind it is right 0.48 of the times
-it commits, against the pipeline's 0.36. What it buys that precision with is
-silence, and the price is steep enough that it loses F1 on every predicate
-without exception, 0.40 against 0.49 pooled.
+**Both models are more precise labellers than the pipeline** on the pooled
+figure, 0.42 and 0.39 against 0.35. What they buy that precision with is
+silence, and the price is steep enough that both lose F1 to the pipeline on
+every predicate without exception, 0.40 and 0.41 against 0.49 pooled.
+
+The larger model does not resolve the picture so much as redistribute it. It
+asserts more (414 judged-pair assertions against 344), which lifts recall
+and costs precision, so its F1 lands within 0.008 of the smaller model's.
+Where the smaller model looked most interesting, `behind`, the larger one is
+markedly worse, 0.28 precision against 0.48. The one place it clearly
+improves is the symmetric-pair defect: it supplies *to the left of* without
+its inverse on 0.16 of assertions against the smaller model's 0.35, so more
+deliberation does buy more internal consistency. Neither model contradicts
+itself outright, both at zero.
 
 Two things follow and they point in opposite directions, so both belong
 here. The model is not a fourth label source: it recovers under half the

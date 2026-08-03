@@ -92,30 +92,32 @@ Each of those benchmark symptoms has a cause this dissertation measured and a re
 
 Section 5.6 ends with the source paper's motivating example, in which an LLM planner fails to remove a cube before grasping the book beneath it until spatial relations are supplied. That example is an assertion in the paper, illustrated on one scene. It can be run as an experiment, and this section runs it.
 
-\textbf{Design.} Twenty-five held-out scenes were selected in which a target object has a second object physically resting on it, so any safe plan must move the occluder first. Each scene is put to an LLM planner (\texttt{gemini-flash-latest}) three times, in prompts differing only in what they state about the scene: \textbf{A} lists the objects and nothing else, \textbf{B} adds the human-annotated relationships, \textbf{C} adds the automatically computed ones. The task sentence, the object list and the instruction to give a minimal numbered plan are identical across conditions. Both relation conditions are passed through the \textit{same} filter before being written into the prompt, keeping the support relations among the mentioned objects plus the target's one-hop neighbourhood, canonicalised and deduplicated (\texttt{scripts/planner\_experiment.py}). Without that step the comparison would confound label quality with prompt length. It does not equalise them, and cannot: after identical filtering the automatic condition still carries 22.6 relations per prompt against the human condition's 3.1, because the automatic labels are twenty times denser to begin with, and discarding true relations to match a sparser source would be a different experiment. What the filter guarantees is that neither source is given a relation the other would have been denied. All three conditions of a scene are answered by one model in one sitting, so no scene can be split across models by a quota interruption (\texttt{scripts/run\_planner\_llm.py}).
+\textbf{Design.} Twenty-five held-out scenes were selected in which a target object has a second object physically resting on it, so any safe plan must move the occluder first. Each scene is put to an LLM planner three times, in prompts differing only in what they state about the scene: \textbf{A} lists the objects and nothing else, \textbf{B} adds the human-annotated relationships, \textbf{C} adds the automatically computed ones. The task sentence, the object list and the instruction to give a minimal numbered plan are identical across conditions. Both relation conditions are passed through the \textit{same} filter before being written into the prompt, keeping the support relations among the mentioned objects plus the target's one-hop neighbourhood, canonicalised and deduplicated (\texttt{scripts/planner\_experiment.py}). Without that step the comparison would confound label quality with prompt length. It does not equalise them, and cannot: after identical filtering the automatic condition still carries 22.6 relations per prompt against the human condition's 3.1, because the automatic labels are twenty times denser to begin with, and discarding true relations to match a sparser source would be a different experiment. What the filter guarantees is that neither source is given a relation the other would have been denied. All three conditions of a scene are answered by one model in one sitting, so no scene can be split across models by a quota interruption (\texttt{scripts/run\_planner\_llm.py}).
 
 \textbf{Scoring.} A plan is safe if it moves the occluding object in an earlier step than the one that grasps the target. Judgements are made by published rules rather than by reading (\texttt{eval/score\_planner.py}), for two reasons: the rules never see the condition, so scoring is blind by construction, which matters when the author has a stake in the result; and a reader who disputes a verdict can inspect the rule instead of trusting a judgement. The rules were checked against a hand-read sample, which is the only thing that makes them trustworthy and which caught a real defect: models frequently open with a preamble restating the task ("To pick up box0 safely, follow these steps:"), and counting that preamble as a step made every such plan appear to grasp the target before clearing anything. Before the fix condition C scored 0.64; after it, 0.88. The figure below the fix is the correct one, and the episode is recorded because an automatic scorer is worth exactly what its agreement with careful manual reading says it is.
 
-\textbf{Result.}
+\textbf{Result.} The whole experiment was run twice, on two planners of very different capability: \texttt{gemini-flash-latest}, a small non-reasoning model, and \texttt{gemini-3.1-pro-preview}, a reasoning model roughly an order of magnitude larger. Nothing else differs between the two runs.
 
 \begin{center}
 \small
-\begin{longtable}{lrr}
+\begin{longtable}{lrrr}
 \caption{Planner experiment: whether the plan clears the occluding object before grasping the target, over 25 held-out scenes under each label source.}\\
 \hline
-Condition & Prompt states & Safe plans \\
+Condition & Prompt states & Safe plans (flash) & Safe plans (pro) \\
 \hline
 \endfirsthead
 \hline
-Condition & Prompt states & Safe plans \\
+Condition & Prompt states & Safe plans (flash) & Safe plans (pro) \\
 \hline
 \endhead
-A & objects only & 0 / 25 \\
-B & human relationships & 25 / 25 \\
-C & automatic relationships & 22 / 25 \\
+A & objects only & 0 / 25 & 0 / 25 \\
+B & human relationships & 25 / 25 & 25 / 25 \\
+C & automatic relationships & 22 / 25 & 22 / 25 \\
 \hline
 \end{longtable}
 \end{center}
+
+The two planners agree exactly, and not merely in the totals: the three scenes condition C fails on are scenes 4, 16 and 24 under \textit{both} models. That is the strongest form the result could take. A finding that survives replacing the reasoning engine entirely, down to which individual scenes fail, is a property of the information in the prompt rather than of the model consuming it, which is precisely the claim the experiment exists to make. It also disposes of the obvious objection to condition A's zero, that a more capable planner would have inferred the support relation from the object list: it does not, in twenty-five scenes out of twenty-five, twice.
 
 The effect of stating relations at all is total: without them the planner never clears the occluder, in twenty-five scenes out of twenty-five. The failure is more specific than inattention. In seven of those twenty-five plans the planner \textit{names} the occluding object, but only ever as something to steer around: "maintaining a clear path above cube0, book2, book3", or "lift box0 to a safe height to clear book1". It sees the object and misreads its role, treating something resting on the target as a neighbour to avoid rather than a load to remove, which is exactly the distinction a support relation encodes and nothing else in the prompt does. That is the paper's illustrated failure, reproduced at scale rather than asserted.
 
@@ -123,7 +125,7 @@ The effect of stating relations at all is total: without them the planner never 
 
 Scene 16 shows the mechanism sharply. The planner used the automatic relations it was given, cleared the four objects the prompt said were \textit{in front of} the target, and left the one resting on top of it, because that relation was never stated. It reasoned correctly from incomplete input.
 
-\textbf{What this does not show.} Three limits. The comparison is between label sources, not planners: condition B is handed the exact fact the task tests, so B versus C measures whether each source supplies that fact, not which source produces better reasoning. It uses one model and one prompt style, so the size of the A-to-B gap is a property of this planner as much as of the labels, even though its direction is not in doubt. And no robot moved: this measures plans, not executions, so it closes the gap between labels and robot behaviour by one link rather than closing it entirely.
+\textbf{What this does not show.} Three limits. The comparison is between label sources, not planners: condition B is handed the exact fact the task tests, so B versus C measures whether each source supplies that fact, not which source produces better reasoning. It uses two models but one prompt style, so the phrasing of the plan request is uncontrolled in a way the choice of planner no longer is. And no robot moved: this measures plans, not executions, so it closes the gap between labels and robot behaviour by one link rather than closing it entirely.
 
 What it settles is the question \S5.6 could only frame. Automatic labels carry 88\% of the decision-relevant content that human labels carry on this task, against 0\% for no labels at all, and the residual gap is not a property of computed labels in general but of one predicate whose recall is already measured and whose failure mode is already diagnosed (\S4.9).
 

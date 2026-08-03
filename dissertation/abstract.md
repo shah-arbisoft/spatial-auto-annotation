@@ -2,51 +2,52 @@
 
 Scene-graph datasets for robotics are built by hand: a human decides every
 spatial relationship between every pair of objects. The bottleneck keeps
-such datasets small and the labels inconsistent, problems the authors of a
-recent robot-acquired dataset report themselves. This dissertation asks
+such datasets small and the labels inconsistent, problems the authors of one
+robot-acquired dataset report themselves. This dissertation asks
 whether the human can be removed from that loop entirely, for the seven
-predicates the dataset defines (on, under, left/right of, in front
+predicates that dataset defines (on, under, left/right of, in front
 of/behind, near).
 
 The pipeline computes rather than predicts each relationship: off-the-shelf
 models measure the scene (segmentation masks and monocular depth), each
 object is lifted to a 3D position, and geometric rules decide every label.
 Thresholds are fitted on six of the nine annotator groups and validated on
-the held-out three; outputs use the dataset's native formats. The full
-836-image dataset is annotated in about five minutes on a consumer GPU, at
-20 times the label density of the manual pass.
+the held-out three; outputs use the dataset's native formats. All 836
+images are annotated in five minutes on a consumer GPU, at 20 times the
+label density of the manual pass.
 
-Validated against 8,926 human-annotated relationships, the automatic labels
-match or exceed the human process on five of seven predicates (0.85 mean
-recall, 0.76 on held-out annotators; audited precision ≈ 1.0 for the lateral
-and proximity predicates and ≈ 0.9 for support). The hardest pair, in front
+Validated against 8,926 human relationships, the automatic labels match or
+exceed the human process on five of seven predicates (0.85 mean
+recall, 0.76 on held-out annotators; audited precision ≈ 1.0 for lateral
+and proximity, ≈ 0.9 for support). The hardest pair, in front
 of/behind, is decided by a cascade of relative depth and a ground-plane cue;
-diagnosing every disagreement attributes the residual gap to the human
-annotation itself, including two groups that labelled the pair with opposite
+diagnosing every disagreement attributes the residual gap to the annotation
+itself, including two groups that labelled the pair with opposite
 conventions, rather than to tool error (~7% of misses). Because the images
-are consecutive frames of one capture, the labels can also be checked
-against themselves without ground truth: across viewpoints of the same scene
-the pipeline reproduces its front/behind verdict 0.96 of the time, so a
-predicate recovering 0.64 of the human labels is applying a criterion the
-annotators did not share rather than guessing.
+are consecutive frames of one capture, the labels can be checked against
+themselves without ground truth: across viewpoints the pipeline reproduces
+its front/behind verdict 0.96 of the time, so a predicate recovering 0.64 of
+the human labels is applying a criterion the annotators did not share rather
+than guessing.
 
 In a controlled downstream experiment a classifier trained on the automatic
 labels reaches 0.76 mean recall against held-out human annotations, versus
 0.30 for human labels and 0.36 when those are stretched by self-training,
-the standard semi-supervised remedy.
+the standard remedy.
 
 Repeated in the source paper's benchmark framework, with a shared frozen
 detector and three seeds per arm, the verdict splits: the human-trained
 model ranks better against human test annotation (mR@100 0.326 against
-0.278) but recalls almost nothing on relation compositions never seen in
-training, where the automatic model recalls sixty times more (zR@100 0.172
-against 0.003). That advantage sits entirely on the two test annotators with
-a measured labelling defect, so the ranking metric rewards annotation habits
+0.278) but recalls almost nothing on compositions never seen in training,
+where the automatic model recalls sixty times more (zR@100 0.172 against
+0.003). That advantage sits entirely on the two test annotators with a
+measured labelling defect, so the ranking metric rewards annotation habits
 as well as spatial correctness. One link further down the chain the answer
 is unambiguous: asked for a safe grasp plan on 25 held-out scenes where an
-object rests on the target, an LLM planner clears it in 0 of 25 scenes given
-objects alone, 25 of 25 given human relationships and 22 of 25 given
-automatic ones. Automatic labels are the better supervision wherever ground
-truth means geometry, human labels wherever it means annotation practice,
-and robot planning needs the former. The bottleneck removed limited not only
+object rests on the target, a planner clears it in 0 of 25 given objects
+alone, 25 of 25 given human relationships and 22 of 25 given automatic
+ones, on two planners of very different capability and failing on the same
+three scenes under both. Automatic labels are the better supervision where
+ground truth means geometry, human labels where it means annotation
+practice, and robot planning needs the former. The bottleneck removed limited not only
 the dataset's size but what it taught.

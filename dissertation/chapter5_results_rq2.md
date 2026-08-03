@@ -198,8 +198,8 @@ runs it.
 
 **Design.** Twenty-five held-out scenes were selected in which a target
 object has a second object physically resting on it, so any safe plan must
-move the occluder first. Each scene is put to an LLM planner
-(`gemini-flash-latest`) three times, in prompts differing only in what they
+move the occluder first. Each scene is put to an LLM planner three times, in
+prompts differing only in what they
 state about the scene: **A** lists the objects and nothing else, **B** adds
 the human-annotated relationships, **C** adds the automatically computed
 ones. The task sentence, the object list and the instruction to give a
@@ -233,13 +233,26 @@ grasp the target before clearing anything. Before the fix condition C scored
 episode is recorded because an automatic scorer is worth exactly what its
 agreement with careful manual reading says it is.
 
-**Result.**
+**Result.** The whole experiment was run twice, on two planners of very
+different capability: `gemini-flash-latest`, a small non-reasoning model,
+and `gemini-3.1-pro-preview`, a reasoning model roughly an order of
+magnitude larger. Nothing else differs between the two runs.
 
-| Condition | Prompt states | Safe plans |
-|---|---|---|
-| A | objects only | 0 / 25 |
-| B | human relationships | 25 / 25 |
-| C | automatic relationships | 22 / 25 |
+| Condition | Prompt states | Safe plans (flash) | Safe plans (pro) |
+|---|---|---|---|
+| A | objects only | 0 / 25 | 0 / 25 |
+| B | human relationships | 25 / 25 | 25 / 25 |
+| C | automatic relationships | 22 / 25 | 22 / 25 |
+
+The two planners agree exactly, and not merely in the totals: the three
+scenes condition C fails on are scenes 4, 16 and 24 under *both* models.
+That is the strongest form the result could take. A finding that survives
+replacing the reasoning engine entirely, down to which individual scenes
+fail, is a property of the information in the prompt rather than of the
+model consuming it, which is precisely the claim the experiment exists to
+make. It also disposes of the obvious objection to condition A's zero, that
+a more capable planner would have inferred the support relation from the
+object list: it does not, in twenty-five scenes out of twenty-five, twice.
 
 The effect of stating relations at all is total: without them the planner
 never clears the occluder, in twenty-five scenes out of twenty-five. The
@@ -271,9 +284,9 @@ relation was never stated. It reasoned correctly from incomplete input.
 **What this does not show.** Three limits. The comparison is between label
 sources, not planners: condition B is handed the exact fact the task tests,
 so B versus C measures whether each source supplies that fact, not which
-source produces better reasoning. It uses one model and one prompt style,
-so the size of the A-to-B gap is a property of this planner as much as of
-the labels, even though its direction is not in doubt. And no robot moved:
+source produces better reasoning. It uses two models but one prompt style,
+so the phrasing of the plan request is uncontrolled in a way the choice of
+planner no longer is. And no robot moved:
 this measures plans, not executions, so it closes the gap between labels and
 robot behaviour by one link rather than closing it entirely.
 

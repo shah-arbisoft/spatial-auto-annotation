@@ -225,12 +225,13 @@ scene-graph annotation for this dataset's seven predicates.
   This line of work raises the obvious alternative to the present project:
   rather than computing relations geometrically, simply ask a capable
   vision-language model to name them. That alternative is tested rather than
-  argued away. Section 4.16 puts a current model through the same battery, on
-  the same images, with the same boxes and the same written definitions, and
-  finds it recovers 0.40 of the human triplets against the geometric
-  pipeline's 0.83, and loses F1 on every predicate. It is not simply worse:
-  restricted to the pairs the humans judged it is the *more precise* of the
-  two, 0.42 against 0.35, because it asserts far less. More informative than
+  argued away. Section 4.16 puts two current models through the same battery,
+  on the same images, with the same boxes and the same written definitions.
+  The smaller recovers 0.40 of the human triplets against the geometric
+  pipeline's 0.83, and a reasoning model an order of magnitude larger
+  recovers 0.45; both lose F1 on every predicate. Neither is simply worse:
+  restricted to the pairs the humans judged both are *more precise* than the
+  pipeline, 0.42 and 0.39 against 0.35, because they assert far less. More informative than
   either number is the shape of its output: it does not contradict itself and
   does not invert the front/behind convention, it simply says nothing on most
   pairs, and asserts one direction of a symmetric relation without the other

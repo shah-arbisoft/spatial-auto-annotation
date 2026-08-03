@@ -82,7 +82,12 @@ Key commands:
 - `python scripts/run_vlm_pilot.py --make` then `python scripts/run_vlm_pilot.py`
   then `python eval/score_vlm_pilot.py`: the §4.16 vision-language
   comparison (30 numbered-box images, RQ1 battery, self-consistency
-  diagnostics) → `outputs/vlm_pilot/`. `python
+  diagnostics) → `outputs/vlm_pilot/`. The second model is the same three
+  commands with `--model` and its own `--replies` file, then
+  `python eval/compare_vlm_models.py` → `outputs/tables/vlm_models.md`.
+  Reasoning models need `--max-output-tokens` above the 8192 default,
+  because they spend most of the budget deliberating and a truncated reply
+  is indistinguishable from a malformed one. `python
   scripts/vlm_manual_check.py` then writes a pack that lets the comparison
   be redone by hand in a browser: the image the model saw, the prompt
   verbatim, and the human, pipeline and model answers side by side, so the
@@ -90,7 +95,10 @@ Key commands:
 - `python scripts/run_planner_llm.py` then `python eval/score_planner.py`:
   the §5.7 planner experiment (75 prompts over 25 scenes in three
   conditions) and its rule-based blind scoring →
-  `outputs/planner/`, `outputs/planner_scores.json`. Add `--sample N` to
+  `outputs/planner/`, `outputs/planner_scores.json`. Both runner and scorer
+  take `--replies`, which is how the second planner was run into
+  `replies_pro.jsonl` and scored into `planner_scores_pro.json` without
+  touching the first. Add `--sample N` to
   print plans with their verdicts for manual checking.
 - `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment, all three
   label sources (human, self-trained, automatic)
@@ -438,9 +446,11 @@ evidence and coverage limits qualify how far the stability figures reach.
 ### E.1 The vision-language baseline: diagnostics and limits
 
 The recall, precision and F1 tables this section refers to are in §4.16,
-which reports the headline comparison: the model recovers 0.40 of the human
-triplets against the pipeline's 0.83, and is the more precise labeller on
-the judged pairs, 0.42 against 0.35, while losing F1 on every predicate.
+which reports the headline comparison over two models: they recover 0.40 and
+0.45 of the human triplets against the pipeline's 0.83, and are the more
+precise labellers on the judged pairs, 0.42 and 0.39 against 0.35, while
+losing F1 on every predicate. The diagnostics below are the smaller model's
+unless stated, since it is the one the manual-check pack was built for.
 
 One asymmetry must be stated or the precision comparison will be read as
 stronger than it is. The pipeline's apparent false positives were audited
@@ -480,15 +490,33 @@ rather than of the model: what the pipeline has over it is not fluency and
 not per-assertion agreement, but exhaustiveness and the guaranteed
 anti-symmetry of §3.6.
 
-Three limits on this result. It is thirty images and one model at one prompt;
-a larger model, a chain-of-thought prompt or a fine-tune could all move the
-numbers, and the pilot was scoped to decide a role rather than to establish
-a bound. The prompt asks for every pair that stands in a relationship, so
-part of the silence may be the model's own judgement about what is worth
-recording, which is itself the annotator behaviour under discussion rather
-than an artefact. And the recall column rewards density, which is why the
-precision comparison is reported beside it; neither column alone is a
-verdict.
+Three limits on this result, one of them now partly settled. The pilot is
+thirty images at one prompt, and model capacity was the obvious confound: a
+larger model might simply have closed the gap. Running the identical battery
+on a reasoning model an order of magnitude larger tests that directly, and
+the answer is that capacity moves the numbers without moving the verdict.
+Mean recall rises from 0.400 to 0.445 against the pipeline's 0.834, pooled
+F1 from 0.397 to 0.405 against 0.488, and the larger model buys its extra
+recall by asserting more, which costs it precision, 0.389 against 0.419. It
+is better in the way a more willing annotator is better, not in the way a
+more accurate instrument is. What remains untested on this axis is prompting
+and fine-tuning: chain-of-thought scaffolding or supervised adaptation could
+still move the numbers, and neither was attempted.
+
+The other two limits stand unchanged. The prompt asks for every pair that
+stands in a relationship, so part of the silence may be the model's own
+judgement about what is worth recording, which is itself the annotator
+behaviour under discussion rather than an artefact. And the recall column
+rewards density, which is why the precision comparison is reported beside
+it; neither column alone is a verdict.
+
+One diagnostic does improve with scale, and it is the one that matters for
+the argument §4.16 makes. The smaller model supplied *to the left of*
+without its inverse on 0.35 of its assertions; the larger one on 0.16.
+Deliberation buys internal consistency. It does not buy enough: 0.16 is
+still a sixth of a symmetric relation asserted in one direction only, a
+defect the geometric rules cannot exhibit at all because §3.6 enforces the
+inverse by construction.
 
 ### E.2 Viewpoint stability: segmentation evidence and coverage
 

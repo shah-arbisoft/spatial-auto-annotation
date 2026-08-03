@@ -375,61 +375,65 @@ The honest summary is that the scaling claim now rests on a run rather than an a
 
 The three baselines of \S4.2 are deliberately weak, and a reader is entitled to ask about the strong one. Modern vision-language models describe spatial arrangements fluently, and \S2.6 reviews a research line built on exactly that capability. If one of them annotates this dataset as well as the geometric pipeline does, the pipeline is unnecessary. The question is settled here by measurement rather than assertion.
 
-\textbf{Protocol.} Thirty images, stratified across all nine annotator groups, are put to \texttt{gemini-flash-latest} with the ground-truth boxes drawn on the image and numbered, and the model answers using those indices (\texttt{scripts/run\_vlm\_pilot.py}). That places it in the same PredCls setting the pipeline is evaluated in, so neither is scored on detection. The prompt carries Chapter 3's operational definitions verbatim, including that \textit{in front of} means nearer the camera, without which the run would measure the reference-frame ambiguity of \S2.5 rather than accuracy. Scoring is the RQ1 battery on identical pairs, with the pipeline's answer beside it (\texttt{eval/score\_vlm\_pilot.py}). Every reply parsed; no record was malformed.
+\textbf{Protocol.} Thirty images, stratified across all nine annotator groups, are put to the model with the ground-truth boxes drawn on the image and numbered, and the model answers using those indices (\texttt{scripts/run\_vlm\_pilot.py}). That places it in the same PredCls setting the pipeline is evaluated in, so neither is scored on detection. The prompt carries Chapter 3's operational definitions verbatim, including that \textit{in front of} means nearer the camera, without which the run would measure the reference-frame ambiguity of \S2.5 rather than accuracy. Scoring is the RQ1 battery on identical pairs, with the pipeline's answer beside it (\texttt{eval/score\_vlm\_pilot.py}). Every reply parsed; no record was malformed.
 
-\begin{center}
-\small
-\begin{longtable}{lrrr}
-\caption{Stability of each predicate across viewpoints of the same scene, with recall under keyframe propagation against per-frame computation.}\\
-\hline
-Predicate & Gold & VLM & Pipeline \\
-\hline
-\endfirsthead
-\hline
-Predicate & Gold & VLM & Pipeline \\
-\hline
-\endhead
-on & 57 & 0.667 & 0.912 \\
-under & 47 & 0.660 & 0.851 \\
-to the left of & 49 & 0.408 & 0.918 \\
-to the right of & 49 & 0.327 & 0.939 \\
-in front of & 80 & 0.188 & 0.600 \\
-behind & 65 & 0.169 & 0.615 \\
-near & 34 & 0.382 & 1.000 \\
-\textbf{Mean} & \textbf{381} & \textbf{0.400} & \textbf{0.834} \\
-\hline
-\end{longtable}
-\end{center}
-
-On recall the model loses everywhere. It is closest on support, at 0.67 against 0.91, and furthest on the depth pair, where 0.19 against 0.60 leaves it below even the geometric method's known weak point.
-
-Recall alone would be an unfair verdict, and it is worth saying why before reading anything into it. The metric rewards whoever asserts more: on the 374 pairs the humans judged, the pipeline makes 868 assertions to the model's 344, so it has two and a half times as many chances to cover any given gold triplet. A sparse labeller can be right more often about what it does say and still lose on recall. Restricting both to the judged pairs, where precision is defined, tests exactly that.
+Two models were run, because the obvious objection to a single one is that a larger model would close the gap. \texttt{gemini-flash-latest} is the small non-reasoning model; \texttt{gemini-3.1-pro-preview} is a reasoning model roughly an order of magnitude larger which spends most of its output budget deliberating before it answers. Nothing else differs between the two runs: same images, same numbered boxes, same definitions, same scored pairs (\texttt{eval/compare\_vlm\_models.py}).
 
 \begin{center}
 \small
 \begin{longtable}{lrrrr}
-\caption{A vision-language model against the geometric pipeline on the same 30 images, the same pairs and the same human gold: recall.}\\
+\caption{Stability of each predicate across viewpoints of the same scene, with recall under keyframe propagation against per-frame computation.}\\
 \hline
-Predicate & VLM precision & Pipeline precision & VLM F1 & Pipeline F1 \\
+Predicate & Gold & Flash & Pro & Pipeline \\
 \hline
 \endfirsthead
 \hline
-Predicate & VLM precision & Pipeline precision & VLM F1 & Pipeline F1 \\
+Predicate & Gold & Flash & Pro & Pipeline \\
 \hline
 \endhead
-on & \textbf{0.950} & 0.897 & 0.784 & \textbf{0.904} \\
-under & 0.886 & \textbf{0.909} & 0.756 & \textbf{0.879} \\
-to the left of & \textbf{0.408} & 0.385 & 0.408 & \textbf{0.542} \\
-to the right of & 0.381 & \textbf{0.387} & 0.352 & \textbf{0.548} \\
-in front of & \textbf{0.484} & 0.356 & 0.270 & \textbf{0.447} \\
-behind & \textbf{0.478} & 0.308 & 0.250 & \textbf{0.410} \\
-near & 0.105 & \textbf{0.128} & 0.165 & \textbf{0.227} \\
-\textbf{micro} & \textbf{0.419} & 0.351 & 0.397 & \textbf{0.488} \\
+on & 57 & 0.667 & 0.737 & 0.912 \\
+under & 47 & 0.660 & 0.766 & 0.851 \\
+to the left of & 49 & 0.408 & 0.469 & 0.918 \\
+to the right of & 49 & 0.327 & 0.388 & 0.939 \\
+in front of & 80 & 0.188 & 0.237 & 0.600 \\
+behind & 65 & 0.169 & 0.138 & 0.615 \\
+near & 34 & 0.382 & 0.382 & 1.000 \\
+\textbf{Mean} & \textbf{381} & \textbf{0.400} & \textbf{0.445} & \textbf{0.834} \\
 \hline
 \end{longtable}
 \end{center}
 
-\textbf{The model is the more precise labeller}, on four of the seven predicates and on the pooled figure, 0.42 against 0.35. The margin is widest exactly where the pipeline is weakest: on front/behind it is right 0.48 of the times it commits, against the pipeline's 0.36. What it buys that precision with is silence, and the price is steep enough that it loses F1 on every predicate without exception, 0.40 against 0.49 pooled.
+On recall both models lose everywhere. The larger one is better, and the size of the improvement is the point: mean recall moves from 0.400 to 0.445, which is real but leaves it at barely half the pipeline's 0.834. It is closest on support, 0.74 against 0.91, and furthest on the depth pair, where 0.24 against 0.60 leaves it below even the geometric method's known weak point, and where \texttt{behind} actually falls, 0.169 to 0.138. Scaling the model does not scale the ability being measured.
+
+Recall alone would be an unfair verdict, and it is worth saying why before reading anything into it. The metric rewards whoever asserts more: on the 374 pairs the humans judged, the pipeline makes 868 assertions against 344 from the smaller model and 414 from the larger, so it has two to two and a half times as many chances to cover any given gold triplet. A sparse labeller can be right more often about what it does say and still lose on recall. Restricting all three to the judged pairs, where precision is defined, tests exactly that.
+
+\begin{center}
+\small
+\begin{longtable}{lrrrrrr}
+\caption{A vision-language model against the geometric pipeline on the same 30 images, the same pairs and the same human gold: recall.}\\
+\hline
+Predicate & Flash P & Pro P & Pipeline P & Flash F1 & Pro F1 & Pipeline F1 \\
+\hline
+\endfirsthead
+\hline
+Predicate & Flash P & Pro P & Pipeline P & Flash F1 & Pro F1 & Pipeline F1 \\
+\hline
+\endhead
+on & \textbf{0.950} & 0.840 & 0.897 & 0.784 & 0.785 & \textbf{0.904} \\
+under & 0.886 & 0.837 & \textbf{0.909} & 0.756 & 0.800 & \textbf{0.879} \\
+to the left of & 0.408 & \textbf{0.489} & 0.385 & 0.408 & 0.479 & \textbf{0.542} \\
+to the right of & 0.381 & \textbf{0.396} & 0.387 & 0.352 & 0.392 & \textbf{0.548} \\
+in front of & \textbf{0.484} & 0.475 & 0.356 & 0.270 & 0.317 & \textbf{0.447} \\
+behind & \textbf{0.478} & 0.281 & 0.308 & 0.250 & 0.186 & \textbf{0.410} \\
+near & 0.105 & 0.084 & \textbf{0.128} & 0.165 & 0.138 & \textbf{0.227} \\
+\textbf{micro} & \textbf{0.419} & 0.389 & 0.351 & 0.397 & 0.405 & \textbf{0.488} \\
+\hline
+\end{longtable}
+\end{center}
+
+\textbf{Both models are more precise labellers than the pipeline} on the pooled figure, 0.42 and 0.39 against 0.35. What they buy that precision with is silence, and the price is steep enough that both lose F1 to the pipeline on every predicate without exception, 0.40 and 0.41 against 0.49 pooled.
+
+The larger model does not resolve the picture so much as redistribute it. It asserts more (414 judged-pair assertions against 344), which lifts recall and costs precision, so its F1 lands within 0.008 of the smaller model's. Where the smaller model looked most interesting, \texttt{behind}, the larger one is markedly worse, 0.28 precision against 0.48. The one place it clearly improves is the symmetric-pair defect: it supplies \textit{to the left of} without its inverse on 0.16 of assertions against the smaller model's 0.35, so more deliberation does buy more internal consistency. Neither model contradicts itself outright, both at zero.
 
 Two things follow and they point in opposite directions, so both belong here. The model is not a fourth label source: it recovers under half the human record and loses F1 everywhere. But an earlier draft of this section said it won nothing, and that was an artefact of scoring recall alone. Where it does speak it agrees with the annotators more often than the pipeline does, which is the beginning of a case for it as an adjudicator on the depth pair; \S7.6 takes that up rather than settling it here.
 
