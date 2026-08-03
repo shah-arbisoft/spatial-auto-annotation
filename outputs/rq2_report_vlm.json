@@ -1,64 +1,64 @@
 {
   "human-trained": {
     "on": {
-      "recall": 0.9003831417624522,
-      "recall_min": 0.8879310344827587,
-      "recall_max": 0.9080459770114943,
+      "recall": 0.8448275862068965,
+      "recall_min": 0.8275862068965517,
+      "recall_max": 0.8563218390804598,
       "support": 348
     },
     "under": {
-      "recall": 0.5399305555555555,
-      "recall_min": 0.5,
-      "recall_max": 0.5729166666666666,
+      "recall": 0.4392361111111111,
+      "recall_min": 0.3645833333333333,
+      "recall_max": 0.5260416666666666,
       "support": 192
     },
     "to the left of": {
-      "recall": 0.16292974588938713,
-      "recall_min": 0.12331838565022421,
-      "recall_max": 0.21076233183856502,
+      "recall": 0.22346786248131542,
+      "recall_min": 0.18385650224215247,
+      "recall_max": 0.289237668161435,
       "support": 446
     },
     "to the right of": {
-      "recall": 0.28606060606060607,
-      "recall_min": 0.28363636363636363,
-      "recall_max": 0.28909090909090907,
+      "recall": 0.24969696969696972,
+      "recall_min": 0.21818181818181817,
+      "recall_max": 0.3054545454545455,
       "support": 550
     },
     "in front of": {
-      "recall": 0.08593322386425835,
-      "recall_min": 0.07060755336617405,
-      "recall_max": 0.11001642036124795,
+      "recall": 0.09414340448823207,
+      "recall_min": 0.08210180623973727,
+      "recall_max": 0.10180623973727422,
       "support": 609
     },
     "behind": {
-      "recall": 0.18045977011494252,
-      "recall_min": 0.13620689655172413,
-      "recall_max": 0.21379310344827587,
+      "recall": 0.15114942528735634,
+      "recall_min": 0.11896551724137931,
+      "recall_max": 0.1706896551724138,
       "support": 580
     },
     "near": {
-      "recall": 0.035842293906810034,
+      "recall": 0.07526881720430108,
       "recall_min": 0.0,
-      "recall_max": 0.0967741935483871,
+      "recall_max": 0.1935483870967742,
       "support": 93
     }
   },
   "auto-trained": {
     "on": {
-      "recall": 0.921455938697318,
-      "recall_min": 0.9195402298850575,
-      "recall_max": 0.9224137931034483,
+      "recall": 0.9233716475095785,
+      "recall_min": 0.9224137931034483,
+      "recall_max": 0.9252873563218391,
       "support": 348
     },
     "under": {
-      "recall": 0.9270833333333334,
+      "recall": 0.9236111111111112,
       "recall_min": 0.921875,
-      "recall_max": 0.9322916666666666,
+      "recall_max": 0.9270833333333334,
       "support": 192
     },
     "to the left of": {
-      "recall": 0.9514200298953662,
-      "recall_min": 0.9506726457399103,
+      "recall": 0.9529147982062781,
+      "recall_min": 0.952914798206278,
       "recall_max": 0.952914798206278,
       "support": 446
     },
@@ -69,15 +69,15 @@
       "support": 550
     },
     "in front of": {
-      "recall": 0.18609742747673783,
-      "recall_min": 0.17898193760262726,
-      "recall_max": 0.19047619047619047,
+      "recall": 0.18992884510125888,
+      "recall_min": 0.18719211822660098,
+      "recall_max": 0.19376026272577998,
       "support": 609
     },
     "behind": {
-      "recall": 0.3270114942528735,
-      "recall_min": 0.31724137931034485,
-      "recall_max": 0.33448275862068966,
+      "recall": 0.32701149425287357,
+      "recall_min": 0.31551724137931036,
+      "recall_max": 0.3431034482758621,
       "support": 580
     },
     "near": {
@@ -89,133 +89,133 @@
   },
   "pseudo-labelled": {
     "on": {
-      "recall": 0.9137931034482758,
-      "recall_min": 0.9109195402298851,
+      "recall": 0.903256704980843,
+      "recall_min": 0.8879310344827587,
       "recall_max": 0.9166666666666666,
       "support": 348
     },
     "under": {
-      "recall": 0.8368055555555555,
-      "recall_min": 0.7447916666666666,
-      "recall_max": 0.9427083333333334,
+      "recall": 0.59375,
+      "recall_min": 0.5885416666666666,
+      "recall_max": 0.6041666666666666,
       "support": 192
     },
     "to the left of": {
-      "recall": 0.21898355754857998,
-      "recall_min": 0.19955156950672645,
-      "recall_max": 0.2556053811659193,
+      "recall": 0.3064275037369208,
+      "recall_min": 0.273542600896861,
+      "recall_max": 0.3430493273542601,
       "support": 446
     },
     "to the right of": {
-      "recall": 0.3545454545454545,
-      "recall_min": 0.3290909090909091,
-      "recall_max": 0.4,
+      "recall": 0.38121212121212117,
+      "recall_min": 0.37454545454545457,
+      "recall_max": 0.3927272727272727,
       "support": 550
     },
     "in front of": {
-      "recall": 0.12534209085933226,
-      "recall_min": 0.10344827586206896,
-      "recall_max": 0.1477832512315271,
+      "recall": 0.12260536398467432,
+      "recall_min": 0.11658456486042693,
+      "recall_max": 0.12643678160919541,
       "support": 609
     },
     "behind": {
-      "recall": 0.25344827586206903,
-      "recall_min": 0.22586206896551725,
-      "recall_max": 0.27241379310344827,
+      "recall": 0.2224137931034483,
+      "recall_min": 0.1724137931034483,
+      "recall_max": 0.2775862068965517,
       "support": 580
     },
     "near": {
-      "recall": 0.03225806451612903,
-      "recall_min": 0.010752688172043012,
+      "recall": 0.025089605734767026,
+      "recall_min": 0.0,
       "recall_max": 0.06451612903225806,
       "support": 93
     }
   },
   "_pseudo_label_counts": {
     "on": {
-      "pseudo_pos": 22,
-      "pseudo_neg": 14656,
-      "annotated": 1605
+      "pseudo_pos": 51,
+      "pseudo_neg": 54653,
+      "annotated": 6026
     },
     "under": {
-      "pseudo_pos": 21,
-      "pseudo_neg": 14576,
-      "annotated": 1605
+      "pseudo_pos": 50,
+      "pseudo_neg": 54357,
+      "annotated": 6026
     },
     "to the left of": {
-      "pseudo_pos": 14,
-      "pseudo_neg": 14405,
-      "annotated": 1605
+      "pseudo_pos": 43,
+      "pseudo_neg": 53982,
+      "annotated": 6026
     },
     "to the right of": {
-      "pseudo_pos": 13,
-      "pseudo_neg": 14300,
-      "annotated": 1605
+      "pseudo_pos": 54,
+      "pseudo_neg": 53834,
+      "annotated": 6026
     },
     "in front of": {
-      "pseudo_pos": 9,
-      "pseudo_neg": 14195,
-      "annotated": 1605
+      "pseudo_pos": 67,
+      "pseudo_neg": 52845,
+      "annotated": 6026
     },
     "behind": {
-      "pseudo_pos": 9,
-      "pseudo_neg": 14315,
-      "annotated": 1605
+      "pseudo_pos": 42,
+      "pseudo_neg": 53601,
+      "annotated": 6026
     },
     "near": {
-      "pseudo_pos": 5,
-      "pseudo_neg": 14478,
-      "annotated": 1605
+      "pseudo_pos": 36,
+      "pseudo_neg": 54395,
+      "annotated": 6026
     }
   },
   "vlm-trained": {
     "on": {
-      "recall": 0.8275862068965517,
-      "recall_min": 0.7068965517241379,
-      "recall_max": 0.8908045977011494,
+      "recall": 0.7595785440613027,
+      "recall_min": 0.6839080459770115,
+      "recall_max": 0.8936781609195402,
       "support": 348
     },
     "under": {
-      "recall": 0.8871527777777778,
-      "recall_min": 0.7708333333333334,
-      "recall_max": 0.9479166666666666,
+      "recall": 0.8402777777777778,
+      "recall_min": 0.7135416666666666,
+      "recall_max": 0.9114583333333334,
       "support": 192
     },
     "to the left of": {
-      "recall": 0.45142002989536617,
-      "recall_min": 0.39461883408071746,
-      "recall_max": 0.5,
+      "recall": 0.4177877428998505,
+      "recall_min": 0.4103139013452915,
+      "recall_max": 0.4304932735426009,
       "support": 446
     },
     "to the right of": {
-      "recall": 0.29696969696969694,
-      "recall_min": 0.2581818181818182,
-      "recall_max": 0.34545454545454546,
+      "recall": 0.3503030303030303,
+      "recall_min": 0.30363636363636365,
+      "recall_max": 0.43636363636363634,
       "support": 550
     },
     "in front of": {
-      "recall": 0.09688013136288998,
-      "recall_min": 0.08538587848932677,
-      "recall_max": 0.10344827586206896,
+      "recall": 0.07881773399014778,
+      "recall_min": 0.06732348111658457,
+      "recall_max": 0.08866995073891626,
       "support": 609
     },
     "behind": {
-      "recall": 0.2057471264367816,
-      "recall_min": 0.19137931034482758,
+      "recall": 0.2132183908045977,
+      "recall_min": 0.20517241379310344,
       "recall_max": 0.22586206896551725,
       "support": 580
     },
     "near": {
-      "recall": 0.01075268817204301,
+      "recall": 0.0,
       "recall_min": 0.0,
-      "recall_max": 0.03225806451612903,
+      "recall_max": 0.0,
       "support": 93
     }
   },
   "_vlm": {
-    "images": 157,
-    "labelled_pairs": 3603,
-    "train_pairs_all_arms": 16318,
-    "replies_file": "outputs/vlm_pilot/replies_train_f35_snap.jsonl"
+    "images": 600,
+    "labelled_pairs": 13657,
+    "train_pairs_all_arms": 60762,
+    "replies_file": "outputs/vlm_pilot/replies_train_f35.jsonl"
   }
 }
