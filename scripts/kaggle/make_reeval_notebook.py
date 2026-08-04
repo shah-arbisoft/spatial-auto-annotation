@@ -62,9 +62,13 @@ single run.
    (`notebook-ssg`) - supplies the seed-42 checkpoints.
 4. Add Input: committed output of the **seed replication** notebook -
    supplies the seed-43 and seed-44 checkpoints.
+5. Add Input: committed output of the **vision-language arm** notebook -
+   supplies react_vlm_s42/43/44. Omit it and the run still succeeds, simply
+   without that arm; the assertion below only requires four runs.
 5. **Save Version > Save & Run All (Commit)**.
 
-Runtime ~40 minutes (24 evaluations, no training).
+Runtime ~40 minutes for two arms, ~60 with the vision-language arm
+(9 runs x 4 slices = 36 evaluations, no training).
 """
 
 CELLS: list[tuple[str, str]] = [
@@ -131,7 +135,11 @@ print("detector:", det[0])
 # seed 42 folders are named react_human / react_auto; 43 and 44 carry _sNN
 WANT = {"react_human": ("human", 42), "react_auto": ("auto", 42),
         "react_human_s43": ("human", 43), "react_auto_s43": ("auto", 43),
-        "react_human_s44": ("human", 44), "react_auto_s44": ("auto", 44)}
+        "react_human_s44": ("human", 44), "react_auto_s44": ("auto", 44),
+        # the vision-language arm, trained in its own notebook; every seed
+        # carries an _sNN suffix because it never had a seed-42-only run
+        "react_vlm_s42": ("vlm", 42), "react_vlm_s43": ("vlm", 43),
+        "react_vlm_s44": ("vlm", 44)}
 
 RUNS = {}
 for name, (arm, seed) in WANT.items():
