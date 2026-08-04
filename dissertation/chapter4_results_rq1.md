@@ -13,7 +13,7 @@ predicate pair per annotator (§4.5), costs the residual human effort (§4.7),
 and closes with the audit-driven rule repairs (§4.9), a diagnosis of every
 remaining miss (§4.10), and the fully-automatic deployment mode (§4.11).
 
-The last four sections leave the annotated gold behind, because every measure
+The last five sections leave the annotated gold behind, because every measure
 above is bounded by the quality of the labels it is scored against. Section
 4.12 runs the pipeline on video from outside the calibration domain, §4.13
 sets out the independent study that re-estimates precision with judges who
@@ -304,12 +304,13 @@ source paper's future work requests.
 
 ## 4.8 Answer to RQ1
 
-Automated annotation reaches human-comparable quality on six of seven
+Automated annotation reaches human-comparable quality on five of seven
 predicates outright (0.81–1.00 recall of the human triplets; mean 0.85, with
-0.76 on annotators no threshold ever saw), matches the human notion of `near`
-completely once the label's inconsistent usage is accounted for (0.997 pooled,
-1.00 held-out at the fitted threshold), resolving the one predicate the source
-paper reports as failing for every model it benchmarks (§2.2). On the
+0.76 on annotators no threshold ever saw). One of those five is `near`, whose
+human notion it matches completely once the label's inconsistent usage is
+accounted for (0.997 pooled, 1.00 held-out at the fitted threshold),
+resolving the one predicate the source paper reports as failing for every
+model it benchmarks (§2.2). On the
 depth pair, after the depth-plus-ground-plane cascade, it recalls 0.64/0.66
 pooled and, where it commits, agrees with six of the seven same-convention
 annotators at 0.95–1.00 (the seventh on 65 triplets, the smallest sample in
@@ -319,7 +320,7 @@ into calibrated abstention and that inverted convention. The audits bound true
 precision: ~1.0 for the lateral and proximity predicates and for depth-decided
 front/behind, ~0.9 for support after the contact rule, and ~0.73 conservative
 for the ground-plane fallback's added commits (§4.9). The tool's residual cost
-is the ~8% borderline review queue, and its labels are 20× denser than the
+is the 8.5% borderline review queue (§4.7), and its labels are 20× denser than the
 human set.
 
 ## 4.9 Shipped from the ablations

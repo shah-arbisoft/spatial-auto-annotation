@@ -153,9 +153,12 @@ files in the image returned no errors, so no layer is truncated. Inside the
 finished image the test suite reports **66 passed** a second time, torch
 resolves to `2.5.1+cu121` rather than the CPU wheel the pitfall above
 produces, and `pip check` is clean apart from a platform-metadata note on
-`ninja`, a build-time dependency of SAM2. The 60 Python and YAML files under
-`src/`, `eval/`, `tests/`, `configs/` and `scripts/` are hash-identical to
-the working tree, `/app` is 2.0 MB, and the dataset, the caches and the
+`ninja`, a build-time dependency of SAM2. Every one of the 60 Python and YAML
+files under `src/`, `eval/`, `tests/`, `configs/` and `scripts/` was
+hash-identical to the working tree as it stood at the commit the image was
+built from (`a10378f`); analysis scripts added afterwards are in the
+repository but not in that image, which is the ordinary consequence of an
+image being a snapshot. `/app` is 2.0 MB, and the dataset, the caches and the
 credentials file are absent, `.env.example` being the only environment file
 shipped.
 

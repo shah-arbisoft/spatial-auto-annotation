@@ -205,13 +205,18 @@ it knows more geometry.
 (§3.8). Neither arm can rank exactly those pairs highly; prediction 3
 underestimated not the labels but the gold.
 
-**The zero-shot flip is the counter-evidence in the benchmark's own terms.**
-zR@100 scores triplet types absent from training, the one sub-metric that
-cannot reward memorising the annotators' labelling prior. There the
-auto-trained arm's advantage (0.172 vs 0.003 over three seeds, disjoint
-ranges) shows what density and
-consistency actually bought: geometry that composes to unseen combinations,
-rather than a lookup of previously-labelled ones.
+**The zero-shot column needs reading carefully, because it does not measure
+what its name implies here.** zR@100 is defined as recall on triplet types
+absent from a model's *own* training data, but both arms are scored against
+one shared reference, the human training annotation, since that is the only
+way their numbers sit in one column. The two are not the same question. Of
+the 25 test triplet types the human annotation omits, the human arm saw none
+in training and the auto arm saw 24, so the auto arm's 0.172 against 0.003
+(three seeds, disjoint ranges) records that its labels *cover* relation types
+the manual pass never recorded. That is a real and relevant property of the
+label source, and it is the one the annotation bottleneck predicts. It is not
+evidence of compositional generalisation, and this dissertation does not
+claim it as such.
 
 ## 6.5 An honest reading, both ways
 
@@ -228,7 +233,7 @@ rather than spatial understanding. The per-group decomposition, replicated
 across seeds, adjudicates between the readings: against the only test
 annotator whose labels this dissertation's earlier chapters did *not*
 convict of a measured defect, the two arms rank equally well and the auto
-arm generalises far better to unseen compositions, while against the two
+arm covers far more of the omitted relation types, while against the two
 convicted annotators the human arm wins in proportion to their
 idiosyncrasy. That is weaker than the single-seed run implied, and it is
 the version the evidence supports.
@@ -283,8 +288,9 @@ variation of the procedure that produced it.
 
 At the level the source paper itself evaluates robot-readiness (SGG metrics
 on human-annotated gold), automatic labels train a model that trains longer,
-generalises to unseen relation compositions dramatically better (zR@100
-0.172 vs 0.003 over three seeds, ranges disjoint), ranks equally well
+covers relation types the manual annotation never recorded far more fully
+(zR@100 0.172 vs 0.003 over three seeds, ranges disjoint; §6.5 sets out what
+that column does and does not establish), ranks equally well
 against the one test annotator with no measured annotation defect, and
 ranks lower against the two that have them, for reasons this dissertation
 can attribute line by line to measured properties of those annotations. The

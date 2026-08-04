@@ -64,8 +64,9 @@ human labels are stretched by self-training, the standard semi-supervised
 remedy. In the full benchmark the verdict is conditional and the condition
 is legible: over three seeds per arm the human-trained model ranks better
 against human test annotation (mR@100 0.326 against 0.278), the auto-trained
-model generalises about sixty times better to unseen relation compositions
-(zR@100 0.172 against 0.003, with disjoint per-seed ranges), and the human
+model recovers about sixty times more of the relation types the manual
+annotation omits (zR@100 0.172 against 0.003, with disjoint per-seed ranges;
+a difference in label coverage rather than in generalisation, §6.5), and the human
 advantage is concentrated entirely on the two test annotators carrying
 measured labelling defects, disappearing against the only one without
 (0.308 against 0.307).
@@ -97,8 +98,8 @@ only three groups with fourfold variation in exhaustiveness.
 sparse, guideline-free annotation partly measures agreement with annotator
 habits rather than spatial correctness. The evidence is a dissociation:
 the model that ranks better memorises which pairs annotators record, and the
-model that generalises to unseen compositions is the one trained on
-consistent computed labels. The per-annotator decomposition localises the
+model that covers the relation types they never recorded is the one trained
+on consistent computed labels. The per-annotator decomposition localises the
 effect precisely, and the seed replication shows which parts of it survive
 training variance.
 
