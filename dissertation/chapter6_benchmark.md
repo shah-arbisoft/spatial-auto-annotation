@@ -100,17 +100,26 @@ so the spread below is the relation model's own variance and nothing else.
 
 | slice | metric | human-trained | auto-trained | separable? |
 |---|---|---|---|---|
-| full test | mR@100 | **0.326** (0.304–0.346) | 0.278 (0.268–0.288) | yes |
+| full test | mR@100 | **0.326** (0.303–0.347) | 0.278 (0.268–0.289) | yes |
 | full test | zR@100 | 0.003 (0.000–0.004) | **0.172** (0.157–0.196) | yes |
 | group 6 | mR@100 | **0.366** (0.343–0.382) | 0.286 (0.261–0.304) | yes |
 | group 6 | zR@100 | 0.000 (0.000–0.000) | **0.300** (0.152–0.379) | yes |
 | group 7 | mR@100 | 0.308 (0.298–0.323) | 0.307 (0.289–0.334) | **no** |
 | group 7 | zR@100 | 0.005 (0.000–0.008) | **0.165** (0.094–0.221) | yes |
-| group 8 | mR@100 | **0.174** (0.150–0.196) | 0.111 (0.088–0.127) | yes |
+| group 8 | mR@100 | **0.171** (0.142–0.197) | 0.109 (0.087–0.125) | yes |
 | group 8 | zR@100 | 0.000 (0.000–0.000) | **0.036** (0.018–0.061) | yes |
 
 Mean over three seeds, with the per-seed range in brackets; "separable"
 records whether the two arms' ranges are disjoint.
+
+One caveat belongs with the decimals. Re-scoring the *same* checkpoints a
+second time does not reproduce them exactly: an independent re-evaluation
+pass moved the pooled human mR@100 by 0.001 and the group-8 figures, drawn
+from the smallest slice at 37 images, by up to 0.008. Inference here is not
+bit-deterministic, so a margin of that order is not a result. The numbers
+above are those of the re-evaluation committed with this repository, and no
+claim in this chapter turns on a difference smaller than the spread already
+shown in brackets.
 
 Two things follow, and the first is a correction. **The single-seed group-7
 result does not replicate.** At seed 42 the auto arm led 0.334 to 0.323, and
@@ -123,7 +132,7 @@ therefore withdrawn.
 What survives is the pattern it was evidence for, and it survives with a
 spread rather than a point. The human arm's advantage is large on both
 annotators carrying a measured defect (group 6: 0.366 vs 0.286; group 8:
-0.174 vs 0.111) and disappears entirely on the one annotator whose labels
+0.171 vs 0.109) and disappears entirely on the one annotator whose labels
 this dissertation did not convict of anything (0.308 vs 0.307). The
 gradient runs with annotation quality, not with geometry, which is the
 claim §6.4 develops. The weaker version is also the more defensible one:
@@ -140,7 +149,9 @@ training combinations on two of the three. Unlike the ranking metrics, this
 gap is not a near-run thing at any seed or on any slice, and unlike the
 ranking metrics it points the same way on defective and clean annotators
 alike, which is what distinguishes a property of the labels from a property
-of the gold. It is the finding this chapter rests on.
+of the gold. What that column does and does not establish is set out in §6.5:
+it measures which relation types each source covers, not compositional
+generalisation, because both arms are scored against one shared reference.
 
 ## 6.4 Why the verdict flipped between Chapter 5 and this chapter
 
@@ -184,7 +195,7 @@ are indistinguishable**: 0.308 against 0.307 over three seeds, with
 overlapping ranges. On the two annotators this dissertation had already
 convicted of convention inversion (and, for group 8, idiosyncratic `near`
 usage and one-directional support) the human arm wins by margins far larger
-than seed variance: 0.366 against 0.286 on group 6, and 0.174 against 0.111
+than seed variance: 0.366 against 0.286 on group 6, and 0.171 against 0.109
 on group 8. The human arm's entire headline lead is therefore manufactured
 on the two defective annotators and vanishes on the clean one. Ranking
 parity on clean gold is a weaker statement than the single-seed run

@@ -310,8 +310,8 @@ predicates outright (0.81–1.00 recall of the human triplets; mean 0.85, with
 human notion it matches completely once the label's inconsistent usage is
 accounted for (0.997 pooled, 1.00 held-out at the fitted threshold),
 resolving the one predicate the source paper reports as failing for every
-model it benchmarks (§2.2). On the
-depth pair, after the depth-plus-ground-plane cascade, it recalls 0.64/0.66
+model it benchmarks (§2.2). On the depth pair, after the
+depth-plus-ground-plane cascade, it recalls 0.64/0.66
 pooled and, where it commits, agrees with six of the seven same-convention
 annotators at 0.95–1.00 (the seventh on 65 triplets, the smallest sample in
 the dataset, at 0.57); aligned for the two inverted-convention groups, depth
