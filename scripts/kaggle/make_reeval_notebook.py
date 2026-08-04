@@ -189,8 +189,13 @@ for name, (arm, seed) in WANT.items():
                   "cfg": sorted(cfgs)[-1], "ckpt": sorted(ckpts)[-1]}
     print(f"  found {name}: {os.path.basename(RUNS[name]['ckpt'])}")
 
-print(f"\\n{len(RUNS)} of 6 runs available")
-assert len(RUNS) >= 4, "attach both training notebooks' outputs as inputs"
+print(f"\\n{len(RUNS)} of {len(WANT)} runs available")
+assert len(RUNS) >= 4, "attach the training notebooks' outputs as inputs"
+missing_arms = sorted({a for a, _ in WANT.values()} - {r["arm"] for r in RUNS.values()})
+if missing_arms:
+    print(f"NOTE: no checkpoints found for {missing_arms}. That arm will be "
+          f"absent from the output rather than wrong in it; attach its "
+          f"notebook output if you meant to include it.")
 """),
 
     ("markdown",
