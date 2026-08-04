@@ -468,8 +468,11 @@ def fig_sgg_curves():
     curves = json.loads(p.read_text())
     fig, ax = plt.subplots(figsize=(7.6, 4.2))
     styles = {"react_human": (C_GRAY, "trained on human labels"),
-              "react_auto": (C_MAIN, "trained on automatic labels")}
-    for arm, (color, label) in styles.items():
+              "react_auto": (C_MAIN, "trained on pipeline labels"),
+              "react_vlm": (C_VLM, "trained on Gemini labels")}
+    # an arm absent from curves.json is simply not drawn
+    for arm, (color, label) in ((a, s) for a, s in styles.items()
+                                if a in curves):
         mr = curves[arm]["val_mr_per_epoch"]
         ax.plot(range(len(mr)), mr, color=color, lw=1.8, label=label)
         b = curves[arm]["best_epoch"]
