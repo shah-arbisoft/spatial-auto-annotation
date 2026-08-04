@@ -1,0 +1,25 @@
+{
+  "reference": "human",
+  "test_types": 88,
+  "shared_zero_shot": 25,
+  "arms": {
+    "human": {
+      "train_types": 94,
+      "saw_of_shared": 0,
+      "shared_zs": 25,
+      "own_zs": 25
+    },
+    "auto": {
+      "train_types": 209,
+      "saw_of_shared": 24,
+      "shared_zs": 25,
+      "own_zs": 1
+    },
+    "vlm": {
+      "train_types": 188,
+      "saw_of_shared": 25,
+      "shared_zs": 25,
+      "own_zs": 0
+    }
+  }
+}
