@@ -244,8 +244,38 @@ for g in ["group_6", "group_7", "group_8"]:
      "directly. Results are collected into one dictionary and printed as "
      "JSON at the end for easy copy-out."),
     ("code", """\
-import os, json, glob, shutil, torch, logging, statistics as st
+import os, sys, json, glob, shutil, pathlib, torch, logging, statistics as st
 os.chdir("/kaggle/working/SGG-Benchmark")
+
+# Cell 1 re-clones the framework, so anything it wiped is restored here
+# rather than assumed. Idempotent: skips files already carrying the marker.
+_root = pathlib.Path("/kaggle/working/SGG-Benchmark/sgg_benchmark")
+_old = "from ultralytics.utils.plotting import feature_visualization"
+_marker = "feature_visualization = None  # removed in newer ultralytics"
+_NL = chr(10)
+_new = _NL.join([
+    "try:",
+    "    from ultralytics.utils.plotting import feature_visualization",
+    "except ImportError:",
+    "    feature_visualization = None  # removed in newer ultralytics; only",
+    "    # used by an optional debug path this run never enables",
+])
+_patched = []
+for _f in _root.rglob("*.py"):
+    _s = _f.read_text(encoding="utf-8")
+    if _marker in _s:
+        continue
+    if _old in _s:
+        _f.write_text(_s.replace(_old, _new, 1), encoding="utf-8")
+        _patched.append(str(_f.relative_to(_root)))
+print("patched now:", _patched or "nothing (already patched)")
+
+# A failed import leaves half-built modules in sys.modules, so a retry fails
+# on the stale entry instead of on the code that was just fixed.
+for _m in [m for m in list(sys.modules) if m.startswith("sgg_benchmark")]:
+    del sys.modules[_m]
+print("cleared cached sgg_benchmark modules")
+
 from omegaconf import OmegaConf
 from sgg_benchmark.modeling.detector import build_detection_model
 from sgg_benchmark.utils.checkpoint import DetectronCheckpointer
