@@ -84,6 +84,41 @@ pip install -q ultralytics hydra-core omegaconf
 echo "INSTALL DONE"
 """),
 
+    ("markdown",
+     "## Cell 1b - patch an import current ultralytics no longer provides\n\n"
+     "Neither SGG-Benchmark's requirements nor the install above pins "
+     "`ultralytics`, so a fresh clone takes whatever is current, and recent "
+     "releases dropped `feature_visualization`. Several backbone modules "
+     "import it at module level, though it is only ever called inside an "
+     "`if visualize:` branch nothing here enters, so wrapping the import is "
+     "enough. Skips files already carrying the marker, because wrapping an "
+     "already-wrapped import produces an IndentationError."),
+    ("code", """import pathlib
+root = pathlib.Path("/kaggle/working/SGG-Benchmark/sgg_benchmark")
+old = "from ultralytics.utils.plotting import feature_visualization"
+marker = "feature_visualization = None  # removed in newer ultralytics"
+NL = chr(10)   # spelled this way so the generator cannot eat the escape
+new = NL.join([
+    "try:",
+    "    from ultralytics.utils.plotting import feature_visualization",
+    "except ImportError:",
+    "    feature_visualization = None  # removed in newer ultralytics; only",
+    "    # used by an optional debug path this run never enables",
+])
+
+patched = []
+for f in root.rglob("*.py"):
+    src = f.read_text(encoding="utf-8")
+    if marker in src:
+        continue
+    if old in src:
+        f.write_text(src.replace(old, new, 1), encoding="utf-8")
+        patched.append(str(f.relative_to(root)))
+print(f"patched {len(patched)} file(s):")
+for name in patched:
+    print(" ", name)
+"""),
+
     ("markdown", "## Cell 2 - copy dataset and config"),
     ("code", """\
 %%bash
