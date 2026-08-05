@@ -81,3 +81,10 @@ dissertation/latex/*.synctex.gz
 dissertation/latex/main.pdf
 outputs/vlm_pilot/img/
 outputs/docker/build_full.log
+
+# Working notes live outside the repository, in ../notes/. Anything that ends
+# up back here by accident stays out: these are drafts and personal records,
+# not documentation someone cloning this would want.
+
+
+
