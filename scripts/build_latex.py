@@ -67,11 +67,18 @@ FIGURES = {
         "Frame-to-frame stability of the emitted triplets on the two "
         "demonstration clips, before and after temporal smoothing.",
         "## 4.13 Independent validation of the precision estimate"),
-    "rq2_comparison.png": (
+    "planner_sources.png": (
         "chapter5_results_rq2.md",
-        "Downstream recall against held-out human gold for the three label "
-        "sources. Self-training improves on the human labels everywhere "
-        "except \\texttt{near}, where it falls below them.",
+        "Scenes with a safe grasp plan, by the relation source given to the "
+        "planner. Neither automatic source matches human annotation alone; "
+        "their union does, because their failures are disjoint.",
+        "## 5.8 Answer to RQ2"),
+    "rq2_with_vlm.png": (
+        "chapter5_results_rq2.md",
+        "Downstream recall against held-out human gold by label source. "
+        "Every arm trains on the same pairs, so the label source is the only "
+        "variable. Self-training improves on the human labels everywhere "
+        "except \texttt{near}, where it falls below them.",
         "## 5.3 Why self-training does not rescue the human labels"),
     "sgg_training_curves.png": (
         "chapter6_benchmark.md",
@@ -188,6 +195,8 @@ TABLES = {
         "Mean recall at 100 by test slice for both arms.",
         "Seed replication: which differences separate across three seeds "
         "per arm.",
+        "A third label source in the benchmark: mean recall at 100 by test "
+        "slice for the human, automatic and vision-language arms.",
     ],
     "appendices.md": [
         "Commands reproducing every experiment from the cached geometry, "

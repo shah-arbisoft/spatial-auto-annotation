@@ -153,6 +153,45 @@ of the gold. What that column does and does not establish is set out in §6.5:
 it measures which relation types each source covers, not compositional
 generalisation, because both arms are scored against one shared reference.
 
+### 6.3.2 A third label source, and the one result that does not fit
+
+Chapter 5 adds a vision-language model as a fourth training source, and the
+same labels were put through this benchmark as a third arm, three seeds,
+same frozen detector, same human test gold.
+
+| slice | human | automatic | vision-language |
+|---|---|---|---|
+| full test | 0.326 (0.303–0.347) | 0.278 (0.268–0.289) | 0.329 (0.316–0.347) |
+| group 6 (defect) | **0.366** (0.343–0.382) | 0.286 (0.261–0.304) | 0.336 (0.317–0.369) |
+| group 7 (clean) | 0.308 (0.298–0.323) | 0.307 (0.289–0.334) | **0.381** (0.365–0.395) |
+| group 8 (defect) | **0.171** (0.142–0.197) | 0.109 (0.087–0.125) | 0.148 (0.134–0.159) |
+
+Mean mR@100 over three seeds, per-seed range in brackets.
+
+Pooled, the vision-language arm is indistinguishable from the human arm
+(0.329 against 0.326, ranges overlapping almost entirely), and that is what
+§6.4's argument predicts. The model annotates sparsely and human-like: §4.16
+measures it recovering under half the human triplets, staying silent on most
+pairs, and reproducing the annotators' own asymmetry defect. A metric that
+rewards resembling the manual pass should therefore score it like the manual
+pass, and it does. A third source behaving as the argument says it should is
+confirming evidence, not an embarrassment.
+
+**One result does not fit, and it is reported rather than explained away.**
+On group 7, the single test annotator whose labels this dissertation did not
+convict of a measured defect, the vision-language arm leads both others at
+0.381 against 0.308 and 0.307, and its per-seed range touches neither. That
+is the cleanest gold in the test set, so a win there cannot be attributed to
+matching a defect. Three readings remain open and this experiment does not
+separate them: the arm trains on 14,626 relations against the human arm's
+5,421, so the gain may be density rather than the source; group 7 is 73
+images, small enough that a 0.07 margin over three seeds is suggestive rather
+than settled; and the arm's assertions were never audited as the tool's were
+(§4.4), so their correctness is assumed, not measured. The honest position is
+that on clean gold a vision-language source is at least competitive with both
+alternatives, and that establishing why would need the audit and a larger
+clean slice, neither of which this project has.
+
 ## 6.4 Why the verdict flipped between Chapter 5 and this chapter
 
 The same labels, the same held-out human gold, and two opposite outcomes:

@@ -52,16 +52,29 @@ source's character. That contrast is the experiment.
 
 Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 
-| predicate | human-trained | self-trained | auto-trained | gold (held-out) |
-|---|---|---|---|---|
-| on | 0.84 (0.83–0.86) | 0.90 (0.89–0.92) | 0.92 (0.92–0.93) | 348 |
-| under | 0.44 (0.36–0.53) | 0.59 (0.59–0.60) | 0.92 (0.92–0.93) | 192 |
-| to the left of | 0.22 (0.18–0.29) | 0.31 (0.27–0.34) | 0.95 (0.95–0.95) | 446 |
-| to the right of | 0.25 (0.22–0.31) | 0.38 (0.37–0.39) | 0.99 (0.99–0.99) | 550 |
-| in front of | 0.09 (0.08–0.10) | 0.12 (0.12–0.13) | 0.19 (0.19–0.19) | 609 |
-| behind | 0.15 (0.12–0.17) | 0.22 (0.17–0.28) | 0.33 (0.32–0.34) | 580 |
-| near | 0.08 (0.00–0.19) | 0.03 (0.00–0.06) | 1.00 (1.00–1.00) | 93 |
-| **mean** | **0.30** | **0.36** | **0.76** | |
+| predicate | human-trained | self-trained | vision-language | auto-trained | gold (held-out) |
+|---|---|---|---|---|---|
+| on | 0.84 (0.83–0.86) | 0.90 (0.89–0.92) | 0.76 (0.68–0.89) | 0.92 (0.92–0.93) | 348 |
+| under | 0.44 (0.36–0.53) | 0.59 (0.59–0.60) | 0.84 (0.71–0.91) | 0.92 (0.92–0.93) | 192 |
+| to the left of | 0.22 (0.18–0.29) | 0.31 (0.27–0.34) | 0.42 (0.41–0.43) | 0.95 (0.95–0.95) | 446 |
+| to the right of | 0.25 (0.22–0.31) | 0.38 (0.37–0.39) | 0.35 (0.30–0.44) | 0.99 (0.99–0.99) | 550 |
+| in front of | 0.09 (0.08–0.10) | 0.12 (0.12–0.13) | 0.08 (0.07–0.09) | 0.19 (0.19–0.19) | 609 |
+| behind | 0.15 (0.12–0.17) | 0.22 (0.17–0.28) | 0.21 (0.21–0.23) | 0.33 (0.32–0.34) | 580 |
+| near | 0.08 (0.00–0.19) | 0.03 (0.00–0.06) | 0.00 (0.00–0.00) | 1.00 (1.00–1.00) | 93 |
+| **mean** | **0.30** | **0.36** | **0.38** | **0.76** | |
+
+A fourth arm answers the question §4.16 raises but cannot settle: if a
+vision-language model is not a good enough *annotator*, is it nonetheless a
+good enough *teacher*? The same model was put over all 600 training images and
+its labels used exactly as the other three are used. Because that arm covers
+those images and not others, every arm here trains on precisely the pairs it
+covers, so no arm is advantaged by seeing more of the split; the human,
+self-trained and automatic figures are unchanged from the three-arm
+experiment to the last decimal, which is the check that the fourth arm is an
+addition to it rather than a different experiment. The answer is a qualified
+yes: at 0.38 the vision-language labels teach better than the sparse human
+labels they would replace, and about as well as the standard remedy for
+scarce labels, while remaining half as useful as computed geometry.
 
 Training on the automatic labels multiplies downstream mean recall by ~2.5
 against the human annotators' own held-out labels: 0.76 vs 0.30. Self-training
@@ -238,11 +251,19 @@ different capability: `gemini-flash-latest`, a small non-reasoning model,
 and `gemini-3.1-pro-preview`, a reasoning model roughly an order of
 magnitude larger. Nothing else differs between the two runs.
 
+Two further conditions were added afterwards, and only on the larger
+planner. **D** replaces the tool's relations with a vision-language model's,
+the same `gemini-3.1-pro-preview` assessed as a label source in §4.16, passed
+through the identical filter so that B, C and D differ only in who supplied
+the relations. **E** supplies the union of C and D.
+
 | Condition | Prompt states | Safe plans (flash) | Safe plans (pro) |
 |---|---|---|---|
 | A | objects only | 0 / 25 | 0 / 25 |
 | B | human relationships | 25 / 25 | 25 / 25 |
 | C | automatic relationships | 22 / 25 | 22 / 25 |
+| D | vision-language relationships | not run | 20 / 25 |
+| E | automatic and vision-language combined | not run | **25 / 25** |
 
 The two planners agree exactly, and not merely in the totals: the three
 scenes condition C fails on are scenes 4, 16 and 24 under *both* models.
@@ -264,6 +285,31 @@ misreads its role, treating something resting on the target as a neighbour
 to avoid rather than a load to remove, which is exactly the distinction a
 support relation encodes and nothing else in the prompt does. That is the
 paper's illustrated failure, reproduced at scale rather than asserted.
+
+**The two automatic sources fail on different scenes, and the union closes
+the gap.** Condition D is the weaker source taken alone: 20 of 25 against the
+tool's 22, consistent with §4.16, where the same model recovers roughly half
+the human triplets the tool does. What matters is not that ranking but the
+structure underneath it. Condition C fails on scenes 4, 16 and 24; condition
+D fails on 3, 5, 6, 13 and 14. **The two sets do not intersect.** Every
+failure in both arms is a support relation the source did not supply, never a
+plan that reasoned badly from what it was given, so a union that supplies
+more support relations repairs exactly those cases and cannot break the ones
+already working. It does: condition E clears the occluder in all 25 scenes,
+gaining three over C and five over D, losing nothing to either, and drawing
+level with the human labels at 0 gained, 0 lost, 25 tied.
+
+This is the only measurement in this dissertation on which automatic labels
+*match* human annotation on a robot-relevant task rather than approaching it,
+and it does so without any human in the labelling loop. Two qualifications
+keep it in proportion. Twenty-five scenes is a small sample, and the interest
+is in the disjointness of the failures rather than in the two-scene margin
+between C and D, which that sample cannot resolve. And the vision-language
+model's assertions were never audited the way the tool's were (§4.4), so the
+union's gain is measured on the planning task alone and is not evidence about
+the correctness of the relations it added. What the result supports is a
+designed follow-up: relations from a second, differently-failing source are
+worth having precisely where the geometric rules abstain.
 
 **Where the automatic labels lose, and why.** All three C failures have the
 same cause, and it is not a planning failure: in each, the automatic relation
