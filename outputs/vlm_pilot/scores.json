@@ -1,195 +1,195 @@
 {
-  "models": [
-    "gemini-flash-latest"
-  ],
-  "images": 30,
-  "gold": {
-    "in front of": 80,
-    "near": 34,
-    "behind": 65,
-    "on": 57,
-    "under": 47,
-    "to the right of": 49,
-    "to the left of": 49
-  },
-  "vlm_recall": {
-    "on": 0.6666666666666666,
-    "under": 0.6595744680851063,
-    "to the left of": 0.40816326530612246,
-    "to the right of": 0.32653061224489793,
-    "in front of": 0.1875,
-    "behind": 0.16923076923076924,
-    "near": 0.38235294117647056
-  },
-  "pipeline_recall": {
-    "on": 0.9122807017543859,
-    "under": 0.851063829787234,
-    "to the left of": 0.9183673469387755,
-    "to the right of": 0.9387755102040817,
-    "in front of": 0.6,
-    "behind": 0.6153846153846154,
-    "near": 1.0
-  },
-  "vlm_mean": 0.4000026746728619,
-  "pipeline_mean": 0.833696000581299,
-  "vlm_emitted": {
-    "to the right of": 244,
-    "near": 235,
-    "behind": 117,
-    "to the left of": 374,
-    "on": 50,
-    "under": 50,
-    "in front of": 117
-  },
-  "pipeline_emitted": {
-    "to the right of": 1711,
-    "in front of": 1548,
-    "near": 1808,
-    "behind": 1548,
-    "to the left of": 1711,
-    "on": 82,
-    "under": 82
-  },
-  "per_group": {
-    "group_0": {
-      "gold": 80,
-      "vlm": 41,
-      "pipe": 72
-    },
-    "group_1": {
-      "gold": 62,
-      "vlm": 32,
-      "pipe": 58
-    },
-    "group_2": {
-      "gold": 44,
-      "vlm": 7,
-      "pipe": 37
-    },
-    "group_3": {
-      "gold": 17,
-      "vlm": 6,
-      "pipe": 15
-    },
-    "group_4": {
-      "gold": 18,
-      "vlm": 10,
-      "pipe": 16
-    },
-    "group_5": {
-      "gold": 23,
-      "vlm": 19,
-      "pipe": 21
-    },
-    "group_6": {
-      "gold": 27,
-      "vlm": 8,
-      "pipe": 16
-    },
-    "group_7": {
-      "gold": 29,
-      "vlm": 13,
-      "pipe": 28
-    },
-    "group_8": {
-      "gold": 81,
-      "vlm": 8,
-      "pipe": 42
-    }
-  },
-  "judged_pairs": 374,
-  "vlm_precision_judged": {
-    "on": 0.95,
-    "under": 0.8857142857142857,
-    "to the left of": 0.40816326530612246,
-    "to the right of": 0.38095238095238093,
-    "in front of": 0.4838709677419355,
-    "behind": 0.4782608695652174,
-    "near": 0.10483870967741936
-  },
-  "vlm_f1_judged": {
-    "on": 0.7835051546391752,
-    "under": 0.7560975609756098,
-    "to the left of": 0.40816326530612246,
-    "to the right of": 0.3516483516483516,
-    "in front of": 0.2702702702702703,
-    "behind": 0.25000000000000006,
-    "near": 0.16455696202531644
-  },
-  "pipeline_precision_judged": {
-    "on": 0.896551724137931,
-    "under": 0.9090909090909091,
-    "to the left of": 0.38461538461538464,
-    "to the right of": 0.3865546218487395,
-    "in front of": 0.35555555555555557,
-    "behind": 0.3076923076923077,
-    "near": 0.12830188679245283
-  },
-  "pipeline_f1_judged": {
-    "on": 0.9043478260869565,
-    "under": 0.8791208791208791,
-    "to the left of": 0.5421686746987951,
-    "to the right of": 0.5476190476190476,
-    "in front of": 0.4465116279069768,
-    "behind": 0.4102564102564103,
-    "near": 0.2274247491638796
-  },
-  "vlm_micro": {
-    "precision": 0.4186046511627907,
-    "recall": 0.3779527559055118,
-    "f1": 0.3972413793103448,
-    "assertions": 344
-  },
-  "pipeline_micro": {
-    "precision": 0.3513824884792627,
-    "recall": 0.800524934383202,
-    "f1": 0.48839071257005606,
-    "assertions": 868
-  },
-  "malformed_dropped": 0,
-  "contradictions": 0,
   "asserted": {
     "behind": 117,
-    "near": 235,
-    "under": 50,
     "in front of": 117,
-    "to the right of": 244,
+    "near": 235,
+    "on": 50,
     "to the left of": 374,
-    "on": 50
+    "to the right of": 244,
+    "under": 50
   },
+  "contradictions": 0,
+  "gold": {
+    "behind": 65,
+    "in front of": 80,
+    "near": 34,
+    "on": 57,
+    "to the left of": 49,
+    "to the right of": 49,
+    "under": 47
+  },
+  "images": 30,
   "inverse_absent": {
-    "to the left of": 131,
-    "to the right of": 1,
     "behind": 1,
     "in front of": 1,
     "on": 0,
+    "to the left of": 131,
+    "to the right of": 1,
     "under": 0
+  },
+  "judged_pairs": 374,
+  "malformed_dropped": 0,
+  "miss_opposite": {
+    "behind": 3,
+    "in front of": 5,
+    "near": 0,
+    "on": 2,
+    "to the left of": 0,
+    "to the right of": 1,
+    "under": 1
+  },
+  "miss_other": {
+    "behind": 17,
+    "in front of": 15,
+    "near": 11,
+    "on": 4,
+    "to the left of": 2,
+    "to the right of": 1,
+    "under": 4
   },
   "miss_silent": {
     "behind": 34,
     "in front of": 45,
+    "near": 10,
     "on": 13,
-    "under": 11,
-    "to the right of": 31,
     "to the left of": 27,
-    "near": 10
+    "to the right of": 31,
+    "under": 11
   },
-  "miss_opposite": {
-    "in front of": 5,
-    "behind": 3,
-    "to the right of": 1,
-    "on": 2,
-    "under": 1,
-    "to the left of": 0,
-    "near": 0
+  "models": [
+    "gemini-flash-latest"
+  ],
+  "per_group": {
+    "group_0": {
+      "gold": 80,
+      "pipe": 72,
+      "vlm": 41
+    },
+    "group_1": {
+      "gold": 62,
+      "pipe": 58,
+      "vlm": 32
+    },
+    "group_2": {
+      "gold": 44,
+      "pipe": 37,
+      "vlm": 7
+    },
+    "group_3": {
+      "gold": 17,
+      "pipe": 15,
+      "vlm": 6
+    },
+    "group_4": {
+      "gold": 18,
+      "pipe": 16,
+      "vlm": 10
+    },
+    "group_5": {
+      "gold": 23,
+      "pipe": 21,
+      "vlm": 19
+    },
+    "group_6": {
+      "gold": 27,
+      "pipe": 16,
+      "vlm": 8
+    },
+    "group_7": {
+      "gold": 29,
+      "pipe": 28,
+      "vlm": 13
+    },
+    "group_8": {
+      "gold": 81,
+      "pipe": 42,
+      "vlm": 8
+    }
   },
-  "miss_other": {
-    "in front of": 15,
-    "behind": 17,
-    "under": 4,
-    "to the left of": 2,
-    "near": 11,
-    "on": 4,
-    "to the right of": 1
+  "pipeline_emitted": {
+    "behind": 1548,
+    "in front of": 1548,
+    "near": 1808,
+    "on": 82,
+    "to the left of": 1711,
+    "to the right of": 1711,
+    "under": 82
+  },
+  "pipeline_f1_judged": {
+    "behind": 0.4102564102564103,
+    "in front of": 0.4465116279069768,
+    "near": 0.2274247491638796,
+    "on": 0.9043478260869565,
+    "to the left of": 0.5421686746987951,
+    "to the right of": 0.5476190476190476,
+    "under": 0.8791208791208791
+  },
+  "pipeline_mean": 0.833696000581299,
+  "pipeline_micro": {
+    "assertions": 868,
+    "f1": 0.48839071257005606,
+    "precision": 0.3513824884792627,
+    "recall": 0.800524934383202
+  },
+  "pipeline_precision_judged": {
+    "behind": 0.3076923076923077,
+    "in front of": 0.35555555555555557,
+    "near": 0.12830188679245283,
+    "on": 0.896551724137931,
+    "to the left of": 0.38461538461538464,
+    "to the right of": 0.3865546218487395,
+    "under": 0.9090909090909091
+  },
+  "pipeline_recall": {
+    "behind": 0.6153846153846154,
+    "in front of": 0.6,
+    "near": 1.0,
+    "on": 0.9122807017543859,
+    "to the left of": 0.9183673469387755,
+    "to the right of": 0.9387755102040817,
+    "under": 0.851063829787234
+  },
+  "vlm_emitted": {
+    "behind": 117,
+    "in front of": 117,
+    "near": 235,
+    "on": 50,
+    "to the left of": 374,
+    "to the right of": 244,
+    "under": 50
+  },
+  "vlm_f1_judged": {
+    "behind": 0.25000000000000006,
+    "in front of": 0.2702702702702703,
+    "near": 0.16455696202531644,
+    "on": 0.7835051546391752,
+    "to the left of": 0.40816326530612246,
+    "to the right of": 0.3516483516483516,
+    "under": 0.7560975609756098
+  },
+  "vlm_mean": 0.4000026746728619,
+  "vlm_micro": {
+    "assertions": 344,
+    "f1": 0.3972413793103448,
+    "precision": 0.4186046511627907,
+    "recall": 0.3779527559055118
+  },
+  "vlm_precision_judged": {
+    "behind": 0.4782608695652174,
+    "in front of": 0.4838709677419355,
+    "near": 0.10483870967741936,
+    "on": 0.95,
+    "to the left of": 0.40816326530612246,
+    "to the right of": 0.38095238095238093,
+    "under": 0.8857142857142857
+  },
+  "vlm_recall": {
+    "behind": 0.16923076923076924,
+    "in front of": 0.1875,
+    "near": 0.38235294117647056,
+    "on": 0.6666666666666666,
+    "to the left of": 0.40816326530612246,
+    "to the right of": 0.32653061224489793,
+    "under": 0.6595744680851063
   }
 }

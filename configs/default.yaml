@@ -38,7 +38,9 @@ predicates:
                                # size); fitted to the annotators who used `near`.
                                # Contact pairs (on/under) are never near.
   on_vertical_gap: 0.05        # max normalised vertical gap to count as touching
-  on_horizontal_overlap: 0.20  # min IoU-of-x-extent to count as horizontal overlap
+  on_horizontal_overlap: 0.20  # min fraction of the NARROWER box's x-extent that
+                               # overlaps the other's (a containment fraction,
+                               # not an IoU) to count as horizontal overlap
   on_depth_eps: 0.06           # support requires depth co-location; calibrated on
                                # train groups (held-out support F1 0.58 -> 0.71)
   on_contact_min: 0.60         # min mask-contact fraction for the support rule;

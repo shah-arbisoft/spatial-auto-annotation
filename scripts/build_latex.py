@@ -78,8 +78,16 @@ FIGURES = {
         "Downstream recall against held-out human gold by label source. "
         "Every arm trains on the same pairs, so the label source is the only "
         "variable. Self-training improves on the human labels everywhere "
-        "except \texttt{near}, where it falls below them.",
+        "except \\texttt{near}, where it falls below them.",
         "## 5.3 Why self-training does not rescue the human labels"),
+    "rq1_with_vlm.png": (
+        "chapter4_results_rq1.md",
+        "Recall of the human triplets per predicate: the geometric pipeline "
+        "against both vision-language models on the same 30 images, the same "
+        "numbered boxes and the same written definitions. The dotted lines "
+        "are the two means. Scaling the model lifts every predicate a little "
+        "and closes none of the gap.",
+        "after:## 4.16 Would a vision-language model do this instead?"),
     "sgg_training_curves.png": (
         "chapter6_benchmark.md",
         "Validation curves for both benchmark arms, each against its own "
@@ -157,26 +165,37 @@ TABLES = {
         "Summary of the design decisions, the alternatives rejected and the "
         "reasons.",
     ],
+    # One caption per table, in document order. The two Ablation A9 captions
+    # that used to sit here moved with their tables to Appendix D.6; leaving
+    # them behind shifted every caption from the ablation table onward.
     "chapter4_results_rq1.md": [
+        # 4.2
         "Per-predicate recall of the human triplets, pooled and on held-out "
         "annotators, against three baselines.",
+        # 4.3
         "Precision, recall and F1 restricted to the human-annotated pairs.",
+        # 4.3.1
         "For each missed human triplet, the predicates the tool emitted "
         "instead.",
+        # 4.4
         "Manual audit of a stratified sample of extra predictions, with "
         "Wilson intervals.",
+        # 4.5
         "Front/behind by annotator group: emission rate, agreement where the "
         "tool commits, and the effect of aligning the direction convention.",
+        # 4.9
+        "The nine ablations: what each tests, the setting that shipped, and "
+        "the verdict on held-out annotators.",
+        # 4.10
         "Diagnosed cause of every missed human triplet, by predicate.",
-        "Ablation A9: two-view triangulation against the monocular cascade "
-        "on the same front/behind pairs.",
-        "Ablation A9 by depth separation: multi-frame ordering accuracy is at "
-        "chance where the two objects sit at nearly equal camera distance.",
+        # 4.14
         "Stability of each predicate across viewpoints of the same scene, "
         "with recall under keyframe propagation against per-frame "
         "computation.",
+        # 4.16
         "A vision-language model against the geometric pipeline on the same "
         "30 images, the same pairs and the same human gold: recall.",
+        # 4.16
         "The same comparison restricted to the pairs carrying a human label, "
         "where precision is defined. The model is the more precise labeller "
         "and loses F1 on every predicate.",
@@ -198,9 +217,20 @@ TABLES = {
         "A third label source in the benchmark: mean recall at 100 by test "
         "slice for the human, automatic and vision-language arms.",
     ],
+    # Consumed in document order across the appendices, one per table.
     "appendices.md": [
+        # B
         "Commands reproducing every experiment from the cached geometry, "
         "with run times.",
+        # C.10
+        "The seven predicates: core geometric test, shipped threshold values "
+        "and the symmetry each rule guarantees by construction.",
+        # D.6
+        "Ablation A9: two-view triangulation against the monocular cascade "
+        "on the same front/behind pairs.",
+        # D.6
+        "Ablation A9 by depth separation: multi-frame ordering accuracy is at "
+        "chance where the two objects sit at nearly equal camera distance.",
     ],
 }
 
@@ -286,15 +316,27 @@ def convert(md: str, figures: list[tuple[str, str, str]],
             depth = len(m.group(1))
             cmd = {2: "section", 3: "subsection", 4: "subsubsection"}[min(depth, 4)]
             title = m.group(2).strip()
-            # any figure anchored to this heading goes just before it.
+            # A figure anchored to this heading goes just before it, which
+            # puts it at the end of the *previous* section: that is the right
+            # place for a figure illustrating what was just reported. An
+            # anchor written "after:## 4.16 ..." goes after the heading
+            # instead, which is what a figure belonging to the final section
+            # of a chapter needs, since there is no following heading to
+            # anchor it to.
             # Prefix match, not equality: section titles get reworded, and an
             # anchor that silently stops matching used to drop the figure
             # from the PDF without a word (it dropped two).
             for fname, caption, anchor in figures:
-                if anchor and line.strip().startswith(anchor.strip()):
+                if anchor and not anchor.startswith("after:") \
+                        and line.strip().startswith(anchor.strip()):
                     out.append(figure_block(fname, caption))
                     placed_figs.add(fname)
             out.append("\\" + cmd + "{" + inline(title) + "}")
+            for fname, caption, anchor in figures:
+                if anchor.startswith("after:") \
+                        and line.strip().startswith(anchor[len("after:"):].strip()):
+                    out.append(figure_block(fname, caption))
+                    placed_figs.add(fname)
             i += 1
             continue
 
@@ -399,13 +441,25 @@ def main():
         figs = [(f, c, a) for f, (owner, c, a) in FIGURES.items()
                 if owner == md_name and (FIGDIR / f).exists()]
         tex = convert(md, figs, TABLES.get(md_name))
-        placed = sum(1 for f, _c, a in figs if a and a in md)
+        placed = sum(1 for f, _c, a in figs
+                     if a and a.removeprefix("after:") in md)
         n_tab = tex.count(r"\begin{longtable}")
         n_cap = tex.count(r"\caption{") - sum(1 for f, _c, a in figs
                                               if (FIGDIR / f).exists())
         stem = Path(md_name).stem.replace("_", "-")
         (out / (stem + ".tex")).write_text(tex, encoding="utf-8")
-        note = "" if n_cap == n_tab else f"  WARNING: {n_tab - n_cap} UNCAPTIONED"
+        # n_cap == n_tab only tells us every table got *a* caption. A registry
+        # holding more captions than the chapter has tables silently shifts
+        # them all, which is how five of chapter 4's captions came to sit on
+        # the wrong tables, so the count is checked explicitly.
+        declared = len(TABLES.get(md_name) or [])
+        if n_cap != n_tab:
+            note = f"  WARNING: {n_tab - n_cap} UNCAPTIONED"
+        elif declared != n_tab:
+            note = (f"  WARNING: {declared} captions declared for {n_tab} "
+                    f"tables; captions are positional and will be misaligned")
+        else:
+            note = ""
         print(f"  {md_name:34s} -> {stem}.tex  "
               f"({placed} figures, {n_tab} tables){note}")
 
@@ -420,10 +474,11 @@ def main():
     app_caps = list(TABLES.get("appendices.md", []))
     for title, body in zip(parts[1::2], parts[2::2]):
         # captions are consumed in document order across the appendices
-        n_here = sum(1 for ln in body.splitlines() if ln.strip().startswith("|"))
-        take = app_caps[:1] if n_here else []
-        if n_here:
-            app_caps = app_caps[1:]
+        # count tables, not table rows: one caption is consumed per table, so
+        # an appendix with two tables must take two.
+        n_here = sum(1 for ln in body.splitlines()
+                     if ln.strip().startswith("|---"))
+        take, app_caps = app_caps[:n_here], app_caps[n_here:]
         chunks.append("\\chapter{" + inline(title.strip()) + "}\n"
                       + convert(body, [], take))
     (out / "appendices.tex").write_text(
@@ -656,6 +711,11 @@ will be penalised.
 % record, later appendices are supplementary material.
 \appendix
 \renewcommand{\chaptertitlename}{Appendix}
+% Appendix subsections carry their own labels (C.1, D.1, E.1 ...) inside the
+% heading text, so LaTeX must not number them a second time; without this a
+% heading reads "C.0.1 C.1 Notation ...". secnumdepth 0 keeps the chapter
+% numbering the contents page needs (Appendix A, B, C ...) and drops the rest.
+\setcounter{secnumdepth}{0}
 \input{appendices}
 
 \end{document}

@@ -272,7 +272,11 @@ def main():
         "miss_silent": dict(silent),
         "miss_opposite": dict(opposite),
         "miss_other": dict(other),
-    }, indent=2), encoding="utf-8")
+        # sort_keys so a rerun is byte-identical: several of the fields above
+        # are counters whose insertion order follows whichever predicate the
+        # model happened to mention first, which made the artefact churn in
+        # git on every run without a single value changing.
+    }, indent=2, sort_keys=True), encoding="utf-8")
     print(f"\nwrote {args.out}")
 
 

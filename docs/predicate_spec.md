@@ -62,7 +62,7 @@ B is the object — to match the dataset's subject→object triplet format.
 ## 1. `on(A, B)` — A rests on B
 
 A is `on` B when A sits directly above B, they (nearly) touch, and they overlap
-horizontally. Three conditions, all required:
+horizontally. Four conditions, all required:
 
 1. **Above:** A's mask bottom is above B's mask top region — A is the higher
    object. Concretely `cy_A < cy_B` and the bottom edge of A is near the top of B.
@@ -70,8 +70,10 @@ horizontally. Three conditions, all required:
    bottom of A and the top of B is `<= on_vertical_gap` (default 0.05). A gap that
    is small but non-negative captures resting contact while tolerating mask noise.
 3. **Horizontal overlap:** the horizontal extents of A and B overlap by at least
-   `on_horizontal_overlap` (default 0.20), measured as overlap-of-x-extent. An
-   object resting on another must share a footprint.
+   `on_horizontal_overlap` (default 0.20) of the **narrower** box's x-extent
+   (`_x_extent_overlap`; this is a containment fraction, not an IoU, so a small
+   object fully above a large one scores 1.0). An object resting on another
+   must share a footprint.
 4. **Depth co-location:** `|depth_A − depth_B| ≤ on_depth_eps` (calibrated 0.06
    on the train annotator groups). Rationale: on a floor plane, "farther"
    projects as "higher in the image", so an object *behind* another mimics the
@@ -95,6 +97,14 @@ boxes touch but masks don't. Measured: held-out support F1 0.71 → 0.87;
 re-audited extra-label precision 0.07/0.20 → 0.73/0.80 (on/under). Known
 residual failure mode: an object *held* by a person satisfies contact
 (holding ≠ resting); a class-aware guard is a documented refinement.
+
+**Class guard.** Classes listed in `no_support_classes` (shipped value:
+`["human"]`) are excluded from `on`/`under` in either role. The justification
+is measured rather than assumed: the annotators never recorded a person as
+supporting or being supported, on 0 of 2,466 gold support triplets, and mask
+contact alone cannot distinguish a person *holding* an object from a surface
+*supporting* one. The guard is a config entry, not a hard-coded name, so a
+deployment with different classes revises it in one line.
 
 ## 2. `under(A, B)` — A is below and supports B
 
@@ -243,30 +253,31 @@ A pair is flagged (not dropped) when any of:
   unable to decide (elevated object, no mask evidence, or bottom edges within
   `plane_band`) (§5–6).
 
-Flags are written alongside the triplets. Measured on the full dataset, ~40% of
-ordered pairs carry some flag — dominated by `depth_ambiguous` (~30% of pairs),
-i.e. pairs at similar depth where the tool abstains from front/behind entirely
-(humans typically don't label those pairs either). The flag types serve
-different purposes and are reported separately: depth/lateral flags mark
-*abstentions* (no wrong label was emitted; nothing to fix), while
-`near_threshold_edge` (~8% of pairs) is the genuine *review queue* for the
-borderline-near cases. The evaluation reports per-type flag rates rather than a
-single number, and the human-in-the-loop claim is costed on the review-queue
-flags, not the abstentions.
+Flags are written alongside the triplets. Measured on the full dataset with the
+shipped rules, 31.5% of ordered pairs carry some flag: `depth_ambiguous` 19.3%,
+`lateral_ambiguous` 10.0% and `near_threshold_edge` 8.5% (a pair may carry more
+than one). The depth share was 29.5% before the ground-plane fallback shipped,
+which resolved about a third of the depth abstentions. The flag types serve
+different purposes and are reported separately: depth and lateral flags mark
+*abstentions* (no wrong label was emitted; nothing to fix, and humans typically
+do not label those pairs either), while `near_threshold_edge` is the genuine
+*review queue* for the borderline-near cases. The evaluation reports per-type
+flag rates rather than a single number, and the human-in-the-loop claim is
+costed on the review-queue flags, not the abstentions.
 
 ---
 
 ## Summary table
 
-| Predicate | Core test (ordered pair A,B) | Threshold(s) | Symmetry |
+| Predicate | Core test (ordered pair A,B) | Threshold(s) and shipped values | Symmetry |
 |---|---|---|---|
-| `on` | above + touching + horiz. overlap | `on_vertical_gap`, `on_horizontal_overlap` | `on(A,B)=under(B,A)` |
+| `on` | mask contact below + depth co-location + centroid order (box test is the no-mask fallback) | `on_contact_min` 0.60, `on_depth_eps` 0.06, `on_vertical_gap` 0.05, `on_horizontal_overlap` 0.20 | `on(A,B)=under(B,A)` |
 | `under` | inverse of `on` | (same as `on`) | `under(A,B)=on(B,A)` |
-| `left of` | `cx_A < cx_B` | `lateral_center_eps` | `left(A,B)=right(B,A)` |
-| `right of` | `cx_A > cx_B` | `lateral_center_eps` | `right(A,B)=left(B,A)` |
-| `in front of` | `d_A < d_B` | `depth_eps` | `front(A,B)=behind(B,A)` |
-| `behind` | `d_A > d_B` | `depth_eps` | `behind(A,B)=front(B,A)` |
-| `near` | `box_gap_rel <= near_T`, no contact | `near_T` (fitted), `flag_near_band` | symmetric |
+| `left of` | `cx_A < cx_B` | `lateral_center_eps` 0.02 | `left(A,B)=right(B,A)` |
+| `right of` | `cx_A > cx_B` | `lateral_center_eps` 0.02 | `right(A,B)=left(B,A)` |
+| `in front of` | `d_A < d_B`, then guarded ground-plane fallback | `depth_eps` 0.03, `plane_band` 0.005 | `front(A,B)=behind(B,A)` |
+| `behind` | `d_A > d_B`, then guarded ground-plane fallback | `depth_eps` 0.03, `plane_band` 0.005 | `behind(A,B)=front(B,A)` |
+| `near` | `box_gap_rel <= near_T`, no contact | `near_T` 1.372 (fitted), `flag_near_band` 0.15 | symmetric |
 
 All thresholds are declared in `configs/default.yaml`; `near_T` is fitted in
 `eval/fit_near.py` (annotator-aware protocol above) and frozen there.
