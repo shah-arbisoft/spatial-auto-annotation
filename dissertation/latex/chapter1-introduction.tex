@@ -5,7 +5,7 @@ Chapter summary: the manual-annotation bottleneck, the compute-not-predict idea,
 
 \section{Background}
 
-For a robot to act usefully in a human environment it must understand not just \textit{what} objects are present but \textit{how they are spatially related}: that a cup is \textit{on} a box, a book is \textit{to the left of} a bottle, a person is \textit{in front of} a shelf. These spatial relationships are the substrate of scene understanding, manipulation planning, and instruction following. The structured representation that captures them is a \textbf{scene graph}: objects as nodes, spatial relationships as labelled edges.
+A robot asked to pick up a book with a cube resting on it needs more than a list of what is in the room: it needs the edge that says the cube is \textit{on} the book. Support, laterality, depth order and proximity are the scene-graph edges a planner consumes to decide what to move first, and \S5.7 measures the consequence directly: given only the object list an LLM planner produces a safe grasp plan in 0 of 25 held-out scenes, and 22 to 25 of 25 once the relations are stated, depending on which source supplied them.
 
 Learning to predict such relationships requires training data in which the relationships are already labelled. Wang et al. (2025) introduced a spatial relationship aware dataset captured by a Boston Dynamics Spot robot: nearly a thousand indoor images (approximately 900 after cleaning; 838 annotated in the released subset), annotated with seven spatial predicates: \textit{behind, in front of, on, to the left of, to the right of, under, near}. Every relationship in it was labelled by hand. Nine trained annotators, working independently in batches of 100, drew every bounding box, assigned every class, and clicked subject then object to set each relationship, using a manual tool (SGDET-Annotate), with a majority-vote cleaning pass.
 
@@ -16,6 +16,10 @@ Manual annotation is the bottleneck. It is slow, expensive, and does not scale, 
 The cost is structural rather than incidental, and it grows faster than the data does. Objects in an image can be related pairwise, so an image holding \textit{n} annotated objects presents \textit{n(n-1)} ordered pairs a conscientious annotator would have to consider. This dataset averages 101 ordered pairs per image, so a genuinely exhaustive pass would mean a hundred judgements per photograph. Relationship annotation is therefore never exhaustive in practice: Visual Genome, the reference corpus for the task, records about eighteen relationships per image over scenes holding roughly twenty objects, a small fraction of the pairs available (Krishna et al., 2017), and in the dataset studied here humans recorded labels on about 10\% of the ordered pairs. Sparsity of this kind is not laziness but arithmetic, and it has a consequence the field routinely absorbs without comment: a model evaluated against such labels is rewarded for reproducing which pairs annotators happened to record, not only which relationships actually hold. Chapter 6 shows that this is measurable rather than theoretical.
 
 A second cost is consistency. Nine annotators working independently in batches, with no written definition of what "near" or "in front of" means, produce nine slightly different labelling conventions. The source paper identifies this for one predicate; Chapter 4 measures it for three, including two annotator groups that recorded \textit{in front of} and \textit{behind} in opposite directions from everyone else. Neither cost is solved by hiring more annotators, because both scale with the number of humans involved.
+
+\subsection{Why the existing remedies do not remove it}
+
+Three families of method already exist for a shortage of labels, and each is reviewed in Chapter 2 and tested somewhere in this dissertation rather than dismissed on paper. Learned scene-graph generators predict relations from visual patterns, but they are trained on labelled triplets and therefore sit \textit{downstream} of an annotator rather than replacing one. Semi-supervised methods stretch the labels that exist, which presupposes a consistent labelled seed; the seed here is 10\% dense and internally contradictory, and Chapter 5 measures what self-training actually does with such a seed. A large vision-language model can be asked for the relations directly, which is the most plausible modern shortcut and the one a reader is most likely to propose; \S4.16 runs it on the same images with the same definitions, and the result is that it reproduces the \textit{human} annotation's characteristic failures rather than a geometric one's. What none of the three does is produce a dense, self-consistent label for every ordered pair in an image with no human deciding anything, which is the gap this project addresses.
 
 \section{Research aim and objectives}
 
@@ -36,7 +40,7 @@ relation-prediction model as effectively as human labels are? Measured with a co
 
 RQ1 asks whether the labels are \textit{accurate}; RQ2 asks whether they are \textit{useful}.
 
-The research questions decompose into five verifiable objectives:
+The research questions decompose into six verifiable objectives:
 
 \begin{itemize}
 \item \textbf{O1 (build).} A fully-automatic pipeline (detection, segmentation, depth,
@@ -48,8 +52,18 @@ with trivial and box-only baselines, ablations, and manually audited true precis
 \item \textbf{O4 (diagnose).} Every disagreement with the human labels attributed to a
 cause: calibrated abstention, annotator behaviour, or genuine tool error. \textit{(Chapters 4, 7)}
 \item \textbf{O5 (test downstream utility).} A controlled experiment in which the same
-classifier is trained once on human and once on automatic labels, isolating the label source, answering RQ2. \textit{(Chapter 5)}
+classifier is trained on each label source under identical features, splits and seeds, isolating the label source, answering RQ2. \textit{(Chapter 5)}
+\item \textbf{O6 (test at the level the field measures).} The same comparison repeated
+in the source paper's own scene-graph framework with a shared frozen detector and replicated seeds, and carried one link further to an LLM planner asked for a safe grasp plan under each label source, so that the answer to RQ2 does not rest on one lightweight model. \textit{(Chapters 5, 6)}
 \end{itemize}
+
+\subsection{What would count as an answer}
+
+Both research questions can be answered badly by choosing the measurement after seeing the result, so the criteria are fixed here, before any of them is reported.
+
+RQ1 is answered \textbf{yes} if per-predicate recall of the human triplets is comparable to what the human process itself achieves, on annotator groups whose data influenced no threshold, and if the labels the tool emits beyond the human record survive manual audit rather than turning out to be noise. \textit{Comparable} is given content by two references rather than by a number chosen for convenience: the trivial random and majority baselines, which any method must beat, and an estimate of how well the human annotators would have scored against one another, which is the ceiling any annotator can fairly be held to (\S4.6). A per-predicate answer is required, not a mean, because a mean over seven predicates can conceal one that fails outright.
+
+RQ2 is answered \textbf{yes} if a model trained on the automatic labels performs at least as well as the same model trained on the human labels, under identical features, splits and seeds, and judged against held-out \textit{human} annotation. That direction is deliberately the harder one for the automatic arm, because the yardstick is the rival source's own product. Since a single lightweight model could produce such a result by accident, the question is put three times at increasing cost, to a controlled classifier, to the source paper's own benchmark framework, and to a planner acting on the relations, with the standard semi-supervised remedy included as a third arm in the controlled experiment. Agreement across all three would be required for an unqualified yes; where they disagree, the disagreement is reported and explained rather than resolved in the project's favour, and Chapter 6 is where that obligation falls due.
 
 \subsection{Contributions}
 
@@ -70,7 +84,9 @@ released images are consecutive frames of one robot capture and asking whether a
 
 \subsection{Scope}
 
-In scope: the automatic annotator; the fidelity study with baselines and ablations; the controlled downstream classifier; the direct benchmark test, in which the source paper's own SGG framework (REACT++) is trained on each label source (Chapter 6); and a critical evaluation chapter. Scaling to robot captures beyond the annotated release was planned as future work and became possible mid-project when the supervising group supplied the full capture the release was cut from; \S4.15 reports it, with the limits that follow from those frames having no ground truth. Deferred to future work: a vision-language task-planning comparison and copy-paste augmentation. These protect the timeline and strengthen the future-work discussion rather than weakening the contribution.
+In scope: the automatic annotator; the fidelity study with baselines and ablations; the controlled downstream classifier; the direct benchmark test, in which the source paper's own SGG framework (REACT++) is trained on each label source (Chapter 6); the planner experiment that carries the comparison one link further towards robot behaviour (\S5.7); the vision-language baseline run on the same images under the same definitions (\S4.16); and a critical evaluation chapter. Two items entered scope during the project rather than at its start, and both are marked as such where they are reported. Scaling to robot captures beyond the annotated release became possible when the supervising group supplied the full capture the release was cut from (\S4.15), with the limits that follow from those frames having no ground truth; and the vision-language comparison, originally deferred, was brought forward once it became clear that a reader would treat it as the obvious alternative to the whole approach. Deferred to future work and not attempted: copy-paste augmentation of under-represented relations, and any revision of the dataset's own predicate definitions.
+
+\textbf{Delimitations and assumptions.} Five, each a decision rather than an oversight, and each revisited in \S7.6. The work covers \textbf{one indoor environment and six annotated object classes}, so every fitted threshold is dataset-specific by construction and it is the method, not the numbers, that is claimed to transfer. Relations are computed in the \textbf{camera frame}, which is a choice among the reference frames Chapter 2 sets out and not a fact about the world; where an annotator used a different frame the two disagree systematically, and \S4.5 measures exactly that. Depth is \textbf{monocular and relative}, so the depth predicates inherit an ambiguity no threshold can remove and which ablation A8 shows a four-times-larger depth model does not resolve. Fidelity is measured in the \textbf{PredCls setting}, with ground-truth boxes and classes supplied, so detection error is held out of the comparison and reported separately (\S4.11). And the \textbf{seven predicates are taken as given} from the source dataset; improving their definitions would be a different project, and this one inherits whatever they leave ambiguous.
 
 \section{Research approach}
 
@@ -97,6 +113,8 @@ Deployment & detector-in-the-loop mode, runtime/VRAM footprint, reproducibility 
 \hline
 \end{longtable}
 \end{center}
+
+The work was carried out under constraints that shaped the design as much as the research questions did, and stating them makes several later choices legible. All perception runs on a \textbf{single 6 GB consumer GPU}, which rules out the largest segmentation and depth checkpoints and makes the small-model choices of Chapter 3 a requirement rather than a preference; ablation A8 then asks what that requirement costs and finds it costs almost nothing on the predicate it was expected to hurt. There was \textbf{no budget for paid annotation}, so the independent re-estimate of precision is a volunteer study (\S4.13) rather than a commissioned one, and the audits that precede it are the author's own, with the circularity that implies and that \S2.9 states as an objection before any result is reported. The project uses \textbf{one dataset}, because it is the dataset whose annotation bottleneck the work exists to address, and the price is that generalisation is argued rather than demonstrated. And the benchmark chapter's training runs use \textbf{free hosted GPU sessions}, which caps how many seeds are affordable and rules out the hyper-parameter search a fully tuned comparison would want; the replication reported in Chapter 6 is what that budget allows, and its width is reported rather than smoothed over.
 
 Ethical considerations are summarised here and detailed in Appendix A. The work is a secondary analysis of a published, openly licensed dataset (CC-BY 4.0) collected by the supervising research group; no new personal data were gathered for the annotation study. Some dataset frames contain identifiable people, so faces are anonymised in every published figure. The independent human validation of the automatic labels (Chapter 4) collects anonymous true/false judgements only, with no names, contact details, or IP addresses, under the University's ethics self-assessment process.
 

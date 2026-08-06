@@ -3,7 +3,7 @@
 Every quantitative claim below is established in Chapters 4--6 and reproducible from the repository; this chapter interprets, connects and stress-tests them.
 \end{quote}
 
-This chapter discusses the results rather than reporting new ones. Section 7.1 evaluates the achievement against the two research questions, \S7.2 dissects what the remaining failures are made of, \S7.3 examines the dataset's annotation process in the light of the measurements, \S7.4 reflects on the methodology itself, \S7.5 compares the outcome with the prior work of Chapter 2, and \S7.6 states limitations and threats to validity. The objective-by-objective audit belongs with the conclusions and is given in \S9.1.
+This chapter discusses the results rather than reporting new ones. Section 7.1 evaluates the achievement against the two research questions, \S7.2 dissects what the remaining failures are made of, \S7.3 examines the dataset's annotation process in the light of the measurements, \S7.4 reflects on the methodology itself, \S7.5 compares the outcome with the prior work of Chapter 2, \S7.6 states limitations and threats to validity, and \S7.7 answers the five objections the literature review raised against the approach before any result was known. The objective-by-objective audit belongs with the conclusions and is given in \S9.1.
 
 \section{Achievement against the research questions}
 
@@ -13,7 +13,7 @@ This chapter discusses the results rather than reporting new ones. Section 7.1 e
 
 The third arm is what makes that claim hard to dismiss. Self-training on the human labels, the standard semi-supervised remedy for exactly this problem, reaches 0.36 and closes only 15\% of the gap, and its bookkeeping shows why: the teacher contributes about a thousand confident \textit{negative} pseudo-labels for every positive one, propagating the annotators' silence rather than their judgement, and on \texttt{near} it drives recall below the human baseline it started from. The comparison therefore is not against doing nothing, but against the obvious alternative, under identical conditions.
 
-The five objectives of \S1.2.1 are audited against their evidence in \S9.1; this chapter is concerned with what the results \textit{mean} rather than with whether each objective was discharged.
+The six objectives of \S1.2.1 are audited against their evidence in \S9.1; this chapter is concerned with what the results \textit{mean} rather than with whether each objective was discharged.
 
 \section{What the remaining failures are made of}
 
@@ -69,6 +69,20 @@ Two results connect this project to literatures outside its immediate lineage. T
 \textbf{Construct.} "Agreement with human labels" is an imperfect proxy when the humans disagree with each other; the per-annotator decompositions mitigate but cannot eliminate this. The RQ2 result compares supervision \textit{at this dataset's annotation scale}. It does not claim automatic labels beat abundant, guideline-driven human annotation, a regime this dataset does not contain.
 
 \textbf{Ethics.} Scene images contain identifiable people; figures for publication use the dataset as released (CC-BY 4.0) with faces blurred as a courtesy.
+
+\section{The objections of \S2.9, answered}
+
+The literature review stated five objections to a rule-based annotator before any result was reported, so that this chapter could be read as an attempt on them. Each is answered here with the evidence that bears on it, including the two the evidence does not settle.
+
+\textbf{Vocabulary scale: not answered, and conceded.} Nothing in this dissertation bears on predicates beyond the seven, and the objection is that a hand-written rule set does not extend by learning. It stands in full. What the work can offer is a boundary rather than a rebuttal: the rules are decidable because the predicates are spatial, and \S3.3 makes that dependence explicit rather than hoping it generalises. Section 9.3 records it as the limitation most likely to matter to anyone reusing the method.
+
+\textbf{Systematic error: partly confirmed, partly refuted, and the split is informative.} The objection predicts that a downstream model absorbs the rule's blind spot as though it were fact. Chapter 6 is that prediction coming true and is reported as such: the auto-trained arm ranks below the human-trained one on the metric the field uses, and the gap is concentrated where the annotation itself is defective. But the objection also predicts that consistent-but-wrong supervision is worse than inconsistent human supervision, and on this dataset that is refuted at every level where the question was asked, by a factor of two and a half in the controlled experiment and by a planner that clears the occluder in 22 of 25 scenes against 0 with no relations at all. The reconciliation is that systematic error is worse than random error only when it is \textit{wrong}; \S4.14's finding that front/behind agrees with itself across viewpoints 0.955 of the time while agreeing with the annotators 0.64 of the time is the shape of a consistent rule meeting a different convention, not of a consistent mistake.
+
+\textbf{Circular validation: conceded.} Section 7.4 already lists this first among the choices a stricter replication should improve, and no result in Chapters 4 to 6 removes it. What belongs here is the extent of the concession rather than a restatement of it. The circularity bounds the \textit{precision} estimates, because those rest on verdicts the author gave. It does not reach the structural guarantees of \S3.6, which are checkable without any verdict at all, nor the downstream findings of Chapters 5 and 6, which are scored against human annotation the author did not produce and in which the automatic arm is judged by its rival's yardstick. The designed remedy is \S4.13 and it has no results at the time of writing, which leaves this the objection a reader should weight most heavily.
+
+\textbf{Reference frame: answered as far as it can be, which is not all the way.} The dissertation does not assert that the camera frame is correct; it shows that the tool applies one frame consistently (\S4.14), that two annotator groups applied another (\S4.5), and that recall rises from 0.64/0.66 to 0.84 once the convention is aligned. That establishes disagreement rather than error, and identifies which party is consistent. It does not establish which convention a robot should obey, and no measurement in this dissertation could, because that is a question about the specification and not about the data.
+
+\textbf{Better collection rather than cheaper labels: not attempted, and partly answered sideways.} The project did not re-collect anything. It did, however, produce the written operational definitions the annotation process never had (\S3.5) and quantify three specific defects those definitions would have prevented, which is the input a better collection round would need. Cheap labels and correct definitions are complements rather than alternatives, and this work supplies evidence for the second while delivering the first.
 
 \section{Aims, revisited}
 

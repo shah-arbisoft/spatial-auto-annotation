@@ -133,7 +133,7 @@ will be penalised.
 \noindent Signature: \rule{6cm}{0.4pt} \hfill Date: \rule{4cm}{0.4pt}
 
 \vspace{1cm}
-\noindent \textbf{Total Number of Words:} 29,855
+\noindent \textbf{Total Number of Words:} 33,349
 
 \cleardoublepage
 
@@ -205,6 +205,11 @@ will be penalised.
 % record, later appendices are supplementary material.
 \appendix
 \renewcommand{\chaptertitlename}{Appendix}
+% Appendix subsections carry their own labels (C.1, D.1, E.1 ...) inside the
+% heading text, so LaTeX must not number them a second time; without this a
+% heading reads "C.0.1 C.1 Notation ...". secnumdepth 0 keeps the chapter
+% numbering the contents page needs (Appendix A, B, C ...) and drops the rest.
+\setcounter{secnumdepth}{0}
 \input{appendices}
 
 \end{document}

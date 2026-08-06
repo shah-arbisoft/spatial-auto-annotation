@@ -3,7 +3,7 @@ This chapter closes the dissertation. Section 9.1 states how each objective was 
 
 \section{Summary of the dissertation}
 
-The aim was to determine whether spatial-relationship annotation for robot-acquired images can be automated, and whether the resulting labels are good enough to replace the human ones. Five objectives carried that aim, and each is met with evidence rather than assertion.
+The aim was to determine whether spatial-relationship annotation for robot-acquired images can be automated, and whether the resulting labels are good enough to replace the human ones. Six objectives carried that aim, and each is met with evidence rather than assertion.
 
 \textbf{O1, build.} A fully-automatic pipeline annotates all 836 images in about five minutes on a 6 GB consumer GPU, with no human deciding any label, and writes the dataset's own formats byte-compatibly (Chapter 3). Verified by a load-write round trip reproducing boxes and labels with zero error.
 
@@ -13,7 +13,9 @@ The aim was to determine whether spatial-relationship annotation for robot-acqui
 
 \textbf{O4, diagnose.} Every one of the 1,689 missed human triplets is attributed to a cause by re-checking rule conditions, so the failure analysis is exhaustive rather than illustrative. Genuine tool error accounts for roughly 7\% of misses; the remainder is calibrated abstention and measured annotator behaviour (\S4.10, \S7.2).
 
-\textbf{O5, test downstream utility.} A controlled experiment trains the same classifier on three label sources under identical conditions (Chapter 5); the comparison is repeated in the source paper's own benchmark framework with a shared frozen detector and three seeds per arm (Chapter 6); and the chain is followed one link further, to an LLM planner asked to produce a safe grasp plan for 25 held-out scenes under each label source (\S5.7).
+\textbf{O5, test downstream utility.} A controlled experiment trains the same classifier on three label sources under identical features, splits and seeds (Chapter 5), so that the only thing differing between arms is where the labels came from: automatic 0.76 mean recall against held-out human gold, human 0.30, self-trained 0.36.
+
+\textbf{O6, test at the level the field measures.} The same comparison is repeated in the source paper's own benchmark framework with a shared frozen detector and three seeds per arm (Chapter 6), and the chain is followed one link further, to an LLM planner asked to produce a safe grasp plan for 25 held-out scenes under each label source (\S5.7). The objective is met in the sense that matters for an honest answer: the heavyweight test does not agree with the lightweight one, the disagreement is localised to the annotators whose labels Chapter 4 convicted of measured defects, and both readings are reported rather than one being selected.
 
 \textbf{RQ1, accuracy.} Yes, with one qualification. On five of seven predicates the automatic labels match or exceed the human process (0.81 to 1.00 recall, audited precision $\approx$ 1.0), and \texttt{near} is solved outright, resolving the one predicate the source paper reports as failing for every model it benchmarked. The depth pair reaches 0.64/0.66 pooled and 0.84 once two annotator groups' inverted conventions are accounted for; where the tool commits it agrees at 0.95 to 1.00 with six of the seven same-convention annotators, the seventh being the smallest sample in the dataset. The residual limit is monocular ambiguity, which ablation A8 shows a four-times-larger depth model does not fix.
 
