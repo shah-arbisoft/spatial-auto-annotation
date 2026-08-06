@@ -24,11 +24,18 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 
-# Most of outputs/ is bulk that regenerates from a run: annotations, the
-# geometry cache, rendered audit and gallery images, video frames. Those stay
-# out; they are ~112 MB and one command rebuilds them.
+# Most of outputs/ is bulk that regenerates from a run: annotations, rendered
+# audit and gallery images, video frames. Those stay out; they are ~112 MB and
+# one command rebuilds them.
 outputs/*
 !outputs/.gitkeep
+
+# The geometry cache is the exception among the bulk, and it travels. Every
+# offline command in Appendix B reads it, so without it a clone cannot run a
+# single experiment without a CUDA GPU and a five-minute perception pass over
+# the dataset. 10 MB buys a reader the whole evaluation chain on a laptop.
+!outputs/geometry/
+!outputs/pairs.csv
 
 # The evidence does travel with the repository, because the dissertation
 # points readers at these files by name and a clone that lacks them cannot
