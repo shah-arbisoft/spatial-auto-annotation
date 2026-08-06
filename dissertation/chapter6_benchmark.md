@@ -72,8 +72,10 @@ The human-trained arm wins the headline ranking metrics (mR@100 0.346 vs
 0.22–0.25 floor rather than recovered. Predictions 2 and 3 are refuted as
 stated. One result points sharply the other way: on triplet *types never
 seen in training*, the auto-trained arm recalls 0.157 against the human
-arm's 0.004, a 39× gap in compositional generalisation at this seed
-(replicated at ~60× over three seeds; §6.3.1).
+arm's 0.004, a 39× gap at this seed (replicated at ~60× over three seeds;
+§6.3.1). What that column measures here is set out in §6.4, and it is
+coverage of the relation types the manual annotation never recorded rather
+than compositional generalisation.
 
 Two follow-up evaluations decompose the headline (same checkpoints, test
 slices re-scored):
@@ -349,5 +351,10 @@ claim the evidence supports is therefore conditional:
 geometry; human labels remain better wherever ground truth means human
 annotation habits.** For the robot chain, where the planner consumes
 relations that must be *correct* rather than *human-like*, the first
-condition is the operative one, and testing it end-to-end (relations into an
-LLM planner, plans scored for validity) is the designed next step.
+condition is the operative one. Section 5.7 already puts that reading to the
+test one link further down the chain, and it survives: given the automatic
+relations an LLM planner produces a safe grasp plan on 22 of 25 held-out
+scenes, against 25 of 25 with the human relations and 0 of 25 with none,
+identically on two planners of very different capability. What the chain
+still lacks is execution on a physical robot, which §9.3 records as the only
+remaining link.

@@ -135,8 +135,11 @@ box, mask or depth is read; the boxes are stored in the upright frame.
 
 ## 3.5 The seven rules
 
-Full definitions with defaults live in `docs/predicate_spec.md`; design
-rationale in brief:
+The complete specification is **Appendix C**: every rule with its thresholds,
+the shipped values, the evidence behind each one, and the correction and
+flagging policy. It is also maintained in the repository as
+`docs/predicate_spec.md`, which is the copy the code and tests are checked
+against. The design rationale in brief:
 
 - **on / under** encode *support*: subject above object, near-touching
   (vertical gap within ±0.05), with horizontal extents overlapping (≥0.20 of
@@ -301,14 +304,51 @@ the segmentation recovers and what skipping the intervening frames costs.
 
 ## 3.11 Reproducibility by construction
 
-Every threshold, seed and model identifier lives in `configs/default.yaml`;
-the runner caches each object's lifted geometry, so any rule or threshold
-change re-evaluates the entire dataset offline in ~20 seconds without touching
-the GPU (`scripts/reannotate_from_cache.py`); the environment is pinned
-(Python 3.11, CUDA torch 2.5.1) with the known install pitfalls documented;
-and the rule layer is covered by unit tests encoding the spec's worked
-examples (13 tests). The full pipeline is a public repository with a smoke
-test that verifies the perception models on first setup.
+Reproducibility here is a design property rather than a documentation
+exercise, because three of the four requirements in §3.2 are unverifiable
+without it: a threshold cannot be said to be fitted on groups 0-5 if nobody
+else can refit it, and an ablation is an assertion unless the reader can
+re-run the arm it removes.
+
+**Configuration and caching.** Every threshold, seed and model identifier
+lives in `configs/default.yaml`, so no constant is buried in a function.
+The runner caches each object's lifted geometry (box, mask centroid, median
+masked depth) after the single GPU pass, which makes the expensive stage
+separable from the cheap one: any rule or threshold change re-evaluates the
+entire dataset offline in about 20 seconds with no GPU
+(`scripts/reannotate_from_cache.py`), against roughly five minutes for a
+full perception run. That separation is what made the audit-driven rule
+repairs of Chapter 4 affordable, and it is why the ablation battery could be
+run as a sweep rather than as a series of overnight jobs.
+
+**Test strategy.** The suite is 66 tests and runs in about a second, which
+is deliberate: a test suite that is slow enough to skip does not constrain
+anything. It has three layers, each guarding a different kind of mistake.
+Worked examples from the predicate specification are encoded directly as
+unit tests over the rule layer, so the specification and the code cannot
+drift apart silently. A randomised invariant test then fuzzes two thousand
+synthetic scenes and asserts the structural guarantees §3.6 promises: that
+mutually exclusive families never co-occur on one ordered pair, that
+inverses mirror between the two orderings, that `near` is symmetric, and
+that `near` never co-occurs with a contact relation. Those hold by
+construction, and pinning them down is what stops a later rule edit from
+quietly breaking them. The remaining tests cover the parts most likely to
+fail for uninteresting reasons: format writers, the detector adapters of
+§3.9, frame selection, and the parsers for externally-produced replies. The
+suite has earned its place more than once, most usefully by rejecting an
+attempt to accept unmapped predicate strings, which would have widened the
+label vocabulary without anyone noticing.
+
+**Environment.** The environment is pinned to Python 3.11 with CUDA torch
+2.5.1, and the one genuinely awkward installation step is documented rather
+than left to be rediscovered: installing SAM2 can silently replace the CUDA
+build of torch with a CPU wheel, so the pipeline still runs, produces
+identical labels, and takes an order of magnitude longer, which is the worst
+class of failure because nothing reports it. A container definition applies
+the same fix in the build, and a smoke test verifies on first setup that
+both perception models load, that CUDA is actually being used, and that peak
+memory sits inside the 6 GB budget of requirement 3. Appendix B gives the
+full walk-through, and the repository is public.
 
 ## 3.12 Summary of design decisions
 

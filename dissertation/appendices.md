@@ -70,9 +70,12 @@ Key commands:
   `outputs/parallax_ablation.json`
 - `python eval/seed_stats.py`: aggregates the benchmark arms across seeds →
   `outputs/tables/seed_replication.md`
-- `python eval/keyframe_propagation.py --sweep 5,10,20,30`: content-adaptive
-  frame selection and the viewpoint-stability measurement of §4.14 →
-  `outputs/keyframe_propagation.json`
+- `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60`:
+  content-adaptive frame selection and the viewpoint-stability measurement of
+  §4.14 → `outputs/keyframe_propagation.json`. The sweep must include the
+  coarse settings: the 89× compression figure §4.14 and §7.2 rely on comes
+  from τ = 45, and because the script rewrites the whole file, a narrower
+  sweep silently removes it
 - `python eval/video_stability.py`: the persistence and Jaccard figures of
   §4.12, derived from the recorded per-frame files →
   `outputs/video_stability.json`
@@ -101,17 +104,58 @@ Key commands:
   touching the first. Add `--sample N` to
   print plans with their verdicts for manual checking.
 - `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment, all three
-  label sources (human, self-trained, automatic)
+  label sources (human, self-trained, automatic) →
+  `outputs/rq2_report.json`, `outputs/tables/rq2.md`
 - `python analysis/score_votes.py votes.csv`: scores the independent
   validation study (crowd precision, author-bias kappa, rater reliability);
   lives with the study's own repository
 - `python scripts/make_figures.py`: regenerate all figures from cached results
 - `pytest -q`: unit and invariant tests
 
+**The vision-language arms.** A fourth label source appears in §5.2, a fifth
+condition in §5.7 and a third arm in §6.3.2, all derived from one model's
+labels rather than from the pipeline's. They are reproduced separately here
+because each begins with an API pass that costs money and cannot be repeated
+byte-for-byte: the model behind `gemini-flash-latest` moved during the
+project (§4.16), so a rerun answers as whatever that alias resolves to on the
+day. The stored replies are therefore committed, and every scoring step below
+reads them rather than re-querying, so all reported numbers reproduce offline
+from this repository alone. Only step (a) needs a key.
+
+- **(a) Label the training images.** `python scripts/run_vlm_pilot.py --make
+  --n 600 --prompts outputs/vlm_pilot/prompts_train.jsonl` builds the
+  prompts, then the same script without `--make` and with `--replies
+  outputs/vlm_pilot/replies_train_f35.jsonl --model <model>` runs the pass.
+  The committed replies are the ones every step below consumes.
+- **(b) The RQ2 fourth arm (§5.2).** `python eval/downstream.py --seeds
+  42,43,44 --vlm-replies outputs/vlm_pilot/replies_train_f35.jsonl --out
+  outputs/rq2_report_vlm.json --table outputs/tables/rq2_vlm.md`. Note that
+  the flag changes the *whole* experiment, not just the new column: every arm
+  is restricted to the pairs the model covered, which is what makes the four
+  columns comparable. That the human, self-trained and automatic figures come
+  out identical to the three-arm run is the check that the restriction is
+  fair, and it is why both JSONs are kept.
+- **(c) The planner's conditions D and E (§5.7).** `python
+  scripts/planner_experiment.py --vlm-replies
+  outputs/vlm_pilot/replies_planner_pro.jsonl` rebuilds the prompt set with
+  condition D (the model's relations through the identical filter) and
+  condition E (the union of C and D); then `python scripts/run_planner_llm.py
+  --model <model> --replies outputs/planner/replies_pro.jsonl` and `python
+  eval/score_planner.py --replies outputs/planner/replies_pro.jsonl --out
+  outputs/planner_scores_abcde.json`.
+- **(d) The benchmark's third arm (§6.3.2).** `python
+  scripts/export_sgg_benchmark.py --vlm-replies
+  outputs/vlm_pilot/replies_train_f35.jsonl` emits a third annotation
+  variant, `_annotations.vlm.coco.json`, alongside the human and automatic
+  ones; `scripts/kaggle/notebook_cells_vlm.md` is the run recipe for training
+  and evaluating that arm at three seeds, and `python eval/seed_stats.py`
+  aggregates all three arms into `outputs/tables/seed_replication.md`.
+
 The Chapter 6 experiment is reproducible from `scripts/kaggle/`: the dataset
 converters (`export_sgg_benchmark.py`, `export_yolo_det.py`), the adapted
-REACT++ configuration, the run recipes (`README.md`, `notebook_cells.md`, and
-`seed_replication.ipynb` for the seed replication), and
+REACT++ configuration, the run recipes (`README.md`, `notebook_cells.md`,
+`seed_replication.ipynb` for the seed replication and `notebook_cells_vlm.md`
+for the vision-language arm), and
 the executed evaluation notebook with its outputs (`eval_notebook.ipynb`),
 which is the recorded provenance of every number in Chapter 6's tables.
 Training logs and parsed results: `outputs/sgg_benchmark/`.
@@ -181,11 +225,18 @@ release's own layout (`img_data/group_N/*.jpg` plus the annotation JSONs)
 and corrects the images' 180° EXIF orientation itself; nothing is
 preprocessed on disk.
 
-**3. One GPU pass, then everything is offline.**
+**3. Everything below is offline, and the cache ships.**
 `python scripts/run_annotator.py` (~5 min on the RTX 2060) writes the
-annotations in all three native formats plus the geometry, contact and
-depth caches under `outputs/`, and `outputs/pairs.csv`. Every experiment
-below runs from those caches on CPU:
+annotations in all three native formats plus the geometry, contact and depth
+caches under `outputs/`, and `outputs/pairs.csv`. That pass is the only step
+that needs a GPU, and it does not have to be repeated: the geometry cache
+and `pairs.csv` are committed to the repository (10 MB, 1,672 files), so a
+clone runs every experiment below on a CPU with no perception models
+installed and no dataset present. Re-running the pass is worthwhile only to
+verify the perception stage itself; the check that it reproduces is
+`scripts/reannotate_from_cache.py`, which rebuilds `pairs.csv` from the
+cache and should return the identical file (84,881 rows, SHA-256
+`60281435…e1bd`).
 
 | command | produces | time |
 |---|---|---|
@@ -195,8 +246,8 @@ below runs from those caches on CPU:
 | `python eval/fidelity.py` | the RQ1 battery, `fidelity_report.json` | ~2 min |
 | `python eval/uncertainty.py --iters 2000` | cluster-bootstrap CIs | ~2 min |
 | `python eval/annotator_agreement.py` | heterogeneity + Fréchet bounds | <1 min |
-| `python eval/keyframe_propagation.py --sweep 5,10,20,30` | §4.14 segmentation, stability, propagation cost | ~3 min |
-| `python eval/ablations.py` | A1–A6 sweeps | ~10 min |
+| `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60` | §4.14 segmentation, stability, propagation cost | ~3 min |
+| `python eval/ablations.py` | A1–A7 sweeps | ~30 s |
 | `python eval/depth_ablation.py` | A8 (needs the `outputs_base` pass) | <1 min |
 | `python eval/downstream.py --seeds 42,43,44` | RQ2, three arms | ~4 h CPU |
 | `python scripts/make_figures.py` | every figure | ~1 min |
@@ -230,10 +281,270 @@ commands write; no figure or table in this dissertation is produced by hand.
 
 ## Appendix C: Predicate specification
 
-The complete geometric specification of the seven predicates (definitions,
-thresholds, worked examples, and the correction and flagging rules) is
-maintained in the repository at `docs/predicate_spec.md` and is reproduced in
-the submitted version of this document.
+This is the complete geometric specification of the seven predicates: the
+per-object measurements every rule reads, the rule for each predicate with its
+thresholds and the evidence behind them, the correction step, and the flagging
+policy. It is the operational definition §4.7.1 establishes the dataset never
+had, and it is the reference `src/predicates.py` implements. The same text is
+maintained in the repository at `docs/predicate_spec.md`, which is what the
+code and the tests are checked against; the two are kept in step deliberately,
+because a specification that drifts from its implementation is worse than none.
+
+The seven predicates are exactly those of the source dataset (Wang et al.,
+2025). The dataset's exact predicate strings are `to the left of` and `to the
+right of`; the shorthand "left of" and "right of" is used below only for
+readability. The canonical names and their dataset IDs are fixed in
+`src/predicates.PREDICATE_IDS`: in front of = 6, behind = 2, on = 10,
+under = 17, to the left of = 15, to the right of = 16, near = 9.
+
+### C.1 Notation and the per-object measurements
+
+After detection, segmentation and depth estimation, each object carries:
+
+- `box = (x1, y1, x2, y2)`, the axis-aligned bounding box in image pixels,
+  from the detector or from the ground-truth annotation.
+- `M`, the binary segmentation mask from SAM2.
+- `(cx, cy)`, the mask centroid in image coordinates.
+- `d`, the per-object relative depth, Depth Anything v2 sampled over `M` and
+  reduced by median.
+- `P = (X, Y, Z)`, the lifted 3D position: normalised image coordinates plus
+  scaled depth, retained per object for the downstream classifier's features.
+
+**Image coordinate convention.** `x` increases to the right and `y` increases
+downward, the standard image convention. Left and right are expressed in the
+**camera frame**, as the camera sees the scene, matching how the human
+annotators clicked subject then object on screen. This is stated explicitly
+because it is a design choice that has to be justified against the annotation
+tool rather than assumed, and §2.9 records that it is a decision and not a
+fact about the world.
+
+**Depth convention.** Depth Anything v2 returns a relative, ordinal depth map.
+Smaller `d` is treated as nearer the camera. Because depth is relative and
+per-image, every depth comparison is ordinal and between objects in the same
+image; no rule consumes an absolute distance, and none may be compared across
+images.
+
+**Normalisation.** Distances and gaps are normalised by image dimensions, `x`
+by width and `y` by height, so one threshold transfers across image sizes. The
+`near` rule uses a size-relative 2D box gap rather than the lifted position
+(C.7).
+
+All predicates are defined for an **ordered pair (A, B)**, A the subject and B
+the object, matching the dataset's subject-predicate-object triplet format.
+
+### C.2 `on(A, B)`: A rests on B
+
+A is `on` B when A sits directly above B, the two nearly touch, and they
+overlap horizontally. Four conditions, all required.
+
+1. **Above.** A is the higher object: `cy_A < cy_B`, with the bottom edge of A
+   near the top of B.
+2. **Touching.** The normalised vertical gap between the bottom of A and the
+   top of B is at most `on_vertical_gap` (0.05). A small but non-negative gap
+   captures resting contact while tolerating mask noise.
+3. **Horizontal overlap.** The horizontal extents overlap by at least
+   `on_horizontal_overlap` (0.20) of the **narrower** box's x-extent. This is a
+   containment fraction rather than an IoU, so a small object sitting fully
+   above a large one scores 1.0, which is the behaviour support requires.
+   Something resting on another object must share its footprint.
+4. **Depth co-location.** `|d_A - d_B| <= on_depth_eps` (0.06, calibrated on
+   the training annotator groups). On a floor plane "farther" projects as
+   "higher in the image", so an object *behind* another mimics the 2D
+   signature of one stacked *on* it; truly stacked objects share a camera
+   distance. Measured effect: held-out support F1 0.58 to 0.71, removing about
+   half the audited false support labels at a cost of two recalled triplets.
+
+Encoding support as *above, touching and horizontally overlapping* is what
+stops a cup floating in front of a shelf from reading as resting on it.
+
+**Mask-contact evidence, primary where masks exist.** The box conditions above
+are the no-mask fallback. With SAM2 masks the rule uses the physical support
+signature instead: `contact_below(A, B)` is the fraction of A's mask-bottom
+columns with B's mask within five pixels below (`src/contact.py`), and `on`
+requires `contact >= on_contact_min` (0.60, calibrated on the training groups,
+with a flat optimum from 0.60 to 0.80) together with the depth gate and the
+centroid order. This recovers the containment case the box test misses, nested
+boxes at shallow viewing angles, formerly 79 to 88% of support misses, and
+rejects cluster neighbours whose boxes touch but whose masks do not. Measured:
+held-out support F1 0.71 to 0.87, and re-audited extra-label precision 0.07 to
+0.73 for `on` and 0.20 to 0.80 for `under`.
+
+**Class guard.** Classes listed in `no_support_classes` (shipped value:
+`human`) are excluded from `on` and `under` in either role. The justification
+is measured rather than assumed: the annotators never recorded a person as
+supporting or being supported, on 0 of 2,466 gold support triplets, and mask
+contact alone cannot distinguish a person *holding* an object from a surface
+*supporting* one. The guard is a configuration entry rather than a hard-coded
+name, so a deployment with different classes revises it in one line. The
+residual failure mode it does not cover is one object held by another
+non-guarded object, which remains a documented refinement.
+
+### C.3 `under(A, B)`: A is below and supports B
+
+`under` is the strict inverse of `on`, computed by evaluating the `on`
+conditions with the arguments swapped:
+
+```
+under(A, B)  ==  on(B, A)
+```
+
+This guarantees consistency by construction: a pair can never be both
+`on(A,B)` and `under(A,B)`.
+
+### C.4 `left of(A, B)`: A's centre is left of B's
+
+```
+left_of(A, B)  ==  (cx_A < cx_B)    in camera-frame image coordinates
+```
+
+The magnitude `|cx_A - cx_B|`, normalised by width, gives the confidence. Below
+`lateral_center_eps` (0.02) the centres nearly coincide, and the pair is
+flagged ambiguous rather than silently labelled.
+
+### C.5 `right of(A, B)`: A's centre is right of B's
+
+```
+right_of(A, B)  ==  (cx_A > cx_B)
+```
+
+The strict mirror of `left of`. Exactly one of the two holds outside the
+ambiguity band; inside it neither is emitted and the pair is flagged.
+`right_of(A,B) == left_of(B,A)`.
+
+### C.6 `in front of(A, B)` and `behind(A, B)`
+
+A two-stage cascade. Stage one is depth ordering:
+
+```
+in_front_of(A, B)  ==  (d_A < d_B)      (smaller depth = nearer)
+behind(A, B)       ==  (d_A > d_B)
+```
+
+with `|d_A - d_B|` below `depth_eps` (0.03) meaning the depths are too close
+to separate, which defers to stage two.
+
+Stage two is the **ground-plane fallback**, which fires only where stage one
+abstained. Two objects standing on the same floor are depth-ordered by
+projection: the nearer object's box bottom sits lower in the image.
+
+```
+plane(A, B)  ==  (y2_A - y2_B) >  plane_band   =>  in front of
+             ==  (y2_A - y2_B) < -plane_band   =>  behind
+```
+
+with `plane_band` = 0.005 of normalised image height, calibrated on the
+training groups (ablation A7). Two guards apply. The fallback fires only when
+neither object is elevated, meaning neither has mask contact at or above
+`on_contact_min` with any partner, because an elevated object's box bottom
+locates its support rather than itself; and only when mask evidence exists at
+all, so it is off in box-only mode. Pairs both stages abstain on are flagged,
+never guessed.
+
+`behind` is the inverse throughout: `behind(A,B) == in_front_of(B,A)`.
+
+Worked example, encoded in `tests/test_predicates.py`: a bottle with box
+bottom 0.80 against a book with box bottom 0.60, depths 0.50 and 0.51 and so
+inside `depth_eps`, both floor-standing, gives bottle `in front of` book. The
+same pair with either object elevated is flagged instead.
+
+### C.7 `near(A, B)`: A and B are close, relative to their size
+
+```
+near(A, B)  ==  box_gap_rel(A, B) <= near_T   AND   not (on(A,B) or under(A,B))
+```
+
+`box_gap_rel` is the edge-to-edge gap between the two normalised boxes divided
+by the mean object size, the square root of box area. Proximity therefore
+scales with the objects: a small gap between two books reads as near, while
+the same absolute gap between a person and a cube may not. The gap is zero
+when boxes touch or overlap, and `near` is symmetric,
+`near(A,B) == near(B,A)`.
+
+**Intended semantics.** Confirmed with the supervising group: `near` meant
+"next to", the annotation team having merged an earlier separate "next to"
+label into it. An adjacency reading supports both the gap metric and the
+contact behaviour below.
+
+**Contact exclusion.** Measured on the human labels, `near` co-occurs with
+`on` or `under` on 0 of 469 pairs, and 74% of near pairs carry only `near`:
+the annotators used it to mean close but with no contact relation. The rule
+encodes that, so a pair already labelled `on` or `under` is never additionally
+`near`.
+
+**Why not 3D centroid distance.** Monocular depth is normalised per image, so
+centroid distances are not comparable across scenes. In a metric comparison
+every 3D-centroid variant transferred to held-out annotators at F1 at or below
+0.024, while the size-relative gap transfers with recall 1.0.
+
+**Fitting protocol, annotator-aware.** Only three of the nine annotator groups
+ever used `near` (group_0: 244 labels, group_4: 129, group_8: 93; the rest
+between 0 and 3). `near_T` is therefore fitted on the near-using groups inside
+the training split (groups 0 and 4), on human-annotated non-contact pairs
+only, and evaluated on the held-out near-using annotator (group_8). The fitted
+value is **T = 1.372**, with held-out recall **1.000**: every pair that unseen
+annotator called near falls within the threshold. Per-annotator precision at
+the same T ranges from 0.16 to 0.63, which reflects how exhaustively each
+annotator applied the label rather than any geometric disagreement. Cases
+within `flag_near_band` (0.15 gap units) of `near_T` are flagged for optional
+review.
+
+### C.8 The correction step
+
+Geometric consistency is enforced at two levels, and it is worth being precise
+about which is which.
+
+**By construction.** With the shipped rules the three mutually exclusive
+families can never co-occur on one ordered pair: `on(A,B)` and `under(A,B)`
+require strictly opposite centroid orderings, and left/right and front/behind
+use strict comparisons separated by an ambiguity band. Inverses mirror exactly
+across the two orderings. These invariants are pinned by a randomised test
+over two thousand synthetic scenes (`tests/test_invariants.py`), so the
+runtime conflict check is an assertion guarding future rule variants rather
+than a filter that fires in practice.
+
+**Active corrections**, adapted from Open3D-VQA's error-correction flow
+(Zhang et al., 2025): `near` is suppressed on contact pairs (C.7), and
+ambiguous cases are abstained and flagged rather than guessed (C.9).
+
+### C.9 Confidence flags, and the honest cost
+
+A pair is flagged, not dropped, when any of the following holds: the `near`
+gap is within `flag_near_band` of `near_T`; the left/right centres are within
+`lateral_center_eps`; or the front/behind depths are within `depth_eps` *and*
+the ground-plane fallback cannot decide, because an object is elevated,
+because no mask evidence exists, or because the bottom edges tie within
+`plane_band`.
+
+Flags are written alongside the triplets. Measured on the full dataset with
+the shipped rules, 31.5% of ordered pairs carry some flag: `depth_ambiguous`
+19.3%, `lateral_ambiguous` 10.0% and `near_threshold_edge` 8.5%, where a pair
+may carry more than one. The depth share was 29.5% before the ground-plane
+fallback shipped, which resolved about a third of the depth abstentions.
+
+The flag types serve different purposes and are reported separately, which is
+what makes the human-in-the-loop claim costable. Depth and lateral flags mark
+*abstentions*: no wrong label was emitted, so there is nothing to review, and
+the human annotators typically did not label those pairs either.
+`near_threshold_edge` is the genuine *review queue*. Section 4.7 costs the
+claim on the review queue alone rather than on the flag total, because
+counting abstentions as human work would overstate the cost by a factor of
+nearly four.
+
+### C.10 Summary
+
+| Predicate | Core test on the ordered pair (A, B) | Thresholds, shipped values | Symmetry |
+|---|---|---|---|
+| `on` | mask contact below, depth co-location, centroid order; box test is the no-mask fallback | `on_contact_min` 0.60, `on_depth_eps` 0.06, `on_vertical_gap` 0.05, `on_horizontal_overlap` 0.20 | `on(A,B) = under(B,A)` |
+| `under` | inverse of `on` | as `on` | `under(A,B) = on(B,A)` |
+| `left of` | `cx_A < cx_B` | `lateral_center_eps` 0.02 | `left(A,B) = right(B,A)` |
+| `right of` | `cx_A > cx_B` | `lateral_center_eps` 0.02 | `right(A,B) = left(B,A)` |
+| `in front of` | `d_A < d_B`, then the guarded ground-plane fallback | `depth_eps` 0.03, `plane_band` 0.005 | `front(A,B) = behind(B,A)` |
+| `behind` | `d_A > d_B`, then the guarded ground-plane fallback | `depth_eps` 0.03, `plane_band` 0.005 | `behind(A,B) = front(B,A)` |
+| `near` | `box_gap_rel <= near_T`, never on a contact pair | `near_T` 1.372 (fitted), `flag_near_band` 0.15 | symmetric |
+
+Every threshold above is declared in `configs/default.yaml`, so no constant
+that affects a label is buried in a function. `near_T` is fitted by
+`eval/fit_near.py` under the protocol of C.7 and frozen there.
 
 ## Appendix D: Ablation derivations
 
@@ -338,13 +649,16 @@ results bound where further engineering can and cannot help.
 
 ### D.5 Why a geometric cue, not a bigger depth model (ablation A8)
 
-It is worth
-asking whether the depth pair would improve simply by using a stronger depth
-network. It does not: swapping Depth Anything v2 Small for the 4× larger Base
-variant and re-running the whole dataset moves front/behind recall by +0.001
-and +0.002 (0.640/0.654 → 0.641/0.656) and leaves mean recall marginally
-*lower*, 0.848 against 0.847. The depth-predicate
-limit is *monocular ambiguity* (two objects at a similar camera distance are
+It is worth asking whether the depth pair would improve simply by using a
+stronger depth network. It does not: swapping Depth Anything v2 Small for
+the 4× larger Base variant and re-running the whole dataset moves
+front/behind recall by +0.001 and +0.002, from 0.640/0.654 to 0.641/0.656,
+while mean recall *falls* from 0.848 to 0.847. (This ablation is its own
+end-to-end run, so its baseline sits about 0.0008 below the headline figures
+of §4.2, which is why `behind` appears here as 0.654 and there as 0.66. The
+offset is smaller than any quantity being compared and applies to both arms
+equally, so it cannot affect the verdict.) The depth-predicate limit is
+*monocular ambiguity* (two objects at a similar camera distance are
 inseparable by any monocular model, regardless of its fidelity), not the
 network's quality. This is precisely why the fallback that worked is a
 geometric projection cue rather than a heavier perception model, and it
@@ -440,11 +754,17 @@ annotator this project set out to build does not have.
 
 ## Appendix E: Extended validation studies
 
-Two studies in Chapter 4 report their headline result in the chapter and
+Five studies report their headline result in the chapter that owns them and
 their supporting detail here: the vision-language baseline of §4.16, whose
-diagnostics are what make its failure interpretable rather than merely
-worse, and the viewpoint-stability measurement of §4.14, whose segmentation
-evidence and coverage limits qualify how far the stability figures reach.
+diagnostics are what make its failure interpretable rather than merely worse
+(E.1); the viewpoint-stability measurement of §4.14, whose segmentation
+evidence and coverage limits qualify how far the stability figures reach
+(E.2); the independent precision study of §4.13, whose instrument can be
+judged before its results exist (E.3); the video processing of §4.12, whose
+settings and open-vocabulary failures qualify the only out-of-domain
+evidence in the dissertation (E.4); and the planner experiment of §5.7,
+whose relation filter and blind scorer are what the comparison rests on
+(E.5).
 
 ### E.1 The vision-language baseline: diagnostics and limits
 
@@ -547,3 +867,104 @@ to 0.1 cuts unmatched objects from 5.6 to 2.2 per frame. Carrying object
 identity with a tracker, as `scripts/run_video.py` already does for video,
 rather than with per-frame overlap, is the straightforward extension that
 would recover it.
+
+### E.3 The independent validation study: design and scoring
+
+§4.13 states the weakness this study addresses and its status. What follows
+is the design, recorded here so that a reader can judge the instrument before
+its results exist.
+
+**Sampling.** A stratified sample of 2,002 automatic labels, 286 per
+predicate, drawn from the tool's *extra* predictions: ordered pairs the human
+annotators never labelled, which is exactly the population with no ground
+truth to score against. Each claim is rendered as the source photograph with
+the subject outlined in red and the object in blue, presented with a single
+sentence ("the book is on the box"), and answered TRUE or WRONG / can't tell
+by volunteers recruited through an open link. The instructions restate
+Chapter 3's operational definitions: camera-frame laterality, "in front of"
+as nearer the camera, support as physically resting rather than held, and an
+explicit instruction to answer WRONG when unsure, which reproduces the
+conservative rule used in the author's own audits. Each browser receives a
+random identifier that prevents repeat judgements without identifying
+anybody, and faces are anonymised in every image (Chapter 8).
+
+**Coverage.** Stratified by what each analysis requires. An aggregate
+precision estimate needs only one judgement per claim, since the sample is
+random either way, so ordinary claims target a single rater. The 147 claims
+that also carry an author verdict target three raters each, because the
+crowd-versus-author comparison and the inter-rater reliability figure both
+need several independent judgements on the *same* item; those claims are
+served first. The design therefore needs about 2,300 judgements rather than
+the 6,000 a uniform three-rater target would demand, and it fails gracefully:
+the author-comparison subset completes after roughly 30 participants, so that
+analysis survives a thin turnout while any further response widens the
+precision estimate.
+
+**Scoring**, fully specified in advance (`analysis/score_votes.py`): ties
+resolve to WRONG, matching the audit protocol; reflex-speed responses and
+raters who disagree systematically with everyone else can be excluded by
+pre-declared filters. Crowd precision is reported per predicate with binomial
+intervals, author agreement as percentage and Cohen's kappa (Cohen, 1960),
+and crowd-internal reliability as Krippendorff's alpha.
+
+### E.4 Video processing: settings and the open-vocabulary failures
+
+Section 4.12 reports what the two clips show. This section records how they
+were processed and what went wrong, both of which qualify the reading.
+
+**Processing.** Each frame is annotated independently by the deployment-mode
+stack of §4.11 with open-vocabulary prompts; object identities are carried
+between frames by greedy IoU tracking, and each pair's predicates are
+smoothed by a plus-or-minus-two-frame temporal majority vote
+(`scripts/run_video.py`; overlays and per-frame records in
+`outputs/video/`). The vote is the only component with no counterpart in the
+still-image pipeline, and its effect is measured in §4.12 rather than
+assumed: a small gain on the static scene and a larger one where detection
+churns, which is the behaviour a majority filter should show.
+
+**Persistence and agreement.** Persistence is measured over pairs co-visible
+in at least 20 frames, where co-visible means both track identities appear
+in that frame; 81% and 89% of pair-predicates are present in at least 90% of
+their co-visible frames. The frame-to-frame Jaccard dips in clip 2 align
+with the hands picking objects up, which is the change the smoothing is
+required not to erase.
+
+**Open-vocabulary failures.** Two are plainly visible and worth recording,
+because both are detection failures rather than relation failures and so
+support the same attribution §4.11 makes for the dataset itself. Content
+displayed *on the laptop screen* is detected as real objects standing in
+real relations to the objects around it. And items outside the prompt list
+snap to the nearest prompted class: an earbuds case is labelled a `cup`.
+Neither is corrected, and both are present in the released overlays.
+
+### E.5 The planner experiment: prompt construction and scoring rules
+
+Section 5.7 reports the design in outline and the result. Two components
+need recording in full, because the comparison is only as good as they are.
+
+**The relation filter.** Both relation conditions are passed through one
+filter before their relations are written into the prompt
+(`scripts/planner_experiment.py`): it keeps the support relations among the
+mentioned objects plus the target's one-hop neighbourhood, canonicalised and
+deduplicated. Without that step the comparison would confound label quality
+with prompt length. It does not equalise prompt length, and cannot: after
+identical filtering the automatic condition still carries 22.6 relations per
+prompt against the human condition's 3.1, because the automatic labels are
+twenty times denser to begin with, and discarding true relations to match a
+sparser source would be a different experiment. What the filter guarantees
+is the weaker but sufficient property that neither source is given a
+relation the other would have been denied. The task sentence, the object
+list and the instruction to give a minimal numbered plan are identical
+across conditions, and all conditions of a scene are answered by one model
+in one sitting, so no scene can be split across models by a quota
+interruption (`scripts/run_planner_llm.py`).
+
+**The scoring defect that manual checking caught.** Models frequently open
+with a preamble restating the task ("To pick up box0 safely, follow these
+steps:"), and counting that preamble as a step made every such plan appear
+to grasp the target before clearing anything. Before the fix condition C
+scored 0.64; after it, 0.88. The figure below the fix is the correct one.
+The episode is recorded because it is the only evidence that the blind
+scorer measures what it claims to: a rule-based judge inherits whatever its
+author failed to anticipate, and the hand-read sample is what exposed this
+one.

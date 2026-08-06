@@ -9,7 +9,9 @@ This chapter discusses the results rather than reporting new ones. Section
 dissects what the remaining failures are made of, §7.3 examines the
 dataset's annotation process in the light of the measurements, §7.4 reflects
 on the methodology itself, §7.5 compares the outcome with the prior work of
-Chapter 2, and §7.6 states limitations and threats to validity. The
+Chapter 2, §7.6 states limitations and threats to validity, and §7.7 answers
+the five objections the literature review raised against the approach before
+any result was known. The
 objective-by-objective audit belongs with the conclusions and is given in
 §9.1.
 
@@ -52,7 +54,7 @@ judgement, and on `near` it drives recall below the human baseline it started
 from. The comparison therefore is not against doing nothing, but against the
 obvious alternative, under identical conditions.
 
-The five objectives of §1.2.1 are audited against their evidence in §9.1; this
+The six objectives of §1.2.1 are audited against their evidence in §9.1; this
 chapter is concerned with what the results *mean* rather than with whether
 each objective was discharged.
 
@@ -265,7 +267,69 @@ guideline-driven human annotation, a regime this dataset does not contain.
 **Ethics.** Scene images contain identifiable people; figures for publication
 use the dataset as released (CC-BY 4.0) with faces blurred as a courtesy.
 
-## 7.7 Aims, revisited
+## 7.7 The objections of §2.9, answered
+
+The literature review stated five objections to a rule-based annotator before
+any result was reported, so that this chapter could be read as an attempt on
+them. Each is answered here with the evidence that bears on it, including the
+two the evidence does not settle.
+
+**Vocabulary scale: not answered, and conceded.** Nothing in this
+dissertation bears on predicates beyond the seven, and the objection is that
+a hand-written rule set does not extend by learning. It stands in full. What
+the work can offer is a boundary rather than a rebuttal: the rules are
+decidable because the predicates are spatial, and §3.3 makes that
+dependence explicit rather than hoping it generalises. Section 9.3 records
+it as the limitation most likely to matter to anyone reusing the method.
+
+**Systematic error: partly confirmed, partly refuted, and the split is
+informative.** The objection predicts that a downstream model absorbs the
+rule's blind spot as though it were fact. Chapter 6 is that prediction
+coming true and is reported as such: the auto-trained arm ranks below the
+human-trained one on the metric the field uses, and the gap is concentrated
+where the annotation itself is defective. But the objection also predicts
+that consistent-but-wrong supervision is worse than inconsistent human
+supervision, and on this dataset that is refuted at every level where the
+question was asked, by a factor of two and a half in the controlled
+experiment and by a planner that clears the occluder in 22 of 25 scenes
+against 0 with no relations at all. The reconciliation is that systematic
+error is worse than random error only when it is *wrong*; §4.14's finding
+that front/behind agrees with itself across viewpoints 0.955 of the time
+while agreeing with the annotators 0.64 of the time is the shape of a
+consistent rule meeting a different convention, not of a consistent mistake.
+
+**Circular validation: conceded.** Section 7.4 already lists this first
+among the choices a stricter replication should improve, and no result in
+Chapters 4 to 6 removes it. What belongs here is the extent of the
+concession rather than a restatement of it. The circularity bounds the
+*precision* estimates, because those rest on verdicts the author gave. It
+does not reach the structural guarantees of §3.6, which are checkable
+without any verdict at all, nor the downstream findings of Chapters 5 and 6,
+which are scored against human annotation the author did not produce and in
+which the automatic arm is judged by its rival's yardstick. The designed
+remedy is §4.13 and it has no results at the time of writing, which leaves
+this the objection a reader should weight most heavily.
+
+**Reference frame: answered as far as it can be, which is not all the way.**
+The dissertation does not assert that the camera frame is correct; it shows
+that the tool applies one frame consistently (§4.14), that two annotator
+groups applied another (§4.5), and that recall rises from 0.64/0.66 to 0.84
+once the convention is aligned. That establishes disagreement rather than
+error, and identifies which party is consistent. It does not establish which
+convention a robot should obey, and no measurement in this dissertation
+could, because that is a question about the specification and not about the
+data.
+
+**Better collection rather than cheaper labels: not attempted, and partly
+answered sideways.** The project did not re-collect anything. It did,
+however, produce the written operational definitions the annotation process
+never had (§3.5) and quantify three specific defects those definitions would
+have prevented, which is the input a better collection round would need.
+Cheap labels and correct definitions are complements rather than
+alternatives, and this work supplies evidence for the second while
+delivering the first.
+
+## 7.8 Aims, revisited
 
 Both research questions are answered with evidence that survived held-out
 validation, independent audits and exhaustive failure diagnosis. The

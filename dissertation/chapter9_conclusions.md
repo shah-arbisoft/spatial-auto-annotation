@@ -10,7 +10,7 @@ personal reflection on how the project was actually conducted.
 
 The aim was to determine whether spatial-relationship annotation for
 robot-acquired images can be automated, and whether the resulting labels are
-good enough to replace the human ones. Five objectives carried that aim, and
+good enough to replace the human ones. Six objectives carried that aim, and
 each is met with evidence rather than assertion.
 
 **O1, build.** A fully-automatic pipeline annotates all 836 images in about
@@ -40,11 +40,20 @@ roughly 7% of misses; the remainder is calibrated abstention and measured
 annotator behaviour (§4.10, §7.2).
 
 **O5, test downstream utility.** A controlled experiment trains the same
-classifier on three label sources under identical conditions (Chapter 5);
-the comparison is repeated in the source paper's own benchmark framework
-with a shared frozen detector and three seeds per arm (Chapter 6); and the
-chain is followed one link further, to an LLM planner asked to produce a
-safe grasp plan for 25 held-out scenes under each label source (§5.7).
+classifier on three label sources under identical features, splits and seeds
+(Chapter 5), so that the only thing differing between arms is where the
+labels came from: automatic 0.76 mean recall against held-out human gold,
+human 0.30, self-trained 0.36.
+
+**O6, test at the level the field measures.** The same comparison is
+repeated in the source paper's own benchmark framework with a shared frozen
+detector and three seeds per arm (Chapter 6), and the chain is followed one
+link further, to an LLM planner asked to produce a safe grasp plan for 25
+held-out scenes under each label source (§5.7). The objective is met in the
+sense that matters for an honest answer: the heavyweight test does not
+agree with the lightweight one, the disagreement is localised to the
+annotators whose labels Chapter 4 convicted of measured defects, and both
+readings are reported rather than one being selected.
 
 **RQ1, accuracy.** Yes, with one qualification. On five of seven predicates
 the automatic labels match or exceed the human process (0.81 to 1.00 recall,

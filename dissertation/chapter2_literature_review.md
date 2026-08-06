@@ -19,28 +19,26 @@ then to the rival remedies that stretch scarce labels rather than replacing
 them, semi-supervised and active learning, with the argument for why they do
 not fit this dataset (§2.4). Only then does it turn to the approach this
 project takes and its lineage (§2.5), the perception components it stands on
-(§2.6), and the learned models that consume its output (§2.7). Section 2.8
-states the research gap as a critical comparison, and §2.9 positions the
-work against it.
+(§2.6), and the learned models that consume its output (§2.7). Two critical
+sections follow: §2.8 examines the metrics the field scores itself with and
+what they fail to capture, and §2.9 states the strongest case *against* the
+approach taken here. Section 2.10 then states the research gap as a critical
+comparison, and §2.11 positions the work against it.
 
 ## 2.1 Scene graphs and spatial relationships in robotics
 
-A robot acting in a human environment must represent not only *what* objects
-are present but *how they are spatially arranged*. The structured
-representation for this is the **scene graph**: objects as nodes and
-pairwise relationships as labelled, directed edges (subject → predicate →
-object). Spatial predicates (*on*, *under*, *left/right of*, *in front of /
-behind*, *near*) are the edges that matter for manipulation, navigation and
-instruction following, because they encode the geometry an agent must
-respect to act. A planner told only "cube, book, table" cannot decide what
-to move first; a planner told "the cube is on the book" can. The pattern is
-general: language-driven robot planners ground their instructions in a
-structured account of scene state (Ahn et al., 2022), and scene graphs
-extended to 3D have been proposed as exactly that unifying structure, tying
-semantics, space and camera into one queryable representation (Armeni et
-al., 2019). This review concentrates on how such spatial edges are
-**produced**: by hand, by learned prediction, or, as this project argues, by
-computation from measured geometry.
+The seven spatial predicates this project computes (*on*, *under*,
+*left/right of*, *in front of / behind*, *near*) are the scene-graph edges
+that carry the geometry an agent must respect to act. A planner told only
+"cube, book, table" cannot decide what to move first; a planner told "the
+cube is on the book" can, and §5.7 turns that into a measurement rather than
+an illustration. Language-driven robot planners ground their instructions in
+exactly such a structured account of scene state (Ahn et al., 2022), and 3D
+scene graphs were proposed as its unifying form, tying semantics, space and
+camera into one queryable representation (Armeni et al., 2019). This review
+concentrates on how those edges are **produced**: by hand, by learned
+prediction, or, as this project argues, by computation from measured
+geometry.
 
 ## 2.2 The source dataset and its annotation bottleneck
 
@@ -232,10 +230,11 @@ scene-graph annotation for this dataset's seven predicates.
   recovers 0.45; both lose F1 on every predicate. Neither is simply worse:
   restricted to the pairs the humans judged both are *more precise* than the
   pipeline, 0.42 and 0.39 against 0.35, because they assert far less. More informative than
-  either number is the shape of its output: it does not contradict itself and
-  does not invert the front/behind convention, it simply says nothing on most
-  pairs, and asserts one direction of a symmetric relation without the other
-  in a third of cases. Those are the two defects §4.5 measures in the *human* annotation.
+  either number is the shape of the output: no self-contradiction and no
+  inverted depth convention, but silence on most pairs, together with a
+  symmetric relation asserted in one direction only about a third of the
+  time. Both of those are behaviours §4.5 measures in the *human*
+  annotation.
   A vision-language model asked to annotate reproduces the failure mode of
   the process this project set out to replace, which is why the gap in the
   literature is not filled by pointing a larger model at the problem.
@@ -288,6 +287,35 @@ graphs are heading in deployment, and they strengthen rather than weaken the
 case for automatic annotation: the training data such systems' learned
 components need is exactly what an annotator supplies.
 
+A question the lineage rarely puts to itself is how anyone knows the computed
+labels are right, and the answer matters here because this project's central
+claim is a validation claim rather than a generation one. Two kinds of
+evidence are offered, and neither is the kind RQ1 requires. The first is
+**downstream benefit**: SpatialVLM (Chen et al., 2024) establishes its
+generated supervision by fine-tuning a vision-language model on it and
+showing the model answers spatial questions better, and SpatialRGPT (Cheng
+et al., 2024) likewise judges its curated region representations through the
+model they produce and the benchmark built alongside it. The second is
+**internal consistency**: Open3D-VQA (Zhang et al., 2025) adds a correction
+flow that discards configurations its own geometry rules declare impossible,
+a principle this project adapts in §3.6.
+
+Both are worth having and both share one blind spot. A model trained on
+computed labels and tested on questions generated by the same computation
+will score well on any convention the computation applies consistently,
+including a wrong one; and an internal consistency check is satisfied by any
+coherent convention, since impossibility is judged by the same rules that
+produced the labels. Neither procedure can detect a systematic disagreement
+with how humans actually use the words, which is precisely the failure mode
+Chapter 4 goes on to measure in both directions, in the tool and in the
+annotators. The only instrument that can is comparison against an
+independently produced human record, which is what none of these works
+performs and what RQ1 is. It also explains why Chapter 6's less favourable
+result is not a contradiction of Chapter 5's: judged against *human*
+annotation rather than against labels from the same source, downstream
+benefit becomes a genuinely adversarial test, and the lineage does not run
+it.
+
 **Synthesis.** Every pipeline in this lineage either (a) targets a *different
 output* (VQA text or a live map, not VG triplets), (b) operates in a
 *different domain or sensor suite* (internet images, scans, RGB-D, not this
@@ -303,44 +331,41 @@ each component was chosen against alternatives from the recent literature. The
 relevant design space, which is also the basis of the **detector-swap
 ablation**, is:
 
-- **Detection.** *Closed-set:* **YOLOv10m** (Wang, A. et al., 2024), the
-  dataset's own baseline (six classes; 0.93 mAP@50). YOLOv10 removes the
-  non-maximum-suppression stage of earlier YOLO versions with a consistent
-  dual-assignment training scheme, which is why it can run in real time onboard
-  a robot. *Open-vocabulary:* **Grounding DINO** (Liu et al., 2024) marries a
-  DETR-style detector with grounded language pre-training, so it detects
-  arbitrary text-named objects at some cost in per-class sharpness. This
-  enables extension beyond the six classes; the deployment-mode experiment in
-  Chapter 4 uses it precisely because it is the worst reasonable case, so the
-  detection-quality bound it produces is conservative.
-- **Segmentation.** **SAM2** (Ravi et al., 2024) is a promptable segmentation
-  model: given a box prompt it returns the pixel mask of the object inside it,
-  and it is trained to do so for arbitrary objects rather than a fixed class
-  list. The pipeline uses it to turn each detector box into a silhouette, which
-  matters twice: depth is sampled only from object pixels rather than the
-  background inside the box, and the support rule's contact test (Chapter 3)
-  needs to know where an object's bottom edge actually runs, pixel by pixel.
-- **Monocular depth.** **Depth Anything v2** (Yang, L. et al., 2024) is a monocular
-  depth estimator distilled from a large teacher trained on synthetic data and
-  pseudo-labelled real images. Its output is *relative*, not metric: it orders
-  pixels by distance but assigns no unit. That property shapes the rule design
-  in Chapter 3: depth comparisons are **ordinal and within-image**, and no rule
-  may use an absolute distance. The Small variant runs in under a gigabyte of
-  VRAM, which keeps the whole pipeline on a 6 GB consumer GPU; Chapter 4's
-  ablation A8 tests whether the larger Base variant would change the results.
+- **Detection.** *Closed-set:* **YOLOv10m** (Wang, A. et al., 2024) is the
+  dataset's own baseline over its six classes, at 0.93 mAP@50, and is what a
+  replication with the authors' weights would use. *Open-vocabulary:*
+  **Grounding DINO** (Liu et al., 2024) trades per-class sharpness for
+  arbitrary text-named objects, which is what carries the pipeline beyond the
+  six classes. Chapter 4's deployment mode uses it at a 0.25 box threshold
+  precisely because it is the worst reasonable detector, so the end-to-end
+  bound it produces (0.38 triplet recall, against 0.85 conditional on both
+  endpoints being found) is conservative rather than flattering.
+- **Segmentation.** **SAM2** (Ravi et al., 2024) is used box-prompted, in the
+  `sam2.1-hiera-small` variant with multimask enabled and the best-scoring
+  mask taken. The silhouette is load-bearing twice over: depth is sampled by
+  median over object pixels rather than over the whole box, and the support
+  rule's contact test needs the object's bottom boundary pixel by pixel
+  (§3.5). Single-mask mode was rejected on measurement, having returned empty
+  masks on loose boxes.
+- **Monocular depth.** **Depth Anything v2** (Yang, L. et al., 2024) emits a
+  *relative* map, ordering pixels without a unit, and that single property
+  fixes the rule design: every depth comparison is ordinal and within-image,
+  and no rule may consume an absolute distance. The Small variant is shipped
+  for three reasons that happen to agree: it runs under a gigabyte of VRAM
+  and so fits the 6 GB RTX 2060 alongside SAM2 at a measured 0.65 GB peak, it
+  is Apache-2.0 where Base and Large are non-commercial, and ablation A8
+  finds the 4× larger Base variant moves front/behind by +0.001 and +0.002.
 - **Open-vocabulary classification/segmentation (CLIP family).** **CLIP**
-  (Radford et al., 2021) gives zero-shot image–text matching; **SCLIP**
-  (Wang, F. et al., 2024) makes CLIP dense via a training-free *Correlative
-  Self-Attention*, reaching 38.2% zero-shot mIoU for open-vocabulary
-  segmentation. These matter for the **open-vocabulary scaling** direction
-  (labelling object types beyond the six classes) but add nothing to the
-  *relation* logic; for the closed-set core they are positioned as
-  **alternatives and future work**, not components.
+  (Radford et al., 2021) and **SCLIP** (Wang, F. et al., 2024), the latter
+  reaching 38.2% zero-shot mIoU by making CLIP dense through a training-free
+  *Correlative Self-Attention*, bear on the open-vocabulary scaling direction
+  rather than on the relation logic. They are positioned as alternatives and
+  future work, not components.
 - **3D primitive abstraction (out of scope).** **PrimitiveAnything**
-  (Ye et al., 2025) decomposes *3D shapes* into primitive assemblies
-  (cuboids, cylinders, ellipsoids). It assumes clean 3D input we do not have
-  (only monocular RGB + relative depth), so it is noted only as a speculative
-  future representation, not used here.
+  (Ye et al., 2025) decomposes 3D shapes into cuboids, cylinders and
+  ellipsoids, and assumes clean 3D input this project does not have, having
+  only monocular RGB and relative depth. It is noted as a speculative future
+  representation, not used.
 
 The division of labour is deliberate: the neural components above only
 *measure* (where an object is, which pixels belong to it, how far away it
@@ -410,7 +435,145 @@ our auto-labels versus the human labels is the heavyweight version of RQ2
 (the lightweight classifier is the controlled main experiment); that test is
 executed and reported in Chapter 6.
 
-## 2.8 Critical comparison and the research gap
+## 2.8 How the field measures success, and what those measures miss
+
+The metrics introduced in §2.7 are not neutral instruments; each was adopted
+to fix a defect in the one before it, and each carries a defect of its own.
+Because Chapters 4 and 6 report results *in* these metrics and then argue
+about what the results mean, the arguments belong here, established from the
+literature, rather than being improvised alongside the numbers.
+
+**Recall without precision is a consequence of incomplete annotation, not a
+choice.** The convention descends from visual relationship detection on
+crowdsourced graphs (Lu et al., 2016; Krishna et al., 2017), where annotators
+record a handful of the relations present in a scene and leave the rest
+unmarked. An unannotated pair is therefore not a negative, merely an
+unexamined one, so a predicted relation absent from the gold cannot be
+scored wrong, and precision computed against such a gold is not precision at
+all. The field's response was to drop precision and rank by recall at K.
+The cost is that the metric cannot distinguish a system that predicts
+carefully from one that predicts abundantly, and the omission becomes acute
+exactly when the object of study is the annotation itself: a method that
+labels the pairs the humans skipped is penalised for its coverage under a
+precision reading and rewarded for it under a recall reading, with neither
+number settling whether the extra labels are true. Chang et al. (2023) name
+annotation cost and label bias as the field's persistent constraints without
+resolving this measurement consequence of them.
+
+**A metric a context-free prior can saturate is measuring the prior.**
+Zellers et al.'s (2018) frequency baseline predicts the commonest predicate
+for an object pair with no access to the image and proved extremely hard to
+beat on R@K, which is a statement about the metric at least as much as about
+the models. **mR@K** (Tang et al., 2020) is the corrective: averaging recall
+per predicate stops head classes from carrying the score. It introduces its
+own sensitivity, however, because a predicate with few test instances now
+weighs as much as one with thousands, so the aggregate can move on a handful
+of triplets and, in a dataset annotated by different people in different
+blocks, on which annotator happened to supply them. Per-predicate and
+per-annotator decomposition is therefore not optional garnish; without it a
+mean recall is uninterpretable, which is why Chapters 4 and 6 report both.
+
+**Zero-shot recall measures something relative, and what it is relative to
+must be stated.** zR@K scores only subject–predicate–object combinations
+absent from *training*, isolating composition from memorisation (Tang et al.,
+2020). The definition is well posed when one model is compared against
+itself. It becomes ambiguous the moment two differently-supervised models are
+compared in a single column, because the exclusion set is then drawn from one
+shared reference rather than from each model's own training data; what the
+column reports is the extent to which each label source covers combinations
+the reference omits. That is a real property, and for an annotation study
+arguably the more interesting one, but it is not compositional
+generalisation. Section 6.4 shows that this distinction is not hypothetical
+for the present experiment, and reports the quantity under its accurate name.
+
+**Setting and gold determine what a number means.** PredCls supplies
+ground-truth boxes and classes, so it measures the relation model in
+isolation and produces systematically higher figures than SGDet, where
+detection errors propagate; numbers from the two settings are not
+comparable, though they are frequently quoted side by side. Underneath both
+sits the assumption that the gold is correct, which Northcutt, Athalye and
+Mueller (2021) showed is false often enough to reorder published rankings
+(§2.3). For spatial relations specifically, the annotation may also be
+*consistently* wrong in the sense that matters here: if a group of annotators
+applied a different reference frame, a system that agrees with them scores
+well and a system that is right scores badly, and no recall metric can tell
+the two apart.
+
+Three commitments follow for this dissertation, each traceable to a defect
+above. Recall against the human triplets is reported alongside an audited
+estimate of true precision on pairs the gold never covers (§4.4), because
+recall alone cannot separate coverage from correctness. Every aggregate is
+decomposed per predicate and per annotator group, because means over
+heterogeneous annotation hide exactly the effects being studied. And the
+decisive test of the labels is deliberately moved *off* these metrics
+altogether, to whether a downstream consumer trained on them performs the
+task (Chapters 5 and 6), because a metric that rewards agreement with the
+annotation cannot adjudicate a dispute about the annotation.
+
+## 2.9 The case against a rule-based annotator
+
+An honest review states the strongest version of the opposing argument, not
+a version chosen because it is answerable. Four objections stand against the
+approach this project takes, and they are set out here so that later
+chapters can be read as attempts on them rather than as a defence assembled
+after the fact.
+
+**Rules do not scale with the vocabulary.** Each predicate here is an
+explicitly authored geometric test with fitted thresholds. Seven predicates
+are tractable; the scene-graph literature routinely works with fifty
+(Krishna et al., 2017), and the direction of travel that Chang et al. (2023)
+identify is open-vocabulary relations, including non-spatial ones such as
+*holding* or *using* for which no geometric criterion exists. A learned
+predictor improves by being shown more data, whereas a rule set improves
+only by being extended by hand. Whatever this project demonstrates about
+seven spatial predicates transfers to functional or interactional relations
+not at all.
+
+**Systematic error is worse for training than random error.** The appeal of
+computed labels is consistency, but consistency guarantees only that
+mistakes recur, and a rule's mistakes correlate with scene geometry rather
+than scattering at random. Tang et al. (2020) established how thoroughly SGG
+models absorb the distribution of their supervision; that result cuts both
+ways, so a model trained on rule output can learn the rule's blind spot as
+though it were a property of the world, and no amount of extra data will
+average it out. Independent human noise is, in this narrow respect, the
+safer failure mode.
+
+**Validating one's own labelling functions is circular.** Weak supervision's
+foundational system anticipated this: Snorkel (Ratner et al., 2017) treats
+labelling functions as noisy and *estimates* their accuracies from the
+agreement structure among several independent sources, precisely because an
+author's confidence in a rule is not evidence about it. A single rule set
+verdicted by its own author has neither multiple sources nor a generative
+model over them, and an audit conducted by the person who wrote the rules
+inherits their assumptions about what counts as correct. Chapter 4 concedes
+this and reports both the mitigations and their limits.
+
+**The reference frame is a decision, not a fact.** *In front of* has no
+answer independent of the frame in which it is asked: Landau and Jackendoff
+(1993) set out the distinction between viewer-centred, object-centred and
+environment-centred description, and RoboSpatial (Song et al., 2025)
+maintains three frames explicitly rather than choosing one. A rule set must
+commit to a convention, and where an annotator used a different one the two
+will disagree systematically. Calling the rule correct in that situation is
+an assertion about which convention should govern, not a measurement, and
+the dissertation is obliged to argue for it rather than assume it (§4.5).
+
+A fifth objection is directed at the premise rather than the method. If the
+existing annotation is inconsistent, the direct remedy is better collection,
+not cheaper labels; SpatialSense (Yang, K., Russakovsky and Deng, 2019) and
+Rel3D (Goyal et al., 2020) both responded to defective relation annotation
+by rebuilding the collection process. Automation makes labels cheap, which
+is orthogonal to making the definitions right, and this project inherits the
+dataset's definitions rather than improving them.
+
+The dissertation answers the second and fourth objections empirically, in
+Chapters 5 and 6 for systematic error and in Chapters 4 and 7 for the
+reference frame, and it concedes the third while reporting what mitigation
+was possible. The first, vocabulary scale, it does not answer at all and
+records as a limitation (§9.3). The fifth is a different project.
+
+## 2.10 Critical comparison and the research gap
 
 The table is the analytical core: it shows every neighbour either targets a
 different output, is a reference recipe rather than an annotator, operates
@@ -436,7 +599,7 @@ work quantifies agreement with the human consensus on the same images. The
 geometry-to-label *method* is borrowed and well-precedented; its
 instantiation as a validated automatic annotator for this dataset is new.
 
-## 2.9 Summary and positioning
+## 2.11 Summary and positioning
 
 The literature establishes (i) that spatial relations are **computable from
 geometry** (SpatialVLM and its lineage), (ii) that **depth-grounded region
@@ -452,6 +615,17 @@ dataset's seven spatial predicates in its native formats and is validated
 against its human labels, even though the dataset's authors explicitly ask
 for automation-friendly fixes ("spatial thresholds for near," augmenting
 under-represented relations).
+
+Two further things follow from the critical sections. The metrics the field
+scores itself with are recall-shaped because its annotation is incomplete
+(§2.8), so no single number from them can settle a dispute about the
+annotation itself, and the evaluation protocol of Chapters 4 to 6 is built
+around that limitation rather than inside it. And the case against the
+approach is strongest on three points that are stated in advance (§2.9): a
+rule set does not extend to an open predicate vocabulary, its errors are
+systematic rather than random, and validation by the rules' own author is
+circular. Those are the objections the results chapters have to answer, and
+§7.7 is where each is answered or conceded.
 
 Because the seven predicates are spatial, the appropriate instrument is
 **explicit geometric rules over measured perception**, not a learned

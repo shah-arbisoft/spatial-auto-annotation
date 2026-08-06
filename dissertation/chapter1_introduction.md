@@ -5,13 +5,13 @@
 
 ## 1.1 Background
 
-For a robot to act usefully in a human environment it must understand not
-just *what* objects are present but *how they are spatially related*: that a
-cup is *on* a box, a book is *to the left of* a bottle, a person is *in
-front of* a shelf. These spatial relationships are the substrate of scene
-understanding, manipulation planning, and instruction following. The
-structured representation that captures them is a **scene graph**: objects
-as nodes, spatial relationships as labelled edges.
+A robot asked to pick up a book with a cube resting on it needs more than a
+list of what is in the room: it needs the edge that says the cube is *on* the
+book. Support, laterality, depth order and proximity are the scene-graph
+edges a planner consumes to decide what to move first, and §5.7 measures the
+consequence directly: given only the object list an LLM planner produces a
+safe grasp plan in 0 of 25 held-out scenes, and 22 to 25 of 25 once the
+relations are stated, depending on which source supplied them.
 
 Learning to predict such relationships requires training data in which the
 relationships are already labelled. Wang et al. (2025) introduced a spatial
@@ -60,6 +60,24 @@ two annotator groups that recorded *in front of* and *behind* in opposite
 directions from everyone else. Neither cost is solved by hiring more
 annotators, because both scale with the number of humans involved.
 
+### 1.1.2 Why the existing remedies do not remove it
+
+Three families of method already exist for a shortage of labels, and each is
+reviewed in Chapter 2 and tested somewhere in this dissertation rather than
+dismissed on paper. Learned scene-graph generators predict relations from
+visual patterns, but they are trained on labelled triplets and therefore sit
+*downstream* of an annotator rather than replacing one. Semi-supervised
+methods stretch the labels that exist, which presupposes a consistent
+labelled seed; the seed here is 10% dense and internally contradictory, and
+Chapter 5 measures what self-training actually does with such a seed. A
+large vision-language model can be asked for the relations directly, which
+is the most plausible modern shortcut and the one a reader is most likely to
+propose; §4.16 runs it on the same images with the same definitions, and the
+result is that it reproduces the *human* annotation's characteristic
+failures rather than a geometric one's. What none of the three does is
+produce a dense, self-consistent label for every ordered pair in an image
+with no human deciding anything, which is the gap this project addresses.
+
 ## 1.2 Research aim and objectives
 
 This project removes the human from the labelling loop. The seven predicates
@@ -99,7 +117,7 @@ judgements, directly addressing the inconsistency the source paper flagged.
 RQ1 asks whether the labels are *accurate*; RQ2 asks whether they are
 *useful*.
 
-The research questions decompose into five verifiable objectives:
+The research questions decompose into six verifiable objectives:
 
 - **O1 (build).** A fully-automatic pipeline (detection, segmentation, depth,
   geometric rules) that annotates the complete dataset in its native formats
@@ -114,10 +132,46 @@ The research questions decompose into five verifiable objectives:
   cause: calibrated abstention, annotator behaviour, or genuine tool error.
   *(Chapters 4, 7)*
 - **O5 (test downstream utility).** A controlled experiment in which the same
-  classifier is trained once on human and once on automatic labels, isolating
-  the label source, answering RQ2. *(Chapter 5)*
+  classifier is trained on each label source under identical features,
+  splits and seeds, isolating the label source, answering RQ2. *(Chapter 5)*
+- **O6 (test at the level the field measures).** The same comparison repeated
+  in the source paper's own scene-graph framework with a shared frozen
+  detector and replicated seeds, and carried one link further to an LLM
+  planner asked for a safe grasp plan under each label source, so that the
+  answer to RQ2 does not rest on one lightweight model. *(Chapters 5, 6)*
 
-### 1.2.2 Contributions
+### 1.2.2 What would count as an answer
+
+Both research questions can be answered badly by choosing the measurement
+after seeing the result, so the criteria are fixed here, before any of them
+is reported.
+
+RQ1 is answered **yes** if per-predicate recall of the human triplets is
+comparable to what the human process itself achieves, on annotator groups
+whose data influenced no threshold, and if the labels the tool emits beyond
+the human record survive manual audit rather than turning out to be noise.
+*Comparable* is given content by two references rather than by a number
+chosen for convenience: the trivial random and majority baselines, which any
+method must beat, and an estimate of how well the human annotators would
+have scored against one another, which is the ceiling any annotator can
+fairly be held to (§4.6). A per-predicate answer is required, not a mean,
+because a mean over seven predicates can conceal one that fails outright.
+
+RQ2 is answered **yes** if a model trained on the automatic labels performs
+at least as well as the same model trained on the human labels, under
+identical features, splits and seeds, and judged against held-out *human*
+annotation. That direction is deliberately the harder one for the automatic
+arm, because the yardstick is the rival source's own product. Since a single
+lightweight model could produce such a result by accident, the question is
+put three times at increasing cost, to a controlled classifier, to the
+source paper's own benchmark framework, and to a planner acting on the
+relations, with the standard semi-supervised remedy included as a third arm
+in the controlled experiment. Agreement across all three would be required
+for an unqualified yes; where they disagree, the disagreement is reported
+and explained rather than resolved in the project's favour, and Chapter 6 is
+where that obligation falls due.
+
+### 1.2.3 Contributions
 
 1. The first fully-automatic spatial-relationship annotator for this robot
    scene-graph dataset and its seven predicates.
@@ -141,19 +195,41 @@ The research questions decompose into five verifiable objectives:
    annotation cannot draw, and it applies to any image dataset cut from a
    sequence.
 
-### 1.2.3 Scope
+### 1.2.4 Scope
 
 In scope: the automatic annotator; the fidelity study with baselines and
 ablations; the controlled downstream classifier; the direct benchmark test, in
 which the source paper's own SGG framework (REACT++) is trained on each label
-source (Chapter 6); and a critical evaluation chapter. Scaling to robot
-captures beyond the annotated release was planned as future work and became
-possible mid-project when the supervising group supplied the full capture the
-release was cut from; §4.15 reports it, with the limits that follow from
-those frames having no ground truth. Deferred to future work: a
-vision-language task-planning comparison and copy-paste augmentation. These
-protect the timeline and strengthen the future-work discussion rather than
-weakening the contribution.
+source (Chapter 6); the planner experiment that carries the comparison one
+link further towards robot behaviour (§5.7); the vision-language baseline run
+on the same images under the same definitions (§4.16); and a critical
+evaluation chapter. Two items entered scope during the project rather than at
+its start, and both are marked as such where they are reported. Scaling to
+robot captures beyond the annotated release became possible when the
+supervising group supplied the full capture the release was cut from (§4.15),
+with the limits that follow from those frames having no ground truth; and the
+vision-language comparison, originally deferred, was brought forward once it
+became clear that a reader would treat it as the obvious alternative to the
+whole approach. Deferred to future work and not attempted: copy-paste
+augmentation of under-represented relations, and any revision of the
+dataset's own predicate definitions.
+
+**Delimitations and assumptions.** Five, each a decision rather than an
+oversight, and each revisited in §7.6. The work covers **one indoor
+environment and six annotated object classes**, so every fitted threshold is
+dataset-specific by construction and it is the method, not the numbers, that
+is claimed to transfer. Relations are computed in the **camera frame**,
+which is a choice among the reference frames Chapter 2 sets out and not a
+fact about the world; where an annotator used a different frame the two
+disagree systematically, and §4.5 measures exactly that. Depth is
+**monocular and relative**, so the depth predicates inherit an ambiguity no
+threshold can remove and which ablation A8 shows a four-times-larger depth
+model does not resolve. Fidelity is measured in the **PredCls setting**,
+with ground-truth boxes and classes supplied, so detection error is held out
+of the comparison and reported separately (§4.11). And the **seven
+predicates are taken as given** from the source dataset; improving their
+definitions would be a different project, and this one inherits whatever
+they leave ambiguous.
 
 ## 1.3 Research approach
 
@@ -175,6 +251,25 @@ hidden.
 | Modelling | perception stack + geometric rule layer; threshold calibration; downstream classifiers | Ch. 3, 5 |
 | Evaluation | fidelity protocol (baselines, ablations, audits), controlled label-source comparison, exhaustive failure attribution | Ch. 4–6 |
 | Deployment | detector-in-the-loop mode, runtime/VRAM footprint, reproducibility package | Ch. 4, appendices |
+
+The work was carried out under constraints that shaped the design as much as
+the research questions did, and stating them makes several later choices
+legible. All perception runs on a **single 6 GB consumer GPU**, which rules
+out the largest segmentation and depth checkpoints and makes the small-model
+choices of Chapter 3 a requirement rather than a preference; ablation A8
+then asks what that requirement costs and finds it costs almost nothing on
+the predicate it was expected to hurt. There was **no budget for paid
+annotation**, so the independent re-estimate of precision is a volunteer
+study (§4.13) rather than a commissioned one, and the audits that precede it
+are the author's own, with the circularity that implies and that §2.9 states
+as an objection before any result is reported. The project uses **one
+dataset**, because it is the dataset whose annotation bottleneck the work
+exists to address, and the price is that generalisation is argued rather
+than demonstrated. And the benchmark chapter's training runs use **free
+hosted GPU sessions**, which caps how many seeds are affordable and rules
+out the hyper-parameter search a fully tuned comparison would want; the
+replication reported in Chapter 6 is what that budget allows, and its width
+is reported rather than smoothed over.
 
 Ethical considerations are summarised here and detailed in Appendix A. The
 work is a secondary analysis of a published, openly licensed dataset (CC-BY

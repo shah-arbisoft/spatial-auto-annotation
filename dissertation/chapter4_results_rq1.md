@@ -424,45 +424,37 @@ numbers are the ones that matter.
 ## 4.12 Video, and the only out-of-domain evidence
 
 Two short royalty-free stock clips (sources in Appendix A) were processed
-per frame by the deployment-mode stack of §4.11 with open-vocabulary prompts,
-greedy IoU tracking for stable object identities, and a ±2-frame temporal
-majority vote over each pair's predicates (`scripts/run_video.py`; overlays
-and per-frame records in `outputs/video/`). The clips were chosen as
-complementary regimes: a **moving camera over a static desk scene** (clip 1,
-99 frames), where relations should stay constant and any variation is
-measurement noise; and a **static overhead camera with moving hands**
-(clip 2, 79 frames), where relations genuinely change and smoothing must not
-erase the change.
+frame by frame by the deployment-mode stack of §4.11, with no threshold
+retuned: `near_T`, the depth band, the contact fraction and the plane band
+are the values fitted on groups 0-5. The clips are the project's only
+evidence from outside the calibration domain, and they share nothing with
+the robot dataset: different scenes, a different camera and viewpoint, and
+objects drawn almost entirely from outside the six annotated classes (a
+monitor, keyboard, mouse, mug, spectacles, plants, a lamp, a notepad, a
+laptop, a wallet, an earbuds case). They were chosen as complementary
+regimes: a **moving camera over a static desk scene** (clip 1, 99 frames),
+where relations should stay constant and any variation is measurement noise,
+and a **static overhead camera with moving hands** (clip 2, 79 frames),
+where relations genuinely change and smoothing must not erase the change.
+Appendix E.4 gives the tracking and temporal-vote settings and the catalogue
+of open-vocabulary failures.
 
-The clips matter chiefly because they are the project's only evidence from
-outside the calibration domain. They share nothing with the robot dataset:
-different scenes, a different camera and viewpoint, and objects drawn almost
-entirely from outside the six annotated classes (a monitor, keyboard, mouse,
-mug, spectacles, plants, a lamp, a notepad, a laptop, a wallet, an earbuds
-case). No threshold was retuned; `near_T`, the depth band, the contact
-fraction and the plane band are the values fitted on groups 0–5.
-
-Three observations. **(i) Relations are stable wherever identity is stable.**
-For object pairs co-visible in ≥20 frames, the emitted predicate persists at
-0.90/0.94 mean across the two clips, with 81% and 89% of pair-predicates
-present in ≥90% of their co-visible frames (`eval/video_stability.py`;
-co-visible means both track identities appear in that frame). The temporal
-vote separates the two regimes: it lifts persistence from 0.896 to 0.902 on
-the static-scene clip and from 0.915 to 0.938 on the one with moving hands,
-which is where per-frame detection actually churns. Frame-to-frame triplet
-agreement (Jaccard 0.89 and 0.70) is dominated by zero-shot detection churn
-and, in clip 2, genuine hand motion, with the dips aligning to the hands
-picking objects up. This mirrors §4.11's attribution: the variation is
-detection, not relations. **(ii) The rules transfer to objects they were
+Three observations. **(i) Relations are stable wherever identity is
+stable.** For object pairs co-visible in at least 20 frames the emitted
+predicate persists at 0.90/0.94 mean across the two clips
+(`eval/video_stability.py`), and the temporal vote separates the two
+regimes: it lifts persistence from 0.896 to 0.902 on the static-scene clip
+and from 0.915 to 0.938 on the one with moving hands, which is where
+per-frame detection actually churns. Frame-to-frame triplet agreement
+(Jaccard 0.89 and 0.70) is dominated by zero-shot detection churn and, in
+clip 2, genuine hand motion. This mirrors §4.11's attribution: the variation
+is detection, not relations. **(ii) The rules transfer to objects they were
 never calibrated on**: a pen resting on a notepad and a wallet-and-photograph
 stack are labelled by the same mask-contact evidence fitted on the dataset's
 six classes. **(iii) The camera-frame semantics behave as designed**: in the
 bird's-eye clip, in front of/behind re-maps to distance from the viewer's
 edge of the desk, the reference-frame dependence §2.5 cites from RoboSpatial,
-demonstrated rather than asserted. The open-vocabulary failures are equally
-visible and worth recording: content displayed *on the laptop screen* is
-detected as real objects, and items outside the prompt list snap to the
-nearest prompted class (an earbuds case becomes a `cup`).
+demonstrated rather than asserted.
 
 The limits should be equally clear. With no video ground truth these are
 qualitative judgements over two clips: they support the claim that the
@@ -478,54 +470,25 @@ which is the same attribution §4.11 makes for the dataset itself.
 The true-precision estimates of §4.4 and §4.9 have one methodological
 weakness that no amount of sampling fixes: they were verdicted by the author
 of the tool being evaluated. Conservative rules and published evidence
-mitigate the risk, but they do not remove it, and the honest description of
-those numbers is "author-verdicted". A separate study was therefore designed
-to re-estimate precision with judges who have no stake in the result.
+mitigate the risk but do not remove it, and the honest description of those
+numbers is "author-verdicted". A separate study was therefore designed to
+re-estimate precision with judges who have no stake in the result: 2,002
+automatic labels, stratified across the seven predicates and drawn entirely
+from pairs the annotators never touched, each rendered as the photograph with
+the subject and object outlined and judged TRUE or WRONG by anonymous
+volunteers under the operational definitions of Chapter 3.
 
-**Protocol.** A stratified sample of 2,002 automatic labels (286 per
-predicate) is drawn from the tool's *extra* predictions, meaning ordered
-pairs the human annotators never labelled, which is exactly the population
-with no ground truth to score against. Each claim is rendered as the source
-photograph with the subject outlined in red and the object in blue, and
-presented with a single sentence ("the book is on the box") to volunteers
-recruited by open link, who answer TRUE or WRONG / can't tell. The
-instructions restate the operational definitions of Chapter 3: camera-frame
-laterality, "in front of" as nearer the camera, support as physically
-resting rather than held, and an explicit instruction to answer WRONG when
-unsure, which reproduces the conservative rule used in the author's audits.
-Each browser receives a random identifier that prevents repeat judgements
-without identifying anybody, and faces are anonymised in every image
-(Chapter 8).
+It is designed to measure three things the author-verdicted audits cannot:
+crowd precision per predicate at a sample two orders of magnitude larger than
+§4.4's fifteen; an author-bias check, by comparing crowd majority against the
+author's own verdict on the 147 items carrying both; and whether disputed
+claims are wrong or merely ambiguous, through inter-rater reliability, which
+is the distinction the disagreement literature of §2.3 insists on.
 
-Coverage is stratified by what each analysis requires. An aggregate
-precision estimate needs only one judgement per claim, since the sample is
-random either way, so ordinary claims target a single rater. The 147 claims
-that also carry an author verdict target three raters each, because the
-crowd-versus-author comparison and the inter-rater reliability figure both
-need several independent judgements on the *same* item; those claims are
-served first. The design therefore needs about 2,300 judgements rather than
-the 6,000 a uniform three-rater target would demand, and it fails
-gracefully: the author-comparison subset completes after roughly 30
-participants, so that analysis survives a thin turnout while any further
-response widens the precision estimate.
-
-**What it measures.** Three things the author-verdicted audits cannot. First,
-crowd precision per predicate with binomial confidence intervals, at a sample
-size two orders of magnitude larger than the n = 15 per predicate of §4.4.
-Second, an author-bias check: the 147 items carrying the author's own
-verdicts are retained inside the pool, so crowd majority and author verdict
-can be compared directly by percentage agreement and Cohen's kappa (Cohen,
-1960). Third, whether the *task* is well posed at all, through
-crowd-internal reliability across raters (Krippendorff's alpha), which
-distinguishes "the tool is wrong" from "this claim is genuinely ambiguous",
-a distinction the annotator-disagreement literature insists on (§2.3).
-
-Scoring is fully specified in advance (`analysis/score_votes.py`): ties
-resolve to WRONG, matching the audit protocol; reflex-speed responses and
-raters who disagree systematically with everyone else can be excluded by
-pre-declared filters. The instrument is complete and collection is under
-way; the results are reported at submission, and the limitation stated in
-§7.4 stands until they are.
+**The instrument is complete and collection is under way; no results are
+reported here, and the limitation recorded in §7.4 stands until they are.**
+Appendix E.3 gives the sampling design, the coverage strategy and the
+pre-declared scoring rules.
 
 ## 4.14 Temporal redundancy and stability under viewpoint change
 
@@ -752,9 +715,11 @@ it does speak it agrees with the annotators more often than the pipeline
 does, which is the beginning of a case for it as an adjudicator on the depth
 pair; §7.6 takes that up rather than settling it here.
 
-The comparison carries one asymmetry that stops it
-being read as truthfulness rather than agreement, and the model's failures
-have a diagnosable shape: it does not contradict itself and does not invert
+The comparison carries one asymmetry that has to be stated:
+only the pipeline's extra assertions were audited (§4.4), so these columns
+compare agreement with the human record and not truthfulness. The model's
+failures also have a diagnosable shape: it does not contradict itself and
+does not invert
 the front/behind convention, it simply falls silent, and it supplies one
 direction of a symmetric pair without the other in a third of cases. Those
 are the two defects §4.5 measures in the *human* annotation. **Asked to
