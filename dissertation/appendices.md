@@ -628,15 +628,9 @@ person side carried no gold to recover.
 
 ### D.3 The ground-plane fallback (ablation A7)
 
-The depth abstention band was the
-single largest miss cause, and most of it is resolvable without depth at all:
-two objects standing on the same floor are depth-ordered by pure projection.
-The nearer object's box bottom sits lower in the image, a pixel-precise cue
-exactly where relative depth is noisiest. The shipped rule fires only where
-the depth rule abstained, only when *neither* object rests on another object
-by the tool's own contact evidence (an elevated object's box bottom locates
-its support, not itself), and only outside a small bottom-edge band
-(`plane_band` = 0.005, calibrated on the train groups; ablation A7). On the
+The depth abstention band was the single largest miss cause, and most of it
+turned out to be resolvable without depth at all. Appendix C.6 specifies the
+rule and its two guards; what follows is the evidence that selected it. On the
 train groups the fallback adds 386 committed directions at 0.91 agreement; on
 held-out group 7 it adds 54 and **every one agrees with the annotator**.
 Effect on the headline: front/behind recall 0.52/0.55 → **0.64/0.66** (aligned
