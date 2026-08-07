@@ -96,6 +96,65 @@ model inherits that instability (`behind` spans 0.17–0.28). Sparse supervision
 is not just weaker, it is *unstable*, its outcome hostage to sampling noise,
 and self-training passes the instability on to its student.
 
+### 5.2.1 The same experiment on four other indicators
+
+A recall-only table invites one obvious objection: the automatic arm labels
+twenty times more densely, so of course it recovers more. The objection is
+answered by measuring, not by argument, and the answer is not the flattering
+one.
+
+| arm | macro R | macro P | macro F1 | macro AP | micro F1 |
+|---|---|---|---|---|---|
+| human-trained | 0.297 | **0.252** | 0.267 | **0.230** | **0.262** |
+| pseudo-labelled | 0.365 | 0.243 | **0.289** | 0.215 | 0.273 |
+| vision-language | 0.380 | 0.197 | 0.253 | 0.219 | 0.221 |
+| auto-trained | **0.758** | 0.136 | 0.194 | 0.164 | 0.066 |
+
+**On every indicator except recall the automatic arm comes last.** Precision
+0.136 against the human arm's 0.252; F1 0.194 against 0.267; average
+precision 0.164 against 0.230. Micro-averaging, which weights predicates by
+how often the annotators used them, is harsher still at 0.066 against 0.262.
+Taken at face value the table says the automatic labels are the worst
+supervision of the four.
+
+They are not, and the reason is visible in one number. Average precision was
+included precisely because it is threshold-free: no arm can improve it by
+committing to more pairs, since the curve sweeps every operating point. The
+automatic arm scores **0.040 on *to the left of***. That is the predicate on
+which §4.4 audited fifteen of its fifteen extra predictions and found every
+one correct. An arm cannot simultaneously be wrong about laterality and
+right about it; what the column actually measures is agreement with which
+pairs an annotator chose to write down, and an arm that ranks by whether a
+relation holds scores badly against a target that records whether a human
+bothered to record it.
+
+This is the artefact of §4.3 reappearing one level down the chain. There it
+depressed the tool's restricted precision to 0.35 on lateral predicates the
+audit then scored at 1.00; here it depresses a classifier trained on those
+labels, in a metric family chosen to be robust. The mechanism is identical
+because the cause is identical: gold that annotates about a tenth of the
+ordered pairs cannot distinguish a false positive from an unexamined one,
+and it charges the denser arm for the coverage that makes it useful.
+
+Two things follow, and the second is a concession. The first is that this
+strengthens rather than weakens the reading Chapter 6 arrives at
+independently: a metric rewarding agreement with annotation practice favours
+whichever arm imitates that practice, and it does so here in a controlled
+experiment with a different model, different features and a different metric
+family from the benchmark's. The second is that these columns cannot be
+argued away in the automatic arm's favour either. The audit of §4.4 covers
+the *rule layer's* extra predictions, not the classifier's, so strictly the
+precision figures are uninterpretable rather than favourable. Auditing a
+stratified sample of the auto-trained classifier's own false positives is
+the measurement that would settle it, and it is not in this dissertation.
+
+What the four indicators do establish is narrower than the recall column
+suggests and firmer than the precision column implies: judged on the labels'
+ability to teach a model to recover relations humans recorded, the automatic
+arm dominates; judged on its ability to imitate which relations humans chose
+to record, it does not, and no metric computed against this gold can
+separate the two.
+
 ## 5.3 Why self-training does not rescue the human labels
 
 The pseudo-label arm's own bookkeeping explains its ceiling precisely. Of the
@@ -158,8 +217,10 @@ every arm's front/behind equally.
 
 ## 5.5 Honest boundaries
 
-The evaluation gold is itself sparse human annotation, so recall (not
-precision) is the reported metric, mirroring the RQ1 protocol. The
+The evaluation gold is itself sparse human annotation, so recall is the
+primary metric, mirroring the RQ1 protocol; §5.2.1 reports precision, F1 and
+average precision beside it and shows why they cannot be read as error rates
+here. The
 human-trained model's weakness is partly a property of *any* sparse
 supervision at this scale; with many more human labels it would improve, but
 producing many more human labels is exactly the bottleneck this project

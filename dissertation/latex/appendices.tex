@@ -96,7 +96,7 @@ The check that the perception stage reproduces is \texttt{scripts/reannotate\_fr
 
 \begin{center}
 \small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.468\textwidth}>{\raggedright\arraybackslash}p{0.367\textwidth}>{\raggedright\arraybackslash}p{0.105\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.457\textwidth}>{\raggedright\arraybackslash}p{0.359\textwidth}>{\raggedright\arraybackslash}p{0.124\textwidth}}
 \caption{Commands reproducing every experiment from the cached geometry, with run times.}\\
 \hline
 command & produces & time \\
@@ -115,7 +115,7 @@ command & produces & time \\
 \texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30,45,60} & \S4.14 segmentation, stability, propagation cost & \textasciitilde{}3 min \\
 \texttt{python eval/ablations.py} & A1--A7 sweeps & \textasciitilde{}30 s \\
 \texttt{python eval/depth\_ablation.py} & A8 (needs the \texttt{outputs\_base} pass) & <1 min \\
-\texttt{python eval/downstream.py --seeds 42,43,44} & RQ2, three arms & \textasciitilde{}4 h CPU \\
+\texttt{python eval/downstream.py --seeds 42,43,44} & RQ2, three arms & \textasciitilde{}20 min CPU \\
 \texttt{python scripts/make\_figures.py} & every figure & \textasciitilde{}1 min \\
 \hline
 \end{longtable}

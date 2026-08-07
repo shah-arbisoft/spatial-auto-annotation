@@ -272,7 +272,7 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60` | §4.14 segmentation, stability, propagation cost | ~3 min |
 | `python eval/ablations.py` | A1–A7 sweeps | ~30 s |
 | `python eval/depth_ablation.py` | A8 (needs the `outputs_base` pass) | <1 min |
-| `python eval/downstream.py --seeds 42,43,44` | RQ2, three arms | ~4 h CPU |
+| `python eval/downstream.py --seeds 42,43,44` | RQ2, three arms | ~20 min CPU |
 | `python scripts/make_figures.py` | every figure | ~1 min |
 
 The two GPU extras: `python scripts/run_sgdet.py --threshold 0.25` for the

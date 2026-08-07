@@ -203,6 +203,10 @@ TABLES = {
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "
         "sources.",
+        "The same experiment on four further indicators. The automatic arm "
+        "leads on recall and trails on every other column, which is the "
+        "sparse-gold artefact of \\S4.3 reappearing downstream rather than a "
+        "verdict on label quality.",
         "Planner experiment: whether the plan clears the occluding object "
         "before grasping the target, over 25 held-out scenes under each "
         "label source.",

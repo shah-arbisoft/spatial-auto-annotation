@@ -116,6 +116,51 @@ def load_matrix(cfg, vlm=None):
             np.array(yv), np.array(vseen))
 
 
+def average_precision(clf, Xs_te, g):
+    """Area under the precision-recall curve, threshold-free.
+
+    The one indicator here that the density objection cannot touch: it scores
+    how well an arm orders pairs, not how many it commits to, so an arm that
+    predicts twenty times more relations gains nothing from volume alone.
+    """
+    from sklearn.metrics import average_precision_score  # noqa: PLC0415
+    if g.sum() == 0:
+        return 0.0
+    return float(average_precision_score(g, clf.predict_proba(Xs_te)[:, 1]))
+
+
+def scores(tp, fp, fn, support, ap=None):
+    """The four indicators reported per predicate, and the counts behind them.
+
+    Each answers a specific objection to a recall-only table:
+
+    * recall            the primary measure, as in RQ1
+    * precision_sparse  answers "the denser arm should recall more". It is a
+                        floor rather than an error rate: the gold annotates
+                        about a tenth of the ordered pairs, so it charges an
+                        arm for every true relation the annotators did not
+                        record, which is the artefact SS4.3 measures and the
+                        audit of SS4.4 shows to be largely benign
+    * f1_sparse         the same caveat, in one number
+    * average_precision threshold-free, so no arm gains by committing to more
+                        pairs. It still scores against sparse gold, so read
+                        it as ranking agreement with annotation selection,
+                        not as correctness
+
+    The raw counts are kept so a support-weighted (micro) mean can be formed
+    at aggregation. Reporting macro beside micro is the same distinction
+    SS2.8 draws between mR@K and R@K, applied to this project's own numbers.
+    """
+    r = tp / (tp + fn) if tp + fn else 0.0
+    p = tp / (tp + fp) if tp + fp else 0.0
+    return {"recall": r,
+            "precision_sparse": p,
+            "f1_sparse": 2 * p * r / (p + r) if p + r else 0.0,
+            "average_precision": float(ap) if ap is not None else 0.0,
+            "tp": tp, "fp": fp, "fn": fn,
+            "support": support}
+
+
 def train_and_eval(X_tr, y_tr, X_te, gold_te, seed=42):
     """One classifier per predicate; recall/precision vs held-out human gold."""
     from sklearn.preprocessing import StandardScaler  # noqa: PLC0415
@@ -132,9 +177,8 @@ def train_and_eval(X_tr, y_tr, X_te, gold_te, seed=42):
         tp = int(((pred == 1) & (g == 1)).sum())
         fn = int(((pred == 0) & (g == 1)).sum())
         fp = int(((pred == 1) & (g == 0)).sum())  # fp vs sparse gold: report, don't over-read
-        out[k] = {"recall": tp / (tp + fn) if tp + fn else 0.0,
-                  "precision_sparse": tp / (tp + fp) if tp + fp else 0.0,
-                  "support": int(g.sum())}
+        out[k] = scores(tp, fp, fn, int(g.sum()),
+                        ap=average_precision(clf, Xs_te, g))
     return out
 
 
@@ -186,11 +230,77 @@ def train_pseudo_and_eval(X_tr, yh_tr, X_te, gold_te, seed=42, conf=0.90):
         g = gold_te[:, i]
         tp = int(((pred == 1) & (g == 1)).sum())
         fn = int(((pred == 0) & (g == 1)).sum())
-        out[k] = {"recall": tp / (tp + fn) if tp + fn else 0.0,
-                  "support": int(g.sum())}
+        fp = int(((pred == 1) & (g == 0)).sum())
+        out[k] = scores(tp, fp, fn, int(g.sum()),
+                        ap=average_precision(student, Xs_te, g))
         stats[k] = {"pseudo_pos": n_pos, "pseudo_neg": n_neg,
                     "annotated": int(annotated.sum())}
     return out, stats
+
+
+METRICS = ("recall", "precision_sparse", "f1_sparse", "average_precision")
+
+
+def aggregate(per_seed) -> dict:
+    """Mean and per-seed range for every metric, plus macro and micro means.
+
+    Macro averages the seven predicates equally; micro pools the counts, so
+    frequent predicates dominate. They are reported together because SS2.8
+    argues that either alone is uninterpretable.
+    """
+    agg = {}
+    for k in PREDICATES:
+        agg[k] = {"support": per_seed[0][k]["support"]}
+        for m in METRICS:
+            vals = [r[k][m] for r in per_seed]
+            agg[k][m] = float(np.mean(vals))
+            agg[k][m + "_min"] = float(np.min(vals))
+            agg[k][m + "_max"] = float(np.max(vals))
+
+    macro = {m: float(np.mean([agg[k][m] for k in PREDICATES])) for m in METRICS}
+    micro_seeds = []
+    for r in per_seed:
+        tp = sum(r[k]["tp"] for k in PREDICATES)
+        fp = sum(r[k]["fp"] for k in PREDICATES)
+        fn = sum(r[k]["fn"] for k in PREDICATES)
+        rec = tp / (tp + fn) if tp + fn else 0.0
+        pre = tp / (tp + fp) if tp + fp else 0.0
+        micro_seeds.append({
+            "recall": rec, "precision_sparse": pre,
+            "f1_sparse": 2 * pre * rec / (pre + rec) if pre + rec else 0.0})
+    micro = {m: float(np.mean([s[m] for s in micro_seeds]))
+             for m in ("recall", "precision_sparse", "f1_sparse")}
+    agg["_macro"], agg["_micro"] = macro, micro
+    return agg
+
+
+def summary_tables(results: dict) -> list[str]:
+    """Markdown for the indicators beyond recall."""
+    arms = [(n, results[n]) for n in
+            ("human-trained", "pseudo-labelled", "vlm-trained", "auto-trained")
+            if n in results]
+    md = ["", "## Beyond recall: precision, F1 and ranking quality", "",
+          "Precision against gold that annotates about a tenth of the ordered "
+          "pairs is a floor, not an error rate: it charges an arm for every "
+          "true relation the annotators never recorded, the artefact measured "
+          "in SS4.3. Average precision is threshold-free and so removes the "
+          "density confound outright. Macro weights the seven predicates "
+          "equally; micro pools the counts.", "",
+          "| arm | macro R | macro P | macro F1 | macro AP | micro R | micro P | micro F1 |",
+          "|---|---|---|---|---|---|---|---|"]
+    for name, a in arms:
+        ma, mi = a["_macro"], a["_micro"]
+        md.append(f"| {name} | {ma['recall']:.3f} | {ma['precision_sparse']:.3f} | "
+                  f"{ma['f1_sparse']:.3f} | {ma['average_precision']:.3f} | "
+                  f"{mi['recall']:.3f} | {mi['precision_sparse']:.3f} | "
+                  f"{mi['f1_sparse']:.3f} |")
+    md += ["", "Per predicate, average precision (threshold-free):", "",
+           "| predicate | " + " | ".join(n for n, _ in arms) + " |",
+           "|---" * (len(arms) + 1) + "|"]
+    for k in PREDICATES:
+        md.append(f"| {k} | " + " | ".join(
+            f"{a[k]['average_precision']:.3f}" for _, a in arms) + " |")
+    return md
 
 
 def main():
@@ -240,13 +350,7 @@ def main():
         for seed in seeds:
             print(f"training {name}, seed {seed} ...")
             per_seed.append(train_and_eval(X[fit], labels[fit], X[~tr], gold_te, seed=seed))
-        agg = {}
-        for k in PREDICATES:
-            rs = [r[k]["recall"] for r in per_seed]
-            agg[k] = {"recall": float(np.mean(rs)),
-                      "recall_min": float(np.min(rs)), "recall_max": float(np.max(rs)),
-                      "support": per_seed[0][k]["support"]}
-        results[name] = agg
+        results[name] = aggregate(per_seed)
 
     # third arm: self-training on the sparse human labels (the rival remedy)
     per_seed, pstats = [], None
@@ -254,13 +358,7 @@ def main():
         print(f"training pseudo-labelled (self-training), seed {seed} ...")
         r, pstats = train_pseudo_and_eval(X[fit], yh[fit], X[~tr], gold_te, seed=seed)
         per_seed.append(r)
-    agg = {}
-    for k in PREDICATES:
-        rs = [r[k]["recall"] for r in per_seed]
-        agg[k] = {"recall": float(np.mean(rs)),
-                  "recall_min": float(np.min(rs)), "recall_max": float(np.max(rs)),
-                  "support": per_seed[0][k]["support"]}
-    results["pseudo-labelled"] = agg
+    results["pseudo-labelled"] = aggregate(per_seed)
     results["_pseudo_label_counts"] = pstats
 
     # fourth arm: a vision-language model as the label source. It trains only
@@ -272,14 +370,7 @@ def main():
             print(f"training vlm-trained, seed {seed} ...")
             per_seed.append(train_and_eval(X[fit], yv[fit], X[~tr], gold_te,
                                            seed=seed))
-        agg = {}
-        for k in PREDICATES:
-            rs = [r[k]["recall"] for r in per_seed]
-            agg[k] = {"recall": float(np.mean(rs)),
-                      "recall_min": float(np.min(rs)),
-                      "recall_max": float(np.max(rs)),
-                      "support": per_seed[0][k]["support"]}
-        results["vlm-trained"] = agg
+        results["vlm-trained"] = aggregate(per_seed)
         results["_vlm"] = {"images": len(vlm["images"]),
                            "labelled_pairs": len(vlm["rels"]),
                            "train_pairs_all_arms": int(fit.sum()),
@@ -301,6 +392,8 @@ def main():
         md.append(f"| {k} | {h['recall']:.2f} ({h['recall_min']:.2f}-{h['recall_max']:.2f}) | "
                   f"{p['recall']:.2f} ({p['recall_min']:.2f}-{p['recall_max']:.2f}) | "
                   f"{a['recall']:.2f} ({a['recall_min']:.2f}-{a['recall_max']:.2f}) | {h['support']} |")
+
+    md += summary_tables(results)
     md.append(f"| **mean** | **{np.mean(hv):.2f}** | **{np.mean(pv):.2f}** | "
               f"**{np.mean(av):.2f}** | |")
 
@@ -309,7 +402,7 @@ def main():
     Path(args.out).write_text(json.dumps(results, indent=2),
                                                encoding="utf-8")
     print("\n".join(md))
-    print("\nreport -> outputs/rq2_report.json ; table -> outputs/tables/rq2.md")
+    print(f"\nreport -> {args.out} ; table -> {args.table}")
 
 
 if __name__ == "__main__":

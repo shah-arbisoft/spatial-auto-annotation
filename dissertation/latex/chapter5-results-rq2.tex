@@ -55,6 +55,40 @@ Training on the automatic labels multiplies downstream mean recall by \textascii
 
 The seed spreads carry a second result. The auto-trained model's recall varies by at most 0.02 across seeds on every predicate, while the human-trained model's varies by up to 0.19 (\texttt{near} spans 0.00--0.19) and the self-trained model inherits that instability (\texttt{behind} spans 0.17--0.28). Sparse supervision is not just weaker, it is \textit{unstable}, its outcome hostage to sampling noise, and self-training passes the instability on to its student.
 
+\subsection{The same experiment on four other indicators}
+
+A recall-only table invites one obvious objection: the automatic arm labels twenty times more densely, so of course it recovers more. The objection is answered by measuring, not by argument, and the answer is not the flattering one.
+
+\begin{center}
+\small
+\begin{longtable}{lrrrrr}
+\caption{The same experiment on four further indicators. The automatic arm leads on recall and trails on every other column, which is the sparse-gold artefact of \textbackslash{}S4.3 reappearing downstream rather than a verdict on label quality.}\\
+\hline
+arm & macro R & macro P & macro F1 & macro AP & micro F1 \\
+\hline
+\endfirsthead
+\hline
+arm & macro R & macro P & macro F1 & macro AP & micro F1 \\
+\hline
+\endhead
+human-trained & 0.297 & \textbf{0.252} & 0.267 & \textbf{0.230} & \textbf{0.262} \\
+pseudo-labelled & 0.365 & 0.243 & \textbf{0.289} & 0.215 & 0.273 \\
+vision-language & 0.380 & 0.197 & 0.253 & 0.219 & 0.221 \\
+auto-trained & \textbf{0.758} & 0.136 & 0.194 & 0.164 & 0.066 \\
+\hline
+\end{longtable}
+\end{center}
+
+\textbf{On every indicator except recall the automatic arm comes last.} Precision 0.136 against the human arm's 0.252; F1 0.194 against 0.267; average precision 0.164 against 0.230. Micro-averaging, which weights predicates by how often the annotators used them, is harsher still at 0.066 against 0.262. Taken at face value the table says the automatic labels are the worst supervision of the four.
+
+They are not, and the reason is visible in one number. Average precision was included precisely because it is threshold-free: no arm can improve it by committing to more pairs, since the curve sweeps every operating point. The automatic arm scores **0.040 on *to the left of***. That is the predicate on which \S4.4 audited fifteen of its fifteen extra predictions and found every one correct. An arm cannot simultaneously be wrong about laterality and right about it; what the column actually measures is agreement with which pairs an annotator chose to write down, and an arm that ranks by whether a relation holds scores badly against a target that records whether a human bothered to record it.
+
+This is the artefact of \S4.3 reappearing one level down the chain. There it depressed the tool's restricted precision to 0.35 on lateral predicates the audit then scored at 1.00; here it depresses a classifier trained on those labels, in a metric family chosen to be robust. The mechanism is identical because the cause is identical: gold that annotates about a tenth of the ordered pairs cannot distinguish a false positive from an unexamined one, and it charges the denser arm for the coverage that makes it useful.
+
+Two things follow, and the second is a concession. The first is that this strengthens rather than weakens the reading Chapter 6 arrives at independently: a metric rewarding agreement with annotation practice favours whichever arm imitates that practice, and it does so here in a controlled experiment with a different model, different features and a different metric family from the benchmark's. The second is that these columns cannot be argued away in the automatic arm's favour either. The audit of \S4.4 covers the \textit{rule layer's} extra predictions, not the classifier's, so strictly the precision figures are uninterpretable rather than favourable. Auditing a stratified sample of the auto-trained classifier's own false positives is the measurement that would settle it, and it is not in this dissertation.
+
+What the four indicators do establish is narrower than the recall column suggests and firmer than the precision column implies: judged on the labels' ability to teach a model to recover relations humans recorded, the automatic arm dominates; judged on its ability to imitate which relations humans chose to record, it does not, and no metric computed against this gold can separate the two.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/rq2-with-vlm.png}
@@ -80,7 +114,7 @@ Two checks argue the result is real rather than an artefact. First, the auto-tra
 
 \section{Honest boundaries}
 
-The evaluation gold is itself sparse human annotation, so recall (not precision) is the reported metric, mirroring the RQ1 protocol. The human-trained model's weakness is partly a property of \textit{any} sparse supervision at this scale; with many more human labels it would improve, but producing many more human labels is exactly the bottleneck this project removes, and the self-trained arm shows the shortfall cannot simply be computed away. The front/behind rows are depressed for every arm by the held-out groups' inverted convention (Chapter 4); the comparison between sources remains fair because the penalty is shared.
+The evaluation gold is itself sparse human annotation, so recall is the primary metric, mirroring the RQ1 protocol; \S5.2.1 reports precision, F1 and average precision beside it and shows why they cannot be read as error rates here. The human-trained model's weakness is partly a property of \textit{any} sparse supervision at this scale; with many more human labels it would improve, but producing many more human labels is exactly the bottleneck this project removes, and the self-trained arm shows the shortfall cannot simply be computed away. The front/behind rows are depressed for every arm by the held-out groups' inverted convention (Chapter 4); the comparison between sources remains fair because the penalty is shared.
 
 One structural caveat deserves stating plainly. The classifier's features are geometric, and the automatic labels were generated by rules over closely related geometry, so the auto-trained arm's task is partly to re-learn its own generator; read alone, this chapter shows the automatic labels are \textit{learnable} and the human labels are not, rather than that automatic labels win under any featurisation. Three things keep the comparison meaningful: every arm receives the identical features, so the featurisation advantages no source; "the labels are learnable" is itself the property RQ2 asks about, since a downstream consumer must extract a consistent signal from the labels; and Chapter 6 removes the circularity entirely by repeating the comparison in a full scene-graph model with visual features, where the density and consistency effects persist in the training dynamics and the zero-shot generalisation even though the headline verdict changes.
 
