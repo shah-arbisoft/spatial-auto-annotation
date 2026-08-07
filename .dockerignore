@@ -10,8 +10,28 @@
 *.key
 **/_key_do_not_share.csv
 
-# generated results; the container writes these to a mounted volume instead
-outputs/
+# outputs/ mirrors what .gitignore keeps: the bulk that regenerates from a run
+# stays out, the geometry cache and the committed evidence go in. Without the
+# cache the image cannot run any of the offline commands in its own header
+# unless the host mounts outputs/, which defeats the point of shipping an
+# environment. The cache is 10 MB and the evidence about 4 MB.
+outputs/*
+!outputs/geometry/
+!outputs/pairs.csv
+!outputs/*.json
+!outputs/tables/
+!outputs/planner/
+!outputs/vlm_pilot/
+!outputs/sgg_benchmark/
+outputs/vlm_pilot/img/
+outputs/vlm_pilot/browser_pack/
+outputs/vlm_pilot/manual_check/
+outputs/annotations/
+outputs/audit*/
+outputs/failure_gallery/
+outputs/extension/
+outputs/video/
+outputs/figures/
 outputs_base/
 
 # the benchmark upload artefacts (~90 MB) are built by a script when needed

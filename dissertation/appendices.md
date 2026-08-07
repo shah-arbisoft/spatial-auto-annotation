@@ -189,22 +189,29 @@ torch reinstall, in 328 s. The final stage runs the project's test suite
 import of the rule layer, so an environment that cannot import the rule
 layer cannot produce an image at all.
 
-The resulting image, 7.02 GB over eleven layers, was then checked as an
-artefact rather than trusted on the strength of its log, because the machine
-that built it ran out of disk during the export stage and a partly written
-layer is not always an obvious failure. Reading every one of the 84,972
-files in the image returned no errors, so no layer is truncated. Inside the
-finished image the test suite reports **66 passed** a second time, torch
-resolves to `2.5.1+cu121` rather than the CPU wheel the pitfall above
-produces, and `pip check` is clean apart from a platform-metadata note on
-`ninja`, a build-time dependency of SAM2. Every one of the 60 Python and YAML
-files under `src/`, `eval/`, `tests/`, `configs/` and `scripts/` was
-hash-identical to the working tree as it stood at the commit the image was
-built from (`a10378f`); analysis scripts added afterwards are in the
-repository but not in that image, which is the ordinary consequence of an
-image being a snapshot. `/app` is 2.0 MB, and the dataset, the caches and the
-credentials file are absent, `.env.example` being the only environment file
-shipped.
+The image is checked as an artefact rather than trusted on the strength of
+its log, and the reason is worth recording as method. Two builds of this
+image have failed from a full disk: one during the export stage, one during
+unpacking, and the second wrote the tag before it died, so `docker images`
+listed a plausible entry for an image that was never finished. A build log
+and a tag are therefore not evidence; only the finished image is.
+
+Inside the current image the test suite reports **66 passed**, torch resolves
+to `2.5.1+cu121` rather than the CPU wheel the pitfall above produces, and
+sam2, cv2, numpy, scipy, scikit-learn, Pillow and transformers all import.
+`/app` is 19.3 MB, most of it the geometry cache, and the specification the
+rules implement is the current one, checked on three strings that changed in
+the last revision. The dataset and the credentials file are absent,
+`.env.example` being the only environment file shipped, and so are the bulk
+outputs the image has no use for: rendered annotations, the failure gallery,
+the figures and the video frames.
+
+The reproduction is the point. Mounting the dataset read-only and running
+`scripts/reannotate_from_cache.py` inside the container produces a
+`pairs.csv` of 84,881 rows whose SHA-256 matches the file committed here
+exactly, so the container does not merely install, it reproduces the
+annotations this dissertation reports. `outputs/docker/verification.md`
+records the full check.
 
 Given a `--gpus all` flag the container also sees the card: CUDA reports
 available, the RTX 2060 is enumerated, and a matrix product executes on the
@@ -229,14 +236,24 @@ preprocessed on disk.
 `python scripts/run_annotator.py` (~5 min on the RTX 2060) writes the
 annotations in all three native formats plus the geometry, contact and depth
 caches under `outputs/`, and `outputs/pairs.csv`. That pass is the only step
-that needs a GPU, and it does not have to be repeated: the geometry cache
-and `pairs.csv` are committed to the repository (10 MB, 1,672 files), so a
-clone runs every experiment below on a CPU with no perception models
-installed and no dataset present. Re-running the pass is worthwhile only to
-verify the perception stage itself; the check that it reproduces is
+needing a GPU, and it does not have to be repeated: the geometry cache and
+`pairs.csv` are committed to the repository (10 MB, 1,672 files), so every
+experiment below runs on a CPU with no perception models installed and no
+GPU present.
+
+Four of those commands still read the dataset's annotation files, because
+they iterate the released images rather than the cache index:
+`reannotate_from_cache.py`, `eval/ablations.py`,
+`eval/keyframe_propagation.py` and `eval/depth_ablation.py`. They need
+`annotated_data/` (17 MB) but never open a JPEG, so the images are not
+required for any of them. The rest, including the whole RQ1 battery, run
+from the committed caches and JSON alone; this was checked by running them
+in a container with nothing mounted.
+
+The check that the perception stage reproduces is
 `scripts/reannotate_from_cache.py`, which rebuilds `pairs.csv` from the
-cache and should return the identical file (84,881 rows, SHA-256
-`60281435…e1bd`).
+cache and should return the identical file: 84,881 rows, SHA-256
+`60281435…e1bd`.
 
 | command | produces | time |
 |---|---|---|
