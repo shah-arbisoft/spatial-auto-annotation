@@ -85,5 +85,7 @@ dissertation/latex/*.fls
 dissertation/latex/*.fdb_latexmk
 dissertation/latex/*.synctex.gz
 dissertation/latex/main.pdf
+# temporary compiles kept for eyeballing, not deliverables
+dissertation/*.pdf
 outputs/vlm_pilot/img/
 outputs/docker/build_full.log
