@@ -85,7 +85,7 @@ For each human triplet the tool failed to recover, the labels it \textit{did} em
 
 \begin{center}
 \small
-\begin{longtable}{lrr}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.194\textwidth}>{\raggedleft\arraybackslash}p{0.127\textwidth}>{\raggedright\arraybackslash}p{0.619\textwidth}}
 \caption{For each missed human triplet, the predicates the tool emitted instead.}\\
 \hline
 Gold predicate & Missed & Most frequent co-emissions on missed pairs \\
@@ -121,7 +121,7 @@ Two structural signatures stand out. Missed front/behind pairs carrying the \tex
 
 \begin{center}
 \small
-\begin{longtable}{lrrr}
+\begin{longtable}{lrrl}
 \caption{Manual audit of a stratified sample of extra predictions, with Wilson intervals.}\\
 \hline
 Predicate & Correct / n & Precision est. & Wilson 95\% CI \\
@@ -148,7 +148,7 @@ The audit splits the predicates cleanly in two. For the lateral, depth and proxi
 
 \begin{center}
 \small
-\begin{longtable}{lrrrrrr}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.127\textwidth}>{\raggedleft\arraybackslash}p{0.079\textwidth}>{\raggedleft\arraybackslash}p{0.114\textwidth}>{\raggedleft\arraybackslash}p{0.217\textwidth}>{\raggedright\arraybackslash}p{0.134\textwidth}>{\raggedleft\arraybackslash}p{0.121\textwidth}>{\raggedleft\arraybackslash}p{0.148\textwidth}}
 \caption{Front/behind by annotator group: emission rate, agreement where the tool commits, and the effect of aligning the direction convention.}\\
 \hline
 Group & Gold & Emit rate & Agreement when committed & Convention & Raw recall & Aligned recall \\
@@ -220,7 +220,7 @@ Nine ablations were run. Seven sweep a shipped parameter over the cached geometr
 
 \begin{center}
 \small
-\begin{longtable}{lrrr}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.069\textwidth}>{\raggedright\arraybackslash}p{0.233\textwidth}>{\raggedright\arraybackslash}p{0.160\textwidth}>{\raggedright\arraybackslash}p{0.479\textwidth}}
 \caption{The nine ablations: what each tests, the setting that shipped, and the verdict on held-out annotators.}\\
 \hline
 \# & What it tests & Setting & Verdict \\
@@ -255,7 +255,7 @@ Each missed human triplet is diagnosed automatically by re-checking the rule's i
 
 \begin{center}
 \small
-\begin{longtable}{ll}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.195\textwidth}>{\raggedright\arraybackslash}p{0.745\textwidth}}
 \caption{Diagnosed cause of every missed human triplet, by predicate.}\\
 \hline
 Predicate & Dominant causes (share of that predicate's misses) \\
@@ -410,7 +410,7 @@ Recall alone would be an unfair verdict, and it is worth saying why before readi
 
 \begin{center}
 \small
-\begin{longtable}{lrrrrrr}
+\begin{longtable}{llrrrrl}
 \caption{The same comparison restricted to the pairs carrying a human label, where precision is defined. The model is the more precise labeller and loses F1 on every predicate.}\\
 \hline
 Predicate & Flash P & Pro P & Pipeline P & Flash F1 & Pro F1 & Pipeline F1 \\

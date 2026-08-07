@@ -88,7 +88,7 @@ The end-to-end check is the one that matters for reproducibility. Mounting the d
 
 \begin{center}
 \small
-\begin{longtable}{lrr}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.468\textwidth}>{\raggedright\arraybackslash}p{0.367\textwidth}>{\raggedright\arraybackslash}p{0.105\textwidth}}
 \caption{Commands reproducing every experiment from the cached geometry, with run times.}\\
 \hline
 command & produces & time \\
@@ -259,7 +259,7 @@ The flag types serve different purposes and are reported separately, which is wh
 
 \begin{center}
 \small
-\begin{longtable}{lrrr}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.095\textwidth}>{\raggedright\arraybackslash}p{0.339\textwidth}>{\raggedright\arraybackslash}p{0.369\textwidth}>{\raggedright\arraybackslash}p{0.138\textwidth}}
 \caption{The seven predicates: core geometric test, shipped threshold values and the symmetry each rule guarantees by construction.}\\
 \hline
 Predicate & Core test on the ordered pair (A, B) & Thresholds, shipped values & Symmetry \\
@@ -321,7 +321,7 @@ The second recovers the camera pose properly, estimating the essential matrix fr
 
 \begin{center}
 \small
-\begin{longtable}{lrr}
+\begin{longtable}{lrl}
 \caption{Ablation A9: two-view triangulation against the monocular cascade on the same front/behind pairs.}\\
 \hline
 Depth cue & Ordering accuracy & Pairs answered \\

@@ -35,7 +35,7 @@ Both best checkpoints evaluated on the identical test set (210 images, human gol
 
 \begin{center}
 \small
-\begin{longtable}{lrr}
+\begin{longtable}{llr}
 \caption{Benchmark test results (SGDet) for the human-trained and auto-trained arms.}\\
 \hline
 metric (test, sgdet) & human-trained & auto-trained \\
@@ -55,7 +55,7 @@ zero-shot recall zR@100 & 0.004 & \textbf{0.157} \\
 
 \begin{center}
 \small
-\begin{longtable}{lrr}
+\begin{longtable}{llr}
 \caption{Per-predicate mean recall at 100 for both arms.}\\
 \hline
 per-predicate mR@100 & human-trained & auto-trained \\
@@ -82,7 +82,7 @@ Two follow-up evaluations decompose the headline (same checkpoints, test slices 
 
 \begin{center}
 \small
-\begin{longtable}{lrr}
+\begin{longtable}{llr}
 \caption{Mean recall at 100 by test slice for both arms.}\\
 \hline
 test slice (mR@100) & human-trained & auto-trained \\
@@ -109,7 +109,7 @@ Every number above comes from one training run per arm. Two of the margins are s
 
 \begin{center}
 \small
-\begin{longtable}{lrrrr}
+\begin{longtable}{lllll}
 \caption{Seed replication: which differences separate across three seeds per arm.}\\
 \hline
 slice & metric & human-trained & auto-trained & separable? \\
@@ -147,7 +147,7 @@ Chapter 5 adds a vision-language model as a fourth training source, and the same
 
 \begin{center}
 \small
-\begin{longtable}{lrrr}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.197\textwidth}>{\raggedright\arraybackslash}p{0.260\textwidth}>{\raggedleft\arraybackslash}p{0.224\textwidth}>{\raggedleft\arraybackslash}p{0.260\textwidth}}
 \caption{A third label source in the benchmark: mean recall at 100 by test slice for the human, automatic and vision-language arms.}\\
 \hline
 slice & human & automatic & vision-language \\
