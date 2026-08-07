@@ -206,12 +206,18 @@ the last revision. The dataset and the credentials file are absent,
 outputs the image has no use for: rendered annotations, the failure gallery,
 the figures and the video frames.
 
-The reproduction is the point. Mounting the dataset read-only and running
-`scripts/reannotate_from_cache.py` inside the container produces a
-`pairs.csv` of 84,881 rows whose SHA-256 matches the file committed here
-exactly, so the container does not merely install, it reproduces the
-annotations this dissertation reports. `outputs/docker/verification.md`
-records the full check.
+The reproduction is the point. Mounting the dataset read-only, deleting
+`outputs/pairs.csv` and running `scripts/reannotate_from_cache.py` inside the
+container regenerates it at 84,881 rows with the SHA-256 of the file
+committed here, and repeating it gives the same digest. Deleting first is
+deliberate rather than tidy: the file ships inside the image, so a run that
+failed silently would leave the committed copy in place and a naive check
+would call that a reproduction. Twelve of the fifteen offline commands
+complete in the container; the three that do not need roughly 200 MB of
+GPU-produced intermediates the image deliberately omits, each of which
+already has its committed JSON summary. `outputs/docker/verification.md`
+records the full check, including the file-by-file integrity scan that
+catches the half-written image a full disk produces.
 
 Given a `--gpus all` flag the container also sees the card: CUDA reports
 available, the RTX 2060 is enumerated, and a matrix product executes on the

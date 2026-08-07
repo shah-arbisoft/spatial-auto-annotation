@@ -1,61 +1,76 @@
 # Container verification
 
-Image `spatial-annotator:latest`, rebuilt 2026-08-07, 7.02 GB content,
-sha256:ce49e9ed1cdc. This supersedes the 2026-08-02 image
-(sha256:98376b6a5299), which was verified in the same way but predates the
-predicate-specification corrections and did not carry the geometry cache.
+Image `spatial-annotator:latest`, rebuilt 2026-08-07,
+`sha256:ce49e9ed1cdc413d2b388f7f001e5b8ca9586ab831291f57fbb0a2716fca0b95`,
+7.02 GB of content. Supersedes the 2026-08-02 image
+(`sha256:98376b6a5299`), which predates the predicate-specification
+corrections and carried no geometry cache.
 
-Both builds are recorded because the first attempt at this rebuild failed in
-a way worth documenting: the layers exported and the tag was written, then
-the builder died during `unpacking` when the host disk filled. The tag
-existed and `docker images` listed a plausible size, so the failure was only
-visible in the build's own exit status. It is the same failure the 2026-08-02
-build hit during export, and the reason this file verifies a finished image
-rather than trusting a build log.
+Everything below was run against the finished image and the output recorded,
+because a build log is not evidence. Two builds of this image have died from
+a full disk: one during export, one during `unpacking` after the tag had
+already been written, so `docker images` listed a plausible entry for an
+image that never finished. That is why the first check here reads every file
+rather than trusting the tag.
 
-## Build-time
-- pytest inside the build: 66 passed
-- rule layer import: OK
-- no `ERROR:` after the naming step (checked; this is what the first attempt
-  failed)
+## Integrity
+- **86,797 files read in full, 10.42 GB, 0 read errors** — no truncated layer
+- `pip check`: clean apart from the known `ninja` platform-metadata note
+  (a SAM2 build dependency, not used at runtime)
+- all **75** Python/YAML/Markdown files under `src/`, `eval/`, `tests/`,
+  `configs/`, `scripts/` and `docs/` are SHA-256 identical to the working
+  tree: 75 identical, 0 differing, 0 missing
 
-## Runtime (finished image)
-- python 3.11.10
-- pytest inside the finished image: **66 passed**
-- torch 2.5.1+cu121, CUDA build 12.1 (not the CPU wheel the SAM2 pitfall
-  produces)
-- sam2, cv2, numpy, scipy, sklearn, PIL, transformers all import
+## Runtime
+- python 3.11.10; pytest inside the finished image: **66 passed**
+- torch 2.5.1+cu121, CUDA build 12.1, not the CPU wheel the SAM2 pitfall
+  produces
+- sam2, cv2, numpy, scipy, scikit-learn, Pillow, transformers all import
+- `--gpus all`: CUDA available, RTX 2060 enumerated, 512x512 matmul executes
+  on the device (10.6 MB peak)
 
 ## Contents
 - `/app` = 19.3 MB, of which the geometry cache is 1,672 files
-- present and intended: `outputs/geometry/`, `outputs/pairs.csv`,
-  `outputs/fidelity_report.json`, `.env.example`
-- absent: `.env`, `.env.local`, `votes.csv`, `outputs/annotations/`,
-  `outputs/failure_gallery/`, `outputs/figures/`, `outputs/video/`,
-  `datasets/`, `.git/`
-- the current predicate specification is inside the image, checked on three
-  strings that changed in the last revision
+- present: `outputs/geometry/`, `outputs/pairs.csv`, the committed JSON
+  evidence, `.env.example`
+- absent: `.env`, `.env.local`, `votes.csv`, `datasets/`, `.git/`, and the
+  bulk outputs the image has no use for (`annotations/`, `failure_gallery/`,
+  `figures/`, `video/`)
 
-## Reproduction, which is the point of the image
-With the dataset mounted read-only and nothing else:
+## Reproduction
 
-    docker run --rm -v /path/to/SpatialAwareRobotDataset-main:/ds:ro \
-      spatial-annotator sh -c \
-      'sed -i "s|root: .*|root: /ds/SpatialAwareRobotDataset-main|" configs/default.yaml
-       python scripts/reannotate_from_cache.py'
+    MSYS_NO_PATHCONV=1 docker run --rm \
+      -v "D:/path/to/SpatialAwareRobotDataset-main:/ds:ro" spatial-annotator sh -c '
+        sed -i "s|root: .*|root: /ds/SpatialAwareRobotDataset-main|" configs/default.yaml
+        rm -f outputs/pairs.csv
+        python scripts/reannotate_from_cache.py'
 
-produces `outputs/pairs.csv` with **84,881 rows** and SHA-256
-`60281435122944fc243f3ca252be8f800867cb8a17413f9e43ccd1a4e220e1bd`,
-**byte-identical to the file committed in this repository**. The container
-therefore does not merely install; it reproduces the annotations this
-dissertation reports.
+`pairs.csv` is **deleted before the run**, deliberately: it ships inside the
+image, so a run that silently failed would otherwise leave the committed file
+in place and look like a success. It regenerates at **84,881 rows** with
+SHA-256 `60281435122944fc243f3ca252be8f800867cb8a17413f9e43ccd1a4e220e1bd`,
+**byte-identical to the file committed here**, and repeating it in the same
+container gives the same digest. The container therefore does not merely
+install; it reproduces the annotations this dissertation reports.
 
-With **nothing mounted at all**, `eval/fidelity.py`, `eval/seed_stats.py`,
-`eval/score_planner.py` and `eval/compare_vlm_models.py` all run to
-completion from the committed caches. The four commands that iterate the
-released images rather than the cache index still need `annotated_data/`
-mounted; they never open a JPEG (Appendix B, step 3).
+The `MSYS_NO_PATHCONV=1` prefix matters on Git Bash for Windows, which
+rewrites `/ds` into a Windows path and silently produces a container with no
+mount at all rather than an error.
 
-## GPU passthrough
-`docker run --gpus all`: CUDA available True, NVIDIA GeForce RTX 2060
-enumerated, 512x512 matmul executes on the device (10.6 MB peak).
+## The documented chain, run in the container
+With the dataset mounted read-only, 12 of the 15 offline commands complete:
+`reannotate_from_cache`, `fit_near`, `fidelity`, `annotator_agreement`,
+`uncertainty`, `ablations`, `seed_stats`, `score_planner`, `score_vlm_pilot`,
+`compare_vlm_models`, `keyframe_propagation` and `make_figures`.
+
+With **nothing mounted**, the subset that reads only the committed caches and
+JSON still completes, including the whole RQ1 battery (`fidelity`,
+`seed_stats`, `score_planner`, `compare_vlm_models`).
+
+Three commands cannot run in the container and are expected not to, because
+they consume roughly 200 MB of GPU-produced bulk that is deliberately kept
+out of the image: `depth_ablation` needs `outputs_base/` (38 MB, the
+Base-variant re-run), `video_stability` needs `outputs/video/` (42 MB,
+per-frame records) and `extension_scale` needs `outputs/extension/` (120 MB,
+the 1,766-frame pass). Each is regenerated by a GPU pass on the host, and
+each writes a committed JSON summary that the dissertation quotes.
