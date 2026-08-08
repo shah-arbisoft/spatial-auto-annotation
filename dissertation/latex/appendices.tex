@@ -17,42 +17,6 @@ The independent validation of the automatic labels (Chapter 4) collects anonymou
 
 Environment: Windows 11, Python 3.11.9 (virtual environment), PyTorch 2.5.1 (CUDA 12.1), single NVIDIA RTX 2060 (6 GB). All thresholds, seeds and model identifiers are pinned in \texttt{configs/default.yaml}.
 
-Key commands:
-
-\begin{itemize}
-\item \texttt{python scripts/run\_annotator.py}: annotate the full dataset (GPU, \textasciitilde{}5 min)
-\item \texttt{python scripts/reannotate\_from\_cache.py}: re-evaluate rule changes offline
-from the geometry cache (\textasciitilde{}20 s, no GPU)
-\item \texttt{python eval/fit\_near.py}: fit and report the \texttt{near} threshold
-\item \texttt{python eval/fidelity.py}: the RQ1 battery $\rightarrow$ \texttt{outputs/}
-\item \texttt{python eval/uncertainty.py --iters 2000}: cluster-bootstrap intervals for
-every headline recall $\rightarrow$ \texttt{outputs/tables/uncertainty.md}
-\item \texttt{python eval/annotator\_agreement.py}: annotator heterogeneity and the
-estimated human-human agreement bounds $\rightarrow$ \texttt{outputs/tables/annotator\_agreement.md}
-\item \texttt{python eval/ablations.py}: ablations A1--A7 $\rightarrow$ \texttt{outputs/tables/ablations.md}
-\item \texttt{python eval/depth\_ablation.py}: the A8 depth-model comparison
-\item \texttt{python eval/parallax\_ablation.py --method triangulate --gap 10}: the
-A9 multi-frame depth comparison; needs the raw capture (Appendix D.6) $\rightarrow$ \texttt{outputs/parallax\_ablation.json}
-\item \texttt{python eval/seed\_stats.py}: aggregates the benchmark arms across seeds $\rightarrow$
-\texttt{outputs/tables/seed\_replication.md}
-\item \texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30,45,60}:
-content-adaptive frame selection and the viewpoint-stability measurement of \S4.14 $\rightarrow$ \texttt{outputs/keyframe\_propagation.json}. The sweep must include the coarse settings: the 89$\times$ compression figure \S4.14 and \S7.2 rely on comes from $\tau$ = 45, and because the script rewrites the whole file, a narrower sweep silently removes it
-\item \texttt{python eval/video\_stability.py}: the persistence and Jaccard figures of
-\S4.12, derived from the recorded per-frame files $\rightarrow$ \texttt{outputs/video\_stability.json}
-\item \texttt{python eval/extension\_scale.py}: throughput, density and predicate
-distribution on the unannotated capture (\S4.15) $\rightarrow$ \texttt{outputs/extension\_scale.json}
-\item \texttt{python scripts/run\_vlm\_pilot.py --make} then \texttt{python scripts/run\_vlm\_pilot.py}
-then \texttt{python eval/score\_vlm\_pilot.py}: the \S4.16 vision-language comparison (30 numbered-box images, RQ1 battery, self-consistency diagnostics) $\rightarrow$ \texttt{outputs/vlm\_pilot/}. The second model is the same three commands with \texttt{--model} and its own \texttt{--replies} file, then \texttt{python eval/compare\_vlm\_models.py} $\rightarrow$ \texttt{outputs/tables/vlm\_models.md}. Reasoning models need \texttt{--max-output-tokens} above the 8192 default, because they spend most of the budget deliberating and a truncated reply is indistinguishable from a malformed one. \texttt{python scripts/vlm\_manual\_check.py} then writes a pack that lets the comparison be redone by hand in a browser: the image the model saw, the prompt verbatim, and the human, pipeline and model answers side by side, so the scoring script can be checked without running it.
-\item \texttt{python scripts/run\_planner\_llm.py} then \texttt{python eval/score\_planner.py}:
-the \S5.7 planner experiment (75 prompts over 25 scenes in three conditions) and its rule-based blind scoring $\rightarrow$ \texttt{outputs/planner/}, \texttt{outputs/planner\_scores.json}. Both runner and scorer take \texttt{--replies}, which is how the second planner was run into \texttt{replies\_pro.jsonl} and scored into \texttt{planner\_scores\_pro.json} without touching the first. Add \texttt{--sample N} to print plans with their verdicts for manual checking.
-\item \texttt{python eval/downstream.py --seeds 42,43,44}: the RQ2 experiment, all three
-label sources (human, self-trained, automatic) $\rightarrow$ \texttt{outputs/rq2\_report.json}, \texttt{outputs/tables/rq2.md}
-\item \texttt{python analysis/score\_votes.py votes.csv}: scores the independent
-validation study (crowd precision, author-bias kappa, rater reliability); lives with the study's own repository
-\item \texttt{python scripts/make\_figures.py}: regenerate all figures from cached results
-\item \texttt{pytest -q}: unit and invariant tests
-\end{itemize}
-
 \textbf{The vision-language arms.} A fourth label source appears in \S5.2, a fifth condition in \S5.7 and a third arm in \S6.3.2, all derived from one model's labels rather than from the pipeline's. They are reproduced separately here because each begins with an API pass that costs money and cannot be repeated byte-for-byte: the model behind \texttt{gemini-flash-latest} moved during the project (\S4.16), so a rerun answers as whatever that alias resolves to on the day. The stored replies are therefore committed, and every scoring step below reads them rather than re-querying, so all reported numbers reproduce offline from this repository alone. Only step (a) needs a key.
 
 \begin{itemize}
@@ -96,7 +60,7 @@ The check that the perception stage reproduces is \texttt{scripts/reannotate\_fr
 
 \begin{center}
 \small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.457\textwidth}>{\raggedright\arraybackslash}p{0.359\textwidth}>{\raggedright\arraybackslash}p{0.124\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.408\textwidth}>{\raggedright\arraybackslash}p{0.447\textwidth}>{\raggedright\arraybackslash}p{0.085\textwidth}}
 \caption{Commands reproducing every experiment from the cached geometry, with run times.}\\
 \hline
 command & produces & time \\
@@ -107,19 +71,31 @@ command & produces & time \\
 \hline
 \endhead
 \texttt{pytest -q} & 66 unit and invariant tests & <1 min \\
-\texttt{python scripts/reannotate\_from\_cache.py} & re-runs the rules after any threshold change & \textasciitilde{}20 s \\
-\texttt{python eval/fit\_near.py} & the near-threshold protocol, \texttt{near\_fit.json} & \textasciitilde{}1 min \\
-\texttt{python eval/fidelity.py} & the RQ1 battery, \texttt{fidelity\_report.json} & \textasciitilde{}2 min \\
-\texttt{python eval/uncertainty.py --iters 2000} & cluster-bootstrap CIs & \textasciitilde{}2 min \\
-\texttt{python eval/annotator\_agreement.py} & heterogeneity + Fréchet bounds & <1 min \\
-\texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30,45,60} & \S4.14 segmentation, stability, propagation cost & \textasciitilde{}3 min \\
-\texttt{python eval/ablations.py} & A1--A7 sweeps & \textasciitilde{}30 s \\
-\texttt{python eval/depth\_ablation.py} & A8 (needs the \texttt{outputs\_base} pass) & <1 min \\
-\texttt{python eval/downstream.py --seeds 42,43,44} & RQ2, three arms & \textasciitilde{}20 min CPU \\
+\texttt{python scripts/reannotate\_from\_cache.py} & re-runs the rules after any threshold change; rebuilds \texttt{outputs/pairs.csv} & \textasciitilde{}20 s \\
+\texttt{python eval/fit\_near.py} & the \texttt{near} threshold protocol, \texttt{near\_fit.json} & \textasciitilde{}1 min \\
+\texttt{python eval/fidelity.py} & the RQ1 battery, \texttt{fidelity\_report.json}, \texttt{tables/rq1\_tables.md} & \textasciitilde{}2 min \\
+\texttt{python eval/uncertainty.py --iters 2000} & cluster-bootstrap intervals for every headline recall, \texttt{tables/uncertainty.md} & \textasciitilde{}2 min \\
+\texttt{python eval/annotator\_agreement.py} & annotator heterogeneity and the Fréchet bounds, \texttt{tables/annotator\_agreement.md} & <1 min \\
+\texttt{python eval/keyframe\_propagation.py --sweep 5,10,20,30,45,60} & \S4.14 frame selection, stability and propagation cost, \texttt{keyframe\_propagation.json} & \textasciitilde{}3 min \\
+\texttt{python eval/ablations.py} & ablations A1--A7, \texttt{tables/ablations.md} & \textasciitilde{}30 s \\
+\texttt{python eval/depth\_ablation.py} & ablation A8; needs the \texttt{outputs\_base} pass below & <1 min \\
+\texttt{python eval/parallax\_ablation.py --method triangulate --gap 10} & ablation A9; needs the raw capture (D.6), \texttt{parallax\_ablation.json} & \textasciitilde{}5 min \\
+\texttt{python eval/video\_stability.py} & the \S4.12 persistence and Jaccard figures, \texttt{video\_stability.json} & <1 min \\
+\texttt{python eval/extension\_scale.py} & \S4.15 throughput, density and predicate distribution & <1 min \\
+\texttt{python eval/seed\_stats.py} & the benchmark arms aggregated across seeds, \texttt{tables/seed\_replication.md} & <1 min \\
+\texttt{python eval/downstream.py --seeds 42,43,44} & RQ2, all arms, \texttt{rq2\_report.json}, \texttt{tables/rq2.md} & \textasciitilde{}20 min \\
+\texttt{python eval/score\_vlm\_pilot.py}, then \texttt{python eval/compare\_vlm\_models.py} & the \S4.16 comparison and \texttt{tables/vlm\_models.md}, from the stored replies & <1 min \\
+\texttt{python eval/score\_planner.py} & the \S5.7 blind scoring, \texttt{planner\_scores.json} & <1 min \\
 \texttt{python scripts/make\_figures.py} & every figure & \textasciitilde{}1 min \\
 \hline
 \end{longtable}
 \end{center}
+
+Four commands have a trap or an option worth knowing, and they are the ones a reader is most likely to run wrongly.
+
+\texttt{keyframe\_propagation.py} rewrites its whole output file, so the sweep must include the coarse settings: the 89$\times$ compression figure \S4.14 and \S7.2 rely on comes from $\tau$ = 45, and a narrower sweep removes it silently. \texttt{score\_planner.py} and \texttt{run\_planner\_llm.py} both take \texttt{--replies}, which is how the second planner was run and scored without touching the first, and \texttt{--sample N} prints plans beside their verdicts for manual checking. \texttt{run\_vlm\_pilot.py} needs \texttt{--max-output-tokens} above the 8192 default for a reasoning model, which spends most of its budget deliberating, and a truncated reply is indistinguishable from a malformed one. \texttt{python scripts/vlm\_manual\_check.py} writes a pack that lets \S4.16 be redone by hand in a browser, showing the image the model saw, the prompt verbatim and the human, pipeline and model answers side by side, so the scoring script can be checked rather than trusted.
+
+The independent validation study is scored by \texttt{python analysis/score\_votes.py votes.csv}, which lives with that study's own repository (B.5) rather than this one.
 
 The two GPU extras: \texttt{python scripts/run\_sgdet.py --threshold 0.25} for the deployment-mode pass (\textasciitilde{}47 min) and \texttt{python scripts/run\_annotator.py --config configs/depth\_base.yaml --out outputs\_base} for A8's Base-model pass (\textasciitilde{}7 min).
 

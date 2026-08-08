@@ -52,66 +52,6 @@ Environment: Windows 11, Python 3.11.9 (virtual environment), PyTorch 2.5.1
 (CUDA 12.1), single NVIDIA RTX 2060 (6 GB). All thresholds, seeds and model
 identifiers are pinned in `configs/default.yaml`.
 
-Key commands:
-
-- `python scripts/run_annotator.py`: annotate the full dataset (GPU, ~5 min)
-- `python scripts/reannotate_from_cache.py`: re-evaluate rule changes offline
-  from the geometry cache (~20 s, no GPU)
-- `python eval/fit_near.py`: fit and report the `near` threshold
-- `python eval/fidelity.py`: the RQ1 battery → `outputs/`
-- `python eval/uncertainty.py --iters 2000`: cluster-bootstrap intervals for
-  every headline recall → `outputs/tables/uncertainty.md`
-- `python eval/annotator_agreement.py`: annotator heterogeneity and the
-  estimated human-human agreement bounds → `outputs/tables/annotator_agreement.md`
-- `python eval/ablations.py`: ablations A1–A7 → `outputs/tables/ablations.md`
-- `python eval/depth_ablation.py`: the A8 depth-model comparison
-- `python eval/parallax_ablation.py --method triangulate --gap 10`: the
-  A9 multi-frame depth comparison; needs the raw capture (Appendix D.6) →
-  `outputs/parallax_ablation.json`
-- `python eval/seed_stats.py`: aggregates the benchmark arms across seeds →
-  `outputs/tables/seed_replication.md`
-- `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60`:
-  content-adaptive frame selection and the viewpoint-stability measurement of
-  §4.14 → `outputs/keyframe_propagation.json`. The sweep must include the
-  coarse settings: the 89× compression figure §4.14 and §7.2 rely on comes
-  from τ = 45, and because the script rewrites the whole file, a narrower
-  sweep silently removes it
-- `python eval/video_stability.py`: the persistence and Jaccard figures of
-  §4.12, derived from the recorded per-frame files →
-  `outputs/video_stability.json`
-- `python eval/extension_scale.py`: throughput, density and predicate
-  distribution on the unannotated capture (§4.15) →
-  `outputs/extension_scale.json`
-- `python scripts/run_vlm_pilot.py --make` then `python scripts/run_vlm_pilot.py`
-  then `python eval/score_vlm_pilot.py`: the §4.16 vision-language
-  comparison (30 numbered-box images, RQ1 battery, self-consistency
-  diagnostics) → `outputs/vlm_pilot/`. The second model is the same three
-  commands with `--model` and its own `--replies` file, then
-  `python eval/compare_vlm_models.py` → `outputs/tables/vlm_models.md`.
-  Reasoning models need `--max-output-tokens` above the 8192 default,
-  because they spend most of the budget deliberating and a truncated reply
-  is indistinguishable from a malformed one. `python
-  scripts/vlm_manual_check.py` then writes a pack that lets the comparison
-  be redone by hand in a browser: the image the model saw, the prompt
-  verbatim, and the human, pipeline and model answers side by side, so the
-  scoring script can be checked without running it.
-- `python scripts/run_planner_llm.py` then `python eval/score_planner.py`:
-  the §5.7 planner experiment (75 prompts over 25 scenes in three
-  conditions) and its rule-based blind scoring →
-  `outputs/planner/`, `outputs/planner_scores.json`. Both runner and scorer
-  take `--replies`, which is how the second planner was run into
-  `replies_pro.jsonl` and scored into `planner_scores_pro.json` without
-  touching the first. Add `--sample N` to
-  print plans with their verdicts for manual checking.
-- `python eval/downstream.py --seeds 42,43,44`: the RQ2 experiment, all three
-  label sources (human, self-trained, automatic) →
-  `outputs/rq2_report.json`, `outputs/tables/rq2.md`
-- `python analysis/score_votes.py votes.csv`: scores the independent
-  validation study (crowd precision, author-bias kappa, rater reliability);
-  lives with the study's own repository
-- `python scripts/make_figures.py`: regenerate all figures from cached results
-- `pytest -q`: unit and invariant tests
-
 **The vision-language arms.** A fourth label source appears in §5.2, a fifth
 condition in §5.7 and a third arm in §6.3.2, all derived from one model's
 labels rather than from the pipeline's. They are reproduced separately here
@@ -264,16 +204,44 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | command | produces | time |
 |---|---|---|
 | `pytest -q` | 66 unit and invariant tests | <1 min |
-| `python scripts/reannotate_from_cache.py` | re-runs the rules after any threshold change | ~20 s |
-| `python eval/fit_near.py` | the near-threshold protocol, `near_fit.json` | ~1 min |
-| `python eval/fidelity.py` | the RQ1 battery, `fidelity_report.json` | ~2 min |
-| `python eval/uncertainty.py --iters 2000` | cluster-bootstrap CIs | ~2 min |
-| `python eval/annotator_agreement.py` | heterogeneity + Fréchet bounds | <1 min |
-| `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60` | §4.14 segmentation, stability, propagation cost | ~3 min |
-| `python eval/ablations.py` | A1–A7 sweeps | ~30 s |
-| `python eval/depth_ablation.py` | A8 (needs the `outputs_base` pass) | <1 min |
-| `python eval/downstream.py --seeds 42,43,44` | RQ2, three arms | ~20 min CPU |
+| `python scripts/reannotate_from_cache.py` | re-runs the rules after any threshold change; rebuilds `outputs/pairs.csv` | ~20 s |
+| `python eval/fit_near.py` | the `near` threshold protocol, `near_fit.json` | ~1 min |
+| `python eval/fidelity.py` | the RQ1 battery, `fidelity_report.json`, `tables/rq1_tables.md` | ~2 min |
+| `python eval/uncertainty.py --iters 2000` | cluster-bootstrap intervals for every headline recall, `tables/uncertainty.md` | ~2 min |
+| `python eval/annotator_agreement.py` | annotator heterogeneity and the Fréchet bounds, `tables/annotator_agreement.md` | <1 min |
+| `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60` | §4.14 frame selection, stability and propagation cost, `keyframe_propagation.json` | ~3 min |
+| `python eval/ablations.py` | ablations A1–A7, `tables/ablations.md` | ~30 s |
+| `python eval/depth_ablation.py` | ablation A8; needs the `outputs_base` pass below | <1 min |
+| `python eval/parallax_ablation.py --method triangulate --gap 10` | ablation A9; needs the raw capture (D.6), `parallax_ablation.json` | ~5 min |
+| `python eval/video_stability.py` | the §4.12 persistence and Jaccard figures, `video_stability.json` | <1 min |
+| `python eval/extension_scale.py` | §4.15 throughput, density and predicate distribution | <1 min |
+| `python eval/seed_stats.py` | the benchmark arms aggregated across seeds, `tables/seed_replication.md` | <1 min |
+| `python eval/downstream.py --seeds 42,43,44` | RQ2, all arms, `rq2_report.json`, `tables/rq2.md` | ~20 min |
+| `python eval/score_vlm_pilot.py`, then `python eval/compare_vlm_models.py` | the §4.16 comparison and `tables/vlm_models.md`, from the stored replies | <1 min |
+| `python eval/score_planner.py` | the §5.7 blind scoring, `planner_scores.json` | <1 min |
 | `python scripts/make_figures.py` | every figure | ~1 min |
+
+Four commands have a trap or an option worth knowing, and they are the ones
+a reader is most likely to run wrongly.
+
+`keyframe_propagation.py` rewrites its whole output file, so the sweep must
+include the coarse settings: the 89× compression figure §4.14 and §7.2 rely
+on comes from τ = 45, and a narrower sweep removes it silently.
+`score_planner.py` and `run_planner_llm.py` both take `--replies`, which is
+how the second planner was run and scored without touching the first, and
+`--sample N` prints plans beside their verdicts for manual checking.
+`run_vlm_pilot.py` needs `--max-output-tokens` above the 8192 default for a
+reasoning model, which spends most of its budget deliberating, and a
+truncated reply is indistinguishable from a malformed one.
+`python scripts/vlm_manual_check.py` writes a pack that lets §4.16 be
+redone by
+hand in a browser, showing the image the model saw, the prompt verbatim and
+the human, pipeline and model answers side by side, so the scoring script
+can be checked rather than trusted.
+
+The independent validation study is scored by
+`python analysis/score_votes.py votes.csv`, which lives with that study's
+own repository (B.5) rather than this one.
 
 The two GPU extras: `python scripts/run_sgdet.py --threshold 0.25` for the
 deployment-mode pass (~47 min) and `python scripts/run_annotator.py
