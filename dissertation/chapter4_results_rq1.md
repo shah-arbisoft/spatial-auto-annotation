@@ -6,48 +6,38 @@
 > audit (§4.4) predates the gate; §4.9 reports the gate's effect on the audited
 > samples.
 
-This chapter answers RQ1. It sets the evaluation protocol (§4.1), reports the
-headline recall against every human label (§4.2) with restricted precision
-(§4.3) and an audited true-precision estimate (§4.4), decomposes the hardest
-predicate pair per annotator (§4.5), costs the residual human effort (§4.7),
-and closes with the audit-driven rule repairs (§4.9), a diagnosis of every
-remaining miss (§4.10), and the fully-automatic deployment mode (§4.11).
+This chapter answers RQ1: the protocol (§4.1), headline recall (§4.2),
+restricted precision (§4.3), audited true precision (§4.4), the hardest
+predicate pair per annotator (§4.5), the residual human cost (§4.7), the
+audit-driven rule repairs (§4.9), every remaining miss diagnosed (§4.10),
+and full automation (§4.11).
 
-The last five sections leave the annotated gold behind, because every measure
-above is bounded by the quality of the labels it is scored against. Section
-4.12 runs the pipeline on video from outside the calibration domain, §4.13
-sets out the independent study that re-estimates precision with judges who
-have no stake in the result, §4.14 uses the images' origin as consecutive
-frames of one robot capture to ask whether the labels survive the camera
-moving, §4.15 reports what the pipeline does on 1,766 robot frames nobody
-has labelled, and §4.16 asks whether a vision-language model would have done
-the job instead.
+Every measure above is bounded by the labels it is scored against, so the
+last five sections leave the gold behind: video from outside the calibration
+domain (§4.12), the independent study that re-estimates precision with
+disinterested judges (§4.13), whether labels survive the camera moving
+(§4.14), 1,766 unlabelled robot frames (§4.15), and whether a
+vision-language model would have done the job instead (§4.16).
 
 ## 4.1 Protocol
 
-RQ1 asks whether the automatic labels reach a quality comparable to human
-annotation. Two properties of the ground truth shape the protocol. First,
-the human annotations are **sparse**: 8,790 of 84,880 ordered object pairs
-(~10%) carry a human label, so an automatic label absent from the gold is
-not necessarily wrong, and raw precision against the gold systematically
-undercounts. Second, annotator behaviour is **uneven** (Chapter 3 measured
-this for `near`; §4.5 adds a second case), so agreement is reported per
-annotator group as well as pooled.
+Two properties of the gold shape the protocol. It is **sparse**: 8,790 of
+84,880 ordered pairs (~10%) carry a human label, so a label absent from the
+gold is unexamined rather than wrong, and raw precision undercounts. And
+annotator behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second
+case), so agreement is reported per annotator group as well as pooled.
 
-The evaluation therefore uses: (1) per-predicate **recall of the human
-triplets** as the primary metric, consistent with the recall-based convention
-of the source paper; (2) precision/recall/F1 **restricted to human-annotated
-pairs**; (3) a **manual audit** of a stratified sample of the tool's extra
-predictions, giving an unbiased estimate of true precision; (4) per-type
-**flag rates**, costing the human-in-the-loop claim; and (5) three baselines:
-random predicate, majority predicate, and **box-only geometry** (box centres,
-no masks, no depth). Object boxes and classes are ground truth throughout (the
-PredCls setting), so box IoU agreement is not applicable; detector-in-the-loop
-results appear with the ablations. Thresholds were fitted only on annotator
-groups 0–5; groups 6–8 are held out. A group is also a contiguous block of
-the underlying capture, so that split holds out an unseen object arrangement
-as well as an unseen annotator; §4.14 establishes this and discusses what it
-qualifies.
+The evaluation therefore uses per-predicate **recall of the human triplets**
+as the primary metric, following the source paper's convention; **restricted
+precision, recall and F1** on annotated pairs; a **manual audit** of a
+stratified sample of the extra predictions, for an unbiased true-precision
+estimate; per-type **flag rates**, costing the human-in-the-loop claim; and
+three baselines, random, majority and **box-only geometry** (box centres, no
+masks, no depth). Boxes and classes are ground truth throughout (PredCls), so
+box IoU does not apply; detector-in-the-loop results sit with the ablations.
+Thresholds were fitted on annotator groups 0–5 only, with 6–8 held out. Each
+group is also a contiguous block of the capture, so the split holds out an
+unseen arrangement as well as an unseen annotator (§4.14).
 
 ## 4.2 Headline: recall of the human triplets
 
@@ -69,40 +59,35 @@ annotator groups that labelled the pair with the *opposite direction
 convention*; §4.5 decomposes this, and convention-aligned depth recall is
 0.84.
 
-These recalls are computed over every human triplet in the dataset, so they
-are population values rather than estimates from a sample. The question a
-reader still has is whether another batch from the same process would give
-the same numbers, and that is answered by a cluster bootstrap over images
-(`eval/uncertainty.py`; 2,000 resamples, whole images resampled with
-replacement so that triplets sharing a scene, a depth map and an annotator
-stay together). The 95% intervals are narrow for the predicates the tool
-handles well, on 0.879 (0.863–0.895), left 0.965 (0.954–0.975), right 0.985
-(0.977–0.992), near 0.997 (0.993–1.000), and materially wider for the depth
-pair, in front of 0.640 (0.602–0.678) and behind 0.655 (0.615–0.692), which
-is the expected signature of a predicate whose outcome depends on scene
-composition rather than on a stable rule. The held-out intervals appear with
-the per-annotator analysis in §4.6.
+These are population values, not sample estimates: every human triplet is
+scored. Whether another batch would give the same numbers is answered by a
+cluster bootstrap over images (`eval/uncertainty.py`, 2,000 resamples, whole
+images resampled so triplets sharing a scene, a depth map and an annotator
+stay together). The 95% intervals are narrow where the tool is strong, on
+0.879 (0.863–0.895), left 0.965 (0.954–0.975), right 0.985 (0.977–0.992),
+near 0.997 (0.993–1.000), and materially wider on the depth pair, in front of
+0.640 (0.602–0.678) and behind 0.655 (0.615–0.692). That is the signature of
+a predicate decided by scene composition rather than a stable rule. Held-out
+intervals appear in §4.6.
 
 Three observations. **(i)** The tool recovers 81% of all human triplets
-(7,237 of 8,926; mean per-predicate recall 0.85, and 0.76 on annotators whose
-data never influenced any threshold), against 14% for both trivial baselines.
-**(ii)** The box-only baseline matches the full pipeline on
-every box-computable predicate; the segmentation masks contribute essentially
-nothing to on/under/left/right/near recall (mask centroids ≈ box centres). The
-full pipeline's advantage is confined to the depth predicates (0.64/0.66 vs
+(7,237 of 8,926; mean 0.85, and 0.76 on annotators no threshold ever saw)
+against 14% for both trivial baselines. **(ii)** Box-only matches the full
+pipeline on every box-computable predicate, so masks contribute almost
+nothing to on/under/left/right/near recall (mask centroids ≈ box centres).
+The pipeline's advantage is confined to the depth pair (0.64/0.66 against
 0.00), and even the ground-plane fallback, a pure box cue, needs masks to
-fire, because its elevation guard is the mask-contact evidence (§4.9). This
-raises a design question the ablations pursue: is SAM2 needed at
-all, or is its real contribution depth *sampling* quality? **(iii)** The
-held-out column is higher than the pooled column for on/under/near and far
-lower for front/behind, which is an annotator-behaviour signature in both
-cases. For front/behind the cause is the convention inversion unpacked in
-§4.5; for on/under it is direction-usage asymmetry: several groups label only
-one direction of a support pair (group_2 records 188 *on* and zero *under*;
-group_8 only *under*), and the held-out groups' support labels happen to be
-canonical stackings the rules recover at 0.95–1.00. Gold totals here are 8,926
-rather than 8,928 because two stray annotation files without matching images
-are excluded (Chapter 3).
+fire because its elevation guard is mask-contact evidence (§4.9). The
+ablations pursue the question this raises: is SAM2 needed at all, or is its
+contribution depth *sampling* quality? **(iii)** Held-out beats pooled on
+on/under/near and falls far below it on front/behind. Both are annotator
+signatures: convention inversion for the depth pair (§4.5), and
+direction-usage asymmetry for support, where several groups label one
+direction only (group_2 records 188 *on* and no *under*; group_8 only
+*under*) while the held-out groups' support labels happen to be canonical
+stackings the rules recover at 0.95–1.00. Gold totals 8,926 rather than 8,928
+because two stray annotation files without matching images are excluded
+(Chapter 3).
 
 ## 4.3 Precision on the annotated pairs
 
@@ -116,14 +101,12 @@ are excluded (Chapter 3).
 | behind | 0.36 | 0.66 | 0.46 | 1584 |
 | near | 0.12 | 1.00 | 0.21 | 717 |
 
-Restricted to the 8,790 human-annotated ordered pairs, precision is bounded
-below by construction: on an annotated pair the human typically recorded one
-or two relations, while several are geometrically true at once (a pair can
-be near, left-of and in-front-of simultaneously). The `near` row is the
-extreme case, since the tool emits `near` densely wherever the fitted gap
-threshold holds while only 3 of 9 annotator groups ever used the label, and
-it is exactly why the protocol includes the audit (§4.4) rather than reading
-these columns at face value.
+On the 8,790 annotated pairs precision is bounded below by construction: the
+human typically recorded one or two relations where several hold at once, a
+pair being near, left-of and in-front-of simultaneously. The `near` row is
+the extreme case, since the tool emits `near` wherever the fitted gap holds while
+only 3 of 9 annotator groups ever used the label. That is why the protocol
+includes the audit (§4.4) rather than reading these columns at face value.
 
 ### 4.3.1 Confusion: what the tool said when it missed
 
@@ -169,18 +152,16 @@ rows below describe a fixed failure, not the final tool.
 | behind | 15 / 15 | 1.00 | [0.80, 1.00] |
 | near | 15 / 15 | 1.00 | [0.80, 1.00] |
 
-The audit splits the predicates cleanly in two. For the lateral, depth and
-proximity predicates, **every sampled extra prediction was correct**: the low
-restricted precision in §4.3 is an artefact of sparse human labelling, exactly
-as the protocol anticipated, and the tool's dense labels on unannotated pairs
-are (within the sample's confidence bounds) trustworthy. For the support pair
-the picture inverts: extra `on`/`under` labels are mostly **false fires**. The
-box-adjacency test triggers on objects that merely project next to each other
-in clusters (a book *behind* a bottle, a cube on the floor with a remote lying
-in front). Combined with §4.2's containment misses, both error directions of
-the support rule point to the same repair, a mask-contact test instead of box
-adjacency, which the ablations evaluate. Two honest caveats: the sample is 15
-per predicate, so per-predicate estimates carry wide intervals; and depth
+The audit splits the predicates in two. For lateral, depth and proximity,
+**every sampled extra prediction was correct**: §4.3's low restricted
+precision is the sparse-gold artefact the protocol anticipated, and the dense
+labels on unannotated pairs are trustworthy within the sample's bounds. For
+support the picture inverts, extra `on`/`under` labels being mostly **false
+fires**: box adjacency triggers on objects that merely project next to each
+other (a book *behind* a bottle, a cube on the floor with a remote in front).
+With §4.2's containment misses, both error directions point to one repair, a
+mask-contact test instead of box adjacency, which the ablations evaluate. Two
+caveats: 15 per predicate gives wide per-predicate intervals, and depth
 verdicts on near-coincident objects were occasionally marginal (noted in the
 sheet).
 
@@ -204,27 +185,23 @@ fallback of §4.9; the fallback roughly doubled the emit rates of the
 abstention-heavy groups 2 and 3.) The pooled 0.65 decomposes into three
 distinct causes:
 
-1. **Direction agreement is near-perfect where the tool commits.** For six of
-   the eight groups with meaningful counts, agreement *when a direction is
-   emitted* is 0.95–1.00. Genuine depth-ordering errors are rare.
-2. **Two annotator groups used the inverted convention.** Groups 6 and 8 agree
-   with the committed direction 2–5% of the time; flipping their labels
-   recovers 0.93/0.71. After the `near` findings, this is a *second*,
-   independent, measured annotation-consistency defect in the dataset: the
-   direction convention for in front of/behind was not applied uniformly
-   across annotators. This is the reference-frame ambiguity RoboSpatial
-   formalises (§2.5) observed in the wild: with no frame declared in the
-   guidance, two annotator teams resolved it in opposite directions.
-   (Aligned overall recall: 0.84. Alignment uses one
-   disclosed bit per group, the majority direction of that group's own
-   labels.)
-3. **The remaining gap is abstention, not error.** Groups 2 and 3 agree with
-   the tool almost perfectly when it commits, but their scenes place object
-   pairs inside the `depth_eps` ambiguity band *and* out of the ground-plane
-   fallback's reach (elevated objects, near-tied bottom edges), so the tool
-   abstains (emit rates 0.58 and 0.54, roughly doubled by the fallback from
-   0.30 and 0.08). The `depth_eps` and `plane_band` sweeps in the ablations
-   trade this abstention against precision explicitly.
+1. **Direction agreement is near-perfect where the tool commits**, 0.95–1.00
+   for six of the eight groups with meaningful counts. Genuine depth-ordering
+   errors are rare.
+2. **Two annotator groups used the inverted convention.** Groups 6 and 8
+   agree with the committed direction 2–5% of the time; flipping their labels
+   recovers 0.93/0.71, and aligned overall recall is 0.84 (alignment uses one
+   disclosed bit per group, the majority direction of its own labels). After
+   `near`, this is a second measured annotation defect: the front/behind
+   convention was not applied uniformly. It is the reference-frame ambiguity
+   RoboSpatial formalises (§2.5), observed in the wild, with no frame
+   declared in the guidance and two teams resolving it oppositely.
+3. **The remaining gap is abstention, not error.** Groups 2 and 3 agree
+   almost perfectly when the tool commits, but their pairs sit inside the
+   `depth_eps` band *and* beyond the ground-plane fallback's reach (elevated
+   objects, near-tied bottom edges), so the tool abstains: emit rates 0.58
+   and 0.54, roughly doubled by the fallback from 0.30 and 0.08. The
+   `depth_eps` and `plane_band` sweeps trade this against precision.
 
 ## 4.6 The tenth annotator, and what the annotators would score against each other
 
@@ -261,20 +238,18 @@ inference about human-human agreement, this alone establishes that the
 annotators are not interchangeable, and it puts a number on how far apart
 they are.
 
-**Bounds on human-human agreement.** For any common reference, if annotator
-A agrees with it on a fraction p_A of items and B on p_B, their mutual
-agreement p_AB obeys the Fréchet inequalities
+**Bounds on human-human agreement.** Against any common reference, if
+annotators A and B agree with it on fractions p_A and p_B, their mutual
+agreement obeys the Fréchet inequalities
 max(0, p_A + p_B − 1) ≤ p_AB ≤ 1 − |p_A − p_B|. Averaged over all 21 pairs of
-consistent annotators, these place annotator-to-annotator agreement in
-**[0.74, 0.92]**. The tool's own mean agreement with those annotators,
-**0.869, lies inside that interval**. In other words, the automatic
-annotator agrees with the human annotators about as well as the evidence
-permits them to agree with each other. One assumption is required and is
-stated rather than buried: because the batches are disjoint, the bounds
-presume each annotator's agreement rate would carry over to another
-~100-image batch. The interval is therefore an estimate, not a measurement,
-and the independent validation study (§4.13) is what tests the underlying
-precision claim without it.
+consistent annotators these place annotator-to-annotator agreement in
+**[0.74, 0.92]**, and the tool's own mean agreement, **0.869, lies inside
+it**: the automatic annotator agrees with the humans about as well as the
+evidence permits them to agree with each other. One assumption is stated
+rather than buried. The batches are disjoint, so the bounds presume each
+annotator's rate would carry to another ~100-image batch. The interval is an
+estimate, not a measurement, and §4.13 is what tests the precision claim
+without it.
 
 ## 4.7 Flags: the honest human cost
 
@@ -289,38 +264,32 @@ above.
 
 ### 4.7.1 The missing guidelines, confirmed at the source
 
-The annotation guidance the annotators worked from (confirmed from the
-SGDET-Annotate repository the supervisor indicated) consists of vocabulary
-lists only, object names and 19 relationship terms, with no operational
-definitions. Every annotator behaviour this chapter measures (the selective
-use of `near`, the inverted front/behind convention, one-directional support
-labelling) is the predictable consequence of labelling with undefined terms,
-the exact failure mode the annotator-disagreement literature documents across
-vision and language tasks (§2.3).
-The geometric specification of Chapter 3 is therefore not a re-implementation
-of existing rules but the first operational definition of these predicates,
-and the fitted thresholds are exactly the "clear annotation guidelines" the
-source paper's future work requests.
+The guidance the annotators worked from, confirmed at the SGDET-Annotate
+repository, is vocabulary lists only: object names and 19 relationship terms,
+no operational definitions. Every behaviour this chapter measures, selective
+`near`, the inverted front/behind convention, one-directional support, is the
+predictable consequence of labelling with undefined terms, the failure mode
+§2.3 documents across vision and language. Chapter 3's specification is
+therefore not a re-implementation but the first operational definition of
+these predicates, and the fitted thresholds are the "clear annotation
+guidelines" the source paper asks for.
 
 ## 4.8 Answer to RQ1
 
 Automated annotation reaches human-comparable quality on five of seven
-predicates outright (0.81–1.00 recall of the human triplets; mean 0.85, with
-0.76 on annotators no threshold ever saw). One of those five is `near`, whose
-human notion it matches completely once the label's inconsistent usage is
-accounted for (0.997 pooled, 1.00 held-out at the fitted threshold),
-resolving the one predicate the source paper reports as failing for every
-model it benchmarks (§2.2). On the depth pair, after the
-depth-plus-ground-plane cascade, it recalls 0.64/0.66
-pooled and, where it commits, agrees with six of the seven same-convention
-annotators at 0.95–1.00 (the seventh on 65 triplets, the smallest sample in
-the dataset, at 0.57); aligned for the two inverted-convention groups, depth
-recall is 0.84. The remaining shortfall decomposes, in measured proportions,
-into calibrated abstention and that inverted convention. The audits bound true
-precision: ~1.0 for the lateral and proximity predicates and for depth-decided
-front/behind, ~0.9 for support after the contact rule, and ~0.73 conservative
-for the ground-plane fallback's added commits (§4.9). The tool's residual cost
-is the 8.5% borderline review queue (§4.7), and its labels are 20× denser than the
+predicates outright: 0.81–1.00 recall, mean 0.85, and 0.76 on annotators no
+threshold ever saw. One of the five is `near`, matched completely once its
+inconsistent usage is accounted for (0.997 pooled, 1.00 held-out), resolving
+the predicate the source paper reports as failing for every model it
+benchmarks (§2.2). The depth pair recalls 0.64/0.66 pooled after the cascade
+and, where it commits, agrees at 0.95–1.00 with six of the seven
+same-convention annotators, the seventh being the dataset's smallest sample
+at 65 triplets and 0.57; aligned for the two inverted groups it reaches 0.84.
+The shortfall decomposes, in measured proportions, into calibrated abstention
+and that convention. Audited true precision is ~1.0 for lateral, proximity
+and depth-decided front/behind, ~0.9 for support after the contact rule, and
+~0.73 conservatively for the fallback's added commits (§4.9). The residual
+cost is an 8.5% review queue (§4.7), against labels 20× denser than the
 human set.
 
 ## 4.9 Shipped from the ablations
@@ -344,26 +313,23 @@ optimised against.
 | A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/+0.002 front/behind, mean recall marginally lower |
 | A9 | multi-frame depth (two-view triangulation) | n/a | **declined**; 0.706 against the monocular cascade's 0.875, on 9% of pairs |
 
-Three of these changed the headline table materially, and the order they
-arrived in is the argument of this section. The audit localised a support
-precision failure; a geometric insight (stacked objects share a camera
-distance) fixed half of it; a perception upgrade (mask-bottom contact) fixed
-most of the rest while *raising* recall, which is the rare change that
-improves both error directions together; and the ground-plane fallback then
-recovered most of the front/behind abstention band without using depth at
-all. Each step was calibrated on the training groups and validated on
-annotators it had never seen.
+Three changed the headline table materially, and their order is this
+section's argument. The audit localised a support precision failure; a
+geometric insight (stacked objects share a camera distance) fixed half; a
+perception upgrade (mask-bottom contact) fixed most of the rest while
+*raising* recall, the rare change that improves both error directions at
+once; and the ground-plane fallback then recovered most of the front/behind
+abstention band without depth at all. Each step was calibrated on the
+training groups and validated on unseen annotators.
 
-The two declined ablations bound where further engineering can help. A
-four-times-larger depth model moves front/behind by 0.001 and 0.002 while
-leaving mean recall slightly lower, and two-view
-triangulation over the raw capture is 0.17 *worse* than the monocular
-cascade where it returns an answer at all, which is on 9% of pairs. The
-depth-predicate limit is monocular ambiguity in the scenes rather than model
-capacity, and multi-view geometry inherits that limit rather than removing
-it. Read with the viewpoint stability of §4.14, where the predicate
-reproduces its own verdict 0.955 of the time, the return on measuring depth
-more precisely is bounded before it starts.
+The two declined ablations bound where engineering can help. A
+four-times-larger depth model moves front/behind by 0.001 and 0.002 and
+leaves mean recall slightly lower; two-view triangulation over the raw
+capture is 0.17 *worse* than the monocular cascade where it answers at all,
+on 9% of pairs. The limit is monocular ambiguity in the scenes, not model
+capacity, and multi-view geometry inherits it rather than removing it. Read
+with §4.14, where the predicate reproduces its own verdict 0.955 of the time,
+the return on measuring depth more precisely is bounded before it starts.
 
 Full derivations, calibration evidence, audit samples and the failure
 structure of each refinement are given in **Appendix D**.
@@ -402,16 +368,15 @@ trial), then runs the identical SAM2 → depth → rules stack
 (`scripts/run_sgdet.py`, scored by `eval/sgdet_eval.py` with class-matched
 greedy IoU ≥ 0.5).
 
-End-to-end triplet recall over all 836 images is **0.38** against the PredCls
+End-to-end triplet recall over 836 images is **0.38** against the PredCls
 headline, and the decomposition attributes the gap exactly. Zero-shot
-detection recall spans 0.40 (cube) to 0.95 (human), and a triplet needs *both*
-endpoints found. **Conditioned on both endpoints being detected, the relation
-layer scores 0.85 mean, matching its PredCls performance** (lateral
-0.96/0.98, near 1.00, support 0.83/0.77; front/behind 0.69/0.70, computed
-before the ground-plane fallback shipped, so the conditional depth numbers are
-a floor; detectable pairs also skew towards well-separated objects). The gap
-is therefore entirely a detection problem, not a relations problem: the
-geometric rules are detector-agnostic.
+detection recall spans 0.40 (cube) to 0.95 (human), and a triplet needs
+*both* endpoints. **Conditioned on both being detected the relation layer
+scores 0.85 mean, matching PredCls** (lateral 0.96/0.98, near 1.00, support
+0.83/0.77; front/behind 0.69/0.70, computed before the ground-plane fallback
+shipped, so those are a floor, and detectable pairs skew towards
+well-separated objects). The gap is a detection problem, not a relations one:
+the rules are detector-agnostic.
 
 Two honest notes. Zero-shot open-vocabulary detection is the worst-case
 detector, exactly the reach-versus-per-class-recall trade §2.6 identifies,
@@ -423,38 +388,34 @@ numbers are the ones that matter.
 
 ## 4.12 Video, and the only out-of-domain evidence
 
-Two short royalty-free stock clips (sources in Appendix A) were processed
-frame by frame by the deployment-mode stack of §4.11, with no threshold
-retuned: `near_T`, the depth band, the contact fraction and the plane band
-are the values fitted on groups 0-5. The clips are the project's only
-evidence from outside the calibration domain, and they share nothing with
-the robot dataset: different scenes, a different camera and viewpoint, and
-objects drawn almost entirely from outside the six annotated classes (a
-monitor, keyboard, mouse, mug, spectacles, plants, a lamp, a notepad, a
-laptop, a wallet, an earbuds case). They were chosen as complementary
-regimes: a **moving camera over a static desk scene** (clip 1, 99 frames),
-where relations should stay constant and any variation is measurement noise,
-and a **static overhead camera with moving hands** (clip 2, 79 frames),
-where relations genuinely change and smoothing must not erase the change.
-Appendix E.4 gives the tracking and temporal-vote settings and the catalogue
-of open-vocabulary failures.
+Two royalty-free stock clips (sources in Appendix A) were processed frame by
+frame by §4.11's deployment stack with no threshold retuned: `near_T`, the
+depth band, the contact fraction and the plane band keep the values fitted on
+groups 0-5. They are the project's only evidence from outside the calibration
+domain and share nothing with the robot dataset: different scenes, a
+different camera, and objects almost entirely outside the six annotated
+classes (monitor, keyboard, mouse, mug, spectacles, plants, lamp, notepad,
+laptop, wallet, earbuds case). The two regimes are complementary: a **moving
+camera over a static desk** (clip 1, 99 frames), where any variation is
+measurement noise, and a **static overhead camera with moving hands** (clip
+2, 79 frames), where relations genuinely change and smoothing must not erase
+them. Appendix E.4 gives the tracking and temporal-vote settings and the
+open-vocabulary failures.
 
-Three observations. **(i) Relations are stable wherever identity is
-stable.** For object pairs co-visible in at least 20 frames the emitted
-predicate persists at 0.90/0.94 mean across the two clips
-(`eval/video_stability.py`), and the temporal vote separates the two
-regimes: it lifts persistence from 0.896 to 0.902 on the static-scene clip
-and from 0.915 to 0.938 on the one with moving hands, which is where
-per-frame detection actually churns. Frame-to-frame triplet agreement
-(Jaccard 0.89 and 0.70) is dominated by zero-shot detection churn and, in
-clip 2, genuine hand motion. This mirrors §4.11's attribution: the variation
-is detection, not relations. **(ii) The rules transfer to objects they were
-never calibrated on**: a pen resting on a notepad and a wallet-and-photograph
-stack are labelled by the same mask-contact evidence fitted on the dataset's
-six classes. **(iii) The camera-frame semantics behave as designed**: in the
-bird's-eye clip, in front of/behind re-maps to distance from the viewer's
-edge of the desk, the reference-frame dependence §2.5 cites from RoboSpatial,
-demonstrated rather than asserted.
+Three observations. **(i) Relations are stable wherever identity is.** For
+pairs co-visible in at least 20 frames the predicate persists at 0.90/0.94
+mean (`eval/video_stability.py`), and the temporal vote separates the
+regimes: 0.896 to 0.902 on the static clip, 0.915 to 0.938 on the one with
+moving hands, where per-frame detection churns. Frame-to-frame triplet
+agreement (Jaccard 0.89 and 0.70) is dominated by zero-shot detection churn
+and, in clip 2, genuine hand motion, which mirrors §4.11: the variation is
+detection, not relations. **(ii) The rules transfer to objects never
+calibrated on**: a pen on a notepad and a wallet-and-photograph stack are
+labelled by the same mask-contact evidence fitted on six classes. **(iii)
+The camera-frame semantics behave as designed**: in the bird's-eye clip,
+front/behind re-maps to distance from the viewer's edge of the desk, the
+reference-frame dependence §2.5 cites from RoboSpatial, demonstrated rather
+than asserted.
 
 The limits should be equally clear. With no video ground truth these are
 qualitative judgements over two clips: they support the claim that the
@@ -467,16 +428,15 @@ which is the same attribution §4.11 makes for the dataset itself.
 
 ## 4.13 Independent validation of the precision estimate
 
-The true-precision estimates of §4.4 and §4.9 have one methodological
-weakness that no amount of sampling fixes: they were verdicted by the author
-of the tool being evaluated. Conservative rules and published evidence
-mitigate the risk but do not remove it, and the honest description of those
-numbers is "author-verdicted". A separate study was therefore designed to
-re-estimate precision with judges who have no stake in the result: 2,002
-automatic labels, stratified across the seven predicates and drawn entirely
-from pairs the annotators never touched, each rendered as the photograph with
-the subject and object outlined and judged TRUE or WRONG by anonymous
-volunteers under the operational definitions of Chapter 3.
+The true-precision estimates of §4.4 and §4.9 carry one weakness no amount of
+sampling fixes: they were verdicted by the author of the tool being
+evaluated. Conservative rules and published evidence mitigate that without
+removing it, and the honest description is "author-verdicted". A separate
+study re-estimates precision with disinterested judges: 2,002 automatic
+labels, stratified across the seven predicates, drawn entirely from pairs the
+annotators never touched, each rendered as the photograph with subject and
+object outlined and judged TRUE or WRONG by anonymous volunteers under
+Chapter 3's definitions.
 
 It is designed to measure three things the author-verdicted audits cannot:
 crowd precision per predicate at a sample two orders of magnitude larger than
@@ -555,19 +515,17 @@ benefit of propagation: the segment representative is the frame nearest the
 segment mean, which on a moving camera is less likely to be caught
 mid-transition than an arbitrary frame.
 
-**The first column holds the finding, and it is not the one expected.**
-Front/behind was the predicted loser, on the assumption that its errors are
-depth noise near the decision boundary, which is exactly what a viewpoint
-change perturbs. It does not behave that way. Front/behind agrees with
-itself across viewpoints 0.955 of the time, above `on` and `under` at 0.909,
-and still 0.924 when the segmentation is coarsened to 89× compression, where
-segment members are substantially different views. A predicate whose recall
-against human labels is 0.64 while its agreement with itself is 0.955 is not
-making random errors; it is making the same call repeatedly and disagreeing
-with the annotators systematically. That converges with ablation A8, where a
-depth model four times larger did not improve the pair, and with §4.5, where
-two annotator groups labelled it in the opposite direction. §7.2 develops
-what follows for where the remaining effort should go.
+**The first column holds the finding, and it is not the expected one.**
+Front/behind was the predicted loser, on the assumption its errors are depth
+noise near the boundary, which is exactly what a viewpoint change perturbs.
+It does not behave that way: it agrees with itself 0.955 of the time, above
+`on` and `under` at 0.909, and still 0.924 at 89× compression, where segment
+members are substantially different views. A predicate recalling 0.64 of the
+human labels while agreeing with itself at 0.955 is not making random errors;
+it is making the same call repeatedly and disagreeing systematically. That
+converges with A8, where a four-times-larger depth model changed nothing, and
+with §4.5, where two groups labelled the pair oppositely. §7.2 develops what
+follows.
 
 **Limits.** The figures above are an upper bound, because only pairs that
 could be matched between keyframe and frame contribute and those are the
@@ -592,31 +550,28 @@ parts to it.
 
 *Cost.* Content-adaptive selection reduces 1,766 frames to 562 keyframes,
 3.1×. The recorded run took 6.15 s per frame on the RTX 2060, 586 frames per
-hour, so the keyframe pass completed in 58 minutes where annotating every
-frame at the same rate would have taken just over three hours
-(`outputs/extension_scale.json`). That figure includes writing an inspection
-overlay for every frame, which this run did in order to make the output
-checkable by eye; the annotation itself is roughly half of it, so a
-deployment run emitting JSON alone would be expected near 3.3 s per frame.
-The measured number is quoted here in preference to that estimate, because
-it is the one the repository can reproduce.
+hour, so the keyframe pass finished in 58 minutes against just over three
+hours for every frame (`outputs/extension_scale.json`). That includes writing
+an inspection overlay per frame to make the output checkable by eye;
+annotation is roughly half of it, so a JSON-only deployment run would land
+near 3.3 s per frame. The measured figure leads because it is the one the
+repository reproduces.
 
 *Yield.* The run emits 185,242 triplets over 562 frames, 330 per frame from
 11.7 detected objects. No frame produced an empty graph. For comparison, the
 human process recorded 8,926 triplets across 836 images, about 11 per image.
 
 *Behaviour.* The risk with unfamiliar input is not loud failure but quiet
-drift, a pipeline that keeps emitting labels whose distribution has silently
-changed. Compared against the same detector on the annotated images, the
-predicate distribution is close to unchanged: total variation distance
-0.032, with the largest single shift 0.015 (in front of, 0.181 to 0.195).
-The `on`/`under` share is low in both runs, 0.006 annotated against 0.003
-here, which is a property of open-vocabulary detection rather than of the
-new frames: more detected objects means more pairs, and most pairs are not
-in contact. Density per frame is lower than on the annotated portion
-(330 against 633 triplets) for the same reason in reverse, since the later
-arrangements hold fewer objects (11.7 detections against 16.9) and pair
-count grows with the square of that.
+drift: a pipeline still emitting labels whose distribution has silently
+changed. Against the same detector on the annotated images the predicate
+distribution is nearly unchanged, total variation distance 0.032 with the
+largest shift 0.015 (in front of, 0.181 to 0.195). The `on`/`under` share is
+low in both runs, 0.006 annotated against 0.003 here, which is a property of
+open-vocabulary detection rather than the new frames: more detections means
+more pairs, and most pairs are not in contact. Density per frame is lower for
+the same reason in reverse, 330 against 633 triplets, since the later
+arrangements hold fewer objects (11.7 detections against 16.9) and pair count
+grows with the square.
 
 The honest summary is that the scaling claim now rests on a run rather than
 an argument, and that what it demonstrates is capacity and stability, not
@@ -634,16 +589,14 @@ that capability. If one of them annotates this dataset as well as the
 geometric pipeline does, the pipeline is unnecessary. The question is
 settled here by measurement rather than assertion.
 
-**Protocol.** Thirty images, stratified across all nine annotator groups, are
-put to the model with the ground-truth boxes drawn on the image
-and numbered, and the model answers using those indices
-(`scripts/run_vlm_pilot.py`). That places it in the same PredCls setting the
-pipeline is evaluated in, so neither is scored on detection. The prompt
-carries Chapter 3's operational definitions verbatim, including that *in
-front of* means nearer the camera, without which the run would measure the
-reference-frame ambiguity of §2.5 rather than accuracy. Scoring is the RQ1
-battery on identical pairs, with the pipeline's answer beside it
-(`eval/score_vlm_pilot.py`). Every reply parsed; no record was malformed.
+**Protocol.** Thirty images, stratified across all nine annotator groups, go
+to the model with the ground-truth boxes drawn on and numbered, and it
+answers by index (`scripts/run_vlm_pilot.py`). That is the same PredCls
+setting the pipeline is evaluated in, so neither is scored on detection. The
+prompt carries Chapter 3's definitions verbatim, including *in front of* as
+nearer the camera; without it the run would measure §2.5's reference-frame
+ambiguity rather than accuracy. Scoring is the RQ1 battery on identical
+pairs (`eval/score_vlm_pilot.py`). Every reply parsed; none was malformed.
 
 Two models were run, because the obvious objection to a single one is that a
 larger model would close the gap. `gemini-flash-latest` is the small
@@ -664,22 +617,19 @@ same images, same numbered boxes, same definitions, same scored pairs
 | near | 34 | 0.382 | 0.382 | 1.000 |
 | **Mean** | **381** | **0.400** | **0.445** | **0.834** |
 
-On recall both models lose everywhere. The larger one is better, and the
-size of the improvement is the point: mean recall moves from 0.400 to 0.445,
-which is real but leaves it at barely half the pipeline's 0.834. It is
-closest on support, 0.74 against 0.91, and furthest on the depth pair, where
-0.24 against 0.60 leaves it below even the geometric method's known weak
-point, and where `behind` actually falls, 0.169 to 0.138. Scaling the model
-does not scale the ability being measured.
+On recall both models lose everywhere, and the size of the improvement is the
+point: mean recall moves from 0.400 to 0.445, real but barely half the
+pipeline's 0.834. It is closest on support, 0.74 against 0.91, and furthest
+on the depth pair, where 0.24 against 0.60 puts it below the geometric
+method's known weak point and `behind` actually falls, 0.169 to 0.138.
+Scaling the model does not scale the ability being measured.
 
-Recall alone would be an unfair verdict, and it is worth saying why before
-reading anything into it. The metric rewards whoever asserts more: on the
-374 pairs the humans judged, the pipeline makes 868 assertions against 344
-from the smaller model and 414 from the larger, so it has two to two and a
-half times as many chances to cover any given gold triplet. A sparse
-labeller can be right more often about what it does say and still lose on
-recall. Restricting all three to the judged pairs, where precision is
-defined, tests exactly that.
+Recall alone would be an unfair verdict. It rewards whoever asserts more: on
+the 374 judged pairs the pipeline makes 868 assertions against 344 and 414
+from the two models, so it has two to two and a half times the chances of
+covering any gold triplet. A sparse labeller can be right more often about
+what it does say and still lose on recall. Restricting all three to the
+judged pairs, where precision is defined, tests that.
 
 | Predicate | Flash P | Pro P | Pipeline P | Flash F1 | Pro F1 | Pipeline F1 |
 |---|---|---|---|---|---|---|
@@ -692,42 +642,37 @@ defined, tests exactly that.
 | near | 0.105 | 0.084 | **0.128** | 0.165 | 0.138 | **0.227** |
 | **micro** | **0.419** | 0.389 | 0.351 | 0.397 | 0.405 | **0.488** |
 
-**Both models are more precise labellers than the pipeline** on the pooled
-figure, 0.42 and 0.39 against 0.35. What they buy that precision with is
-silence, and the price is steep enough that both lose F1 to the pipeline on
-every predicate without exception, 0.40 and 0.41 against 0.49 pooled.
+**Both models are more precise than the pipeline** on the pooled figure, 0.42
+and 0.39 against 0.35. They buy that with silence, and the price is steep
+enough that both lose F1 on every predicate, 0.40 and 0.41 against 0.49
+pooled.
 
-The larger model does not resolve the picture so much as redistribute it. It
-asserts more (414 judged-pair assertions against 344), which lifts recall
-and costs precision, so its F1 lands within 0.008 of the smaller model's.
-Where the smaller model looked most interesting, `behind`, the larger one is
-markedly worse, 0.28 precision against 0.48. The one place it clearly
-improves is the symmetric-pair defect: it supplies *to the left of* without
-its inverse on 0.16 of assertions against the smaller model's 0.35, so more
-deliberation does buy more internal consistency. Neither model contradicts
-itself outright, both at zero.
+The larger model redistributes the picture rather than resolving it. It
+asserts more (414 judged-pair assertions against 344), lifting recall and
+costing precision, so its F1 lands within 0.008 of the smaller model's. Where
+the smaller model looked most interesting, `behind`, the larger is markedly
+worse at 0.28 precision against 0.48. It clearly improves in one place, the
+symmetric-pair defect: *to the left of* without its inverse on 0.16 of
+assertions against 0.35, so deliberation does buy internal consistency.
+Neither contradicts itself, both at zero.
 
-Two things follow and they point in opposite directions, so both belong
-here. The model is not a fourth label source: it recovers under half the
-human record and loses F1 everywhere. But an earlier draft of this section
-said it won nothing, and that was an artefact of scoring recall alone. Where
-it does speak it agrees with the annotators more often than the pipeline
-does, which is the beginning of a case for it as an adjudicator on the depth
-pair; §7.6 takes that up rather than settling it here.
+Two things follow, pointing opposite ways, so both belong here. The model is
+not a fourth label source: it recovers under half the human record and loses
+F1 everywhere. But an earlier draft said it won nothing, which was an
+artefact of scoring recall alone. Where it does speak it agrees with the
+annotators more often than the pipeline, which begins a case for it as an
+adjudicator on the depth pair; §7.6 takes that up.
 
-The comparison carries one asymmetry that has to be stated:
-only the pipeline's extra assertions were audited (§4.4), so these columns
-compare agreement with the human record and not truthfulness. The model's
-failures also have a diagnosable shape: it does not contradict itself and
-does not invert
-the front/behind convention, it simply falls silent, and it supplies one
-direction of a symmetric pair without the other in a third of cases. Those
-are the two defects §4.5 measures in the *human* annotation. **Asked to
-annotate, a capable vision-language model reproduces the characteristic
-failure of the human annotation process rather than that of a geometric
-one.** It is not a cheaper annotator; it is a faster instance of the thing
-this project was built to replace, and being conservative is both why its
-precision beats the pipeline's and why most relations in a scene go
-unrecorded. The diagnostics behind that reading, the audit asymmetry, and
-the limits of a thirty-image single-model pilot are set out in
-**Appendix E**.
+One asymmetry has to be stated: only the pipeline's extra assertions were
+audited (§4.4), so these columns compare agreement with the human record,
+not truthfulness. The model's failures have a diagnosable shape. It does not
+contradict itself and does not invert the front/behind convention; it falls
+silent, and supplies one direction of a symmetric pair without the other in a
+third of cases. Those are the two defects §4.5 measures in the *human*
+annotation. **Asked to annotate, a capable vision-language model reproduces
+the characteristic failure of the human process rather than a geometric
+one.** It is not a cheaper annotator but a faster instance of the thing this
+project replaces, and its conservatism is both why its precision beats the
+pipeline's and why most relations go unrecorded. **Appendix E** gives the
+diagnostics, the audit asymmetry and the limits of a thirty-image
+single-model pilot.
