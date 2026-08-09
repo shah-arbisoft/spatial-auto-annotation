@@ -184,6 +184,13 @@ right_of(A, B)  ==  (cx_A > cx_B)
 The strict mirror of \texttt{left of}. Exactly one of the two holds outside the ambiguity band; inside it neither is emitted and the pair is flagged. \texttt{right\_of(A,B) == left\_of(B,A)}.
 
 \subsection{C.6 \texttt{in front of(A, B)} and \texttt{behind(A, B)}}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/front-behind-decomposition.png}
+\caption{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
+\label{fig:front-behind-decomposition}
+\end{figure}
+
 
 A two-stage cascade. Stage one is depth ordering:
 
@@ -208,6 +215,13 @@ with \texttt{plane\_band} = 0.005 of normalised image height, calibrated on the 
 Worked example, encoded in \texttt{tests/test\_predicates.py}: a bottle with box bottom 0.80 against a book with box bottom 0.60, depths 0.50 and 0.51 and so inside \texttt{depth\_eps}, both floor-standing, gives bottle \texttt{in front of} book. The same pair with either object elevated is flagged instead.
 
 \subsection{C.7 \texttt{near(A, B)}: A and B are close, relative to their size}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/near-T-sweep.png}
+\caption{Fitting the \texttt{near} threshold. Recall against all annotators and against the held-out annotator, with restricted precision. The fitted value is the tightest threshold at the plateau.}
+\label{fig:near-T-sweep}
+\end{figure}
+
 
 \begin{verbatim}
 near(A, B)  ==  box_gap_rel(A, B) <= near_T   AND   not (on(A,B) or under(A,B))
@@ -349,6 +363,32 @@ The estimator is real. Given objects at moderately different depths it reaches 0
 
 The honest scope of this result is that it rules out the cheap version of the idea rather than the idea itself. A careful multi-view reconstruction over many frames, with bundle adjustment and real intrinsics, would estimate depth better than two views and an assumed focal length. What the ablation establishes is that geometric depth is not free here, that the obvious implementations lose to the monocular cascade on both accuracy and coverage, and, read with \S4.14, that the return on any of them is bounded: a predicate that already reproduces its own verdict 0.955 of the time across viewpoints does not have much room to gain from measuring depth more precisely. There is also a design cost that no accuracy figure captures. Every multi-frame method requires neighbouring frames at inference time, which the single-image annotator this project set out to build does not have.
 
+\subsection{D.7 Failure diagnosis by predicate}
+
+Section 4.10 states what the diagnosis establishes. The per-predicate breakdown of the shipped rule set's 1,689 missed human triplets is below, produced by re-checking each rule's individual conditions against the cached geometry and mask-contact maps.
+
+\begin{center}
+\small
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.195\textwidth}>{\raggedright\arraybackslash}p{0.745\textwidth}}
+\caption{Diagnosed cause of every missed human triplet, by predicate.}\\
+\hline
+Predicate & Dominant causes (share of that predicate's misses) \\
+\hline
+\endfirsthead
+\hline
+Predicate & Dominant causes (share of that predicate's misses) \\
+\hline
+\endhead
+in front of & abstained in ambiguity band 61\% $\cdot$ convention-inverted annotators 38\% $\cdot$ \textbf{genuine depth error 1\%} \\
+behind & abstained 52\% $\cdot$ convention-inverted 42\% $\cdot$ \textbf{genuine depth error 5\%} \\
+on & mask contact below threshold 58\% $\cdot$ depth-gate suppressed 40\% \\
+under & contact below threshold 50\% $\cdot$ depth-gate suppressed 33\% $\cdot$ no contact measured (occlusion) 17\% \\
+near & 2 remaining misses (contact boundary) \\
+to the left/right of & centre flip 71--89\% $\cdot$ abstained 11--29\% (52 cases total) \\
+\hline
+\end{longtable}
+\end{center}
+
 
 \chapter{Extended validation studies}
 
@@ -356,8 +396,40 @@ The honest scope of this result is that it rules out the cheap version of the id
 Five studies report their headline result in the chapter that owns them and their supporting detail here: the vision-language baseline of \S4.16, whose diagnostics are what make its failure interpretable rather than merely worse (E.1); the viewpoint-stability measurement of \S4.14, whose segmentation evidence and coverage limits qualify how far the stability figures reach (E.2); the independent precision study of \S4.13, whose instrument can be judged before its results exist (E.3); the video processing of \S4.12, whose settings and open-vocabulary failures qualify the only out-of-domain evidence in the dissertation (E.4); and the planner experiment of \S5.7, whose relation filter and blind scorer are what the comparison rests on (E.5).
 
 \subsection{E.1 The vision-language baseline: diagnostics and limits}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/rq1-with-vlm.png}
+\caption{Recall of the human triplets per predicate: the geometric pipeline against both vision-language models on the same 30 images, the same numbered boxes and the same written definitions. The dotted lines are the two means. Scaling the model lifts every predicate a little and closes none of the gap.}
+\label{fig:rq1-with-vlm}
+\end{figure}
 
-The recall, precision and F1 tables this section refers to are in \S4.16, which reports the headline comparison over two models: they recover 0.40 and 0.45 of the human triplets against the pipeline's 0.83, and are the more precise labellers on the judged pairs, 0.42 and 0.39 against 0.35, while losing F1 on every predicate. The diagnostics below are the smaller model's unless stated, since it is the one the manual-check pack was built for.
+
+Section 4.16 reports the headline comparison over two models and carries the recall table: they recover 0.40 and 0.45 of the human triplets against the pipeline's 0.83, and are the more precise labellers on the judged pairs, 0.42 and 0.39 against 0.35, while losing F1 on every predicate. The per-predicate form of that second comparison is below, and the diagnostics after it are the smaller model's unless stated, since it is the one the manual-check pack was built for.
+
+\begin{center}
+\small
+\begin{longtable}{llrrrrl}
+\caption{The vision-language comparison of \textbackslash{}S4.16 restricted to the pairs carrying a human label, where precision is defined. The model is the more precise labeller and loses F1 on every predicate.}\\
+\hline
+Predicate & Flash P & Pro P & Pipeline P & Flash F1 & Pro F1 & Pipeline F1 \\
+\hline
+\endfirsthead
+\hline
+Predicate & Flash P & Pro P & Pipeline P & Flash F1 & Pro F1 & Pipeline F1 \\
+\hline
+\endhead
+on & \textbf{0.950} & 0.840 & 0.897 & 0.784 & 0.785 & \textbf{0.904} \\
+under & 0.886 & 0.837 & \textbf{0.909} & 0.756 & 0.800 & \textbf{0.879} \\
+to the left of & 0.408 & \textbf{0.489} & 0.385 & 0.408 & 0.479 & \textbf{0.542} \\
+to the right of & 0.381 & \textbf{0.396} & 0.387 & 0.352 & 0.392 & \textbf{0.548} \\
+in front of & \textbf{0.484} & 0.475 & 0.356 & 0.270 & 0.317 & \textbf{0.447} \\
+behind & \textbf{0.478} & 0.281 & 0.308 & 0.250 & 0.186 & \textbf{0.410} \\
+near & 0.105 & 0.084 & \textbf{0.128} & 0.165 & 0.138 & \textbf{0.227} \\
+\textbf{micro} & \textbf{0.419} & 0.389 & 0.351 & 0.397 & 0.405 & \textbf{0.488} \\
+\hline
+\end{longtable}
+\end{center}
+
 
 One asymmetry must be stated or the precision comparison will be read as stronger than it is. The pipeline's apparent false positives were audited (\S4.4) and found to be largely \textit{correct but unrecorded}, relations that hold geometrically which the annotators did not write down, giving audited true precision near 1.0 on the lateral and proximity predicates. Its 0.35 here is therefore a floor set by sparse gold rather than a measure of error. No equivalent audit exists for the model's assertions, so its 0.42 is not known to be a floor in the same way. The two are comparable as agreement with the human record, and are not comparable as truthfulness.
 
@@ -379,6 +451,8 @@ One diagnostic does improve with scale, and it is the one that matters for the a
 
 \subsection{E.2 Viewpoint stability: segmentation evidence and coverage}
 
+Object indices are not stable across frames, the annotators having recorded different subsets of the scene from frame to frame: \texttt{group\_0} alone contains 43 distinct object orderings, which is why matching is by class and box overlap rather than by index. Compression over the 802 annotated frames is lower than the 2.7$\times$ below because those frames are a subset, so consecutive members sit further apart in the original capture.
+
 \textit{Segmentation.} At $\tau$ = 10 the full 2,650-frame sequence collapses to 892 segments, a 3.0$\times$ reduction; over the 884 released frames it gives 331, 2.7$\times$. Scored on the released portion, where the eight layout changes are known, every one is recovered within five frames (boundary recall 1.00). Precision against those eight is low by construction and not a defect: viewpoint changes within a block are genuine content changes, merely finer-grained. The standard alternative has no usable operating point at all on this material, for the reason \S3.10 gives: thresholding consecutive-frame differences at 15 grey levels fires 13 times and finds none of the eight, and at 5 it finds all eight among 604 firings, a precision of 0.013.
 
 \textbf{Limits.} Two, both restricting scope rather than direction. Stability is computed only on pairs that could be matched between keyframe and frame, and those are the pairs whose objects moved least in the image, plausibly the easier population, so the figures are an upper bound. And matched coverage falls as segments grow, from 88.7\% of pairs at $\tau$ = 5 to 58.5\% at $\tau$ = 10 and 26.5\% at $\tau$ = 20, so aggressive compression leaves most pairs uncovered rather than mislabelled. The cause is box drift under camera motion rather than missing annotation: at $\tau$ = 20, 65\% of skipped frames carry an identical object count to their keyframe, and relaxing the overlap criterion from 0.5 to 0.1 cuts unmatched objects from 5.6 to 2.2 per frame. Carrying object identity with a tracker, as \texttt{scripts/run\_video.py} already does for video, rather than with per-frame overlap, is the straightforward extension that would recover it.
@@ -394,8 +468,17 @@ One diagnostic does improve with scale, and it is the one that matters for the a
 \textbf{Scoring}, fully specified in advance (\texttt{analysis/score\_votes.py}): ties resolve to WRONG, matching the audit protocol; reflex-speed responses and raters who disagree systematically with everyone else can be excluded by pre-declared filters. Crowd precision is reported per predicate with binomial intervals, author agreement as percentage and Cohen's kappa (Cohen, 1960), and crowd-internal reliability as Krippendorff's alpha.
 
 \subsection{E.4 Video processing: settings and the open-vocabulary failures}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/video-stability.png}
+\caption{Frame-to-frame stability of the emitted triplets on the two demonstration clips, before and after temporal smoothing.}
+\label{fig:video-stability}
+\end{figure}
+
 
 Section 4.12 reports what the two clips show. This section records how they were processed and what went wrong, both of which qualify the reading.
+
+\textbf{The clips and the thresholds.} Both are royalty-free stock, sourced in Appendix A. Nothing was retuned for them: \texttt{near\_T}, the depth band, the contact fraction and the plane band keep the values fitted on groups 0-5. The objects are almost entirely outside the six annotated classes (monitor, keyboard, mouse, mug, spectacles, plants, lamp, notepad, laptop, wallet, earbuds case).
 
 \textbf{Processing.} Each frame is annotated independently by the deployment-mode stack of \S4.11 with open-vocabulary prompts; object identities are carried between frames by greedy IoU tracking, and each pair's predicates are smoothed by a plus-or-minus-two-frame temporal majority vote (\texttt{scripts/run\_video.py}; overlays and per-frame records in \texttt{outputs/video/}). The vote is the only component with no counterpart in the still-image pipeline, and its effect is measured in \S4.12 rather than assumed: a small gain on the static scene and a larger one where detection churns, which is the behaviour a majority filter should show.
 
@@ -403,10 +486,95 @@ Section 4.12 reports what the two clips show. This section records how they were
 
 \textbf{Open-vocabulary failures.} Two are plainly visible and worth recording, because both are detection failures rather than relation failures and so support the same attribution \S4.11 makes for the dataset itself. Content displayed \textit{on the laptop screen} is detected as real objects standing in real relations to the objects around it. And items outside the prompt list snap to the nearest prompted class: an earbuds case is labelled a \texttt{cup}. Neither is corrected, and both are present in the released overlays.
 
+\subsection{E.6 The scale run: timing and the distribution check}
+
+Section 4.15 reports what the run over the 1,766 unannotated frames establishes. Two of its figures need accounting for.
+
+\textit{Timing.} The 6.15 s per frame includes writing an inspection overlay per frame to make the output checkable by eye. Annotation is roughly half of it, so a JSON-only deployment run would land near 3.3 s per frame. The measured figure leads in \S4.15 because it is the one the repository reproduces.
+
+\textit{The two distribution differences.} The largest predicate shift is \textit{in front of}, 0.181 to 0.195. The \texttt{on}/\texttt{under} share is low in both runs, 0.006 annotated against 0.003 here, which is a property of open-vocabulary detection rather than of the new frames: more detections means more pairs, and most pairs are not in contact. Density per frame is lower for the same reason in reverse, 330 against 633 triplets, since the later arrangements hold fewer objects (11.7 detections against 16.9) and pair count grows with the square.
+
 \subsection{E.5 The planner experiment: prompt construction and scoring rules}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/planner-sources.png}
+\caption{Scenes with a safe grasp plan, by the relation source given to the planner. Neither automatic source matches human annotation alone; their union does, because their failures are disjoint.}
+\label{fig:planner-sources}
+\end{figure}
+
 
 Section 5.7 reports the design in outline and the result. Two components need recording in full, because the comparison is only as good as they are.
 
 \textbf{The relation filter.} Both relation conditions are passed through one filter before their relations are written into the prompt (\texttt{scripts/planner\_experiment.py}): it keeps the support relations among the mentioned objects plus the target's one-hop neighbourhood, canonicalised and deduplicated. Without that step the comparison would confound label quality with prompt length. It does not equalise prompt length, and cannot: after identical filtering the automatic condition still carries 22.6 relations per prompt against the human condition's 3.1, because the automatic labels are twenty times denser to begin with, and discarding true relations to match a sparser source would be a different experiment. What the filter guarantees is the weaker but sufficient property that neither source is given a relation the other would have been denied. The task sentence, the object list and the instruction to give a minimal numbered plan are identical across conditions, and all conditions of a scene are answered by one model in one sitting, so no scene can be split across models by a quota interruption (\texttt{scripts/run\_planner\_llm.py}).
 
+\textbf{The failure with no relations at all.} Condition A never clears the occluder, in twenty-five scenes out of twenty-five and under both planners. In seven of those plans the planner names the occluding object, but only ever as something to steer around: "maintaining a clear path above cube0, book2, book3", or "lift box0 to a safe height to clear book1".
+
+\textbf{The three scenes condition C fails on.} Scene 4 offered "box6 is in front of book7" and "box6 is near book7"; scene 24 offered near, in front of and to the left of. Scene 16 shows the mechanism sharply: the planner used the automatic relations it was given, cleared the four objects the prompt said were \textit{in front of} the target, and left the one resting on top of it, because that relation was never stated. It reasoned correctly from incomplete input.
+
 \textbf{The scoring defect that manual checking caught.} Models frequently open with a preamble restating the task ("To pick up box0 safely, follow these steps:"), and counting that preamble as a step made every such plan appear to grasp the target before clearing anything. Before the fix condition C scored 0.64; after it, 0.88. The figure below the fix is the correct one. The episode is recorded because it is the only evidence that the blind scorer measures what it claims to: a rule-based judge inherits whatever its author failed to anticipate, and the hand-read sample is what exposed this one.
+
+
+
+\chapter{Supplementary tables and figures}
+
+
+\subsection{F.1 Per-predicate and per-slice results at seed 42}
+
+Section 6.3 reports the headline benchmark result and Appendix F.1 the two decompositions it draws on. Both come from the same pair of best checkpoints scored on the same 210-image test set, at seed 42 only; \S6.3.1 replicates the slice decomposition across three seeds, and where the two disagree the three-seed figures are the ones any claim rests on.
+
+\begin{center}
+\small
+\begin{longtable}{llr}
+\caption{Benchmark per-predicate mean recall at 100 for both arms, seed 42.}\\
+\hline
+per-predicate mR@100 & human-trained & auto-trained \\
+\hline
+\endfirsthead
+\hline
+per-predicate mR@100 & human-trained & auto-trained \\
+\hline
+\endhead
+on & \textbf{0.741} & 0.637 \\
+under & 0.731 & \textbf{0.762} \\
+to the left of & \textbf{0.203} & 0.120 \\
+to the right of & \textbf{0.373} & 0.180 \\
+in front of & \textbf{0.124} & 0.101 \\
+behind & \textbf{0.195} & 0.109 \\
+near & \textbf{0.054} & 0.032 \\
+\hline
+\end{longtable}
+\end{center}
+
+\begin{center}
+\small
+\begin{longtable}{llr}
+\caption{Benchmark mean recall at 100 by test slice for both arms, seed 42. Section 6.3.1 replicates every row but the convention-aligned one across three seeds.}\\
+\hline
+test slice (mR@100) & human-trained & auto-trained \\
+\hline
+\endfirsthead
+\hline
+test slice (mR@100) & human-trained & auto-trained \\
+\hline
+\endhead
+full test, as annotated & \textbf{0.346} & 0.277 \\
+full test, conventions aligned* & \textbf{0.387} & 0.312 \\
+group 6 alone (inverted convention) & \textbf{0.382} & 0.261 \\
+group 7 alone (consistent annotator) & 0.323 & 0.334 \\
+group 8 alone (inverted, dense \texttt{near} user) & \textbf{0.190} & 0.116 \\
+\hline
+\end{longtable}
+\end{center}
+
+\textbackslash{}* groups 6/8's front/behind gold flipped, one disclosed bit per group, as in \S4.5.
+
+\subsection{F.2 Downstream recall by label source}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/rq2-with-vlm.png}
+\caption{Downstream recall against held-out human gold by label source. Every arm trains on the same pairs, so the label source is the only variable. Self-training improves on the human labels everywhere except \texttt{near}, where it falls below them.}
+\label{fig:rq2-with-vlm}
+\end{figure}
+
+
+Section 5.2 carries the per-predicate figures and the seed spreads. The chart below is the same experiment drawn rather than tabulated, which makes the ordering easier to take in at once.

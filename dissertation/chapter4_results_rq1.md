@@ -41,6 +41,8 @@ unseen arrangement as well as an unseen annotator (§4.14).
 
 ## 4.2 Headline: recall of the human triplets
 
+{{fig:rq1-recall}} plots the per-predicate result; the table below carries the same figures with the baselines.
+
 | Predicate | Gold | Ours | Ours (held-out) | Random | Majority | Box-only |
 |---|---|---|---|---|---|---|
 | on | 1465 | 0.88 | 0.92 | 0.13 | 0.00 | 0.84 |
@@ -339,16 +341,8 @@ structure of each refinement are given in **Appendix D**.
 Each missed human triplet is diagnosed automatically by re-checking the rule's
 individual conditions against the cached geometry and mask-contact maps
 (`scripts/make_failure_gallery.py`; rendered examples in
-`outputs/failure_gallery/`). With the shipped rule set (1,689 misses):
-
-| Predicate | Dominant causes (share of that predicate's misses) |
-|---|---|
-| in front of | abstained in ambiguity band 61% · convention-inverted annotators 38% · **genuine depth error 1%** |
-| behind | abstained 52% · convention-inverted 42% · **genuine depth error 5%** |
-| on | mask contact below threshold 58% · depth-gate suppressed 40% |
-| under | contact below threshold 50% · depth-gate suppressed 33% · no contact measured (occlusion) 17% |
-| near | 2 remaining misses (contact boundary) |
-| to the left/right of | centre flip 71–89% · abstained 11–29% (52 cases total) |
+`outputs/failure_gallery/`). Appendix D.7 breaks the 1,689 misses of the
+shipped rule set down by predicate and cause.
 
 Genuine depth-ordering errors remain 1–5% of front/behind misses; the support
 misses are threshold/gate trades on real contact evidence rather than
@@ -388,19 +382,16 @@ numbers are the ones that matter.
 
 ## 4.12 Video, and the only out-of-domain evidence
 
-Two royalty-free stock clips (sources in Appendix A) were processed frame by
-frame by §4.11's deployment stack with no threshold retuned: `near_T`, the
-depth band, the contact fraction and the plane band keep the values fitted on
-groups 0-5. They are the project's only evidence from outside the calibration
-domain and share nothing with the robot dataset: different scenes, a
-different camera, and objects almost entirely outside the six annotated
-classes (monitor, keyboard, mouse, mug, spectacles, plants, lamp, notepad,
-laptop, wallet, earbuds case). The two regimes are complementary: a **moving
-camera over a static desk** (clip 1, 99 frames), where any variation is
-measurement noise, and a **static overhead camera with moving hands** (clip
-2, 79 frames), where relations genuinely change and smoothing must not erase
-them. Appendix E.4 gives the tracking and temporal-vote settings and the
-open-vocabulary failures.
+Two royalty-free stock clips were processed frame by frame by §4.11's
+deployment stack with no threshold retuned. They are the project's only
+evidence from outside the calibration domain and share nothing with the robot
+dataset: different scenes, a different camera, and objects almost entirely
+outside the six annotated classes. The two regimes are complementary, a
+**moving camera over a static desk** (clip 1, 99 frames) where any variation
+is measurement noise, and a **static overhead camera with moving hands**
+(clip 2, 79 frames) where relations genuinely change and smoothing must not
+erase them. Appendix E.4 gives the clips, the thresholds carried over, the
+tracking and temporal-vote settings, and the open-vocabulary failures.
 
 Three observations. **(i) Relations are stable wherever identity is.** For
 pairs co-visible in at least 20 frames the predicate persists at 0.90/0.94
@@ -417,14 +408,14 @@ front/behind re-maps to distance from the viewer's edge of the desk, the
 reference-frame dependence §2.5 cites from RoboSpatial, demonstrated rather
 than asserted.
 
-The limits should be equally clear. With no video ground truth these are
-qualitative judgements over two clips: they support the claim that the
-*rules* carry to new object types and viewpoints, and say nothing
-quantitative about accuracy in a new domain. A labelled cross-domain sample
-is the measurement this substitutes for, and it remains future work (§7.6).
-What the clips do settle is that transfer is not blocked by the object
-vocabulary, because the failures visible in them are detection failures,
-which is the same attribution §4.11 makes for the dataset itself.
+With no video ground truth these are qualitative judgements over two clips.
+They support the claim that the *rules* carry to new object types and
+viewpoints, and say nothing quantitative about accuracy in a new domain; a
+labelled cross-domain sample is the measurement they substitute for, and it
+remains future work (§7.6). What the clips do settle is that transfer is not
+blocked by the object vocabulary, because the failures visible in them are
+detection failures, the same attribution §4.11 makes for the dataset
+itself.
 
 ## 4.13 Independent validation of the precision estimate
 
@@ -434,13 +425,10 @@ evaluated. Conservative rules and published evidence mitigate that without
 removing it, and the honest description is "author-verdicted". A separate
 study re-estimates precision with disinterested judges: 2,002 automatic
 labels, stratified across the seven predicates, drawn entirely from pairs the
-annotators never touched, each rendered as the photograph with subject and
-object outlined and judged TRUE or WRONG by anonymous volunteers under
-Chapter 3's definitions.
-
-It is designed to measure three things the author-verdicted audits cannot:
-crowd precision per predicate at a sample two orders of magnitude larger than
-§4.4's fifteen; an author-bias check, by comparing crowd majority against the
+annotators never touched, each judged TRUE or WRONG by anonymous volunteers
+under Chapter 3's definitions. It measures three things the author-verdicted
+audits cannot: crowd precision per predicate at a sample two orders of
+magnitude larger than §4.4's fifteen; an author-bias check against the
 author's own verdict on the 147 items carrying both; and whether disputed
 claims are wrong or merely ambiguous, through inter-rater reliability, which
 is the distinction the disagreement literature of §2.3 insists on.
@@ -471,30 +459,20 @@ the design was described as one thing and the data supports a slightly
 stronger one.
 
 **The measurement.** Consecutive frames show a scene from different
-viewpoints, so the pipeline's verdicts can be checked against themselves
-with no human labels: a relation fixed by geometry should survive the camera
-moving, and one decided by a coin toss at a threshold should not. Frames
-were segmented by content drift (§3.10) and each segment's predicates
-propagated from its keyframe to the rest, matching objects by class and box
-overlap because object indices are not stable across frames, the annotators
-having recorded different subsets of the scene from frame to frame
-(`group_0` alone contains 43 distinct object orderings;
-`eval/keyframe_propagation.py`).
-
-*Segmentation.* Drift-based segmentation compresses the released frames 2.7×
-at τ = 10 and locates all eight known layout changes within five frames of
-where they fall. The standard alternative, thresholding the difference
-between consecutive frames, has no usable operating point on this material
-at any setting, for the structural reason §3.10 gives. Appendix E.2 reports
-both sweeps.
-
-*Stability and cost.* The propagation runs over the 802 annotated frames
+viewpoints, so the pipeline's verdicts can be checked against themselves with
+no human labels: a relation fixed by geometry should survive the camera
+moving, and one decided by a coin toss at a threshold should not. Frames were
+segmented by content drift (§3.10) and each segment's predicates propagated
+from its keyframe to the rest, matching objects by class and box overlap
+because object indices are not stable across frames
+(`eval/keyframe_propagation.py`). Segmentation compresses the released frames
+2.7× at τ = 10 and locates all eight known layout changes within five frames;
+the standard alternative, thresholding consecutive-frame differences, has no
+usable operating point on this material at any setting, for the structural
+reason §3.10 gives. The propagation itself runs over the 802 annotated frames
 carrying pair records, segmented within each group so no segment straddles
-two arrangements. At τ = 10 that leaves 234 frames whose predicates are
-propagated rather than computed, and 11,352 object pairs on which the two
-can be compared. (Compression is lower here than the 2.7× above because
-these 802 frames are a subset: consecutive members sit further apart in the
-original capture.)
+two arrangements, leaving at τ = 10 some 234 propagated frames and 11,352
+comparable object pairs. Appendix E.2 reports both sweeps and the coverage figures.
 
 | Predicate | Stability | Recall (propagated) | Recall (per frame) |
 |---|---|---|---|
@@ -527,51 +505,37 @@ converges with A8, where a four-times-larger depth model changed nothing, and
 with §4.5, where two groups labelled the pair oppositely. §7.2 develops what
 follows.
 
-**Limits.** The figures above are an upper bound, because only pairs that
-could be matched between keyframe and frame contribute and those are the
-ones whose objects moved least in the image. Coverage also thins as segments
-grow, so aggressive compression leaves pairs uncovered rather than
-mislabelled. Appendix E.2 traces that to box drift under camera motion
-rather than to absent annotation, which makes carrying object identity with
-a tracker the straightforward remedy.
+**Limits.** The figures above are an upper bound, because only pairs matched
+between keyframe and frame contribute and those are the ones whose objects
+moved least in the image. Coverage also thins as segments grow, so aggressive
+compression leaves pairs uncovered rather than mislabelled; Appendix E.2
+traces that to box drift under camera motion rather than to absent
+annotation, which makes carrying object identity with a tracker the
+straightforward remedy.
 
 ## 4.15 Scale, measured rather than extrapolated
 
 Throughput and density elsewhere in this chapter are measured on the 836
 annotated images, which leaves the claim that the method extends to new
-captures resting on an extrapolation. The 1,766 unannotated frames of the
-raw sequence (§4.14, Appendix A) remove that gap: they are robot output
-nobody has labelled, from the same platform and laboratory but from later in
-the session, with arrangements and rooms the tool has never been shown.
+captures resting on an extrapolation. The 1,766 unannotated frames of the raw
+sequence (§4.14, Appendix A) remove that gap: they are robot output nobody
+has labelled, from the same platform and laboratory but from later in the
+session, with arrangements and rooms the tool has never been shown. There is
+no ground truth, so no accuracy claim is available and none is made. What the
+run establishes is operational.
 
-No accuracy claim is available here, since there is no ground truth, and
-none is made. What the run establishes is operational, and there are three
-parts to it.
-
-*Cost.* Content-adaptive selection reduces 1,766 frames to 562 keyframes,
-3.1×. The recorded run took 6.15 s per frame on the RTX 2060, 586 frames per
-hour, so the keyframe pass finished in 58 minutes against just over three
-hours for every frame (`outputs/extension_scale.json`). That includes writing
-an inspection overlay per frame to make the output checkable by eye;
-annotation is roughly half of it, so a JSON-only deployment run would land
-near 3.3 s per frame. The measured figure leads because it is the one the
-repository reproduces.
-
-*Yield.* The run emits 185,242 triplets over 562 frames, 330 per frame from
-11.7 detected objects. No frame produced an empty graph. For comparison, the
-human process recorded 8,926 triplets across 836 images, about 11 per image.
-
-*Behaviour.* The risk with unfamiliar input is not loud failure but quiet
-drift: a pipeline still emitting labels whose distribution has silently
-changed. Against the same detector on the annotated images the predicate
-distribution is nearly unchanged, total variation distance 0.032 with the
-largest shift 0.015 (in front of, 0.181 to 0.195). The `on`/`under` share is
-low in both runs, 0.006 annotated against 0.003 here, which is a property of
-open-vocabulary detection rather than the new frames: more detections means
-more pairs, and most pairs are not in contact. Density per frame is lower for
-the same reason in reverse, 330 against 633 triplets, since the later
-arrangements hold fewer objects (11.7 detections against 16.9) and pair count
-grows with the square.
+Content-adaptive selection reduces 1,766 frames to 562 keyframes, 3.1×, and
+the recorded run took 6.15 s per frame on the RTX 2060, 586 frames per hour,
+finishing the keyframe pass in 58 minutes against just over three hours for
+every frame (`outputs/extension_scale.json`). It emits 185,242 triplets over
+those 562 frames, 330 per frame from 11.7 detected objects, with no empty
+graph anywhere; the human process recorded 8,926 triplets across 836 images,
+about 11 per image. The risk with unfamiliar input is not loud failure but
+quiet drift, a pipeline still emitting labels whose distribution has silently
+changed, and that does not happen: against the same detector on the annotated
+images the predicate distribution shifts by a total variation distance of
+0.032, largest single move 0.015. Appendix E.6 accounts for the timing and
+for both distribution differences.
 
 The honest summary is that the scaling claim now rests on a run rather than
 an argument, and that what it demonstrates is capacity and stability, not
@@ -599,11 +563,10 @@ ambiguity rather than accuracy. Scoring is the RQ1 battery on identical
 pairs (`eval/score_vlm_pilot.py`). Every reply parsed; none was malformed.
 
 Two models were run, because the obvious objection to a single one is that a
-larger model would close the gap. `gemini-flash-latest` is the small
-non-reasoning model; `gemini-3.1-pro-preview` is a reasoning model roughly
-an order of magnitude larger which spends most of its output budget
-deliberating before it answers. Nothing else differs between the two runs:
-same images, same numbered boxes, same definitions, same scored pairs
+larger model would close the gap: `gemini-flash-latest` is the small
+non-reasoning model, `gemini-3.1-pro-preview` a reasoning model roughly an
+order of magnitude larger which spends most of its output budget deliberating
+before it answers. Nothing else differs between the runs
 (`eval/compare_vlm_models.py`).
 
 | Predicate | Gold | Flash | Pro | Pipeline |
@@ -629,29 +592,17 @@ the 374 judged pairs the pipeline makes 868 assertions against 344 and 414
 from the two models, so it has two to two and a half times the chances of
 covering any gold triplet. A sparse labeller can be right more often about
 what it does say and still lose on recall. Restricting all three to the
-judged pairs, where precision is defined, tests that.
-
-| Predicate | Flash P | Pro P | Pipeline P | Flash F1 | Pro F1 | Pipeline F1 |
-|---|---|---|---|---|---|---|
-| on | **0.950** | 0.840 | 0.897 | 0.784 | 0.785 | **0.904** |
-| under | 0.886 | 0.837 | **0.909** | 0.756 | 0.800 | **0.879** |
-| to the left of | 0.408 | **0.489** | 0.385 | 0.408 | 0.479 | **0.542** |
-| to the right of | 0.381 | **0.396** | 0.387 | 0.352 | 0.392 | **0.548** |
-| in front of | **0.484** | 0.475 | 0.356 | 0.270 | 0.317 | **0.447** |
-| behind | **0.478** | 0.281 | 0.308 | 0.250 | 0.186 | **0.410** |
-| near | 0.105 | 0.084 | **0.128** | 0.165 | 0.138 | **0.227** |
-| **micro** | **0.419** | 0.389 | 0.351 | 0.397 | 0.405 | **0.488** |
-
-**Both models are more precise than the pipeline** on the pooled figure, 0.42
-and 0.39 against 0.35. They buy that with silence, and the price is steep
-enough that both lose F1 on every predicate, 0.40 and 0.41 against 0.49
-pooled.
+judged pairs, where precision is defined, tests that, and it reverses one
+column. **Both models are more precise than the pipeline** on the pooled
+figure, 0.419 and 0.389 against 0.351. They buy that with silence, and the
+price is steep enough that both lose F1 on every predicate, 0.397 and 0.405
+against 0.488 pooled (Appendix E.1).
 
 The larger model redistributes the picture rather than resolving it. It
 asserts more (414 judged-pair assertions against 344), lifting recall and
 costing precision, so its F1 lands within 0.008 of the smaller model's. Where
 the smaller model looked most interesting, `behind`, the larger is markedly
-worse at 0.28 precision against 0.48. It clearly improves in one place, the
+worse at 0.281 precision against 0.478. It clearly improves in one place, the
 symmetric-pair defect: *to the left of* without its inverse on 0.16 of
 assertions against 0.35, so deliberation does buy internal consistency.
 Neither contradicts itself, both at zero.

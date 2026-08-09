@@ -269,39 +269,31 @@ runs it.
 **Design.** Twenty-five held-out scenes were selected in which a target
 object has a second object physically resting on it, so any safe plan must
 move the occluder first. Each scene is put to an LLM planner three times, in
-prompts differing only in what they state about the scene: **A** lists the
-objects and nothing else, **B** adds the human-annotated relationships, and
-**C** adds the automatically computed ones. One filter is applied to both
-relation conditions before anything is written into the prompt, so no
-relation is offered to one planner that would have been withheld from the
-other. Density is
-deliberately not equalised, since matching a sparser source would mean
-throwing away true relations: the automatic condition averages 22.6
-relations per prompt and the human condition 3.1. Appendix E.5 sets out the
-filter and the prompt construction.
+prompts differing only in what they state: **A** lists the objects and
+nothing else, **B** adds the human-annotated relationships, **C** adds the
+automatically computed ones. One filter runs over both relation conditions
+first, so no relation is offered to one planner that would have been withheld
+from the other. Density is deliberately not equalised, since matching a
+sparser source would mean throwing away true relations: C averages 22.6
+relations per prompt against B's 3.1.
 
 **Scoring.** A plan is safe if it moves the occluding object in an earlier
-step than the one that grasps the target. Judgements are made by published
-rules rather than by reading (`eval/score_planner.py`), for two reasons: the
-rules never see the condition, so scoring is blind by construction, which
-matters when the author has a stake in the result; and a reader who disputes
-a verdict can inspect the rule instead of trusting a judgement. The rules
-were checked against a hand-read sample, which is the only thing that makes
-them trustworthy and which caught a real defect that moved condition C from
-0.64 to 0.88. Appendix E.5 records what the defect was, because an automatic
-scorer is worth exactly what its agreement with careful manual reading says
-it is.
+step than the one that grasps the target, judged by published rules rather
+than by reading (`eval/score_planner.py`): the rules never see the condition,
+so scoring is blind by construction, which matters when the author has a
+stake in the result, and a reader who disputes a verdict can inspect the rule
+instead of trusting a judgement. Appendix E.5 gives the filter, the prompt
+construction, and the defect a hand-read sample caught, which moved condition
+C from 0.64 to 0.88.
 
-**Result.** The whole experiment was run twice, on two planners of very
-different capability: `gemini-flash-latest`, a small non-reasoning model,
-and `gemini-3.1-pro-preview`, a reasoning model roughly an order of
-magnitude larger. Nothing else differs between the two runs.
-
-Two further conditions were added afterwards, and only on the larger
-planner. **D** replaces the tool's relations with a vision-language model's,
-the same `gemini-3.1-pro-preview` assessed as a label source in §4.16, passed
-through the identical filter so that B, C and D differ only in who supplied
-the relations. **E** supplies the union of C and D.
+**Result.** The experiment was run twice on planners of very different
+capability: `gemini-flash-latest`, a small non-reasoning model, and
+`gemini-3.1-pro-preview`, a reasoning model roughly an order of magnitude
+larger. Nothing else differs between the runs. Two further conditions were
+added afterwards, on the larger planner only: **D** replaces the tool's
+relations with the vision-language model's from §4.16, passed through the
+identical filter so that B, C and D differ only in who supplied the
+relations, and **E** supplies the union of C and D.
 
 | Condition | Prompt states | Safe plans (flash) | Safe plans (pro) |
 |---|---|---|---|
@@ -321,16 +313,14 @@ make. It also disposes of the obvious objection to condition A's zero, that
 a more capable planner would have inferred the support relation from the
 object list: it does not, in twenty-five scenes out of twenty-five, twice.
 
-The effect of stating relations at all is total: without them the planner
-never clears the occluder, in twenty-five scenes out of twenty-five. The
-failure is more specific than inattention. In seven of those twenty-five
-plans the planner *names* the occluding object, but only ever as something
-to steer around: "maintaining a clear path above cube0, book2, book3", or
-"lift box0 to a safe height to clear book1". It sees the object and
-misreads its role, treating something resting on the target as a neighbour
-to avoid rather than a load to remove, which is exactly the distinction a
-support relation encodes and nothing else in the prompt does. That is the
-paper's illustrated failure, reproduced at scale rather than asserted.
+The effect of stating relations at all is total, and the failure without
+them is more specific than inattention: in seven of the twenty-five condition
+A plans the planner *names* the occluding object, but only ever as something
+to steer around (Appendix E.5). It sees the object and misreads its role,
+treating something resting on the target as a neighbour to avoid rather than
+a load to remove, which is exactly the distinction a support relation encodes
+and nothing else in the prompt does. That is the paper's illustrated failure,
+reproduced at scale rather than asserted.
 
 **The two automatic sources fail on different scenes, and the union closes
 the gap.** Condition D is the weaker source taken alone: 20 of 25 against the
@@ -358,29 +348,22 @@ differently-failing source are worth having exactly where the geometric rules
 abstain.
 
 **Where the automatic labels lose, and why.** All three C failures have the
-same cause, and it is not a planning failure: in each, the automatic relation
-list did not contain the support relation. Scene 4 offered "box6 is in front
-of book7" and "box6 is near book7"; scene 24 offered near, in front of and to
-the left of. The occluder was described, accurately, in every way except the
-one the task depended on. In zero cases was the support relation present and
-ignored. The failure rate follows directly: three misses in twenty-five
-scenes is 12%, against the measured support recall of 0.88 in §4.2, so the
-planner result is the fidelity result showing up one level higher in the
-chain.
-
-Scene 16 shows the mechanism sharply. The planner used the automatic
-relations it was given, cleared the four objects the prompt said were *in
-front of* the target, and left the one resting on top of it, because that
-relation was never stated. It reasoned correctly from incomplete input.
+same cause, and it is not a planning failure: the automatic relation list did
+not contain the support relation. The occluder was described, accurately, in
+every way except the one the task depended on, and in zero cases was the
+support relation present and ignored (Appendix E.5). Three misses in
+twenty-five scenes is 12%, against the measured support recall of 0.88 in
+§4.2, so the planner result is the fidelity result showing up one level
+higher in the chain.
 
 **What this does not show.** Three limits. The comparison is between label
 sources, not planners: condition B is handed the exact fact the task tests,
 so B versus C measures whether each source supplies that fact, not which
-source produces better reasoning. It uses two models but one prompt style,
-so the phrasing of the plan request is uncontrolled in a way the choice of
-planner no longer is. And no robot moved:
-this measures plans, not executions, so it closes the gap between labels and
-robot behaviour by one link rather than closing it entirely.
+source reasons better. It uses two models but one prompt style, so the
+phrasing of the plan request is uncontrolled in a way the choice of planner
+no longer is. And no robot moved: this measures plans, not executions, so it
+closes the gap between labels and robot behaviour by one link rather than
+closing it entirely.
 
 What it settles is the question §5.6 could only frame. Automatic labels carry
 88% of the decision-relevant content that human labels carry on this task,

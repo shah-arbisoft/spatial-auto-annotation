@@ -51,43 +51,43 @@ FIGURES = {
         "box-only bar because that ablation cannot compute depth.",
         "## 4.3 Precision on the annotated pairs"),
     "near_T_sweep.png": (
-        "chapter4_results_rq1.md",
+        "appendices.md",
         "Fitting the \\texttt{near} threshold. Recall against all annotators "
         "and against the held-out annotator, with restricted precision. The "
         "fitted value is the tightest threshold at the plateau.",
-        "## 4.4 Manual audit of extra predictions (true-precision estimate)"),
+        "after:### C.7"),
     "front_behind_decomposition.png": (
-        "chapter4_results_rq1.md",
+        "appendices.md",
         "Front/behind decomposed per annotator group: agreement where the "
         "tool commits, deliberate abstention, and the two groups that used "
         "the inverted direction convention.",
-        "## 4.6 The tenth annotator"),
+        "after:### C.6"),
     "video_stability.png": (
-        "chapter4_results_rq1.md",
+        "appendices.md",
         "Frame-to-frame stability of the emitted triplets on the two "
         "demonstration clips, before and after temporal smoothing.",
-        "## 4.13 Independent validation of the precision estimate"),
+        "after:### E.4"),
     "planner_sources.png": (
-        "chapter5_results_rq2.md",
+        "appendices.md",
         "Scenes with a safe grasp plan, by the relation source given to the "
         "planner. Neither automatic source matches human annotation alone; "
         "their union does, because their failures are disjoint.",
-        "## 5.8 Answer to RQ2"),
+        "after:### E.5"),
     "rq2_with_vlm.png": (
-        "chapter5_results_rq2.md",
+        "appendices.md",
         "Downstream recall against held-out human gold by label source. "
         "Every arm trains on the same pairs, so the label source is the only "
         "variable. Self-training improves on the human labels everywhere "
         "except \\texttt{near}, where it falls below them.",
-        "## 5.3 Why self-training does not rescue the human labels"),
+        "after:### F.2"),
     "rq1_with_vlm.png": (
-        "chapter4_results_rq1.md",
+        "appendices.md",
         "Recall of the human triplets per predicate: the geometric pipeline "
         "against both vision-language models on the same 30 images, the same "
         "numbered boxes and the same written definitions. The dotted lines "
         "are the two means. Scaling the model lifts every predicate a little "
         "and closes none of the gap.",
-        "after:## 4.16 Would a vision-language model do this instead?"),
+        "after:### E.1"),
     "sgg_training_curves.png": (
         "chapter6_benchmark.md",
         "Validation curves for both benchmark arms, each against its own "
@@ -137,12 +137,24 @@ def inline(text: str) -> str:
 
     text = re.sub(r"`([^`]+)`", stash, text)
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)      # links -> text
+    # {{fig:rq1-recall}} -> Figure~\ref{...}. Written this way in the Markdown
+    # so a figure can be referred to by name rather than by a number that
+    # moves whenever a float does; stashed with the code spans so esc() below
+    # does not escape the backslash back out again.
+    def stash_ref(m):
+        spans.append(None)
+        REFS[len(spans) - 1] = r"Figure~\ref{" + m.group(1) + "}"
+        return f"\x00{len(spans) - 1}\x00"
+
+    REFS: dict[int, str] = {}
+    text = re.sub(r"\{\{(fig:[A-Za-z0-9_-]+)\}\}", stash_ref, text)
     text = esc(text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"\\textbf{\1}", text)
     text = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"\\textit{\1}", text)
 
     def pop(m):
-        return r"\texttt{" + esc(spans[int(m.group(1))]) + "}"
+        i = int(m.group(1))
+        return REFS[i] if i in REFS else r"\texttt{" + esc(spans[i]) + "}"
 
     return re.sub(r"\x00(\d+)\x00", pop, text)
 
@@ -186,8 +198,6 @@ TABLES = {
         # 4.9
         "The nine ablations: what each tests, the setting that shipped, and "
         "the verdict on held-out annotators.",
-        # 4.10
-        "Diagnosed cause of every missed human triplet, by predicate.",
         # 4.14
         "Stability of each predicate across viewpoints of the same scene, "
         "with recall under keyframe propagation against per-frame "
@@ -195,10 +205,6 @@ TABLES = {
         # 4.16
         "A vision-language model against the geometric pipeline on the same "
         "30 images, the same pairs and the same human gold: recall.",
-        # 4.16
-        "The same comparison restricted to the pairs carrying a human label, "
-        "where precision is defined. The model is the more precise labeller "
-        "and loses F1 on every predicate.",
     ],
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "
@@ -214,8 +220,6 @@ TABLES = {
     "chapter6_benchmark.md": [
         "Benchmark test results (SGDet) for the human-trained and "
         "auto-trained arms.",
-        "Per-predicate mean recall at 100 for both arms.",
-        "Mean recall at 100 by test slice for both arms.",
         "Seed replication: which differences separate across three seeds "
         "per arm.",
         "A third label source in the benchmark: mean recall at 100 by test "
@@ -235,6 +239,18 @@ TABLES = {
         # D.6
         "Ablation A9 by depth separation: multi-frame ordering accuracy is at "
         "chance where the two objects sit at nearly equal camera distance.",
+        # D.7
+        "Diagnosed cause of every missed human triplet, by predicate.",
+        # E.1
+        "The vision-language comparison of \\S4.16 restricted to the pairs "
+        "carrying a human label, where precision is defined. The model is the "
+        "more precise labeller and loses F1 on every predicate.",
+        # F.1
+        "Benchmark per-predicate mean recall at 100 for both arms, seed 42.",
+        # F.1
+        "Benchmark mean recall at 100 by test slice for both arms, seed 42. "
+        "Section 6.3.1 replicates every row but the convention-aligned one "
+        "across three seeds.",
     ],
 }
 
@@ -545,8 +561,14 @@ def main():
         n_here = sum(1 for ln in body.splitlines()
                      if ln.strip().startswith("|---"))
         take, app_caps = app_caps[:n_here], app_caps[n_here:]
+        # Figures owned by the appendices are anchored on a subsection
+        # heading, so each belongs to whichever appendix chunk holds its
+        # anchor; without this filter every appendix would get every figure.
+        here = [(f, c, a) for f, (owner, c, a) in FIGURES.items()
+                if owner == "appendices.md" and (FIGDIR / f).exists()
+                and a and a.removeprefix("after:") in body]
         chunks.append("\\chapter{" + inline(title.strip()) + "}\n"
-                      + convert(body, [], take))
+                      + convert(body, here, take))
     (out / "appendices.tex").write_text(
         "\n\n".join(chunks) if chunks else convert(app_md, []), encoding="utf-8")
     print(f"  appendices.md{'':21s} -> appendices.tex  ({len(chunks)} appendices)")

@@ -20,7 +20,7 @@ human-label arm saturates early, replicating the source paper; (2) the auto-labe
 
 \section{Training dynamics: prediction 1 confirmed}
 
-The human arm reaches 95\% of its best validation score by \textbf{epoch 4}, peaks at epoch 12 and declines, mild overfitting on 5,421 sparse triplets. That replicates the source paper's central observation ("all predictors reached their peak mR@100 well before the final epoch") on its own dataset with a current model, and adds the cause: sparse supervision is exhausted early. The auto arm is still improving at epoch 9, peaks at epoch 18 without declining, and sees 213 distinct triplet types in training against the human arm's 94. (Figure: \texttt{sgg\_training\_curves.png}. Each validation series uses its own arm's labels, so only the \textit{shapes} compare, never the heights.)
+The human arm reaches 95\% of its best validation score by \textbf{epoch 4}, peaks at epoch 12 and declines, mild overfitting on 5,421 sparse triplets. That replicates the source paper's central observation ("all predictors reached their peak mR@100 well before the final epoch") on its own dataset with a current model, and adds the cause: sparse supervision is exhausted early. The auto arm is still improving at epoch 9, peaks at epoch 18 without declining, and sees 213 distinct triplet types in training against the human arm's 94. Figure~\ref{fig:sgg-training-curves} plots both: each validation series uses its own arm's labels, so only the \textit{shapes} compare, never the heights.
 
 \begin{figure}[htbp]
 \centering
@@ -53,55 +53,9 @@ zero-shot recall zR@100 & 0.004 & \textbf{0.157} \\
 \end{longtable}
 \end{center}
 
-\begin{center}
-\small
-\begin{longtable}{llr}
-\caption{Per-predicate mean recall at 100 for both arms.}\\
-\hline
-per-predicate mR@100 & human-trained & auto-trained \\
-\hline
-\endfirsthead
-\hline
-per-predicate mR@100 & human-trained & auto-trained \\
-\hline
-\endhead
-on & \textbf{0.741} & 0.637 \\
-under & 0.731 & \textbf{0.762} \\
-to the left of & \textbf{0.203} & 0.120 \\
-to the right of & \textbf{0.373} & 0.180 \\
-in front of & \textbf{0.124} & 0.101 \\
-behind & \textbf{0.195} & 0.109 \\
-near & \textbf{0.054} & 0.032 \\
-\hline
-\end{longtable}
-\end{center}
+The human-trained arm wins the headline ranking metrics (mR@100 0.346 vs 0.277) and leads on six of the seven predicates individually, the exception being \texttt{under} at 0.762 against 0.731; \texttt{near} fails for both arms (0.054 and 0.032), close to the source paper's 0.22--0.25 floor rather than recovered. Predictions 2 and 3 are refuted as stated. Appendix F.1 carries the per-predicate breakdown. One result points sharply the other way: on triplet \textit{types never seen in training}, the auto-trained arm recalls 0.157 against the human arm's 0.004, a 39$\times$ gap at this seed (replicated at \textasciitilde{}60$\times$ over three seeds; \S6.3.1). What that column measures here is set out in \S6.4, and it is coverage of the relation types the manual annotation never recorded rather than compositional generalisation.
 
-The human-trained arm wins the headline ranking metrics (mR@100 0.346 vs 0.277); \texttt{near} fails for both arms (0.05/0.03), close to the source paper's 0.22--0.25 floor rather than recovered. Predictions 2 and 3 are refuted as stated. One result points sharply the other way: on triplet \textit{types never seen in training}, the auto-trained arm recalls 0.157 against the human arm's 0.004, a 39$\times$ gap at this seed (replicated at \textasciitilde{}60$\times$ over three seeds; \S6.3.1). What that column measures here is set out in \S6.4, and it is coverage of the relation types the manual annotation never recorded rather than compositional generalisation.
-
-Two follow-up evaluations decompose the headline (same checkpoints, test slices re-scored):
-
-\begin{center}
-\small
-\begin{longtable}{llr}
-\caption{Mean recall at 100 by test slice for both arms.}\\
-\hline
-test slice (mR@100) & human-trained & auto-trained \\
-\hline
-\endfirsthead
-\hline
-test slice (mR@100) & human-trained & auto-trained \\
-\hline
-\endhead
-full test, as annotated & \textbf{0.346} & 0.277 \\
-full test, conventions aligned* & \textbf{0.387} & 0.312 \\
-group 6 alone (inverted convention) & \textbf{0.382} & 0.261 \\
-group 7 alone (consistent annotator) & 0.323 & 0.334 \\
-group 8 alone (inverted, dense \texttt{near} user) & \textbf{0.190} & 0.116 \\
-\hline
-\end{longtable}
-\end{center}
-
-\textbackslash{}* groups 6/8's front/behind gold flipped, one disclosed bit per group, as in \S4.5.
+Re-scoring the same checkpoints on individual test slices decomposes that headline, and the seed replication below repeats the decomposition with a spread rather than a point, so the single-run slice figures are in Appendix F.1. One of them has no counterpart there: aligning the front/behind convention of groups 6 and 8, one disclosed bit per group as in \S4.5, lifts both arms without changing the ordering, 0.387 against 0.312.
 
 \subsection{Replication across seeds, and one claim withdrawn}
 

@@ -41,8 +41,9 @@ their peak mR@100 well before the final epoch") on its own dataset with a
 current model, and adds the cause: sparse supervision is exhausted early. The
 auto arm is still improving at epoch 9, peaks at epoch 18 without declining,
 and sees 213 distinct triplet types in training against the human arm's 94.
-(Figure: `sgg_training_curves.png`. Each validation series uses its own arm's
-labels, so only the *shapes* compare, never the heights.)
+{{fig:sgg-training-curves}} plots both: each validation
+series uses its own arm's labels, so only the *shapes* compare, never the
+heights.
 
 ## 6.3 Test results: predictions 2 and 3 refuted on the ranking metric
 
@@ -56,39 +57,24 @@ human gold, groups 6–8):
 | F1@100 | **0.347** | 0.268 |
 | zero-shot recall zR@100 | 0.004 | **0.157** |
 
-| per-predicate mR@100 | human-trained | auto-trained |
-|---|---|---|
-| on | **0.741** | 0.637 |
-| under | 0.731 | **0.762** |
-| to the left of | **0.203** | 0.120 |
-| to the right of | **0.373** | 0.180 |
-| in front of | **0.124** | 0.101 |
-| behind | **0.195** | 0.109 |
-| near | **0.054** | 0.032 |
-
 The human-trained arm wins the headline ranking metrics (mR@100 0.346 vs
-0.277); `near` fails for both arms (0.05/0.03), close to the source paper's
-0.22–0.25 floor rather than recovered. Predictions 2 and 3 are refuted as
-stated. One result points sharply the other way: on triplet *types never
+0.277) and leads on six of the seven predicates individually, the exception
+being `under` at 0.762 against 0.731; `near` fails for both arms (0.054 and
+0.032), close to the source paper's 0.22–0.25 floor rather than recovered.
+Predictions 2 and 3 are refuted as stated. Appendix F.1 carries the
+per-predicate breakdown. One result points sharply the other way: on triplet *types never
 seen in training*, the auto-trained arm recalls 0.157 against the human
 arm's 0.004, a 39× gap at this seed (replicated at ~60× over three seeds;
 §6.3.1). What that column measures here is set out in §6.4, and it is
 coverage of the relation types the manual annotation never recorded rather
 than compositional generalisation.
 
-Two follow-up evaluations decompose the headline (same checkpoints, test
-slices re-scored):
-
-| test slice (mR@100) | human-trained | auto-trained |
-|---|---|---|
-| full test, as annotated | **0.346** | 0.277 |
-| full test, conventions aligned* | **0.387** | 0.312 |
-| group 6 alone (inverted convention) | **0.382** | 0.261 |
-| group 7 alone (consistent annotator) | 0.323 | 0.334 |
-| group 8 alone (inverted, dense `near` user) | **0.190** | 0.116 |
-
-\* groups 6/8's front/behind gold flipped, one disclosed bit per group, as in
-§4.5.
+Re-scoring the same checkpoints on individual test slices decomposes that
+headline, and the seed replication below repeats the decomposition with a
+spread rather than a point, so the single-run slice figures are in Appendix
+F.1. One of them has no counterpart there: aligning the front/behind
+convention of groups 6 and 8, one disclosed bit per group as in §4.5, lifts
+both arms without changing the ordering, 0.387 against 0.312.
 
 ### 6.3.1 Replication across seeds, and one claim withdrawn
 
