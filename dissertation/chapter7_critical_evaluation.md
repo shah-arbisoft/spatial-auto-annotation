@@ -67,15 +67,15 @@ error are roughly 7%. The bulk of the miss mass is calibrated abstention
 defects (38–42%, a share that *grew* as the ground-plane fallback shrank the
 abstention share around it).
 
-Second, **the support arc shows the method working as a method**. The box rule
-shipped with ~0.27 true precision; the audit localised the failure (projection
-adjacency), the gallery localised the misses (containment), one geometric
-insight (stacked objects share a camera distance) fixed half the false fires,
-and one perception upgrade (mask-bottom contact) fixed most of the rest while
-*raising* recall, each step calibrated on train annotators and validated
-held-out. The residual failure mode is itself precisely characterised: a
-person *holding* an object satisfies pixel contact (3 of the 7 remaining
-audited errors); a class-aware guard is the documented next refinement.
+Second, **the support arc shows the method working as a method**. The box
+rule shipped at ~0.27 true precision; the audit localised the failure
+(projection adjacency), the gallery localised the misses (containment), one
+geometric insight (stacked objects share a camera distance) fixed half the
+false fires, and one perception upgrade (mask-bottom contact) fixed most of
+the rest while *raising* recall, each step calibrated on train annotators and
+validated held-out. The residual failure mode is precisely characterised too:
+a person *holding* an object satisfies pixel contact (3 of the 7 remaining
+audited errors), and a class-aware guard is the documented next refinement.
 
 Third, **what looked like a depth-resolution ceiling was mostly a rules
 ceiling, and it moved**. Two objects at similar camera distance cannot be
@@ -83,27 +83,25 @@ ordered by relative monocular depth (the `depth_eps` sweep bounds the trade:
 recall up to ~0.71 at ε=0 for ~0.26–0.36 precision), but the ground-plane
 fallback recovers most of the abstention band *without* depth, from pure
 projection, once the tool's own contact evidence guards against elevated
-objects. The residual ceiling is narrower and precisely characterised:
-objects resting on supports the detector has no box for, the fallback's
-audited failure mode, and pairs whose bottom edges tie within the band. Both
-operating points are documented, revisable decisions rather than hidden
-constants (ablations A2, A7).
+objects. What is left is narrower and equally well characterised: objects
+resting on supports the detector has no box for, and pairs whose bottom edges
+tie within the band. Both operating points are documented, revisable
+decisions rather than hidden constants (ablations A2, A7).
 
 Section 4.14 settles what the ablations could not. If the front/behind gap
 were depth *noise*, estimates jittering either side of a boundary, moving the
-camera would flip verdicts, since that is the perturbation such noise
-responds to. It does not: the predicate reproduces itself 0.955 of the time,
-above `on` and `under`, and holds at 0.924 at 89-fold compression. A
-predicate recovering 0.64 of the human labels while agreeing with itself at
-that rate is not guessing; it is applying a consistent criterion the
-annotators did not share. With A8, where quadrupling the depth model changed
-nothing, and §4.5, where two groups labelled the pair oppositely, the weight
-of the shortfall sits on definitional disagreement rather than perception.
-That does not dissolve monocular ambiguity, which genuinely bounds the
-predicate at equal camera distance; it relocates most of the measured gap
-away from it. The implication is unglamorous: the best expected return on
-this predicate is a written annotation guideline, not a better depth
-network.
+camera would flip verdicts, since that is the perturbation such noise responds
+to. It does not: the predicate reproduces itself 0.955 of the time, above `on`
+and `under`, and holds at 0.924 at 89-fold compression. A predicate recovering
+0.64 of the human labels while agreeing with itself at that rate is not
+guessing; it is applying a consistent criterion the annotators did not share.
+With A8, where quadrupling the depth model changed nothing, and §4.5, where
+two groups labelled the pair oppositely, the weight of the shortfall sits on
+definitional disagreement rather than perception. That does not dissolve
+monocular ambiguity, which genuinely bounds the predicate at equal camera
+distance, but it relocates most of the measured gap away from it. The
+implication is unglamorous: the best expected return here is a written
+annotation guideline, not a better depth network.
 
 ## 7.3 The dataset's annotation process, examined
 
@@ -126,9 +124,9 @@ quantifies how much further the guideline problem goes:
 
 This reframes the evaluation itself: for several predicates there is no human
 consensus to agree with, only per-annotator behaviours. The dissertation's
-response (per-annotator reporting, annotator-aware calibration, and
-operational definitions as the deliverable) is, to our knowledge, the first
-time this dataset's label semantics have been made explicit.
+response, per-annotator reporting, annotator-aware calibration and operational
+definitions as the deliverable, is to our knowledge the first time this
+dataset's label semantics have been made explicit.
 
 The "tenth annotator" framing survives contact with the data, and §4.6 puts
 numbers on it. The tool is deterministic, the same labeller for every group,
@@ -136,9 +134,9 @@ so the 0.216 spread in its agreement across the seven consistent annotators
 (0.717 to 0.933) measures their heterogeneity, not its inconsistency. Fréchet
 bounds with the tool as common reference place annotator-to-annotator
 agreement in [0.74, 0.92], containing the tool's own 0.869. The claim is
-deliberately modest, since the bounds assume the batches are exchangeable:
-the automatic annotator cannot be shown to agree with the humans any less
-well than they can be shown to agree with each other. Without overlapping
+deliberately modest, since the bounds assume the batches are exchangeable: the
+automatic annotator cannot be shown to agree with the humans any less well
+than they can be shown to agree with each other. Without overlapping
 assignments the quantity cannot be measured outright, and that absence is
 itself a finding about the dataset's construction, one a replication should
 design away by having two annotators share a batch.
@@ -154,17 +152,16 @@ precision for five predicates and confirmed it for support); and **train-only
 calibration with held-out annotators** (every fitted threshold generalised:
 near recall 1.0, support F1 0.87 on annotators the thresholds never saw).
 
-One choice proved its worth only afterwards. Chapter 6 originally ran a
-single seed per arm, and an early reading of its per-group table reported the
-auto arm winning on the one defect-free test annotator. Two further seeds
-showed them tied, and the claim was withdrawn (§6.3.1). The narrow lesson is
-that a 0.011 margin on 73 images should never have been called a win; the
-honest description was "indistinguishable". The broader one is that the
-discipline applied faithfully to thresholds, fitting on some annotators and
-validating on others, reached *model training variance* late, and the fix was
-cheap: four extra runs on a free GPU tier. A replication designed from the
-start would have trained every arm at three seeds and reported ranges
-throughout, which is what the final version does.
+One choice proved its worth only afterwards. Chapter 6 originally ran a single
+seed per arm, and an early reading of its per-group table reported the auto arm
+winning on the one defect-free test annotator. Two further seeds showed them
+tied and the claim was withdrawn (§6.3.1). The narrow lesson is that a 0.011
+margin on 73 images should never have been called a win; the honest word was
+"indistinguishable". The broader one is that the discipline applied faithfully
+to thresholds reached *model training variance* late, and the fix was cheap:
+four extra runs on a free GPU tier. A replication designed from the start
+would have trained every arm at three seeds and reported ranges throughout,
+which is what the final version does.
 
 Choices a stricter replication should improve: the **audits were verdicted by
 the author** (conservatively, with verdicts and rendered evidence published

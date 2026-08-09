@@ -24,13 +24,11 @@ threshold generalises perfectly to the held-out annotator who used the label
 (recall 1.00), and the support rules reach held-out F1 0.87.
 
 **O3, validate.** Per-predicate fidelity against all 8,926 human triplets,
-against three trivial baselines and a vision-language model given the same
-boxes and the same definitions (§4.16), with nine ablations and manually
-audited precision (Chapter 4): mean recall 0.85, and 0.76 on annotators no
-threshold ever saw.
-Cluster-bootstrap intervals accompany every headline figure, and an
-independent validation study re-estimates precision with judges who have no
-stake in the result (§4.13).
+three trivial baselines and a vision-language model given the same boxes and
+definitions (§4.16), with nine ablations, manually audited precision and
+cluster-bootstrap intervals on every headline figure (Chapter 4): mean recall
+0.85, and 0.76 on annotators no threshold ever saw. An independent study
+re-estimates precision with judges who have no stake in the result (§4.13).
 
 **O4, diagnose.** Every one of the 1,689 missed human triplets is attributed
 to a cause by re-checking rule conditions, so the failure analysis is
@@ -39,10 +37,9 @@ roughly 7% of misses; the remainder is calibrated abstention and measured
 annotator behaviour (§4.10, §7.2).
 
 **O5, test downstream utility.** A controlled experiment trains the same
-classifier on three label sources under identical features, splits and seeds
-(Chapter 5), so that the only thing differing between arms is where the
-labels came from: automatic 0.76 mean recall against held-out human gold,
-human 0.30, self-trained 0.36.
+classifier on three label sources under identical features, splits and seeds,
+so the only variable is where the labels came from (Chapter 5): automatic 0.76
+mean recall against held-out human gold, human 0.30, self-trained 0.36.
 
 **O6, test at the level the field measures.** The same comparison is
 repeated in the source paper's own benchmark framework with a shared frozen
@@ -55,40 +52,39 @@ annotators whose labels Chapter 4 convicted of measured defects, and both
 readings are reported rather than one being selected.
 
 Section 1.2.2 fixed what would count as an answer before any result was
-reported. Both questions are settled against those criteria rather than
-against a measure chosen afterwards, and §7.1 is where the answers are
-argued; what follows is the verdict and its conditions.
+reported, so both questions are settled against those criteria rather than a
+measure chosen afterwards. Section 7.1 argues the answers; what follows is
+the verdict and its conditions.
 
-**RQ1 is answered yes on five of seven predicates and qualified on two.**
-The criterion was per-predicate recall on annotator groups no threshold ever
-saw, judged against two references fixed in advance. Both are met: the
-trivial baselines are beaten by a wide margin (0.85 against 0.14), and the
-tool's mean agreement with the consistent annotators, 0.869, falls inside
-the [0.74, 0.92] interval within which those annotators can be shown to
-agree with one another (§4.6), so the tool is not distinguishable from a
-tenth annotator. The second condition, that the labels beyond the human
-record survive audit, holds for the lateral, proximity and depth-decided
-predicates at audited precision near 1.0 and for support at roughly 0.9
-after the contact rule. The qualification is `in front of` and `behind`,
-which reach 0.64/0.66 pooled: not a failure of the criterion but a
-disagreement about the words, since §4.14 shows the tool reproducing its own
-verdict across viewpoints 0.955 of the time while two annotator groups
-applied the opposite convention. A per-predicate answer was required
-precisely so this could not hide inside a mean.
+**RQ1 is answered yes on five of seven predicates and qualified on two.** The
+criterion was per-predicate recall on annotator groups no threshold ever saw,
+judged against two references fixed in advance, and both are met: the trivial
+baselines are beaten by a wide margin (0.85 against 0.14), and the tool's mean
+agreement with the consistent annotators, 0.869, falls inside the [0.74, 0.92]
+interval within which those annotators can be shown to agree with one another
+(§4.6), so the tool is not distinguishable from a tenth annotator. The second
+condition, that labels beyond the human record survive audit, holds for the
+lateral, proximity and depth-decided predicates at audited precision near 1.0
+and for support at roughly 0.9 after the contact rule. The qualification is
+`in front of` and `behind` at 0.64/0.66 pooled: not a failure of the criterion
+but a disagreement about the words, since §4.14 shows the tool reproducing its
+own verdict across viewpoints 0.955 of the time while two annotator groups
+applied the opposite convention. A per-predicate answer was required precisely
+so this could not hide inside a mean.
 
-**RQ2 is answered yes at two of the three levels the criterion named, and
-the third disagrees.** The controlled classifier gives 0.76 against 0.30,
-and the planner gives 22 of 25 against 0 of 25 with no relations, both under
-the harder direction the criterion specified: held-out *human* gold, the
-rival source's own yardstick. The benchmark does not agree. Trained in the
-source paper's own framework, the human arm ranks better on mR@100, 0.326
-against 0.278 over three seeds. Section 1.2.2 committed to reporting that as
-disagreement rather than resolving it favourably, and Chapter 6 does: the
-human arm's lead sits entirely on the two test annotators carrying measured
-labelling defects and vanishes on the one without (0.308 against 0.307),
-while the auto arm covers sixty times more of the relation types the manual
-annotation never recorded. An unqualified yes required agreement across all
-three, so the honest verdict is a conditional one.
+**RQ2 is answered yes at two of the three levels the criterion named, and the
+third disagrees.** The controlled classifier gives 0.76 against 0.30 and the
+planner 22 of 25 against 0 of 25 with no relations, both in the harder
+direction the criterion specified: held-out *human* gold, the rival source's
+own yardstick. The benchmark does not agree, the human arm ranking better on
+mR@100 in the source paper's own framework, 0.326 against 0.278 over three
+seeds. Section 1.2.2 committed to reporting that as disagreement rather than
+resolving it favourably, and Chapter 6 does: the human arm's lead sits
+entirely on the two test annotators carrying measured labelling defects and
+vanishes on the one without (0.308 against 0.307), while the auto arm covers
+sixty times more of the relation types the manual annotation never recorded.
+An unqualified yes required agreement across all three, so the honest verdict
+is conditional.
 
 The condition is legible, and it is the sentence the evidence supports:
 **automatic labels are the better supervision wherever ground truth means
@@ -143,17 +139,16 @@ cannot draw.
 Each limitation below is stated with the specific experiment that would
 settle it, because that is more useful than an apology.
 
-**The chain reaches the plan, not the robot.** The planner experiment
-(§5.7) closes one of the two remaining links: across 25 held-out scenes an
-LLM planner never clears an occluding object when given objects alone
-(0/25), always clears it when given the human relationships (25/25), and
-does so on 22 of 25 with the automatic ones, with all three failures traced
-to a missing support relation rather than to faulty reasoning. What is still
-missing is execution. No robot moved during this project, so the evidence
-runs from labels to models to plans and stops there. Putting the same three
-conditions on a physical Spot, or in a simulator with contact physics, is
-the experiment that would close the last link, and it is now the only one
-left in the chain.
+**The chain reaches the plan, not the robot.** The planner experiment (§5.7)
+closes one of the two remaining links: across 25 held-out scenes an LLM
+planner never clears an occluding object when given objects alone (0/25),
+always clears it when given the human relationships (25/25), and does so on 22
+of 25 with the automatic ones, all three failures traced to a missing support
+relation rather than to faulty reasoning. What is missing is execution. No
+robot moved during this project, so the evidence runs from labels to models to
+plans and stops. Putting the same conditions on a physical Spot, or in a
+simulator with contact physics, would close the last link, and it is now the
+only one left in the chain.
 
 **Precision estimates remain partly author-verdicted.** The independent
 validation study (§4.13) is deployed and collecting, with coverage
@@ -189,31 +184,30 @@ scores 0.85. The gap is detection, not relations, and the source paper's own
 trained detector (0.93 mAP@50) would close most of it. That check needs only
 the released weights.
 
-**Scale is demonstrated without ground truth.** The supervising group
-supplied the full 2,650-frame capture the released images were cut from, and
-the pipeline was run over the 1,766 frames nobody has annotated: 562
-keyframes after content-adaptive selection, 58 minutes, 185,242 triplets, a
-predicate distribution 0.032 in total variation from the annotated portion
-(§4.15). Capacity and stability on unfamiliar input are therefore measured
-rather than argued. Correctness on that portion is not, and cannot be
-without labels; §4.14's viewpoint-consistency check substitutes
-self-agreement for truth and should be read as the weaker thing it is. The
-experiment that would close this is a modest labelled sample from the
-unannotated frames, a few hundred triplets, which is an afternoon of
+**Scale is demonstrated without ground truth.** The supervising group supplied
+the full 2,650-frame capture the released images were cut from, and the
+pipeline was run over the 1,766 frames nobody has annotated: 562 keyframes
+after content-adaptive selection, 58 minutes, 185,242 triplets, a predicate
+distribution 0.032 in total variation from the annotated portion (§4.15).
+Capacity and stability on unfamiliar input are therefore measured rather than
+argued. Correctness on that portion is not and cannot be without labels;
+§4.14's viewpoint-consistency check substitutes self-agreement for truth and
+should be read as the weaker thing it is. Closing it needs a modest labelled
+sample from those frames, a few hundred triplets, which is an afternoon of
 annotation rather than a research programme.
 
 **The capture is stereo, and only one eye was used.** The supplied folder is
-named `rightimg`, which implies a left counterpart held by the supervising
-group. True stereo would attack the front/behind bound directly, supplying
-disparity at every frame from a known, fixed baseline, which is precisely
-what the multi-frame estimators of A9 lack: those must recover the camera's
-motion before they can use it, and on small low-texture objects they return
-an answer for only 9% of pairs and are 0.17 less accurate than the monocular
-cascade where they do (§4.9, Appendix D.6). A calibrated stereo pair removes both
-problems at once and is the single cheapest experiment left on this
-predicate. It also keeps the method's premise intact, since stereo is
-available at capture time, whereas depth recovered from a robot walking
-twenty frames is not available to a single-image annotator at all.
+named `rightimg`, implying a left counterpart held by the supervising group.
+True stereo would attack the front/behind bound directly, supplying disparity
+at every frame from a known fixed baseline, which is exactly what the
+multi-frame estimators of A9 lack: those must recover the camera's motion
+first, and on small low-texture objects they answer for only 9% of pairs and
+are 0.17 less accurate than the monocular cascade where they do (§4.9,
+Appendix D.6). A calibrated stereo pair removes both problems at once and is
+the cheapest experiment left on this predicate. It also keeps the method's
+premise intact, since stereo is available at capture time, whereas depth
+recovered from a robot walking twenty frames is not available to a
+single-image annotator at all.
 
 ## 9.4 Personal reflections
 

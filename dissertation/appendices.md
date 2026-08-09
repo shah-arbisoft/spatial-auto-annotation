@@ -895,6 +895,13 @@ would recover it.
 is the design, recorded here so that a reader can judge the instrument before
 its results exist.
 
+It measures three things the author-verdicted audits cannot: crowd precision
+per predicate at a sample two orders of magnitude larger than §4.4's fifteen;
+an author-bias check against the author's own verdict on the 147 items
+carrying both; and whether disputed claims are wrong or merely ambiguous,
+through inter-rater reliability, which is the distinction the disagreement
+literature of §2.3 insists on.
+
 **Sampling.** A stratified sample of 2,002 automatic labels, 286 per
 predicate, drawn from the tool's *extra* predictions: ordered pairs the human
 annotators never labelled, which is exactly the population with no ground
@@ -933,6 +940,17 @@ and crowd-internal reliability as Krippendorff's alpha.
 Section 4.12 reports what the two clips show. This section records how they
 were processed and what went wrong, both of which qualify the reading.
 
+**The two regimes.** They are complementary: a moving camera over a static
+desk (clip 1, 99 frames), where any variation is measurement noise, and a
+static overhead camera with moving hands (clip 2, 79 frames), where relations
+genuinely change and smoothing must not erase them. The temporal vote
+separates them, lifting persistence from 0.896 to 0.902 on the static clip and
+from 0.915 to 0.938 on the one with moving hands, where per-frame detection
+churns, which is the behaviour a majority filter should show. Frame-to-frame
+triplet agreement (Jaccard 0.89 and 0.70) is dominated by zero-shot detection
+churn and, in clip 2, by genuine hand motion, mirroring §4.11: the variation
+is detection, not relations.
+
 **The clips and the thresholds.** Both are royalty-free stock, sourced in
 Appendix A. Nothing was retuned for them: `near_T`, the depth band, the
 contact fraction and the plane band keep the values fitted on groups 0-5. The
@@ -970,7 +988,10 @@ Neither is corrected, and both are present in the released overlays.
 Section 4.15 reports what the run over the 1,766 unannotated frames
 establishes. Two of its figures need accounting for.
 
-*Timing.* The 6.15 s per frame includes writing an inspection overlay per
+*Yield and detections.* The run averages 330 triplets per frame from 11.7
+detected objects, and the human process recorded about 11 triplets per image.
+
+*Timing.* 6.15 s per frame is 586 frames per hour. It includes writing an inspection overlay per
 frame to make the output checkable by eye. Annotation is roughly half of it,
 so a JSON-only deployment run would land near 3.3 s per frame. The measured
 figure leads in §4.15 because it is the one the repository reproduces.

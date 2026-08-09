@@ -41,8 +41,14 @@
 % \onehalfspacing, which disagrees; the Word file is the template the module
 % names, and the 60-page hard limit makes the difference material rather
 % than cosmetic.
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0.6em}
+% Paragraphs are separated by a first-line indent rather than by vertical
+% space. The template's own body paragraphs carry neither (its Normal style
+% sets no space-after and no indent, and it separates paragraphs with the
+% occasional empty one), so some choice has to be made; this is the one that
+% costs no page space. At 320 body paragraphs a 0.6em skip was 2,304pt, or
+% 3.3 pages of the 60 the module allows for the chapters.
+\setlength{\parindent}{1.5em}
+\setlength{\parskip}{0pt}
 \singlespacing
 \sloppy
 
@@ -146,7 +152,7 @@ will be penalised.
 \noindent Signature: \rule{6cm}{0.4pt} \hfill Date: \rule{4cm}{0.4pt}
 
 \vspace{1cm}
-\noindent \textbf{Total Number of Words:} 31,281
+\noindent \textbf{Total Number of Words:} 30,977
 
 \cleardoublepage
 
