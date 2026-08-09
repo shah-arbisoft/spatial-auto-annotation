@@ -36,21 +36,18 @@ Crucially, **no automatic annotator exists for this dataset**.
 SGDET-Annotate only accelerates manual labelling; a human still decides
 every label.
 
-The cost is structural rather than incidental, and it grows faster than the
-data does. Objects in an image can be related pairwise, so an image holding
-*n* annotated objects presents *n(n−1)* ordered pairs a conscientious
-annotator would have to consider. This dataset averages 101 ordered pairs per
-image, so a genuinely exhaustive pass would mean a hundred judgements per
-photograph. Relationship annotation is therefore never exhaustive in
-practice: Visual Genome, the reference corpus for the task, records about
-eighteen relationships per image over scenes holding roughly twenty objects,
-a small fraction of the pairs available (Krishna et al., 2017), and in the
-dataset studied here humans recorded labels on about 10% of the ordered
-pairs. Sparsity of this kind is not laziness but arithmetic,
-and it has a consequence the field routinely absorbs without comment: a model
+The cost is structural, and it grows faster than the data. Objects relate
+pairwise, so an image holding *n* annotated objects presents *n(n−1)* ordered
+pairs a conscientious annotator must consider. This dataset averages 101 per
+image, so an exhaustive pass means a hundred judgements per photograph.
+Relationship annotation is therefore never exhaustive in practice: Visual
+Genome, the reference corpus, records about eighteen relationships per image
+over scenes of roughly twenty objects (Krishna et al., 2017), and here humans
+labelled about 10% of ordered pairs. That sparsity is arithmetic, not
+laziness, and it has a consequence the field absorbs without comment: a model
 evaluated against such labels is rewarded for reproducing which pairs
-annotators happened to record, not only which relationships actually hold.
-Chapter 6 shows that this is measurable rather than theoretical.
+annotators happened to record, not only which relationships hold. Chapter 6
+shows this is measurable rather than theoretical.
 
 A second cost is consistency. Nine annotators working independently in
 batches, with no written definition of what "near" or "in front of" means,
@@ -63,20 +60,18 @@ annotators, because both scale with the number of humans involved.
 ### 1.1.2 Why the existing remedies do not remove it
 
 Three families of method already exist for a shortage of labels, and each is
-reviewed in Chapter 2 and tested somewhere in this dissertation rather than
-dismissed on paper. Learned scene-graph generators predict relations from
-visual patterns, but they are trained on labelled triplets and therefore sit
-*downstream* of an annotator rather than replacing one. Semi-supervised
-methods stretch the labels that exist, which presupposes a consistent
-labelled seed; the seed here is 10% dense and internally contradictory, and
-Chapter 5 measures what self-training actually does with such a seed. A
-large vision-language model can be asked for the relations directly, which
-is the most plausible modern shortcut and the one a reader is most likely to
-propose; §4.16 runs it on the same images with the same definitions, and the
-result is that it reproduces the *human* annotation's characteristic
-failures rather than a geometric one's. What none of the three does is
-produce a dense, self-consistent label for every ordered pair in an image
-with no human deciding anything, which is the gap this project addresses.
+reviewed in Chapter 2 and tested here rather than dismissed on paper. Learned
+scene-graph generators predict relations from visual patterns, but they train
+on labelled triplets and so sit *downstream* of an annotator rather than
+replacing one. Semi-supervised methods stretch the labels that exist, which
+presupposes a consistent seed; this one is 10% dense and internally
+contradictory, and Chapter 5 measures what self-training does with it. A large
+vision-language model can be asked directly, the most plausible modern
+shortcut and the one a reader will propose; §4.16 runs it on the same images
+with the same definitions and finds it reproduces the *human* annotation's
+characteristic failures rather than a geometric one's. None of the three
+produces a dense, self-consistent label for every ordered pair with no human
+deciding anything, which is the gap this project addresses.
 
 ## 1.2 Research aim and objectives
 
@@ -252,24 +247,21 @@ hidden.
 | Evaluation | fidelity protocol (baselines, ablations, audits), controlled label-source comparison, exhaustive failure attribution | Ch. 4–6 |
 | Deployment | detector-in-the-loop mode, runtime/VRAM footprint, reproducibility package | Ch. 4, appendices |
 
-The work was carried out under constraints that shaped the design as much as
-the research questions did, and stating them makes several later choices
-legible. All perception runs on a **single 6 GB consumer GPU**, which rules
-out the largest segmentation and depth checkpoints and makes the small-model
-choices of Chapter 3 a requirement rather than a preference; ablation A8
-then asks what that requirement costs and finds it costs almost nothing on
-the predicate it was expected to hurt. There was **no budget for paid
-annotation**, so the independent re-estimate of precision is a volunteer
-study (§4.13) rather than a commissioned one, and the audits that precede it
-are the author's own, with the circularity that implies and that §2.9 states
-as an objection before any result is reported. The project uses **one
-dataset**, because it is the dataset whose annotation bottleneck the work
-exists to address, and the price is that generalisation is argued rather
-than demonstrated. And the benchmark chapter's training runs use **free
-hosted GPU sessions**, which caps how many seeds are affordable and rules
-out the hyper-parameter search a fully tuned comparison would want; the
-replication reported in Chapter 6 is what that budget allows, and its width
-is reported rather than smoothed over.
+Four constraints shaped the design as much as the research questions did, and
+stating them makes several later choices legible. All perception runs on a
+**single 6 GB consumer GPU**, which rules out the largest segmentation and
+depth checkpoints and makes Chapter 3's small-model choices a requirement
+rather than a preference; ablation A8 asks what that costs and finds almost
+nothing on the predicate it was expected to hurt. There was **no budget for
+paid annotation**, so the independent re-estimate of precision is a volunteer
+study (§4.13), and the audits preceding it are the author's own, with the
+circularity §2.9 states as an objection before any result is reported. The
+project uses **one dataset**, the one whose bottleneck the work exists to
+address, and the price is that generalisation is argued rather than
+demonstrated. And the benchmark runs use **free hosted GPU sessions**, which
+caps the affordable seeds and rules out a hyper-parameter search; Chapter 6's
+replication is what that budget allows, and its width is reported rather than
+smoothed over.
 
 Ethical considerations are summarised here and detailed in Appendix A. The
 work is a secondary analysis of a published, openly licensed dataset (CC-BY
@@ -283,21 +275,18 @@ under the University's ethics self-assessment process.
 ## 1.4 Dissertation outline
 
 Chapter 2 reviews the literature with label quality as its organising
-question and positions the research gap. Chapter 3 gives the research
-methodology and the geometric design of the seven predicates with per-choice
-justifications. Chapters 4, 5 and 6 are the analysis chapters, presented as
-three iterations of increasing scope in the CRISP-DM sense: Chapter 4
-presents the fidelity study (RQ1), its ablations, the independent validation
-of its precision estimates, and two measurements that leave the annotated
-gold behind: whether the labels survive the camera moving, and what the
-pipeline does on robot frames nobody has labelled; Chapter 5 the controlled
-downstream study (RQ2), including a self-training arm that tests the
-standard rival remedy for scarce labels; and Chapter 6 the direct benchmark
-test, in which the source paper's own SGG model is trained on each label
-source and judged against three pre-registered predictions. Chapter 7 is a
-critical evaluation tying all three iterations to causes and to prior work.
-Chapter 8 assesses the legal, social, ethical and professional dimensions of
-automating annotation. Chapter 9 concludes: it reports the objectives
-against their evidence, states the contributions, turns each limitation into
-the experiment that would resolve it, and reflects on how the project was
-actually conducted.
+question and positions the gap. Chapter 3 gives the methodology and the
+geometric design of the seven predicates with per-choice justifications.
+Chapters 4 to 6 are the analysis chapters, three CRISP-DM iterations of
+increasing scope: Chapter 4 the fidelity study (RQ1) with its ablations, the
+independent validation of its precision estimates, and two measurements that
+leave the annotated gold behind, whether labels survive the camera moving and
+what the pipeline does on unlabelled robot frames; Chapter 5 the controlled
+downstream study (RQ2) including a self-training arm testing the standard
+rival remedy; Chapter 6 the direct benchmark test, training the source
+paper's own SGG model on each label source against three pre-registered
+predictions. Chapter 7 ties all three to causes and to prior work. Chapter 8
+assesses the legal, social, ethical and professional dimensions of automating
+annotation. Chapter 9 reports the objectives against their evidence, states
+the contributions, turns each limitation into the experiment that would
+resolve it, and reflects on how the project was conducted.

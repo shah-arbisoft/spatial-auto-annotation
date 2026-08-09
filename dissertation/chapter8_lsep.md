@@ -18,40 +18,37 @@ validation website, and in the released repository; the automatic
 annotations are a derivative work distributed under the same attribution
 terms.
 
-**Model licences as a design constraint.** Licensing was treated as an
-engineering requirement, not an afterthought, and in one case it shaped the
-pipeline: Depth Anything v2 is released under Apache-2.0 only in its Small
-variant, while the larger variants carry a non-commercial licence, so the
-Small variant was preferred, a choice later justified independently on
-accuracy grounds by ablation A8 (Appendix D.5). SAM2 and Grounding DINO are
-Apache-2.0. The YOLO training used for the benchmark detector relies on the
-`ultralytics` library, which is AGPL-3.0; this is compatible with academic
+**Model licences as a design constraint.** Licensing was an engineering
+requirement rather than an afterthought, and in one case it shaped the
+pipeline: Depth Anything v2 is Apache-2.0 only in its Small variant, the
+larger ones being non-commercial, so Small was preferred, a choice ablation
+A8 later justified independently on accuracy (Appendix D.5). SAM2 and
+Grounding DINO are Apache-2.0. The benchmark detector's YOLO training uses
+the `ultralytics` library, which is AGPL-3.0: compatible with academic
 research use, but a commercial deployment of that component would need a
-licence review, and the note is recorded here so a future user does not
-inherit the question unknowingly.
+licence review. The note is recorded so a future user does not inherit the
+question unknowingly.
 
-**Data protection.** Some dataset frames contain identifiable people, which
-makes them personal data within the meaning of UK data-protection law (Data
-Protection Act 2018). This project processes them for research purposes
-under the terms of their public release, and applies data minimisation to
-everything it republishes: faces are anonymised in all published figures and
-in every image on the validation website, and items whose judgement would be
-compromised by anonymisation are removed rather than shown. The validation
-study itself collects no personal data at all (§8.3). No unauthorised access
-to systems or data occurs anywhere in the project, so the Computer Misuse
-Act 1990 is noted only for completeness.
+**Data protection.** Some frames contain identifiable people, making them
+personal data under UK law (Data Protection Act 2018). The project processes
+them for research under the terms of their public release and applies data
+minimisation to everything it republishes: faces are anonymised in all
+published figures and in every image on the validation website, and items
+whose judgement anonymisation would compromise are removed rather than shown.
+The validation study itself collects no personal data (§8.3). No unauthorised
+access occurs anywhere in the project, so the Computer Misuse Act 1990 is
+noted only for completeness.
 
 ## 8.2 Social considerations
 
-**Automation of annotation work.** The project automates a task that is
-currently paid human work. The honest framing is the one the measurements
-support: at this dataset's scale the manual process produced sparse and
-inconsistent labels at a cost of nine annotators, and the realistic social
-effect of automation here is not the displacement of a profession but a
-change in the human role, from labelling every pair to reviewing a
-measurable flagged minority (§4.7). The same shift makes dataset
+**Automation of annotation work.** The project automates paid human work.
+The honest framing is the one the measurements support: at this scale the
+manual process produced sparse, inconsistent labels at a cost of nine
+annotators, and the realistic effect of automation is not displacing a
+profession but changing the human role, from labelling every pair to
+reviewing a measurable flagged minority (§4.7). The same shift makes dataset
 construction affordable for groups that could not fund manual annotation at
-all; the entire pipeline runs on a consumer 6 GB GPU.
+all, since the pipeline runs on a consumer 6 GB GPU.
 
 **Downstream robot behaviour.** Annotation quality propagates: a robot
 planner consuming wrong spatial relations can act wrongly in physical space.
@@ -71,31 +68,29 @@ a deployment consideration rather than a resolved issue.
 
 ## 8.3 Ethical considerations
 
-The project's ethical surface has three parts, each with a concrete
-safeguard. First, secondary use of images containing identifiable people:
-handled by face anonymisation in everything republished, item removal where
-anonymisation would bias a judgement, and `noindex` on the validation site.
-Second, the human validation study: participation is anonymous, voluntary
-and brief; no names, contact details, IP addresses or tracking identifiers
-are collected; an information panel states the purpose and data handling
-before play; and the collection runs under the University's ethics
-self-assessment process (Appendix A). Third, research integrity in
-reporting: predictions were registered before the benchmark run and two of
-the three are reported as refuted (§6.6); a withdrawn hypothesis remains in
-the text (§6.4); and two built refinements are reported as measured and
-declined (Appendix D.4). The dissertation treats honest negative results as
-results.
+The ethical surface has three parts, each with a concrete safeguard. First,
+secondary use of images containing identifiable people: face anonymisation in
+everything republished, item removal where anonymisation would bias a
+judgement, and `noindex` on the validation site. Second, the human validation
+study: participation is anonymous, voluntary and brief, no names, contact
+details, IP addresses or tracking identifiers are collected, an information
+panel states the purpose and data handling before play, and the collection
+runs under the University's ethics self-assessment process (Appendix A).
+Third, research integrity: predictions were registered before the benchmark
+run and two of three are reported refuted (§6.6), a withdrawn hypothesis
+remains in the text (§6.4), and two built refinements are reported as
+measured and declined (Appendix D.4). The dissertation treats honest negative
+results as results.
 
 ## 8.4 Professional considerations
 
-The work is conducted to the standards of the BCS Code of Conduct (BCS,
-2022): public interest (privacy safeguards above), professional competence
-and integrity (claims bounded by measurements; limitations stated in §7.6),
-and duty to the profession (methods and failures documented so others can
-build on both). Professional practice in the engineering itself: version
-control with a clean history, a unit-and-invariant test suite run before
-every change ships, every threshold in one configuration file, seeded and
-reproducible runs (Appendix B), and licence-compliant use of third-party
-models and data. The reproducibility package is treated as a deliverable
-with the same status as the results, because a validation study that cannot
-be re-run is an anecdote.
+The work follows the BCS Code of Conduct (BCS, 2022): public interest, in
+the privacy safeguards above; professional competence and integrity, in
+claims bounded by measurements and limitations stated in §7.6; and duty to
+the profession, in methods and failures documented so others can build on
+both. In the engineering itself: version control with a clean history, a
+unit-and-invariant suite run before every change ships, every threshold in
+one configuration file, seeded reproducible runs (Appendix B), and
+licence-compliant use of third-party models and data. The reproducibility
+package is a deliverable with the same status as the results, because a
+validation study that cannot be re-run is an anecdote.

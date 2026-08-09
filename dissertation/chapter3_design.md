@@ -33,21 +33,18 @@ Azevedo and Santos (2008) compare the three and observe that CRISP-DM is
 effectively a superset of SEMMA and an implementation of KDD with stronger
 process guidance.
 
-CRISP-DM was chosen for this project for two concrete reasons. First, the
-project's motivating problem is not a pattern-discovery exercise but an
-engineering question posed by a dataset's own authors, so a phase that pins
-the business problem (the annotation bottleneck, Chapters 1–2) before
-modelling is structurally necessary. Second, and decisively, the project's
-actual course followed CRISP-DM's evaluation-to-modelling loop in a way the
-linear models do not describe: the audit of support-rule precision (Chapter 4)
-sent the work back to the modelling phase twice (a depth gate, then a
-mask-contact test), each pass re-validated on held-out annotators. The mapping
-of every CRISP-DM phase to a concrete part of this dissertation is given in
-Chapter 1 (§1.3), including the two findings that came directly out of the
-Data Understanding phase: the dataset's stored image orientation and the three
-measured annotator behaviours. Ethical considerations attached to the data and
-to the human validation study are summarised in §1.3 and detailed in
-Appendix A.
+CRISP-DM was chosen for two concrete reasons. The motivating problem is not
+pattern discovery but an engineering question posed by a dataset's own
+authors, so a phase pinning the business problem (the annotation bottleneck,
+Chapters 1–2) before modelling is structurally necessary. Decisively, the
+project's actual course followed CRISP-DM's evaluation-to-modelling loop in a
+way the linear models do not describe: the audit of support-rule precision
+(Chapter 4) sent the work back to modelling twice, a depth gate then a
+mask-contact test, each pass re-validated on held-out annotators. §1.3 maps
+every phase to a concrete part of this dissertation, including the two
+findings that came straight out of Data Understanding: the stored image
+orientation and the three measured annotator behaviours. Ethical
+considerations are summarised in §1.3 and detailed in Appendix A.
 
 ## 3.2 Problem analysis
 
@@ -248,20 +245,18 @@ detector or from ground truth, so detector quality and relation quality are
 separately attributable, and a better detector improves the system without a
 line of rule code changing.
 
-To make the property usable rather than merely true, the contract is stated
-explicitly (`src/detectors.py`) as a single method returning pixel boxes,
-class names and scores, with three implementations: open-vocabulary
-prompting for images with no trained model available, an adapter for any
-ultralytics checkpoint including the source paper's own YOLOv10m weights, and
-a reader for detections computed by some entirely external system. Twelve unit
-tests pin the contract, including one that drives the rule layer from a
-detector written against the documentation alone. Two coupling points remain
-and are documented rather than hidden: the support guard keys on the literal
-class name `human`, and the fitted thresholds assume boxes of roughly the
-tightness the dataset's annotators drew, so a detector with systematically
-different boxes should re-run the calibration procedure of §3.8 (twenty
-seconds offline from the geometry cache). A worked example is in
-`docs/CUSTOM_DETECTOR.md`.
+To make the property usable rather than merely true, the contract is explicit
+(`src/detectors.py`): one method returning pixel boxes, class names and
+scores, with three implementations, open-vocabulary prompting where no
+trained model exists, an adapter for any ultralytics checkpoint including the
+source paper's YOLOv10m weights, and a reader for externally computed
+detections. Twelve unit tests pin it, one driving the rule layer from a
+detector written against the documentation alone. Two coupling points are
+documented rather than hidden: the support guard keys on the literal class
+name `human`, and the fitted thresholds assume boxes of roughly the tightness
+the annotators drew, so a detector with systematically different boxes should
+re-run §3.8's calibration (twenty seconds offline from the cache). A worked
+example is in `docs/CUSTOM_DETECTOR.md`.
 
 ## 3.10 Selecting frames by content
 
@@ -284,16 +279,15 @@ any single step, while the same motion integrated over forty frames displaces
 the image by 13 px. Only the accumulated drift carries the signal.
 
 `segment_sequence` (`src/keyframes.py`) therefore measures drift from the
-*anchor* of the current segment rather than from the preceding frame, opening
-a new segment when that drift exceeds a threshold τ. Gradual motion
-accumulates instead of being repeatedly rounded away, and a genuine cut still
-crosses the threshold in a single step, so one mechanism serves both regimes.
-Distances are mean absolute differences over 64×48 mean-subtracted greyscale
-thumbnails; subtracting the mean discards the global exposure shifts of an
-auto-exposing camera, which would otherwise be the largest signal present and
-would fire boundaries of their own. Each segment nominates the frame closest
-to its mean signature, which on a moving camera is a better representative
-than the first frame, that one usually being mid-transition.
+*anchor* of the current segment rather than the preceding frame, opening a new
+segment when drift exceeds τ. Gradual motion accumulates instead of being
+rounded away, and a genuine cut still crosses in one step, so one mechanism
+serves both regimes. Distances are mean absolute differences over 64×48
+mean-subtracted greyscale thumbnails; subtracting the mean discards the global
+exposure shifts of an auto-exposing camera, which would otherwise dominate and
+fire boundaries of their own. Each segment nominates the frame closest to its
+mean signature, a better representative on a moving camera than the first
+frame, which is usually mid-transition.
 
 A single parameter spans two uses. Small τ isolates near-duplicates, so each
 segment is one viewpoint and the representative can stand for the rest; large
