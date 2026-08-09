@@ -7,16 +7,10 @@
 > `outputs/near_fit.json`.
 
 This chapter sets out how the project was conducted and why the annotator is
-built the way it is. Section 3.1 selects and justifies the data-science
-methodology that structures the work. Section 3.2 analyses the problem and its
-constraints, §3.3 states the central design principle, §3.4 gives the pipeline
-architecture with per-stage justifications, §3.5 the seven predicate rules,
-§3.6 the correction and confidence machinery, §3.7 output compatibility,
-§3.8 the calibration protocol for `near`, §3.9 how the detector is kept
-replaceable, §3.10 how frames are selected when the input is a continuous
-robot capture rather than a set of independent images, and §3.11 the
-reproducibility measures. Section 3.12 collects every design decision in one
-table.
+built the way it is: the methodology that structures the work (§3.1), the
+problem and its constraints (§3.2), the design and the seven predicate rules
+that follow from it (§3.3–§3.11), and every decision collected in one table
+(§3.12).
 
 ## 3.1 Research methodology
 

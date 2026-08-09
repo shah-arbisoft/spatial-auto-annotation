@@ -11,18 +11,10 @@ relations can be computed, which the literature already settles, but whether
 computed labels are better or worse than the human labels they replace, and
 how anyone would know.
 
-The chapter moves from the representation (§2.1) to the dataset whose
-bottleneck motivates the work (§2.2); to what makes labels good or bad,
-covering weak supervision, annotator disagreement and the statistics used to
-measure agreement (§2.3); and to the rival remedies that stretch scarce
-labels rather than replacing them, with the argument for why semi-supervised
-and active learning do not fit this dataset (§2.4). Only then does it turn to
-this project's approach and lineage (§2.5), the perception components it
-stands on (§2.6), and the learned models that consume its output (§2.7). Two
-critical sections follow: §2.8 on the metrics the field scores itself with
-and what they miss, §2.9 on the strongest case *against* the approach taken
-here. Section 2.10 states the research gap as a critical comparison and
-§2.11 positions the work against it.
+It reaches the project's own approach only after the rival remedies that
+stretch scarce labels rather than replacing them (§2.4), and it ends on the
+two sections that argue against itself: what the field's metrics miss (§2.8)
+and the strongest case against a rule-based annotator (§2.9).
 
 ## 2.1 Scene graphs and spatial relationships in robotics
 
@@ -183,17 +175,16 @@ rarely run against one another.
 ## 2.5 Geometry-to-label pipelines (the lineage we build on)
 
 A line of work *computes* spatial facts from perceived geometry rather than
-predicting them from learned relational patterns. The idea is older than its
-current instantiations: CLEVR (Johnson et al., 2017) generated hundreds of
-thousands of scenes whose spatial relations were emitted *by the renderer*,
-exact by construction, and became the standard diagnostic for compositional
-reasoning precisely because programmatic labels carry no annotator noise to
-memorise. What CLEVR sidesteps is the hard half of the problem: its
-geometry is known because the scenes are synthetic, whereas an annotator for
-real photographs must first *recover* geometry from pixels before any rule
-can fire. The works below take up that harder half. Each is methodological
-ancestry for the present project, but each outputs something other than a
-scene-graph annotation for this dataset's seven predicates.
+predicting them from learned relational patterns. The idea predates its
+current instantiations: CLEVR (Johnson et al., 2017) emitted the spatial
+relations of hundreds of thousands of scenes *from the renderer*, exact by
+construction, and became the standard diagnostic for compositional reasoning
+precisely because programmatic labels carry no annotator noise to memorise.
+What it sidesteps is the hard half: its geometry is known because the scenes
+are synthetic, whereas an annotator for real photographs must first *recover*
+geometry from pixels before any rule can fire. The works below take up that
+half. Each is methodological ancestry here, and each outputs something other
+than a scene-graph annotation for this dataset's seven predicates.
 
 - **SpatialVLM** (Chen et al., 2024) is the foundational geometry-to-label
   method. It builds an *automatic* 3D spatial-VQA data-generation framework,
@@ -215,26 +206,21 @@ scene-graph annotation for this dataset's seven predicates.
   computing relations geometrically, ask a capable vision-language model to
   name them. Section 4.16 tests that rather than arguing it away, putting two
   current models through the same battery on the same images with the same
-  boxes and definitions. The smaller recovers 0.40 of the human triplets
-  against the pipeline's 0.83 and a reasoning model an order of magnitude
-  larger recovers 0.45; both lose F1 on every predicate. Neither is simply
-  worse: restricted to the judged pairs both are *more precise* than the
-  pipeline, 0.42 and 0.39 against 0.35, because they assert far less. More
-  informative is the shape of the output: no self-contradiction and no
-  inverted depth convention, but silence on most pairs and a symmetric
-  relation asserted in one direction only about a third of the time. Both are
+  boxes and definitions. Both recover under half the human triplets the
+  pipeline does and lose F1 on every predicate, and neither is simply worse,
+  since both are *more precise* where they speak. What settles the question
+  is the shape of the output: silence on most pairs, and a symmetric relation
+  asserted in one direction only about a third of the time, which are the
   behaviours §4.5 measures in the *human* annotation. A vision-language model
   asked to annotate reproduces the failure mode this project set out to
-  replace, which is why pointing a larger model at the problem does not fill
-  the gap.
+  replace, which is why pointing a larger model at it does not fill the gap.
 
 - **VQASynth** (Remyx AI, 2024) is an open reproduction of the SpatialVLM
-  pipeline: a chain of expert models (SAM2 for localisation refinement, monocular
-  depth, and grounded captioning) that infers spatial relationships to **create a
-  spatial-VQA dataset**. It is the most reusable code reference; its output stage
-  produces **QA pairs**, which we would replace with a scene-graph-triplet
-  writer. (Its depth backend has shifted over time, e.g. DepthPro → VGGT, so we
-  pin our own.)
+  pipeline: a chain of expert models (SAM2, monocular depth, grounded
+  captioning) inferring spatial relationships to **create a spatial-VQA
+  dataset**. It is the most reusable code reference, and its output stage
+  produces **QA pairs** where we need a scene-graph-triplet writer. Its depth
+  backend has shifted over time (DepthPro → VGGT), so we pin our own.
 
 - **Open3D-VQA** (Zhang et al., 2025) is the source of our **error-correction**
   idea. It is an embodied spatial-reasoning benchmark for *open/aerial* space
@@ -250,16 +236,15 @@ scene-graph annotation for this dataset's seven predicates.
   from real indoor/tabletop scans (≈1M images, ≈3M annotated spatial relations).
   Critically for our design, it formalises **reference frames**: ego-centric,
   world-centric and object-centric readings of the same spatial phrase. The
-  ambiguity is not an engineering nuisance but a documented property of
-  spatial language itself; Landau and Jackendoff (1993) showed that natural
-  language encodes object location through a small set of frame-dependent
-  primitives, so the same sentence ("the cup is left of the box") is true in
-  one frame and false in another, and an annotator must pin the frame before
-  any label is well defined.
-  This directly justifies our explicit choice to express *left/right* in the
-  **camera (ego) frame** (predicate spec §0), which is also the frame the
-  dataset's annotators saw on screen. Its output is spatial QA over three
-  frames, not a fixed seven-predicate annotation.
+  ambiguity is a documented property of spatial language rather than an
+  engineering nuisance, Landau and Jackendoff (1993) having shown that
+  language encodes location through a small set of frame-dependent
+  primitives, so "the cup is left of the box" is true in one frame and false
+  in another and an annotator must pin the frame before any label is well
+  defined. That justifies expressing *left/right* in the **camera (ego)
+  frame** (predicate spec §0), which is also the frame the dataset's
+  annotators saw on screen. Its output is spatial QA over three frames, not a
+  fixed seven-predicate annotation.
 
 One adjacent family needs explicit separation, because from a robotics
 standpoint it looks closest. Online 3D scene-graph *mapping* systems build a
@@ -267,38 +252,36 @@ spatial-semantic graph as a robot moves: Hydra optimises a multi-layer graph
 in real time from depth-equipped SLAM (Hughes, Chang and Carlone, 2022), and
 ConceptGraphs opens the node vocabulary by fusing foundation-model features
 into an RGB-D map (Gu et al., 2024). They *consume* depth sensors and
-*produce* maps for a live robot; they do not emit dataset-format annotation
-for existing monocular images, and none is validated against human
-annotators, which is this project's deliverable and test. They strengthen
-rather than weaken the case for automatic annotation: the training data their
+*produce* maps for a live robot, emit no dataset-format annotation for
+existing monocular images, and none is validated against human annotators,
+which is this project's deliverable and test. They strengthen the case for
+automatic annotation rather than weakening it: the training data their
 learned components need is what an annotator supplies.
 
 A question the lineage rarely puts to itself is how anyone knows the computed
-labels are right, and the answer matters here because this project's central
-claim is a validation claim rather than a generation one. Two kinds of
-evidence are offered, and neither is the kind RQ1 requires. The first is
-**downstream benefit**: SpatialVLM (Chen et al., 2024) establishes its
-generated supervision by fine-tuning a vision-language model on it and
-showing the model answers spatial questions better, and SpatialRGPT (Cheng
-et al., 2024) likewise judges its curated region representations through the
-model they produce and the benchmark built alongside it. The second is
-**internal consistency**: Open3D-VQA (Zhang et al., 2025) adds a correction
-flow that discards configurations its own geometry rules declare impossible,
-a principle this project adapts in §3.6.
+labels are right, and it matters here because this project's central claim is
+a validation claim rather than a generation one. Two kinds of evidence are
+offered and neither is the kind RQ1 requires. The first is **downstream
+benefit**: SpatialVLM (Chen et al., 2024) establishes its generated
+supervision by fine-tuning a vision-language model on it and showing better
+answers to spatial questions, and SpatialRGPT (Cheng et al., 2024) likewise
+judges its curated region representations through the model they produce. The
+second is **internal consistency**: Open3D-VQA (Zhang et al., 2025) discards
+configurations its own geometry rules declare impossible, a principle this
+project adapts in §3.6.
 
-Both are worth having and both share one blind spot. A model trained on
-computed labels and tested on questions from the same computation scores well
-on any convention applied consistently, including a wrong one; and an
-internal consistency check is satisfied by any coherent convention, since
-impossibility is judged by the rules that produced the labels. Neither can
-detect systematic disagreement with how humans use the words, the failure
-mode Chapter 4 measures in both directions, in the tool and in the
-annotators. Only comparison against an independently produced human record
-can, which none of these works performs and which is what RQ1 is. It also
-explains why Chapter 6's less favourable result does not contradict Chapter
-5's: judged against *human* annotation rather than labels from the same
-source, downstream benefit becomes genuinely adversarial, and the lineage
-does not run that test.
+Both share one blind spot. A model trained on computed labels and tested on
+questions from the same computation scores well on any convention applied
+consistently, including a wrong one, and an internal consistency check is
+satisfied by any coherent convention, since impossibility is judged by the
+rules that produced the labels. Neither can detect systematic disagreement
+with how humans use the words, the failure mode Chapter 4 measures in the
+tool and in the annotators alike. Only comparison against an independently
+produced human record can, which none of these works performs and which is
+what RQ1 is. It also explains why Chapter 6's less favourable result does not
+contradict Chapter 5's: judged against *human* annotation rather than labels
+from the same source, downstream benefit becomes genuinely adversarial, and
+the lineage does not run that test.
 
 **Synthesis.** Every pipeline in this lineage either (a) targets a *different
 output* (VQA text or a live map, not VG triplets), (b) operates in a
@@ -417,28 +400,28 @@ executed and reported in Chapter 6.
 
 ## 2.8 How the field measures success, and what those measures miss
 
-The metrics introduced in §2.7 are not neutral instruments; each was adopted
-to fix a defect in the one before it, and each carries a defect of its own.
-Because Chapters 4 and 6 report results *in* these metrics and then argue
-about what the results mean, the arguments belong here, established from the
-literature, rather than being improvised alongside the numbers.
+The metrics introduced in §2.7 are not neutral instruments: each was adopted
+to fix a defect in the one before it and carries a defect of its own. Because
+Chapters 4 and 6 report results *in* these metrics and then argue about what
+the results mean, the arguments belong here, established from the literature,
+rather than improvised alongside the numbers.
 
 **Recall without precision is a consequence of incomplete annotation, not a
 choice.** The convention descends from visual relationship detection on
 crowdsourced graphs (Lu et al., 2016; Krishna et al., 2017), where annotators
 record a handful of the relations present in a scene and leave the rest
-unmarked. An unannotated pair is therefore not a negative, merely an
-unexamined one, so a predicted relation absent from the gold cannot be
-scored wrong, and precision computed against such a gold is not precision at
-all. The field's response was to drop precision and rank by recall at K.
-The cost is that the metric cannot distinguish a system that predicts
-carefully from one that predicts abundantly, and the omission becomes acute
-exactly when the object of study is the annotation itself: a method that
-labels the pairs the humans skipped is penalised for its coverage under a
-precision reading and rewarded for it under a recall reading, with neither
-number settling whether the extra labels are true. Chang et al. (2023) name
-annotation cost and label bias as the field's persistent constraints without
-resolving this measurement consequence of them.
+unmarked. An unannotated pair is not a negative but an unexamined one, so a
+predicted relation absent from the gold cannot be scored wrong and precision
+computed against such a gold is not precision at all. The field's response
+was to drop it and rank by recall at K. The cost is a metric that cannot
+distinguish a system predicting carefully from one predicting abundantly, and
+the omission becomes acute exactly when the object of study is the annotation
+itself: a method labelling the pairs the humans skipped is penalised for its
+coverage under a precision reading and rewarded for it under a recall
+reading, with neither number settling whether the extra labels are true.
+Chang et al. (2023) name annotation cost and label bias as the field's
+persistent constraints without resolving this measurement consequence of
+them.
 
 **A metric a context-free prior can saturate is measuring the prior.**
 Zellers et al.'s (2018) frequency baseline predicts the commonest predicate
@@ -467,17 +450,16 @@ generalisation. Section 6.4 shows that this distinction is not hypothetical
 for the present experiment, and reports the quantity under its accurate name.
 
 **Setting and gold determine what a number means.** PredCls supplies
-ground-truth boxes and classes, so it measures the relation model in
-isolation and produces systematically higher figures than SGDet, where
-detection errors propagate; numbers from the two settings are not
-comparable, though they are frequently quoted side by side. Underneath both
-sits the assumption that the gold is correct, which Northcutt, Athalye and
-Mueller (2021) showed is false often enough to reorder published rankings
-(§2.3). For spatial relations specifically, the annotation may also be
-*consistently* wrong in the sense that matters here: if a group of annotators
-applied a different reference frame, a system that agrees with them scores
-well and a system that is right scores badly, and no recall metric can tell
-the two apart.
+ground-truth boxes and classes, measuring the relation model in isolation and
+producing systematically higher figures than SGDet, where detection errors
+propagate; the two are frequently quoted side by side and are not comparable.
+Underneath both sits the assumption that the gold is correct, which Northcutt,
+Athalye and Mueller (2021) showed is false often enough to reorder published
+rankings (§2.3). For spatial relations the annotation may also be
+*consistently* wrong in the sense that matters here: where a group of
+annotators applied a different reference frame, a system agreeing with them
+scores well and a system that is right scores badly, and no recall metric can
+tell the two apart.
 
 Three commitments follow for this dissertation, each traceable to a defect
 above. Recall against the human triplets is reported alongside an audited
@@ -510,24 +492,22 @@ seven spatial predicates transfers to functional or interactional relations
 not at all.
 
 **Systematic error is worse for training than random error.** The appeal of
-computed labels is consistency, but consistency guarantees only that
-mistakes recur, and a rule's mistakes correlate with scene geometry rather
-than scattering at random. Tang et al. (2020) established how thoroughly SGG
-models absorb the distribution of their supervision; that result cuts both
-ways, so a model trained on rule output can learn the rule's blind spot as
-though it were a property of the world, and no amount of extra data will
-average it out. Independent human noise is, in this narrow respect, the
-safer failure mode.
+computed labels is consistency, but consistency guarantees only that mistakes
+recur, and a rule's mistakes correlate with scene geometry rather than
+scattering at random. Tang et al. (2020) established how thoroughly SGG models
+absorb the distribution of their supervision, a result that cuts both ways: a
+model trained on rule output can learn the rule's blind spot as a property of
+the world, and no amount of extra data averages it out. Independent human
+noise is, in this narrow respect, the safer failure mode.
 
-**Validating one's own labelling functions is circular.** Weak supervision's
-foundational system anticipated this: Snorkel (Ratner et al., 2017) treats
-labelling functions as noisy and *estimates* their accuracies from the
-agreement structure among several independent sources, precisely because an
-author's confidence in a rule is not evidence about it. A single rule set
-verdicted by its own author has neither multiple sources nor a generative
-model over them, and an audit conducted by the person who wrote the rules
-inherits their assumptions about what counts as correct. Chapter 4 concedes
-this and reports both the mitigations and their limits.
+**Validating one's own labelling functions is circular.** Snorkel (Ratner et
+al., 2017) anticipated this, treating labelling functions as noisy and
+*estimating* their accuracies from the agreement structure among several
+independent sources, precisely because an author's confidence in a rule is not
+evidence about it. A single rule set verdicted by its own author has neither
+multiple sources nor a generative model over them, and an audit by the person
+who wrote the rules inherits their assumptions about what counts as correct.
+Chapter 4 concedes this and reports the mitigations and their limits.
 
 **The reference frame is a decision, not a fact.** *In front of* has no
 answer independent of the frame in which it is asked: Landau and Jackendoff

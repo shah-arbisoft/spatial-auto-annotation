@@ -4,16 +4,12 @@
 > and reproducible from the repository; this chapter interprets, connects and
 > stress-tests them.
 
-This chapter discusses the results rather than reporting new ones. Section
-7.1 evaluates the achievement against the two research questions, §7.2
-dissects what the remaining failures are made of, §7.3 examines the
-dataset's annotation process in the light of the measurements, §7.4 reflects
-on the methodology itself, §7.5 compares the outcome with the prior work of
-Chapter 2, §7.6 states limitations and threats to validity, and §7.7 answers
-the five objections the literature review raised against the approach before
-any result was known. The
-objective-by-objective audit belongs with the conclusions and is given in
-§9.1.
+This chapter discusses the results rather than reporting new ones: what the
+project achieved against its two research questions, what the remaining
+failures are made of, what the measurements say about the dataset's own
+annotation process, and, in §7.7, an answer to each of the five objections
+§2.9 raised against the approach before any result was known. The
+objective-by-objective audit belongs with the conclusions and is in §9.1.
 
 ## 7.1 Achievement against the research questions
 

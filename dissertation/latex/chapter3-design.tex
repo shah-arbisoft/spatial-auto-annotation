@@ -3,7 +3,7 @@
 Written alongside the build, so every design claim below is implemented and, where stated, measured. Numbers marked \textit{(measured)} come from runs over the released dataset (836 annotated images); the fitting protocol and per-annotator analysis are reproducible from \texttt{eval/fit\_near.py} and \texttt{outputs/near\_fit.json}.
 \end{quote}
 
-This chapter sets out how the project was conducted and why the annotator is built the way it is. Section 3.1 selects and justifies the data-science methodology that structures the work. Section 3.2 analyses the problem and its constraints, \S3.3 states the central design principle, \S3.4 gives the pipeline architecture with per-stage justifications, \S3.5 the seven predicate rules, \S3.6 the correction and confidence machinery, \S3.7 output compatibility, \S3.8 the calibration protocol for \texttt{near}, \S3.9 how the detector is kept replaceable, \S3.10 how frames are selected when the input is a continuous robot capture rather than a set of independent images, and \S3.11 the reproducibility measures. Section 3.12 collects every design decision in one table.
+This chapter sets out how the project was conducted and why the annotator is built the way it is: the methodology that structures the work (\S3.1), the problem and its constraints (\S3.2), the design and the seven predicate rules that follow from it (\S3.3--\S3.11), and every decision collected in one table (\S3.12).
 
 \section{Research methodology}
 

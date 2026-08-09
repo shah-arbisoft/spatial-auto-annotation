@@ -1,10 +1,9 @@
 # Chapter 9: Conclusions and Future Work
 
-This chapter closes the dissertation. Section 9.1 states how each objective
-was met and what the two research questions were answered with, §9.2 sets
-out the contributions and who can use them, §9.3 states the limitations
-honestly and turns each into the work that would resolve it, and §9.4 is a
-personal reflection on how the project was actually conducted.
+This chapter closes the dissertation: what each objective was met with and
+how the two research questions are answered (§9.1), the contributions (§9.2),
+each limitation paired with the experiment that would settle it (§9.3), and
+a personal reflection on how the project was actually conducted (§9.4).
 
 ## 9.1 Summary of the dissertation
 

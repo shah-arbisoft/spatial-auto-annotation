@@ -8,13 +8,9 @@
 > `outputs/planner_scores_abcde.json`.
 
 This chapter answers RQ2 with a controlled experiment over three label
-sources, and a fourth added later (§5.2).
-Section 5.1 states the design, §5.2 the result, §5.3 examines why
-self-training fails to rescue the human labels, §5.4 the mechanism and its
-consistency checks, §5.5 the boundaries of the claim, and §5.6 the connection
-to the source paper's robot-planning chain. Section 5.7 then tests that chain
-one link further, asking whether the label source changes the plan an LLM
-planner produces for a robot, and §5.8 gives the answer.
+sources and a fourth added later (§5.1–§5.6), then follows the source paper's
+robot-planning chain one link further, asking whether the label source
+changes the plan an LLM planner produces (§5.7).
 
 ## 5.1 The controlled experiment
 

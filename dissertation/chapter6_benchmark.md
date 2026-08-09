@@ -5,11 +5,9 @@
 > `scripts/export_sgg_benchmark.py`; run recipe in `scripts/kaggle/`.
 
 This chapter is the third analysis iteration: the heavyweight version of the
-RQ2 experiment, run in the source paper's own framework. Section 6.1 gives
-the design and the three predictions registered in advance, §6.2–6.3 the
-training dynamics and test results, §6.4 the decomposition of why the verdict
-differs from Chapter 5, §6.5 both readings of the evidence, and §6.6–6.7 the
-prediction verdicts and the conditional answer.
+RQ2 experiment, run in the source paper's own framework against three
+predictions registered before it (§6.1). It reaches a different verdict from
+Chapter 5, and §6.4 decomposes why.
 
 ## 6.1 Design
 

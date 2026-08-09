@@ -1,13 +1,9 @@
 # Chapter 8: Legal, Social, Ethical and Professional Considerations
 
-This chapter assesses the legal, social, ethical and professional (LSEP)
-dimensions of building and releasing an automatic annotator: §8.1 the legal
-position of the data, the models and the outputs; §8.2 the social
-implications of automating annotation work and of the robot systems it
-serves; §8.3 the ethical safeguards, including those for the human
-validation study; and §8.4 the professional standards the project holds
-itself to. The detailed ethics record, including the participant-facing
-material, is in Appendix A.
+This chapter assesses the legal, social, ethical and professional dimensions
+of building and releasing an automatic annotator, including the safeguards
+covering the human validation study (§8.3). The detailed ethics record, with
+the participant-facing material, is in Appendix A.
 
 ## 8.1 Legal considerations
 

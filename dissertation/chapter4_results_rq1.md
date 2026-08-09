@@ -6,15 +6,14 @@
 > audit (§4.4) predates the gate; §4.9 reports the gate's effect on the audited
 > samples.
 
-This chapter answers RQ1: the protocol (§4.1), headline recall (§4.2),
-restricted precision (§4.3), audited true precision (§4.4), the hardest
-predicate pair per annotator (§4.5), the residual human cost (§4.7), the
-audit-driven rule repairs (§4.9), every remaining miss diagnosed (§4.10),
-and full automation (§4.11).
+This chapter answers RQ1, from the protocol (§4.1) through headline recall
+(§4.2), audited precision (§4.3–§4.4), the hardest predicate pair per
+annotator (§4.5), the residual human cost (§4.7) and every remaining miss
+diagnosed (§4.10), to full automation with a detector in the loop (§4.11).
 
-Every measure above is bounded by the labels it is scored against, so the
-last five sections leave the gold behind: video from outside the calibration
-domain (§4.12), the independent study that re-estimates precision with
+Every one of those measures is bounded by the labels it is scored against,
+so the last five sections leave the gold behind: video from outside the
+calibration domain (§4.12), the study re-estimating precision with
 disinterested judges (§4.13), whether labels survive the camera moving
 (§4.14), 1,766 unlabelled robot frames (§4.15), and whether a
 vision-language model would have done the job instead (§4.16).
