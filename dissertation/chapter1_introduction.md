@@ -1,8 +1,5 @@
 # Chapter 1: Introduction
 
-> Chapter summary: the manual-annotation bottleneck, the compute-not-predict
-> idea, the research questions and objectives, and the shape of the argument.
-
 ## 1.1 Background
 
 A robot asked to pick up a book with a cube resting on it needs more than a

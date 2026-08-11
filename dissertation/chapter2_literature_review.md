@@ -1,9 +1,5 @@
 # Chapter 2: Literature Review
 
-> Facts attributed to the source paper are verified against its arXiv full
-> text (2506.12525); all other cited works are verified against their published
-> versions. Full bibliography entries: [references.md](references.md).
-
 This chapter reviews the work this project builds on and the work it must be
 distinguished from. Its organising question is **label quality**, because
 that is what the project's evidence ultimately turns on: not whether spatial
@@ -307,39 +303,26 @@ ablation**, is:
   precisely because it is the worst reasonable detector, so the end-to-end
   bound it produces (0.38 triplet recall, against 0.85 conditional on both
   endpoints being found) is conservative rather than flattering.
-- **Segmentation.** **SAM2** (Ravi et al., 2024) is used box-prompted, in the
-  `sam2.1-hiera-small` variant with multimask enabled and the best-scoring
-  mask taken. The silhouette is load-bearing twice over: depth is sampled by
-  median over object pixels rather than over the whole box, and the support
-  rule's contact test needs the object's bottom boundary pixel by pixel
-  (§3.5). Single-mask mode was rejected on measurement, having returned empty
-  masks on loose boxes.
+- **Segmentation.** **SAM2** (Ravi et al., 2024), box-prompted. The
+  silhouette is load-bearing twice over: depth is sampled by median over
+  object pixels rather than over the whole box, and the support rule's contact
+  test needs the object's bottom boundary pixel by pixel (§3.5).
 - **Monocular depth.** **Depth Anything v2** (Yang, L. et al., 2024) emits a
   *relative* map, ordering pixels without a unit, and that single property
   fixes the rule design: every depth comparison is ordinal and within-image,
-  and no rule may consume an absolute distance. The Small variant is shipped
-  for three reasons that happen to agree: it runs under a gigabyte of VRAM
-  and so fits the 6 GB RTX 2060 alongside SAM2 at a measured 0.65 GB peak, it
-  is Apache-2.0 where Base and Large are non-commercial, and ablation A8
-  finds the 4× larger Base variant moves front/behind by +0.001 and +0.002.
-- **Open-vocabulary classification/segmentation (CLIP family).** **CLIP**
-  (Radford et al., 2021) and **SCLIP** (Wang, F. et al., 2024), the latter
-  reaching 38.2% zero-shot mIoU by making CLIP dense through a training-free
-  *Correlative Self-Attention*, bear on the open-vocabulary scaling direction
-  rather than on the relation logic. They are positioned as alternatives and
-  future work, not components.
-- **3D primitive abstraction (out of scope).** **PrimitiveAnything**
-  (Ye et al., 2025) decomposes 3D shapes into cuboids, cylinders and
-  ellipsoids, and assumes clean 3D input this project does not have, having
-  only monocular RGB and relative depth. It is noted as a speculative future
-  representation, not used.
+  and no rule may consume an absolute distance.
+- **Adjacent, not used.** **CLIP** (Radford et al., 2021) and **SCLIP**
+  (Wang, F. et al., 2024), which reaches 38.2% zero-shot mIoU by making CLIP
+  dense through a training-free *Correlative Self-Attention*, bear on
+  open-vocabulary scaling rather than on relation logic; **PrimitiveAnything** (Ye et al., 2025) decomposes 3D shapes
+  into primitives and assumes clean 3D input this project does not have. All
+  three are future directions rather than components.
 
-The division of labour is deliberate: the neural components above only
-*measure* (where an object is, which pixels belong to it, how far away it
-looks), and every relationship decision is made by an explicit rule over those
-measurements. Chapter 3 argues this split is what makes the annotator
-auditable, and Chapter 4's box-only ablation quantifies what each perception
-component actually contributes.
+The division of labour is deliberate. The neural components only *measure*,
+and every relationship decision is made by an explicit rule over those
+measurements, which is what makes the annotator auditable; §3.4 gives each
+choice with the alternative it displaced, and Chapter 4's box-only ablation
+quantifies what each actually contributes.
 
 ## 2.7 Learned scene-graph generation (the consumer of our output)
 
@@ -483,15 +466,14 @@ chapters can be read as attempts on them rather than as a defence assembled
 after the fact.
 
 **Rules do not scale with the vocabulary.** Each predicate here is an
-explicitly authored geometric test with fitted thresholds. Seven predicates
-are tractable; the scene-graph literature routinely works with fifty
-(Krishna et al., 2017), and the direction of travel that Chang et al. (2023)
-identify is open-vocabulary relations, including non-spatial ones such as
-*holding* or *using* for which no geometric criterion exists. A learned
-predictor improves by being shown more data, whereas a rule set improves
-only by being extended by hand. Whatever this project demonstrates about
-seven spatial predicates transfers to functional or interactional relations
-not at all.
+explicitly authored geometric test with fitted thresholds. Seven are
+tractable; the literature routinely works with fifty (Krishna et al., 2017),
+and the direction of travel Chang et al. (2023) identify is open-vocabulary
+relations, including non-spatial ones such as *holding* for which no geometric
+criterion exists. A learned predictor improves by being shown more data, a
+rule set only by being extended by hand, so whatever this project demonstrates
+about seven spatial predicates transfers to functional relations not at
+all.
 
 **Systematic error is worse for training than random error.** The appeal of
 computed labels is consistency, but consistency guarantees only that mistakes
@@ -537,11 +519,10 @@ records as a limitation (§9.3). The fifth is a different project.
 
 ## 2.10 Critical comparison and the research gap
 
-The table is the analytical core: it shows every neighbour either targets a
-different output, is a reference recipe rather than an annotator, operates
-outside this dataset, or *predicts* rather than *computes* relations, and
-that **none provides a fully-automatic annotator for this dataset's seven
-predicates, validated against its human labels**.
+Every neighbour below either targets a different output, is a reference
+recipe rather than an annotator, operates outside this dataset, or *predicts*
+rather than *computes* relations. **None provides a fully-automatic annotator
+for this dataset's seven predicates, validated against its human labels.**
 
 | Work | Year/venue | Relations: compute vs. predict | Output | Auto-annotator? | This dataset's 7 predicates? | Validated vs. these human labels? |
 |---|---|---|---|---|---|---|
@@ -564,20 +545,19 @@ instantiation as a validated automatic annotator for this dataset is new.
 ## 2.11 Summary and positioning
 
 The literature establishes that spatial relations are computable from
-geometry, that learned SGG consumes labelled triplets and absorbs their
-biases, and that dense rule-based supervision substitutes for scarce human
-labels when validated carefully. It leaves a precise gap: no automatic,
-geometry-based annotator emits this dataset's seven predicates in its native
-formats and is validated against its human labels, even though its authors
-ask for exactly such fixes.
+geometry, that learned SGG absorbs the biases of the triplets it consumes, and
+that dense rule-based supervision substitutes for scarce human labels when
+validated carefully. It leaves a precise gap: no automatic, geometry-based
+annotator emits this dataset's seven predicates in its native formats and is
+validated against its human labels, even though its authors ask for exactly
+such fixes.
 
-Two things follow from the critical sections and shape everything after them.
-Because the field's metrics are recall-shaped by its own incomplete
-annotation (§2.8), no single number from them can settle a dispute *about*
-that annotation, so the protocol of Chapters 4 to 6 is built around the
-limitation rather than inside it. And because the strongest case against the
-approach is stated in advance (§2.9), the results chapters can be read as an
-attempt on it, with §7.7 the reckoning. Because the seven predicates are
-spatial, the appropriate instrument is explicit geometric rules over measured
-perception rather than a learned predictor that would merely re-import human
-labelling bias, and Chapter 3 develops that design.
+Two things follow from the critical sections. Because the field's metrics are
+recall-shaped by its own incomplete annotation (§2.8), no number from them can
+settle a dispute *about* that annotation, so the protocol of Chapters 4 to 6
+is built around that limitation rather than inside it; and because the
+strongest case against the approach is stated in advance (§2.9), the results
+can be read as an attempt on it, with §7.7 the reckoning. Chapter 3 develops
+the design the gap calls for: explicit geometric rules over measured
+perception, rather than a learned predictor that would re-import the very
+labelling bias in question.

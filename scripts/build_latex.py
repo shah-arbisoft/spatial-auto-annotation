@@ -270,6 +270,9 @@ TABLES = {
         "Restricted precision, recall and F1 on the human-annotated pairs "
         "only, where an unannotated pair cannot be scored and precision is "
         "therefore a floor.",
+        # F.8
+        "Per-predicate recall on the held-out annotator groups with 95% "
+        "cluster-bootstrap intervals over images.",
     ],
 }
 

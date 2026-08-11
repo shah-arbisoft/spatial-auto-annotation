@@ -1,9 +1,5 @@
 # Chapter 7: Critical Evaluation
 
-> Every quantitative claim below is established in Chapters 4–6
-> and reproducible from the repository; this chapter interprets, connects and
-> stress-tests them.
-
 This chapter discusses the results rather than reporting new ones: what the
 project achieved against its two research questions, what the remaining
 failures are made of, what the measurements say about the dataset's own
@@ -160,16 +156,14 @@ designed from the start would have trained every arm at three seeds and
 reported ranges throughout, which is what the final version does.
 
 Choices a stricter replication should improve: the **audits were verdicted by
-the author** (conservatively, with verdicts and rendered evidence published
-for spot-checking; the independent validation study of Appendix E.3 is the designed
-remedy, and blind external verdicting should have been the instrument from
-the first audit rather than the last); the
-**support-rule iteration used the same audit machinery twice**, so the second
-audit is confirmatory rather than fully independent; the SGDet **prompt/
-threshold tuning used one disclosed iteration on a trial slice** that
-over-estimated full-set detection quality, a small, instructive example of
-trial-set optimism; and 2,000-scene invariant fuzzing pins rule consistency
-but not rule *truth*, which only the audits address.
+the author**, conservatively and with the evidence published for
+spot-checking, where blind external verdicting should have been the instrument
+from the first audit rather than the last (Appendix E.3); the **support-rule
+iteration used the same audit machinery twice**, making the second audit
+confirmatory rather than independent; the SGDet **threshold tuning used one
+disclosed iteration on a trial slice** that over-estimated full-set detection
+quality, an instructive case of trial-set optimism; and invariant fuzzing pins
+rule consistency but not rule *truth*, which only the audits address.
 
 ## 7.5 Synthesis against the geometry-to-label lineage
 
@@ -291,19 +285,14 @@ could, because that is a question about the specification and not about the
 data.
 
 **Better collection rather than cheaper labels: not attempted, and partly
-answered sideways.** The project did not re-collect anything. It did,
-however, produce the written operational definitions the annotation process
-never had (§3.5) and quantify three specific defects those definitions would
-have prevented, which is the input a better collection round would need.
-Cheap labels and correct definitions are complements rather than
-alternatives, and this work supplies evidence for the second while
-delivering the first.
-
-## 7.8 Aims, revisited
+answered sideways.** The project re-collected nothing, but it produced the
+operational definitions the annotation process never had (§3.5) and quantified
+three defects those definitions would have prevented, which is what a better
+collection round needs. Cheap labels and correct definitions are complements,
+and this work supplies the second while delivering the first.
 
 The project set out to show that automatic labels are *not much worse* than
-human ones and found conditions under which they are decisively better for
-downstream learning, those conditions being sparse, guideline-free
-annotation: exactly the regime the source dataset occupies. That reframes
-what the bottleneck was doing. It was not only slowing the dataset down, it
-was limiting what the dataset could teach.
+human ones, and found conditions under which they are decisively better, those
+conditions being the sparse, guideline-free annotation this dataset occupies.
+The bottleneck was therefore not only slowing the dataset down, it was
+limiting what the dataset could teach.

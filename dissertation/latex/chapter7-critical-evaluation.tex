@@ -1,8 +1,4 @@
 
-\begin{quote}
-Every quantitative claim below is established in Chapters 4--6 and reproducible from the repository; this chapter interprets, connects and stress-tests them.
-\end{quote}
-
 This chapter discusses the results rather than reporting new ones: what the project achieved against its two research questions, what the remaining failures are made of, what the measurements say about the dataset's own annotation process, and, in \S{}7.7, an answer to each of the five objections \S{}2.9 raised against the approach before any result was known. The objective-by-objective audit belongs with the conclusions and is in \S{}9.1.
 
 \section{Achievement against the research questions}
@@ -52,7 +48,7 @@ Choices that proved right: the \textbf{PredCls isolation} (without it, every rul
 
 One choice proved its worth only afterwards. The withdrawn single-seed claim of \S{}6.3.1 shows the discipline applied faithfully to thresholds, fitting on some annotators and validating on others, reaching \textit{model training variance} late. The fix was cheap, four extra runs on a free GPU tier, and a replication designed from the start would have trained every arm at three seeds and reported ranges throughout, which is what the final version does.
 
-Choices a stricter replication should improve: the \textbf{audits were verdicted by the author} (conservatively, with verdicts and rendered evidence published for spot-checking; the independent validation study of Appendix E.3 is the designed remedy, and blind external verdicting should have been the instrument from the first audit rather than the last); the \textbf{support-rule iteration used the same audit machinery twice}, so the second audit is confirmatory rather than fully independent; the SGDet \textbf{prompt/ threshold tuning used one disclosed iteration on a trial slice} that over-estimated full-set detection quality, a small, instructive example of trial-set optimism; and 2,000-scene invariant fuzzing pins rule consistency but not rule \textit{truth}, which only the audits address.
+Choices a stricter replication should improve: the \textbf{audits were verdicted by the author}, conservatively and with the evidence published for spot-checking, where blind external verdicting should have been the instrument from the first audit rather than the last (Appendix E.3); the \textbf{support-rule iteration used the same audit machinery twice}, making the second audit confirmatory rather than independent; the SGDet \textbf{threshold tuning used one disclosed iteration on a trial slice} that over-estimated full-set detection quality, an instructive case of trial-set optimism; and invariant fuzzing pins rule consistency but not rule \textit{truth}, which only the audits address.
 
 \section{Synthesis against the geometry-to-label lineage}
 
@@ -82,8 +78,6 @@ The literature review stated five objections to a rule-based annotator before an
 
 \textbf{Reference frame: answered as far as it can be, which is not all the way.} The dissertation does not assert that the camera frame is correct; it shows that the tool applies one frame consistently (\S{}4.12), that two annotator groups applied another (\S{}4.5), and that recall rises from 0.64/0.66 to 0.84 once the convention is aligned. That establishes disagreement rather than error, and identifies which party is consistent. It does not establish which convention a robot should obey, and no measurement in this dissertation could, because that is a question about the specification and not about the data.
 
-\textbf{Better collection rather than cheaper labels: not attempted, and partly answered sideways.} The project did not re-collect anything. It did, however, produce the written operational definitions the annotation process never had (\S{}3.5) and quantify three specific defects those definitions would have prevented, which is the input a better collection round would need. Cheap labels and correct definitions are complements rather than alternatives, and this work supplies evidence for the second while delivering the first.
+\textbf{Better collection rather than cheaper labels: not attempted, and partly answered sideways.} The project re-collected nothing, but it produced the operational definitions the annotation process never had (\S{}3.5) and quantified three defects those definitions would have prevented, which is what a better collection round needs. Cheap labels and correct definitions are complements, and this work supplies the second while delivering the first.
 
-\section{Aims, revisited}
-
-The project set out to show that automatic labels are \textit{not much worse} than human ones and found conditions under which they are decisively better for downstream learning, those conditions being sparse, guideline-free annotation: exactly the regime the source dataset occupies. That reframes what the bottleneck was doing. It was not only slowing the dataset down, it was limiting what the dataset could teach.
+The project set out to show that automatic labels are \textit{not much worse} than human ones, and found conditions under which they are decisively better, those conditions being the sparse, guideline-free annotation this dataset occupies. The bottleneck was therefore not only slowing the dataset down, it was limiting what the dataset could teach.

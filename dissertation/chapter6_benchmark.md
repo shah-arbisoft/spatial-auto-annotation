@@ -1,9 +1,5 @@
 # Chapter 6: The Direct Benchmark Test: Training REACT++ on Both Label Sources
 
-> Numbers generated on Kaggle (T4 GPU) with SGG-Benchmark; training logs and
-> the exact per-epoch series in `outputs/sgg_benchmark/`; conversion by
-> `scripts/export_sgg_benchmark.py`; run recipe in `scripts/kaggle/`.
-
 This chapter is the third analysis iteration: the heavyweight version of the
 RQ2 experiment, run in the source paper's own framework against three
 predictions registered before it (§6.1). It reaches a different verdict from
@@ -203,13 +199,12 @@ generalisation; this dissertation does not claim it as such.
 ## 6.5 An honest reading, both ways
 
 Two interpretations survive and neither is available without the other. The
-benchmark result is real: if the consumer will be *evaluated against
-human-annotated scene graphs*, human labels remain the better supervision,
-because they carry the annotation prior the evaluation shares. The
-interpretation is equally real: the ranking metric inherits every defect
-measured in the gold, and the advantage is concentrated exactly where the
-annotation is defective and absent where it is not, which is what
-annotation-prior agreement would look like.
+benchmark result is real: a consumer *evaluated against human-annotated scene
+graphs* is better supervised by human labels, which carry the annotation prior
+the evaluation shares. The interpretation is equally real: the ranking metric
+inherits every defect measured in the gold, and the advantage is concentrated
+exactly where the annotation is defective and absent where it is not, which is
+what annotation-prior agreement would look like.
 
 The critical reading is not novel to this project, which is what makes it
 credible rather than self-serving. Neural Motifs (Zellers et al., 2018)
@@ -228,13 +223,13 @@ the analogue of §4.4, left as designed follow-up.
 ## 6.6 What Chapter 5's predictions got right and wrong
 
 Registered before the run, judged after: prediction 1 (early human-arm
-saturation) is **confirmed**, and it replicates the source paper. Prediction
-2 (higher plateau) is **refuted on mR@100 as stated**; the plateau is higher
+saturation) is **confirmed** and replicates the source paper. Prediction 2
+(higher plateau) is **refuted on mR@100 as stated**, the plateau being higher
 only on the zero-shot component the prediction did not name. Prediction 3
-(`near` recovery) is **refuted**; it wrongly assumed the test gold could
-reward dense `near` prediction. The value of pre-registration is precisely
-that these verdicts are checkable; the mechanism analysis above is what the
-misses taught.
+(`near` recovery) is **refuted**: it wrongly assumed the test gold could
+reward dense `near` prediction. The value of pre-registration is that these
+verdicts are checkable, and the mechanism analysis above is what the misses
+taught.
 
 The replication adds a fourth verdict, on a claim made *after* the run rather
 than before: §6.3.1 withdraws the single-seed group-7 result rather than
@@ -248,11 +243,11 @@ that produced it.
 At the level the source paper evaluates robot-readiness, automatic labels
 train a model that trains longer, covers the relation types the manual
 annotation never recorded far more fully (zR@100 0.172 against 0.003, disjoint
-ranges), ranks equally against the one test annotator with no measured defect
-and lower against the two that have them. The claim the evidence supports is
-conditional: **automatic labels are better training material wherever ground
-truth means geometry; human labels remain better wherever it means human
-annotation habits.** For the robot chain the first condition is operative,
-because a planner needs relations that are *correct* rather than *human-like*,
-and §5.7 tests that one link further down, where it survives. What the chain
-still lacks is execution on a physical robot (§9.3).
+ranges), ranks equally against the one clean test annotator and lower against
+the two with measured defects. The claim the evidence supports is conditional:
+**automatic labels are better training material wherever ground truth means
+geometry; human labels remain better wherever it means human annotation
+habits.** The first condition is the operative one for a robot, which needs
+relations that are *correct* rather than *human-like*, and §5.7 tests that a
+link further down, where it survives. The chain still lacks execution on a
+physical robot (§9.3).
