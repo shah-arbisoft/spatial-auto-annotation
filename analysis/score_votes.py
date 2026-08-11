@@ -56,6 +56,38 @@ PREDICATES = ["on", "under", "to the left of", "to the right of",
 TRUE, WRONG = "TRUE", "WRONG"
 
 
+# The site that collects the votes is a separate project, so its export column
+# names are its own. These are the variants seen in the wild for each field;
+# --inspect reports what a given CSV maps onto, and anything unmapped is named
+# so it can be added here rather than guessed at.
+ALIASES = {
+    "claim_id": ["claim_id", "claim", "id", "item", "item_id", "claimid",
+                 "triplet_id", "pair_id"],
+    "predicate": ["predicate", "relation", "rel", "label", "predicate_name"],
+    "verdict": ["verdict", "answer", "response", "judgement", "judgment",
+                "vote", "is_correct", "correct"],
+    "rater_id": ["rater_id", "rater", "user", "user_id", "session",
+                 "session_id", "browser_id", "participant", "participant_id"],
+    "response_ms": ["response_ms", "ms", "time_ms", "duration_ms", "elapsed_ms",
+                    "response_time", "latency_ms"],
+    "author_verdict": ["author_verdict", "author", "gold", "author_label",
+                       "expert_verdict", "key"],
+}
+
+
+def map_columns(fieldnames):
+    """Map a CSV's headers onto the fields the scorer needs."""
+    seen = {(f or "").strip().lower(): f for f in (fieldnames or [])}
+    out, unmapped = {}, dict(seen)
+    for field, names in ALIASES.items():
+        for n in names:
+            if n in seen:
+                out[field] = seen[n]
+                unmapped.pop(n, None)
+                break
+    return out, sorted(unmapped.values())
+
+
 def normalise(v: str) -> str:
     """Map whatever the site exported onto TRUE/WRONG.
 
@@ -123,24 +155,138 @@ def krippendorff_alpha(units: dict[str, list[str]]) -> float:
 
 
 # --- pipeline ---------------------------------------------------------------
+
+def load_claims(path):
+    """claim_id -> {predicate, author_verdict} from the claim set / answer key.
+
+    Accepts CSV or JSON. The predicate comes from the claim set that built the
+    site; the author verdict, where present, comes from the private key that
+    E.3 keeps out of the public repository. Neither is ever served to a
+    participant, which is why they are joined here rather than exported.
+    """
+    path = pathlib.Path(path)
+    out = {}
+    if path.suffix.lower() == ".json":
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        items = raw.values() if isinstance(raw, dict) else raw
+        for c in items:
+            cid = str(c.get("claim_id") or c.get("id") or c.get("item") or "")
+            if cid:
+                out[cid] = {
+                    "predicate": (c.get("predicate") or c.get("relation") or ""),
+                    "author_verdict": c.get("author_verdict") or c.get("gold") or None,
+                }
+    else:
+        with open(path, encoding="utf-8-sig", newline="") as fh:
+            reader = csv.DictReader(fh)
+            cols, _ = map_columns(reader.fieldnames)
+            for r in reader:
+                cid = (r.get(cols.get("claim_id", "")) or "").strip()
+                if not cid:
+                    continue
+                out[cid] = {
+                    "predicate": (r.get(cols.get("predicate", "")) or "").strip(),
+                    "author_verdict": (r.get(cols.get("author_verdict", "")) or "").strip() or None,
+                }
+    return out
+
+
+def apply_claims(rows, claims):
+    """Fill predicate and author_verdict from the claim set. Reports misses."""
+    filled = missing = 0
+    for r in rows:
+        c = claims.get(r["claim_id"])
+        if not c:
+            missing += 1
+            continue
+        if not r["predicate"] and c["predicate"]:
+            r["predicate"] = c["predicate"]
+        if not r["author_verdict"] and c["author_verdict"]:
+            r["author_verdict"] = normalise(c["author_verdict"])
+        filled += 1
+    return {"judgements_joined": filled, "claim_ids_not_in_claim_set": missing}
+
+
+def dedupe(rows):
+    """Drop rows identical in rater, claim, verdict and timing.
+
+    A genuine second judgement by the same rater on the same claim would not
+    reproduce the response time to the millisecond; an export or submit that
+    ran twice does. The partial 11 August return had 12 of these.
+    """
+    seen, out, dups = set(), [], 0
+    for r in rows:
+        k = (r["rater_id"], r["claim_id"], r["verdict"], r["response_ms"])
+        if k in seen:
+            dups += 1
+        else:
+            seen.add(k)
+            out.append(r)
+    return out, dups
+
+
 def read_votes(handle) -> list[dict]:
+    reader = csv.DictReader(handle)
+    cols, _ = map_columns(reader.fieldnames)
+    for needed in ("claim_id", "verdict"):
+        if needed not in cols:
+            raise SystemExit(
+                f"no column maps onto {needed!r}; run --inspect on this file "
+                f"to see what it has")
     rows = []
-    for i, r in enumerate(csv.DictReader(handle), 2):
-        r = { (k or "").strip().lower(): (v or "").strip() for k, v in r.items() }
-        if not r.get("claim_id"):
+    for i, r in enumerate(reader, 2):
+        def get(field, default=""):
+            c = cols.get(field)
+            return (r.get(c) or "").strip() if c else default
+        if not get("claim_id"):
             continue
         try:
             rows.append({
-                "claim_id": r["claim_id"],
-                "predicate": r.get("predicate", ""),
-                "verdict": normalise(r["verdict"]),
-                "rater_id": r.get("rater_id", f"anon{i}"),
-                "response_ms": int(float(r["response_ms"])) if r.get("response_ms") else None,
-                "author_verdict": normalise(r["author_verdict"]) if r.get("author_verdict") else None,
+                "claim_id": get("claim_id"),
+                "predicate": get("predicate"),
+                "verdict": normalise(get("verdict")),
+                "rater_id": get("rater_id") or f"anon{i}",
+                "response_ms": int(float(get("response_ms"))) if get("response_ms") else None,
+                "author_verdict": normalise(get("author_verdict")) if get("author_verdict") else None,
             })
-        except (KeyError, ValueError) as e:
+        except ValueError as e:
             raise SystemExit(f"row {i}: {e}") from None
     return rows
+
+
+def inspect(path) -> int:
+    """Report what a CSV holds and how it would be read, before scoring it."""
+    with open(path, encoding="utf-8-sig", newline="") as fh:
+        reader = csv.DictReader(fh)
+        cols, unmapped = map_columns(reader.fieldnames)
+        rows = [r for _, r in zip(range(400), reader)]
+    print(f"  {path}: {len(rows)} rows read (first 400), "
+          f"{len(reader.fieldnames or [])} columns\n")
+    print("  mapped:")
+    for field in ALIASES:
+        c = cols.get(field)
+        need = " (required)" if field in ("claim_id", "verdict") else ""
+        print(f"    {field:16} <- {c if c else '*** nothing ***'}{need}")
+    if unmapped:
+        print(f"\n  unmapped columns: {', '.join(unmapped)}")
+    if cols.get("verdict"):
+        vals = collections.Counter((r.get(cols['verdict']) or '').strip()
+                                   for r in rows)
+        print(f"\n  verdict values seen: {dict(vals.most_common(8))}")
+        bad = [v for v in vals if v and v.strip().lower() not in
+               {"true","t","yes","y","1","correct","wrong","w","no","n","0",
+                "false","incorrect","can't tell","cant tell","unsure","skip"}]
+        if bad:
+            print(f"  NOT RECOGNISED: {bad} -- tell me what these mean")
+    if cols.get("predicate"):
+        print(f"\n  predicates seen: "
+              f"{sorted({(r.get(cols['predicate']) or '').strip() for r in rows} - {''})}")
+    if cols.get("claim_id"):
+        ids = [(r.get(cols['claim_id']) or '').strip() for r in rows]
+        per = collections.Counter(ids)
+        print(f"\n  {len(per)} distinct claims; "
+              f"{sum(1 for v in per.values() if v >= 2)} have 2+ judgements")
+    return 0
 
 
 def apply_filters(rows: list[dict]) -> tuple[list[dict], dict]:
@@ -185,8 +331,12 @@ def majority_of(verdicts: list[str]) -> str:
     return TIE_RESOLVES_TO
 
 
-def score(rows: list[dict]) -> dict:
+def score(rows: list[dict], claims: dict | None = None) -> dict:
+    rows, dups = dedupe(rows)
+    joined = apply_claims(rows, claims) if claims else {}
     rows, filt = apply_filters(rows)
+    filt["exact_duplicate_rows_dropped"] = dups
+    filt.update(joined)
 
     by_claim: dict[str, list[dict]] = collections.defaultdict(list)
     for r in rows:
@@ -278,8 +428,10 @@ def selftest() -> int:
     for i in range(8):                                   # contrarian, must be dropped
         rows.append(f"c{i:04d},{PREDICATES[i%7]},WRONG,rBAD,4000,")
 
+    rows.append(rows[1])                                  # exact duplicate row
     res = score(read_votes(io.StringIO("\n".join(rows))))
     f = res["filters"]
+    assert f["exact_duplicate_rows_dropped"] == 1, f
     assert f["dropped_faster_than_800ms"] == 1, f
     assert "rBAD" in f["raters_excluded_as_outliers"], f
     assert 0.7 < res["crowd_precision_pooled"] < 1.0, res["crowd_precision_pooled"]
@@ -297,8 +449,12 @@ def main() -> int:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("votes", nargs="?", help="exported votes CSV")
     ap.add_argument("--out", default="outputs/validation_study.json")
+    ap.add_argument("--claims", help="claim set / answer key CSV or JSON, "
+                    "supplying predicate and author_verdict offline")
     ap.add_argument("--schema", action="store_true", help="print the expected CSV")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--inspect", action="store_true",
+                    help="report a CSV's columns and how they would be read")
     a = ap.parse_args()
 
     if a.schema:
@@ -306,11 +462,19 @@ def main() -> int:
         return 0
     if a.selftest:
         return selftest()
+    if a.inspect:
+        if not a.votes:
+            ap.error("--inspect needs a CSV")
+        return inspect(a.votes)
     if not a.votes:
         ap.error("give a votes CSV, or --schema, or --selftest")
 
+    claims = load_claims(a.claims) if a.claims else None
     with open(a.votes, encoding="utf-8-sig", newline="") as fh:
-        res = score(read_votes(fh))
+        res = score(read_votes(fh), claims)
+    if not claims:
+        print("note: no --claims given, so per-predicate precision and the "
+              "author comparison are unavailable", file=sys.stderr)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(res, indent=2, sort_keys=True), encoding="utf-8")
