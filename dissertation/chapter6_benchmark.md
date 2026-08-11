@@ -137,44 +137,26 @@ column establishes: which relation types each source covers, not
 compositional generalisation, because both arms score against one shared
 reference.
 
-### 6.3.2 A third label source, and the one result that does not fit
+### 6.3.2 A third label source
 
 Chapter 5 adds a vision-language model as a fourth training source, and the
-same labels were put through this benchmark as a third arm, three seeds,
-same frozen detector, same human test gold.
-
-| slice | human | automatic | vision-language |
-|---|---|---|---|
-| full test | 0.326 (0.303–0.347) | 0.278 (0.268–0.289) | 0.329 (0.316–0.347) |
-| group 6 (defect) | **0.366** (0.343–0.382) | 0.286 (0.261–0.304) | 0.336 (0.317–0.369) |
-| group 7 (clean) | 0.308 (0.298–0.323) | 0.307 (0.289–0.334) | **0.381** (0.365–0.395) |
-| group 8 (defect) | **0.171** (0.142–0.197) | 0.109 (0.087–0.125) | 0.148 (0.134–0.159) |
-
-Mean mR@100 over three seeds, per-seed range in brackets.
-
-Pooled, the vision-language arm is indistinguishable from the human arm
-(0.329 against 0.326, ranges overlapping almost entirely), and that is what
-§6.4's argument predicts. The model annotates sparsely and human-like: §4.16
-measures it recovering under half the human triplets, staying silent on most
-pairs, and reproducing the annotators' own asymmetry defect. A metric that
-rewards resembling the manual pass should therefore score it like the manual
-pass, and it does. A third source behaving as the argument says it should is
+same labels were put through this benchmark as a third arm, three seeds, same
+frozen detector, same human test gold. Pooled, it is indistinguishable from
+the human arm (0.329 against 0.326, ranges overlapping almost entirely), and
+that is what §6.4's argument predicts: §4.16 measures the model annotating
+sparsely and human-like, recovering under half the human triplets, staying
+silent on most pairs and reproducing the annotators' own asymmetry defect, so
+a metric rewarding resemblance to the manual pass should score it like the
+manual pass. A third source behaving as the argument says it should is
 confirming evidence, not an embarrassment.
 
 **One result does not fit, and it is reported rather than explained away.**
-On group 7, the single test annotator whose labels this dissertation did not
-convict of a measured defect, the vision-language arm leads both others at
-0.381 against 0.308 and 0.307, and its per-seed range touches neither. That
-is the cleanest gold in the test set, so a win there cannot be attributed to
-matching a defect. Three readings remain open and this experiment does not
-separate them: the arm trains on 14,626 relations against the human arm's
-5,421, so the gain may be density rather than the source; group 7 is 73
-images, small enough that a 0.07 margin over three seeds is suggestive rather
-than settled; and the arm's assertions were never audited as the tool's were
-(§4.4), so their correctness is assumed, not measured. The honest position is
-that on clean gold a vision-language source is at least competitive with both
-alternatives, and that establishing why would need the audit and a larger
-clean slice, neither of which this project has.
+On group 7, the one test annotator with no measured defect and therefore the
+cleanest gold, the vision-language arm leads both others at 0.381 against
+0.308 and 0.307, with a per-seed range touching neither. A win there cannot
+be attributed to matching a defect. Appendix F.4 gives the per-slice table
+and the three readings the experiment cannot separate.
+
 
 ## 6.4 Why the verdict flipped between Chapter 5 and this chapter
 
@@ -214,25 +196,21 @@ measurement and withdrawn.
 per-group decomposition localises the human arm's lead precisely, and the
 seed replication of §6.3.1 is what makes the localisation trustworthy. On
 **group 7, the one test annotator with consistent conventions, the two arms
-are indistinguishable**: 0.308 against 0.307 over three seeds, with
-overlapping ranges. On the two annotators this dissertation had already
-convicted of convention inversion (and, for group 8, idiosyncratic `near`
-usage and one-directional support) the human arm wins by margins far larger
-than seed variance: 0.366 against 0.286 on group 6, and 0.171 against 0.109
-on group 8. The human arm's entire headline lead is therefore manufactured
-on the two defective annotators and vanishes on the clean one. Ranking
-parity on clean gold is a weaker statement than the single-seed run
-suggested, and a sturdier one: it needs no claim about which labels are
-better, only the observation that the human arm's advantage tracks
-annotation defects rather than geometry. The group-7 zero-shot gap is not
-marginal at any seed (zR@100 0.165 against 0.005).
-Group 6 shows the clearest fingerprint of annotation-prior matching: its
-*lateral* gold, geometrically unambiguous relations both models predict
-freely, is recalled at 0.49/0.69 by the human arm against 0.12/0.21 by the
-auto arm. Laterals have no convention to invert; what differs is *which*
-pairs the annotator selected, and the human-trained model ranks exactly
-those pairs highly because it learned human selection habits, not because
-it knows more geometry.
+are indistinguishable** at 0.308 against 0.307 over three seeds; on the two
+annotators already convicted of convention inversion the human arm wins by
+margins far larger than seed variance, 0.366 against 0.286 on group 6 and
+0.171 against 0.109 on group 8. Its entire headline lead is therefore
+manufactured on the defective annotators and vanishes on the clean one, while
+the group-7 zero-shot gap is not marginal at any seed (zR@100 0.165 against
+0.005). That is a weaker statement than the single-seed run suggested and a
+sturdier one, needing no claim about which labels are better, only that the
+human arm's advantage tracks annotation defects rather than geometry. Group 6
+shows the clearest fingerprint: its *lateral* gold, geometrically unambiguous
+relations both models predict freely, is recalled at 0.49/0.69 by the human
+arm against 0.12/0.21 by the auto arm. Laterals have no convention to invert,
+so what differs is *which* pairs the annotator selected, and the human-trained
+model ranks exactly those highly because it learned human selection habits,
+not because it knows more geometry.
 
 **(iii) `near` gold is a single idiosyncratic annotator.** All 93 test
 `near` labels come from group 8, whose usage is sparse and non-exhaustive
@@ -254,27 +232,16 @@ claim it as such.
 
 ## 6.5 An honest reading, both ways
 
-Two interpretations survive, and both are recorded. Read charitably toward
-the benchmark: if the consumer will be *evaluated against human-annotated
-scene graphs*, human labels remain the better supervision, because they carry
-the annotation prior the evaluation shares, a practical advantage the
-automatic labels do not replicate. Read critically: the ranking metric
-inherits every defect measured in the gold, sparsity that penalises true
-predictions, inverted conventions in two of three test groups, a
-single-annotator `near`, so it partly measures agreement with those defects
-rather than spatial understanding. The per-group decomposition, replicated
-across seeds, adjudicates: against the only test annotator not convicted of a
-measured defect the arms rank equally and the auto arm covers far more of the
-omitted relation types, while against the two convicted ones the human arm
-wins in proportion to their idiosyncrasy. That is weaker than the single-seed
-run implied, and it is the version the evidence supports.
-
-Neither reading is available without the other. The benchmark result is
-real: on this dataset's test annotation the human-trained model ranks
-better, and a practitioner scoring against such annotation should expect
-that. The interpretation is equally real: the advantage is concentrated
-exactly where the annotation is defective and absent where it is not, which
-is what a metric measuring annotation-prior agreement would look like.
+Two interpretations survive and neither is available without the other. The
+benchmark result is real: if the consumer will be *evaluated against
+human-annotated scene graphs*, human labels remain the better supervision,
+because they carry the annotation prior the evaluation shares, and a
+practitioner scoring against such annotation should expect that. The
+interpretation is equally real: the ranking metric inherits every defect
+measured in the gold, so it partly measures agreement with those defects
+rather than spatial understanding, and the advantage is concentrated exactly
+where the annotation is defective and absent where it is not, which is what
+annotation-prior agreement would look like.
 
 The critical reading is not novel to this project, which is what makes it
 credible rather than self-serving. Neural Motifs (Zellers et al., 2018)
@@ -316,17 +283,13 @@ compared with the variation of the procedure that produced it.
 At the level the source paper evaluates robot-readiness, SGG metrics on
 human-annotated gold, automatic labels train a model that trains longer,
 covers the relation types the manual annotation never recorded far more fully
-(zR@100 0.172 against 0.003 over three seeds, disjoint ranges; §6.5 sets out
-what that column establishes), ranks equally against the one test annotator
-with no measured defect, and ranks lower against the two that have them, for
-reasons attributable line by line to measured properties of those
-annotations. The claim the evidence supports is conditional: **automatic
-labels are better training material wherever ground truth means geometry;
-human labels remain better wherever it means human annotation habits.** For
-the robot chain, where the planner needs relations that are *correct* rather
-than *human-like*, the first condition is operative. §5.7 tests that reading
-one link further down and it survives: given the automatic relations a
-planner produces a safe grasp plan on 22 of 25 held-out scenes, against 25 of
-25 with human relations and 0 of 25 with none, identically on two planners of
-very different capability. What the chain still lacks is execution on a
-physical robot (§9.3).
+(zR@100 0.172 against 0.003 over three seeds, disjoint ranges), ranks equally
+against the one test annotator with no measured defect and lower against the
+two that have them, for reasons attributable line by line to measured
+properties of those annotations. The claim the evidence supports is therefore
+conditional: **automatic labels are better training material wherever ground
+truth means geometry; human labels remain better wherever it means human
+annotation habits.** For the robot chain the first condition is operative,
+because a planner needs relations that are *correct* rather than *human-like*,
+and §5.7 tests that one link further down, where it survives. What the chain
+still lacks is execution on a physical robot (§9.3).

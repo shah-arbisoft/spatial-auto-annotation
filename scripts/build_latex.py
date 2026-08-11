@@ -174,8 +174,6 @@ TABLES = {
     "chapter3_design.md": [
         "Pipeline stages, the alternative rejected at each stage, and the "
         "justification.",
-        "Summary of the design decisions, the alternatives rejected and the "
-        "reasons.",
     ],
     # One caption per table, in document order. The two Ablation A9 captions
     # that used to sit here moved with their tables to Appendix D.6; leaving
@@ -186,9 +184,6 @@ TABLES = {
         "annotators, against three baselines.",
         # 4.3
         "Precision, recall and F1 restricted to the human-annotated pairs.",
-        # 4.3.1
-        "For each missed human triplet, the predicates the tool emitted "
-        "instead.",
         # 4.4
         "Manual audit of a stratified sample of extra predictions, with "
         "Wilson intervals.",
@@ -209,10 +204,6 @@ TABLES = {
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "
         "sources.",
-        "The same experiment on four further indicators. The automatic arm "
-        "leads on recall and trails on every other column, which is the "
-        "sparse-gold artefact of \\S4.3 reappearing downstream rather than a "
-        "verdict on label quality.",
         "Planner experiment: whether the plan clears the occluding object "
         "before grasping the target, over 25 held-out scenes under each "
         "label source.",
@@ -222,8 +213,6 @@ TABLES = {
         "auto-trained arms.",
         "Seed replication: which differences separate across three seeds "
         "per arm.",
-        "A third label source in the benchmark: mean recall at 100 by test "
-        "slice for the human, automatic and vision-language arms.",
     ],
     # Consumed in document order across the appendices, one per table.
     "appendices.md": [
@@ -240,6 +229,9 @@ TABLES = {
         "Ablation A9 by depth separation: multi-frame ordering accuracy is at "
         "chance where the two objects sit at nearly equal camera distance.",
         # D.7
+        "For each missed human triplet, the predicates the tool emitted "
+        "instead.",
+        # D.7
         "Diagnosed cause of every missed human triplet, by predicate.",
         # E.1
         "The vision-language comparison of \\S4.16 restricted to the pairs "
@@ -251,6 +243,17 @@ TABLES = {
         "Benchmark mean recall at 100 by test slice for both arms, seed 42. "
         "Section 6.3.1 replicates every row but the convention-aligned one "
         "across three seeds.",
+        # F.3
+        "Summary of the design decisions, the alternatives rejected and the "
+        "reasons.",
+        # F.4
+        "A third label source in the benchmark: mean recall at 100 by test "
+        "slice for the human, automatic and vision-language arms.",
+        # F.5
+        "The downstream experiment on four further indicators. The automatic "
+        "arm leads on recall and trails on every other column, which is the "
+        "sparse-gold artefact of \\S4.3 reappearing downstream rather than a "
+        "verdict on label quality.",
     ],
 }
 

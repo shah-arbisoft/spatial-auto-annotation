@@ -109,10 +109,8 @@ judgements, directly addressing the inconsistency the source paper flagged.
   relation-prediction model as effectively as human labels are? Measured with a
   controlled lightweight classifier trained once on each label source.
 
-RQ1 asks whether the labels are *accurate*; RQ2 asks whether they are
-*useful*.
-
-The research questions decompose into six verifiable objectives:
+RQ1 asks whether the labels are *accurate*, RQ2 whether they are *useful*.
+The two decompose into six verifiable objectives:
 
 - **O1 (build).** A fully-automatic pipeline (detection, segmentation, depth,
   geometric rules) that annotates the complete dataset in its native formats
@@ -168,27 +166,17 @@ where that obligation falls due.
 
 ### 1.2.3 Contributions
 
-1. The first fully-automatic spatial-relationship annotator for this robot
-   scene-graph dataset and its seven predicates.
-2. A geometric specification and implementation of all seven predicates,
-   including a correction step that rejects geometrically impossible labels and
-   confidence flags that mark ambiguous cases for optional human review.
-3. A *near* threshold fitted to the human labels, addressing a limitation the
-   dataset authors explicitly named.
-4. A fidelity study (RQ1) with multiple baselines and ablations, and a
-   controlled downstream study (RQ2) that isolates the effect of the label
-   source across three arms, including a self-training arm that tests the
-   standard semi-supervised alternative to automatic labelling.
-5. Two measurements of the dataset's own annotation process that its authors
-   did not have: the quantified annotator behaviours of Chapter 4, and an
-   estimate of how well the annotators would agree with one another, obtained
-   by using the deterministic annotator as a common reference.
-6. A label-free reliability check, obtained by recovering the fact that the
-   released images are consecutive frames of one robot capture and asking
-   whether a predicate survives the camera moving. It separates a rule that
-   is wrong from one that is merely uncertain, a distinction sparse human
-   annotation cannot draw, and it applies to any image dataset cut from a
-   sequence.
+The deliverable is the first fully-automatic spatial-relationship annotator
+for this dataset and its seven predicates, with a geometric specification of
+each, a correction step that rejects impossible labels, confidence flags over
+the ambiguous ones, and a fitted `near` threshold answering a limitation the
+dataset's authors named. Around it sit a fidelity study with baselines and
+ablations (RQ1), a controlled three-arm downstream study (RQ2), two
+measurements of the dataset's own annotation process its authors did not
+have, and a reliability check that needs no labels at all, obtained by
+recovering the fact that the released images are consecutive frames of one
+robot capture. Section 9.2 states each contribution against the evidence for
+it, and says who can use it.
 
 ### 1.2.4 Scope
 
@@ -201,7 +189,8 @@ on the same images under the same definitions (§4.16); and a critical
 evaluation chapter. Two items entered scope during the project rather than at
 its start, and both are marked as such where they are reported. Scaling to
 robot captures beyond the annotated release became possible when the
-supervising group supplied the full capture the release was cut from (§4.15),
+supervising group supplied the full capture the release was cut from
+(Appendix E.6),
 with the limits that follow from those frames having no ground truth; and the
 vision-language comparison, originally deferred, was brought forward once it
 became clear that a reader would treat it as the obvious alternative to the
@@ -210,33 +199,25 @@ augmentation of under-represented relations, and any revision of the
 dataset's own predicate definitions.
 
 **Delimitations and assumptions.** Five, each a decision rather than an
-oversight, and each revisited in §7.6. The work covers **one indoor
-environment and six annotated object classes**, so every fitted threshold is
-dataset-specific by construction and it is the method, not the numbers, that
-is claimed to transfer. Relations are computed in the **camera frame**,
-which is a choice among the reference frames Chapter 2 sets out and not a
-fact about the world; where an annotator used a different frame the two
-disagree systematically, and §4.5 measures exactly that. Depth is
-**monocular and relative**, so the depth predicates inherit an ambiguity no
-threshold can remove and which ablation A8 shows a four-times-larger depth
-model does not resolve. Fidelity is measured in the **PredCls setting**,
-with ground-truth boxes and classes supplied, so detection error is held out
-of the comparison and reported separately (§4.11). And the **seven
-predicates are taken as given** from the source dataset; improving their
-definitions would be a different project, and this one inherits whatever
-they leave ambiguous.
+oversight, and each argued in §7.6 with the threat it carries. The work
+covers **one indoor environment and six annotated object classes**, so it is
+the method and not the fitted numbers that is claimed to transfer. Relations
+are computed in the **camera frame**, a choice among the reference frames
+Chapter 2 sets out rather than a fact about the world, and §4.5 measures what
+it costs where an annotator chose differently. Depth is **monocular and
+relative**. Fidelity is measured in the **PredCls setting**, so detection
+error is held out of the comparison and reported separately (§4.11). And the
+**seven predicates are taken as given**; improving their definitions would be
+a different project.
 
 ## 1.3 Research approach
 
-The project follows the CRISP-DM structure that organises data-science work
-from problem understanding through to evaluation and deployment; the choice
-among candidate methodologies is justified in Chapter 3. The mapping
-below is descriptive, not decorative: two of the project's findings (the
-dataset's stored image orientation and the three measured annotator
-behaviours) came directly from the Data Understanding stage, and the
-audit-driven repair of the support rules is a documented iteration between
-Evaluation and Modelling. That is CRISP-DM's loop, made explicit rather than
-hidden.
+The project follows CRISP-DM, chosen over KDD and SEMMA for the reasons §3.1
+gives. The mapping below is descriptive rather than decorative: two findings
+(the dataset's stored image orientation and the three measured annotator
+behaviours) came straight out of Data Understanding, and the audit-driven
+repair of the support rules is a documented iteration between Evaluation and
+Modelling. That is CRISP-DM's loop, made explicit rather than hidden.
 
 | CRISP-DM stage | In this project | Where |
 |---|---|---|
@@ -254,7 +235,7 @@ depth checkpoints and makes Chapter 3's small-model choices a requirement
 rather than a preference; ablation A8 asks what that costs and finds almost
 nothing on the predicate it was expected to hurt. There was **no budget for
 paid annotation**, so the independent re-estimate of precision is a volunteer
-study (§4.13), and the audits preceding it are the author's own, with the
+study (Appendix E.3), and the audits preceding it are the author's own, with the
 circularity §2.9 states as an objection before any result is reported. The
 project uses **one dataset**, the one whose bottleneck the work exists to
 address, and the price is that generalisation is argued rather than
@@ -275,18 +256,12 @@ under the University's ethics self-assessment process.
 ## 1.4 Dissertation outline
 
 Chapter 2 reviews the literature with label quality as its organising
-question and positions the gap. Chapter 3 gives the methodology and the
-geometric design of the seven predicates with per-choice justifications.
-Chapters 4 to 6 are the analysis chapters, three CRISP-DM iterations of
-increasing scope: Chapter 4 the fidelity study (RQ1) with its ablations, the
-independent validation of its precision estimates, and two measurements that
-leave the annotated gold behind, whether labels survive the camera moving and
-what the pipeline does on unlabelled robot frames; Chapter 5 the controlled
-downstream study (RQ2) including a self-training arm testing the standard
-rival remedy; Chapter 6 the direct benchmark test, training the source
-paper's own SGG model on each label source against three pre-registered
-predictions. Chapter 7 ties all three to causes and to prior work. Chapter 8
-assesses the legal, social, ethical and professional dimensions of automating
-annotation. Chapter 9 reports the objectives against their evidence, states
-the contributions, turns each limitation into the experiment that would
-resolve it, and reflects on how the project was conducted.
+question, and Chapter 3 gives the methodology and the geometric design of the
+seven predicates. **Chapters 4 to 6 are three CRISP-DM iterations of
+increasing scope on the same question**, and reading them in order is the
+point: the fidelity study answers RQ1 against the human labels, the
+controlled downstream study answers RQ2 against a lightweight model, and the
+benchmark repeats it in the source paper's own framework and disagrees.
+Chapter 7 ties all three to causes and to prior work, Chapter 8 to the legal,
+social, ethical and professional dimensions of automating annotation, and
+Chapter 9 to the objectives, the contributions and what is left undone.

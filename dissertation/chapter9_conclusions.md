@@ -12,44 +12,28 @@ robot-acquired images can be automated, and whether the resulting labels are
 good enough to replace the human ones. Six objectives carried that aim, and
 each is met with evidence rather than assertion.
 
-**O1, build.** A fully-automatic pipeline annotates all 836 images in about
-five minutes on a 6 GB consumer GPU, with no human deciding any label, and
-writes the dataset's own formats byte-compatibly (Chapter 3). Verified by a
-load-write round trip reproducing boxes and labels with zero error.
-
-**O2, specify and calibrate.** All seven predicates have written operational
-definitions with explicit thresholds, every one fitted on annotator groups
-0 to 5 alone and reported on the held-out groups (Chapter 3). The `near`
-threshold generalises perfectly to the held-out annotator who used the label
-(recall 1.00), and the support rules reach held-out F1 0.87.
-
-**O3, validate.** Per-predicate fidelity against all 8,926 human triplets,
-three trivial baselines and a vision-language model given the same boxes and
-definitions (§4.16), with nine ablations, manually audited precision and
-cluster-bootstrap intervals on every headline figure (Chapter 4): mean recall
-0.85, and 0.76 on annotators no threshold ever saw. An independent study
-re-estimates precision with judges who have no stake in the result (§4.13).
-
-**O4, diagnose.** Every one of the 1,689 missed human triplets is attributed
-to a cause by re-checking rule conditions, so the failure analysis is
-exhaustive rather than illustrative. Genuine tool error accounts for
-roughly 7% of misses; the remainder is calibrated abstention and measured
-annotator behaviour (§4.10, §7.2).
-
-**O5, test downstream utility.** A controlled experiment trains the same
-classifier on three label sources under identical features, splits and seeds,
-so the only variable is where the labels came from (Chapter 5): automatic 0.76
-mean recall against held-out human gold, human 0.30, self-trained 0.36.
-
-**O6, test at the level the field measures.** The same comparison is
-repeated in the source paper's own benchmark framework with a shared frozen
-detector and three seeds per arm (Chapter 6), and the chain is followed one
-link further, to an LLM planner asked to produce a safe grasp plan for 25
-held-out scenes under each label source (§5.7). The objective is met in the
-sense that matters for an honest answer: the heavyweight test does not
-agree with the lightweight one, the disagreement is localised to the
-annotators whose labels Chapter 4 convicted of measured defects, and both
-readings are reported rather than one being selected.
+Each is met with evidence rather than assertion, and the evidence is
+already reported: a pipeline annotating all 836 images in about five minutes
+on a 6 GB consumer GPU with no human deciding any label, writing the
+dataset's own formats byte-compatibly and verified by a zero-error load-write
+round trip (**O1**); written operational definitions of all seven predicates
+with every threshold fitted on annotator groups 0 to 5 alone, `near`
+generalising to the held-out annotator at recall 1.00 and the support rules
+reaching held-out F1 0.87 (**O2**); per-predicate fidelity against all 8,926
+human triplets with three trivial baselines, a vision-language model under
+the same definitions (§4.16), nine ablations, audited precision and
+cluster-bootstrap
+intervals, giving mean recall 0.85 and 0.76 on annotators no threshold ever
+saw (**O3**); every one of the 1,689 missed triplets attributed to a cause,
+leaving roughly 7% attributable to genuine tool error (§4.10, §7.2) (**O4**); a controlled
+experiment isolating the label source, at 0.76 mean recall against held-out
+human gold for the automatic arm, 0.30 human and 0.36 self-trained (**O5**);
+and the same comparison repeated in the source paper's own framework with a
+frozen detector and three seeds per arm, carried one link further to a
+planner (**O6**). O6 is met in the sense that matters for an honest answer:
+the heavyweight test does not agree with the lightweight one, the
+disagreement is localised to the annotators whose labels Chapter 4 convicted
+of measured defects, and both readings are reported rather than one selected.
 
 Section 1.2.2 fixed what would count as an answer before any result was
 reported, so both questions are settled against those criteria rather than a
@@ -151,44 +135,43 @@ simulator with contact physics, would close the last link, and it is now the
 only one left in the chain.
 
 **Precision estimates remain partly author-verdicted.** The independent
-validation study (§4.13) is deployed and collecting, with coverage
-stratified so the audit-overlap items reach several raters first. Until it
-completes, the audited precision figures carry the author's own judgement,
-conservatively applied and published for checking.
+validation study (Appendix E.3) is deployed and collecting, with coverage stratified
+so the audit-overlap items reach several raters first. Until it completes the
+audited figures carry the author's own judgement, conservatively applied and
+published for checking.
 
-**One domain, one camera, six object classes.** The fitted constants are
-dataset-specific by design; what transfers is the calibration procedure. The
-only out-of-domain evidence is qualitative (§4.12), where unretuned
-thresholds behaved correctly on stock video containing objects outside the
-six classes. A labelled cross-domain sample of a few dozen images would turn
-that into a measurement, and it is cheap enough that a replication should
-simply include one.
+**One domain, one camera, six object classes.** What transfers is the
+calibration procedure, not the fitted constants. A labelled cross-domain
+sample of a few dozen images would turn Appendix E.4's qualitative evidence
+into a
+measurement, and is cheap enough that a replication should simply include one.
 
 **Front/behind is bounded, but less by depth than the number suggests.**
 Section 4.9 bounds the engineering: neither a larger depth model nor
 multi-frame geometry moves the pair, so the limit is monocular ambiguity in
 the scenes rather than model capacity. What that leaves is a limitation of a
-different kind. A predicate that reproduces its own verdict across
-viewpoints 0.955 of the time while recovering 0.64 of the human labels is
-not mismeasuring the scene; it is applying a criterion the annotators did
-not share. The intervention with the best expected return is therefore a
-written annotation guideline rather than a better network, which is an
-uncomfortable conclusion for a computer-vision project and the one the
-evidence supports. The measurement routes that stay open are a calibrated
-stereo pair or an RGB-D capture; wider surface detection was built, measured
-and declined (Appendix D.4).
+different kind, since a predicate reproducing its own verdict across
+viewpoints 0.955 of the time while recovering 0.64 of the human labels is not
+mismeasuring the scene but applying a criterion the annotators did not share.
+The intervention with the best expected return is therefore a written
+annotation guideline rather than a better network, which is an uncomfortable
+conclusion for a computer-vision project and the one the evidence supports.
+The measurement routes that stay open are a calibrated stereo pair or an
+RGB-D capture; wider surface detection was built, measured and declined
+(Appendix D.4).
 
-**Detection bounds full automation.** With a zero-shot detector the
-end-to-end recall is 0.38, while the relation layer conditional on detection
-scores 0.85. The gap is detection, not relations, and the source paper's own
-trained detector (0.93 mAP@50) would close most of it. That check needs only
-the released weights.
+**Detection bounds full automation.** End-to-end recall with a zero-shot
+detector is 0.38 against the relation layer's 0.85 conditional on detection.
+The gap is detection, not relations, and the source paper's own trained
+detector (0.93 mAP@50) would close most of it. That check needs only the
+released weights.
 
 **Scale is demonstrated without ground truth.** The supervising group supplied
 the full 2,650-frame capture the released images were cut from, and the
 pipeline was run over the 1,766 frames nobody has annotated: 562 keyframes
 after content-adaptive selection, 58 minutes, 185,242 triplets, a predicate
-distribution 0.032 in total variation from the annotated portion (§4.15).
+distribution 0.032 in total variation from the annotated portion
+(Appendix E.6).
 Capacity and stability on unfamiliar input are therefore measured rather than
 argued. Correctness on that portion is not and cannot be without labels;
 §4.14's viewpoint-consistency check substitutes self-agreement for truth and
@@ -235,27 +218,25 @@ including calibrating on some annotators and validating on others, follows
 from that shift.
 
 The third lesson was about my own claims, and the one I would most like to
-have learned sooner. Reading a single benchmark run, I reported that my
-labels won against the one test annotator with clean conventions. The margin
-was 0.011 on 73 images. Retraining both arms at two more seeds showed them
-tied, and I withdrew the claim (§6.3.1). I had been careful in one place,
-fitting thresholds on some annotators and validating on others, and careless
-in another, treating one training run as a result. The discipline was not new
-to me; I had simply not applied it to model training variance. Recording the
-retraction rather than quietly deleting it felt uncomfortable and is, I
-think, right.
+have learned sooner. On a single benchmark run I reported that my labels won
+against the one test annotator with clean conventions, on a margin of 0.011
+over 73 images; two more seeds showed them tied and I withdrew it (§6.3.1). I
+had been careful in one place, fitting thresholds on some annotators and
+validating on others, and careless in another, treating one training run as a
+result. The discipline was not new to me, I had simply not applied it to model
+training variance, and recording the retraction rather than quietly deleting
+it felt uncomfortable and is, I think, right.
 
 Given the time again I would front-load the experiments that answer the
 question the project actually asks. I spent considerable effort proving the
 labels are correct and train models well, and comparatively little on whether
 they help a robot decide what to do, which is the entire motivation. The
-planner experiment ran last and turned out to be the clearest single result:
-0 of 25 against 25 of 25 needs no statistics. Run in week five, it would have
-pointed the intervening work at supply of the support relation, where its
-only failures came from. I would also have had two people annotate the same
-fifty images in week two: one afternoon would have produced the
-inter-annotator agreement figure the whole "comparable to human quality"
-claim needs, which I ended up estimating indirectly.
+planner experiment ran last and was the clearest single result: 0 of 25
+against 25 of 25 needs no statistics, and run in week five it would have
+pointed the intervening work at supply of the support relation, where its only
+failures came from. I would also have had two people annotate the same fifty
+images in week two, since one afternoon would have produced outright the
+inter-annotator agreement figure I ended up estimating indirectly.
 
 Technically, the thing I am most pleased with is not the accuracy figure but
 the two refinements I built, measured and then declined. Both were

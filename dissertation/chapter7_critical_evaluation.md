@@ -118,9 +118,9 @@ quantifies how much further the guideline problem goes:
    recovers 0.93/0.71).
 3. Support pairs were often labelled in **one direction only** (one group
    all-`on`, another all-`under`).
-4. The official guidance, confirmed at the annotation tool's repository,
-   consists of **vocabulary lists with no definitions**. Every defect above is
-   the predictable consequence of labelling with undefined terms.
+4. The official guidance, confirmed at the annotation tool's repository, is
+   **vocabulary lists with no definitions** (§4.7), which is what makes
+   every defect above predictable rather than surprising.
 
 This reframes the evaluation itself: for several predicates there is no human
 consensus to agree with, only per-annotator behaviours. The dissertation's
@@ -165,7 +165,7 @@ which is what the final version does.
 
 Choices a stricter replication should improve: the **audits were verdicted by
 the author** (conservatively, with verdicts and rendered evidence published
-for spot-checking; the independent validation study of §4.13 is the designed
+for spot-checking; the independent validation study of Appendix E.3 is the designed
 remedy, and blind external verdicting should have been the instrument from
 the first audit rather than the last); the
 **support-rule iteration used the same audit machinery twice**, so the second
@@ -178,16 +178,15 @@ but not rule *truth*, which only the audits address.
 ## 7.5 Synthesis against the geometry-to-label lineage
 
 The pipeline borrows its skeleton from the SpatialVLM family (Chen et al.,
-2024): lift perception to geometry, derive spatial facts deterministically.
-The idea is older, since CLEVR (Johnson et al., 2017) obtained exact
-relations from a renderer; neither supplies the recovery of geometry from
-real photographs, where this project's difficulty sits. What it adds is not
-the skeleton but the parts the lineage leaves implicit. SpatialVLM and
-VQASynth (Remyx AI, 2024) generate *training text* at internet scale and
-never confront a fixed predicate vocabulary with human ground truth;
-SpatialRGPT (Cheng et al., 2024) curates region representations with depth
-but validates downstream, not against annotators. This project's
-contributions are **annotator-aware calibration** (fit only on annotators who
+2024) and, further back, from CLEVR (Johnson et al., 2017); neither supplies
+the recovery of geometry from real photographs, where this project's
+difficulty sits. What it adds is not the skeleton but the parts the lineage
+leaves implicit, because SpatialVLM and VQASynth (Remyx AI, 2024) generate
+*training text* at internet scale without ever confronting a fixed predicate
+vocabulary with human ground truth, and SpatialRGPT (Cheng et al., 2024)
+curates region representations with depth but validates downstream rather
+than against annotators. This project's contributions are **annotator-aware
+calibration** (fit only on annotators who
 used a label; hold out annotators, not just images), **contact as the support
 signature** (mask-bottom adjacency, unused by the box-geometry lineage, which
 repaired both error directions at once and parallels the argument for
@@ -223,19 +222,14 @@ the rule change it evaluates.
 
 **External.** One laboratory domain, six object classes, one camera and
 mounting; the fitted constants (`near_T`, ε values, contact threshold) are
-dataset-specific by design. The *procedure* (fit on some annotators, validate
-on held-out ones) is the transferable artefact, not the numbers. The one
-piece of out-of-domain evidence is qualitative: the video clips of §4.12 run
-the unretuned thresholds over different scenes, a different viewpoint and
-objects almost entirely outside the six classes, and the support and lateral
-relations behave correctly there, with the visible failures attributable to
-detection rather than to the rules. That supports transfer of the rule layer
-but measures nothing, since no labelled out-of-domain gold exists; a modest
-labelled cross-domain sample is the missing experiment, and it is cheap
-enough that a replication should simply include one. Full
-automation is currently detection-bounded (0.38 end-to-end with a worst-case
-zero-shot detector; the authors' trained detector would close most of that
-gap, but this remains unverified without their weights).
+dataset-specific by design, and the transferable artefact is the *procedure*,
+fit on some annotators and validate on held-out ones, not the numbers. The
+only out-of-domain evidence is qualitative (Appendix E.4) and measures nothing,
+since no labelled out-of-domain gold exists; a modest labelled cross-domain
+sample is the missing experiment, cheap enough that a replication should
+simply include one. Full automation is currently detection-bounded (0.38
+end-to-end with a worst-case zero-shot detector; the authors' trained
+detector would close most of that gap, unverified without their weights).
 
 **Construct.** "Agreement with human labels" is an imperfect proxy when the
 humans disagree with each other; the per-annotator decompositions mitigate but
@@ -286,7 +280,8 @@ does not reach the structural guarantees of §3.6, which are checkable
 without any verdict at all, nor the downstream findings of Chapters 5 and 6,
 which are scored against human annotation the author did not produce and in
 which the automatic arm is judged by its rival's yardstick. The designed
-remedy is §4.13 and it has no results at the time of writing, which leaves
+remedy is the study of Appendix E.3 and it has no results at the time of
+writing, which leaves
 this the objection a reader should weight most heavily.
 
 **Reference frame: answered as far as it can be, which is not all the way.**
@@ -310,14 +305,9 @@ delivering the first.
 
 ## 7.8 Aims, revisited
 
-Both research questions are answered with evidence that survived held-out
-validation, audits and exhaustive failure diagnosis. The unexpected result is
-the strongest: the project set out to show automatic labels are *not much
-worse* than human ones, and found conditions under which they are decisively
-better for downstream learning, those conditions being sparse,
-guideline-free annotation, exactly the regime the source dataset occupies.
-The scaling claim has teeth beyond throughput: 836 images labelled in five
-minutes at 20× the human density, and a model trained on those labels
-reaching two and a half times the downstream recall of its human-trained
-twin. The bottleneck was not only slowing the dataset down; it was limiting
-what the dataset could teach.
+The project set out to show that automatic labels are *not much worse* than
+human ones and found conditions under which they are decisively better for
+downstream learning, those conditions being sparse, guideline-free
+annotation: exactly the regime the source dataset occupies. That reframes
+what the bottleneck was doing. It was not only slowing the dataset down, it
+was limiting what the dataset could teach.

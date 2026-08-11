@@ -158,14 +158,6 @@ against. The design rationale in brief:
   commit the fallback added was correct). Pairs both stages abstain on are
   flagged rather than guessed (recall 0.64/0.66 *(measured)*, from 0.52/0.55
   depth-only; both bands are recall/precision levers swept in the ablations).
-  Two implementation pitfalls, both caught and fixed, sit behind depth and
-  are worth recording as method: the HF depth output is *larger = nearer* and
-  must be inverted to the smaller = nearer convention (verified by front/behind
-  agreement, ~26% → ~74%); and the dataset's images carry a 180° EXIF rotation
-  that a naive load ignores, so depth and masks were initially sampled from an
-  upside-down frame while the boxes were upright. That discrepancy is invisible
-  to the box-based predicates and to the unit tests, but obvious on one
-  rendered annotated image.
 - **near** is a size-relative proximity test: edge-to-edge box gap divided by
   mean object size, below a fitted threshold, and **never on contact pairs**;
   measured, `near` co-occurs with on/under on 0 of 469 human pairs, so the
@@ -266,22 +258,20 @@ which requires deciding where one viewpoint ends and the next begins.
 The standard tool does not apply. Shot-boundary detection thresholds the
 difference between consecutive frames, which presumes cuts, and a robot
 walking through a room produces none. The failure is structural rather than a
-matter of threshold choice, which §4.14 verifies by sweeping the threshold:
-no setting separates the sequence's known content changes from its noise,
-because motion arriving at 0.08 px per frame is not larger than the noise at
-any single step, while the same motion integrated over forty frames displaces
-the image by 13 px. Only the accumulated drift carries the signal.
+matter of threshold choice, as §4.14 verifies by sweeping it: motion arriving
+at 0.08 px per frame is never larger than the noise at any single step, while
+the same motion integrated over forty frames displaces the image by 13 px, so
+only the accumulated drift carries the signal.
 
 `segment_sequence` (`src/keyframes.py`) therefore measures drift from the
 *anchor* of the current segment rather than the preceding frame, opening a new
-segment when drift exceeds τ. Gradual motion accumulates instead of being
-rounded away, and a genuine cut still crosses in one step, so one mechanism
-serves both regimes. Distances are mean absolute differences over 64×48
-mean-subtracted greyscale thumbnails; subtracting the mean discards the global
-exposure shifts of an auto-exposing camera, which would otherwise dominate and
-fire boundaries of their own. Each segment nominates the frame closest to its
-mean signature, a better representative on a moving camera than the first
-frame, which is usually mid-transition.
+segment when drift exceeds τ, so gradual motion accumulates instead of being
+rounded away while a genuine cut still crosses in one step. Distances are mean
+absolute differences over 64×48 mean-subtracted greyscale thumbnails, the
+subtraction discarding the global exposure shifts of an auto-exposing camera,
+which would otherwise fire boundaries of their own. Each segment nominates the
+frame closest to its mean signature, a better representative on a moving
+camera than the first, which is usually mid-transition.
 
 A single parameter spans two uses. Small τ isolates near-duplicates, so each
 segment is one viewpoint and the representative can stand for the rest; large
@@ -299,33 +289,25 @@ else can refit it, and an ablation is an assertion unless the reader can
 re-run the arm it removes.
 
 **Configuration and caching.** Every threshold, seed and model identifier
-lives in `configs/default.yaml`, so no constant is buried in a function.
-The runner caches each object's lifted geometry (box, mask centroid, median
-masked depth) after the single GPU pass, which makes the expensive stage
-separable from the cheap one: any rule or threshold change re-evaluates the
-entire dataset offline in about 20 seconds with no GPU
-(`scripts/reannotate_from_cache.py`), against roughly five minutes for a
-full perception run. That separation is what made the audit-driven rule
-repairs of Chapter 4 affordable, and it is why the ablation battery could be
-run as a sweep rather than as a series of overnight jobs.
+lives in `configs/default.yaml`, so no constant is buried in a function, and
+the runner caches each object's lifted geometry after the single GPU pass.
+That separates the expensive stage from the cheap one: any rule or threshold
+change re-evaluates the entire dataset offline in about 20 seconds with no GPU
+(`scripts/reannotate_from_cache.py`) against roughly five minutes for a full
+perception run, which is what made the audit-driven rule repairs of Chapter 4
+affordable and let the ablation battery run as a sweep rather than a series of
+overnight jobs.
 
-**Test strategy.** The suite is 66 tests and runs in about a second, which
-is deliberate: a test suite that is slow enough to skip does not constrain
-anything. It has three layers, each guarding a different kind of mistake.
-Worked examples from the predicate specification are encoded directly as
-unit tests over the rule layer, so the specification and the code cannot
-drift apart silently. A randomised invariant test then fuzzes two thousand
-synthetic scenes and asserts the structural guarantees §3.6 promises: that
-mutually exclusive families never co-occur on one ordered pair, that
-inverses mirror between the two orderings, that `near` is symmetric, and
-that `near` never co-occurs with a contact relation. Those hold by
-construction, and pinning them down is what stops a later rule edit from
-quietly breaking them. The remaining tests cover the parts most likely to
-fail for uninteresting reasons: format writers, the detector adapters of
-§3.9, frame selection, and the parsers for externally-produced replies. The
-suite has earned its place more than once, most usefully by rejecting an
-attempt to accept unmapped predicate strings, which would have widened the
-label vocabulary without anyone noticing.
+**Test strategy.** The suite is 66 tests and runs in about a second, which is
+deliberate: a test suite slow enough to skip does not constrain anything. It
+has three layers. Worked examples from the predicate specification are
+encoded as unit tests over the rule layer, so specification and code cannot
+drift apart silently. A randomised invariant test fuzzes two thousand
+synthetic scenes and asserts the structural guarantees §3.6 promises, which
+hold by construction and would otherwise be easy for a later rule edit to
+break quietly. The rest cover what fails for uninteresting reasons: format
+writers, the detector adapters of §3.9, frame selection, and the parsers for
+externally-produced replies.
 
 **Environment.** The environment is pinned to Python 3.11 with CUDA torch
 2.5.1, and the one genuinely awkward installation step is documented rather
@@ -340,16 +322,18 @@ full walk-through, and the repository is public.
 
 ## 3.12 Summary of design decisions
 
-| Decision | Alternative rejected | Why |
-|---|---|---|
-| Compute relations from geometry | learned relation model | supplies (not consumes) training labels; auditable; valid for spatial predicates |
-| PredCls evaluation | detector-in-the-loop RQ1 | isolates the contribution; detection already established by the paper |
-| SAM2 masks, multimask best-score | box-only geometry | robustness (empty-mask failure measured); box-only kept as ablation |
-| Depth Anything v2 Small, relative | metric/stereo depth; larger variants | data is mono RGB; 6 GB budget; Apache-2.0 licence; **and measured: the Base model gives identical accuracy (A8), so the limit is monocular ambiguity, not model capacity** |
-| Median masked depth | mean | robust to mask edge bleed |
-| Abstention bands + flags | forced binary decisions | converts model uncertainty into measurable human cost |
-| Ground-plane fallback for depth ties | metric depth models; multi-frame fusion | free 2D cue, pixel-precise in the depth band; guarded by own contact evidence; metric depth needs new capture, multi-frame breaks the single-image contract |
-| `near` = relative box gap + contact exclusion | 3D centroid distance | measured: centroid metrics don't transfer (F1 ≤ 0.024); near never co-occurs with contact (0/469) |
-| Annotator-aware `near` fit | fit/test across all groups | only 3/9 groups used the label; naive protocol conflates annotator habits with tool error |
-| Byte-compatible writers | own format + converter | RQ1/RQ2 comparability; verified zero-error |
-| Config + geometry cache | ad-hoc constants, full re-runs | reproducibility; 20 s offline re-evaluation |
+Every decision above shares one shape: an alternative was available, it was
+rejected for a stated reason, and where the reason is a measurement rather
+than a judgement the measurement is named. Four were settled by evidence
+that arrived after the decision and could have overturned it. The Small
+depth model was chosen for the 6 GB budget and its licence, and ablation A8
+then found the Base model gives identical accuracy, so the limit is monocular
+ambiguity rather than model capacity. The `near` metric was chosen as a
+relative box gap over a 3D centroid distance because every centroid variant
+transferred to held-out annotators at F1 no better than 0.024. Masks were
+kept over box-only geometry because single-mask mode returned empty masks on
+loose boxes, and box-only survives as an ablation that turns out to match the
+full pipeline on every box-computable predicate. And the ground-plane
+fallback was admitted only once it could be guarded by the tool's own contact
+evidence. Appendix F.3 tabulates all eleven decisions with their rejected
+alternatives.

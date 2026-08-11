@@ -39,7 +39,7 @@ review.
 *The completed self-assessment form is attached at the end of this
 appendix.*
 
-**Demonstration footage.** The two video clips in §4.12 are royalty-free
+**Demonstration footage.** The two video clips of E.4 are royalty-free
 stock footage from Pexels, used under the Pexels licence (free use, no
 attribution required): clip 1 (desk scene, moving camera)
 https://www.pexels.com/video/6558513/ and clip 2 (overhead desk, moving
@@ -213,8 +213,8 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/ablations.py` | ablations A1–A7, `tables/ablations.md` | ~30 s |
 | `python eval/depth_ablation.py` | ablation A8; needs the `outputs_base` pass below | <1 min |
 | `python eval/parallax_ablation.py --method triangulate --gap 10` | ablation A9; needs the raw capture (D.6), `parallax_ablation.json` | ~5 min |
-| `python eval/video_stability.py` | the §4.12 persistence and Jaccard figures, `video_stability.json` | <1 min |
-| `python eval/extension_scale.py` | §4.15 throughput, density and predicate distribution | <1 min |
+| `python eval/video_stability.py` | the E.4 persistence and Jaccard figures, `video_stability.json` | <1 min |
+| `python eval/extension_scale.py` | E.6 throughput, density and predicate distribution | <1 min |
 | `python eval/seed_stats.py` | the benchmark arms aggregated across seeds, `tables/seed_replication.md` | <1 min |
 | `python eval/downstream.py --seeds 42,43,44` | RQ2, all arms, `rq2_report.json`, `tables/rq2.md` | ~20 min |
 | `python eval/score_vlm_pilot.py`, then `python eval/compare_vlm_models.py` | the §4.16 comparison and `tables/vlm_models.md`, from the stored replies | <1 min |
@@ -275,7 +275,7 @@ commands write; no figure or table in this dissertation is produced by hand.
 This is the complete geometric specification of the seven predicates: the
 per-object measurements every rule reads, the rule for each predicate with its
 thresholds and the evidence behind them, the correction step, and the flagging
-policy. It is the operational definition §4.7.1 establishes the dataset never
+policy. It is the operational definition §4.7 establishes the dataset never
 had, and it is the reference `src/predicates.py` implements. The same text is
 maintained in the repository at `docs/predicate_spec.md`, which is what the
 code and the tests are checked against; the two are kept in step deliberately,
@@ -739,10 +739,34 @@ annotator this project set out to build does not have.
 
 ### D.7 Failure diagnosis by predicate
 
-Section 4.10 states what the diagnosis establishes. The per-predicate
-breakdown of the shipped rule set's 1,689 missed human triplets is below,
-produced by re-checking each rule's individual conditions against the cached
-geometry and mask-contact maps.
+Section 4.3 and §4.10 state what the diagnosis establishes. Two tables reach
+it from opposite sides. The first records, for each missed human triplet, the
+labels the tool emitted on that pair instead, which identifies the failure
+mode directly.
+
+For each human triplet the tool failed to recover, the labels it *did* emit on
+that pair identify the failure mode directly:
+
+| Gold predicate | Missed | Most frequent co-emissions on missed pairs |
+|---|---|---|
+| on | 177/1465 | near (177), behind (155): support demoted to proximity/depth |
+| under | 187/1001 | in front of (167), near (166) |
+| to the left of | 34/972 | near (33), to the right of (24): flips at the centre band |
+| to the right of | 18/1174 | to the left of (16) |
+| in front of | 725/2013 | near (572), behind (422), to the left of (261) |
+| behind | 546/1584 | near (421), in front of (353) |
+| near | 2/717 | on (2): the contact-exclusion boundary |
+
+Two structural signatures stand out. Missed front/behind pairs carrying the
+*opposite* direction (422 + 353) are almost entirely the convention-inverted
+groups of §4.5, and their count *rose* with the ground-plane fallback,
+because pairs the tool used to abstain on are now committed in the direction
+those groups invert. And the two remaining missed `near` pairs carry
+`on`/`under`: the two rules disputing the contact boundary, the same
+support-rule frontier the audit (§4.4) identifies from the precision side.
+
+The second re-checks each rule's individual conditions against the cached
+geometry and mask-contact maps, attributing every miss to a cause.
 
 | Predicate | Dominant causes (share of that predicate's misses) |
 |---|---|
@@ -755,19 +779,30 @@ geometry and mask-contact maps.
 
 ## Appendix E: Extended validation studies
 
-Five studies report their headline result in the chapter that owns them and
-their supporting detail here: the vision-language baseline of §4.16, whose
-diagnostics are what make its failure interpretable rather than merely worse
-(E.1); the viewpoint-stability measurement of §4.14, whose segmentation
-evidence and coverage limits qualify how far the stability figures reach
-(E.2); the independent precision study of §4.13, whose instrument can be
-judged before its results exist (E.3); the video processing of §4.12, whose
-settings and open-vocabulary failures qualify the only out-of-domain
-evidence in the dissertation (E.4); and the planner experiment of §5.7,
-whose relation filter and blind scorer are what the comparison rests on
-(E.5).
+Six studies sit here. Three support a result reported in a chapter and
+carry the detail behind it: the vision-language baseline of §4.16, whose
+diagnostics make its failure interpretable rather than merely worse (E.1);
+the viewpoint-stability measurement of §4.14, whose segmentation evidence and
+coverage limits qualify how far the stability figures reach (E.2); and the
+planner experiment of §5.7, whose relation filter and blind scorer are what
+the comparison rests on (E.5).
+
+The other three are reported here in full, because none of them has a result
+to put in a chapter. The independent precision study is built but not yet
+collected (E.3); the video processing is qualitative, over two clips with no
+ground truth (E.4); and the scale run has no labels to be correct against
+(E.6). Each is work done and is recorded as such, with what it does and does
+not establish stated in its own section.
 
 ### E.1 The vision-language baseline: diagnostics and limits
+
+The larger model redistributes the picture rather than resolving it. It
+asserts more (414 judged-pair assertions against 344), lifting recall and
+costing precision, so its F1 lands within 0.008 of the smaller model's, and
+where the smaller model looked most interesting, `behind`, the larger is
+markedly worse at 0.281 precision against 0.478. It is closest to the
+pipeline on support, 0.74 against 0.91, and `behind` recall actually falls
+with scale, 0.169 to 0.138.
 
 Section 4.16 reports the headline comparison over two models and carries the
 recall table: they recover 0.40 and 0.45 of the human triplets against the
@@ -891,9 +926,14 @@ would recover it.
 
 ### E.3 The independent validation study: design and scoring
 
-§4.13 states the weakness this study addresses and its status. What follows
-is the design, recorded here so that a reader can judge the instrument before
-its results exist.
+The true-precision estimates of §4.4 and §4.9 carry one weakness no amount of
+sampling fixes: they were verdicted by the author of the tool being evaluated.
+Conservative rules and published evidence mitigate that without removing it,
+and the honest description is "author-verdicted". This study re-estimates
+precision with disinterested judges. **The instrument is complete and
+collection is under way; no results exist yet, and the limitation recorded in
+§7.4 stands until they do.** What follows is the design, recorded so that a
+reader can judge the instrument before its results exist.
 
 It measures three things the author-verdicted audits cannot: crowd precision
 per predicate at a sample two orders of magnitude larger than §4.4's fifteen;
@@ -937,8 +977,17 @@ and crowd-internal reliability as Krippendorff's alpha.
 
 ### E.4 Video processing: settings and the open-vocabulary failures
 
-Section 4.12 reports what the two clips show. This section records how they
-were processed and what went wrong, both of which qualify the reading.
+The rest of this section records how the clips were processed and what went
+wrong, both of which qualify the reading above.
+
+**What the clips show.** Relations are stable wherever identity is: for pairs
+co-visible in at least 20 frames the predicate persists at 0.90/0.94 mean
+(`eval/video_stability.py`). The rules transfer to objects never calibrated
+on, a pen on a notepad and a wallet-and-photograph stack labelled by the same
+mask-contact evidence fitted on six classes. And the camera-frame semantics
+behave as designed: in the bird's-eye clip front/behind re-maps to distance
+from the viewer's edge of the desk, the reference-frame dependence §2.5 cites
+from RoboSpatial, demonstrated rather than asserted.
 
 **The two regimes.** They are complementary: a moving camera over a static
 desk (clip 1, 99 frames), where any variation is measurement noise, and a
@@ -950,6 +999,25 @@ churns, which is the behaviour a majority filter should show. Frame-to-frame
 triplet agreement (Jaccard 0.89 and 0.70) is dominated by zero-shot detection
 churn and, in clip 2, by genuine hand motion, mirroring §4.11: the variation
 is detection, not relations.
+
+Two royalty-free stock clips were processed frame by frame by the
+deployment stack of §4.11 with no threshold retuned. They share nothing with
+the robot dataset: different scenes, a different camera, and objects almost
+entirely outside the six annotated classes. Three things hold there. Relations
+are stable wherever identity is. The rules transfer to objects never
+calibrated on: a pen on a notepad and a wallet-and-photograph stack are
+labelled by the same mask-contact evidence fitted on six classes. And the
+camera-frame semantics behave as designed, front/behind re-mapping in the
+bird's-eye clip to distance from the viewer's edge of the desk, which is the
+reference-frame dependence §2.5 cites from RoboSpatial demonstrated rather
+than asserted.
+
+This measures nothing and is recorded for what it bounds rather than what it
+establishes. There is no video ground truth, so these are qualitative
+judgements over two clips, and a labelled cross-domain sample remains future
+work (§7.6). What they settle is that transfer is not blocked by the object
+vocabulary, because every failure visible in them is a detection failure,
+which is the attribution §4.11 makes for the dataset itself.
 
 **The clips and the thresholds.** Both are royalty-free stock, sourced in
 Appendix A. Nothing was retuned for them: `near_T`, the depth band, the
@@ -964,7 +1032,7 @@ between frames by greedy IoU tracking, and each pair's predicates are
 smoothed by a plus-or-minus-two-frame temporal majority vote
 (`scripts/run_video.py`; overlays and per-frame records in
 `outputs/video/`). The vote is the only component with no counterpart in the
-still-image pipeline, and its effect is measured in §4.12 rather than
+still-image pipeline, and its effect is measured rather than
 assumed: a small gain on the static scene and a larger one where detection
 churns, which is the behaviour a majority filter should show.
 
@@ -985,8 +1053,26 @@ Neither is corrected, and both are present in the released overlays.
 
 ### E.6 The scale run: timing and the distribution check
 
-Section 4.15 reports what the run over the 1,766 unannotated frames
-establishes. Two of its figures need accounting for.
+Throughput and density in Chapter 4 are measured on the 836 annotated images,
+which leaves the claim that the method extends to new captures resting on an
+extrapolation. The 1,766 unannotated frames of the raw sequence (§4.14,
+Appendix A) remove that gap: robot output nobody has labelled, from the same
+platform but later in the session, with arrangements the tool has never been
+shown. Content-adaptive selection reduces them to 562 keyframes, 3.1×, at
+6.15 s per frame on the RTX 2060, finishing in 58 minutes against just over
+three hours for every frame (`outputs/extension_scale.json`). The run emits
+185,242 triplets, 330 per frame, with no empty graph anywhere, against the
+human process's 8,926 triplets across 836 images. The risk with unfamiliar
+input is not loud failure but quiet drift, a pipeline still emitting labels
+whose distribution has silently changed, and that does not happen: against the
+same detector on the annotated images the predicate distribution shifts by a
+total variation distance of 0.032, largest single move 0.015.
+
+What this demonstrates is capacity and stability, not correctness. There is no
+ground truth and no accuracy claim is made; establishing correctness on this
+portion needs labels that do not exist, and §4.14's viewpoint-consistency
+measurement is the closest available substitute, being a check on
+self-agreement rather than on truth. Two figures above need accounting for.
 
 *Yield and detections.* The run averages 330 triplets per frame from 11.7
 detected objects, and the human process recorded about 11 triplets per image.
@@ -994,7 +1080,7 @@ detected objects, and the human process recorded about 11 triplets per image.
 *Timing.* 6.15 s per frame is 586 frames per hour. It includes writing an inspection overlay per
 frame to make the output checkable by eye. Annotation is roughly half of it,
 so a JSON-only deployment run would land near 3.3 s per frame. The measured
-figure leads in §4.15 because it is the one the repository reproduces.
+figure leads above because it is the one the repository reproduces.
 
 *The two distribution differences.* The largest predicate shift is *in front
 of*, 0.181 to 0.195. The `on`/`under` share is low in both runs, 0.006
@@ -1087,3 +1173,69 @@ three-seed figures are the ones any claim rests on.
 Section 5.2 carries the per-predicate figures and the seed spreads. The chart
 below is the same experiment drawn rather than tabulated, which makes the
 ordering easier to take in at once.
+
+
+### F.3 Design decisions and the alternatives rejected
+
+Section 3.12 states what the decisions have in common and names the four that
+later evidence could have overturned. The full table is here.
+
+| Decision | Alternative rejected | Why |
+|---|---|---|
+| Compute relations from geometry | learned relation model | supplies (not consumes) training labels; auditable; valid for spatial predicates |
+| PredCls evaluation | detector-in-the-loop RQ1 | isolates the contribution; detection already established by the paper |
+| SAM2 masks, multimask best-score | box-only geometry | robustness (empty-mask failure measured); box-only kept as ablation |
+| Depth Anything v2 Small, relative | metric/stereo depth; larger variants | data is mono RGB; 6 GB budget; Apache-2.0 licence; **and measured: the Base model gives identical accuracy (A8), so the limit is monocular ambiguity, not model capacity** |
+| Median masked depth | mean | robust to mask edge bleed |
+| Abstention bands + flags | forced binary decisions | converts model uncertainty into measurable human cost |
+| Ground-plane fallback for depth ties | metric depth models; multi-frame fusion | free 2D cue, pixel-precise in the depth band; guarded by own contact evidence; metric depth needs new capture, multi-frame breaks the single-image contract |
+| `near` = relative box gap + contact exclusion | 3D centroid distance | measured: centroid metrics don't transfer (F1 ≤ 0.024); near never co-occurs with contact (0/469) |
+| Annotator-aware `near` fit | fit/test across all groups | only 3/9 groups used the label; naive protocol conflates annotator habits with tool error |
+| Byte-compatible writers | own format + converter | RQ1/RQ2 comparability; verified zero-error |
+| Config + geometry cache | ad-hoc constants, full re-runs | reproducibility; 20 s offline re-evaluation |
+
+### F.4 The vision-language training arm, by test slice
+
+Section 6.3.2 reports what this arm establishes and the one result that does
+not fit. Mean mR@100 over three seeds, per-seed range in brackets.
+
+| slice | human | automatic | vision-language |
+|---|---|---|---|
+| full test | 0.326 (0.303–0.347) | 0.278 (0.268–0.289) | 0.329 (0.316–0.347) |
+| group 6 (defect) | **0.366** (0.343–0.382) | 0.286 (0.261–0.304) | 0.336 (0.317–0.369) |
+| group 7 (clean) | 0.308 (0.298–0.323) | 0.307 (0.289–0.334) | **0.381** (0.365–0.395) |
+| group 8 (defect) | **0.171** (0.142–0.197) | 0.109 (0.087–0.125) | 0.148 (0.134–0.159) |
+
+Three readings of the group-7 result remain open and this experiment does not
+separate them. The arm trains on 14,626 relations against the human arm's
+5,421, so the gain may be density rather than the source. Group 7 is 73
+images, small enough that a 0.07 margin over three seeds is suggestive rather
+than settled. And the arm's assertions were never audited as the tool's were
+(§4.4), so their correctness is assumed, not measured. The honest position is
+that on clean gold a vision-language source is at least competitive with both
+alternatives, and that establishing why would need the audit and a larger
+clean slice, neither of which this project has.
+
+### F.5 Downstream indicators beyond recall
+
+Section 5.2.1 states the finding and why the columns cannot be read as an
+error rate. The full table is below, macro-averaged over predicates except
+where marked.
+
+| arm | macro R | macro P | macro F1 | macro AP | micro F1 |
+|---|---|---|---|---|---|
+| human-trained | 0.297 | **0.252** | 0.267 | **0.230** | **0.262** |
+| pseudo-labelled | 0.365 | 0.243 | **0.289** | 0.215 | 0.273 |
+| vision-language | 0.380 | 0.197 | 0.253 | 0.219 | 0.221 |
+| auto-trained | **0.758** | 0.136 | 0.194 | 0.164 | 0.066 |
+
+Two things follow from it, the second a concession. The result strengthens
+rather than weakens the reading Chapter 6 reaches independently, because it
+shows a metric rewarding agreement with annotation practice favouring
+whichever arm imitates it, here in a controlled experiment with a different
+model, different features and a different metric family from the benchmark's.
+But strictly these precision figures are uninterpretable rather than
+favourable: the audit of §4.4 covered the rule layer's extra predictions, not
+the classifier's, so auditing a stratified sample of the classifier's own
+false positives is what would settle them, and that is not in this
+dissertation.

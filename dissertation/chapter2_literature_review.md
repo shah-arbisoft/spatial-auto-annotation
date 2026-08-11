@@ -561,34 +561,21 @@ instantiation as a validated automatic annotator for this dataset is new.
 
 ## 2.11 Summary and positioning
 
-The literature establishes that spatial relations are **computable from
-geometry** (SpatialVLM and its lineage); that **depth-grounded region
-reasoning** works (SpatialRGPT, RoboSpatial); that **learned SGG** consumes
-labelled triplets and absorbs their biases (Visual Genome lineage, REACT++);
-that **dense rule-based supervision substitutes for scarce human labels**
-when validated carefully (Snorkel, the disagreement literature); and that
-the annotation-stretching remedies presuppose a consistent labelled seed
-this dataset does not provide (§2.4). It leaves a precise gap: no automatic,
+The literature establishes that spatial relations are computable from
+geometry, that learned SGG consumes labelled triplets and absorbs their
+biases, and that dense rule-based supervision substitutes for scarce human
+labels when validated carefully. It leaves a precise gap: no automatic,
 geometry-based annotator emits this dataset's seven predicates in its native
 formats and is validated against its human labels, even though its authors
-ask for exactly such fixes ("spatial thresholds for near," augmenting
-under-represented relations).
+ask for exactly such fixes.
 
-Two further things follow from the critical sections. The metrics the field
-scores itself with are recall-shaped because its annotation is incomplete
-(§2.8), so no single number from them can settle a dispute about the
-annotation itself, and the evaluation protocol of Chapters 4 to 6 is built
-around that limitation rather than inside it. And the case against the
-approach is strongest on three points that are stated in advance (§2.9): a
-rule set does not extend to an open predicate vocabulary, its errors are
-systematic rather than random, and validation by the rules' own author is
-circular. Those are the objections the results chapters have to answer, and
-§7.7 is where each is answered or conceded.
-
-Because the seven predicates are spatial, the appropriate instrument is
-**explicit geometric rules over measured perception**, not a learned
-relation predictor that would merely re-import human labelling bias. This
-motivates the design developed in Chapter 3.
-
-Full citation details for every work discussed in this chapter are given in
-[references.md](references.md).
+Two things follow from the critical sections and shape everything after them.
+Because the field's metrics are recall-shaped by its own incomplete
+annotation (§2.8), no single number from them can settle a dispute *about*
+that annotation, so the protocol of Chapters 4 to 6 is built around the
+limitation rather than inside it. And because the strongest case against the
+approach is stated in advance (§2.9), the results chapters can be read as an
+attempt on it, with §7.7 the reckoning. Because the seven predicates are
+spatial, the appropriate instrument is explicit geometric rules over measured
+perception rather than a learned predictor that would merely re-import human
+labelling bias, and Chapter 3 develops that design.

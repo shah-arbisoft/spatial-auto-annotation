@@ -95,57 +95,33 @@ and self-training passes the instability on to its student.
 
 A recall-only table invites one obvious objection: the automatic arm labels
 twenty times more densely, so of course it recovers more. The objection is
-answered by measuring, not by argument, and the answer is not the flattering
-one.
+answered by measuring rather than by argument, and the answer is not the
+flattering one. **On every indicator except recall the automatic arm comes
+last**: macro precision 0.136 against the human arm's 0.252, F1 0.194 against
+0.267, average precision 0.164 against 0.230, and micro F1, which weights
+predicates by how often the annotators used them, harshest of all at 0.066
+against 0.262. Taken at face value the table says the automatic labels are
+the worst supervision of the four.
 
-| arm | macro R | macro P | macro F1 | macro AP | micro F1 |
-|---|---|---|---|---|---|
-| human-trained | 0.297 | **0.252** | 0.267 | **0.230** | **0.262** |
-| pseudo-labelled | 0.365 | 0.243 | **0.289** | 0.215 | 0.273 |
-| vision-language | 0.380 | 0.197 | 0.253 | 0.219 | 0.221 |
-| auto-trained | **0.758** | 0.136 | 0.194 | 0.164 | 0.066 |
+They are not, and one number shows why. Average precision is threshold-free,
+so no arm improves it by committing to more pairs, and the automatic arm
+still scores **0.040 on *to the left of***, the predicate on which §4.4
+audited fifteen of its fifteen extra predictions and found every one correct.
+An arm cannot be both wrong and right about laterality. What the column
+measures is agreement with which pairs an annotator chose to write down, so
+this is the artefact of §4.3 reappearing one level down the chain, and it
+charges the denser arm for the coverage that makes it useful. The columns
+cannot be argued away in the automatic arm's favour either, since §4.4
+audited the *rule layer's* extra predictions and not the classifier's.
+Appendix F.5 gives the full table and both readings.
 
-**On every indicator except recall the automatic arm comes last.** Precision
-0.136 against the human arm's 0.252; F1 0.194 against 0.267; average
-precision 0.164 against 0.230. Micro-averaging, which weights predicates by
-how often the annotators used them, is harsher still at 0.066 against 0.262.
-Taken at face value the table says the automatic labels are the worst
-supervision of the four.
-
-They are not, and one number shows why. Average precision is threshold-free:
-no arm improves it by committing to more pairs, since the curve sweeps every
-operating point. The automatic arm scores **0.040 on *to the left of***, the
-predicate on which §4.4 audited fifteen of its fifteen extra predictions and
-found every one correct. An arm cannot be both wrong and right about
-laterality. The column measures agreement with which pairs an annotator chose
-to write down, and an arm ranking by whether a relation holds scores badly
-against a target recording whether a human bothered to.
-
-This is the artefact of §4.3 reappearing one level down the chain. There it
-depressed the tool's restricted precision to 0.35 on lateral predicates the
-audit then scored at 1.00; here it depresses a classifier trained on those
-labels, in a metric family chosen to be robust. The mechanism is identical
-because the cause is identical: gold that annotates about a tenth of the
-ordered pairs cannot distinguish a false positive from an unexamined one,
-and it charges the denser arm for the coverage that makes it useful.
-
-Two things follow, the second a concession. This strengthens rather than
-weakens the reading Chapter 6 reaches independently: a metric rewarding
-agreement with annotation practice favours whichever arm imitates it, shown
-here in a controlled experiment with a different model, different features
-and a different metric family. But the columns cannot be argued away in the
-automatic arm's favour either. §4.4 audited the *rule layer's* extra
-predictions, not the classifier's, so strictly these precision figures are
-uninterpretable rather than favourable. Auditing a stratified sample of the
-classifier's own false positives would settle it, and that is not in this
-dissertation.
-
-What the four indicators do establish is narrower than the recall column
+What the four indicators establish is narrower than the recall column
 suggests and firmer than the precision column implies: judged on the labels'
 ability to teach a model to recover relations humans recorded, the automatic
 arm dominates; judged on its ability to imitate which relations humans chose
-to record, it does not, and no metric computed against this gold can
-separate the two.
+to record, it does not, and no metric computed against this gold can separate
+the two.
+
 
 ## 5.3 Why self-training does not rescue the human labels
 
@@ -166,36 +142,28 @@ a label conflates "no relation holds" with "nobody looked". A student trained
 on the union cannot distinguish the two, and inherits a systematic bias
 towards silence.
 
-The `near` row makes the point sharply. Human-trained recall is already
-near-collapse at 0.08, and self-training pushes it *down* to 0.03. Only three
-of nine annotator groups used the label at all, so the teacher's notion of
-"near" is both weak and idiosyncratic; its confident pseudo-labels then bury
-what little positive signal existed. Where the seed is defective,
-self-training does not merely fail to help, it can actively amplify the
-defect. The automatic labels reach 1.00 on the same evaluation, because the
-fitted threshold applies one definition to every pair rather than
-extrapolating three annotators' habits.
-
-The comparison is therefore not "programmatic labels beat doing nothing", but
-"programmatic labels beat the standard remedy, under identical conditions,
-closing more than six times as much of the available gap". Active learning is
-not tested here because it fails for a different and simpler reason: it still
-buys human labels, so it lowers the bottleneck's cost without removing it, and
-it has no mechanism at all for the inconsistency between annotators that
-Chapter 4 measures.
+The `near` row makes the point sharply. Human-trained recall is already at
+near-collapse, 0.08, and self-training pushes it *down* to 0.03: only three of
+nine annotator groups used the label, so the teacher's notion of "near" is
+both weak and idiosyncratic, and its confident pseudo-labels bury what little
+positive signal existed. Where the seed is defective, self-training does not
+merely fail to help, it amplifies the defect. The comparison is therefore not
+"programmatic labels beat doing nothing" but "programmatic labels beat the
+standard remedy, under identical conditions, closing more than six times as
+much of the available gap". Active learning is not tested because it fails for
+a simpler reason (§2.4): it still buys human labels, so it lowers the
+bottleneck's cost without removing it.
 
 ## 5.4 Why the automatic labels win, and two consistency checks
 
-The mechanism is the one measured throughout: the human labels are *sparse*
-(~10% of pairs) and *inconsistent* (three of nine annotators used `near`, two
-inverted the front/behind convention, support was often one-directional). A
-classifier trained on that learns above all to be silent, and its recall
-collapses exactly where labelling was thinnest (`near` 0.08, lateral
-0.22–0.25). The automatic labels are dense and rule-consistent, so the same
-model learns the geometry (near 1.00, lateral 0.95–0.99, support 0.92). That
-is §2.3's weak-supervision prediction confirmed under controlled conditions:
-dense consistent programmatic labels out-teach scarce gold when supervision,
-not capacity, is the bottleneck.
+The mechanism is the one measured throughout. A classifier trained on labels
+that are sparse (~10% of pairs) and inconsistent (§4.5, §4.7) learns above
+all to be silent, and its recall collapses exactly where labelling was
+thinnest (`near` 0.08, lateral 0.22–0.25); trained on dense rule-consistent
+labels the same model learns the geometry (near 1.00, lateral 0.95–0.99,
+support 0.92). That is §2.3's weak-supervision prediction confirmed under
+controlled conditions: dense consistent programmatic labels out-teach scarce
+gold when supervision, not capacity, is the bottleneck.
 
 Two checks argue the result is real rather than an artefact. First, the
 auto-trained model's profile almost exactly reproduces the rule layer's own
@@ -214,9 +182,9 @@ and shows why none reads as an error rate here. The human-trained model's
 weakness is partly a property of *any* sparse supervision at this scale, and
 more human labels would improve it, but producing them is the bottleneck this
 project removes and the self-trained arm shows the shortfall cannot be
-computed away. The front/behind rows are depressed for every arm by the
-held-out groups' inverted convention (Chapter 4); the comparison stays fair
-because the penalty is shared.
+computed away instead. The front/behind rows are depressed for every arm by
+the held-out groups' inverted convention (Chapter 4), so the penalty is
+shared and the comparison stays fair.
 
 One structural caveat needs stating plainly. The classifier's features are
 geometric and the automatic labels come from rules over closely related
@@ -244,52 +212,39 @@ every model saturating by epoch 2–6 and `near` stuck at 0.22–0.25 (§2.2).
 Each symptom has a cause this dissertation measured and a remedy it built.
 Saturation within six epochs is what training on 9,313 sparse triplets looks
 like, and the automatic labels give 20× the supervision on the same images.
-The universal `near` failure is what an undefined, three-annotator label
-looks like, and the fitted-threshold labels are perfectly learnable (this
-chapter's proxy reaches 1.00). The depth predicates were being taught two
-opposite conventions by different annotators; the automatic labels apply one.
-The controlled experiment is the proxy for the SGG step, and it measures the
-effect as large. The direct test, training the paper's own model on each
-source and comparing mR@100, runs in Chapter 6. Three predictions are
-registered here beforehand: later saturation, a higher plateau, and the
-recovery of `near`. Chapter 6 judges all three.
+The universal `near` failure is what an undefined, three-annotator label looks
+like, and the fitted-threshold labels are perfectly learnable (this chapter's
+proxy reaches 1.00). The depth predicates were being taught two opposite
+conventions; the automatic labels apply one. Three predictions follow and are
+registered here before the direct test that judges them, which trains the
+paper's own model on each source in Chapter 6: later saturation, a higher
+plateau, and the recovery of `near`.
 
 ## 5.7 The planner experiment: does the label source change what a robot would do?
 
 Section 5.6 ends with the source paper's motivating example, in which an LLM
 planner fails to remove a cube before grasping the book beneath it until
-spatial relations are supplied. That example is an assertion in the paper,
-illustrated on one scene. It can be run as an experiment, and this section
-runs it.
+spatial relations are supplied. The paper asserts it on one scene. It can be
+run as an experiment, and this section runs it.
 
-**Design.** Twenty-five held-out scenes were selected in which a target
-object has a second object physically resting on it, so any safe plan must
-move the occluder first. Each scene is put to an LLM planner three times, in
-prompts differing only in what they state: **A** lists the objects and
-nothing else, **B** adds the human-annotated relationships, **C** adds the
-automatically computed ones. One filter runs over both relation conditions
-first, so no relation is offered to one planner that would have been withheld
-from the other. Density is deliberately not equalised, since matching a
-sparser source would mean throwing away true relations: C averages 22.6
-relations per prompt against B's 3.1.
-
-**Scoring.** A plan is safe if it moves the occluding object in an earlier
-step than the one that grasps the target, judged by published rules rather
-than by reading (`eval/score_planner.py`): the rules never see the condition,
-so scoring is blind by construction, which matters when the author has a
-stake in the result, and a reader who disputes a verdict can inspect the rule
-instead of trusting a judgement. Appendix E.5 gives the filter, the prompt
-construction, and the defect a hand-read sample caught, which moved condition
-C from 0.64 to 0.88.
-
-**Result.** The experiment was run twice on planners of very different
-capability: `gemini-flash-latest`, a small non-reasoning model, and
-`gemini-3.1-pro-preview`, a reasoning model roughly an order of magnitude
-larger. Nothing else differs between the runs. Two further conditions were
-added afterwards, on the larger planner only: **D** replaces the tool's
-relations with the vision-language model's from §4.16, passed through the
-identical filter so that B, C and D differ only in who supplied the
-relations, and **E** supplies the union of C and D.
+**Design.** Twenty-five held-out scenes were selected in which a target object
+has a second object resting on it, so any safe plan must move the occluder
+first. Each scene is put to an LLM planner three times, in prompts differing
+only in what they state: **A** lists the objects and nothing else, **B** adds
+the human-annotated relationships, **C** adds the automatically computed ones.
+One filter runs over both relation conditions first, so no relation is offered
+to one planner that would have been withheld from the other; density is
+deliberately not equalised, since matching a sparser source would mean
+throwing away true relations. A plan is safe if it moves the occluder before
+the step that grasps the target, judged by published rules rather than by
+reading (`eval/score_planner.py`), so scoring is blind by construction and a
+reader who disputes a verdict can inspect the rule. Appendix E.5 gives the
+filter, the prompt construction, the scene-level forensics and a scoring
+defect that hand-reading caught. The experiment was run twice, on
+`gemini-flash-latest` and on the reasoning model
+`gemini-3.1-pro-preview`, and two further conditions were added on the larger
+planner only: **D** replaces the tool's relations with the vision-language
+model's from §4.16, and **E** supplies the union of C and D.
 
 | Condition | Prompt states | Safe plans (flash) | Safe plans (pro) |
 |---|---|---|---|
@@ -299,73 +254,56 @@ relations, and **E** supplies the union of C and D.
 | D | vision-language relationships | not run | 20 / 25 |
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
-The two planners agree exactly, and not merely in the totals: the three
-scenes condition C fails on are scenes 4, 16 and 24 under *both* models.
-That is the strongest form the result could take. A finding that survives
-replacing the reasoning engine entirely, down to which individual scenes
-fail, is a property of the information in the prompt rather than of the
-model consuming it, which is precisely the claim the experiment exists to
-make. It also disposes of the obvious objection to condition A's zero, that
-a more capable planner would have inferred the support relation from the
-object list: it does not, in twenty-five scenes out of twenty-five, twice.
-
-The effect of stating relations at all is total, and the failure without
-them is more specific than inattention: in seven of the twenty-five condition
-A plans the planner *names* the occluding object, but only ever as something
-to steer around (Appendix E.5). It sees the object and misreads its role,
-treating something resting on the target as a neighbour to avoid rather than
-a load to remove, which is exactly the distinction a support relation encodes
-and nothing else in the prompt does. That is the paper's illustrated failure,
-reproduced at scale rather than asserted.
+The two planners agree exactly, and not merely in the totals: the three scenes
+C fails on are scenes 4, 16 and 24 under *both* models. A finding that
+survives replacing the reasoning engine, down to which scenes fail, is a
+property of the information in the prompt rather than of the model consuming
+it, which is the claim the experiment exists to make. It also disposes of the
+objection to condition A's zero, that a more capable planner would infer
+support from the object list: it does not, in twenty-five scenes out of
+twenty-five, twice. The failure without relations is more specific than
+inattention, since in seven of the A plans the planner *names* the occluder
+but only as something to steer around: it sees the object and misreads its
+role, treating something resting on the target as a neighbour to avoid rather
+than a load to remove, which is exactly the distinction a support relation
+encodes and nothing else in the prompt does.
 
 **The two automatic sources fail on different scenes, and the union closes
-the gap.** Condition D is the weaker source taken alone: 20 of 25 against the
-tool's 22, consistent with §4.16, where the same model recovers roughly half
-the human triplets the tool does. What matters is not that ranking but the
-structure underneath it. Condition C fails on scenes 4, 16 and 24; condition
-D fails on 3, 5, 6, 13 and 14. **The two sets do not intersect.** Every
-failure in both arms is a support relation the source did not supply, never a
-plan that reasoned badly from what it was given, so a union that supplies
-more support relations repairs exactly those cases and cannot break the ones
-already working. It does: condition E clears the occluder in all 25 scenes,
-gaining three over C and five over D, losing nothing to either, and drawing
-level with the human labels at 0 gained, 0 lost, 25 tied.
+the gap.** Condition D is the weaker source alone, 20 of 25 against the tool's
+22, consistent with §4.16. What matters is the structure underneath: C fails
+on scenes 4, 16 and 24, D on 3, 5, 6, 13 and 14, and **the two sets do not
+intersect**. Every failure in both arms is a support relation the source did
+not supply, never a plan that reasoned badly from what it was given, so a
+union supplying more support relations repairs exactly those cases and cannot
+break the ones already working. It does: condition E clears the occluder in
+all 25 scenes, drawing level with the human labels at 0 gained, 0 lost, 25
+tied. This is the only measurement here on which automatic labels *match*
+human annotation on a robot-relevant task rather than approaching it, with no
+human in the labelling loop.
 
-This is the only measurement here on which automatic labels *match* human
-annotation on a robot-relevant task rather than approaching it, with no human
-in the labelling loop. Two qualifications keep it in proportion. Twenty-five
-scenes is a small sample, and the interest is the disjointness of the
-failures rather than the two-scene margin between C and D, which that sample
-cannot resolve. And the vision-language model's assertions were never audited
-as the tool's were (§4.4), so the union's gain is measured on the planning
-task alone and says nothing about the correctness of the relations it added.
-The result supports a designed follow-up: relations from a second,
-differently-failing source are worth having exactly where the geometric rules
-abstain.
-
-**Where the automatic labels lose, and why.** All three C failures have the
-same cause, and it is not a planning failure: the automatic relation list did
-not contain the support relation. The occluder was described, accurately, in
-every way except the one the task depended on, and in zero cases was the
-support relation present and ignored (Appendix E.5). Three misses in
+All three C failures have the same cause, and it is not a planning failure:
+the automatic relation list did not contain the support relation. The occluder
+was described accurately in every way except the one the task depended on, and
+in zero cases was the support relation present and ignored. Three misses in
 twenty-five scenes is 12%, against the measured support recall of 0.88 in
-§4.2, so the planner result is the fidelity result showing up one level
-higher in the chain.
+§4.2, so the planner result is the fidelity result showing up one level higher
+in the chain.
 
-**What this does not show.** Three limits. The comparison is between label
-sources, not planners: condition B is handed the exact fact the task tests,
-so B versus C measures whether each source supplies that fact, not which
-source reasons better. It uses two models but one prompt style, so the
-phrasing of the plan request is uncontrolled in a way the choice of planner
-no longer is. And no robot moved: this measures plans, not executions, so it
-closes the gap between labels and robot behaviour by one link rather than
-closing it entirely.
+**What this does not show.** Twenty-five scenes is a small sample, and the
+interest is the disjointness of the failures rather than the two-scene margin
+between C and D, which that sample cannot resolve. The vision-language model's
+assertions were never audited as the tool's were (§4.4), so the union's gain
+is measured on the planning task alone. The comparison is between label
+sources, not planners: condition B is handed the exact fact the task tests. And
+no robot moved, so this measures plans, not executions, and closes the gap
+between labels and robot behaviour by one link rather than entirely.
 
 What it settles is the question §5.6 could only frame. Automatic labels carry
 88% of the decision-relevant content that human labels carry on this task,
 against 0% for no labels at all, and the residual gap is not a property of
 computed labels in general but of one predicate whose recall is already
 measured and whose failure mode is already diagnosed (§4.9).
+
 
 ## 5.8 Answer to RQ2
 
