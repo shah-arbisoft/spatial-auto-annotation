@@ -441,7 +441,8 @@ same pair with either object elevated is flagged instead.
 ### C.7 `near(A, B)`: A and B are close, relative to their size
 
 ```
-near(A, B)  ==  box_gap_rel(A, B) <= near_T   AND   not (on(A,B) or under(A,B))
+near(A, B)  ==  box_gap_rel(A, B) <= near_T
+                AND not (on(A, B) or under(A, B))
 ```
 
 `box_gap_rel` is the edge-to-edge gap between the two normalised boxes divided

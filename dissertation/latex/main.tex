@@ -51,6 +51,10 @@
 \setlength{\parskip}{0pt}
 \singlespacing
 \sloppy
+% Lets TeX stretch a stubborn line rather than push it into the margin. Without
+% it, prose containing a long unbreakable token (a URL, a file path, a hash)
+% overflows instead of loosening.
+\setlength{\emergencystretch}{3em}
 
 % The template's contents page lists chapters as "CHAPTER 1: INTRODUCTION",
 % so the chapter heading is formatted to match rather than the report

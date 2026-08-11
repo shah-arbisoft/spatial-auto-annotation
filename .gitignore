@@ -92,3 +92,12 @@ dissertation/*.zip
 !dissertation/latex.zip
 outputs/vlm_pilot/img/
 outputs/docker/build_full.log
+
+# local pdflatex build products (the .tex sources are tracked, the run is not)
+dissertation/latex/*.aux
+dissertation/latex/*.log
+dissertation/latex/*.out
+dissertation/latex/*.toc
+dissertation/latex/*.lot
+dissertation/latex/*.lof
+dissertation/latex/main.pdf

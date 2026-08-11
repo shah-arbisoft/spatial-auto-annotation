@@ -17,6 +17,7 @@ from pathlib import Path
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parents[1]
 FIG = ROOT / "outputs" / "figures"
@@ -126,16 +127,20 @@ def fig_rq1_with_vlm():
     ax.set_xticks(list(x))
     ax.set_xticklabels(labels, rotation=20, ha="right")
     _style(ax)
-    ax.axhline(A["pipeline_mean"], color=C_MAIN, ls=":", lw=1.2, alpha=0.7)
-    ax.axhline(B["vlm_mean"], color=C_VLM, ls=":", lw=1.2, alpha=0.7)
-    ax.text(-0.62, A["pipeline_mean"] + 0.02,
-            f"pipeline mean {A['pipeline_mean']:.2f}", fontsize=8.5,
-            color=C_MAIN, ha="left")
-    ax.text(-0.62, B["vlm_mean"] + 0.02,
-            f"Gemini Pro mean {B['vlm_mean']:.2f}", fontsize=8.5,
-            color=C_VLM, ha="left")
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.01), ncol=3,
-              frameon=False, columnspacing=1.4, handlelength=1.3)
+    # The two means were annotated inline at the left edge, in the same colour
+    # as the bars they sat on top of, which made both unreadable where they
+    # overlapped. They go in the legend instead: same information, no collision
+    # possible, and the value is stated rather than left to be read off the axis.
+    mean_lines = []
+    for value, colour, name in ((A["pipeline_mean"], C_MAIN, "pipeline"),
+                                (B["vlm_mean"], C_VLM, "Gemini Pro")):
+        ax.axhline(value, color=colour, ls=":", lw=1.2, alpha=0.75)
+        mean_lines.append(Line2D([], [], color=colour, ls=":", lw=1.2,
+                                 label=f"{name} mean {value:.2f}"))
+    handles, _ = ax.get_legend_handles_labels()
+    ax.legend(handles=handles + mean_lines,
+              loc="lower center", bbox_to_anchor=(0.5, 1.01), ncol=3,
+              frameon=False, columnspacing=1.4, handlelength=1.6)
     out = FIG / "rq1_with_vlm.png"
     fig.savefig(out)
     plt.close(fig)
