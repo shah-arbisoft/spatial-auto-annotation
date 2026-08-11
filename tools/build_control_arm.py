@@ -36,9 +36,43 @@ OUT = ROOT / "outputs" / "validation"
 PREDICATES = ["on", "under", "to the left of", "to the right of",
               "in front of", "behind", "near"]
 
+# E.3 shows the rater "a single sentence ('the book is on the box')", so the
+# control arm has to name classes too. Emitting object indices would make the
+# control claims visibly unlike the treatment ones and give the design away.
+ANN = ROOT / "outputs" / "annotations"
+LABEL_NAMES = {v: k for k, v in
+               {"book": 1, "bottle": 2, "box": 3,
+                "cube": 4, "human": 5, "remote": 6}.items()}
+
+
+def class_lookup():
+    """image_id -> [class name per object index], from the annotation files."""
+    import json
+    out = {}
+    for f in ANN.rglob("*.json"):
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        img = d.get("image-name")
+        if img:
+            out[img] = [LABEL_NAMES.get(l, f"object {l}")
+                        for l in d.get("labels", [])]
+    return out
+
 
 def split(cell: str) -> list[str]:
     return [p.strip() for p in (cell or "").split(";") if p.strip()]
+
+
+def sentence(names, c, predicate):
+    """"the book is on the box", falling back to the index if unknown."""
+    per_image = names.get(c["image_id"], [])
+
+    def nm(i):
+        i = int(i)
+        return per_image[i] if i < len(per_image) else f"object {i}"
+    return f"the {nm(c['subj'])} is {predicate} the {nm(c['obj'])}"
 
 
 def load_pairs():
@@ -82,6 +116,9 @@ def main() -> int:
             short.append(p)
         print(f"    {p:20} {n:6}{flag}")
 
+    names = class_lookup()
+    print(f"\n  class names loaded for {len(names):,} images")
+
     rng = random.Random(a.seed)
     claims, key = [], []
     cid = a.start_id
@@ -96,7 +133,7 @@ def main() -> int:
                 "obj": c["obj"],
                 # the sentence the rater sees, identical in form to the
                 # treatment arm: no wording distinguishes the two
-                "sentence": f"the {c['subj']} is {p} the {c['obj']}",
+                "sentence": sentence(names, c, p),
             })
             key.append({"claim_id": cid, "predicate": p, "arm": "control",
                         "source": "human annotation"})
