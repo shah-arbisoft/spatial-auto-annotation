@@ -464,6 +464,8 @@ near & 0.105 & 0.084 & \textbf{0.128} & 0.165 & 0.138 & \textbf{0.227} \\
 \end{center}
 
 
+The pipeline makes 868 assertions on the 374 judged pairs against the models' 344 and 414, which is why recall alone would be an unfair verdict and why \S4.16 reports the restricted comparison beside it.
+
 One asymmetry must be stated or the precision comparison will be read as stronger than it is. The pipeline's apparent false positives were audited (\S4.4) and found to be largely \textit{correct but unrecorded}, relations that hold geometrically which the annotators did not write down, giving audited true precision near 1.0 on the lateral and proximity predicates. Its 0.35 here is therefore a floor set by sparse gold rather than a measure of error. No equivalent audit exists for the model's assertions, so its 0.42 is not known to be a floor in the same way. The two are comparable as agreement with the human record, and are not comparable as truthfulness.
 
 \textbf{How it fails is the interesting part, and it is not the way a badly-calibrated model fails.} Three diagnostics separate wrong answers from absent ones.
@@ -615,6 +617,8 @@ group 8 alone (inverted, dense \texttt{near} user) & \textbf{0.190} & 0.116 \\
 
 \textbackslash{}* groups 6/8's front/behind gold flipped, one disclosed bit per group, as in \S4.5.
 
+The seed ranges above absorb one further source of variation. Re-scoring the \textit{same} checkpoints a second time does not reproduce them exactly: an independent re-evaluation pass moved the pooled human mR@100 by 0.001 and the group-8 figures, drawn from the smallest slice at 37 images, by up to 0.008. Inference is not bit-deterministic, so a margin of that order is not a result. The figures reported are those of the re-evaluation committed with this repository, and no claim in Chapter 6 turns on a difference smaller than the per-seed spread.
+
 \subsection{F.2 Downstream recall by label source}
 \begin{figure}[htbp]
 \centering
@@ -709,3 +713,38 @@ auto-trained & \textbf{0.758} & 0.136 & 0.194 & 0.164 & 0.066 \\
 \end{center}
 
 Two things follow from it, the second a concession. The result strengthens rather than weakens the reading Chapter 6 reaches independently, because it shows a metric rewarding agreement with annotation practice favouring whichever arm imitates it, here in a controlled experiment with a different model, different features and a different metric family from the benchmark's. But strictly these precision figures are uninterpretable rather than favourable: the audit of \S4.4 covered the rule layer's extra predictions, not the classifier's, so auditing a stratified sample of the classifier's own false positives is what would settle them, and that is not in this dissertation.
+
+\subsection{F.6 Restricted precision on the annotated pairs}
+
+Section 4.3 quotes these figures and states why they are a floor rather than an error rate. Recall and F1 are restricted to the same 8,790 annotated pairs.
+
+\begin{center}
+\small
+\begin{longtable}{lrrrr}
+\caption{Restricted precision, recall and F1 on the human-annotated pairs only, where an unannotated pair cannot be scored and precision is therefore a floor.}\\
+\hline
+Predicate & P & R & F1 & support \\
+\hline
+\endfirsthead
+\hline
+Predicate & P & R & F1 & support \\
+\hline
+\endhead
+on & 0.88 & 0.88 & 0.88 & 1465 \\
+under & 0.84 & 0.81 & 0.83 & 1001 \\
+to the left of & 0.35 & 0.96 & 0.51 & 972 \\
+to the right of & 0.42 & 0.98 & 0.59 & 1174 \\
+in front of & 0.43 & 0.64 & 0.51 & 2013 \\
+behind & 0.36 & 0.66 & 0.46 & 1584 \\
+near & 0.12 & 1.00 & 0.21 & 717 \\
+\hline
+\end{longtable}
+\end{center}
+
+\subsection{F.7 Bounding annotator agreement without overlapping assignments}
+
+Section 4.6 states the result and its weight. The derivation is here, with the assumption it rests on.
+
+Against any common reference, if annotators A and B agree with it on fractions p\_A and p\_B, their mutual agreement obeys the Fréchet inequalities max(0, p\_A + p\_B - 1) $\leq$ p\_AB $\leq$ 1 - |p\_A - p\_B|. Averaged over all 21 pairs of consistent annotators these place annotator-to-annotator agreement in [0.74, 0.92], and the tool's own mean agreement of 0.869 lies inside it (\texttt{eval/annotator\_agreement.py}).
+
+Two things limit what that is worth, and neither is buried. Fréchet bounds are the loosest bounds available, so an 18-point interval rules little out: had the tool scored 0.75 or 0.91 the same sentence could be written. And the groups labelled disjoint batches, so the bounds presume each annotator's rate would carry to another \textasciitilde{}100-image batch, which nothing in this dataset can check. The interval is an estimate, not a measurement. The assumption-free half of \S4.6 is the heterogeneity spread, which needs no such presumption: the tool is deterministic, so the 0.216 range in its agreement across the seven consistent annotators is variation in the annotators and nothing else.

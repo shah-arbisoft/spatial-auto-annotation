@@ -16,14 +16,6 @@
 - Supervised by: Dr Peng Wang
 - University of Surrey, Guildford, Surrey GU2 7XH
 
-## Highlights
-
-- First fully-automatic annotator for a robot scene-graph dataset's seven spatial predicates
-- Geometric rules compute every relation; thresholds fitted and validated on held-out annotators
-- Recovers 85% of human labels; audited precision ≈ 1.0 on five of seven predicates
-- Model trained on automatic labels beats its human-label twin 0.76 vs 0.30 on held-out gold
-- Quantifies two annotation defects: inverted front/behind conventions, selective near usage
-- Annotates the full dataset in five minutes on a 6 GB consumer GPU at 20× human label density
 
 ## Acknowledgements
 

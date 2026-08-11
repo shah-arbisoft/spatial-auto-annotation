@@ -76,12 +76,10 @@ Three observations. **(i)** The tool recovers 81% of all human triplets
 (7,237 of 8,926; mean 0.85, and 0.76 on annotators no threshold ever saw)
 against 14% for both trivial baselines. **(ii)** Box-only matches the full
 pipeline on every box-computable predicate, so masks contribute almost
-nothing to on/under/left/right/near recall (mask centroids ≈ box centres).
-The pipeline's advantage is confined to the depth pair (0.64/0.66 against
-0.00), and even the ground-plane fallback, a pure box cue, needs masks to
-fire because its elevation guard is mask-contact evidence (§4.9). The
-ablations pursue the question this raises: is SAM2 needed at all, or is its
-contribution depth *sampling* quality? **(iii)** Held-out beats pooled on
+nothing to on/under/left/right/near recall and the pipeline's advantage is
+confined to the depth pair (0.64/0.66 against 0.00). Even there the
+ground-plane fallback, a pure box cue, needs masks to fire, because its
+elevation guard is mask-contact evidence (§4.9). **(iii)** Held-out beats pooled on
 on/under/near and falls far below it on front/behind. Both are annotator
 signatures: convention inversion for the depth pair (§4.5), and
 direction-usage asymmetry for support, where several groups label one
@@ -93,20 +91,13 @@ because two stray annotation files without matching images are excluded
 
 ## 4.3 Precision on the annotated pairs
 
-| Predicate | P | R | F1 | support |
-|---|---|---|---|---|
-| on | 0.88 | 0.88 | 0.88 | 1465 |
-| under | 0.84 | 0.81 | 0.83 | 1001 |
-| to the left of | 0.35 | 0.96 | 0.51 | 972 |
-| to the right of | 0.42 | 0.98 | 0.59 | 1174 |
-| in front of | 0.43 | 0.64 | 0.51 | 2013 |
-| behind | 0.36 | 0.66 | 0.46 | 1584 |
-| near | 0.12 | 1.00 | 0.21 | 717 |
-
-On the 8,790 annotated pairs precision is bounded below by construction: the
-human typically recorded one or two relations where several hold at once, a
-pair being near, left-of and in-front-of simultaneously. The `near` row is
-the extreme case, since the tool emits `near` wherever the fitted gap holds while
+Restricted to the 8,790 annotated pairs, precision runs 0.88 and 0.84 on the
+support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.36 on the depth pair
+and 0.12 on `near`, against the recall column of §4.2 (full table in Appendix
+F.6). Every one of those figures is bounded below by construction: the human
+typically recorded one or two relations where several hold at once, a pair
+being near, left-of and in-front-of simultaneously. The `near` row is the
+extreme case, since the tool emits `near` wherever the fitted gap holds while
 only 3 of 9 annotator groups ever used the label. That is why the protocol
 includes the audit (§4.4) rather than reading these columns at face value.
 
@@ -218,18 +209,15 @@ inference about human-human agreement, this alone establishes that the
 annotators are not interchangeable, and it puts a number on how far apart
 they are.
 
-**Bounds on human-human agreement.** Against any common reference, if
-annotators A and B agree with it on fractions p_A and p_B, their mutual
-agreement obeys the Fréchet inequalities
-max(0, p_A + p_B − 1) ≤ p_AB ≤ 1 − |p_A − p_B|. Averaged over all 21 pairs of
-consistent annotators these place annotator-to-annotator agreement in
-**[0.74, 0.92]**, and the tool's own mean agreement, **0.869, lies inside
-it**: the automatic annotator agrees with the humans about as well as the
-evidence permits them to agree with each other. One assumption is stated
-rather than buried. The batches are disjoint, so the bounds presume each
-annotator's rate would carry to another ~100-image batch. The interval is an
-estimate, not a measurement, and the independent study of Appendix E.3 is
-what tests the precision claim without it.
+**Bounds on human-human agreement.** Taking the tool as a fixed common
+reference and applying the Fréchet inequalities across all 21 pairs of
+consistent annotators places annotator-to-annotator agreement in
+**[0.74, 0.92]**, an interval containing the tool's own mean agreement of
+**0.869** (Appendix F.7). The bound is the loosest available and rests on an
+assumption the disjoint batches cannot test, so what it supports is a
+*failure to distinguish* the tool from a tenth annotator rather than a
+demonstration that it is one. The independent study of Appendix E.3 is what
+would test the precision claim without the assumption.
 
 ## 4.7 Flags: the honest human cost
 
@@ -289,16 +277,14 @@ geometric insight (stacked objects share a camera distance) fixed half; a
 perception upgrade (mask-bottom contact) fixed most of the rest while
 *raising* recall, the rare change that improves both error directions at
 once; and the ground-plane fallback then recovered most of the front/behind
-abstention band without depth at all. Each step was calibrated on the
-training groups and validated on unseen annotators.
+abstention band without depth at all.
 
-The two declined ablations bound where engineering can help. A
-four-times-larger depth model moves front/behind by 0.001 and 0.002 and
-leaves mean recall slightly lower, and two-view triangulation over the raw
-capture is 0.17 *worse* than the monocular cascade where it answers at all,
-on 9% of pairs. The limit is monocular ambiguity in the scenes rather than
-model capacity, and multi-view geometry inherits it rather than removing it;
-§7.2 takes up what follows.
+The two declined ablations bound where engineering can help: neither a
+four-times-larger depth model nor two-view triangulation over the raw capture
+improves the depth pair, and the second is 0.17 *worse* where it answers at
+all. The limit is monocular ambiguity in the scenes rather than model
+capacity, and multi-view geometry inherits it rather than removing it; §7.2
+takes up what follows.
 
 Full derivations, calibration evidence, audit samples and the failure
 structure of each refinement are given in **Appendix D**.
@@ -365,11 +351,9 @@ results already reported and enables one measurement they could not make.
 split of §4.1 is held out by scene as well as by annotator. The annotator
 reading survives, since an inverted front/behind convention (§4.5) and a
 `near` label used by three groups in nine (§3.2) are properties of labelling
-behaviour that no arrangement of furniture can produce. The confound also
-runs in the favourable direction: 0.76 on held-out groups is generalisation
-to an unseen annotator *and* an unseen arrangement. It is recorded because
-the design was described as one thing and the data supports a slightly
-stronger one.
+behaviour that no arrangement of furniture can produce, and the confound runs
+in the favourable direction: 0.76 on held-out groups is generalisation to an
+unseen annotator *and* an unseen arrangement.
 
 **The measurement.** Consecutive frames show a scene from different
 viewpoints, so the pipeline's verdicts can be checked against themselves with
@@ -393,12 +377,12 @@ object-matching rule and the coverage figures.
 | near | 0.966 | 1.000 | 1.000 |
 | **Mean** | **0.953** | **0.843** | **0.832** |
 
-Skipping frames costs nothing measurable. Mean recall under propagation is
+Skipping frames costs nothing measurable: mean recall under propagation is
 0.843 against 0.832 computed per frame, and the ordering holds at every
 threshold tested (0.879 against 0.861 at τ = 20, a 4.0× reduction). The small
-advantage is likely an artefact of the selection rule rather than a benefit of
-propagation, since the segment representative is the frame nearest the segment
-mean and so less likely to be caught mid-transition than an arbitrary one.
+advantage is likely an artefact of the selection rule, since the segment
+representative is the frame nearest the segment mean and so less likely to be
+caught mid-transition than an arbitrary one.
 
 **The first column holds the finding, and it is not the expected one.**
 Front/behind was the predicted loser, on the assumption its errors are depth
@@ -457,22 +441,21 @@ ability being measured.
 Recall alone would be an unfair verdict, because it rewards whoever asserts
 more: on the 374 judged pairs the pipeline makes 868 assertions against 344
 and 414. Restricted to those pairs, where precision is defined, the column
-reverses. **Both models are more precise than the pipeline**, 0.419 and 0.389
-against 0.351. They buy it with silence, and the price is steep enough that
-both lose F1 on every predicate, 0.397 and 0.405 against 0.488 pooled. Only
-the pipeline's extra assertions were audited (§4.4), so these columns compare
-agreement with the human record and not truthfulness.
+reverses, and **both models are more precise than the pipeline**, 0.419 and
+0.389 against 0.351. They buy it with silence, and the price is steep enough
+that both lose F1 on every predicate, 0.397 and 0.405 against 0.488 pooled
+(Appendix E.1).
 
-The shape of the failure is what settles the question. Neither model
-contradicts itself and neither inverts the front/behind convention; what they
-do is fall silent, and supply one direction of a symmetric pair without the
-other in a third of cases. Those are the two defects §4.5 measures in the
-*human* annotation. **Asked to annotate, a capable vision-language model
-reproduces the characteristic failure of the human process rather than a
-geometric one.** It is not a cheaper annotator but a faster instance of the
-thing this project replaces, and its conservatism is both why its precision
-beats the pipeline's and why most relations go unrecorded. That it is more
-precise where it speaks still begins a case for it as an adjudicator on the
-depth pair, which §7.6 takes up. Appendix E.1 gives the per-predicate
-precision and F1, the diagnostics behind each claim above, and the limits of
-a thirty-image pilot.
+The shape of the failure settles the question. Neither model contradicts
+itself and neither inverts the front/behind convention; what they do is fall
+silent, and supply one direction of a symmetric pair without the other in a
+third of cases. Those are the two defects §4.5 measures in the *human*
+annotation. **Asked to annotate, a capable vision-language model reproduces
+the characteristic failure of the human process rather than a geometric
+one.** It is not a cheaper annotator but a faster instance of the thing this
+project replaces, and its conservatism is both why its precision beats the
+pipeline's and why most relations go unrecorded. Being more precise where it
+speaks still begins a case for it as an adjudicator on the depth pair, which
+§7.6 takes up. Appendix E.1 gives the per-predicate precision and F1, the
+diagnostics behind each claim here, and the limits of a thirty-image
+pilot.

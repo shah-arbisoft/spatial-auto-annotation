@@ -157,47 +157,41 @@ bottleneck's cost without removing it.
 ## 5.4 Why the automatic labels win, and two consistency checks
 
 The mechanism is the one measured throughout. A classifier trained on labels
-that are sparse (~10% of pairs) and inconsistent (§4.5, §4.7) learns above
-all to be silent, and its recall collapses exactly where labelling was
-thinnest (`near` 0.08, lateral 0.22–0.25); trained on dense rule-consistent
-labels the same model learns the geometry (near 1.00, lateral 0.95–0.99,
-support 0.92). That is §2.3's weak-supervision prediction confirmed under
-controlled conditions: dense consistent programmatic labels out-teach scarce
-gold when supervision, not capacity, is the bottleneck.
-
-Two checks argue the result is real rather than an artefact. First, the
+that are sparse (~10% of pairs) and inconsistent (§4.5, §4.7) learns above all
+to be silent, and its recall collapses exactly where labelling was thinnest
+(`near` 0.08, lateral 0.22–0.25); trained on dense rule-consistent labels the
+same model learns the geometry (near 1.00, lateral 0.95–0.99, support 0.92).
+That is §2.3's weak-supervision prediction confirmed under controlled
+conditions. Two checks argue the result is real rather than an artefact: the
 auto-trained model's profile almost exactly reproduces the rule layer's own
-held-out performance (mean 0.76; front/behind 0.19/0.33 ≈ the rules' held-out
-0.20/0.35): the classifier *distilled the annotator*, which is precisely what
-"the labels are learnable" means. Second, all three arms face identical
-conditions everywhere: the same features, the same oversampling cap, the same
-held-out gold including the convention-inverted annotators, which penalises
-every arm's front/behind equally.
+held-out performance (mean 0.76; front/behind 0.19/0.33 against the rules'
+0.20/0.35), so the classifier *distilled the annotator*, which is what "the
+labels are learnable" means; and all three arms face identical features, the
+same oversampling cap and the same held-out gold, including the
+convention-inverted annotators, which penalises every arm's front/behind
+equally.
+
 
 ## 5.5 Honest boundaries
 
 The evaluation gold is itself sparse human annotation, so recall is primary,
-mirroring RQ1; §5.2.1 reports precision, F1 and average precision beside it
-and shows why none reads as an error rate here. The human-trained model's
-weakness is partly a property of *any* sparse supervision at this scale, and
-more human labels would improve it, but producing them is the bottleneck this
-project removes and the self-trained arm shows the shortfall cannot be
-computed away instead. The front/behind rows are depressed for every arm by
-the held-out groups' inverted convention (Chapter 4), so the penalty is
-shared and the comparison stays fair.
+mirroring RQ1, and §5.2.1 shows why none of the other columns reads as an
+error rate here. The human-trained model's weakness is partly a property of
+*any* sparse supervision at this scale, and more human labels would improve
+it, but producing them is the bottleneck this project removes and the
+self-trained arm shows the shortfall cannot be computed away instead. The
+front/behind rows are depressed for every arm by the held-out groups'
+inverted convention (Chapter 4), so the penalty is shared.
 
 One structural caveat needs stating plainly. The classifier's features are
 geometric and the automatic labels come from rules over closely related
 geometry, so the auto-trained arm is partly re-learning its own generator.
 Read alone, this chapter shows the automatic labels are *learnable* and the
 human labels are not, rather than that they win under any featurisation.
-Three things keep it meaningful: every arm gets identical features, so
-featurisation advantages no source; "learnable" is itself the property RQ2
-asks about, since a downstream consumer must extract a consistent signal;
-and Chapter 6 removes the circularity by repeating the comparison in a full
-scene-graph model with visual features, where the density and consistency
-effects persist in the training dynamics and zero-shot generalisation even
-though the headline verdict changes.
+Three things keep it meaningful: every arm gets identical features; being
+learnable is itself the property RQ2 asks about, since a downstream consumer
+must extract a consistent signal; and Chapter 6 removes the circularity by
+repeating the comparison in a full scene-graph model with visual features.
 
 ## 5.6 From labels to robots: where this sits in the source paper's chain
 
@@ -210,15 +204,14 @@ benchmarked on the human labels, topping out at mR@100 = 0.49 (VCTree), with
 every model saturating by epoch 2–6 and `near` stuck at 0.22–0.25 (§2.2).
 
 Each symptom has a cause this dissertation measured and a remedy it built.
-Saturation within six epochs is what training on 9,313 sparse triplets looks
-like, and the automatic labels give 20× the supervision on the same images.
-The universal `near` failure is what an undefined, three-annotator label looks
-like, and the fitted-threshold labels are perfectly learnable (this chapter's
-proxy reaches 1.00). The depth predicates were being taught two opposite
-conventions; the automatic labels apply one. Three predictions follow and are
-registered here before the direct test that judges them, which trains the
-paper's own model on each source in Chapter 6: later saturation, a higher
-plateau, and the recovery of `near`.
+Saturation within six epochs is what training on the 8,926 sparse triplets of
+§4.2 looks like, and the automatic labels give 20× the supervision on the same
+images. The universal `near` failure is what an undefined, three-annotator
+label looks like, and the fitted-threshold labels are perfectly learnable
+(this chapter's proxy reaches 1.00). The depth predicates were being taught
+two opposite conventions; the automatic labels apply one. Three predictions
+follow, registered here before the direct test that judges them in Chapter 6:
+later saturation, a higher plateau, and the recovery of `near`.
 
 ## 5.7 The planner experiment: does the label source change what a robot would do?
 
@@ -255,18 +248,16 @@ model's from §4.16, and **E** supplies the union of C and D.
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
 The two planners agree exactly, and not merely in the totals: the three scenes
-C fails on are scenes 4, 16 and 24 under *both* models. A finding that
-survives replacing the reasoning engine, down to which scenes fail, is a
-property of the information in the prompt rather than of the model consuming
-it, which is the claim the experiment exists to make. It also disposes of the
-objection to condition A's zero, that a more capable planner would infer
-support from the object list: it does not, in twenty-five scenes out of
-twenty-five, twice. The failure without relations is more specific than
-inattention, since in seven of the A plans the planner *names* the occluder
-but only as something to steer around: it sees the object and misreads its
-role, treating something resting on the target as a neighbour to avoid rather
-than a load to remove, which is exactly the distinction a support relation
-encodes and nothing else in the prompt does.
+C fails on are scenes 4, 16 and 24 under *both* models. A finding that survives
+replacing the reasoning engine, down to which scenes fail, is a property of the
+information in the prompt rather than of the model consuming it, which is the
+claim the experiment exists to make. It also disposes of the objection to
+condition A's zero, that a more capable planner would infer support from the
+object list: it does not, in twenty-five scenes out of twenty-five, twice. The
+failure without relations is more specific than inattention, since in seven of
+the A plans the planner *names* the occluder but only as something to steer
+around, treating something resting on the target as a neighbour to avoid
+rather than a load to remove.
 
 **The two automatic sources fail on different scenes, and the union closes
 the gap.** Condition D is the weaker source alone, 20 of 25 against the tool's
