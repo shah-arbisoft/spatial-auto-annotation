@@ -204,7 +204,7 @@ than a scene-graph annotation for this dataset's seven predicates.
 
   This raises the obvious alternative to the present project: rather than
   computing relations geometrically, ask a capable vision-language model to
-  name them. Section 4.16 tests that rather than arguing it away, putting two
+  name them. Section 4.13 tests that rather than arguing it away, putting two
   current models through the same battery on the same images with the same
   boxes and definitions. Both recover under half the human triplets the
   pipeline does and lose F1 on every predicate, and neither is simply worse,
@@ -427,8 +427,9 @@ them.
 Zellers et al.'s (2018) frequency baseline predicts the commonest predicate
 for an object pair with no access to the image and proved extremely hard to
 beat on R@K, which is a statement about the metric at least as much as about
-the models. **mR@K** (Tang et al., 2020) is the corrective: averaging recall
-per predicate stops head classes from carrying the score. It introduces its
+the models. **mR@K**, proposed by VCTree (Tang et al., 2019) and adopted as
+standard after Tang et al. (2020), is the corrective: averaging recall per
+predicate stops head classes from carrying the score. It introduces its
 own sensitivity, however, because a predicate with few test instances now
 weighs as much as one with thousands, so the aggregate can move on a handful
 of triplets and, in a dataset annotated by different people in different
@@ -438,8 +439,9 @@ mean recall is uninterpretable, which is why Chapters 4 and 6 report both.
 
 **Zero-shot recall measures something relative, and what it is relative to
 must be stated.** zR@K scores only subject–predicate–object combinations
-absent from *training*, isolating composition from memorisation (Tang et al.,
-2020). The definition is well posed when one model is compared against
+absent from *training*, isolating composition from memorisation. It comes
+from visual relationship detection (Lu et al., 2016) and was first reported on
+Visual Genome by Tang et al. (2020). The definition is well posed when one model is compared against
 itself. It becomes ambiguous the moment two differently-supervised models are
 compared in a single column, because the exclusion set is then drawn from one
 shared reference rather than from each model's own training data; what the

@@ -64,7 +64,7 @@ Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 | near | 0.08 (0.00–0.19) | 0.03 (0.00–0.06) | 0.00 (0.00–0.00) | 1.00 (1.00–1.00) | 93 |
 | **mean** | **0.30** | **0.36** | **0.38** | **0.76** | |
 
-A fourth arm answers what §4.16 raises but cannot settle: if a
+A fourth arm answers what §4.13 raises but cannot settle: if a
 vision-language model is not a good enough *annotator*, is it a good enough
 *teacher*? The same model labelled all 600 training images, used exactly as
 the other three sources are. Every arm trains on precisely the pairs that arm
@@ -237,7 +237,7 @@ defect that hand-reading caught. The experiment was run twice, on
 `gemini-flash-latest` and on the reasoning model
 `gemini-3.1-pro-preview`, and two further conditions were added on the larger
 planner only: **D** replaces the tool's relations with the vision-language
-model's from §4.16, and **E** supplies the union of C and D.
+model's from §4.13, and **E** supplies the union of C and D.
 
 | Condition | Prompt states | Safe plans (flash) | Safe plans (pro) |
 |---|---|---|---|
@@ -261,7 +261,7 @@ rather than a load to remove.
 
 **The two automatic sources fail on different scenes, and the union closes
 the gap.** Condition D is the weaker source alone, 20 of 25 against the tool's
-22, consistent with §4.16. What matters is the structure underneath: C fails
+22, consistent with §4.13. What matters is the structure underneath: C fails
 on scenes 4, 16 and 24, D on 3, 5, 6, 13 and 14, and **the two sets do not
 intersect**. Every failure in both arms is a support relation the source did
 not supply, never a plan that reasoned badly from what it was given, so a

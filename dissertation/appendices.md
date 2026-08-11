@@ -9,7 +9,7 @@ personal data was collected for the annotation study. Scene images in the
 dataset contain identifiable people; all figures reproduced in this
 dissertation blur faces, and the dataset is used strictly as released.
 
-A second body of data is used in §4.14 and §9.3: the complete 2,650-frame
+A second body of data is used in §4.12 and §9.3: the complete 2,650-frame
 capture from which the released images were cut, supplied directly by the
 supervising group. Frames 000000–000883 are the released dataset itself,
 verified by exact pixel match; the remaining 1,766 frames carry no
@@ -57,7 +57,7 @@ condition in §5.7 and a third arm in §6.3.2, all derived from one model's
 labels rather than from the pipeline's. They are reproduced separately here
 because each begins with an API pass that costs money and cannot be repeated
 byte-for-byte: the model behind `gemini-flash-latest` moved during the
-project (§4.16), so a rerun answers as whatever that alias resolves to on the
+project (§4.13), so a rerun answers as whatever that alias resolves to on the
 day. The stored replies are therefore committed, and every scoring step below
 reads them rather than re-querying, so all reported numbers reproduce offline
 from this repository alone. Only step (a) needs a key.
@@ -209,7 +209,7 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/fidelity.py` | the RQ1 battery, `fidelity_report.json`, `tables/rq1_tables.md` | ~2 min |
 | `python eval/uncertainty.py --iters 2000` | cluster-bootstrap intervals for every headline recall, `tables/uncertainty.md` | ~2 min |
 | `python eval/annotator_agreement.py` | annotator heterogeneity and the Fréchet bounds, `tables/annotator_agreement.md` | <1 min |
-| `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60` | §4.14 frame selection, stability and propagation cost, `keyframe_propagation.json` | ~3 min |
+| `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60` | §4.12 frame selection, stability and propagation cost, `keyframe_propagation.json` | ~3 min |
 | `python eval/ablations.py` | ablations A1–A7, `tables/ablations.md` | ~30 s |
 | `python eval/depth_ablation.py` | ablation A8; needs the `outputs_base` pass below | <1 min |
 | `python eval/parallax_ablation.py --method triangulate --gap 10` | ablation A9; needs the raw capture (D.6), `parallax_ablation.json` | ~5 min |
@@ -217,7 +217,7 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/extension_scale.py` | E.6 throughput, density and predicate distribution | <1 min |
 | `python eval/seed_stats.py` | the benchmark arms aggregated across seeds, `tables/seed_replication.md` | <1 min |
 | `python eval/downstream.py --seeds 42,43,44` | RQ2, all arms, `rq2_report.json`, `tables/rq2.md` | ~20 min |
-| `python eval/score_vlm_pilot.py`, then `python eval/compare_vlm_models.py` | the §4.16 comparison and `tables/vlm_models.md`, from the stored replies | <1 min |
+| `python eval/score_vlm_pilot.py`, then `python eval/compare_vlm_models.py` | the §4.13 comparison and `tables/vlm_models.md`, from the stored replies | <1 min |
 | `python eval/score_planner.py` | the §5.7 blind scoring, `planner_scores.json` | <1 min |
 | `python scripts/make_figures.py` | every figure | ~1 min |
 
@@ -225,7 +225,7 @@ Four commands have a trap or an option worth knowing, and they are the ones
 a reader is most likely to run wrongly.
 
 `keyframe_propagation.py` rewrites its whole output file, so the sweep must
-include the coarse settings: the 89× compression figure §4.14 and §7.2 rely
+include the coarse settings: the 89× compression figure §4.12 and §7.2 rely
 on comes from τ = 45, and a narrower sweep removes it silently.
 `score_planner.py` and `run_planner_llm.py` both take `--replies`, which is
 how the second planner was run and scored without touching the first, and
@@ -233,7 +233,7 @@ how the second planner was run and scored without touching the first, and
 `run_vlm_pilot.py` needs `--max-output-tokens` above the 8192 default for a
 reasoning model, which spends most of its budget deliberating, and a
 truncated reply is indistinguishable from a malformed one.
-`python scripts/vlm_manual_check.py` writes a pack that lets §4.16 be
+`python scripts/vlm_manual_check.py` writes a pack that lets §4.13 be
 redone by
 hand in a browser, showing the image the model saw, the prompt verbatim and
 the human, pipeline and model answers side by side, so the scoring script
@@ -654,7 +654,7 @@ licence, and half the VRAM.
 ### D.6 Why not multi-frame depth either (ablation A9)
 
 Ablation A8 rules out a bigger *monocular* model, but it leaves the sharper
-objection open. The images are consecutive frames of a robot walk (§4.14), so
+objection open. The images are consecutive frames of a robot walk (§4.12), so
 neighbouring frames exist that view the same scene from a different camera
 position. Two views constrain depth geometrically, without any learned prior,
 and that is the classical remedy for exactly the ambiguity A8 blames. If the
@@ -730,7 +730,7 @@ many frames, with bundle adjustment and real intrinsics, would estimate depth
 better than two views and an assumed focal length. What the ablation
 establishes is that geometric depth is not free here, that the obvious
 implementations lose to the monocular cascade on both accuracy and coverage,
-and, read with §4.14, that the return on any of them is bounded: a predicate
+and, read with §4.12, that the return on any of them is bounded: a predicate
 that already reproduces its own verdict 0.955 of the time across viewpoints
 does not have much room to gain from measuring depth more precisely. There is
 also a design cost that no accuracy figure captures. Every multi-frame method
@@ -780,9 +780,9 @@ geometry and mask-contact maps, attributing every miss to a cause.
 ## Appendix E: Extended validation studies
 
 Six studies sit here. Three support a result reported in a chapter and
-carry the detail behind it: the vision-language baseline of §4.16, whose
+carry the detail behind it: the vision-language baseline of §4.13, whose
 diagnostics make its failure interpretable rather than merely worse (E.1);
-the viewpoint-stability measurement of §4.14, whose segmentation evidence and
+the viewpoint-stability measurement of §4.12, whose segmentation evidence and
 coverage limits qualify how far the stability figures reach (E.2); and the
 planner experiment of §5.7, whose relation filter and blind scorer are what
 the comparison rests on (E.5).
@@ -804,7 +804,7 @@ markedly worse at 0.281 precision against 0.478. It is closest to the
 pipeline on support, 0.74 against 0.91, and `behind` recall actually falls
 with scale, 0.169 to 0.138.
 
-Section 4.16 reports the headline comparison over two models and carries the
+Section 4.13 reports the headline comparison over two models and carries the
 recall table: they recover 0.40 and 0.45 of the human triplets against the
 pipeline's 0.83, and are the more precise labellers on the judged pairs, 0.42
 and 0.39 against 0.35, while losing F1 on every predicate. The per-predicate
@@ -826,7 +826,7 @@ built for.
 
 The pipeline makes 868 assertions on the 374 judged pairs against the models'
 344 and 414, which is why recall alone would be an unfair verdict and why
-§4.16 reports the restricted comparison beside it.
+§4.13 reports the restricted comparison beside it.
 
 One asymmetry must be stated or the precision comparison will be read as
 stronger than it is. The pipeline's apparent false positives were audited
@@ -860,7 +860,7 @@ states, while support relations carry their inverse 100% of the time. That
 is the same defect §4.5 measures in the human annotation, where one group
 recorded 188 instances of *on* and no instances of *under*.
 
-Section 4.16 draws the conclusion these diagnostics support. One point
+Section 4.13 draws the conclusion these diagnostics support. One point
 belongs here rather than there, because it is a property of the pipeline
 rather than of the model: what the pipeline has over it is not fluency and
 not per-assertion agreement, but exhaustiveness and the guaranteed
@@ -887,7 +887,7 @@ rewards density, which is why the precision comparison is reported beside
 it; neither column alone is a verdict.
 
 One diagnostic does improve with scale, and it is the one that matters for
-the argument §4.16 makes. The smaller model supplied *to the left of*
+the argument §4.13 makes. The smaller model supplied *to the left of*
 without its inverse on 0.35 of its assertions; the larger one on 0.16.
 Deliberation buys internal consistency. It does not buy enough: 0.16 is
 still a sixth of a symmetric relation asserted in one direction only, a
@@ -1059,7 +1059,7 @@ Neither is corrected, and both are present in the released overlays.
 
 Throughput and density in Chapter 4 are measured on the 836 annotated images,
 which leaves the claim that the method extends to new captures resting on an
-extrapolation. The 1,766 unannotated frames of the raw sequence (§4.14,
+extrapolation. The 1,766 unannotated frames of the raw sequence (§4.12,
 Appendix A) remove that gap: robot output nobody has labelled, from the same
 platform but later in the session, with arrangements the tool has never been
 shown. Content-adaptive selection reduces them to 562 keyframes, 3.1×, at
@@ -1074,7 +1074,7 @@ total variation distance of 0.032, largest single move 0.015.
 
 What this demonstrates is capacity and stability, not correctness. There is no
 ground truth and no accuracy claim is made; establishing correctness on this
-portion needs labels that do not exist, and §4.14's viewpoint-consistency
+portion needs labels that do not exist, and §4.12's viewpoint-consistency
 measurement is the closest available substitute, being a check on
 self-agreement rather than on truth. Two figures above need accounting for.
 

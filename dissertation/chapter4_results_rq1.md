@@ -13,8 +13,8 @@ diagnosed (§4.10), to full automation with a detector in the loop (§4.11).
 
 Every one of those measures is bounded by the labels it is scored against,
 so the last two sections leave the gold behind: whether the labels survive
-the camera moving (§4.14), and whether a vision-language model would have
-done the job instead (§4.16). Three further studies carry no gold at all and
+the camera moving (§4.12), and whether a vision-language model would have
+done the job instead (§4.13). Three further studies carry no gold at all and
 are reported in Appendix E: video from outside the calibration domain (E.4),
 1,766 unlabelled robot frames (E.6), and the study now re-estimating
 precision with disinterested judges (E.3).
@@ -37,7 +37,7 @@ masks, no depth). Boxes and classes are ground truth throughout (PredCls), so
 box IoU does not apply; detector-in-the-loop results sit with the ablations.
 Thresholds were fitted on annotator groups 0–5 only, with 6–8 held out. Each
 group is also a contiguous block of the capture, so the split holds out an
-unseen arrangement as well as an unseen annotator (§4.14).
+unseen arrangement as well as an unseen annotator (§4.12).
 
 ## 4.2 Headline: recall of the human triplets
 
@@ -337,7 +337,7 @@ failure (Appendix E.4).
 
 
 
-## 4.14 Temporal redundancy and stability under viewpoint change
+## 4.12 Temporal redundancy and stability under viewpoint change
 
 The 884 released images are not independent photographs. Pixel-matching them
 against the 2,650-frame raw capture the supervising group later supplied
@@ -405,7 +405,7 @@ annotation, which makes carrying object identity with a tracker the
 straightforward remedy.
 
 
-## 4.16 Would a vision-language model do this instead?
+## 4.13 Would a vision-language model do this instead?
 
 The three baselines of §4.2 are deliberately weak, and a reader is entitled
 to ask about the strong one: if a vision-language model, the research line

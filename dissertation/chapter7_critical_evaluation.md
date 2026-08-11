@@ -88,7 +88,7 @@ resting on supports the detector has no box for, and pairs whose bottom edges
 tie within the band. Both operating points are documented, revisable
 decisions rather than hidden constants (ablations A2, A7).
 
-Section 4.14 settles what the ablations could not. If the front/behind gap
+Section 4.12 settles what the ablations could not. If the front/behind gap
 were depth *noise*, estimates jittering either side of a boundary, moving the
 camera would flip verdicts, since that is the perturbation such noise responds
 to. It does not: the predicate reproduces itself 0.955 of the time, above `on`
@@ -262,7 +262,7 @@ supervision, and on this dataset that is refuted at every level where the
 question was asked, by a factor of two and a half in the controlled
 experiment and by a planner that clears the occluder in 22 of 25 scenes
 against 0 with no relations at all. The reconciliation is that systematic
-error is worse than random error only when it is *wrong*; §4.14's finding
+error is worse than random error only when it is *wrong*; §4.12's finding
 that front/behind agrees with itself across viewpoints 0.955 of the time
 while agreeing with the annotators 0.64 of the time is the shape of a
 consistent rule meeting a different convention, not of a consistent mistake.
@@ -282,7 +282,7 @@ this the objection a reader should weight most heavily.
 
 **Reference frame: answered as far as it can be, which is not all the way.**
 The dissertation does not assert that the camera frame is correct; it shows
-that the tool applies one frame consistently (§4.14), that two annotator
+that the tool applies one frame consistently (§4.12), that two annotator
 groups applied another (§4.5), and that recall rises from 0.64/0.66 to 0.84
 once the convention is aligned. That establishes disagreement rather than
 error, and identifies which party is consistent. It does not establish which

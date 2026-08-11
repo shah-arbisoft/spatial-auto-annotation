@@ -258,7 +258,7 @@ which requires deciding where one viewpoint ends and the next begins.
 The standard tool does not apply. Shot-boundary detection thresholds the
 difference between consecutive frames, which presumes cuts, and a robot
 walking through a room produces none. The failure is structural rather than a
-matter of threshold choice, as §4.14 verifies by sweeping it: motion arriving
+matter of threshold choice, as §4.12 verifies by sweeping it: motion arriving
 at 0.08 px per frame is never larger than the noise at any single step, while
 the same motion integrated over forty frames displaces the image by 13 px, so
 only the accumulated drift carries the signal.
@@ -276,8 +276,8 @@ camera than the first, which is usually mid-transition.
 A single parameter spans two uses. Small τ isolates near-duplicates, so each
 segment is one viewpoint and the representative can stand for the rest; large
 τ groups several viewpoints of one arrangement, which is what the
-cross-viewpoint consistency measurement of §4.14 consumes. The threshold is
-chosen from the data by sweep rather than assumed, and §4.14 reports both what
+cross-viewpoint consistency measurement of §4.12 consumes. The threshold is
+chosen from the data by sweep rather than assumed, and §4.12 reports both what
 the segmentation recovers and what skipping the intervening frames costs.
 
 ## 3.11 Reproducibility by construction

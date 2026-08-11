@@ -67,7 +67,7 @@ replacing one. Semi-supervised methods stretch the labels that exist, which
 presupposes a consistent seed; this one is 10% dense and internally
 contradictory, and Chapter 5 measures what self-training does with it. A large
 vision-language model can be asked directly, the most plausible modern
-shortcut and the one a reader will propose; §4.16 runs it on the same images
+shortcut and the one a reader will propose; §4.13 runs it on the same images
 with the same definitions and finds it reproduces the *human* annotation's
 characteristic failures rather than a geometric one's. None of the three
 produces a dense, self-consistent label for every ordered pair with no human
@@ -185,7 +185,7 @@ ablations; the controlled downstream classifier; the direct benchmark test, in
 which the source paper's own SGG framework (REACT++) is trained on each label
 source (Chapter 6); the planner experiment that carries the comparison one
 link further towards robot behaviour (§5.7); the vision-language baseline run
-on the same images under the same definitions (§4.16); and a critical
+on the same images under the same definitions (§4.13); and a critical
 evaluation chapter. Two items entered scope during the project rather than at
 its start, and both are marked as such where they are reported. Scaling to
 robot captures beyond the annotated release became possible when the

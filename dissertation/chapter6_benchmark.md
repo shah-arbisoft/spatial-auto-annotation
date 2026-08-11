@@ -133,7 +133,7 @@ reference.
 Chapter 5's vision-language labels were put through the same benchmark as a
 third arm, three seeds, same frozen detector, same human test gold. Pooled it
 is indistinguishable from the human arm (0.329 against 0.326), which is what
-§6.4's argument predicts: §4.16 measures that model annotating sparsely and
+§6.4's argument predicts: §4.13 measures that model annotating sparsely and
 human-like, so a metric rewarding resemblance to the manual pass should score
 it like the manual pass. One result does not fit and is reported rather than
 explained away. On group 7, the one test annotator with no measured defect and

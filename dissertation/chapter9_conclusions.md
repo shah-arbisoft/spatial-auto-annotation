@@ -21,7 +21,7 @@ with every threshold fitted on annotator groups 0 to 5 alone, `near`
 generalising to the held-out annotator at recall 1.00 and the support rules
 reaching held-out F1 0.87 (**O2**); per-predicate fidelity against all 8,926
 human triplets with three trivial baselines, a vision-language model under
-the same definitions (§4.16), nine ablations, audited precision and
+the same definitions (§4.13), nine ablations, audited precision and
 cluster-bootstrap
 intervals, giving mean recall 0.85 and 0.76 on annotators no threshold ever
 saw (**O3**); every one of the 1,689 missed triplets attributed to a cause,
@@ -51,7 +51,7 @@ condition, that labels beyond the human record survive audit, holds for the
 lateral, proximity and depth-decided predicates at audited precision near 1.0
 and for support at roughly 0.9 after the contact rule. The qualification is
 `in front of` and `behind` at 0.64/0.66 pooled: not a failure of the criterion
-but a disagreement about the words, since §4.14 shows the tool reproducing its
+but a disagreement about the words, since §4.12 shows the tool reproducing its
 own verdict across viewpoints 0.955 of the time while two annotator groups
 applied the opposite convention. A per-predicate answer was required precisely
 so this could not hide inside a mean.
@@ -111,7 +111,7 @@ would score against one another when they never labelled the same images, by
 using a deterministic annotator as a fixed common reference (§4.6); and a
 reliability check that needs no labels at all, obtained by recovering the
 fact that an image dataset was cut from a continuous capture and asking
-whether its labels survive the camera moving (§4.14). The last of these is
+whether its labels survive the camera moving (§4.12). The last of these is
 the one most likely to transfer. Many robotics datasets are sequences
 presented as image sets, and wherever that is true, a predicate's agreement
 with itself across viewpoints separates a rule that is wrong from a rule
@@ -174,7 +174,7 @@ distribution 0.032 in total variation from the annotated portion
 (Appendix E.6).
 Capacity and stability on unfamiliar input are therefore measured rather than
 argued. Correctness on that portion is not and cannot be without labels;
-§4.14's viewpoint-consistency check substitutes self-agreement for truth and
+§4.12's viewpoint-consistency check substitutes self-agreement for truth and
 should be read as the weaker thing it is. Closing it needs a modest labelled
 sample from those frames, a few hundred triplets, which is an afternoon of
 annotation rather than a research programme.
