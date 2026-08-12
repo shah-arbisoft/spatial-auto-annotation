@@ -2,6 +2,11 @@
 % The Markdown chapters in dissertation/ are the source of truth; rebuild
 % with `python scripts/build_latex.py` after editing them.
 \documentclass[12pt]{report}
+% 1in on a4. The template's own sectPr asks for 1.248in left and right, but
+% that is Word's legacy A4 default rather than a stated requirement, and
+% adopting it costs five pages against a hard 60-page limit and pushes two
+% tables back into the margin. Nothing in the template or the module
+% documents states a margin rule.
 \usepackage[a4paper, margin=1in]{geometry}
 \usepackage{graphicx}
 \usepackage{setspace}
@@ -56,12 +61,33 @@
 % overflows instead of loosening.
 \setlength{\emergencystretch}{3em}
 
-% The template's contents page lists chapters as "CHAPTER 1: INTRODUCTION",
-% so the chapter heading is formatted to match rather than the report
-% class's default "Chapter 1 / Title" on two lines.
-\titleformat{\chapter}[hang]
-  {\normalfont\Large\bfseries\MakeUppercase}{\chaptertitlename\ \thechapter:}{0.5em}{}
-\titlespacing*{\chapter}{0pt}{0pt}{20pt}
+% Heading hierarchy taken from the Word template's styles.xml rather than from
+% the report class. The template defines Heading1 (chapters) as Times New
+% Roman, bold, all-capitals and CENTRED, applied at 11-12pt, and Heading2
+% (sections) as bold at 11pt against a 12pt Normal body. The class defaults
+% are \Large for both and left-aligned, which is two steps too large and the
+% wrong alignment for every heading in the document.
+\titleformat{\chapter}[display]
+  {\normalfont\normalsize\bfseries\centering}
+  {\MakeUppercase{\chaptertitlename\ \thechapter}}{0.4em}{\MakeUppercase}
+\titlespacing*{\chapter}{0pt}{0pt}{18pt}
+
+% sections and below: bold, one step under body text, left aligned
+\titleformat{\section}{\normalfont\small\bfseries}{\thesection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.4ex plus .2ex}{0.7ex}
+\titleformat{\subsection}{\normalfont\small\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\subsection}{0pt}{1.2ex plus .2ex}{0.6ex}
+\titleformat{\subsubsection}{\normalfont\small\bfseries\itshape}{\thesubsubsection}{0.6em}{}
+\titlespacing*{\subsubsection}{0pt}{1.1ex plus .2ex}{0.5ex}
+
+% The template's contents page lists chapters as "CHAPTER 1: INTRODUCTION";
+% the class default is "1 Introduction". tocloft is already loaded, so the
+% prefix, the separator and a wider number box are all that is needed.
+\renewcommand{\cftchappresnum}{CHAPTER~}
+\renewcommand{\cftchapaftersnum}{:\hspace{0.5em}}
+\settowidth{\cftchapnumwidth}{CHAPTER~9:~}
+\renewcommand{\cftchapfont}{\bfseries}
+\renewcommand{\cftchappagefont}{\bfseries}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -77,7 +103,7 @@
     \vspace*{1cm}
     \includegraphics[width=0.4\textwidth]{figures/UniofSurrey.pdf}\\[1.5cm]
 
-    {\LARGE \textbf{A Fully-Automatic Spatial-Relationship\\[0.3cm]
+    {\fontsize{22}{26}\selectfont \textbf{A Fully-Automatic Spatial-Relationship\\[0.3cm]
      Annotation Pipeline for Robot-Acquired Images,\\[0.3cm]
      Validated Against Human Annotation}}\\[2cm]
 
