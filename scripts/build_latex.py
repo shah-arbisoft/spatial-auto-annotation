@@ -51,43 +51,43 @@ FIGURES = {
         "box-only bar because that ablation cannot compute depth.",
         "## 4.3 Precision on the annotated pairs"),
     "near_T_sweep.png": (
-        "appendices.md",
+        "chapter3_design.md",
         "Fitting the \\texttt{near} threshold. Recall against all annotators "
         "and against the held-out annotator, with restricted precision. The "
         "fitted value is the tightest threshold at the plateau.",
-        "after:### C.7"),
+        "## 3.9 Modularity"),
     "front_behind_decomposition.png": (
-        "appendices.md",
+        "chapter4_results_rq1.md",
         "Front/behind decomposed per annotator group: agreement where the "
         "tool commits, deliberate abstention, and the two groups that used "
         "the inverted direction convention.",
-        "after:### C.6"),
+        "## 4.6 The tenth annotator"),
     "video_stability.png": (
         "appendices.md",
         "Frame-to-frame stability of the emitted triplets on the two "
         "demonstration clips, before and after temporal smoothing.",
         "after:### E.4"),
     "planner_sources.png": (
-        "appendices.md",
+        "chapter5_results_rq2.md",
         "Scenes with a safe grasp plan, by the relation source given to the "
         "planner. Neither automatic source matches human annotation alone; "
         "their union does, because their failures are disjoint.",
-        "after:### E.5"),
+        "## 5.8 Answer to RQ2"),
     "rq2_with_vlm.png": (
-        "appendices.md",
+        "chapter5_results_rq2.md",
         "Downstream recall against held-out human gold by label source. "
         "Every arm trains on the same pairs, so the label source is the only "
         "variable. Self-training improves on the human labels everywhere "
         "except \\texttt{near}, where it falls below them.",
-        "after:### F.2"),
+        "## 5.3 Why self-training"),
     "rq1_with_vlm.png": (
-        "appendices.md",
+        "chapter4_results_rq1.md",
         "Recall of the human triplets per predicate: the geometric pipeline "
         "against both vision-language models on the same 30 images, the same "
         "numbered boxes and the same written definitions. The dotted lines "
         "are the two means. Scaling the model lifts every predicate a little "
         "and closes none of the gap.",
-        "after:### E.1"),
+        "after:## 4.13 Would a vision-language"),
     "sgg_training_curves.png": (
         "chapter6_benchmark.md",
         "Validation curves for both benchmark arms, each against its own "

@@ -86,7 +86,7 @@ camera frame, which is the frame the annotators saw on screen and therefore the 
 \item \textbf{in front of / behind} is a two-stage cascade. Depth ordering decides
 first, with an abstention band (0.03), these being the hardest predicates because objects on the same surface often differ by less than the depth model can resolve. Where depth abstains a \textbf{ground-plane fallback} decides from pure projection, ordering two objects on the same floor by which box bottom sits lower in the image: a pixel-precise cue exactly where depth is noisiest. It is guarded by the tool's own support evidence and never fires when either object rests on another (mask contact $\geq$ 0.60), because an elevated object's box bottom says where its \textit{support} is, and it has its own band (0.005). Pairs both stages abstain on are flagged rather than guessed (recall 0.64/0.66 \textit{(measured)}, from 0.52/0.55 depth-only).
 \item \textbf{near} is a size-relative proximity test: edge-to-edge box gap divided by
-mean object size, below a fitted threshold, and \textbf{never on contact pairs}, since \texttt{near} co-occurs with on/under on 0 of 469 human pairs, so the annotators used it as "close but no contact relation". A 3D-centroid metric was rejected on evidence: per-image depth normalisation makes centroid distances incomparable across scenes, and every centroid variant transferred to held-out annotators at F1 $\leq$ 0.024 against the relative gap's recall 1.0 (\S{}3.8).
+mean object size, below a fitted threshold, and \textbf{never on contact pairs}, since \texttt{near} co-occurs with on/under on 0 of 469 human pairs, so the annotators used it as "close but no contact relation". Figure~\ref{fig:near-T-sweep} shows the sweep the threshold is read off. A 3D-centroid metric was rejected on evidence: per-image depth normalisation makes centroid distances incomparable across scenes, and every centroid variant transferred to held-out annotators at F1 $\leq$ 0.024 against the relative gap's recall 1.0 (\S{}3.8).
 \end{itemize}
 
 \section{Correction and confidence}
@@ -104,6 +104,13 @@ The naive protocol (fit one threshold to all \texttt{near} labels, test on held-
 The adopted protocol therefore (i) uses only human-\textit{annotated}, non-contact pairs as fit data, since unannotated pairs are not reliable negatives under sparse annotation and contact pairs are never \texttt{near} by the measured convention; (ii) fits only on annotator groups that used the label within the training split (groups 0 and 4); and (iii) reports agreement on the held-out near-using annotator (group 8), who contributed nothing to the fit.
 
 Results \textit{(measured)}: fitted \textbf{T = 1.372} (gap/mean-size units); held-out recall \textbf{1.000}, meaning every pair the unseen annotator called near lies within the threshold, with per-annotator precision 0.41 / 0.63 / 0.16 at the same T. Since recall is 1.0 for all three annotators simultaneously, the human labels are directionally consistent with a single threshold; what varies (by \textasciitilde{}4$\times$) is how exhaustively each annotator applied the label. The fitted threshold applies one definition uniformly, which is exactly the "spatial thresholds for near" the source paper's future work requests. Whether the tool's extra near pairs (the precision gap) are genuinely near is checked by a manual audit in the evaluation chapter rather than assumed.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/near-T-sweep.png}
+\caption{Fitting the \texttt{near} threshold. Recall against all annotators and against the held-out annotator, with restricted precision. The fitted value is the tightest threshold at the plateau.}
+\label{fig:near-T-sweep}
+\end{figure}
 
 \section{Modularity: the detector as the replaceable part}
 

@@ -152,7 +152,7 @@ against. The design rationale in brief:
 - **near** is a size-relative proximity test: edge-to-edge box gap divided by
   mean object size, below a fitted threshold, and **never on contact pairs**,
   since `near` co-occurs with on/under on 0 of 469 human pairs, so the
-  annotators used it as "close but no contact relation". A 3D-centroid metric
+  annotators used it as "close but no contact relation". {{fig:near-T-sweep}} shows the sweep the threshold is read off. A 3D-centroid metric
   was rejected on evidence: per-image depth normalisation makes centroid
   distances incomparable across scenes, and every centroid variant transferred
   to held-out annotators at F1 ≤ 0.024 against the relative gap's recall 1.0

@@ -202,13 +202,6 @@ right_of(A, B)  ==  (cx_A > cx_B)
 The strict mirror of \texttt{left of}. Exactly one of the two holds outside the ambiguity band; inside it neither is emitted and the pair is flagged. \texttt{right\_\allowbreak{}of(A,B) == left\_\allowbreak{}of(B,A)}.
 
 \subsection{C.6 \texttt{in front of(A, B)} and \texttt{behind(A, B)}}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{figures/front-behind-decomposition.png}
-\caption{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
-\label{fig:front-behind-decomposition}
-\end{figure}
-
 
 A two-stage cascade. Stage one is depth ordering:
 
@@ -233,13 +226,6 @@ with \texttt{plane\_\allowbreak{}band} = 0.005 of normalised image height, calib
 Worked example, encoded in \texttt{tests/test\_\allowbreak{}predicates.py}: a bottle with box bottom 0.80 against a book with box bottom 0.60, depths 0.50 and 0.51 and so inside \texttt{depth\_\allowbreak{}eps}, both floor-standing, gives bottle \texttt{in front of} book. The same pair with either object elevated is flagged instead.
 
 \subsection{C.7 \texttt{near(A, B)}: A and B are close, relative to their size}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{figures/near-T-sweep.png}
-\caption{Fitting the \texttt{near} threshold. Recall against all annotators and against the held-out annotator, with restricted precision. The fitted value is the tightest threshold at the plateau.}
-\label{fig:near-T-sweep}
-\end{figure}
-
 
 \begin{verbatim}
 near(A, B)  ==  box_gap_rel(A, B) <= near_T
@@ -446,13 +432,6 @@ Six studies sit here. Three support a result reported in a chapter and carry the
 The other three are reported here in full, because none of them has a result to put in a chapter. The independent precision study is built but not yet collected (E.3); the video processing is qualitative, over two clips with no ground truth (E.4); and the scale run has no labels to be correct against (E.6). Each is work done and is recorded as such, with what it does and does not establish stated in its own section.
 
 \subsection{E.1 The vision-language baseline: diagnostics and limits}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{figures/rq1-with-vlm.png}
-\caption{Recall of the human triplets per predicate: the geometric pipeline against both vision-language models on the same 30 images, the same numbered boxes and the same written definitions. The dotted lines are the two means. Scaling the model lifts every predicate a little and closes none of the gap.}
-\label{fig:rq1-with-vlm}
-\end{figure}
-
 
 The larger model redistributes the picture rather than resolving it. It asserts more (414 judged-pair assertions against 344), lifting recall and costing precision, so its F1 lands within 0.008 of the smaller model's, and where the smaller model looked most interesting, \texttt{behind}, the larger is markedly worse at 0.281 precision against 0.478. It is closest to the pipeline on support, 0.74 against 0.91, and \texttt{behind} recall actually falls with scale, 0.169 to 0.138.
 
@@ -563,13 +542,6 @@ What this demonstrates is capacity and stability, not correctness. There is no g
 \textit{The two distribution differences.} The largest predicate shift is \textit{in front of}, 0.181 to 0.195. The \texttt{on}/\texttt{under} share is low in both runs, 0.006 annotated against 0.003 here, which is a property of open-vocabulary detection rather than of the new frames: more detections means more pairs, and most pairs are not in contact. Density per frame is lower for the same reason in reverse, 330 against 633 triplets, since the later arrangements hold fewer objects (11.7 detections against 16.9) and pair count grows with the square.
 
 \subsection{E.5 The planner experiment: prompt construction and scoring rules}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{figures/planner-sources.png}
-\caption{Scenes with a safe grasp plan, by the relation source given to the planner. Neither automatic source matches human annotation alone; their union does, because their failures are disjoint.}
-\label{fig:planner-sources}
-\end{figure}
-
 
 Section 5.7 reports the design in outline and the result. Two components need recording in full, because the comparison is only as good as they are.
 
@@ -639,13 +611,6 @@ group 8 alone (inverted, dense \texttt{near} user) & \textbf{0.190} & 0.116 \\
 The seed ranges above absorb one further source of variation. Re-scoring the \textit{same} checkpoints a second time does not reproduce them exactly: an independent re-evaluation pass moved the pooled human mR@100 by 0.001 and the group-8 figures, drawn from the smallest slice at 37 images, by up to 0.008. Inference is not bit-deterministic, so a margin of that order is not a result. The figures reported are those of the re-evaluation committed with this repository, and no claim in Chapter 6 turns on a difference smaller than the per-seed spread.
 
 \subsection{F.2 Downstream recall by label source}
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.95\textwidth]{figures/rq2-with-vlm.png}
-\caption{Downstream recall against held-out human gold by label source. Every arm trains on the same pairs, so the label source is the only variable. Self-training improves on the human labels everywhere except \texttt{near}, where it falls below them.}
-\label{fig:rq2-with-vlm}
-\end{figure}
-
 
 Section 5.2 carries the per-predicate figures and the seed spreads. The chart below is the same experiment drawn rather than tabulated, which makes the ordering easier to take in at once.
 

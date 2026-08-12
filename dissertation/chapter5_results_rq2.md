@@ -69,7 +69,8 @@ the vision-language labels teach better than the sparse human labels they
 would replace and about as well as the standard remedy for scarce labels,
 while remaining half as useful as computed geometry.
 
-Training on the automatic labels multiplies downstream mean recall by ~2.5
+{{fig:rq2-with-vlm}} draws the four arms per predicate. Training on the
+automatic labels multiplies downstream mean recall by ~2.5
 against the human annotators' own held-out labels: 0.76 vs 0.30. Self-training
 lands between the two but far closer to the floor: it improves the human
 baseline on six of seven predicates and lifts the mean to 0.36, which closes
@@ -240,7 +241,8 @@ model's from §4.13, and **E** supplies the union of C and D.
 | D | vision-language relationships | not run | 20 / 25 |
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
-The two planners agree exactly, and not merely in the totals: the three scenes
+{{fig:planner-sources}} shows the five conditions side by side. The two
+planners agree exactly, and not merely in the totals: the three scenes
 C fails on are scenes 4, 16 and 24 under *both* models. A finding that survives
 replacing the reasoning engine, down to which scenes fail, is a property of the
 information in the prompt rather than of the model consuming it, which is the

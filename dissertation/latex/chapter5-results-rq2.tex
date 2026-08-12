@@ -47,7 +47,7 @@ near & 0.08 (0.00--0.19) & 0.03 (0.00--0.06) & 0.00 (0.00--0.00) & 1.00 (1.00--1
 
 A fourth arm answers what \S{}4.13 raises but cannot settle: if a vision-language model is not a good enough \textit{annotator}, is it a good enough \textit{teacher}? The same model labelled all 600 training images, used exactly as the other three sources are. Every arm trains on precisely the pairs that arm covers, so none is advantaged by seeing more of the split, and the human, self-trained and automatic figures are unchanged from the three-arm experiment to the last decimal, which is the check that this is an addition rather than a different experiment. The answer is a qualified yes: at 0.38 the vision-language labels teach better than the sparse human labels they would replace and about as well as the standard remedy for scarce labels, while remaining half as useful as computed geometry.
 
-Training on the automatic labels multiplies downstream mean recall by \textasciitilde{}2.5 against the human annotators' own held-out labels: 0.76 vs 0.30. Self-training lands between the two but far closer to the floor: it improves the human baseline on six of seven predicates and lifts the mean to 0.36, which closes \textbf{15\% of the distance} between the human and automatic arms. Stretching the existing labels helps; it does not substitute for labelling every pair consistently.
+Figure~\ref{fig:rq2-with-vlm} draws the four arms per predicate. Training on the automatic labels multiplies downstream mean recall by \textasciitilde{}2.5 against the human annotators' own held-out labels: 0.76 vs 0.30. Self-training lands between the two but far closer to the floor: it improves the human baseline on six of seven predicates and lifts the mean to 0.36, which closes \textbf{15\% of the distance} between the human and automatic arms. Stretching the existing labels helps; it does not substitute for labelling every pair consistently.
 
 The seed spreads carry a second result. The auto-trained model's recall varies by at most 0.02 across seeds on every predicate, while the human-trained model's varies by up to 0.19 (\texttt{near} spans 0.00--0.19) and the self-trained model inherits that instability (\texttt{behind} spans 0.17--0.28). Sparse supervision is not just weaker, it is \textit{unstable}, its outcome hostage to sampling noise, and self-training passes the instability on to its student.
 
@@ -59,6 +59,13 @@ They are not, and one number shows why. Average precision is threshold-free, so 
 
 What the four indicators establish is narrower than the recall column suggests and firmer than the precision column implies: judged on the labels' ability to teach a model to recover relations humans recorded, the automatic arm dominates; judged on its ability to imitate which relations humans chose to record, it does not, and no metric computed against this gold can separate the two.
 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/rq2-with-vlm.png}
+\caption{Downstream recall against held-out human gold by label source. Every arm trains on the same pairs, so the label source is the only variable. Self-training improves on the human labels everywhere except \texttt{near}, where it falls below them.}
+\label{fig:rq2-with-vlm}
+\end{figure}
 
 \section{Why self-training does not rescue the human labels}
 
@@ -112,7 +119,7 @@ E & automatic and vision-language combined & not run & \textbf{25 / 25} \\
 \end{longtable}
 \end{center}
 
-The two planners agree exactly, and not merely in the totals: the three scenes C fails on are scenes 4, 16 and 24 under \textit{both} models. A finding that survives replacing the reasoning engine, down to which scenes fail, is a property of the information in the prompt rather than of the model consuming it, which is the claim the experiment exists to make. It also disposes of the objection to condition A's zero, that a more capable planner would infer support from the object list: it does not, in twenty-five scenes out of twenty-five, twice. The failure without relations is more specific than inattention, since in seven of the A plans the planner \textit{names} the occluder but only as something to steer around, treating something resting on the target as a neighbour to avoid rather than a load to remove.
+Figure~\ref{fig:planner-sources} shows the five conditions side by side. The two planners agree exactly, and not merely in the totals: the three scenes C fails on are scenes 4, 16 and 24 under \textit{both} models. A finding that survives replacing the reasoning engine, down to which scenes fail, is a property of the information in the prompt rather than of the model consuming it, which is the claim the experiment exists to make. It also disposes of the objection to condition A's zero, that a more capable planner would infer support from the object list: it does not, in twenty-five scenes out of twenty-five, twice. The failure without relations is more specific than inattention, since in seven of the A plans the planner \textit{names} the occluder but only as something to steer around, treating something resting on the target as a neighbour to avoid rather than a load to remove.
 
 \textbf{The two automatic sources fail on different scenes, and the union closes the gap.} Condition D is the weaker source alone, 20 of 25 against the tool's 22, consistent with \S{}4.13. What matters is the structure underneath: C fails on scenes 4, 16 and 24, D on 3, 5, 6, 13 and 14, and \textbf{the two sets do not intersect}. Every failure in both arms is a support relation the source did not supply, never a plan that reasoned badly from what it was given, so a union supplying more support relations repairs exactly those cases and cannot break the ones already working. It does: condition E clears the occluder in all 25 scenes, drawing level with the human labels at 0 gained, 0 lost, 25 tied. This is the only measurement here on which automatic labels \textit{match} human annotation on a robot-relevant task rather than approaching it, with no human in the labelling loop.
 
@@ -122,6 +129,13 @@ All three C failures have the same cause, and it is not a planning failure: the 
 
 What it settles is the question \S{}5.6 could only frame. Automatic labels carry 88\% of the decision-relevant content that human labels carry on this task, against 0\% for no labels at all, and the residual gap is not a property of computed labels in general but of one predicate whose recall is already measured and whose failure mode is already diagnosed (\S{}4.9).
 
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/planner-sources.png}
+\caption{Scenes with a safe grasp plan, by the relation source given to the planner. Neither automatic source matches human annotation alone; their union does, because their failures are disjoint.}
+\label{fig:planner-sources}
+\end{figure}
 
 \section{Answer to RQ2}
 

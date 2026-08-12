@@ -145,7 +145,7 @@ sheet).
 | group_8 | 444 | 0.73 | **0.02** | **inverted** | 0.01 | 0.71 |
 | **overall** | 3597 | | | | **0.65** | **0.84** |
 
-(The table reports the shipped cascade, depth ordering plus the ground-plane
+{{fig:front-behind-decomposition}} plots the same decomposition, where the two inverted groups are the pair sitting alone near zero. (The table reports the shipped cascade, depth ordering plus the ground-plane
 fallback of §4.9; the fallback roughly doubled the emit rates of the
 abstention-heavy groups 2 and 3.) The pooled 0.65 decomposes into three
 distinct causes:
@@ -422,7 +422,8 @@ reasoning model an order of magnitude larger.
 | near | 34 | 0.382 | 0.382 | 1.000 |
 | **Mean** | **381** | **0.400** | **0.445** | **0.834** |
 
-On recall both lose everywhere, and the size of the improvement is the point:
+{{fig:rq1-with-vlm}} plots all three against the human triplets. On recall
+both lose everywhere, and the size of the improvement is the point:
 mean recall moves from 0.400 to 0.445, real but barely half the pipeline's
 0.834, and on the depth pair 0.24 against 0.60 puts the model below the
 geometric method's known weak point. Scaling the model does not scale the

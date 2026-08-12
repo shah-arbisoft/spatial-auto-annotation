@@ -112,7 +112,7 @@ group\_\allowbreak{}8 & 444 & 0.73 & \textbf{0.02} & \textbf{inverted} & 0.01 & 
 \end{longtable}
 \end{center}
 
-(The table reports the shipped cascade, depth ordering plus the ground-plane fallback of \S{}4.9; the fallback roughly doubled the emit rates of the abstention-heavy groups 2 and 3.) The pooled 0.65 decomposes into three distinct causes:
+Figure~\ref{fig:front-behind-decomposition} plots the same decomposition, where the two inverted groups are the pair sitting alone near zero. (The table reports the shipped cascade, depth ordering plus the ground-plane fallback of \S{}4.9; the fallback roughly doubled the emit rates of the abstention-heavy groups 2 and 3.) The pooled 0.65 decomposes into three distinct causes:
 
 \begin{enumerate}
 \item \textbf{Direction agreement is near-perfect where the tool commits}, 0.95--1.00
@@ -122,6 +122,13 @@ agree with the committed direction 2--5\% of the time; flipping their labels rec
 \item \textbf{The remaining gap is abstention, not error.} Groups 2 and 3 agree
 almost perfectly when the tool commits, but their pairs sit inside the \texttt{depth\_\allowbreak{}eps} band \textit{and} beyond the ground-plane fallback's reach (elevated objects, near-tied bottom edges), so the tool abstains: emit rates 0.58 and 0.54, roughly doubled by the fallback from 0.30 and 0.08. The \texttt{depth\_\allowbreak{}eps} and \texttt{plane\_\allowbreak{}band} sweeps trade this against precision.
 \end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/front-behind-decomposition.png}
+\caption{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
+\label{fig:front-behind-decomposition}
+\end{figure}
 
 \section{The tenth annotator, and what the annotators would score against each other}
 
@@ -236,6 +243,13 @@ Skipping frames costs nothing measurable: mean recall under propagation is 0.843
 
 
 \section{Would a vision-language model do this instead?}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/rq1-with-vlm.png}
+\caption{Recall of the human triplets per predicate: the geometric pipeline against both vision-language models on the same 30 images, the same numbered boxes and the same written definitions. The dotted lines are the two means. Scaling the model lifts every predicate a little and closes none of the gap.}
+\label{fig:rq1-with-vlm}
+\end{figure}
+
 
 The three baselines of \S{}4.2 are deliberately weak, and a reader is entitled to ask about the strong one: if a vision-language model annotates this dataset as well as the geometric pipeline does, the pipeline is unnecessary. Thirty images, stratified across all nine annotator groups, go to the model with the ground-truth boxes drawn on and numbered, and it answers by index (\texttt{scripts/run\_\allowbreak{}vlm\_\allowbreak{}pilot.py}). That is the PredCls setting the pipeline is evaluated in, so neither is scored on detection, and the prompt carries Chapter 3's definitions verbatim, without which the run would measure \S{}2.5's reference-frame ambiguity rather than accuracy. Two models were run, because the objection to one is that a larger model would close the gap: \texttt{gemini-flash-latest} is small and non-reasoning, \texttt{gemini-3.1-pro-preview} a reasoning model an order of magnitude larger.
 
@@ -263,7 +277,7 @@ near & 34 & 0.382 & 0.382 & 1.000 \\
 \end{longtable}
 \end{center}
 
-On recall both lose everywhere, and the size of the improvement is the point: mean recall moves from 0.400 to 0.445, real but barely half the pipeline's 0.834, and on the depth pair 0.24 against 0.60 puts the model below the geometric method's known weak point. Scaling the model does not scale the ability being measured.
+Figure~\ref{fig:rq1-with-vlm} plots all three against the human triplets. On recall both lose everywhere, and the size of the improvement is the point: mean recall moves from 0.400 to 0.445, real but barely half the pipeline's 0.834, and on the depth pair 0.24 against 0.60 puts the model below the geometric method's known weak point. Scaling the model does not scale the ability being measured.
 
 Recall alone would be an unfair verdict, because it rewards whoever asserts more: on the 374 judged pairs the pipeline makes 868 assertions against 344 and 414. Restricted to those pairs, where precision is defined, the column reverses, and \textbf{both models are more precise than the pipeline}, 0.419 and 0.389 against 0.351. They buy it with silence, and the price is steep enough that both lose F1 on every predicate, 0.397 and 0.405 against 0.488 pooled (Appendix E.1).
 
