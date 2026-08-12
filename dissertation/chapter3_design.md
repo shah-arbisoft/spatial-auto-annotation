@@ -160,26 +160,70 @@ against. The design rationale in brief:
 
 ## 3.6 Correction and confidence
 
-After the rules run on an ordered pair, mutually exclusive sets (on/under,
-left/right, front/behind) are enforced; a contradiction that survives the
-thresholds (mask or depth noise) demotes the pair to a flag rather than
-emitting an impossible triplet. Ambiguity flags (lateral tie, depth tie,
-near-threshold edge, resolved contradiction) are written alongside the
-triplets. The flags are the design's honesty mechanism: the tool is presented
-as a human-in-the-loop accelerator whose residual human cost is *measurable*
-(the flag rate is reported with the RQ1 results), not as an infallible oracle.
+Three predicate families are mutually exclusive: on/under, left/right and
+front/behind. Two of them cannot contradict, because the rule branches: a pair
+is left of, or right of, or neither, and the same for the depth pair, so
+exclusivity is a property of the control flow rather than something to check
+afterwards. Support is different. `on` and `under` are independent tests over
+*different* contact evidence, the mask-contact fraction measured each way
+round, so noise in either can make both fire on the same pair. That case is
+demoted to an `on_under_conflict` flag and neither label is emitted.
+
+Demoting rather than resolving is the deliberate part. Picking the stronger of
+two contradictory signals would produce a label the evidence does not support
+while looking exactly like a label that it does, and an annotator that
+fabricates under uncertainty cannot be audited. The alternative considered was
+to emit everything and let the consumer sort it out (§3.4); it was rejected
+because geometric consistency is checkable for free, and because RQ2's
+consumer is a model, which has no way to sort it out.
+
+One further correction is class-aware rather than geometric. Support is not
+evaluated at all when either object is a person: the annotators never recorded
+one, on **0 of 2,466 gold support triplets**, and mask contact cannot
+distinguish an object *resting on* someone from one being *held* by them. A
+geometric rule that cannot represent the distinction its evidence turns on
+should decline the pair rather than guess, and the guard is a configuration
+entry (`no_support_classes`) rather than a special case buried in code, so a
+different dataset can revise it.
+
+Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
+near-threshold edge, and the resolved contradiction above. They are the
+design's honesty mechanism. The tool is offered as a human-in-the-loop
+accelerator whose residual human cost is *measurable* rather than as an
+infallible oracle, and about a third of ordered pairs carry a flag; §4.7
+decomposes that into the part which is silent abstention and the much smaller
+part which is a genuine review queue. The structural guarantees this section
+promises are asserted in a randomised invariant test over two thousand
+synthetic scenes (§3.11), because they hold by construction and would
+otherwise be easy for a later rule edit to break quietly.
 
 ## 3.7 Output compatibility
 
-The writers reproduce the SGDET-Annotate structure exactly: centre-form
-`boxes_1024`/`boxes_512` in the resized frames, index-aligned `labels` and
-`attribute` arrays, `relationships` as subject–object index pairs with a
-parallel `predicates` ID array, and the same six-dataset h5 layout with
-int64 attributes. Verified against the real files: a load→write round trip
-reproduces `boxes_1024` and `labels` with zero error, and the h5 matches a
-real export key-for-key, dtype-for-dtype *(measured)*. Auto-labels are
-therefore drop-in replacements for human labels, which is the property RQ2
-depends on.
+Byte-compatibility is a requirement of the research design, not tidiness. RQ2
+compares two label sources by training the same model on each; if the automatic
+labels arrived in a different container, every downstream difference would
+confound the labels with the loader, and no result would be attributable. The
+outputs therefore have to be substitutable for the human ones without touching
+anything that reads them.
+
+Three formats are written because three consumers need them: Visual Genome
+JSON, which is the dataset's own annotation format and the one a replication
+would diff against; YOLO txt, which trains the detector the deployment mode
+and the benchmark share; and the h5 layout the scene-graph framework of
+Chapter 6 ingests. The writers reproduce the SGDET-Annotate structure exactly:
+centre-form `boxes_1024`/`boxes_512` in the resized frames, index-aligned
+`labels` and `attribute` arrays, `relationships` as subject–object index pairs
+with a parallel `predicates` ID array, and the same six-dataset h5 layout with
+int64 attributes.
+
+The alternative was an internal schema plus a converter (§3.4), which is
+easier to write and would have left every comparison one translation away from
+the thing it claims to measure. Compatibility is therefore verified rather
+than assumed: a load→write round trip reproduces `boxes_1024` and `labels`
+with zero error, and the h5 matches a real export key-for-key and
+dtype-for-dtype *(measured)*, with both checks in the test suite so a later
+change to a writer cannot pass unnoticed. Auto-labels are drop-in replacements
+for human labels, which is the property RQ2 depends on.
 
 ## 3.8 Calibrating `near`: an annotator-aware protocol
 
