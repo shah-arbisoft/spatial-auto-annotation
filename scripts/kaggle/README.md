@@ -136,6 +136,37 @@ python tools/relation_train_net_hydra.py --config-path ../configs/hydra/Spatial 
 best checkpoints + per-epoch validation metrics) and download; the offline
 curve/figure script lives in this repo and runs on the logs.
 
+## What is in this folder
+
+Three kinds of file, and the difference matters.
+
+**Executed notebooks** carry their outputs and are the recorded provenance of
+Chapter 6. They ran on Kaggle (T4) in this order:
+
+| file | what it ran | writes |
+|---|---|---|
+| `executed_1_train_arms_seed42.ipynb` | YOLOv8m detector, the background-index patch, a one-epoch smoke test, then the human and auto arms at seed 42 | the first-run checkpoints and logs |
+| `executed_2_seed_replication.ipynb` | the same two arms at seeds 43 and 44, on the frozen detector | `seed_results.zip` |
+| `executed_3_vlm_arm.ipynb` | the third arm, trained on `_annotations.vlm.coco.json` at seeds 42/43/44 | `vlm_results.zip` |
+| `executed_4_reeval_group_slices.ipynb` | re-evaluates every checkpoint against the corrected zero-shot reference and the per-group slices, all three arms | `reeval_results.json` |
+| `eval_notebook.ipynb` | the first run's evaluation pass | `test_results.json` |
+
+Run them in that order: 2 and 3 need the detector 1 freezes, and 4 needs the
+checkpoints 1 to 3 produce.
+
+**Generators** (`make_seeds_notebook.py`, `make_reeval_notebook.py`) write
+clean, unexecuted copies of notebooks 2 and 4. Use these to regenerate a run
+rather than editing an executed notebook, which would destroy the record.
+
+**Recipes** (`notebook_cells.md`, `notebook_cells_seeds.md`,
+`notebook_cells_vlm.md`) are the cell-by-cell instructions, useful if you are
+pasting into a fresh Kaggle notebook by hand.
+
+The dataset the notebooks consume (`spatial_sgg` and `spatial_sgg_yolo`,
+about 71 MB) is **not** committed. It is built from this repository by
+`scripts/export_sgg_benchmark.py` and `scripts/export_yolo_det.py` and
+uploaded to Kaggle as a dataset; regenerate it rather than looking for it here.
+
 ## What we predict (already in writing, ch5 §5.5)
 
 1. **Later saturation** — the human arm peaks within ~2–6 epochs (the source
