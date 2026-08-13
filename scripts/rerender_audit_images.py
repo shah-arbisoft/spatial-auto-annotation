@@ -39,6 +39,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--pack", default="outputs/audit_v3")
     ap.add_argument("--config", default="configs/default.yaml")
+    ap.add_argument("--no-anonymise", action="store_true",
+                    help="leave faces unmasked; local inspection only")
     a = ap.parse_args()
 
     pack = Path(a.pack)
@@ -48,15 +50,26 @@ def main() -> int:
     root = Path(load_config(a.config)["dataset"]["root"])
     rows = list(csv.DictReader(open(key, encoding="utf-8")))
 
+    masked, obscured = 0, []
     for r in rows:
         group, stem = r["image_id"].split("/")
         geo = json.loads((ROOT / f"outputs/geometry/{group}/{stem}.json")
                          .read_text(encoding="utf-8"))
-        render(int(r["id"]), root / "img_data" / group / f"{stem}.jpg", geo,
-               int(r["subj"]), int(r["obj"]), r["predicate"],
-               pack / "img" / f"{int(r['id']):03d}.png")
+        n, bad = render(int(r["id"]), root / "img_data" / group / f"{stem}.jpg",
+                        geo, int(r["subj"]), int(r["obj"]), r["predicate"],
+                        pack / "img" / f"{int(r['id']):03d}.png",
+                        anonymise=not a.no_anonymise)
+        masked += bool(n)
+        if bad:
+            obscured.append(int(r["id"]))
 
     print(f"  redrew {len(rows)} images in {pack}/img")
+    if a.no_anonymise:
+        print("    *** anonymisation DISABLED -- do not send these anywhere ***")
+    else:
+        print(f"    {masked} of {len(rows)} carried an annotated person, faces masked")
+        print(f"    {len(obscured)} items had a mask land on a claim object"
+              + (f": {obscured}" if obscured else ""))
     for p, d in before.items():
         same = digest(p) == d
         print(f"    {p.name:26} {'unchanged' if same else '*** CHANGED ***'} ({d})")

@@ -24,6 +24,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from src.anonymise import face_regions, overlap_frac, pixelate
 from src.dataset import SpatialDataset, load_rgb
 from src.pipeline import load_config
 from src.predicates import PREDICATES
@@ -60,9 +61,30 @@ def _place(w, h, box, W, H, taken):
     return (cx, cy, cx + w, cy + h)
 
 
-def render(sample_id, image_path, geo, subj, obj, predicate, out_png):
+def render(sample_id, image_path, geo, subj, obj, predicate, out_png,
+           anonymise=True):
+    """Draw one claim. Returns (faces_masked, claim_object_obscured).
+
+    Anonymisation is on by default and happens before anything is drawn, so the
+    saved file never holds an unmasked face even transiently. An audit pack is
+    sent to a third-party API and read by a person, which is the same disclosure
+    Chapter 8 covers for the validation website, and 35% of these frames carry
+    an annotated human. The caller is told when a mask lands on a claim object,
+    because that item is no longer judgeable and the pack has to account for it.
+    """
     img = Image.fromarray(load_rgb(image_path))
     W, H = img.size
+    obscured = False
+    if anonymise:
+        regions = face_regions((W, H), geo)
+        by = {o["idx"]: o for o in geo}
+        for idx in (subj, obj):
+            if by[idx].get("label") == "human":
+                continue          # the claim is about the person; masking the head is fine
+            b = [v * s for v, s in zip(by[idx]["box"], (W, H, W, H))]
+            if any(overlap_frac(b, r) > 0.25 for r in regions):
+                obscured = True
+        pixelate(img, regions)
     dr = ImageDraw.Draw(img)
     try:
         font = ImageFont.truetype("arial.ttf", 16)
@@ -86,6 +108,7 @@ def render(sample_id, image_path, geo, subj, obj, predicate, out_png):
     dr.rectangle([0, H - 24, W, H], fill="black")
     dr.text((6, H - 21), caption, fill="white", font=font)
     img.save(out_png)
+    return (len(face_regions((W, H), geo)) if anonymise else 0), obscured
 
 
 def main():
