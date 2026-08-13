@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import base64
+import collections
 import csv
 import json
 import sys
@@ -61,8 +62,26 @@ Answer WRONG if the claim is false, and also if you cannot tell. Do not guess:
 answering WRONG when unsure is what the instruction requires."""
 
 
+def detail_of(payload: str) -> str:
+    """The human-readable half of an API error, not 200 bytes of raw JSON.
+
+    A depleted-credits 429 and an invalid-key 401 look identical when the body
+    is printed as-is, and the difference is the whole diagnosis.
+    """
+    try:
+        return json.loads(payload)["error"]["message"].strip()
+    except Exception:                                     # noqa: BLE001
+        return payload.replace("\n", " ")[:160]
+
+
 def ask(image_path: Path, claim: str, model: str, key: str,
-        retries: int = 4) -> tuple[str, str]:
+        retries: int = 4, note=None) -> tuple[str, str, str]:
+    """Returns (verdict, raw reply, model version that actually answered).
+
+    The alias in --model is not what answered: Appendix E.1 records that the
+    model behind `gemini-flash-latest` moved mid-project, so the reply's own
+    modelVersion is captured per item rather than the name we asked for.
+    """
     url = (f"https://generativelanguage.googleapis.com/v1beta/models/"
            f"{model}:generateContent?key={key}")
     b64 = base64.b64encode(image_path.read_bytes()).decode("ascii")
@@ -81,29 +100,37 @@ def ask(image_path: Path, claim: str, model: str, key: str,
                 url, data=body, headers={"Content-Type": "application/json"})
             with urllib.request.urlopen(req, timeout=120) as r:
                 d = json.loads(r.read())
+            ver = d.get("modelVersion", "")
             parts = d["candidates"][0]["content"]["parts"]
             text = "".join(p.get("text", "") for p in parts).strip()
             up = text.upper()
             # look for the verdict anywhere: a reasoning model may deliberate
             if "WRONG" in up and "TRUE" not in up:
-                return "n", text
+                return "n", text, ver
             if "TRUE" in up and "WRONG" not in up:
-                return "y", text
+                return "y", text, ver
             # both or neither: unparseable, and an unparseable answer is not a
             # verdict. Recorded rather than coerced.
-            return "", text
+            return "", text, ver
         except urllib.error.HTTPError as e:
-            detail = e.read().decode("utf-8", "replace")[:200]
+            msg = f"HTTP {e.code}: {detail_of(e.read().decode('utf-8', 'replace'))}"
             if e.code in (429, 500, 503) and attempt < retries - 1:
-                time.sleep(min(60, 5 * 2 ** attempt))
+                wait = min(60, 5 * 2 ** attempt)
+                if note:
+                    note(f"{msg} -- retry {attempt + 1}/{retries - 1} in {wait}s")
+                time.sleep(wait)
                 continue
-            return "", f"HTTP {e.code}: {detail}"
+            return "", msg, ""
         except Exception as e:                                # noqa: BLE001
             if attempt < retries - 1:
-                time.sleep(5 * 2 ** attempt)
+                wait = 5 * 2 ** attempt
+                if note:
+                    note(f"{type(e).__name__}: {e} -- retry "
+                         f"{attempt + 1}/{retries - 1} in {wait}s")
+                time.sleep(wait)
                 continue
-            return "", f"error: {e}"
-    return "", "retries exhausted"
+            return "", f"error: {e}", ""
+    return "", "retries exhausted", ""
 
 
 def main() -> int:
@@ -130,32 +157,67 @@ def main() -> int:
         print("  nothing to do")
     key = api_key() if todo else ""
 
+    width = max((len(f"{r['subject']} is {r['predicate']} {r['object']}")
+                 for r in todo), default=0)
+    tally, versions, t0 = collections.Counter(), collections.Counter(), time.time()
+
     for i, r in enumerate(todo, 1):
         claim = f"{r['subject']} is {r['predicate']} {r['object']}"
-        v, raw = ask(pack / "img" / r["image"], claim, a.model, key)
+        lead = f"    [{i:>4}/{len(todo)}] #{r['id']:>3}  {claim:<{width}}"
+        print(f"{lead}  ... ", end="", flush=True)
+        broke = []                    # a retry prints its own line, breaking this one
+
+        def note(msg):
+            broke.append(1)
+            print(f"\n      !! {msg}", flush=True)
+
+        v, raw, ver = ask(pack / "img" / r["image"], claim, a.model, key,
+                          note=note)
         append_jsonl(out, [{"id": r["id"], "image": r["image"],
                             "predicate": r["predicate"], "claim": claim,
-                            "verdict": v, "raw": raw[:400], "model": a.model}])
-        if i % 20 == 0 or i == len(todo):
-            print(f"    {i}/{len(todo)}")
+                            "verdict": v, "raw": raw[:400], "model": a.model,
+                            "model_version": ver}])
+        tally[v or "error"] += 1
+        if ver:
+            versions[ver] += 1
+        shown = {"y": "TRUE", "n": "WRONG"}.get(v) or f"** {raw[:90]}"
+        print(f"{lead}  {shown}" if broke else shown, flush=True)
+        # the running tally is what tells you a run has quietly stopped working
+        if i % 25 == 0:
+            done_n, err_n = tally["y"] + tally["n"], tally["error"]
+            rate = i / max(1e-9, time.time() - t0)
+            print(f"      -- {done_n} judged, {err_n} failed, "
+                  f"{rate * 60:.0f}/min, ~{(len(todo) - i) / rate / 60:.0f} min left")
         time.sleep(a.sleep)
 
+    # a failed item that later succeeded has two rows; the file is an append
+    # log, not a table, so everything below counts items rather than rows
     rows = load_jsonl(out)
-    ok = [r for r in rows if r.get("verdict") in ("y", "n")]
-    print(f"\n  {len(ok)}/{len(sheet)} verdicts parsed "
-          f"({len(rows) - len(ok)} unparseable, recorded not coerced)")
+    ok = {r["id"]: r for r in rows if r.get("verdict") in ("y", "n")}
+    stuck = sorted({r["id"] for r in rows} - set(ok), key=int)
+    versions = collections.Counter(r["model_version"] for r in ok.values()
+                                   if r.get("model_version"))
+    if versions:
+        print("\n  answered by: " + ", ".join(f"{k} x{v}"
+                                              for k, v in versions.most_common()))
+    print(f"\n  {len(ok)}/{len(sheet)} items judged")
+    if stuck:
+        print(f"  {len(stuck)} still unresolved, re-run to retry: "
+              f"{', '.join(stuck[:12])}{' ...' if len(stuck) > 12 else ''}")
     if len(ok) == len(sheet):
         with open(pack / "vlm_verdicts.csv", "w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=["id", "image", "subject",
                                               "predicate", "object",
                                               "verdict (y/n)", "notes"])
             w.writeheader()
-            by = {r["id"]: r for r in rows}
+            by = ok
             for s in sheet:
                 w.writerow({**{k: s[k] for k in
                                ("id", "image", "subject", "predicate", "object")},
                             "verdict (y/n)": by[s["id"]]["verdict"],
-                            "notes": "vlm:" + a.model})
+                            # the version that answered, not the alias asked for
+                            "notes": "vlm:" + (by[s["id"]].get("model_version")
+                                               or a.model)})
         print(f"  -> {pack}/vlm_verdicts.csv, same shape as the human sheet")
     return 0
 
