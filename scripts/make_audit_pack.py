@@ -29,6 +29,37 @@ from src.pipeline import load_config
 from src.predicates import PREDICATES
 
 
+def _hits(a, b):
+    return not (a[2] <= b[0] or b[2] <= a[0] or a[3] <= b[1] or b[3] <= a[1])
+
+
+def _place(w, h, box, W, H, taken):
+    """Find a home for a w x h tag that touches its own box but nothing placed.
+
+    Overlapping objects are the norm here rather than the exception -- support
+    claims are about things in contact -- so anchoring both tags to the top-left
+    of their boxes hid one behind the other on exactly the items where knowing
+    which is which matters most. Eight positions around the box are tried in
+    preference order, all of them adjacent to the box so the tag stays readable
+    as belonging to it; only if every one collides does the tag step downwards.
+    """
+    x1, y1, x2, y2 = box
+    cands = [(ax, ay)
+             for ay in (y1 - h - 2, y2 + 2, y1 + 2, y2 - h - 2)
+             for ax in (x1, x2 - w)]
+    for cx, cy in cands:
+        cx = min(max(0.0, cx), W - w)
+        cy = min(max(0.0, cy), H - h)
+        r = (cx, cy, cx + w, cy + h)
+        if not any(_hits(r, t) for t in taken):
+            return r
+    cx = min(max(0.0, x1), W - w)
+    cy = min(max(0.0, y1 - h - 2), H - h)
+    while any(_hits((cx, cy, cx + w, cy + h), t) for t in taken) and cy + h < H:
+        cy += h + 2
+    return (cx, cy, cx + w, cy + h)
+
+
 def render(sample_id, image_path, geo, subj, obj, predicate, out_png):
     img = Image.fromarray(load_rgb(image_path))
     W, H = img.size
@@ -38,15 +69,20 @@ def render(sample_id, image_path, geo, subj, obj, predicate, out_png):
     except OSError:
         font = ImageFont.load_default()
     by_idx = {o["idx"]: o for o in geo}
+    # the caption strip is reserved first, so no tag can be pushed under it
+    taken = [(0.0, H - 24.0, float(W), float(H))]
     for idx, colour, role in ((subj, "#e6194b", "SUBJECT"), (obj, "#4363d8", "OBJECT")):
         o = by_idx[idx]
         x1, y1, x2, y2 = [v * s for v, s in zip(o["box"], (W, H, W, H))]
         dr.rectangle([x1, y1, x2, y2], outline=colour, width=4)
         tag = f"{role}: {o['label']}{idx}"
-        ty = max(0, y1 - 20)
-        dr.rectangle([x1, ty, x1 + dr.textlength(tag, font=font) + 8, ty + 18], fill=colour)
-        dr.text((x1 + 4, ty + 1), tag, fill="white", font=font)
-    caption = f"#{sample_id}:  {by_idx[subj]['label']}{subj}  --{predicate}-->  {by_idx[obj]['label']}{obj}"
+        w, h = dr.textlength(tag, font=font) + 8, 18.0
+        r = _place(w, h, (x1, y1, x2, y2), W, H, taken)
+        taken.append(r)
+        dr.rectangle(list(r), fill=colour)
+        dr.text((r[0] + 4, r[1] + 1), tag, fill="white", font=font)
+    caption = (f"#{sample_id}:  {by_idx[subj]['label']}{subj} "
+               f"is {predicate} {by_idx[obj]['label']}{obj}")
     dr.rectangle([0, H - 24, W, H], fill="black")
     dr.text((6, H - 21), caption, fill="white", font=font)
     img.save(out_png)
