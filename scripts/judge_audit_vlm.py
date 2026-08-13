@@ -180,7 +180,9 @@ def main() -> int:
         tally[v or "error"] += 1
         if ver:
             versions[ver] += 1
-        shown = {"y": "TRUE", "n": "WRONG"}.get(v) or f"** {raw[:90]}"
+        # errors are rare, and an error truncated before its remedy ("no longer
+        # available to new users, please use ...") costs more than a wrapped line
+        shown = {"y": "TRUE", "n": "WRONG"}.get(v) or f"** {raw[:220]}"
         print(f"{lead}  {shown}" if broke else shown, flush=True)
         # the running tally is what tells you a run has quietly stopped working
         if i % 25 == 0:
