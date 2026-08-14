@@ -1,0 +1,243 @@
+id,image,subject,predicate,object,verdict (y/n),notes
+1,001.png,cube9,behind,box6,y,vlm:gemini-3.6-flash
+2,002.png,cube6,to the left of,cube2,y,vlm:gemini-3.6-flash
+3,003.png,bottle5,in front of,book2,y,vlm:gemini-3.6-flash
+4,004.png,book1,near,bottle2,y,vlm:gemini-3.6-flash
+5,005.png,bottle5,on,remote7,n,vlm:gemini-3.6-flash
+6,006.png,bottle6,behind,cube9,y,vlm:gemini-3.6-flash
+7,007.png,book5,on,box6,y,vlm:gemini-3.6-flash
+8,008.png,bottle2,on,cube3,n,vlm:gemini-3.6-flash
+9,009.png,remote14,to the right of,book2,y,vlm:gemini-3.6-flash
+10,010.png,bottle11,to the right of,box6,y,vlm:gemini-3.6-flash
+11,011.png,human10,behind,book9,y,vlm:gemini-3.6-flash
+12,012.png,box3,under,book2,y,vlm:gemini-3.6-flash
+13,013.png,book3,under,bottle7,n,vlm:gemini-3.6-flash
+14,014.png,book4,near,bottle8,y,vlm:gemini-3.6-flash
+15,015.png,human1,behind,cube4,y,vlm:gemini-3.6-flash
+16,016.png,cube10,to the right of,book0,y,vlm:gemini-3.6-flash
+17,017.png,cube7,near,bottle1,y,vlm:gemini-3.6-flash
+18,018.png,book7,to the right of,human12,n,vlm:gemini-3.6-flash
+19,019.png,box1,behind,cube6,n,vlm:gemini-3.6-flash
+20,020.png,bottle1,behind,cube9,y,vlm:gemini-3.6-flash
+21,021.png,bottle7,near,cube6,y,vlm:gemini-3.6-flash
+22,022.png,cube7,under,bottle8,n,vlm:gemini-3.6-flash
+23,023.png,book5,on,box6,y,vlm:gemini-3.6-flash
+24,024.png,remote4,under,cube6,n,vlm:gemini-3.6-flash
+25,025.png,cube11,under,remote6,y,vlm:gemini-3.6-flash
+26,026.png,box10,under,box8,y,vlm:gemini-3.6-flash
+27,027.png,cube2,to the right of,cube9,n,vlm:gemini-3.6-flash
+28,028.png,cube8,behind,bottle2,y,vlm:gemini-3.6-flash
+29,029.png,book4,in front of,human13,y,vlm:gemini-3.6-flash
+30,030.png,box7,to the right of,cube9,y,vlm:gemini-3.6-flash
+31,031.png,book9,to the right of,bottle11,y,vlm:gemini-3.6-flash
+32,032.png,book0,to the left of,bottle2,y,vlm:gemini-3.6-flash
+33,033.png,remote10,under,cube6,n,vlm:gemini-3.6-flash
+34,034.png,book3,behind,cube10,y,vlm:gemini-3.6-flash
+35,035.png,remote14,near,human12,n,vlm:gemini-3.6-flash
+36,036.png,box7,under,cube3,y,vlm:gemini-3.6-flash
+37,037.png,cube7,under,cube6,n,vlm:gemini-3.6-flash
+38,038.png,book6,on,bottle5,n,vlm:gemini-3.6-flash
+39,039.png,book8,on,box12,y,vlm:gemini-3.6-flash
+40,040.png,bottle7,to the left of,box3,n,vlm:gemini-3.6-flash
+41,041.png,cube11,in front of,bottle1,y,vlm:gemini-3.6-flash
+42,042.png,cube7,to the right of,box5,n,vlm:gemini-3.6-flash
+43,043.png,book2,in front of,cube9,y,vlm:gemini-3.6-flash
+44,044.png,remote1,under,cube6,y,vlm:gemini-3.6-flash
+45,045.png,book14,near,box6,n,vlm:gemini-3.6-flash
+46,046.png,bottle5,near,book4,y,vlm:gemini-3.6-flash
+47,047.png,human9,behind,bottle5,y,vlm:gemini-3.6-flash
+48,048.png,book0,near,book4,y,vlm:gemini-3.6-flash
+49,049.png,book5,on,box4,n,vlm:gemini-3.6-flash
+50,050.png,box1,under,bottle3,n,vlm:gemini-3.6-flash
+51,051.png,remote4,under,bottle2,n,vlm:gemini-3.6-flash
+52,052.png,cube9,on,bottle5,n,vlm:gemini-3.6-flash
+53,053.png,cube8,on,book4,y,vlm:gemini-3.6-flash
+54,054.png,bottle1,to the left of,cube0,y,vlm:gemini-3.6-flash
+55,055.png,remote14,on,cube11,n,vlm:gemini-3.6-flash
+56,056.png,bottle8,on,box3,y,vlm:gemini-3.6-flash
+57,057.png,cube5,on,remote6,n,vlm:gemini-3.6-flash
+58,058.png,cube8,on,cube11,y,vlm:gemini-3.6-flash
+59,059.png,book7,under,cube14,y,vlm:gemini-3.6-flash
+60,060.png,cube8,to the right of,bottle5,y,vlm:gemini-3.6-flash
+61,061.png,bottle8,on,cube5,n,vlm:gemini-3.6-flash
+62,062.png,box6,to the right of,book1,y,vlm:gemini-3.6-flash
+63,063.png,bottle1,under,book0,n,vlm:gemini-3.6-flash
+64,064.png,cube8,on,book12,y,vlm:gemini-3.6-flash
+65,065.png,bottle0,in front of,box8,y,vlm:gemini-3.6-flash
+66,066.png,cube10,on,bottle6,n,vlm:gemini-3.6-flash
+67,067.png,remote13,under,cube10,n,vlm:gemini-3.6-flash
+68,068.png,box1,under,book0,y,vlm:gemini-3.6-flash
+69,069.png,box9,behind,book10,y,vlm:gemini-3.6-flash
+70,070.png,cube1,on,bottle3,y,vlm:gemini-3.6-flash
+71,071.png,book5,in front of,bottle6,n,vlm:gemini-3.6-flash
+72,072.png,book8,to the left of,remote7,y,vlm:gemini-3.6-flash
+73,073.png,box3,under,cube2,y,vlm:gemini-3.6-flash
+74,074.png,cube10,behind,cube9,n,vlm:gemini-3.6-flash
+75,075.png,cube7,in front of,cube1,n,vlm:gemini-3.6-flash
+76,076.png,cube6,on,remote4,n,vlm:gemini-3.6-flash
+77,077.png,bottle5,on,cube10,n,vlm:gemini-3.6-flash
+78,078.png,bottle8,under,bottle10,n,vlm:gemini-3.6-flash
+79,079.png,cube12,to the right of,remote15,y,vlm:gemini-3.6-flash
+80,080.png,box1,behind,book3,y,vlm:gemini-3.6-flash
+81,081.png,book0,on,book2,n,vlm:gemini-3.6-flash
+82,082.png,human13,behind,book3,y,vlm:gemini-3.6-flash
+83,083.png,book0,to the left of,cube8,y,vlm:gemini-3.6-flash
+84,084.png,cube8,on,book4,y,vlm:gemini-3.6-flash
+85,085.png,box6,behind,cube5,n,vlm:gemini-3.6-flash
+86,086.png,cube7,on,remote10,n,vlm:gemini-3.6-flash
+87,087.png,box6,behind,bottle4,y,vlm:gemini-3.6-flash
+88,088.png,bottle6,in front of,box0,y,vlm:gemini-3.6-flash
+89,089.png,book2,in front of,cube6,y,vlm:gemini-3.6-flash
+90,090.png,bottle1,on,cube11,n,vlm:gemini-3.6-flash
+91,091.png,box6,to the right of,human9,y,vlm:gemini-3.6-flash
+92,092.png,box12,under,book8,y,vlm:gemini-3.6-flash
+93,093.png,box3,on,cube2,n,vlm:gemini-3.6-flash
+94,094.png,cube3,on,cube5,n,vlm:gemini-3.6-flash
+95,095.png,bottle8,on,bottle6,n,vlm:gemini-3.6-flash
+96,096.png,cube13,under,bottle1,n,vlm:gemini-3.6-flash
+97,097.png,cube5,to the left of,cube7,y,vlm:gemini-3.6-flash
+98,098.png,cube5,under,cube3,n,vlm:gemini-3.6-flash
+99,099.png,cube0,in front of,cube2,y,vlm:gemini-3.6-flash
+100,100.png,cube4,on,bottle0,y,vlm:gemini-3.6-flash
+101,101.png,cube12,to the right of,book2,y,vlm:gemini-3.6-flash
+102,102.png,bottle13,to the left of,cube2,y,vlm:gemini-3.6-flash
+103,103.png,box0,to the right of,box8,n,vlm:gemini-3.6-flash
+104,104.png,cube3,under,cube6,y,vlm:gemini-3.6-flash
+105,105.png,remote7,to the left of,cube8,y,vlm:gemini-3.6-flash
+106,106.png,book11,under,book10,y,vlm:gemini-3.6-flash
+107,107.png,bottle11,behind,cube5,y,vlm:gemini-3.6-flash
+108,108.png,box8,on,box10,n,vlm:gemini-3.6-flash
+109,109.png,box5,under,cube6,y,vlm:gemini-3.6-flash
+110,110.png,book9,on,book11,n,vlm:gemini-3.6-flash
+111,111.png,book7,near,cube1,n,vlm:gemini-3.6-flash
+112,112.png,cube6,to the right of,book8,n,vlm:gemini-3.6-flash
+113,113.png,book0,on,cube3,n,vlm:gemini-3.6-flash
+114,114.png,book10,to the right of,cube7,y,vlm:gemini-3.6-flash
+115,115.png,cube3,under,bottle2,n,vlm:gemini-3.6-flash
+116,116.png,book3,to the left of,remote11,y,vlm:gemini-3.6-flash
+117,117.png,cube11,in front of,human8,y,vlm:gemini-3.6-flash
+118,118.png,cube8,to the right of,cube3,y,vlm:gemini-3.6-flash
+119,119.png,book9,under,cube8,y,vlm:gemini-3.6-flash
+120,120.png,cube8,under,cube5,y,vlm:gemini-3.6-flash
+121,121.png,bottle10,in front of,book13,y,vlm:gemini-3.6-flash
+122,122.png,cube6,on,box8,y,vlm:gemini-3.6-flash
+123,123.png,cube0,to the right of,cube11,y,vlm:gemini-3.6-flash
+124,124.png,human13,to the left of,book3,y,vlm:gemini-3.6-flash
+125,125.png,bottle5,under,book6,y,vlm:gemini-3.6-flash
+126,126.png,cube6,on,cube5,n,vlm:gemini-3.6-flash
+127,127.png,remote4,near,bottle1,y,vlm:gemini-3.6-flash
+128,128.png,bottle2,on,remote4,n,vlm:gemini-3.6-flash
+129,129.png,cube8,on,book9,n,vlm:gemini-3.6-flash
+130,130.png,book7,on,box4,n,vlm:gemini-3.6-flash
+131,131.png,cube5,near,book12,n,vlm:gemini-3.6-flash
+132,132.png,book12,behind,book9,n,vlm:gemini-3.6-flash
+133,133.png,cube2,under,box3,n,vlm:gemini-3.6-flash
+134,134.png,cube9,behind,bottle5,y,vlm:gemini-3.6-flash
+135,135.png,cube3,near,cube6,y,vlm:gemini-3.6-flash
+136,136.png,remote10,to the left of,book2,y,vlm:gemini-3.6-flash
+137,137.png,cube3,in front of,bottle2,y,vlm:gemini-3.6-flash
+138,138.png,cube3,behind,box1,y,vlm:gemini-3.6-flash
+139,139.png,cube2,to the right of,remote7,y,vlm:gemini-3.6-flash
+140,140.png,box5,under,book4,n,vlm:gemini-3.6-flash
+141,141.png,cube4,to the right of,bottle0,y,vlm:gemini-3.6-flash
+142,142.png,cube11,under,cube8,y,vlm:gemini-3.6-flash
+143,143.png,book4,under,cube9,y,vlm:gemini-3.6-flash
+144,144.png,book11,to the right of,cube7,y,vlm:gemini-3.6-flash
+145,145.png,cube10,on,remote6,y,vlm:gemini-3.6-flash
+146,146.png,book7,near,cube8,y,vlm:gemini-3.6-flash
+147,147.png,bottle8,on,remote4,n,vlm:gemini-3.6-flash
+148,148.png,cube5,behind,cube0,n,vlm:gemini-3.6-flash
+149,149.png,human2,behind,remote6,y,vlm:gemini-3.6-flash
+150,150.png,bottle10,to the left of,box4,y,vlm:gemini-3.6-flash
+151,151.png,book11,in front of,book2,y,vlm:gemini-3.6-flash
+152,152.png,cube9,on,cube11,y,vlm:gemini-3.6-flash
+153,153.png,cube8,in front of,bottle7,y,vlm:gemini-3.6-flash
+154,154.png,cube8,near,box6,n,vlm:gemini-3.6-flash
+155,155.png,book2,under,cube3,y,vlm:gemini-3.6-flash
+156,156.png,book2,near,book10,y,vlm:gemini-3.6-flash
+157,157.png,book6,near,bottle5,y,vlm:gemini-3.6-flash
+158,158.png,cube5,under,book2,n,vlm:gemini-3.6-flash
+159,159.png,remote6,under,cube10,n,vlm:gemini-3.6-flash
+160,160.png,box8,under,book9,n,vlm:gemini-3.6-flash
+161,161.png,cube9,in front of,remote15,y,vlm:gemini-3.6-flash
+162,162.png,remote4,to the left of,bottle7,y,vlm:gemini-3.6-flash
+163,163.png,book1,behind,remote8,y,vlm:gemini-3.6-flash
+164,164.png,cube5,near,cube9,y,vlm:gemini-3.6-flash
+165,165.png,cube11,near,box13,n,vlm:gemini-3.6-flash
+166,166.png,book3,to the left of,human4,y,vlm:gemini-3.6-flash
+167,167.png,book2,to the right of,bottle5,y,vlm:gemini-3.6-flash
+168,168.png,book2,to the right of,book4,n,vlm:gemini-3.6-flash
+169,169.png,cube11,in front of,book2,y,vlm:gemini-3.6-flash
+170,170.png,bottle3,under,cube2,y,vlm:gemini-3.6-flash
+171,171.png,cube10,on,remote8,y,vlm:gemini-3.6-flash
+172,172.png,cube10,in front of,bottle5,y,vlm:gemini-3.6-flash
+173,173.png,book2,on,book8,n,vlm:gemini-3.6-flash
+174,174.png,cube11,near,cube8,n,vlm:gemini-3.6-flash
+175,175.png,box1,under,cube2,y,vlm:gemini-3.6-flash
+176,176.png,cube12,in front of,book5,y,vlm:gemini-3.6-flash
+177,177.png,bottle9,near,book2,y,vlm:gemini-3.6-flash
+178,178.png,cube8,in front of,human10,y,vlm:gemini-3.6-flash
+179,179.png,book11,near,book12,y,vlm:gemini-3.6-flash
+180,180.png,book2,to the left of,book11,y,vlm:gemini-3.6-flash
+181,181.png,cube5,to the left of,book4,y,vlm:gemini-3.6-flash
+182,182.png,book12,behind,cube7,y,vlm:gemini-3.6-flash
+183,183.png,book1,to the left of,box7,n,vlm:gemini-3.6-flash
+184,184.png,bottle5,under,cube11,n,vlm:gemini-3.6-flash
+185,185.png,cube0,near,book7,n,vlm:gemini-3.6-flash
+186,186.png,remote7,under,bottle5,n,vlm:gemini-3.6-flash
+187,187.png,book7,near,bottle0,y,vlm:gemini-3.6-flash
+188,188.png,human11,in front of,book1,n,vlm:gemini-3.6-flash
+189,189.png,cube2,on,book6,y,vlm:gemini-3.6-flash
+190,190.png,bottle8,in front of,book10,n,vlm:gemini-3.6-flash
+191,191.png,bottle6,under,cube10,n,vlm:gemini-3.6-flash
+192,192.png,book3,on,box4,y,vlm:gemini-3.6-flash
+193,193.png,cube8,under,bottle3,n,vlm:gemini-3.6-flash
+194,194.png,bottle5,near,box0,y,vlm:gemini-3.6-flash
+195,195.png,book9,behind,book2,y,vlm:gemini-3.6-flash
+196,196.png,bottle2,to the left of,book9,y,vlm:gemini-3.6-flash
+197,197.png,box4,to the right of,bottle5,y,vlm:gemini-3.6-flash
+198,198.png,book5,under,cube4,n,vlm:gemini-3.6-flash
+199,199.png,box6,under,book9,n,vlm:gemini-3.6-flash
+200,200.png,book7,to the right of,cube8,y,vlm:gemini-3.6-flash
+201,201.png,book7,under,cube8,y,vlm:gemini-3.6-flash
+202,202.png,cube8,behind,remote11,y,vlm:gemini-3.6-flash
+203,203.png,bottle5,to the right of,box4,y,vlm:gemini-3.6-flash
+204,204.png,book10,under,cube12,y,vlm:gemini-3.6-flash
+205,205.png,remote7,under,box6,n,vlm:gemini-3.6-flash
+206,206.png,box2,in front of,human4,y,vlm:gemini-3.6-flash
+207,207.png,book9,to the right of,human2,y,vlm:gemini-3.6-flash
+208,208.png,box1,to the left of,book11,y,vlm:gemini-3.6-flash
+209,209.png,bottle1,behind,book12,y,vlm:gemini-3.6-flash
+210,210.png,box7,near,bottle6,y,vlm:gemini-3.6-flash
+211,211.png,book9,under,cube10,y,vlm:gemini-3.6-flash
+212,212.png,cube10,to the left of,cube3,y,vlm:gemini-3.6-flash
+213,213.png,box0,under,box2,n,vlm:gemini-3.6-flash
+214,214.png,cube9,in front of,cube7,y,vlm:gemini-3.6-flash
+215,215.png,bottle7,to the left of,box6,y,vlm:gemini-3.6-flash
+216,216.png,box7,to the left of,book1,y,vlm:gemini-3.6-flash
+217,217.png,box5,in front of,box0,y,vlm:gemini-3.6-flash
+218,218.png,box5,on,cube4,n,vlm:gemini-3.6-flash
+219,219.png,cube3,to the left of,bottle4,y,vlm:gemini-3.6-flash
+220,220.png,cube13,near,book9,n,vlm:gemini-3.6-flash
+221,221.png,cube14,on,book13,y,vlm:gemini-3.6-flash
+222,222.png,remote4,under,bottle8,y,vlm:gemini-3.6-flash
+223,223.png,human11,to the left of,book0,y,vlm:gemini-3.6-flash
+224,224.png,cube12,to the left of,box7,n,vlm:gemini-3.6-flash
+225,225.png,cube11,under,remote14,n,vlm:gemini-3.6-flash
+226,226.png,remote8,to the left of,cube7,y,vlm:gemini-3.6-flash
+227,227.png,book3,near,bottle4,y,vlm:gemini-3.6-flash
+228,228.png,cube3,in front of,cube6,y,vlm:gemini-3.6-flash
+229,229.png,cube7,on,book0,n,vlm:gemini-3.6-flash
+230,230.png,box3,under,book2,y,vlm:gemini-3.6-flash
+231,231.png,book4,behind,cube11,n,vlm:gemini-3.6-flash
+232,232.png,box2,on,box0,n,vlm:gemini-3.6-flash
+233,233.png,book4,to the right of,book5,y,vlm:gemini-3.6-flash
+234,234.png,cube11,on,book4,n,vlm:gemini-3.6-flash
+235,235.png,book5,in front of,box2,y,vlm:gemini-3.6-flash
+236,236.png,book9,under,box8,n,vlm:gemini-3.6-flash
+237,237.png,book1,in front of,book6,n,vlm:gemini-3.6-flash
+238,238.png,cube10,behind,book8,n,vlm:gemini-3.6-flash
+239,239.png,book0,near,cube12,y,vlm:gemini-3.6-flash
+240,240.png,book4,to the left of,book2,n,vlm:gemini-3.6-flash
+241,241.png,box3,under,bottle8,y,vlm:gemini-3.6-flash
+242,242.png,remote8,under,cube10,y,vlm:gemini-3.6-flash
