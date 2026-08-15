@@ -61,8 +61,59 @@ def _place(w, h, box, W, H, taken):
     return (cx, cy, cx + w, cy + h)
 
 
+PANEL_W, PANEL_H, MAX_ZOOM = 208, 156, 14
+
+
+def _inset(img, boxes, colours, W, H):
+    """A magnified view of the two claim objects, placed clear of both.
+
+    The median claim object is about 30 px across and the smallest under 10, so
+    a full-frame view alone asks the auditor to judge a relation between things
+    they cannot resolve. Marking those "not sure" is not neutral: the
+    instruction sheet converts uncertainty to a wrong verdict, so unreadable
+    items push the precision estimate down rather than widening it.
+
+    The crop covers both objects with margin, magnified up to MAX_ZOOM, and is
+    dropped in whichever corner is furthest from them so it hides nothing that
+    matters. Returns the panel rectangle, for the label placer to avoid.
+    """
+    x1 = min(b[0] for b in boxes)
+    y1 = min(b[1] for b in boxes)
+    x2 = max(b[2] for b in boxes)
+    y2 = max(b[3] for b in boxes)
+    pad = max(12.0, 0.35 * max(x2 - x1, y2 - y1))
+    cx1, cy1 = max(0.0, x1 - pad), max(0.0, y1 - pad)
+    cx2, cy2 = min(float(W), x2 + pad), min(float(H), y2 + pad)
+    # widen the crop to the panel's aspect so the magnified view is not squashed
+    cw, ch = max(1.0, cx2 - cx1), max(1.0, cy2 - cy1)
+    zoom = min(MAX_ZOOM, PANEL_W / cw, PANEL_H / ch)
+    if zoom <= 1.05:
+        return None                       # already legible; a panel would only cover things
+    want_w, want_h = PANEL_W / zoom, PANEL_H / zoom
+    mx, my = (cx1 + cx2) / 2, (cy1 + cy2) / 2
+    cx1 = min(max(0.0, mx - want_w / 2), W - want_w)
+    cy1 = min(max(0.0, my - want_h / 2), H - want_h)
+    crop = img.crop((int(cx1), int(cy1), int(cx1 + want_w), int(cy1 + want_h)))
+    panel = crop.resize((PANEL_W, PANEL_H), Image.LANCZOS)
+    pd = ImageDraw.Draw(panel)
+    for b, c in zip(boxes, colours):
+        pd.rectangle([(b[0] - cx1) * zoom - 2, (b[1] - cy1) * zoom - 2,
+                      (b[2] - cx1) * zoom + 2, (b[3] - cy1) * zoom + 2],
+                     outline=c, width=2)
+
+    # the corner furthest from the objects, so the panel covers nothing relevant
+    corners = [(0.0, 0.0), (W - PANEL_W, 0.0),
+               (0.0, H - PANEL_H - 24), (W - PANEL_W, H - PANEL_H - 24)]
+    px, py = max(corners, key=lambda c: (c[0] + PANEL_W / 2 - mx) ** 2
+                                        + (c[1] + PANEL_H / 2 - my) ** 2)
+    img.paste(panel, (int(px), int(py)))
+    d = ImageDraw.Draw(img)
+    d.rectangle([px, py, px + PANEL_W, py + PANEL_H], outline="#ffd400", width=2)
+    return (px, py, px + PANEL_W + 2, py + PANEL_H + 2)
+
+
 def render(sample_id, image_path, geo, subj, obj, predicate, out_png,
-           anonymise=True):
+           anonymise=True, zoom=True):
     """Draw one claim. Returns (faces_masked, claim_object_obscured).
 
     Anonymisation is on by default and happens before anything is drawn, so the
@@ -85,18 +136,33 @@ def render(sample_id, image_path, geo, subj, obj, predicate, out_png,
             if any(overlap_frac(b, r) > 0.25 for r in regions):
                 obscured = True
         pixelate(img, regions)
+    by_idx = {o["idx"]: o for o in geo}
+    boxes = [[v * s for v, s in zip(by_idx[i]["box"], (W, H, W, H))]
+             for i in (subj, obj)]
+    # the magnified view is taken from the clean frame, before the full-size
+    # markers are drawn, so the panel shows the objects rather than the boxes
+    panel = _inset(img, boxes, ("#e6194b", "#4363d8"), W, H) if zoom else None
     dr = ImageDraw.Draw(img)
     try:
         font = ImageFont.truetype("arial.ttf", 16)
     except OSError:
         font = ImageFont.load_default()
-    by_idx = {o["idx"]: o for o in geo}
     # the caption strip is reserved first, so no tag can be pushed under it
     taken = [(0.0, H - 24.0, float(W), float(H))]
+    if panel:
+        taken.append(panel)
     for idx, colour, role in ((subj, "#e6194b", "SUBJECT"), (obj, "#4363d8", "OBJECT")):
         o = by_idx[idx]
         x1, y1, x2, y2 = [v * s for v, s in zip(o["box"], (W, H, W, H))]
-        dr.rectangle([x1, y1, x2, y2], outline=colour, width=4)
+        # The objects here are small -- the median is about 30x30 px and the
+        # smallest are under 10 -- so a fixed 4 px outline drawn inward covered
+        # more than half of the median claim object and all of the smallest. The
+        # marker has to sit OUTSIDE the box, and scale with it, or it hides the
+        # thing the auditor is being asked to look at.
+        lw = max(1, min(3, int(min(x2 - x1, y2 - y1) // 8)))
+        dr.rectangle([max(0, x1 - lw), max(0, y1 - lw),
+                      min(W - 1, x2 + lw), min(H - 1, y2 + lw)],
+                     outline=colour, width=lw)
         tag = f"{role}: {o['label']}{idx}"
         w, h = dr.textlength(tag, font=font) + 8, 18.0
         r = _place(w, h, (x1, y1, x2, y2), W, H, taken)
