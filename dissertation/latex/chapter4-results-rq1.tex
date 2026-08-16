@@ -57,7 +57,7 @@ Restricted to the 8,790 annotated pairs, precision runs 0.88 and 0.84 on the sup
 
 \section{Manual audit of extra predictions (true-precision estimate)}
 
-105 extra predictions (15 per predicate, seeded stratified sample) were rendered with subject/object boxes and manually verdicted, using a conservative rule under which any case not clearly true was marked wrong (\texttt{outputs/audit/audit\_\allowbreak{}sheet.csv}; verdicts to be independently spot-checked). This audit was run against the \textit{pre-gate box rule} and is reported as found because it motivated the support-rule repairs; \S{}4.9 re-audits the shipped rules (support precision \textasciitilde{}0.27 $\rightarrow$ \textasciitilde{}0.9), so the support rows below describe a fixed failure, not the final tool.
+105 extra predictions (15 per predicate, seeded stratified sample) were rendered with subject/object boxes and manually verdicted, using a conservative rule under which any case not clearly true was marked wrong (\texttt{outputs/audit/audit\_\allowbreak{}sheet.csv}; verdicts to be independently spot-checked). This audit was run against the \textit{pre-gate box rule} and is reported as found because it motivated the support-rule repairs; \S{}4.9 re-audits the shipped rules and \S{}4.14 audits them again under blinding, so the support rows below describe a fixed failure, not the final tool. How far it was fixed is the subject of those two sections, and they disagree: pooled support precision moves 0.13 $\rightarrow$ 0.77 on an unblinded re-audit and back to 0.40 when the same rules are judged blind against decoys.
 
 \begin{center}
 \small
@@ -149,7 +149,7 @@ Reading those numbers as a quality verdict requires a yardstick the dataset does
 
 \section{Answer to RQ1}
 
-Automated annotation reaches human-comparable quality on five of seven predicates outright, at 0.81--1.00 recall, mean 0.85 and 0.76 on annotators no threshold ever saw, with audited true precision \textasciitilde{}1.0 for lateral, proximity and depth-decided front/behind and \textasciitilde{}0.9 for support after the contact rule. One of the five is \texttt{near}, matched completely once its inconsistent usage is accounted for (0.997 pooled, 1.00 held-out), which resolves the predicate the source paper reports as failing for every model it benchmarks (\S{}2.2). The qualification is the depth pair, at 0.64/0.66 pooled and 0.84 once the two inverted groups are aligned; \S{}4.5 decomposes that shortfall into calibrated abstention and a convention the annotators did not share, in measured proportions, and neither component is depth error. The residual human cost is an 8.5\% review queue (\S{}4.7), against labels 20$\times$ denser than the human set.
+Automated annotation reaches human-comparable quality on five of seven predicates outright, at 0.81--1.00 recall, mean 0.85 and 0.76 on annotators no threshold ever saw, with blind-audited true precision 0.92--1.00 for lateral, proximity and depth-decided front/behind. Support is the exception and is answered separately: 0.40 [0.31, 0.51] blind, which \S{}4.14 traces to a threshold fitted on a metric that could not see the error it controls. One of the five is \texttt{near}, matched completely once its inconsistent usage is accounted for (0.997 pooled, 1.00 held-out), which resolves the predicate the source paper reports as failing for every model it benchmarks (\S{}2.2). The qualification is the depth pair, at 0.64/0.66 pooled and 0.84 once the two inverted groups are aligned; \S{}4.5 decomposes that shortfall into calibrated abstention and a convention the annotators did not share, in measured proportions, and neither component is depth error. The residual human cost is an 8.5\% review queue (\S{}4.7), against labels 20$\times$ denser than the human set.
 
 \section{Shipped from the ablations}
 
@@ -282,3 +282,45 @@ Figure~\ref{fig:rq1-with-vlm} plots all three against the human triplets. On rec
 Recall alone would be an unfair verdict, because it rewards whoever asserts more: on the 374 judged pairs the pipeline makes 868 assertions against 344 and 414. Restricted to those pairs, where precision is defined, the column reverses, and \textbf{both models are more precise than the pipeline}, 0.419 and 0.389 against 0.351. They buy it with silence, and the price is steep enough that both lose F1 on every predicate, 0.397 and 0.405 against 0.488 pooled (Appendix E.1).
 
 The shape of the failure settles the question. Neither model contradicts itself or inverts the front/behind convention; what they do is fall silent, and supply one direction of a symmetric pair without the other in a third of cases, which are the two defects \S{}4.5 measures in the \textit{human} annotation. \textbf{Asked to annotate, a capable vision-language model reproduces the characteristic failure of the human process rather than a geometric one}, and its conservatism is both why its precision beats the pipeline's and why most relations go unrecorded. That it is more precise where it speaks still begins a case for it as an adjudicator on the depth pair, which \S{}7.6 takes up. Appendix E.1 gives the per-predicate figures, the diagnostics and the limits of a thirty-image pilot.
+
+
+\section{Auditing the audit: blinding, decoys, and a second judge}
+
+Every precision figure so far rests on the author verdicting the author's tool. Section 2.9 raises that objection and \S{}7.4 concedes it. More verdicts of the same kind would only narrow an interval around a possibly biased centre, so this section re-runs the audit with the three defects of \S{}4.4 and \S{}4.9 removed at once.
+
+\textbf{Design.} 242 items: 214 claims the tool emitted and \textbf{28 decoys}, relations it did \textit{not} emit and no annotator labelled, mixed in unmarked. The decoys are the instrument. Every item in the earlier sheets was a tool assertion, so an auditor who simply agreed would have scored 100\% and looked calibrated; here that auditor scores zero on the decoys. Sampling enforces independence the earlier sheets lacked: at most one claim per (annotator group, subject class, object class), because \S{}4.12 establishes each group is one continuous walk holding one arrangement, so two claims from a group can otherwise be the same physical relation seen twice. The shipped class guard is applied, so nothing is audited the tool would no longer emit. The sheet is shuffled and the key held separately. The same 242 images, with the same definitions and the same instruction to answer wrong when unsure, were put to \texttt{gemini-3.6-flash} as an independent second judge (\texttt{scripts/judge\_\allowbreak{}audit\_\allowbreak{}vlm.py}).
+
+\begin{center}
+\small
+\begin{longtable}{lll}
+\caption{Blind, decoy-controlled audit of 242 sampled items, verdicted independently by the author and by a vision-language model, with Wilson intervals. The final row is the decoy control: relations the tool did not emit, which a judge who agreed with everything would reject none of.}\\
+\hline
+Predicate & Author & Model \\
+\hline
+\endfirsthead
+\hline
+Predicate & Author & Model \\
+\hline
+\endhead
+on & 16/43 0.372 [0.24, 0.52] & 25/43 0.581 [0.43, 0.72] \\
+under & 22/51 0.431 [0.31, 0.57] & 35/51 0.686 [0.55, 0.80] \\
+to the left of & 22/24 0.917 [0.74, 0.98] & 23/24 0.958 [0.80, 0.99] \\
+to the right of & 23/24 0.958 [0.80, 0.99] & 22/24 0.917 [0.74, 0.98] \\
+in front of & 23/24 0.958 [0.80, 0.99] & 22/24 0.917 [0.74, 0.98] \\
+behind & 22/24 0.917 [0.74, 0.98] & 20/24 0.833 [0.64, 0.93] \\
+near & 24/24 1.000 [0.86, 1.00] & 15/24 0.625 [0.43, 0.79] \\
+\textbf{support pooled} & \textbf{38/94 0.404 [0.31, 0.51]} & \textbf{60/94 0.638 [0.54, 0.73]} \\
+decoys rejected & 19/28 0.679 [0.49, 0.82] & 24/28 0.857 [0.69, 0.94] \\
+\hline
+\end{longtable}
+\end{center}
+
+\textbf{The lateral, depth and proximity claims survive; support does not.} At 0.404 the support figure is less than half what \S{}4.9 reported and outside any interval this dissertation previously stated. The two judges disagree on its level, 0.404 against 0.638, and agree emphatically on its direction: both are far below 0.9. Raw agreement is 0.814 and Cohen's $\kappa$ 0.576.
+
+\textbf{The decoys establish this is not an auditor being harsh.} Both judges rejected \textbf{all eight} support decoys, so on support neither is disposed to agree with the tool for the sake of it. Where the author \textit{is} more generous is elsewhere and consistently so: three of four \texttt{behind} decoys accepted against the model's one, and two of four for \texttt{in front of} and for \texttt{near}. That is a measured author bias, confined to exactly the family \S{}4.5 shows the annotators themselves used inconsistently, and it is reported rather than corrected because the same conservative instruction governed both judges.
+
+\textbf{Most of the drop is the blinding, not the sample.} The same rules on the same data scored 0.77 unblinded (\S{}4.9) and 0.404 blind. In the earlier sheet every row was known to be a tool emission, and that knowledge is a prior the decoys remove. The rest of the gap is the independence rule, which stops one easy arrangement being counted several times.
+
+\textbf{The cause is a threshold fitted where its error was invisible.} Sorted by the contact fraction the rule fires on, audited claims below 0.85 are correct 1 time in 11 (4/44) and above it 2 times in 3 (34/50). The shipped \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} is 0.60, and Appendix D.2 fitted it on train F1 against the human annotation, which covers \textasciitilde{}10\% of ordered pairs: a false positive on the other 90\% is not in the gold and cost the fit nothing. The plateau D.2 calls "uncritical" from 0.60 to 0.80 is flat because the metric could not see the error the parameter controls. A second, independent signal is the supporting object's size, since \texttt{on(A, B)} requires B to be able to hold A up and a 20-pixel cube is not a surface.
+
+\textbf{The available repair is measured and deliberately not taken.} Raising the threshold to 0.85 moves audited precision 0.404 $\rightarrow$ 0.680 for 0.851 $\rightarrow$ 0.785 recall; adding a base-size gate reaches 0.806 for 0.703 recall. Both cut-offs were chosen by inspecting this audit, so the precision they produce is measured on the sample that selected them and is optimistic by an unknown amount. Quoting it would repeat precisely the error that produced the 0.9. Establishing the gain honestly needs a fresh sample drawn under the new rule, which \S{}7.4 records as the first thing further work should do. Appendix D.2 carries the sweep.
