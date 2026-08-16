@@ -235,9 +235,12 @@ predicates (§7.3 draws that out).
 Automated annotation reaches human-comparable quality on five of seven
 predicates outright, at 0.81–1.00 recall, mean 0.85 and 0.76 on annotators no
 threshold ever saw, with blind-audited true precision 0.92–1.00 for lateral,
-proximity and depth-decided front/behind. Support is the exception and is
-answered separately: 0.40 [0.31, 0.51] blind, which §4.14 traces to a
-threshold fitted on a metric that could not see the error it controls.
+proximity and depth-decided front/behind. Those five rest on 24 samples each,
+so the point estimates are firm only to within intervals reaching 0.74 at the
+lower end, and the claim they support is comparability rather than a
+particular value. Support is the exception and is answered separately: 0.40
+[0.31, 0.51] on 94 samples, which §4.14 traces to a threshold fitted on a
+metric that could not see the error it controls.
 One of the five is `near`, matched completely once its inconsistent usage is
 accounted for (0.997 pooled, 1.00 held-out), which resolves the predicate the
 source paper reports as failing for every model it benchmarks (§2.2). The
@@ -488,6 +491,25 @@ definitions and the same instruction to answer wrong when unsure, were put to
 | near | 24/24 1.000 [0.86, 1.00] | 15/24 0.625 [0.43, 0.79] |
 | **support pooled** | **38/94 0.404 [0.31, 0.51]** | **60/94 0.638 [0.54, 0.73]** |
 | decoys rejected | 19/28 0.679 [0.49, 0.82] | 24/28 0.857 [0.69, 0.94] |
+
+**The two precision measurements point in opposite directions, and which way
+is diagnostic.** Section 4.3 measured precision on the pairs a human labelled;
+this section measures it on the pairs a human did not. For five predicates the
+first badly understates the second (`near` 0.12 against 1.000, the laterals
+0.35 and 0.42 against 0.917 and 0.958), which is the sparse-gold artefact §4.1
+anticipated. For support the relation inverts: 0.88 and 0.84 on annotated
+pairs against 0.372 and 0.431 off them.
+
+The direction of that gap says what the human record *is*. A lateral relation
+holds for nearly every ordered pair and the annotators wrote down a handful,
+so their labels are a small sample of a large truth and the tool's extras are
+mostly further instances of it. Support is rare and salient: a thing resting
+on a thing is worth recording and was recorded, so the human labels are close
+to the complete set of easy cases, the tool agrees with them, and what it adds
+beyond them is mostly not there. Restricted precision therefore understates a
+predicate whose gold is a sample and overstates one whose gold is nearly
+exhaustive, and no single reading of §4.3 is correct for both. This is why the
+protocol pairs it with an audit rather than reporting either alone.
 
 **The lateral, depth and proximity claims survive; support does not.** At
 0.404 the support figure is less than half what §4.9 reported and outside any

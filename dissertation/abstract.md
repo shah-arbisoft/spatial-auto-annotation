@@ -18,10 +18,11 @@ pass's label density.
 Against 8,926 human relationships the automatic labels match or exceed the
 human process on five of seven predicates (0.85 mean recall, 0.76 on held-
 out annotators). A blinded, decoy-controlled audit of 214 sampled claims puts
-precision at 0.92–1.00 for the lateral, depth and proximity predicates but at
-**0.40 [0.31, 0.51]** for support, against 0.64 from an independent
-vision-language judge; both supersede an earlier unblinded estimate of 0.77,
-and the gap between them is itself reported as a result. The hardest pair,
+precision at 0.92–1.00 for the lateral, depth and proximity predicates, on 24
+samples each and so with 95% intervals reaching down to 0.74, but at
+**0.40 [0.31, 0.51]** on 94 samples for support, against 0.64 from an
+independent vision-language judge; both supersede an earlier unblinded
+estimate of 0.77, and the gap between them is itself reported as a result. The hardest pair,
 in front of/behind, uses a cascade of relative
 depth and a ground-plane cue; diagnosing every disagreement puts the
 residual gap on the annotation itself, including two groups that used

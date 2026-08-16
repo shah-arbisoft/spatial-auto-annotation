@@ -284,11 +284,22 @@ sources, not planners: condition B is handed the exact fact the task tests. And
 no robot moved, so this measures plans, not executions, and closes the gap
 between labels and robot behaviour by one link rather than entirely.
 
+One limitation is structural and worth stating plainly, because it bounds what
+the result can mean. **The scoring rule cannot see a false positive.** It asks
+whether the plan moves the occluder before grasping the target, so a support
+relation the tool asserts wrongly costs an unnecessary step rather than a
+failed plan. Section 4.14 measures those at 0.40 precision, and this
+experiment is insensitive to them by construction: it tests whether the labels
+carry *enough*, not whether they carry *too much*. A task penalising wasted
+motion, or one where moving the wrong object is unsafe rather than merely
+inefficient, would rank these label sources differently, and nothing here
+predicts how.
+
 What it settles is the question §5.6 could only frame. Automatic labels carry
 88% of the decision-relevant content that human labels carry on this task,
 against 0% for no labels at all, and the residual gap is not a property of
 computed labels in general but of one predicate whose recall is already
-measured and whose failure mode is already diagnosed (§4.9).
+measured and whose failure modes are diagnosed in §4.9 and §4.14.
 
 
 ## 5.8 Answer to RQ2
