@@ -82,6 +82,27 @@ spatial: each is decidable from positions, extents and depth order. The
 perception models used (SAM2, Depth Anything) only *measure* where things are;
 no learned component decides a relationship.
 
+The alternative was not to compute at all. Section 2.4 sets out the
+established rival, which is to keep the human labels and stretch them by
+semi-supervised pseudo-labelling or by active learning. That route is easier
+to build, and it was rejected on three grounds stated there and verified
+here. The seed labels are internally inconsistent, so a teacher trained on
+them propagates two front/behind conventions and a selective `near` with
+added confidence rather than correcting either. The labelled tenth is not a
+random sample of the rest but whatever nine annotators found salient, which
+is exactly the assumption pseudo-labelling requires and does not have. And
+the seed is weakest where the task is hardest: Chapter 5's human-trained
+classifier, the very teacher such a loop would start from, reaches 0.08–0.25
+recall on the sparsely-labelled predicates.
+
+A geometric labelling function inherits none of those, because it does not
+derive from the seed at all. It is fitted on a handful of thresholds,
+validated on annotators held out from that fit, and is exactly as consistent
+on the unlabelled 90% as on the labelled 10%. None of this is left as
+argument: §5.3 runs the self-training loop as a third arm of the same
+controlled experiment, so the two routes meet on the humans' own held-out
+annotations rather than on plausibility.
+
 **Evaluation setting.** The relation stage is evaluated with ground-truth
 boxes and classes (the SGG literature's *PredCls* setting, §2.7). This
 isolates the contribution, since the paper already establishes detection at
@@ -362,3 +383,32 @@ the relative-gap `near` metric against the centroid variants, masks against
 box-only geometry, and the ground-plane fallback against its own contact
 guard. Each is reported where it was measured (§4.9, Appendix D). Appendix F.3
 tabulates all eleven decisions with the alternative each displaced.
+
+The decisions also answer the four objections §2.9 raises against a
+rule-based annotator, and it is worth naming which answers which, because
+none was added afterwards to fit the objection:
+
+- **Rules do not scale with the vocabulary.** Predicates are configuration
+  rather than code, a specification the rule engine reads (§3.9), so
+  extending the set does not touch the engine. This bounds the objection; it
+  does not defeat it, since a predicate with no geometric criterion cannot be
+  specified at all.
+- **Systematic error is worse for training than random error.** The rules
+  abstain and flag instead of guessing (§3.6), so an unreliable case becomes
+  a countable review item rather than a confident wrong label repeated
+  wherever the geometry repeats. §4.7 prices what that abstention costs.
+- **Validating one's own labelling functions is circular.** The structural
+  guarantees are asserted by randomised invariant testing over synthetic
+  scenes (§3.11), which is independent of the author's judgement about any
+  particular image.
+- **The reference frame is a decision, not a fact.** The camera frame is
+  committed to explicitly and the convention stated with the rules (§3.5), so
+  a disagreement with an annotator is locatable as a convention difference
+  rather than diffused into general error. §4.5 locates two such groups.
+
+Three of the four are mitigations rather than refutations, and §7.4 reports
+what they proved to be worth. The fourth is the one the design could not
+settle on its own: invariant testing pins rule *consistency* but says nothing
+about rule *truth*, and establishing that took an instrument built
+specifically to attack the author's own verdicts (§4.14), which duly
+overturned one of them.
