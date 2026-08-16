@@ -114,7 +114,28 @@ UNICODE = {
     "\u00b7": r"$\cdot$", "\u00b0": r"$^{\circ}$", "\u03b5": r"$\epsilon$",
     "\u2026": r"\ldots{}", "\u2011": "-", "\u00a0": "~", "\u2032": "'",
     "\u2033": "''",
+    # Greek used as statistics notation. Chapter 2 names Cohen's kappa and
+    # Krippendorff's alpha, so the letters appear in prose as well as in the
+    # tables that report them.
+    "\u03ba": r"$\kappa$", "\u03b1": r"$\alpha$", "\u03c3": r"$\sigma$",
+    "\u03bc": r"$\mu$", "\u03c1": r"$\rho$", "\u03bb": r"$\lambda$",
 }
+
+
+def unmapped_unicode(text: str, where: str) -> list[str]:
+    """Characters with no mapping that LaTeX cannot render on its own.
+
+    A single one fails the whole document with "not set up for use with
+    LaTeX", and the error names the character but not the file, so this
+    reports them at build time while the source is still in hand.
+
+    Latin letters with diacritics are excluded: inputenc renders Fréchet from
+    UTF-8 without help, and a guard that fires on correct text is a guard that
+    gets ignored. Everything past Latin Extended-B -- Greek, arrows, maths --
+    does need an entry here.
+    """
+    return sorted({c for c in text
+                   if ord(c) > 0x24F and c not in UNICODE})
 
 
 def esc(text: str) -> str:
@@ -212,6 +233,12 @@ TABLES = {
         # 4.16
         "A vision-language model against the geometric pipeline on the same "
         "30 images, the same pairs and the same human gold: recall.",
+        # 4.14 (the blind re-audit; last table in the chapter)
+        "Blind, decoy-controlled audit of 242 sampled items, verdicted "
+        "independently by the author and by a vision-language model, with "
+        "Wilson intervals. The final row is the decoy control: relations the "
+        "tool did not emit, which a judge who agreed with everything would "
+        "reject none of.",
     ],
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "
@@ -578,6 +605,10 @@ def main():
 
     for md_name, _title in CHAPTERS:
         md = (SRC / md_name).read_text(encoding="utf-8")
+        stray = unmapped_unicode(md, md_name)
+        if stray:
+            print(f"  WARNING: {md_name} has unmapped characters, the compile "
+                  f"will fail on them: {' '.join(stray)}")
         figs = [(f, c, a) for f, (owner, c, a) in FIGURES.items()
                 if owner == md_name and (FIGDIR / f).exists()]
         tex = convert(md, figs, TABLES.get(md_name))

@@ -16,8 +16,10 @@ measure available, *at least* as good as the human process: 0.97–0.998 recall,
 audited true precision ≈ 1.0, and for `near` a perfect held-out score against
 the one annotator who used the label and never influenced the threshold. For
 support, after two evidence upgrades motivated by measurement (depth
-co-location, mask contact), recall is 0.88/0.81 with audited precision around
-0.9, comfortably comparable. For the depth pair the cascade of relative depth
+co-location, mask contact), recall is 0.88/0.81, but the claim stops there:
+blind-audited precision is 0.404 [0.31, 0.51], so the labels the tool adds
+beyond the human record are trustworthy for five predicates and not for this
+one (§4.14). For the depth pair the cascade of relative depth
 and the ground-plane fallback reaches 0.64/0.66 pooled (0.84 once the two
 inverted-convention groups are aligned), and where the tool commits it agrees
 at 0.95–1.00 with six of the seven same-convention annotators, the seventh
@@ -64,7 +66,7 @@ defects (38–42%, a share that *grew* as the ground-plane fallback shrank the
 abstention share around it).
 
 Second, **the support arc shows the method working as a method**. The box
-rule shipped at ~0.27 true precision; the audit localised the failure
+rule shipped at 0.13 true precision; the audit localised the failure
 (projection adjacency), the gallery localised the misses (containment), one
 geometric insight (stacked objects share a camera distance) fixed half the
 false fires, and one perception upgrade (mask-bottom contact) fixed most of
@@ -144,7 +146,9 @@ result would be confounded by detection; the SGDet decomposition shows the
 relation layer at 0.85 conditional mean, invisible in the 0.38 end-to-end
 number); the **sparse-gold protocol** (recall-primary plus restricted
 precision plus audits; the audit overturned the naive reading of restricted
-precision for five predicates and confirmed it for support); and **train-only
+precision for five predicates, and for support it took a third, blinded audit
+to establish that the second had been confirming rather than testing); and
+**train-only
 calibration with held-out annotators** (every fitted threshold generalised:
 near recall 1.0, support F1 0.87 on annotators the thresholds never saw).
 
@@ -155,12 +159,25 @@ late. The fix was cheap, four extra runs on a free GPU tier, and a replication
 designed from the start would have trained every arm at three seeds and
 reported ranges throughout, which is what the final version does.
 
-Choices a stricter replication should improve: the **audits were verdicted by
-the author**, conservatively and with the evidence published for
-spot-checking, where blind external verdicting should have been the instrument
-from the first audit rather than the last (Appendix E.3); the **support-rule
-iteration used the same audit machinery twice**, making the second audit
-confirmatory rather than independent; the SGDet **threshold tuning used one
+Choices a stricter replication should improve, the first of which is no longer
+a suspicion but a measurement. The **audits were verdicted by the author**,
+and §4.14 shows what that cost: the same rules on the same data score 0.77
+when the auditor knows every item is a tool assertion and 0.404 when decoys
+are mixed in unmarked. The **support-rule iteration used the same audit
+machinery twice**, making the second audit confirmatory rather than
+independent, and it confirmed a figure that a blind instrument does not
+support. Blind verdicting with decoys should have been the instrument from
+the first audit rather than the third; it is cheap, and it is the only step
+here that changed a headline number rather than tightening one.
+
+Two consequences follow for further work, in order. **Re-fit
+`on_contact_min` against a precision-aware objective**, since §4.14 traces
+the support result to a threshold fitted on train F1 against gold covering a
+tenth of pairs, where a false positive outside the gold was free. **Then
+re-audit blind on a fresh draw**: §4.14 measures a repair worth 0.404 → 0.680
+but declines to claim it, because both cut-offs were chosen by inspecting the
+audit that would have to certify them, and quoting an in-sample gain is the
+error that produced the 0.9 in the first place. The SGDet **threshold tuning used one
 disclosed iteration on a trial slice** that over-estimated full-set detection
 quality, an instructive case of trial-set optimism; and invariant fuzzing pins
 rule consistency but not rule *truth*, which only the audits address.

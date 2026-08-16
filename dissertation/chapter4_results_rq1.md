@@ -104,8 +104,11 @@ conservative rule under which any case not clearly true was marked wrong
 (`outputs/audit/audit_sheet.csv`; verdicts to be independently
 spot-checked). This audit was run against the *pre-gate box rule* and is
 reported as found because it motivated the support-rule repairs; §4.9
-re-audits the shipped rules (support precision ~0.27 → ~0.9), so the support
-rows below describe a fixed failure, not the final tool.
+re-audits the shipped rules and §4.14 audits them again under blinding, so
+the support rows below describe a fixed failure, not the final tool. How far
+it was fixed is the subject of those two sections, and they disagree: pooled
+support precision moves 0.13 → 0.77 on an unblinded re-audit and back to
+0.40 when the same rules are judged blind against decoys.
 
 | Predicate | Correct / n | Precision est. | Wilson 95% CI |
 |---|---|---|---|
@@ -231,8 +234,10 @@ predicates (§7.3 draws that out).
 
 Automated annotation reaches human-comparable quality on five of seven
 predicates outright, at 0.81–1.00 recall, mean 0.85 and 0.76 on annotators no
-threshold ever saw, with audited true precision ~1.0 for lateral, proximity
-and depth-decided front/behind and ~0.9 for support after the contact rule.
+threshold ever saw, with blind-audited true precision 0.92–1.00 for lateral,
+proximity and depth-decided front/behind. Support is the exception and is
+answered separately: 0.40 [0.31, 0.51] blind, which §4.14 traces to a
+threshold fitted on a metric that could not see the error it controls.
 One of the five is `near`, matched completely once its inconsistent usage is
 accounted for (0.997 pooled, 1.00 held-out), which resolves the predicate the
 source paper reports as failing for every model it benchmarks (§2.2). The
@@ -448,3 +453,80 @@ most relations go unrecorded. That it is more precise where it speaks still
 begins a case for it as an adjudicator on the depth pair, which §7.6 takes up.
 Appendix E.1 gives the per-predicate figures, the diagnostics and the limits
 of a thirty-image pilot.
+
+
+## 4.14 Auditing the audit: blinding, decoys, and a second judge
+
+Every precision figure so far rests on the author verdicting the author's
+tool. Section 2.9 raises that objection and §7.4 concedes it. More verdicts of
+the same kind would only narrow an interval around a possibly biased centre,
+so this section re-runs the audit with the three defects of §4.4 and §4.9
+removed at once.
+
+**Design.** 242 items: 214 claims the tool emitted and **28 decoys**,
+relations it did *not* emit and no annotator labelled, mixed in unmarked. The
+decoys are the instrument. Every item in the earlier sheets was a tool
+assertion, so an auditor who simply agreed would have scored 100% and looked
+calibrated; here that auditor scores zero on the decoys. Sampling enforces
+independence the earlier sheets lacked: at most one claim per (annotator
+group, subject class, object class), because §4.12 establishes each group is
+one continuous walk holding one arrangement, so two claims from a group can
+otherwise be the same physical relation seen twice. The shipped class guard is
+applied, so nothing is audited the tool would no longer emit. The sheet is
+shuffled and the key held separately. The same 242 images, with the same
+definitions and the same instruction to answer wrong when unsure, were put to
+`gemini-3.6-flash` as an independent second judge (`scripts/judge_audit_vlm.py`).
+
+| Predicate | Author | Model |
+|---|---|---|
+| on | 16/43 0.372 [0.24, 0.52] | 25/43 0.581 [0.43, 0.72] |
+| under | 22/51 0.431 [0.31, 0.57] | 35/51 0.686 [0.55, 0.80] |
+| to the left of | 22/24 0.917 [0.74, 0.98] | 23/24 0.958 [0.80, 0.99] |
+| to the right of | 23/24 0.958 [0.80, 0.99] | 22/24 0.917 [0.74, 0.98] |
+| in front of | 23/24 0.958 [0.80, 0.99] | 22/24 0.917 [0.74, 0.98] |
+| behind | 22/24 0.917 [0.74, 0.98] | 20/24 0.833 [0.64, 0.93] |
+| near | 24/24 1.000 [0.86, 1.00] | 15/24 0.625 [0.43, 0.79] |
+| **support pooled** | **38/94 0.404 [0.31, 0.51]** | **60/94 0.638 [0.54, 0.73]** |
+| decoys rejected | 19/28 0.679 [0.49, 0.82] | 24/28 0.857 [0.69, 0.94] |
+
+**The lateral, depth and proximity claims survive; support does not.** At
+0.404 the support figure is less than half what §4.9 reported and outside any
+interval this dissertation previously stated. The two judges disagree on its
+level, 0.404 against 0.638, and agree emphatically on its direction: both are
+far below 0.9. Raw agreement is 0.814 and Cohen's κ 0.576.
+
+**The decoys establish this is not an auditor being harsh.** Both judges
+rejected **all eight** support decoys, so on support neither is disposed to
+agree with the tool for the sake of it. Where the author *is* more generous is
+elsewhere and consistently so: three of four `behind` decoys accepted against
+the model's one, and two of four for `in front of` and for `near`. That is a
+measured author bias, confined to exactly the family §4.5 shows the
+annotators themselves used inconsistently, and it is reported rather than
+corrected because the same conservative instruction governed both judges.
+
+**Most of the drop is the blinding, not the sample.** The same rules on the
+same data scored 0.77 unblinded (§4.9) and 0.404 blind. In the earlier sheet
+every row was known to be a tool emission, and that knowledge is a prior the
+decoys remove. The rest of the gap is the independence rule, which stops one
+easy arrangement being counted several times.
+
+**The cause is a threshold fitted where its error was invisible.** Sorted by
+the contact fraction the rule fires on, audited claims below 0.85 are correct
+1 time in 11 (4/44) and above it 2 times in 3 (34/50). The shipped
+`on_contact_min` is 0.60, and Appendix D.2 fitted it on train F1 against the
+human annotation, which covers ~10% of ordered pairs: a false positive on the
+other 90% is not in the gold and cost the fit nothing. The plateau D.2 calls
+"uncritical" from 0.60 to 0.80 is flat because the metric could not see the
+error the parameter controls. A second, independent signal is the supporting
+object's size, since `on(A, B)` requires B to be able to hold A up and a 20-pixel
+cube is not a surface.
+
+**The available repair is measured and deliberately not taken.** Raising the
+threshold to 0.85 moves audited precision 0.404 → 0.680 for 0.851 → 0.785
+recall; adding a base-size gate reaches 0.806 for 0.703 recall. Both cut-offs
+were chosen by inspecting this audit, so the precision they produce is
+measured on the sample that selected them and is optimistic by an unknown
+amount. Quoting it would repeat precisely the error that produced the 0.9.
+Establishing the gain honestly needs a fresh sample drawn under the new rule,
+which §7.4 records as the first thing further work should do. Appendix D.2
+carries the sweep.

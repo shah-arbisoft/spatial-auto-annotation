@@ -601,10 +601,13 @@ the last contact-boundary suppressions disappear; headline mean recall 0.79
 → **0.81**. The A4 sweep confirms the fitted threshold sits exactly at the
 recall plateau's knee: recall is flat from T = 1.372 upward while emissions
 keep growing, so the fitted value is the least-permissive point achieving
-maximal agreement. A 30-sample re-audit of the new support extras confirms
-the precision claim independently: extras correct rise from 1/15 and 3/15
-(box rule) to **11/15 and 12/15**, an estimated true support precision of
-~0.27 → ~0.9. The seven remaining wrong/uncertain extras have structure: a
+maximal agreement. A 30-sample re-audit of the new support extras appeared to
+confirm the precision claim: extras correct rise from 1/15 and 3/15 (box
+rule) to **11/15 and 12/15**, pooled 0.13 → 0.77. That re-audit was
+unblinded, and §4.14 shows the figure does not survive blinding; the
+threshold below was fitted on train F1 against gold covering a tenth of
+ordered pairs, so a false positive outside the gold cost the fit nothing,
+and the plateau called uncritical here is flat for that reason. The seven remaining wrong/uncertain extras have structure: a
 person *holding* a remote fires contact (holding ≠ resting), one occluded
 bottle-behind-bottle pair, and three distant clusters too small to verdict
 confidently. The person-holding mode is closed by a **class-aware guard**:
