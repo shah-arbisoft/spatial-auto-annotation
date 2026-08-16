@@ -13,8 +13,9 @@ objective-by-objective audit belongs with the conclusions and is in §9.1.
 quality comparable to human annotation. The answer is predicate-shaped rather
 than singular. For the lateral and proximity predicates the tool is, by every
 measure available, *at least* as good as the human process: 0.97–0.998 recall,
-audited true precision ≈ 1.0, and for `near` a perfect held-out score against
-the one annotator who used the label and never influenced the threshold. For
+blind-audited precision 0.92–1.00, and for `near` a perfect held-out score
+against the one annotator who used the label and never influenced the
+threshold. For
 support, after two evidence upgrades motivated by measurement (depth
 co-location, mask contact), recall is 0.88/0.81, but the claim stops there:
 blind-audited precision is 0.404 [0.31, 0.51], so the labels the tool adds

@@ -75,8 +75,11 @@ Its deployments repeatedly matched or beat hand-labelled baselines wherever
 the labelled set, not the model, was the bottleneck. This project's
 geometric rules are labelling functions in that sense, deterministic,
 auditable and dense, with two departures. Measured geometry gives near-exact
-rather than noisy votes for most predicates (audited true precision ≈ 1.0
-for five of seven), so no probabilistic aggregation is needed; and the
+rather than noisy votes for five of the seven predicates (blind-audited
+precision 0.92–1.00) and demonstrably noisy ones for the other two, where
+§4.14 puts support at 0.40; on the five, no probabilistic aggregation is
+needed, and on the two the objection Snorkel answers with aggregation is
+answered here by abstention instead. The second departure is that the
 computed labels are *validated against* the human labels they replace (RQ1)
 rather than assumed comparable.
 
