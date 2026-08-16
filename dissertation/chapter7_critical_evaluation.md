@@ -41,9 +41,9 @@ the bottleneck gains".
 
 The third arm is what makes that claim hard to dismiss. Self-training on the
 human labels, the standard semi-supervised remedy for exactly this problem,
-reaches 0.36 and closes only 15% of the gap, and its bookkeeping shows why:
-the teacher contributes about a thousand confident *negative* pseudo-labels
-for every positive one, propagating the annotators' silence rather than their
+reaches 0.36 and closes only 15% of the gap. Its bookkeeping shows why: the
+teacher contributes about a thousand confident *negative* pseudo-labels for
+every positive one, propagating the annotators' silence rather than their
 judgement, and on `near` it drives recall below the human baseline it started
 from. The comparison therefore is not against doing nothing, but against the
 obvious alternative, under identical conditions.
@@ -141,16 +141,16 @@ design away by having two annotators share a batch.
 
 ## 7.4 Methodological reflection
 
-Choices that proved right: the **PredCls isolation** (without it, every rule
-result would be confounded by detection; the SGDet decomposition shows the
-relation layer at 0.85 conditional mean, invisible in the 0.38 end-to-end
-number); the **sparse-gold protocol** (recall-primary plus restricted
-precision plus audits; the audit overturned the naive reading of restricted
-precision for five predicates, and for support it took a third, blinded audit
-to establish that the second had been confirming rather than testing); and
-**train-only
-calibration with held-out annotators** (every fitted threshold generalised:
-near recall 1.0, support F1 0.87 on annotators the thresholds never saw).
+Three choices proved right. The **PredCls isolation**: without it every rule
+result would be confounded by detection, and the SGDet decomposition shows the
+relation layer at 0.85 conditional mean, invisible inside the 0.38 end-to-end
+number. The **sparse-gold protocol**, recall-primary plus restricted precision
+plus audits: the audit overturned the naive reading of restricted precision
+for five predicates, and for support it took a third, blinded audit to
+establish that the second had been confirming rather than testing.
+**Train-only calibration with held-out annotators**: every fitted threshold
+generalised, with `near` recall 1.0 and support F1 0.87 on annotators the
+thresholds never saw.
 
 One choice proved its worth only afterwards. The withdrawn single-seed claim
 of §6.3.1 shows the discipline applied faithfully to thresholds, fitting on
@@ -192,15 +192,15 @@ leaves implicit, because SpatialVLM and VQASynth (Remyx AI, 2024) generate
 *training text* at internet scale without ever confronting a fixed predicate
 vocabulary with human ground truth, and SpatialRGPT (Cheng et al., 2024)
 curates region representations with depth but validates downstream rather
-than against annotators. This project's contributions are **annotator-aware
-calibration** (fit only on annotators who
-used a label; hold out annotators, not just images), **contact as the support
-signature** (mask-bottom adjacency, unused by the box-geometry lineage, which
-repaired both error directions at once and parallels the argument for
-pixel-accurate grounding in panoptic scene-graph generation (Yang, J. et al.,
-2022)), and **loss attribution as methodology** (every miss diagnosed; every
-gap decomposed into abstention against annotator against error, detection
-against relations). RoboSpatial's reference-frame taxonomy (Song et al.,
+than against annotators. This project contributes three. **Annotator-aware
+calibration**: fit only on annotators who used a label, and hold out
+annotators rather than merely images. **Contact as the support signature**:
+mask-bottom adjacency, unused by the box-geometry lineage, which repaired both
+error directions at once and parallels the argument for pixel-accurate
+grounding in panoptic scene-graph generation (Yang, J. et al., 2022). And
+**loss attribution as methodology**: every miss diagnosed, every gap
+decomposed into abstention against annotator against error, and detection
+against relations. RoboSpatial's reference-frame taxonomy (Song et al.,
 2025), cited in Chapter 3 to justify camera-frame laterality, proved the
 right lens for a *measured* phenomenon: the front/behind inversion is a
 reference-frame disagreement inside one annotation team, an instance of the

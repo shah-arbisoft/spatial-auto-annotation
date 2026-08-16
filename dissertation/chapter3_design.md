@@ -384,9 +384,9 @@ box-only geometry, and the ground-plane fallback against its own contact
 guard. Each is reported where it was measured (§4.9, Appendix D). Appendix F.3
 tabulates all eleven decisions with the alternative each displaced.
 
-The decisions also answer the four objections §2.9 raises against a
-rule-based annotator, and it is worth naming which answers which, because
-none was added afterwards to fit the objection:
+The decisions also answer the four objections §2.9 directs at the method
+itself, and it is worth naming which answers which, because none was added
+afterwards to fit the objection:
 
 - **Rules do not scale with the vocabulary.** Predicates are configuration
   rather than code, a specification the rule engine reads (§3.9), so

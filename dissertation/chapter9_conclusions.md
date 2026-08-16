@@ -13,24 +13,28 @@ good enough to replace the human ones. Six objectives carried that aim, and
 each is met with evidence rather than assertion.
 
 Each is met with evidence rather than assertion, and the evidence is
-already reported: a pipeline annotating all 836 images in about five minutes
-on a 6 GB consumer GPU with no human deciding any label, writing the
-dataset's own formats byte-compatibly and verified by a zero-error load-write
-round trip (**O1**); written operational definitions of all seven predicates
-with every threshold fitted on annotator groups 0 to 5 alone, `near`
+already reported.
+
+**O1** is the pipeline itself: all 836 images annotated in about five minutes
+on a 6 GB consumer GPU, no human deciding any label, the dataset's own formats
+written byte-compatibly and verified by a zero-error load-write round trip.
+**O2** is the specification: written operational definitions of all seven
+predicates, every threshold fitted on annotator groups 0 to 5 alone, `near`
 generalising to the held-out annotator at recall 1.00 and the support rules
-reaching held-out F1 0.87 (**O2**); per-predicate fidelity against all 8,926
-human triplets with three trivial baselines, a vision-language model under
-the same definitions (§4.13), nine ablations, audited precision and
-cluster-bootstrap
-intervals, giving mean recall 0.85 and 0.76 on annotators no threshold ever
-saw (**O3**); every one of the 1,689 missed triplets attributed to a cause,
-leaving roughly 7% attributable to genuine tool error (§4.10, §7.2) (**O4**); a controlled
+reaching held-out F1 0.87. **O3** is the fidelity study: per-predicate
+agreement with all 8,926 human triplets, against three trivial baselines, a
+vision-language model under the same definitions (§4.13), nine ablations,
+audited precision and cluster-bootstrap intervals, giving mean recall 0.85 and
+0.76 on annotators no threshold ever saw. **O4** is the diagnosis: every one
+of the 1,689 missed triplets attributed to a cause, leaving roughly 7%
+attributable to genuine tool error (§4.10, §7.2). **O5** is the controlled
 experiment isolating the label source, at 0.76 mean recall against held-out
-human gold for the automatic arm, 0.30 human and 0.36 self-trained (**O5**);
-and the same comparison repeated in the source paper's own framework with a
-frozen detector and three seeds per arm, carried one link further to a
-planner (**O6**). O6 is met in the sense that matters for an honest answer:
+human gold for the automatic arm against 0.30 human and 0.36 self-trained.
+**O6** repeats that comparison in the source paper's own framework, with a
+frozen detector and three seeds per arm, and carries it one link further to a
+planner.
+
+O6 is met in the sense that matters for an honest answer:
 the heavyweight test does not agree with the lightweight one, the
 disagreement is localised to the annotators whose labels Chapter 4 convicted
 of measured defects, and both readings are reported rather than one selected.
