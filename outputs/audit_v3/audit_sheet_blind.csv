@@ -240,4 +240,4 @@ id,image,subject,predicate,object,verdict (y/n),notes
 239,239.png,book0,near,cube12,y,
 240,240.png,book4,to the left of,book2,n,
 241,241.png,box3,under,bottle8,n,
-242,242.png,remote8,under,cube10,,
+242,242.png,remote8,under,cube10,n,
