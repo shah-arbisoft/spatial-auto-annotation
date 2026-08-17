@@ -701,8 +701,15 @@ moves however close it is.
 The second recovers the camera pose properly, estimating the essential matrix
 from whole-image correspondences, decomposing it into rotation and
 translation, and triangulating the points inside each object's box. Focal
-length is assumed rather than calibrated, which is tolerable because only the
-depth *ordering* is read and that is insensitive to moderate focal error.
+length is **assumed rather than calibrated**, and that assumption is a real
+limitation of this ablation rather than a tolerable simplification. A wrong
+intrinsic matrix does not merely scale the reconstruction: the essential
+matrix decomposed from it is wrong too, so the triangulated points sit in a
+projectively distorted space in which depth order is not guaranteed to
+survive, and the distortion is worst away from the image centre and under the
+forward translation a walking robot supplies. The result below therefore
+bounds *uncalibrated* two-view triangulation on this capture, and should not
+be read as a measurement of what multi-view geometry can do here.
 This is the correct construction and it does much better than the first, but
 not well enough:
 

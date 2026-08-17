@@ -453,6 +453,25 @@ reverses, and **both models are more precise than the pipeline**, 0.419 and
 that both lose F1 on every predicate, 0.397 and 0.405 against 0.488 pooled
 (Appendix E.1).
 
+**Most of that recall gap is silence, and the comparison has to say so.** The
+model was asked for every ordered pair, with the dataset's own definitions and
+the same instruction to omit what it was unsure of that the rules implement as
+abstention, so the two are answering the same question. It nonetheless never
+addressed **171 of the 381 gold triplets at all**, 44.9%. Scored only on the
+pairs it did judge, its recall is **0.686** rather than 0.378, and on the
+predicates where the tool's advantage looks largest the gap nearly closes:
+`to the left of` 0.909 against 0.965, `on` 0.864 against 0.912. A headline
+recall of 0.40 therefore measures two things at once, how often the model is
+wrong and how often it declines, and only the first is a claim about spatial
+competence. What it is bad at is *exhaustiveness*; where it speaks it is
+roughly as good as the geometry.
+
+That is not a defence of the model as an annotator, because exhaustiveness is
+the property this project exists to supply and a source that skips 45% of the
+pairs cannot deliver it. But the fair statement is that the pipeline beats it
+on coverage and matches it on judgement, which is weaker than the recall
+column alone suggests and is the version this dissertation should be held to.
+
 The shape of the failure settles the question. Neither model contradicts
 itself or inverts the front/behind convention; what they do is fall silent,
 and supply one direction of a symmetric pair without the other in a third of
@@ -524,6 +543,19 @@ protocol pairs it with an audit instead of reporting either alone.
 interval this dissertation previously stated. The two judges disagree on its
 level, 0.404 against 0.638, and agree emphatically on its direction: both are
 far below 0.9. Raw agreement is 0.814 and Cohen's κ 0.576.
+
+**`near` is the least supported number in the table, and carries the most
+labels.** The two judges agree closely on the laterals and the depth pair, to
+within 0.042 and 0.083, and diverge on `near` by **0.375**: 1.000 against
+0.625 on the same 24 images. The author also accepted two of the four `near`
+decoys, against the model's one. That combination, the widest disagreement
+and a permissive decoy score, sits underneath the predicate the tool emits
+most freely: 43,388 ordered pairs against 717 in the human record. The
+threshold generalised to a held-out annotator at recall 1.00 (§3.8), so the
+*notion* is calibrated; what 24 samples cannot establish is that a rule firing
+sixty times more often than the annotators did is right every time it fires.
+The honest reading of the 1.000 is that no counter-example appeared in 24
+draws, not that none exists.
 
 **The decoys establish this is not an auditor being harsh.** Both judges
 rejected **all eight** support decoys, so on support neither is disposed to

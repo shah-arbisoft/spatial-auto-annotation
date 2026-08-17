@@ -43,9 +43,14 @@ predicates:
                                # not an IoU) to count as horizontal overlap
   on_depth_eps: 0.06           # support requires depth co-location; calibrated on
                                # train groups (held-out support F1 0.58 -> 0.71)
-  on_contact_min: 0.60         # min mask-contact fraction for the support rule;
-                               # calibrated on train groups (A5; train F1 plateau
-                               # 0.85, held-out 0.87). Box test = no-mask fallback.
+  on_contact_min: 0.85         # min mask-contact fraction for the support rule;
+                               # was 0.60, fitted on train F1 against gold that
+                               # covers a tenth of pairs, where a false positive
+                               # outside the gold cost the fit nothing (4.14).
+                               # Re-fitted on the 63 audited claims from train
+                               # groups; on the 31 held-out claims precision goes
+                               # 0.367 -> 0.667 for held-out recall 0.92 -> 0.843.
+                               # Box test = no-mask fallback.
   lateral_center_eps: 0.02     # |x_A - x_B| below this => left/right ambiguous (flag)
   depth_eps: 0.03              # |depth_A - depth_B| below this => front/behind ambiguous
   plane_band: 0.005            # ground-plane fallback for depth-ambiguous pairs:
