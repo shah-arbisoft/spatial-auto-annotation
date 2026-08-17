@@ -1,6 +1,6 @@
 # Chapter 7: Critical Evaluation
 
-This chapter discusses the results rather than reporting new ones: what the
+This chapter discusses the results instead of reporting new ones: what the
 project achieved against its two research questions, what the remaining
 failures are made of, what the measurements say about the dataset's own
 annotation process, and, in §7.7, an answer to each of the five objections
@@ -44,7 +44,7 @@ The third arm is what makes that claim hard to dismiss. Self-training on the
 human labels, the standard semi-supervised remedy for exactly this problem,
 reaches 0.36 and closes only 15% of the gap. Its bookkeeping shows why: the
 teacher contributes about a thousand confident *negative* pseudo-labels for
-every positive one, propagating the annotators' silence rather than their
+every positive one, propagating the annotators' silence and not their
 judgement, and on `near` it drives recall below the human baseline it started
 from. The comparison therefore is not against doing nothing, but against the
 obvious alternative, under identical conditions.
@@ -56,7 +56,7 @@ each objective was discharged.
 ## 7.2 What the remaining failures are made of
 
 The failure gallery diagnoses every one of the 1,689 missed human triplets by
-re-checking rule conditions, so the failure analysis is exhaustive rather than
+re-checking rule conditions, so the failure analysis is exhaustive and not
 anecdotal. Three observations matter most.
 
 First, **genuine tool error is rare**: depth-ordering mistakes are 1–5% of
@@ -85,7 +85,7 @@ projection, once the tool's own contact evidence guards against elevated
 objects. What is left is narrower and equally well characterised: objects
 resting on supports the detector has no box for, and pairs whose bottom edges
 tie within the band. Both operating points are documented, revisable
-decisions rather than hidden constants (ablations A2, A7).
+decisions and not hidden constants (ablations A2, A7).
 
 Section 4.12 settles what the ablations could not. If the front/behind gap
 were depth *noise*, estimates jittering either side of a boundary, moving the
@@ -119,7 +119,7 @@ quantifies how much further the guideline problem goes:
    all-`on`, another all-`under`).
 4. The official guidance, confirmed at the annotation tool's repository, is
    **vocabulary lists with no definitions** (§4.7), which is what makes
-   every defect above predictable rather than surprising.
+   every defect above predictable, not surprising.
 
 This reframes the evaluation itself: for several predicates there is no human
 consensus to agree with, only per-annotator behaviours. The dissertation's
@@ -148,7 +148,7 @@ relation layer at 0.85 conditional mean, invisible inside the 0.38 end-to-end
 number. The **sparse-gold protocol**, recall-primary plus restricted precision
 plus audits: the audit overturned the naive reading of restricted precision
 for five predicates, and for support it took a third, blinded audit to
-establish that the second had been confirming rather than testing.
+establish that the second had been confirming, not testing.
 **Train-only calibration with held-out annotators**: every fitted threshold
 generalised, with `near` recall 1.0 and support F1 0.87 on annotators the
 thresholds never saw.
@@ -168,8 +168,8 @@ are mixed in unmarked. The **support-rule iteration used the same audit
 machinery twice**, making the second audit confirmatory rather than
 independent, and it confirmed a figure that a blind instrument does not
 support. Blind verdicting with decoys should have been the instrument from
-the first audit rather than the third; it is cheap, and it is the only step
-here that changed a headline number rather than tightening one.
+the first audit, not the third; it is cheap, and it is the only step
+here that changed a headline number instead of tightening one.
 
 One consequence follows for further work, and it is costed rather than
 speculative. **Ship the re-fitted `on_contact_min`.** Section 4.14 traces the
@@ -179,7 +179,7 @@ repair on held-out annotators under this dissertation's own protocol: 0.367 to
 0.667 precision for eight points of recall. The evidence for the change is
 therefore already out-of-sample; what is missing is only the re-run of every
 experiment that consumes the labels, which is a fortnight of compute and
-rewriting rather than a question of method. A replication starting from this
+rewriting, not a question of method. A replication starting from this
 repository should make that its first change and its first re-measurement. The
 SGDet **threshold tuning used one
 disclosed iteration on a trial slice** that over-estimated full-set detection
@@ -198,7 +198,7 @@ vocabulary with human ground truth, and SpatialRGPT (Cheng et al., 2024)
 curates region representations with depth but validates downstream rather
 than against annotators. This project contributes three. **Annotator-aware
 calibration**: fit only on annotators who used a label, and hold out
-annotators rather than merely images. **Contact as the support signature**:
+annotators and not merely images. **Contact as the support signature**:
 mask-bottom adjacency, unused by the box-geometry lineage, which repaired both
 error directions at once and parallels the argument for pixel-accurate
 grounding in panoptic scene-graph generation (Yang, J. et al., 2022). And
@@ -215,7 +215,7 @@ Two results connect this project to literatures outside its lineage. Chapter
 (2021) demonstrated across ten benchmarks, that errors in test annotation
 change model rankings and can select the wrong model; here the defect is
 systematic annotator convention rather than random noise, and it distorts a
-ranking between two label *sources* rather than two architectures. The
+ranking between two label *sources*, not two architectures. The
 diagnosis matches the motivation for SpatialSense (Yang, K., Russakovsky and
 Deng, 2019) and Rel3D (Goyal et al., 2020), both built after their authors
 found relation benchmarks could be scored well without using spatial
@@ -223,7 +223,7 @@ information; this dissertation observes the mirror image, a model scoring
 well by reproducing annotator selection habits. The RQ2 result is Ratner et
 al.'s (2017) weak-supervision prediction confirmed in a domain the original
 work did not address, with the standard semi-supervised alternative (Lee,
-2013) implemented and measured rather than argued away.
+2013) implemented and measured and not argued away.
 
 ## 7.6 Limitations and threats to validity
 
@@ -263,7 +263,7 @@ dissertation bears on predicates beyond the seven, and the objection is that
 a hand-written rule set does not extend by learning. It stands in full. What
 the work can offer is a boundary rather than a rebuttal: the rules are
 decidable because the predicates are spatial, and §3.3 makes that
-dependence explicit rather than hoping it generalises. Section 9.3 records
+dependence explicit instead of hoping it generalises. Section 9.3 records
 it as the limitation most likely to matter to anyone reusing the method.
 
 **Systematic error: partly confirmed, partly refuted, and the split is
@@ -285,7 +285,7 @@ consistent rule meeting a different convention, not of a consistent mistake.
 **Circular validation: conceded.** Section 7.4 already lists this first
 among the choices a stricter replication should improve, and no result in
 Chapters 4 to 6 removes it. What belongs here is the extent of the
-concession rather than a restatement of it. The circularity bounds the
+concession, not a restatement of it. The circularity bounds the
 *precision* estimates, because those rest on verdicts the author gave. It
 does not reach the structural guarantees of §3.6, which are checkable
 without any verdict at all, nor the downstream findings of Chapters 5 and 6,
@@ -305,7 +305,7 @@ convention a robot should obey, and no measurement in this dissertation
 could, because that is a question about the specification and not about the
 data.
 
-**Better collection rather than cheaper labels: not attempted, and partly
+**Better collection, not cheaper labels: not attempted, and partly
 answered sideways.** The project re-collected nothing, but it produced the
 operational definitions the annotation process never had (§3.5) and quantified
 three defects those definitions would have prevented, which is what a better

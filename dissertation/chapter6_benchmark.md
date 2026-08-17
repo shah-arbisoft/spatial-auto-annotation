@@ -54,7 +54,7 @@ human gold, groups 6–8):
 The human-trained arm wins the headline ranking metrics (mR@100 0.346 vs
 0.277) and leads on six of the seven predicates individually, the exception
 being `under` at 0.762 against 0.731; `near` fails for both arms (0.054 and
-0.032), close to the source paper's 0.22–0.25 floor rather than recovered.
+0.032), close to the source paper's 0.22–0.25 floor, not recovered.
 Predictions 2 and 3 are refuted as stated. Appendix F.1 carries the
 per-predicate breakdown. One result points sharply the other way: on triplet *types never
 seen in training*, the auto-trained arm recalls 0.157 against the human
@@ -65,7 +65,7 @@ than compositional generalisation.
 
 Re-scoring the same checkpoints on individual test slices decomposes that
 headline, and the seed replication below repeats the decomposition with a
-spread rather than a point, so the single-run slice figures are in Appendix
+spread, not a point, so the single-run slice figures are in Appendix
 F.1. One of them has no counterpart there: aligning the front/behind
 convention of groups 6 and 8, one disclosed bit per group as in §4.5, lifts
 both arms without changing the ordering, 0.387 against 0.312.
@@ -102,7 +102,7 @@ completely. The claim that the auto arm *wins* on the clean annotator is
 therefore withdrawn.
 
 What survives is the pattern it was evidence for, and it survives with a
-spread rather than a point. The human arm's advantage is large on both
+spread and not a point. The human arm's advantage is large on both
 annotators carrying a measured defect (group 6: 0.366 vs 0.286; group 8:
 0.171 vs 0.109) and disappears entirely on the one annotator whose labels
 this dissertation did not convict of anything (0.308 vs 0.307). The
@@ -131,7 +131,7 @@ third arm, three seeds, same frozen detector, same human test gold. Pooled it
 is indistinguishable from the human arm (0.329 against 0.326), which is what
 §6.4's argument predicts: §4.13 measures that model annotating sparsely and
 human-like, so a metric rewarding resemblance to the manual pass should score
-it like the manual pass. One result does not fit and is reported rather than
+it like the manual pass. One result does not fit and is reported, not
 explained away. On group 7, the one test annotator with no measured defect and
 therefore the cleanest gold, the vision-language arm leads both others at
 0.381, with a per-seed range touching neither, and a win there cannot be
@@ -215,7 +215,7 @@ erroneous test labels reorder rankings across ten benchmarks. What this
 chapter adds is a case where the confound is *isolated by construction*: the
 arms differ only in label source and share a frozen detector, and the
 per-annotator defects were measured beforehand in Chapter 4, so the advantage
-is attributed to annotation practice rather than inferred. The one remaining
+is attributed to annotation practice, not inferred. The one remaining
 instrument is a manual audit of the auto arm's top-ranked "false positives",
 the analogue of §4.4, left as designed follow-up.
 
@@ -232,7 +232,7 @@ verdicts are checkable, and the mechanism analysis above is what the misses
 taught.
 
 The replication adds a fourth verdict, on a claim made *after* the run rather
-than before: §6.3.1 withdraws the single-seed group-7 result rather than
+than before: §6.3.1 withdraws the single-seed group-7 result, not
 quietly editing it away. The lesson is the one already applied to the
 pre-registered predictions and not to that one, that a difference is worth
 naming only once its size is compared with the variation of the procedure

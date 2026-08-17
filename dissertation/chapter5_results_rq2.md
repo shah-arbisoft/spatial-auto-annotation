@@ -28,7 +28,7 @@ introduced alongside the result it produced (§5.2).
 - **Automatic.** Every pair the tool's rules fire on: dense and
   rule-consistent.
 - **Self-trained (pseudo-labelled).** The rival remedy from the
-  semi-supervised literature (§2.4), implemented rather than argued about. A
+  semi-supervised literature (§2.4), implemented and not argued about. A
   teacher is trained on the human labels exactly as in the human arm; it then
   predicts the *unannotated* training pairs, its confident predictions
   (probability ≥ 0.90 either way) become pseudo-labels, and a student is
@@ -63,8 +63,7 @@ vision-language model is not a good enough *annotator*, is it a good enough
 the other three sources are. Every arm trains on precisely the pairs that arm
 covers, so none is advantaged by seeing more of the split, and the human,
 self-trained and automatic figures are unchanged from the three-arm
-experiment to the last decimal, which is the check that this is an addition
-rather than a different experiment. The answer is a qualified yes: at 0.38
+experiment to the last decimal, which is the check that this is an addition, not a different experiment. The answer is a qualified yes: at 0.38
 the vision-language labels teach better than the sparse human labels they
 would replace and about as well as the standard remedy for scarce labels,
 while remaining half as useful as computed geometry.
@@ -156,7 +155,7 @@ to be silent, and its recall collapses exactly where labelling was thinnest
 (`near` 0.08, lateral 0.22–0.25); trained on dense rule-consistent labels the
 same model learns the geometry (near 1.00, lateral 0.95–0.99, support 0.92).
 That is §2.3's weak-supervision prediction confirmed under controlled
-conditions. Two checks argue the result is real rather than an artefact: the
+conditions. Two checks argue the result is real, not an artefact: the
 auto-trained model's profile almost exactly reproduces the rule layer's own
 held-out performance (mean 0.76; front/behind 0.19/0.33 against the rules'
 0.20/0.35), so the classifier *distilled the annotator*, which is what "the
@@ -181,7 +180,7 @@ One structural caveat needs stating plainly. The classifier's features are
 geometric and the automatic labels come from rules over closely related
 geometry, so the auto-trained arm is partly re-learning its own generator.
 Read alone, this chapter shows the automatic labels are *learnable* and the
-human labels are not, rather than that they win under any featurisation.
+human labels are not, and not that they win under any featurisation.
 Three things keep it meaningful: every arm gets identical features; being
 learnable is itself the property RQ2 asks about, since a downstream consumer
 must extract a consistent signal; and Chapter 6 removes the circularity by
@@ -245,14 +244,13 @@ model's from §4.13, and **E** supplies the union of C and D.
 planners agree exactly, and not merely in the totals: the three scenes
 C fails on are scenes 4, 16 and 24 under *both* models. A finding that survives
 replacing the reasoning engine, down to which scenes fail, is a property of the
-information in the prompt rather than of the model consuming it, which is the
+information in the prompt, not of the model consuming it, which is the
 claim the experiment exists to make. It also disposes of the objection to
 condition A's zero, that a more capable planner would infer support from the
 object list: it does not, in twenty-five scenes out of twenty-five, twice. The
 failure without relations is more specific than inattention, since in seven of
 the A plans the planner *names* the occluder but only as something to steer
-around, treating something resting on the target as a neighbour to avoid
-rather than a load to remove.
+around, treating something resting on the target as a neighbour to avoid, not a load to remove.
 
 **The two automatic sources fail on different scenes, and the union closes
 the gap.** Condition D is the weaker source alone, 20 of 25 against the tool's
@@ -276,13 +274,13 @@ twenty-five scenes is 12%, against the measured support recall of 0.88 in
 in the chain.
 
 **What this does not show.** Twenty-five scenes is a small sample, and the
-interest is the disjointness of the failures rather than the two-scene margin
+interest is the disjointness of the failures, not the two-scene margin
 between C and D, which that sample cannot resolve. The vision-language model's
 assertions were never audited as the tool's were (§4.4), so the union's gain
 is measured on the planning task alone. The comparison is between label
 sources, not planners: condition B is handed the exact fact the task tests. And
 no robot moved, so this measures plans, not executions, and closes the gap
-between labels and robot behaviour by one link rather than entirely.
+between labels and robot behaviour by one link, not entirely.
 
 One limitation is structural and worth stating plainly, because it bounds what
 the result can mean. **The scoring rule cannot see a false positive.** It asks
@@ -291,7 +289,7 @@ relation the tool asserts wrongly costs an unnecessary step rather than a
 failed plan. Section 4.14 measures those at 0.40 precision, and this
 experiment is insensitive to them by construction: it tests whether the labels
 carry *enough*, not whether they carry *too much*. A task penalising wasted
-motion, or one where moving the wrong object is unsafe rather than merely
+motion, or one where moving the wrong object is unsafe, not merely
 inefficient, would rank these label sources differently, and nothing here
 predicts how.
 
@@ -310,7 +308,7 @@ training material than the human labels themselves**, because density and
 consistency dominate raw human authority when supervision is sparse. The
 self-trained arm rules out the cheap alternative: the standard semi-supervised
 remedy recovers only 15% of the gap, because it propagates the annotators'
-silence rather than their knowledge. That is the dissertation's core claim,
+silence, not their knowledge. That is the dissertation's core claim,
 that removing the bottleneck can *grow* dataset utility rather than
 approximate it, demonstrated on the dataset's own held-out annotators and
 against the obvious rival.

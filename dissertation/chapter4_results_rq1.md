@@ -17,7 +17,7 @@ precision with disinterested judges (E.3).
 
 Two properties of the gold shape the protocol. It is **sparse**: 8,790 of
 84,880 ordered pairs (~10%) carry a human label, so a label absent from the
-gold is unexamined rather than wrong, and raw precision undercounts. And
+gold is unexamined, not wrong, and raw precision undercounts. And
 annotator behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second
 case), so agreement is reported per annotator group as well as pooled.
 
@@ -63,7 +63,7 @@ stay together). The 95% intervals are narrow where the tool is strong, on
 0.879 (0.863–0.895), left 0.965 (0.954–0.975), right 0.985 (0.977–0.992),
 near 0.997 (0.993–1.000), and materially wider on the depth pair, in front of
 0.640 (0.602–0.678) and behind 0.655 (0.615–0.692). That is the signature of
-a predicate decided by scene composition rather than a stable rule. Held-out
+a predicate decided by scene composition, not a stable rule. Held-out
 intervals appear in §4.6.
 
 Three observations. **(i)** The tool recovers 81% of all human triplets
@@ -98,7 +98,7 @@ typically recorded one or two relations where several hold at once, a pair
 being near, left-of and in-front-of simultaneously. The `near` row is the
 extreme case, since the tool emits `near` wherever the fitted gap holds while
 only 3 of 9 annotator groups ever used the label. That is why the protocol
-includes the audit (§4.4) rather than reading these columns at face value.
+includes the audit (§4.4) instead of reading these columns at face value.
 
 
 ## 4.4 Manual audit of extra predictions (true-precision estimate)
@@ -190,7 +190,7 @@ the seven predicates entirely above 0.87 and the depth pair far below, at
 0.197 (0.147–0.255) and 0.347 (0.281–0.417); Appendix F.8 gives all seven with
 their intervals. The gap between the two groups is
 far wider than the sampling uncertainty, which is what makes the convention
-explanation below a claim about the labels rather than about noise.
+explanation below a claim about the labels, not about noise.
 
 Reading those numbers as a quality verdict requires a yardstick the dataset
 does not supply: how well would two *human* annotators agree with each
@@ -242,7 +242,7 @@ predicates outright, at 0.81–1.00 recall, mean 0.85 and 0.76 on annotators no
 threshold ever saw, with blind-audited true precision 0.92–1.00 for lateral,
 proximity and depth-decided front/behind. Those five rest on 24 samples each,
 so the point estimates are firm only to within intervals reaching 0.74 at the
-lower end, and the claim they support is comparability rather than a
+lower end, and the claim they support is comparability, not a
 particular value. Support is the exception and is answered separately: 0.40
 [0.31, 0.51] on 94 samples, which §4.14 traces to a threshold fitted on a
 metric that could not see the error it controls.
@@ -287,7 +287,7 @@ abstention band without depth at all.
 The two declined ablations bound where engineering can help: neither a
 four-times-larger depth model nor two-view triangulation over the raw capture
 improves the depth pair, and the second is 0.17 *worse* where it answers at
-all. The limit is monocular ambiguity in the scenes rather than model
+all. The limit is monocular ambiguity in the scenes, not model
 capacity, and multi-view geometry inherits it rather than removing it; §7.2
 takes up what follows.
 
@@ -303,7 +303,7 @@ individual conditions against the cached geometry and mask-contact maps
 shipped rule set down by predicate and cause.
 
 Genuine depth-ordering errors remain 1–5% of front/behind misses; the support
-misses are threshold/gate trades on real contact evidence rather than
+misses are threshold/gate trades on real contact evidence, not
 box-geometry artefacts; and `near` misses have all but vanished. The
 convention-inverted *share* grew (38–42%, from 28–32%) not because those
 misses increased but because the ground-plane fallback shrank the abstention
@@ -368,7 +368,7 @@ segmented by content drift (§3.10), which compresses the released frames 2.7×
 at τ = 10 and locates all eight known layout changes within five frames, and
 each segment's predicates were propagated from its keyframe to the rest
 (`eval/keyframe_propagation.py`). The propagation runs over the 802 *annotated*
-frames rather than the 884 released ones, which segment differently because a
+frames, not the 884 released ones, which segment differently because a
 subset sits further apart in the original capture (E.2); at τ = 10 those 802
 give 568 keyframes, leaving 234 propagated frames and 11,352 comparable object
 pairs. Appendix E.2 reports the sweeps, the
@@ -408,7 +408,7 @@ follows.
 keyframe and frame contribute, and those are the ones whose objects moved
 least. Coverage also thins as segments grow, so aggressive compression leaves
 pairs uncovered rather than mislabelled, which Appendix E.2 traces to box
-drift rather than absent annotation, making a tracker the straightforward
+drift and not absent annotation, making a tracker the straightforward
 remedy.
 
 
@@ -422,7 +422,7 @@ ground-truth boxes drawn on and numbered, and it answers by index
 (`scripts/run_vlm_pilot.py`). That is the PredCls setting the pipeline is
 evaluated in, so neither is scored on detection, and the prompt carries
 Chapter 3's definitions verbatim, without which the run would measure §2.5's
-reference-frame ambiguity rather than accuracy. Two models were run, because
+reference-frame ambiguity, not accuracy. Two models were run, because
 the objection to one is that a larger model would close the gap:
 `gemini-flash-latest` is small and non-reasoning, `gemini-3.1-pro-preview` a
 reasoning model an order of magnitude larger.
@@ -517,7 +517,7 @@ to the complete set of easy cases, the tool agrees with them, and what it adds
 beyond them is mostly not there. Restricted precision therefore understates a
 predicate whose gold is a sample and overstates one whose gold is nearly
 exhaustive, and no single reading of §4.3 is correct for both. This is why the
-protocol pairs it with an audit rather than reporting either alone.
+protocol pairs it with an audit instead of reporting either alone.
 
 **The lateral, depth and proximity claims survive; support does not.** At
 0.404 the support figure is less than half what §4.9 reported and outside any
@@ -531,7 +531,7 @@ agree with the tool for the sake of it. Where the author *is* more generous is
 elsewhere and consistently so: three of four `behind` decoys accepted against
 the model's one, and two of four for `in front of` and for `near`. That is a
 measured author bias, confined to exactly the family §4.5 shows the
-annotators themselves used inconsistently, and it is reported rather than
+annotators themselves used inconsistently, and it is reported and not
 corrected because the same conservative instruction governed both judges.
 
 **Most of the drop is the blinding, not the sample.** The same rules on the
@@ -570,7 +570,7 @@ It is nonetheless not shipped, for a reason of scope rather than evidence.
 Changing the threshold changes every emitted label, and with it §4.2, both
 experiments of Chapter 5, the benchmark of Chapter 6 and the planner
 conditions; re-running all of them inside the time remaining would produce a
-partially re-measured dissertation rather than a better one. What is reported
+partially re-measured dissertation, not a better one. What is reported
 here is the size of the repair and the protocol that establishes it, so a
 reader can act on it without repeating the audit. Section 7.4 records it as
 the first thing further work should do, and Appendix D.2 carries the sweep.

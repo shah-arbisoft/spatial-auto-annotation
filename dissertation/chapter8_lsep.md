@@ -15,7 +15,7 @@ annotations are a derivative work distributed under the same attribution
 terms.
 
 **Model licences as a design constraint.** Licensing was an engineering
-requirement rather than an afterthought, and in one case it shaped the
+requirement, not an afterthought, and in one case it shaped the
 pipeline: Depth Anything v2 is Apache-2.0 only in its Small variant, the
 larger ones being non-commercial, so Small was preferred, a choice ablation
 A8 later justified independently on accuracy (Appendix D.5). SAM2 and
@@ -30,7 +30,7 @@ personal data under UK law (Data Protection Act 2018). The project processes
 them for research under the terms of their public release and applies data
 minimisation to everything it republishes: faces are anonymised in all
 published figures and in every image on the validation website, and items
-whose judgement anonymisation would compromise are removed rather than shown.
+whose judgement anonymisation would compromise are removed, not shown.
 The validation study itself collects no personal data (§8.3). No unauthorised
 access occurs anywhere in the project, so the Computer Misuse Act 1990 is
 noted only for completeness.

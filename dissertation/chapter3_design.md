@@ -63,7 +63,7 @@ directly on the released files, drive specific design responses:
 - **Sparse annotation.** Humans labelled ~10% of object pairs *(measured:
   6,458 annotated of 42,440 unordered pairs)*. Design response: the tool labels
   every pair (density is the value added), and the evaluation protocol treats
-  human labels as a recall target rather than an exhaustive gold standard.
+  human labels as a recall target, not an exhaustive gold standard.
 - **Inconsistent `near`.** The source paper flags this qualitatively; measured,
   only 3 of 9 annotator groups ever used `near` (244/129/93 labels; the rest
   0–3), and those three each labelled a different fraction of equally-close
@@ -88,7 +88,7 @@ semi-supervised pseudo-labelling or by active learning. That route is easier
 to build, and it was rejected on three grounds stated there and verified
 here. The seed labels are internally inconsistent, so a teacher trained on
 them propagates two front/behind conventions and a selective `near` with
-added confidence rather than correcting either. The labelled tenth is not a
+added confidence instead of correcting either. The labelled tenth is not a
 random sample of the rest but whatever nine annotators found salient, which
 is exactly the assumption pseudo-labelling requires and does not have. And
 the seed is weakest where the task is hardest: Chapter 5's human-trained
@@ -152,7 +152,7 @@ against. The design rationale in brief:
   the narrower), which keeps "floating in front of" from reading as "on".
   `under` is the strict inverse, so the pair can never contradict. One edge
   case, a small object whose box projects entirely inside its support's at
-  shallow viewing angles, is assessed in the ablations rather than hand-tuned
+  shallow viewing angles, is assessed in the ablations and not hand-tuned
   early.
 - **to the left of / to the right of** compare horizontal centres in the
   camera frame, which is the frame the annotators saw on screen and therefore
@@ -168,7 +168,7 @@ against. The design rationale in brief:
   noisiest. It is guarded by the tool's own support evidence and never fires
   when either object rests on another (mask contact ≥ 0.60), because an
   elevated object's box bottom says where its *support* is, and it has its own
-  band (0.005). Pairs both stages abstain on are flagged rather than guessed
+  band (0.005). Pairs both stages abstain on are flagged, not guessed
   (recall 0.64/0.66 *(measured)*, from 0.52/0.55 depth-only).
 - **near** is a size-relative proximity test: edge-to-edge box gap divided by
   mean object size, below a fitted threshold, and **never on contact pairs**,
@@ -190,7 +190,7 @@ afterwards. Support is different. `on` and `under` are independent tests over
 round, so noise in either can make both fire on the same pair. That case is
 demoted to an `on_under_conflict` flag and neither label is emitted.
 
-Demoting rather than resolving is the deliberate part. Picking the stronger of
+Demoting instead of resolving is the deliberate part. Picking the stronger of
 two contradictory signals would produce a label the evidence does not support
 while looking exactly like a label that it does, and an annotator that
 fabricates under uncertainty cannot be audited. The alternative considered was
@@ -198,19 +198,19 @@ to emit everything and let the consumer sort it out (§3.4); it was rejected
 because geometric consistency is checkable for free, and because RQ2's
 consumer is a model, which has no way to sort it out.
 
-One further correction is class-aware rather than geometric. Support is not
+One further correction is class-aware, not geometric. Support is not
 evaluated at all when either object is a person: the annotators never recorded
 one, on **0 of 2,466 gold support triplets**, and mask contact cannot
 distinguish an object *resting on* someone from one being *held* by them. A
 geometric rule that cannot represent the distinction its evidence turns on
 should decline the pair rather than guess, and the guard is a configuration
-entry (`no_support_classes`) rather than a special case buried in code, so a
+entry (`no_support_classes`), not a special case buried in code, so a
 different dataset can revise it.
 
 Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
 near-threshold edge, and the resolved contradiction above. They are the
 design's honesty mechanism. The tool is offered as a human-in-the-loop
-accelerator whose residual human cost is *measurable* rather than as an
+accelerator whose residual human cost is *measurable*, not as an
 infallible oracle, and about a third of ordered pairs carry a flag; §4.7
 decomposes that into the part which is silent abstention and the much smaller
 part which is a genuine review queue. The structural guarantees this section
@@ -287,14 +287,14 @@ detector or from ground truth, so detector quality and relation quality are
 separately attributable, and a better detector improves the system without a
 line of rule code changing.
 
-To make the property usable rather than merely true, the contract is explicit
+To make the property usable, not merely true, the contract is explicit
 (`src/detectors.py`): one method returning pixel boxes, class names and
 scores, with three implementations, open-vocabulary prompting where no
 trained model exists, an adapter for any ultralytics checkpoint including the
 source paper's YOLOv10m weights, and a reader for externally computed
 detections. Twelve unit tests pin it, one driving the rule layer from a
 detector written against the documentation alone. Two coupling points are
-documented rather than hidden: the support guard keys on the literal class
+documented, not hidden: the support guard keys on the literal class
 name `human`, and the fitted thresholds assume boxes of roughly the tightness
 the annotators drew, so a detector with systematically different boxes should
 re-run §3.8's calibration (twenty seconds offline from the cache). A worked
@@ -313,14 +313,14 @@ which requires deciding where one viewpoint ends and the next begins.
 
 The standard tool does not apply. Shot-boundary detection thresholds the
 difference between consecutive frames, which presumes cuts, and a robot
-walking through a room produces none. The failure is structural rather than a
+walking through a room produces none. The failure is structural, not a
 matter of threshold choice, as §4.12 verifies by sweeping it: motion arriving
 at 0.08 px per frame is never larger than the noise at any single step, while
 the same motion integrated over forty frames displaces the image by 13 px, so
 only the accumulated drift carries the signal.
 
 `segment_sequence` (`src/keyframes.py`) therefore measures drift from the
-*anchor* of the current segment rather than the preceding frame, opening a new
+*anchor* of the current segment, not the preceding frame, opening a new
 segment when drift exceeds τ, so gradual motion accumulates instead of being
 rounded away while a genuine cut still crosses in one step. Distances are mean
 absolute differences over 64×48 mean-subtracted greyscale thumbnails, the
@@ -338,7 +338,7 @@ the segmentation recovers and what skipping the intervening frames costs.
 
 ## 3.11 Reproducibility by construction
 
-Reproducibility here is a design property rather than a documentation
+Reproducibility here is a design property, not a documentation
 exercise, because three of the four requirements in §3.2 are unverifiable
 without it: a threshold cannot be said to be fitted on groups 0-5 if nobody
 else can refit it, and an ablation is an assertion unless the reader can
@@ -363,7 +363,7 @@ quietly; and the rest cover the format writers, the detector adapters of §3.9,
 frame selection and the reply parsers.
 
 **Environment.** Python 3.11 with CUDA torch 2.5.1, pinned, and the one
-genuinely awkward step documented rather than left to be rediscovered:
+genuinely awkward step documented, not left to be rediscovered:
 installing SAM2 can silently replace the CUDA build of torch with a CPU wheel,
 so the pipeline still runs, produces identical labels, and takes an order of
 magnitude longer, which is the worst class of failure because nothing reports
@@ -395,7 +395,7 @@ afterwards to fit the objection:
   specified at all.
 - **Systematic error is worse for training than random error.** The rules
   abstain and flag instead of guessing (§3.6), so an unreliable case becomes
-  a countable review item rather than a confident wrong label repeated
+  a countable review item, not a confident wrong label repeated
   wherever the geometry repeats. §4.7 prices what that abstention costs.
 - **Validating one's own labelling functions is circular.** The structural
   guarantees are asserted by randomised invariant testing over synthetic
@@ -403,8 +403,7 @@ afterwards to fit the objection:
   particular image.
 - **The reference frame is a decision, not a fact.** The camera frame is
   committed to explicitly and the convention stated with the rules (§3.5), so
-  a disagreement with an annotator is locatable as a convention difference
-  rather than diffused into general error. §4.5 locates two such groups.
+  a disagreement with an annotator is locatable as a convention difference, not diffused into general error. §4.5 locates two such groups.
 
 Three of the four are mitigations rather than refutations, and §7.4 reports
 what they proved to be worth. The fourth is the one the design could not

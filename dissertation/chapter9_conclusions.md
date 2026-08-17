@@ -10,10 +10,7 @@ a personal reflection on how the project was actually conducted (§9.4).
 The aim was to determine whether spatial-relationship annotation for
 robot-acquired images can be automated, and whether the resulting labels are
 good enough to replace the human ones. Six objectives carried that aim, and
-each is met with evidence rather than assertion.
-
-Each is met with evidence rather than assertion, and the evidence is
-already reported.
+each is met with evidence, not assertion. That evidence is already reported.
 
 **O1** is the pipeline itself: all 836 images annotated in about five minutes
 on a 6 GB consumer GPU, no human deciding any label, the dataset's own formats
@@ -40,7 +37,7 @@ disagreement is localised to the annotators whose labels Chapter 4 convicted
 of measured defects, and both readings are reported rather than one selected.
 
 Section 1.2.2 fixed what would count as an answer before any result was
-reported, so both questions are settled against those criteria rather than a
+reported, so both questions are settled against those criteria, not a
 measure chosen afterwards. Section 7.1 argues the answers; what follows is
 the verdict and its conditions.
 
@@ -69,7 +66,7 @@ planner 22 of 25 against 0 of 25 with no relations, both in the harder
 direction the criterion specified: held-out *human* gold, the rival source's
 own yardstick. The benchmark does not agree, the human arm ranking better on
 mR@100 in the source paper's own framework, 0.326 against 0.278 over three
-seeds. Section 1.2.2 committed to reporting that as disagreement rather than
+seeds. Section 1.2.2 committed to reporting that as disagreement instead of
 resolving it favourably, and Chapter 6 does: the human arm's lead sits
 entirely on the two test annotators carrying measured labelling defects and
 vanishes on the one without (0.308 against 0.307), while the auto arm covers
@@ -107,9 +104,9 @@ training variance.
 **For weak supervision.** A controlled three-way comparison, on the same
 features, model, split and seeds, showing that programmatic labels out-teach
 both scarce human labels and the standard remedy for scarce human labels.
-The mechanism is measured rather than inferred: self-training contributes
+The mechanism is measured, not inferred: self-training contributes
 roughly a thousand confident negative pseudo-labels for every positive one,
-propagating the annotators' silence rather than their judgement.
+propagating the annotators' silence and not their judgement.
 
 **Methodologically.** Calibration held out by *annotator* rather than by
 image; a sparse-gold evaluation protocol that pairs recall with audited
@@ -135,7 +132,7 @@ closes one of the two remaining links: across 25 held-out scenes an LLM
 planner never clears an occluding object when given objects alone (0/25),
 always clears it when given the human relationships (25/25), and does so on 22
 of 25 with the automatic ones, all three failures traced to a missing support
-relation rather than to faulty reasoning. What is missing is execution. No
+relation, not to faulty reasoning. What is missing is execution. No
 robot moved during this project, so the evidence runs from labels to models to
 plans and stops. Putting the same conditions on a physical Spot, or in a
 simulator with contact physics, would close the last link, and it is now the
@@ -156,7 +153,7 @@ measurement, and is cheap enough that a replication should simply include one.
 **Front/behind is bounded, but less by depth than the number suggests.**
 Section 4.9 bounds the engineering: neither a larger depth model nor
 multi-frame geometry moves the pair, so the limit is monocular ambiguity in
-the scenes rather than model capacity. What that leaves is a limitation of a
+the scenes, not model capacity. What that leaves is a limitation of a
 different kind, since a predicate reproducing its own verdict across
 viewpoints 0.955 of the time while recovering 0.64 of the human labels is not
 mismeasuring the scene but applying a criterion the annotators did not share.
@@ -179,12 +176,12 @@ pipeline was run over the 1,766 frames nobody has annotated: 562 keyframes
 after content-adaptive selection, 58 minutes, 185,242 triplets, a predicate
 distribution 0.032 in total variation from the annotated portion
 (Appendix E.6).
-Capacity and stability on unfamiliar input are therefore measured rather than
+Capacity and stability on unfamiliar input are therefore measured, not
 argued. Correctness on that portion is not and cannot be without labels;
 §4.12's viewpoint-consistency check substitutes self-agreement for truth and
 should be read as the weaker thing it is. Closing it needs a modest labelled
 sample from those frames, a few hundred triplets, which is an afternoon of
-annotation rather than a research programme.
+annotation and not a research programme.
 
 **The capture is stereo, and only one eye was used.** The supplied folder is
 named `rightimg`, implying a left counterpart held by the supervising group.
@@ -248,5 +245,5 @@ inter-annotator agreement figure I ended up estimating indirectly.
 Technically, the thing I am most pleased with is not the accuracy figure but
 the two refinements I built, measured and then declined. Both were
 plausible, both took real work, and the data said neither helped. Reporting
-them as null results rather than dropping them was the point at which the
-project started feeling like research rather than engineering.
+them as null results instead of dropping them was the point at which the
+project started feeling like research, not engineering.
