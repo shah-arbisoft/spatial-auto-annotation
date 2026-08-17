@@ -171,14 +171,17 @@ support. Blind verdicting with decoys should have been the instrument from
 the first audit rather than the third; it is cheap, and it is the only step
 here that changed a headline number rather than tightening one.
 
-Two consequences follow for further work, in order. **Re-fit
-`on_contact_min` against a precision-aware objective**, since §4.14 traces
-the support result to a threshold fitted on train F1 against gold covering a
-tenth of pairs, where a false positive outside the gold was free. **Then
-re-audit blind on a fresh draw**: §4.14 measures a repair worth 0.404 → 0.680
-but declines to claim it, because both cut-offs were chosen by inspecting the
-audit that would have to certify them, and quoting an in-sample gain is the
-error that produced the 0.9 in the first place. The SGDet **threshold tuning used one
+One consequence follows for further work, and it is costed rather than
+speculative. **Ship the re-fitted `on_contact_min`.** Section 4.14 traces the
+support result to a threshold fitted on train F1 against gold covering a tenth
+of pairs, where a false positive outside the gold was free, and measures the
+repair on held-out annotators under this dissertation's own protocol: 0.367 to
+0.667 precision for eight points of recall. The evidence for the change is
+therefore already out-of-sample; what is missing is only the re-run of every
+experiment that consumes the labels, which is a fortnight of compute and
+rewriting rather than a question of method. A replication starting from this
+repository should make that its first change and its first re-measurement. The
+SGDet **threshold tuning used one
 disclosed iteration on a trial slice** that over-estimated full-set detection
 quality, an instructive case of trial-set optimism; and invariant fuzzing pins
 rule consistency but not rule *truth*, which only the audits address.

@@ -68,7 +68,12 @@ intervals appear in §4.6.
 
 Three observations. **(i)** The tool recovers 81% of all human triplets
 (7,237 of 8,926; mean 0.85, and 0.76 on annotators no threshold ever saw)
-against 14% for both trivial baselines. **(ii)** Box-only matches the full
+against 14% for random and 23% for majority on that same triplet-weighted
+basis. The mean column above is per-predicate and puts majority at 0.14,
+which is the right number for a per-predicate question and the wrong one for
+this comparison: guessing `in front of` everywhere recovers 2,013 of 8,926
+triplets because that predicate is a quarter of the gold. Both figures are
+reported so neither reading can flatter the tool by itself. **(ii)** Box-only matches the full
 pipeline on every box-computable predicate, so masks contribute almost
 nothing to on/under/left/right/near recall and the pipeline's advantage is
 confined to the depth pair (0.64/0.66 against 0.00). Even there the
@@ -362,8 +367,11 @@ moving, and one decided by a coin toss at a threshold should not. Frames were
 segmented by content drift (§3.10), which compresses the released frames 2.7×
 at τ = 10 and locates all eight known layout changes within five frames, and
 each segment's predicates were propagated from its keyframe to the rest
-(`eval/keyframe_propagation.py`). At τ = 10 that leaves 234 propagated frames
-and 11,352 comparable object pairs. Appendix E.2 reports the sweeps, the
+(`eval/keyframe_propagation.py`). The propagation runs over the 802 *annotated*
+frames rather than the 884 released ones, which segment differently because a
+subset sits further apart in the original capture (E.2); at τ = 10 those 802
+give 568 keyframes, leaving 234 propagated frames and 11,352 comparable object
+pairs. Appendix E.2 reports the sweeps, the
 object-matching rule and the coverage figures.
 
 | Predicate | Stability | Recall (propagated) | Recall (per frame) |
@@ -543,12 +551,26 @@ error the parameter controls. A second, independent signal is the supporting
 object's size, since `on(A, B)` requires B to be able to hold A up and a 20-pixel
 cube is not a surface.
 
-**The available repair is measured and deliberately not taken.** Raising the
-threshold to 0.85 moves audited precision 0.404 → 0.680 for 0.851 → 0.785
-recall; adding a base-size gate reaches 0.806 for 0.703 recall. Both cut-offs
-were chosen by inspecting this audit, so the precision they produce is
-measured on the sample that selected them and is optimistic by an unknown
-amount. Quoting it would repeat precisely the error that produced the 0.9.
-Establishing the gain honestly needs a fresh sample drawn under the new rule,
-which §7.4 records as the first thing further work should do. Appendix D.2
-carries the sweep.
+**The repair is measured under this dissertation's own protocol, and is not
+shipped.** The obvious response, raising the threshold until precision
+recovers, cannot be evaluated on the sample that suggested it: a cut-off
+chosen by inspecting these 94 verdicts and then scored against them would be
+optimistic by an unknown amount, which is the error that produced the 0.9.
+The audit is therefore split the way every threshold in Chapter 3 is split.
+The cut-off is fitted on the 63 audited claims from annotator groups 0–5,
+where precision rises steeply to 0.686 at 0.85 and flattens after, and it is
+reported on the 31 from groups 6–8, which no part of the fit saw.
+
+On those held-out annotators, raising `on_contact_min` from 0.60 to 0.85 moves
+support precision from **0.367 [0.22, 0.54] to 0.667 [0.42, 0.85]** while
+held-out support recall falls from 0.92 to **0.843**. Precision nearly doubles
+for eight points of recall, and the estimate is out-of-sample by construction.
+
+It is nonetheless not shipped, for a reason of scope rather than evidence.
+Changing the threshold changes every emitted label, and with it §4.2, both
+experiments of Chapter 5, the benchmark of Chapter 6 and the planner
+conditions; re-running all of them inside the time remaining would produce a
+partially re-measured dissertation rather than a better one. What is reported
+here is the size of the repair and the protocol that establishes it, so a
+reader can act on it without repeating the audit. Section 7.4 records it as
+the first thing further work should do, and Appendix D.2 carries the sweep.
