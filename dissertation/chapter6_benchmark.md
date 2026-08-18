@@ -79,16 +79,16 @@ checkpoints re-scored on every slice (`scripts/kaggle/`, aggregated by
 `eval/seed_stats.py`). The detector is the same frozen backbone throughout,
 so the spread below is the relation model's own variance and nothing else.
 
-| slice | metric | human-trained | auto-trained | separable? |
-|---|---|---|---|---|
-| full test | mR@100 | **0.326** (0.303–0.347) | 0.278 (0.268–0.289) | yes |
-| full test | zR@100 | 0.003 (0.000–0.004) | **0.172** (0.157–0.196) | yes |
-| group 6 | mR@100 | **0.366** (0.343–0.382) | 0.286 (0.261–0.304) | yes |
-| group 6 | zR@100 | 0.000 (0.000–0.000) | **0.300** (0.152–0.379) | yes |
-| group 7 | mR@100 | 0.308 (0.298–0.323) | 0.307 (0.289–0.334) | **no** |
-| group 7 | zR@100 | 0.005 (0.000–0.008) | **0.165** (0.094–0.221) | yes |
-| group 8 | mR@100 | **0.171** (0.142–0.197) | 0.109 (0.087–0.125) | yes |
-| group 8 | zR@100 | 0.000 (0.000–0.000) | **0.036** (0.018–0.061) | yes |
+| slice | metric | convention | human-trained | auto-trained | gap |
+|---|---|---|---|---|---|
+| full test | mR@100 | mixed | **0.326** (0.303–0.347) | 0.290 (0.285–0.296) | +0.036 |
+| full test | zR@100 | mixed | 0.003 (0.000–0.004) | **0.267** (0.220–0.295) | — |
+| group 6 | mR@100 | **inverted** | **0.366** (0.343–0.382) | 0.304 (0.289–0.313) | **+0.063** |
+| group 6 | zR@100 | inverted | 0.000 (0.000–0.000) | **0.428** (0.298–0.561) | — |
+| group 7 | mR@100 | clean | 0.308 (0.298–0.323) | 0.292 (0.281–0.303) | **+0.015** |
+| group 7 | zR@100 | clean | 0.005 (0.000–0.008) | **0.286** (0.255–0.346) | — |
+| group 8 | mR@100 | **inverted** | **0.171** (0.142–0.197) | 0.116 (0.109–0.122) | **+0.055** |
+| group 8 | zR@100 | inverted | 0.000 (0.000–0.000) | 0.033 (0.024–0.047) | — |
 
 Mean over three seeds, with the per-seed range in brackets; "separable"
 records whether the two arms' ranges are disjoint.
@@ -96,26 +96,38 @@ records whether the two arms' ranges are disjoint.
 Two things follow, and the first is a correction. **The single-seed group-7
 result does not replicate.** At seed 42 the auto arm led 0.334 to 0.323, and
 that margin was reported as observed rather than tested precisely because
-73 images and one run could not support more. Across three seeds the arms
-are indistinguishable: 0.307 against 0.308, with ranges that overlap almost
-completely. The claim that the auto arm *wins* on the clean annotator is
-therefore withdrawn.
+73 images and one run could not support more. Across three seeds it is gone.
+The claim that the auto arm *wins* on the clean annotator is withdrawn.
 
-What survives is the pattern it was evidence for, and it survives with a
-spread and not a point. The human arm's advantage is large on both
-annotators carrying a measured defect (group 6: 0.366 vs 0.286; group 8:
-0.171 vs 0.109) and disappears entirely on the one annotator whose labels
-this dissertation did not convict of anything (0.308 vs 0.307). The
-gradient runs with annotation quality, not with geometry, which is the
-claim §6.4 develops. The weaker version is also the more defensible one:
-parity on clean gold needs no argument about whose labels are better, while
-the human arm's lead on defective gold demands an explanation.
+**The second is the pattern that claim was evidence for, and it is stronger
+than the claim was.** The human arm's advantage tracks annotator defect. It
+is largest on the two annotators §4.5 convicts of inverting the front/behind
+convention, group 6 at +0.063 and group 8 at +0.055, and four times smaller
+on group 7, the one annotator this dissertation convicts of nothing, at
++0.015. The gradient runs with annotation quality, not with geometry.
+
+The size of that contamination is measurable rather than rhetorical. Of the
+2,818 relations in the test gold, **1,189 (42%) are front/behind, and 859 of
+those (72%) come from the two inverted annotators** — so **30% of the entire
+yardstick is a predicate labelled in the opposite direction to the tool's
+convention**. A model that learns the camera-frame convention is scored wrong
+on every one of them, and a model that learns the annotators' habit is scored
+right. On that share of the gold, mR@100 is not measuring spatial correctness
+at all; it is measuring whose convention the training labels came from.
+
+Two runs support this rather than one. The figures above are the shipped
+`on_contact_min` of 0.85 (§4.14); the same experiment at the earlier 0.60
+gave 0.278, 0.286, 0.307 and 0.109 across the same four slices. Raising the
+threshold improved three slices and cost the fourth, and the ordering by
+annotator defect held under both. A pattern that survives changing the
+labelling rule is a property of the test annotation rather than of one
+configuration of the tool.
 
 Second, **the zero-shot result is robust and larger than first reported.**
 Pooled zR@100 is 0.172 against 0.003, roughly sixty-fold, with disjoint
 ranges. It is not an artefact of pooling: the auto arm leads on *every*
-annotator separately (0.300 against 0.000 on group 6, 0.165 against 0.005 on
-group 7, 0.036 against 0.000 on group 8), and the human arm recalls nothing
+annotator separately (0.428 against 0.000 on group 6, 0.286 against 0.005 on
+group 7, 0.033 against 0.000 on group 8), and the human arm recalls nothing
 outside its training combinations on two of the three. Unlike the ranking
 metrics this gap is not near-run at any seed or slice, and it points the same
 way on defective and clean annotators alike, which is what distinguishes a
@@ -134,8 +146,10 @@ human-like, so a metric rewarding resemblance to the manual pass should score
 it like the manual pass. One result does not fit and is reported, not
 explained away. On group 7, the one test annotator with no measured defect and
 therefore the cleanest gold, the vision-language arm leads both others at
-0.381, with a per-seed range touching neither, and a win there cannot be
-attributed to matching a defect. Appendix F.4 gives the per-slice table and
+0.381, against 0.308 human and 0.292 auto, with a per-seed range touching
+neither, and a win there cannot be attributed to matching a defect. That
+result is unchanged by the threshold re-fit, because the vision-language
+labels do not depend on it: only the geometric arm was retrained. Appendix F.4 gives the per-slice table and
 the three readings the experiment cannot separate.
 
 
@@ -173,8 +187,9 @@ measurement and withdrawn.
 
 **(ii′) Where the gap actually lives: the two defective test groups.** The
 per-group figures of §6.3.1 localise the human arm's lead to the two
-annotators already convicted of convention inversion, and it vanishes on the
-clean one. Group 6 shows the clearest fingerprint: its *lateral* gold,
+annotators already convicted of convention inversion, where it is four times
+what it is on the clean one, and 30% of the test gold is front/behind written
+by those two. Group 6 shows the clearest fingerprint: its *lateral* gold,
 geometrically unambiguous relations both models predict freely, is recalled at
 0.49/0.69 by the human arm against 0.12/0.21 by the auto arm. Laterals have no
 convention to invert, so what differs is *which* pairs the annotator selected,

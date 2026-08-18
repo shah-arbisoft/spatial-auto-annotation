@@ -65,11 +65,13 @@ third disagrees.** The controlled classifier gives 0.76 against 0.30 and the
 planner 22 of 25 against 0 of 25 with no relations, both in the harder
 direction the criterion specified: held-out *human* gold, the rival source's
 own yardstick. The benchmark does not agree, the human arm ranking better on
-mR@100 in the source paper's own framework, 0.326 against 0.278 over three
+mR@100 in the source paper's own framework, 0.326 against 0.290 over three
 seeds. Section 1.2.2 committed to reporting that as disagreement instead of
 resolving it favourably, and Chapter 6 does: the human arm's lead sits
 entirely on the two test annotators carrying measured labelling defects and
-vanishes on the one without (0.308 against 0.307), while the auto arm covers
+is four times smaller on the one without (+0.015 against +0.063 and +0.055),
+on a test gold whose front/behind relations are 72% written by those two
+annotators, while the auto arm covers
 sixty times more of the relation types the manual annotation never recorded.
 An unqualified yes required agreement across all three, so the honest verdict
 is conditional.
