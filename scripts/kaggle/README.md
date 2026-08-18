@@ -149,6 +149,7 @@ Chapter 6. They ran on Kaggle (T4) in this order:
 | `executed_2_seed_replication.ipynb` | the same two arms at seeds 43 and 44, on the frozen detector | `seed_results.zip` |
 | `executed_3_vlm_arm.ipynb` | the third arm, trained on `_annotations.vlm.coco.json` at seeds 42/43/44 | `vlm_results.zip` |
 | `executed_4_reeval_group_slices.ipynb` | re-evaluates every checkpoint against the corrected zero-shot reference and the per-group slices, all three arms | `reeval_results.json` |
+| `executed_5_auto085_refit.ipynb` | the auto arm retrained and re-evaluated after `on_contact_min` moved 0.60 to 0.85 (§4.14), three seeds, four slices; the human and vision-language arms were not retrained because the threshold does not touch their labels | `reeval_auto_085.json` |
 | `eval_notebook.ipynb` | the first run's evaluation pass | `test_results.json` |
 
 Run them in that order: 2 and 3 need the detector 1 freezes, and 4 needs the
