@@ -1,0 +1,762 @@
+2026-08-20 02:36:22,397 sgg_benchmark INFO: Using 1 GPUs
+2026-08-20 02:36:22,397 sgg_benchmark INFO: Task mode: sgdet
+2026-08-20 02:36:22,397 sgg_benchmark INFO: Loading training dataset to extract class information...
+2026-08-20 02:36:22,710 sgg_benchmark INFO: Extracted from dataset: num_obj_classes=7, num_rel_classes=8
+2026-08-20 02:36:22,711 sgg_benchmark INFO: Saving config to: ./checkpoints/spatial/react_auto_s42/config.yml
+2026-08-20 02:36:22,739 sgg_benchmark INFO: Saving Hydra config to: ./checkpoints/spatial/react_auto_s42/hydra_config.yaml
+2026-08-20 02:36:22,739 sgg_benchmark INFO: Building model...
+2026-08-20 02:36:23,290 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:36:23,290 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:36:23,290 sgg_benchmark.data.build INFO: Unable to load data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:36:23,858 sgg_benchmark.data.build INFO: Save data statistics to: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:36:23,858 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:36:23,878 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:36:23,879 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:36:23,879 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:36:23,879 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:36:23,884 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:36:23,884 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:36:23,884 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:36:23,884 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:36:28,377 sgg_benchmark INFO: Building optimizer and scheduler...
+2026-08-20 02:36:28,385 sgg_benchmark INFO: [LR] WarmupCosineAnnealingIterLR: total_iters=387 (25 epochs × 62 iters/epoch ÷ 4 accum), warmup_iters=31 (2 warmup epoch(s)), eta_min=5.0e-07
+2026-08-20 02:36:28,385 sgg_benchmark INFO: Loading validation dataset...
+2026-08-20 02:36:28,430 sgg_benchmark INFO: Loading pretrained backbone detector from: ./checkpoints/BACKBONES/yolov8m_spatial.pt
+2026-08-20 02:36:28,430 sgg_benchmark INFO: Loading backbone from ./checkpoints/BACKBONES/yolov8m_spatial.pt
+2026-08-20 02:36:28,595 sgg_benchmark INFO: Relation predictor set to training mode
+2026-08-20 02:36:28,597 sgg_benchmark INFO: Total parameters: 35,641,371
+2026-08-20 02:36:28,597 sgg_benchmark INFO: Trainable parameters: 9,781,577 (27.44%)
+2026-08-20 02:36:28,597 sgg_benchmark INFO: Starting training loop...
+2026-08-20 02:36:29,649 sgg_benchmark INFO: Start training for 25 epochs (starting from epoch 0)
+2026-08-20 02:36:29,651 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:36:32,012 sgg_benchmark INFO: Epoch 0 [1/62] | loss=0.9230 | loss: [ rel=0.886 | l21=0.033 | dist=0.004 | dis=0.000 ] | lr=1.29e-05 | elapsed=0:00:02 | ETA=0:02:24
+2026-08-20 02:37:27,513 sgg_benchmark INFO: Epoch 0 training time: 57.86 s
+2026-08-20 02:37:27,514 sgg_benchmark INFO: Start validating
+2026-08-20 02:37:27,514 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:37:32,640 sgg_benchmark INFO: Total run time: 0:00:04 (47.9411808013916 ms / img per device, on 1 devices)
+2026-08-20 02:37:32,641 sgg_benchmark INFO: Average latency per image: 47.9411808013916ms
+2026-08-20 02:37:32,641 sgg_benchmark INFO: Standard deviation of latency: 7.034373066544063ms
+2026-08-20 02:37:32,645 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:37:32,645 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:37:32,645 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:37:32,645 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:37:32,649 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:37:34,619 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0214;     R @ 50: 0.0474;     R @ 100: 0.0962;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.0188;    mR @ 50: 0.0374;    mR @ 100: 0.0728;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.0000) (under:0.0312) (to the left of:0.0743) (to the right of:0.0988) (in front of:0.2242) (behind:0.0333) (near:0.0478) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0200;     F1 @ 50: 0.0418;     F1 @ 100: 0.0829;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:37:34,620 sgg_benchmark INFO: Average validation Result for mR: 0.0430
+2026-08-20 02:37:34,623 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_0.pth
+2026-08-20 02:37:34,989 sgg_benchmark INFO: Now best epoch in mR@k is : 0, with value is 0.042993075087007816
+2026-08-20 02:37:34,991 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:37:36,454 sgg_benchmark INFO: Epoch 1 [1/62] | loss=0.5558 | loss: [ rel=0.448 | l21=0.073 | dist=0.035 | dis=0.000 ] | lr=5.94e-05 | elapsed=0:00:01 | ETA=0:01:29
+2026-08-20 02:38:31,540 sgg_benchmark INFO: Epoch 1 training time: 56.55 s
+2026-08-20 02:38:31,540 sgg_benchmark INFO: Start validating
+2026-08-20 02:38:31,541 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:38:36,580 sgg_benchmark INFO: Total run time: 0:00:04 (47.16711669921875 ms / img per device, on 1 devices)
+2026-08-20 02:38:36,580 sgg_benchmark INFO: Average latency per image: 47.16711669921875ms
+2026-08-20 02:38:36,580 sgg_benchmark INFO: Standard deviation of latency: 5.054555643496313ms
+2026-08-20 02:38:36,584 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:38:36,585 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:38:36,585 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:38:36,585 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:38:36,588 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:38:38,650 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0568;     R @ 50: 0.1238;     R @ 100: 0.1882;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.0452;    mR @ 50: 0.0931;    mR @ 100: 0.1398;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.0000) (under:0.0294) (to the left of:0.0199) (to the right of:0.0063) (in front of:0.4071) (behind:0.5090) (near:0.0066) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0503;     F1 @ 50: 0.1062;     F1 @ 100: 0.1604;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:38:38,652 sgg_benchmark INFO: Average validation Result for mR: 0.0927
+2026-08-20 02:38:38,656 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_1.pth
+2026-08-20 02:38:38,987 sgg_benchmark INFO: New best model saved at iteration 1
+2026-08-20 02:38:38,988 sgg_benchmark INFO: Now best epoch in mR@k is : 1, with value is 0.09267780420574852
+2026-08-20 02:38:38,990 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:38:40,077 sgg_benchmark INFO: Epoch 2 [1/62] | loss=0.4783 | loss: [ rel=0.384 | l21=0.065 | dist=0.030 | dis=0.000 ] | lr=1.00e-04 | elapsed=0:00:01 | ETA=0:01:06
+2026-08-20 02:39:34,985 sgg_benchmark INFO: Epoch 2 training time: 56.00 s
+2026-08-20 02:39:34,985 sgg_benchmark INFO: Start validating
+2026-08-20 02:39:34,986 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:39:40,015 sgg_benchmark INFO: Total run time: 0:00:04 (46.874595108032224 ms / img per device, on 1 devices)
+2026-08-20 02:39:40,016 sgg_benchmark INFO: Average latency per image: 46.874595108032224ms
+2026-08-20 02:39:40,016 sgg_benchmark INFO: Standard deviation of latency: 4.976364788450074ms
+2026-08-20 02:39:40,021 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:39:40,021 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:39:40,021 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:39:40,022 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:39:40,026 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:39:42,251 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0380;     R @ 50: 0.0849;     R @ 100: 0.1516;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.0750;    mR @ 50: 0.1191;    mR @ 100: 0.1770;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.2500) (under:0.2188) (to the left of:0.0344) (to the right of:0.0709) (in front of:0.2422) (behind:0.2403) (near:0.1822) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0504;     F1 @ 50: 0.0992;     F1 @ 100: 0.1633;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:39:42,252 sgg_benchmark INFO: Average validation Result for mR: 0.1237
+2026-08-20 02:39:42,257 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_2.pth
+2026-08-20 02:39:42,653 sgg_benchmark INFO: New best model saved at iteration 2
+2026-08-20 02:39:42,654 sgg_benchmark INFO: Now best epoch in mR@k is : 2, with value is 0.12368836977934587
+2026-08-20 02:39:42,656 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:39:43,884 sgg_benchmark INFO: Epoch 3 [1/62] | loss=0.3765 | loss: [ rel=0.333 | l21=0.037 | dist=0.007 | dis=0.000 ] | lr=9.94e-05 | elapsed=0:00:01 | ETA=0:01:14
+2026-08-20 02:40:39,006 sgg_benchmark INFO: Epoch 3 training time: 56.35 s
+2026-08-20 02:40:39,007 sgg_benchmark INFO: Start validating
+2026-08-20 02:40:39,007 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:40:44,001 sgg_benchmark INFO: Total run time: 0:00:04 (46.76834953308106 ms / img per device, on 1 devices)
+2026-08-20 02:40:44,001 sgg_benchmark INFO: Average latency per image: 46.76834953308106ms
+2026-08-20 02:40:44,001 sgg_benchmark INFO: Standard deviation of latency: 4.94800927095336ms
+2026-08-20 02:40:44,005 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:40:44,005 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:40:44,005 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:40:44,005 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:40:44,009 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:40:46,260 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0455;     R @ 50: 0.0976;     R @ 100: 0.1730;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.0745;    mR @ 50: 0.1212;    mR @ 100: 0.1874;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.2656) (under:0.2059) (to the left of:0.1573) (to the right of:0.1118) (in front of:0.2652) (behind:0.2056) (near:0.1005) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0565;     F1 @ 50: 0.1081;     F1 @ 100: 0.1799;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:40:46,262 sgg_benchmark INFO: Average validation Result for mR: 0.1277
+2026-08-20 02:40:46,266 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_3.pth
+2026-08-20 02:40:46,664 sgg_benchmark INFO: New best model saved at iteration 3
+2026-08-20 02:40:46,665 sgg_benchmark INFO: Now best epoch in mR@k is : 3, with value is 0.12771774065358485
+2026-08-20 02:40:46,667 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:40:47,891 sgg_benchmark INFO: Epoch 4 [1/62] | loss=0.3912 | loss: [ rel=0.353 | l21=0.034 | dist=0.004 | dis=0.000 ] | lr=9.79e-05 | elapsed=0:00:01 | ETA=0:01:14
+2026-08-20 02:41:42,625 sgg_benchmark INFO: Epoch 4 training time: 55.96 s
+2026-08-20 02:41:42,626 sgg_benchmark INFO: Start validating
+2026-08-20 02:41:42,626 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:41:47,619 sgg_benchmark INFO: Total run time: 0:00:04 (46.72067111968994 ms / img per device, on 1 devices)
+2026-08-20 02:41:47,619 sgg_benchmark INFO: Average latency per image: 46.72067111968994ms
+2026-08-20 02:41:47,619 sgg_benchmark INFO: Standard deviation of latency: 5.059721126094969ms
+2026-08-20 02:41:47,622 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:41:47,623 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:41:47,623 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:41:47,623 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:41:47,627 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:41:49,824 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0480;     R @ 50: 0.1028;     R @ 100: 0.1713;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.0918;    mR @ 50: 0.1453;    mR @ 100: 0.2044;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3235) (under:0.2794) (to the left of:0.0595) (to the right of:0.1873) (in front of:0.1914) (behind:0.3407) (near:0.0488) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0630;     F1 @ 50: 0.1204;     F1 @ 100: 0.1864;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:41:49,826 sgg_benchmark INFO: Average validation Result for mR: 0.1472
+2026-08-20 02:41:49,829 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_4.pth
+2026-08-20 02:41:50,248 sgg_benchmark INFO: New best model saved at iteration 4
+2026-08-20 02:41:50,248 sgg_benchmark INFO: Now best epoch in mR@k is : 4, with value is 0.14717453805942315
+2026-08-20 02:41:50,250 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:41:51,689 sgg_benchmark INFO: Epoch 5 [1/62] | loss=0.3477 | loss: [ rel=0.310 | l21=0.034 | dist=0.004 | dis=0.000 ] | lr=9.54e-05 | elapsed=0:00:01 | ETA=0:01:27
+2026-08-20 02:42:46,393 sgg_benchmark INFO: Epoch 5 training time: 56.14 s
+2026-08-20 02:42:46,393 sgg_benchmark INFO: Start validating
+2026-08-20 02:42:46,394 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:42:51,425 sgg_benchmark INFO: Total run time: 0:00:04 (47.03369804382324 ms / img per device, on 1 devices)
+2026-08-20 02:42:51,425 sgg_benchmark INFO: Average latency per image: 47.03369804382324ms
+2026-08-20 02:42:51,425 sgg_benchmark INFO: Standard deviation of latency: 5.125953174874627ms
+2026-08-20 02:42:51,430 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:42:51,430 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:42:51,430 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:42:51,430 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:42:51,434 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:42:53,641 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0474;     R @ 50: 0.1019;     R @ 100: 0.1710;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.0846;    mR @ 50: 0.1494;    mR @ 100: 0.2165;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3143) (under:0.3594) (to the left of:0.1135) (to the right of:0.1706) (in front of:0.1401) (behind:0.2879) (near:0.1295) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0608;     F1 @ 50: 0.1211;     F1 @ 100: 0.1910;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:42:53,642 sgg_benchmark INFO: Average validation Result for mR: 0.1502
+2026-08-20 02:42:53,646 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_5.pth
+2026-08-20 02:42:53,980 sgg_benchmark INFO: New best model saved at iteration 5
+2026-08-20 02:42:53,981 sgg_benchmark INFO: Now best epoch in mR@k is : 5, with value is 0.15015997438737447
+2026-08-20 02:42:53,983 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:42:55,370 sgg_benchmark INFO: Epoch 6 [1/62] | loss=0.3623 | loss: [ rel=0.324 | l21=0.034 | dist=0.004 | dis=0.000 ] | lr=9.20e-05 | elapsed=0:00:01 | ETA=0:01:24
+2026-08-20 02:43:49,967 sgg_benchmark INFO: Epoch 6 training time: 55.98 s
+2026-08-20 02:43:49,968 sgg_benchmark INFO: Start validating
+2026-08-20 02:43:49,968 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:43:54,999 sgg_benchmark INFO: Total run time: 0:00:04 (46.89149868011474 ms / img per device, on 1 devices)
+2026-08-20 02:43:54,999 sgg_benchmark INFO: Average latency per image: 46.89149868011474ms
+2026-08-20 02:43:55,000 sgg_benchmark INFO: Standard deviation of latency: 4.811049585584324ms
+2026-08-20 02:43:55,003 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:43:55,003 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:43:55,003 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:43:55,003 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:43:55,007 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:43:57,243 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0466;     R @ 50: 0.1058;     R @ 100: 0.1782;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1021;    mR @ 50: 0.1651;    mR @ 100: 0.2243;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3438) (under:0.3438) (to the left of:0.1690) (to the right of:0.1088) (in front of:0.1914) (behind:0.3098) (near:0.1034) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0640;     F1 @ 50: 0.1289;     F1 @ 100: 0.1986;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:43:57,244 sgg_benchmark INFO: Average validation Result for mR: 0.1638
+2026-08-20 02:43:57,248 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_6.pth
+2026-08-20 02:43:57,573 sgg_benchmark INFO: New best model saved at iteration 6
+2026-08-20 02:43:57,574 sgg_benchmark INFO: Now best epoch in mR@k is : 6, with value is 0.16381266747956733
+2026-08-20 02:43:57,576 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:43:58,939 sgg_benchmark INFO: Epoch 7 [1/62] | loss=0.3367 | loss: [ rel=0.298 | l21=0.034 | dist=0.005 | dis=0.000 ] | lr=8.78e-05 | elapsed=0:00:01 | ETA=0:01:23
+2026-08-20 02:44:53,443 sgg_benchmark INFO: Epoch 7 training time: 55.87 s
+2026-08-20 02:44:53,443 sgg_benchmark INFO: Start validating
+2026-08-20 02:44:53,443 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:44:58,475 sgg_benchmark INFO: Total run time: 0:00:04 (46.938769302368165 ms / img per device, on 1 devices)
+2026-08-20 02:44:58,476 sgg_benchmark INFO: Average latency per image: 46.938769302368165ms
+2026-08-20 02:44:58,476 sgg_benchmark INFO: Standard deviation of latency: 5.064226491748452ms
+2026-08-20 02:44:58,479 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:44:58,479 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:44:58,480 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:44:58,480 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:44:58,483 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:45:00,814 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0533;     R @ 50: 0.1161;     R @ 100: 0.1895;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.0986;    mR @ 50: 0.1670;    mR @ 100: 0.2269;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3548) (under:0.3182) (to the left of:0.1310) (to the right of:0.1802) (in front of:0.1527) (behind:0.3587) (near:0.0926) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0691;     F1 @ 50: 0.1369;     F1 @ 100: 0.2065;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:45:00,816 sgg_benchmark INFO: Average validation Result for mR: 0.1642
+2026-08-20 02:45:00,820 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_7.pth
+2026-08-20 02:45:01,147 sgg_benchmark INFO: New best model saved at iteration 7
+2026-08-20 02:45:01,147 sgg_benchmark INFO: Now best epoch in mR@k is : 7, with value is 0.16415674549106887
+2026-08-20 02:45:01,150 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:45:02,513 sgg_benchmark INFO: Epoch 8 [1/62] | loss=0.3538 | loss: [ rel=0.317 | l21=0.033 | dist=0.004 | dis=0.000 ] | lr=8.29e-05 | elapsed=0:00:01 | ETA=0:01:23
+2026-08-20 02:45:57,469 sgg_benchmark INFO: Epoch 8 training time: 56.32 s
+2026-08-20 02:45:57,469 sgg_benchmark INFO: Start validating
+2026-08-20 02:45:57,470 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:46:02,528 sgg_benchmark INFO: Total run time: 0:00:04 (47.41966804504395 ms / img per device, on 1 devices)
+2026-08-20 02:46:02,529 sgg_benchmark INFO: Average latency per image: 47.41966804504395ms
+2026-08-20 02:46:02,529 sgg_benchmark INFO: Standard deviation of latency: 5.229059552790922ms
+2026-08-20 02:46:02,533 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:46:02,533 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:46:02,533 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:46:02,533 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:46:02,537 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:46:04,789 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0544;     R @ 50: 0.1120;     R @ 100: 0.1968;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1012;    mR @ 50: 0.1642;    mR @ 100: 0.2352;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3333) (under:0.3636) (to the left of:0.1747) (to the right of:0.1212) (in front of:0.2281) (behind:0.3637) (near:0.0614) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0707;     F1 @ 50: 0.1331;     F1 @ 100: 0.2143;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:46:04,791 sgg_benchmark INFO: Average validation Result for mR: 0.1669
+2026-08-20 02:46:04,795 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_8.pth
+2026-08-20 02:46:05,173 sgg_benchmark INFO: New best model saved at iteration 8
+2026-08-20 02:46:05,174 sgg_benchmark INFO: Now best epoch in mR@k is : 8, with value is 0.16685100259143204
+2026-08-20 02:46:05,176 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:46:06,391 sgg_benchmark INFO: Epoch 9 [1/62] | loss=0.3513 | loss: [ rel=0.316 | l21=0.033 | dist=0.003 | dis=0.000 ] | lr=7.72e-05 | elapsed=0:00:01 | ETA=0:01:14
+2026-08-20 02:47:01,573 sgg_benchmark INFO: Epoch 9 training time: 56.40 s
+2026-08-20 02:47:01,574 sgg_benchmark INFO: Start validating
+2026-08-20 02:47:01,574 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:47:06,594 sgg_benchmark INFO: Total run time: 0:00:04 (46.9115111541748 ms / img per device, on 1 devices)
+2026-08-20 02:47:06,594 sgg_benchmark INFO: Average latency per image: 46.9115111541748ms
+2026-08-20 02:47:06,594 sgg_benchmark INFO: Standard deviation of latency: 4.898756051029457ms
+2026-08-20 02:47:06,598 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:47:06,598 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:47:06,598 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:47:06,598 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:47:06,602 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:47:08,944 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0527;     R @ 50: 0.1147;     R @ 100: 0.2002;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.0912;    mR @ 50: 0.1550;    mR @ 100: 0.2327;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3235) (under:0.3182) (to the left of:0.1351) (to the right of:0.2383) (in front of:0.2877) (behind:0.2379) (near:0.0884) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0668;     F1 @ 50: 0.1318;     F1 @ 100: 0.2153;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:47:08,945 sgg_benchmark INFO: Average validation Result for mR: 0.1597
+2026-08-20 02:47:08,946 sgg_benchmark INFO: Now best epoch in mR@k is : 8, with value is 0.16685100259143204
+2026-08-20 02:47:08,948 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:47:10,496 sgg_benchmark INFO: Epoch 10 [1/62] | loss=0.3422 | loss: [ rel=0.307 | l21=0.033 | dist=0.003 | dis=0.000 ] | lr=7.11e-05 | elapsed=0:00:01 | ETA=0:01:34
+2026-08-20 02:48:05,267 sgg_benchmark INFO: Epoch 10 training time: 56.32 s
+2026-08-20 02:48:05,268 sgg_benchmark INFO: Start validating
+2026-08-20 02:48:05,268 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:48:10,276 sgg_benchmark INFO: Total run time: 0:00:04 (46.82324104309082 ms / img per device, on 1 devices)
+2026-08-20 02:48:10,277 sgg_benchmark INFO: Average latency per image: 46.82324104309082ms
+2026-08-20 02:48:10,277 sgg_benchmark INFO: Standard deviation of latency: 4.9592978430295265ms
+2026-08-20 02:48:10,280 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:48:10,281 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:48:10,281 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:48:10,281 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:48:10,284 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:48:12,500 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0563;     R @ 50: 0.1166;     R @ 100: 0.1993;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1048;    mR @ 50: 0.1690;    mR @ 100: 0.2403;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3333) (under:0.3750) (to the left of:0.1683) (to the right of:0.1512) (in front of:0.3583) (behind:0.2295) (near:0.0668) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0732;     F1 @ 50: 0.1380;     F1 @ 100: 0.2179;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:48:12,502 sgg_benchmark INFO: Average validation Result for mR: 0.1714
+2026-08-20 02:48:12,506 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_10.pth
+2026-08-20 02:48:12,833 sgg_benchmark INFO: New best model saved at iteration 10
+2026-08-20 02:48:12,833 sgg_benchmark INFO: Now best epoch in mR@k is : 10, with value is 0.1713678132747584
+2026-08-20 02:48:12,835 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:48:14,303 sgg_benchmark INFO: Epoch 11 [1/62] | loss=0.3429 | loss: [ rel=0.307 | l21=0.033 | dist=0.003 | dis=0.000 ] | lr=6.45e-05 | elapsed=0:00:01 | ETA=0:01:29
+2026-08-20 02:49:08,785 sgg_benchmark INFO: Epoch 11 training time: 55.95 s
+2026-08-20 02:49:08,786 sgg_benchmark INFO: Start validating
+2026-08-20 02:49:08,786 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:49:13,814 sgg_benchmark INFO: Total run time: 0:00:04 (46.95861240386963 ms / img per device, on 1 devices)
+2026-08-20 02:49:13,814 sgg_benchmark INFO: Average latency per image: 46.95861240386963ms
+2026-08-20 02:49:13,814 sgg_benchmark INFO: Standard deviation of latency: 5.051956153518401ms
+2026-08-20 02:49:13,818 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:49:13,818 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:49:13,818 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:49:13,818 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:49:13,822 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:49:16,068 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0460;     R @ 50: 0.1107;     R @ 100: 0.1977;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1121;    mR @ 50: 0.1701;    mR @ 100: 0.2348;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3333) (under:0.3548) (to the left of:0.0887) (to the right of:0.2229) (in front of:0.3453) (behind:0.2415) (near:0.0570) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0653;     F1 @ 50: 0.1342;     F1 @ 100: 0.2147;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:49:16,070 sgg_benchmark INFO: Average validation Result for mR: 0.1723
+2026-08-20 02:49:16,073 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_11.pth
+2026-08-20 02:49:16,441 sgg_benchmark INFO: New best model saved at iteration 11
+2026-08-20 02:49:16,442 sgg_benchmark INFO: Now best epoch in mR@k is : 11, with value is 0.17232743150174387
+2026-08-20 02:49:16,444 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:49:17,687 sgg_benchmark INFO: Epoch 12 [1/62] | loss=0.3234 | loss: [ rel=0.288 | l21=0.032 | dist=0.003 | dis=0.000 ] | lr=5.77e-05 | elapsed=0:00:01 | ETA=0:01:15
+2026-08-20 02:50:13,170 sgg_benchmark INFO: Epoch 12 training time: 56.73 s
+2026-08-20 02:50:13,170 sgg_benchmark INFO: Start validating
+2026-08-20 02:50:13,171 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:50:18,211 sgg_benchmark INFO: Total run time: 0:00:04 (47.06554485321045 ms / img per device, on 1 devices)
+2026-08-20 02:50:18,211 sgg_benchmark INFO: Average latency per image: 47.06554485321045ms
+2026-08-20 02:50:18,211 sgg_benchmark INFO: Standard deviation of latency: 4.798727421107065ms
+2026-08-20 02:50:18,215 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:50:18,216 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:50:18,216 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:50:18,216 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:50:18,220 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:50:20,523 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0455;     R @ 50: 0.1062;     R @ 100: 0.1831;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1048;    mR @ 50: 0.1619;    mR @ 100: 0.2388;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3824) (under:0.3636) (to the left of:0.0497) (to the right of:0.1869) (in front of:0.2548) (behind:0.1903) (near:0.2435) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0634;     F1 @ 50: 0.1283;     F1 @ 100: 0.2072;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:50:20,524 sgg_benchmark INFO: Average validation Result for mR: 0.1685
+2026-08-20 02:50:20,525 sgg_benchmark INFO: Now best epoch in mR@k is : 11, with value is 0.17232743150174387
+2026-08-20 02:50:20,527 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:50:21,933 sgg_benchmark INFO: Epoch 13 [1/62] | loss=0.3323 | loss: [ rel=0.297 | l21=0.032 | dist=0.003 | dis=0.000 ] | lr=5.07e-05 | elapsed=0:00:01 | ETA=0:01:25
+2026-08-20 02:51:16,478 sgg_benchmark INFO: Epoch 13 training time: 55.95 s
+2026-08-20 02:51:16,478 sgg_benchmark INFO: Start validating
+2026-08-20 02:51:16,478 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:51:21,505 sgg_benchmark INFO: Total run time: 0:00:04 (46.93604949951172 ms / img per device, on 1 devices)
+2026-08-20 02:51:21,505 sgg_benchmark INFO: Average latency per image: 46.93604949951172ms
+2026-08-20 02:51:21,505 sgg_benchmark INFO: Standard deviation of latency: 5.089570100671582ms
+2026-08-20 02:51:21,508 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:51:21,509 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:51:21,509 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:51:21,509 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:51:21,512 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:51:23,821 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0533;     R @ 50: 0.1142;     R @ 100: 0.1978;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1239;    mR @ 50: 0.1765;    mR @ 100: 0.2432;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3548) (under:0.3636) (to the left of:0.1806) (to the right of:0.2951) (in front of:0.2718) (behind:0.1824) (near:0.0537) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0745;     F1 @ 50: 0.1387;     F1 @ 100: 0.2182;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:51:23,822 sgg_benchmark INFO: Average validation Result for mR: 0.1812
+2026-08-20 02:51:23,826 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_13.pth
+2026-08-20 02:51:24,157 sgg_benchmark INFO: New best model saved at iteration 13
+2026-08-20 02:51:24,157 sgg_benchmark INFO: Now best epoch in mR@k is : 13, with value is 0.18117180173167635
+2026-08-20 02:51:24,159 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:51:25,566 sgg_benchmark INFO: Epoch 14 [1/62] | loss=0.3085 | loss: [ rel=0.273 | l21=0.033 | dist=0.003 | dis=0.000 ] | lr=4.37e-05 | elapsed=0:00:01 | ETA=0:01:25
+2026-08-20 02:52:20,160 sgg_benchmark INFO: Epoch 14 training time: 56.00 s
+2026-08-20 02:52:20,161 sgg_benchmark INFO: Start validating
+2026-08-20 02:52:20,161 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:52:25,172 sgg_benchmark INFO: Total run time: 0:00:04 (46.670095977783205 ms / img per device, on 1 devices)
+2026-08-20 02:52:25,173 sgg_benchmark INFO: Average latency per image: 46.670095977783205ms
+2026-08-20 02:52:25,173 sgg_benchmark INFO: Standard deviation of latency: 4.935254158173103ms
+2026-08-20 02:52:25,177 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:52:25,177 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:52:25,177 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:52:25,177 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:52:25,181 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:52:27,445 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0551;     R @ 50: 0.1237;     R @ 100: 0.2086;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1147;    mR @ 50: 0.1768;    mR @ 100: 0.2475;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3714) (under:0.3529) (to the left of:0.1142) (to the right of:0.1625) (in front of:0.3514) (behind:0.3222) (near:0.0579) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0744;     F1 @ 50: 0.1455;     F1 @ 100: 0.2264;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:52:27,446 sgg_benchmark INFO: Average validation Result for mR: 0.1797
+2026-08-20 02:52:27,447 sgg_benchmark INFO: Now best epoch in mR@k is : 13, with value is 0.18117180173167635
+2026-08-20 02:52:27,449 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:52:29,097 sgg_benchmark INFO: Epoch 15 [1/62] | loss=0.3258 | loss: [ rel=0.291 | l21=0.032 | dist=0.003 | dis=0.000 ] | lr=3.68e-05 | elapsed=0:00:01 | ETA=0:01:40
+2026-08-20 02:53:23,492 sgg_benchmark INFO: Epoch 15 training time: 56.04 s
+2026-08-20 02:53:23,493 sgg_benchmark INFO: Start validating
+2026-08-20 02:53:23,494 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:53:28,497 sgg_benchmark INFO: Total run time: 0:00:04 (46.67568538665771 ms / img per device, on 1 devices)
+2026-08-20 02:53:28,498 sgg_benchmark INFO: Average latency per image: 46.67568538665771ms
+2026-08-20 02:53:28,498 sgg_benchmark INFO: Standard deviation of latency: 4.963684148248456ms
+2026-08-20 02:53:28,501 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:53:28,501 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:53:28,501 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:53:28,501 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:53:28,505 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:53:30,829 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0507;     R @ 50: 0.1199;     R @ 100: 0.2094;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1182;    mR @ 50: 0.1795;    mR @ 100: 0.2590;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3939) (under:0.4000) (to the left of:0.1858) (to the right of:0.1676) (in front of:0.2898) (behind:0.3206) (near:0.0552) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0710;     F1 @ 50: 0.1438;     F1 @ 100: 0.2316;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:53:30,830 sgg_benchmark INFO: Average validation Result for mR: 0.1855
+2026-08-20 02:53:30,834 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_15.pth
+2026-08-20 02:53:31,165 sgg_benchmark INFO: New best model saved at iteration 15
+2026-08-20 02:53:31,166 sgg_benchmark INFO: Now best epoch in mR@k is : 15, with value is 0.18554509814104705
+2026-08-20 02:53:31,168 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:53:32,380 sgg_benchmark INFO: Epoch 16 [1/62] | loss=0.3136 | loss: [ rel=0.279 | l21=0.032 | dist=0.002 | dis=0.000 ] | lr=3.02e-05 | elapsed=0:00:01 | ETA=0:01:13
+2026-08-20 02:54:27,315 sgg_benchmark INFO: Epoch 16 training time: 56.15 s
+2026-08-20 02:54:27,315 sgg_benchmark INFO: Start validating
+2026-08-20 02:54:27,316 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:54:32,362 sgg_benchmark INFO: Total run time: 0:00:04 (47.13905952453613 ms / img per device, on 1 devices)
+2026-08-20 02:54:32,362 sgg_benchmark INFO: Average latency per image: 47.13905952453613ms
+2026-08-20 02:54:32,362 sgg_benchmark INFO: Standard deviation of latency: 5.30761184568287ms
+2026-08-20 02:54:32,366 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:54:32,366 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:54:32,366 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:54:32,366 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:54:32,370 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:54:34,662 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0568;     R @ 50: 0.1213;     R @ 100: 0.2088;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1166;    mR @ 50: 0.1784;    mR @ 100: 0.2544;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3529) (under:0.3939) (to the left of:0.1595) (to the right of:0.1696) (in front of:0.3300) (behind:0.3325) (near:0.0425) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0764;     F1 @ 50: 0.1444;     F1 @ 100: 0.2294;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:54:34,664 sgg_benchmark INFO: Average validation Result for mR: 0.1831
+2026-08-20 02:54:34,664 sgg_benchmark INFO: Now best epoch in mR@k is : 15, with value is 0.18554509814104705
+2026-08-20 02:54:34,666 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:54:35,928 sgg_benchmark INFO: Epoch 17 [1/62] | loss=0.3104 | loss: [ rel=0.275 | l21=0.032 | dist=0.003 | dis=0.000 ] | lr=2.40e-05 | elapsed=0:00:01 | ETA=0:01:16
+2026-08-20 02:55:30,561 sgg_benchmark INFO: Epoch 17 training time: 55.90 s
+2026-08-20 02:55:30,562 sgg_benchmark INFO: Start validating
+2026-08-20 02:55:30,563 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:55:35,577 sgg_benchmark INFO: Total run time: 0:00:04 (46.86435401916504 ms / img per device, on 1 devices)
+2026-08-20 02:55:35,577 sgg_benchmark INFO: Average latency per image: 46.86435401916504ms
+2026-08-20 02:55:35,577 sgg_benchmark INFO: Standard deviation of latency: 5.186678257637565ms
+2026-08-20 02:55:35,581 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:55:35,581 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:55:35,581 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:55:35,581 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:55:35,585 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:55:37,980 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0545;     R @ 50: 0.1160;     R @ 100: 0.2055;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1079;    mR @ 50: 0.1736;    mR @ 100: 0.2452;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3824) (under:0.3333) (to the left of:0.1893) (to the right of:0.2388) (in front of:0.2502) (behind:0.2176) (near:0.1047) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0724;     F1 @ 50: 0.1391;     F1 @ 100: 0.2236;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:55:37,982 sgg_benchmark INFO: Average validation Result for mR: 0.1755
+2026-08-20 02:55:37,982 sgg_benchmark INFO: Now best epoch in mR@k is : 15, with value is 0.18554509814104705
+2026-08-20 02:55:37,985 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:55:39,497 sgg_benchmark INFO: Epoch 18 [1/62] | loss=0.3156 | loss: [ rel=0.281 | l21=0.032 | dist=0.002 | dis=0.000 ] | lr=1.83e-05 | elapsed=0:00:01 | ETA=0:01:32
+2026-08-20 02:56:34,237 sgg_benchmark INFO: Epoch 18 training time: 56.25 s
+2026-08-20 02:56:34,237 sgg_benchmark INFO: Start validating
+2026-08-20 02:56:34,238 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:56:39,265 sgg_benchmark INFO: Total run time: 0:00:04 (46.7764612197876 ms / img per device, on 1 devices)
+2026-08-20 02:56:39,266 sgg_benchmark INFO: Average latency per image: 46.7764612197876ms
+2026-08-20 02:56:39,266 sgg_benchmark INFO: Standard deviation of latency: 5.0749675604538185ms
+2026-08-20 02:56:39,270 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:56:39,270 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:56:39,270 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:56:39,270 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:56:39,274 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:56:41,597 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0528;     R @ 50: 0.1155;     R @ 100: 0.2078;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1126;    mR @ 50: 0.1744;    mR @ 100: 0.2470;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3548) (under:0.3750) (to the left of:0.1998) (to the right of:0.1748) (in front of:0.2947) (behind:0.2775) (near:0.0522) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0719;     F1 @ 50: 0.1390;     F1 @ 100: 0.2257;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:56:41,599 sgg_benchmark INFO: Average validation Result for mR: 0.1780
+2026-08-20 02:56:41,599 sgg_benchmark INFO: Now best epoch in mR@k is : 15, with value is 0.18554509814104705
+2026-08-20 02:56:41,602 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:56:43,186 sgg_benchmark INFO: Epoch 19 [1/62] | loss=0.3049 | loss: [ rel=0.270 | l21=0.032 | dist=0.003 | dis=0.000 ] | lr=1.33e-05 | elapsed=0:00:01 | ETA=0:01:36
+2026-08-20 02:57:37,629 sgg_benchmark INFO: Epoch 19 training time: 56.03 s
+2026-08-20 02:57:37,629 sgg_benchmark INFO: Start validating
+2026-08-20 02:57:37,630 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:57:42,650 sgg_benchmark INFO: Total run time: 0:00:04 (46.917934608459475 ms / img per device, on 1 devices)
+2026-08-20 02:57:42,651 sgg_benchmark INFO: Average latency per image: 46.917934608459475ms
+2026-08-20 02:57:42,651 sgg_benchmark INFO: Standard deviation of latency: 4.925230703933011ms
+2026-08-20 02:57:42,655 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:57:42,655 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:57:42,655 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:57:42,655 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:57:42,659 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:57:44,993 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0548;     R @ 50: 0.1170;     R @ 100: 0.2071;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1092;    mR @ 50: 0.1785;    mR @ 100: 0.2542;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3636) (under:0.3939) (to the left of:0.1614) (to the right of:0.1770) (in front of:0.3111) (behind:0.3165) (near:0.0560) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0729;     F1 @ 50: 0.1413;     F1 @ 100: 0.2282;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:57:44,995 sgg_benchmark INFO: Average validation Result for mR: 0.1806
+2026-08-20 02:57:44,995 sgg_benchmark INFO: Now best epoch in mR@k is : 15, with value is 0.18554509814104705
+2026-08-20 02:57:44,997 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:57:46,135 sgg_benchmark INFO: Epoch 20 [1/62] | loss=0.3099 | loss: [ rel=0.275 | l21=0.032 | dist=0.002 | dis=0.000 ] | lr=8.95e-06 | elapsed=0:00:01 | ETA=0:01:09
+2026-08-20 02:58:40,938 sgg_benchmark INFO: Epoch 20 training time: 55.94 s
+2026-08-20 02:58:40,939 sgg_benchmark INFO: Start validating
+2026-08-20 02:58:40,939 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:58:45,954 sgg_benchmark INFO: Total run time: 0:00:04 (46.85410457611084 ms / img per device, on 1 devices)
+2026-08-20 02:58:45,954 sgg_benchmark INFO: Average latency per image: 46.85410457611084ms
+2026-08-20 02:58:45,954 sgg_benchmark INFO: Standard deviation of latency: 4.959755546123465ms
+2026-08-20 02:58:45,958 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:58:45,958 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:58:45,959 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:58:45,959 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:58:45,961 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:58:48,272 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0543;     R @ 50: 0.1226;     R @ 100: 0.2075;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1135;    mR @ 50: 0.1813;    mR @ 100: 0.2528;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3939) (under:0.3636) (to the left of:0.1803) (to the right of:0.2013) (in front of:0.2747) (behind:0.2859) (near:0.0701) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0735;     F1 @ 50: 0.1463;     F1 @ 100: 0.2279;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:58:48,274 sgg_benchmark INFO: Average validation Result for mR: 0.1825
+2026-08-20 02:58:48,274 sgg_benchmark INFO: Now best epoch in mR@k is : 15, with value is 0.18554509814104705
+2026-08-20 02:58:48,276 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:58:49,659 sgg_benchmark INFO: Epoch 21 [1/62] | loss=0.3301 | loss: [ rel=0.295 | l21=0.032 | dist=0.003 | dis=0.000 ] | lr=5.45e-06 | elapsed=0:00:01 | ETA=0:01:24
+2026-08-20 02:59:44,575 sgg_benchmark INFO: Epoch 21 training time: 56.30 s
+2026-08-20 02:59:44,575 sgg_benchmark INFO: Start validating
+2026-08-20 02:59:44,576 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 02:59:49,599 sgg_benchmark INFO: Total run time: 0:00:04 (46.91019161224365 ms / img per device, on 1 devices)
+2026-08-20 02:59:49,600 sgg_benchmark INFO: Average latency per image: 46.91019161224365ms
+2026-08-20 02:59:49,600 sgg_benchmark INFO: Standard deviation of latency: 4.800323479157208ms
+2026-08-20 02:59:49,604 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:59:49,604 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 02:59:49,604 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 02:59:49,605 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 02:59:49,609 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 02:59:51,994 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0574;     R @ 50: 0.1257;     R @ 100: 0.2133;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1176;    mR @ 50: 0.1915;    mR @ 100: 0.2606;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3750) (under:0.4000) (to the left of:0.1607) (to the right of:0.1968) (in front of:0.3041) (behind:0.2981) (near:0.0892) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0771;     F1 @ 50: 0.1518;     F1 @ 100: 0.2346;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 02:59:51,995 sgg_benchmark INFO: Average validation Result for mR: 0.1899
+2026-08-20 02:59:51,999 sgg_benchmark.utils.checkpoint INFO: Saving checkpoint to ./checkpoints/spatial/react_auto_s42/best_model_epoch_21.pth
+2026-08-20 02:59:52,323 sgg_benchmark INFO: New best model saved at iteration 21
+2026-08-20 02:59:52,324 sgg_benchmark INFO: Now best epoch in mR@k is : 21, with value is 0.18991158466322686
+2026-08-20 02:59:52,326 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 02:59:53,512 sgg_benchmark INFO: Epoch 22 [1/62] | loss=0.3028 | loss: [ rel=0.268 | l21=0.033 | dist=0.003 | dis=0.000 ] | lr=2.85e-06 | elapsed=0:00:01 | ETA=0:01:12
+2026-08-20 03:00:48,647 sgg_benchmark INFO: Epoch 22 training time: 56.32 s
+2026-08-20 03:00:48,648 sgg_benchmark INFO: Start validating
+2026-08-20 03:00:48,648 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 03:00:53,662 sgg_benchmark INFO: Total run time: 0:00:04 (46.991223945617676 ms / img per device, on 1 devices)
+2026-08-20 03:00:53,663 sgg_benchmark INFO: Average latency per image: 46.991223945617676ms
+2026-08-20 03:00:53,663 sgg_benchmark INFO: Standard deviation of latency: 4.853786187445702ms
+2026-08-20 03:00:53,667 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 03:00:53,667 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 03:00:53,667 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 03:00:53,667 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 03:00:53,671 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 03:00:56,016 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0537;     R @ 50: 0.1192;     R @ 100: 0.2028;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1156;    mR @ 50: 0.1834;    mR @ 100: 0.2495;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3750) (under:0.3750) (to the left of:0.1652) (to the right of:0.1824) (in front of:0.2701) (behind:0.2981) (near:0.0811) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0733;     F1 @ 50: 0.1445;     F1 @ 100: 0.2237;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 03:00:56,017 sgg_benchmark INFO: Average validation Result for mR: 0.1829
+2026-08-20 03:00:56,018 sgg_benchmark INFO: Now best epoch in mR@k is : 21, with value is 0.18991158466322686
+2026-08-20 03:00:56,020 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 03:00:57,301 sgg_benchmark INFO: Epoch 23 [1/62] | loss=0.3001 | loss: [ rel=0.265 | l21=0.033 | dist=0.003 | dis=0.000 ] | lr=1.20e-06 | elapsed=0:00:01 | ETA=0:01:18
+2026-08-20 03:01:52,102 sgg_benchmark INFO: Epoch 23 training time: 56.08 s
+2026-08-20 03:01:52,103 sgg_benchmark INFO: Start validating
+2026-08-20 03:01:52,103 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 03:01:57,128 sgg_benchmark INFO: Total run time: 0:00:04 (46.91304935455322 ms / img per device, on 1 devices)
+2026-08-20 03:01:57,128 sgg_benchmark INFO: Average latency per image: 46.91304935455322ms
+2026-08-20 03:01:57,128 sgg_benchmark INFO: Standard deviation of latency: 4.919227586168313ms
+2026-08-20 03:01:57,132 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 03:01:57,132 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 03:01:57,132 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 03:01:57,132 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 03:01:57,136 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 03:01:59,470 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0576;     R @ 50: 0.1221;     R @ 100: 0.2102;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1169;    mR @ 50: 0.1820;    mR @ 100: 0.2565;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3939) (under:0.3636) (to the left of:0.1611) (to the right of:0.1905) (in front of:0.2933) (behind:0.3037) (near:0.0895) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0772;     F1 @ 50: 0.1462;     F1 @ 100: 0.2311;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 03:01:59,472 sgg_benchmark INFO: Average validation Result for mR: 0.1852
+2026-08-20 03:01:59,472 sgg_benchmark INFO: Now best epoch in mR@k is : 21, with value is 0.18991158466322686
+2026-08-20 03:01:59,475 sgg_benchmark INFO: Detached logging enabled (interval=200)
+2026-08-20 03:02:00,688 sgg_benchmark INFO: Epoch 24 [1/62] | loss=0.2938 | loss: [ rel=0.258 | l21=0.033 | dist=0.003 | dis=0.000 ] | lr=5.17e-07 | elapsed=0:00:01 | ETA=0:01:13
+2026-08-20 03:02:55,774 sgg_benchmark INFO: Epoch 24 training time: 56.30 s
+2026-08-20 03:02:55,774 sgg_benchmark INFO: Start validating
+2026-08-20 03:02:55,775 sgg_benchmark INFO: Start evaluation on  dataset(100 images).
+2026-08-20 03:03:00,801 sgg_benchmark INFO: Total run time: 0:00:04 (46.98760227203369 ms / img per device, on 1 devices)
+2026-08-20 03:03:00,801 sgg_benchmark INFO: Average latency per image: 46.98760227203369ms
+2026-08-20 03:03:00,801 sgg_benchmark INFO: Standard deviation of latency: 5.47265504823099ms
+2026-08-20 03:03:00,805 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 03:03:00,805 sgg_benchmark.data.build INFO: get dataset statistics...
+2026-08-20 03:03:00,805 sgg_benchmark.data.build INFO: Loading data statistics from: ./checkpoints/spatial/react_auto_s42/SpatialRobot_statistics.cache
+2026-08-20 03:03:00,806 sgg_benchmark.data.build INFO: ----------------------------------------------------------------------------------------------------
+2026-08-20 03:03:00,808 sgg_benchmark INFO: Dynamically loaded 205 seen triplets from training statistics for zero-shot evaluation.
+2026-08-20 03:03:03,160 sgg_benchmark INFO: 
+====================================================================================================
+Detection evaluation mAp=0.6952
+====================================================================================================
+SGG eval:     R @ 20: 0.0566;     R @ 50: 0.1238;     R @ 100: 0.2166;  for mode=sgdet.
+SGG eval:    mR @ 20: 0.1139;    mR @ 50: 0.1841;    mR @ 100: 0.2597;  for mode=sgdet.
+----------------------- Details ------------------------
+(on:0.3939) (under:0.3824) (to the left of:0.1766) (to the right of:0.1869) (in front of:0.2889) (behind:0.3154) (near:0.0738) 
+--------------------------------------------------------
+SGG eval:     zR @ 20: 0.0000;     zR @ 50: 0.0000;     zR @ 100: 0.0000;  for mode=sgdet.
+SGG eval:     F1 @ 20: 0.0757;     F1 @ 50: 0.1481;     F1 @ 100: 0.2362;  for mode=sgdet.
+====================================================================================================
+
+2026-08-20 03:03:03,162 sgg_benchmark INFO: Average validation Result for mR: 0.1859
+2026-08-20 03:03:03,162 sgg_benchmark INFO: Now best epoch in mR@k is : 21, with value is 0.18991158466322686
+2026-08-20 03:03:03,162 sgg_benchmark INFO: Total training time: 0:26:33.513652 (63.7405 s / epoch)
+2026-08-20 03:03:03,163 sgg_benchmark INFO: Best Epoch is : 21.0000
+2026-08-20 03:03:03,163 sgg_benchmark INFO: Running final evaluation...
+2026-08-20 03:03:03,163 sgg_benchmark INFO: Loading best checkpoint from ./checkpoints/spatial/react_auto_s42/best_model_epoch_21.pth...
+2026-08-20 03:03:03,164 sgg_benchmark.utils.checkpoint INFO: Loading checkpoint from ./checkpoints/spatial/react_auto_s42/best_model_epoch_21.pth

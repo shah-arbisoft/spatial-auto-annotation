@@ -480,9 +480,12 @@ def fig_sgg_curves():
                                 if a in curves):
         mr = curves[arm]["val_mr_per_epoch"]
         ax.plot(range(len(mr)), mr, color=color, lw=1.8, label=label)
+        # best_epoch is 1-indexed in curves.json; the series is 0-indexed,
+        # so the marker sat one epoch late and reported the wrong value.
         b = curves[arm]["best_epoch"]
-        ax.plot(b, mr[b], "o", color=color, ms=7)
-        ax.annotate(f"best {mr[b]:.3f} (ep {b})", (b, mr[b]),
+        i = b - 1
+        ax.plot(i, mr[i], "o", color=color, ms=7)
+        ax.annotate(f"best {mr[i]:.3f} (ep {b})", (i, mr[i]),
                     textcoords="offset points", xytext=(8, 6),
                     fontsize=9, color=color)
     ax.set_xlabel("epoch")

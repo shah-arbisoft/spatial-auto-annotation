@@ -28,19 +28,19 @@ identical held-out test set. The isolation mirrors RQ2 exactly:
 
 ## 6.2 Training dynamics: prediction 1 confirmed
 
-The human arm reaches 95% of its best validation score by **epoch 4**, peaks
-at epoch 12 and declines, mild overfitting on 5,421 sparse triplets. That
-replicates the source paper's central observation ("all predictors reached
-their peak mR@100 well before the final epoch") on its own dataset with a
-current model, and adds the cause: sparse supervision is exhausted early. The
-auto arm is still improving at epoch 9, peaks at epoch 18 without declining,
-and sees 213 distinct triplet types in training against the human arm's 94.
+The human arm **peaks at epoch 4 of 25** and never improves again, oscillating
+between 0.101 and 0.123 for the remaining twenty-one, mild overfitting on
+5,421 sparse triplets. That replicates the source paper's central observation
+("all predictors reached their peak mR@100 well before the final epoch") on
+its own dataset with a current model, and adds the cause: sparse supervision
+is exhausted early. The auto arm is still climbing at epoch 8, does not reach
+95% of its best until **epoch 14** and peaks at **epoch 22**, and sees 213
+distinct triplet types in training against the human arm's 94. Where one arm
+has learned everything its labels contain in four epochs, the other is still
+finding structure at twenty-two.
 {{fig:sgg-training-curves}} plots both: each validation
 series uses its own arm's labels, so only the *shapes* compare, never the
-heights. The curves come from the first benchmark run rather than the
-retrained arms of §6.3, whose per-epoch logs were not retained; what they
-support is the shape claim above, which is a statement about when each arm
-saturates and not about where it finishes.
+heights.
 
 ## 6.3 Test results: prediction 2 unresolved, prediction 3 refuted
 
