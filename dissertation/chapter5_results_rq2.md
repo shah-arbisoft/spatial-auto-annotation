@@ -282,8 +282,26 @@ sources, not planners: condition B is handed the exact fact the task tests. And
 no robot moved, so this measures plans, not executions, and closes the gap
 between labels and robot behaviour by one link, not entirely.
 
-One limitation is structural and worth stating plainly, because it bounds what
-the result can mean. **The scoring rule cannot see a false positive.** It asks
+**The figures above predate the threshold refit of §4.14 and would change.**
+This experiment was run on the labels `on_contact_min` 0.60 produced; the
+shipped rule is 0.85, which emits support more sparingly. Checking the 25
+scenes against the shipped labels, the support relation the task depends on is
+present in 18 of them rather than 22: it is now absent in scenes 1, 4, 7, 16,
+19, 24 and 25, where before it was absent in 4, 16 and 24 alone. Since every C
+failure recorded here is a missing support relation and none is a plan that
+reasoned badly from one it was given, condition C would be expected to fall to
+about 18 of 25 on a re-run. That expectation is stated rather than measured,
+and the re-run is the one experiment in this dissertation the threshold change
+has not yet been carried through to.
+
+Condition E is unaffected, and the reason is the finding this section rests
+on. The seven scenes the tool now misses and the five the vision-language
+model misses remain **disjoint**, so their union still supplies a support
+relation for all 25. Making the geometric source stricter widened its gap and
+left the complementarity intact, which is a stronger form of the same result.
+
+One further limitation is structural and worth stating plainly, because it
+bounds what the result can mean. **The scoring rule cannot see a false positive.** It asks
 whether the plan moves the occluder before grasping the target, so a support
 relation the tool asserts wrongly costs an unnecessary step rather than a
 failed plan. Section 4.14 measures those at 0.40 precision, and this

@@ -8,7 +8,9 @@ book. Support, laterality, depth order and proximity are the scene-graph
 edges a planner consumes to decide what to move first, and §5.7 measures the
 consequence directly: given only the object list an LLM planner produces a
 safe grasp plan in 0 of 25 held-out scenes, and 22 to 25 of 25 once the
-relations are stated, depending on which source supplied them.
+relations are stated, depending on which source supplied them; §5.7 records
+that the automatic figure predates the threshold refit of §4.14 and would
+fall.
 
 Learning to predict such relationships requires training data in which the
 relationships are already labelled. Wang et al. (2025) introduced a spatial
