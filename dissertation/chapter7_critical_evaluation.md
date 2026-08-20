@@ -66,8 +66,10 @@ error are roughly 7%. The bulk of the miss mass is calibrated abstention
 defects (38–42%, a share that *grew* as the ground-plane fallback shrank the
 abstention share around it).
 
-Second, **the support arc shows the method working as a method**. The box
-rule shipped at 0.13 true precision; the audit localised the failure
+Second, **the support arc shows the method working as a method**, and it
+ran one step further than the chapter originally recorded: the threshold that
+survived those repairs was itself re-fitted after §4.14 found it over-emitting,
+and the shipped value is now 0.85. The box rule shipped at 0.13 true precision; the audit localised the failure
 (projection adjacency), the gallery localised the misses (containment), one
 geometric insight (stacked objects share a camera distance) fixed half the
 false fires, and one perception upgrade (mask-bottom contact) fixed most of
@@ -170,6 +172,20 @@ independent, and it confirmed a figure that a blind instrument does not
 support. Blind verdicting with decoys should have been the instrument from
 the first audit, not the third; it is cheap, and it is the only step
 here that changed a headline number instead of tightening one.
+
+One finding belongs here rather than in Chapter 6, because it is about method
+and not about labels. The benchmark arms were originally trained weeks apart,
+against whatever state the upstream framework happened to be in on the day;
+retraining all nine runs in a single session on one clone moved the
+human arm's pooled mR@100 from 0.326 to 0.293, while the vision-language arm
+moved 0.001 and neither arm's labels had changed. **A third of the margin this
+dissertation once reported between label sources was an artefact of *when*
+each arm was trained.** Nothing in the original protocol was careless: seeds
+were fixed, the detector frozen, the configuration shared. The confound
+entered through an unpinned dependency, which is the one axis the protocol did
+not name. A controlled comparison has to control the code as explicitly as it
+controls the data, by pinning versions and training every arm in one session;
+§6.3 now does, and its figures supersede the earlier ones.
 
 One consequence follows for further work, and it is costed rather than
 speculative. **Ship the re-fitted `on_contact_min`.** Section 4.14 traces the

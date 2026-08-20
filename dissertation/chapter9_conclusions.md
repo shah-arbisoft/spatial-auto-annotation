@@ -60,28 +60,29 @@ own verdict across viewpoints 0.955 of the time while two annotator groups
 applied the opposite convention. A per-predicate answer was required precisely
 so this could not hide inside a mean.
 
-**RQ2 is answered yes at two of the three levels the criterion named, and the
-third disagrees.** The controlled classifier gives 0.76 against 0.30 and the
-planner 22 of 25 against 0 of 25 with no relations, both in the harder
-direction the criterion specified: held-out *human* gold, the rival source's
-own yardstick. The benchmark does not agree, the human arm ranking better on
-mR@100 in the source paper's own framework, 0.326 against 0.290 over three
-seeds. Section 1.2.2 committed to reporting that as disagreement instead of
-resolving it favourably, and Chapter 6 does: the human arm's lead sits
-entirely on the two test annotators carrying measured labelling defects and
-is four times smaller on the one without (+0.015 against +0.063 and +0.055),
-on a test gold whose front/behind relations are 72% written by those two
-annotators, while the auto arm covers
-sixty times more of the relation types the manual annotation never recorded.
-An unqualified yes required agreement across all three, so the honest verdict
-is conditional.
+**RQ2 is answered yes at all three levels the criterion named, decisively at
+two of them and narrowly at the third.** The controlled classifier gives 0.76
+against 0.30 and the planner 22 of 25 against 0 of 25 with no relations, both
+in the harder direction the criterion specified: held-out *human* gold, the
+rival source's own yardstick. The benchmark neither confirms the margin nor
+contradicts it. Over three seeds in the source paper's own framework the two
+arms rank level, 0.292 against 0.293, with overlapping seed ranges on every
+slice, so what Chapter 5 measures as a two-and-a-half-fold advantage the
+ranked metric measures as parity. Section 1.2.2 committed to reporting that
+honestly rather than resolving it favourably, and Chapter 6 does: what
+difference remains sits on the two test annotators carrying measured
+labelling defects and reverses on the one without, on a test gold whose
+front/behind relations are 72% written by those two, while the auto arm
+recovers five times more of the relation types the manual annotation never
+recorded and reproduces itself across seeds nearly nine times more tightly.
+"Good enough to replace" is met at every level; "better", which Chapter 5
+supports, holds only where ground truth means geometry.
 
 The condition is legible, and it is the sentence the evidence supports:
-**automatic labels are the better supervision wherever ground truth means
-geometry; human labels remain better wherever ground truth means human
-annotation practice.** Robot planning needs the former, which is why the
-planner result and the benchmark result point in opposite directions without
-contradicting each other.
+**automatic labels are at least the equal of human ones wherever ground truth
+means human annotation practice, and better wherever it means geometry.**
+Robot planning needs the second, which is why the planner separates the
+sources decisively while the ranked benchmark cannot separate them at all.
 
 ## 9.2 Research contributions
 

@@ -1243,10 +1243,11 @@ not fit. Mean mR@100 over three seeds, per-seed range in brackets.
 
 | slice | human | automatic | vision-language |
 |---|---|---|---|
-| full test | 0.326 (0.303–0.347) | 0.278 (0.268–0.289) | 0.329 (0.316–0.347) |
-| group 6 (defect) | **0.366** (0.343–0.382) | 0.286 (0.261–0.304) | 0.336 (0.317–0.369) |
-| group 7 (clean) | 0.308 (0.298–0.323) | 0.307 (0.289–0.334) | **0.381** (0.365–0.395) |
-| group 8 (defect) | **0.171** (0.142–0.197) | 0.109 (0.087–0.125) | 0.148 (0.134–0.159) |
+| full test | 0.293 (0.270–0.322) | 0.292 (0.290–0.296) | **0.329** (0.312–0.357) |
+| group 6 (defect) | 0.327 (0.299–0.364) | 0.305 (0.296–0.312) | **0.337** (0.316–0.366) |
+| group 7 (clean) | 0.278 (0.254–0.298) | 0.289 (0.280–0.300) | **0.362** (0.357–0.364) |
+| group 8 (defect) | 0.147 (0.130–0.164) | 0.120 (0.108–0.131) | **0.164** (0.146–0.183) |
+| aligned gold | 0.333 (0.310–0.369) | 0.316 (0.312–0.320) | **0.369** (0.354–0.390) |
 
 Three readings of the group-7 result remain open and this experiment does not
 separate them. The arm trains on 14,626 relations against the human arm's
