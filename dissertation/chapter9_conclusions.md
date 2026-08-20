@@ -22,7 +22,7 @@ reaching held-out F1 0.87. **O3** is the fidelity study: per-predicate
 agreement with all 8,926 human triplets, against three trivial baselines, a
 vision-language model under the same definitions (§4.13), nine ablations,
 audited precision and cluster-bootstrap intervals, giving mean recall 0.85 and
-0.76 on annotators no threshold ever saw. **O4** is the diagnosis: every one
+0.74 on annotators no threshold ever saw. **O4** is the diagnosis: every one
 of the 1,689 missed triplets attributed to a cause, leaving roughly 7%
 attributable to genuine tool error (§4.10, §7.2). **O5** is the controlled
 experiment isolating the label source, at 0.75 mean recall against held-out
@@ -54,7 +54,7 @@ the criterion is met on the trivial-baseline reference with the second
 reference offering only weak support. The second
 condition, that labels beyond the human record survive audit, holds for the
 lateral, proximity and depth-decided predicates at blind-audited precision
-0.92–1.00. **It is not met for support.** At 0.535 [0.42, 0.65] about half the
+0.79–1.00. **It is not met for support.** At 0.535 [0.42, 0.65] about half the
 support labels the tool adds beyond the human record are wrong, which is well
 above noise and well below a standard anything should be built on, and the
 criterion of §1.2.2 asked for labels that survive audit rather than labels
@@ -175,7 +175,7 @@ Section 4.9 bounds the engineering: neither a larger depth model nor
 multi-frame geometry moves the pair, so the limit is monocular ambiguity in
 the scenes, not model capacity. What that leaves is a limitation of a
 different kind, since a predicate reproducing its own verdict across
-viewpoints 0.958 of the time while recovering 0.64 of the human labels is not
+viewpoints 0.958 of the time while recovering 0.70 of the human labels is not
 mismeasuring the scene but applying a criterion the annotators did not share.
 The intervention with the best expected return is therefore a written
 annotation guideline rather than a better network, which is an uncomfortable

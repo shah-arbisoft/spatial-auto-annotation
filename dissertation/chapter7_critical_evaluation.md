@@ -13,7 +13,7 @@ objective-by-objective audit belongs with the conclusions and is in §9.1.
 quality comparable to human annotation. The answer is predicate-shaped rather
 than singular. For the lateral and proximity predicates the tool is, by every
 measure available, *at least* as good as the human process: 0.97–0.998 recall,
-blind-audited precision 0.92–1.00, and for `near` a perfect held-out score
+blind-audited precision 0.79–1.00, and for `near` a recall of 1.00 held-out
 against the one annotator who used the label and never influenced the
 threshold. For
 support, after two evidence upgrades motivated by measurement (depth
@@ -104,8 +104,8 @@ Section 4.12 settles what the ablations could not. If the front/behind gap
 were depth *noise*, estimates jittering either side of a boundary, moving the
 camera would flip verdicts, since that is the perturbation such noise responds
 to. It does not: the predicate reproduces itself 0.958 of the time, above `on`
-and `under`, and holds at 0.924 at 89-fold compression. A predicate recovering
-0.64 of the human labels while agreeing with itself at that rate is not
+and `under`, and holds at 0.911 at 89-fold compression. A predicate recovering
+0.70 of the human labels while agreeing with itself at that rate is not
 guessing; it is applying a consistent criterion the annotators did not share.
 With A8, where quadrupling the depth model changed nothing, and §4.5, where
 two groups labelled the pair oppositely, the weight of the shortfall sits on

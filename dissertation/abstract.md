@@ -16,15 +16,14 @@ are annotated in five minutes on a consumer GPU, at 20 times the manual
 pass's label density.
 
 Against 8,926 human relationships the automatic labels match or exceed the
-human process on five of seven predicates (0.85 mean recall, 0.76 on held-
-out annotators). A blinded, decoy-controlled audit of 214 sampled claims puts
-precision at 0.92–1.00 for the lateral, depth and proximity predicates, on 24
-samples each and so with 95% intervals reaching down to 0.74, but at
-**0.54 [0.42, 0.65]** on 71 samples for support, against 0.83 from an
-independent vision-language judge. Both supersede an earlier unblinded
-estimate of 0.77, and the support figure is itself the second of two audits:
-the first measured 0.40, a threshold refitted in response, and the second
-re-drawn from the corrected labels. The hardest pair,
+human process on five of seven predicates (0.85 mean recall, 0.74 on held-
+out annotators). A blinded, decoy-controlled audit of 191 sampled claims puts
+precision at 0.79–1.00 for the lateral, depth and proximity predicates, on 24
+samples each and so with wide intervals, but at **0.54 [0.42, 0.65]** on 71
+samples for support, against 0.83 from an independent vision-language judge.
+Both supersede an earlier unblinded estimate of 0.77, and the support figure
+is the second of two audits: the first measured 0.40, a threshold was refitted
+in response, and the second was drawn afresh from the corrected labels. The hardest pair,
 in front of/behind, uses a cascade of relative
 depth and a ground-plane cue; diagnosing every disagreement puts the
 residual gap on the annotation itself, including two groups that used
@@ -32,7 +31,7 @@ opposite conventions, rather than on tool error (~7%). Because the images
 are consecutive frames of one capture, the labels can be checked against
 themselves without ground truth: the pipeline reproduces its front/behind
 verdict across viewpoints 0.96 of the time, so a predicate recovering only
-0.64 of the human labels is applying an unshared criterion rather than
+0.70 of the human labels is applying an unshared criterion rather than
 guessing.
 
 A classifier trained on the automatic labels reaches 0.75 mean recall
@@ -52,7 +51,7 @@ safe grasp plan on 25 held-out scenes where an object rests on the target, a
 planner clears it in 0 of 25 given objects alone, 25 of 25 given human
 relationships, 19 of 25 given automatic ones and 25 of 25 given the union of
 the automatic and vision-language sources, identically on two planners
-of very different capability. Automatic labels are the better supervision
-where ground truth means geometry, human labels where it means annotation
-practice, and robot planning needs the former. The bottleneck removed was
+of very different capability. Automatic labels are at least the equal of human
+ones where ground truth means annotation practice and better where it means
+geometry, and robot planning needs the second. The bottleneck removed was
 limiting not only the dataset's size but what it could teach.

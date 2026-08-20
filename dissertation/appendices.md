@@ -1028,7 +1028,8 @@ from RoboSpatial, demonstrated rather than asserted.
 desk (clip 1, 99 frames), where any variation is measurement noise, and a
 static overhead camera with moving hands (clip 2, 79 frames), where relations
 genuinely change and smoothing must not erase them. The temporal vote
-separates them, lifting persistence from 0.763 to 0.774 on the static clip and
+separates them, and {{fig:video-stability}} plots the frame-to-frame agreement
+each clip produces before and after it, lifting persistence from 0.763 to 0.774 on the static clip and
 from 0.928 to 0.964 on the one with moving hands, where per-frame detection
 churns, which is the behaviour a majority filter should show. Frame-to-frame
 triplet agreement (Jaccard 0.84 and 0.59) is dominated by zero-shot detection

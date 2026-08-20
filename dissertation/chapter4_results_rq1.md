@@ -243,8 +243,8 @@ predicates (§7.3 draws that out).
 ## 4.8 Answer to RQ1
 
 Automated annotation reaches human-comparable quality on five of seven
-predicates outright, at 0.81–1.00 recall, mean 0.85 and 0.76 on annotators no
-threshold ever saw, with blind-audited true precision 0.92–1.00 for lateral,
+predicates outright, at 0.75–1.00 recall, mean 0.85 and 0.74 on annotators no
+threshold ever saw, with blind-audited true precision 0.79–1.00 for lateral,
 proximity and depth-decided front/behind. Those five rest on 24 samples each,
 so the point estimates are firm only to within intervals reaching 0.74 at the
 lower end, and the claim they support is comparability, not a

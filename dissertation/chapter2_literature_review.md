@@ -75,7 +75,7 @@ Its deployments repeatedly matched or beat hand-labelled baselines wherever
 the labelled set, not the model, was the bottleneck. This project's
 geometric rules are labelling functions in that sense, deterministic,
 auditable and dense, with two departures. Measured geometry gives near-exact, not noisy votes for five of the seven predicates (blind-audited
-precision 0.92–1.00) and demonstrably noisy ones for the other two, where
+precision 0.79–1.00) and demonstrably noisy ones for the other two, where
 §4.14 puts support at 0.40; on the five, no probabilistic aggregation is
 needed, and on the two the objection Snorkel answers with aggregation is
 answered here by abstention instead. The second departure is that the
