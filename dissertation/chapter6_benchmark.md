@@ -109,11 +109,19 @@ on group 7, the one annotator this dissertation convicts of nothing, at
 The size of that contamination is measurable rather than rhetorical. Of the
 2,818 relations in the test gold, **1,189 (42%) are front/behind, and 859 of
 those (72%) come from the two inverted annotators** — so **30% of the entire
-yardstick is a predicate labelled in the opposite direction to the tool's
-convention**. A model that learns the camera-frame convention is scored wrong
-on every one of them, and a model that learns the annotators' habit is scored
-right. On that share of the gold, mR@100 is not measuring spatial correctness
-at all; it is measuring whose convention the training labels came from.
+yardstick is a predicate labelled in the opposite direction to the convention
+every training group used**. Both arms train on groups 0–5, where no inversion
+is measured, so neither can score those relations and the penalty falls on
+them equally. What the inversion sets is therefore a *ceiling*, not a bias: it
+caps what any model trained on this data can achieve on 30% of the test gold,
+compressing the range in which the two arms can differ at all, and it makes
+the absolute mR@100 figures in this chapter lower bounds on both sides rather
+than estimates of spatial competence.
+
+The human arm's lead is a separate effect, and §6.4 localises it to annotator
+*selection* rather than annotator convention: the same gap appears on the
+lateral predicates, which have no direction to invert. The two defects
+co-occur in the same annotators without one causing the other.
 
 Two runs support this rather than one. The figures above are the shipped
 `on_contact_min` of 0.85 (§4.14); the same experiment at the earlier 0.60
@@ -184,6 +192,16 @@ learned the consistent convention, both pay the same tax on inverted gold,
 and the gap between them barely moves. The initial hypothesis that the
 denser arm is punished *harder* for its confidence is refuted by this
 measurement and withdrawn.
+
+That measurement replicates at the shipped threshold. Re-scoring the
+retrained auto arm of §4.14 against the same convention-aligned gold moves it
+from 0.291 to **0.316** mR@100 and from 0.255 to **0.293** R@100, a gain of
++0.025 against the +0.035 recorded at the earlier threshold. The size of the
+correction is therefore a property of the test annotation rather than of the
+labelling rule: two different label sets, produced by two different values of
+`on_contact_min`, pay a tax of the same order for the same annotator defect.
+Roughly a tenth of the absolute mR@100 reported anywhere in this chapter is
+an artefact of that defect, on both sides of the comparison.
 
 **(ii′) Where the gap actually lives: the two defective test groups.** The
 per-group figures of §6.3.1 localise the human arm's lead to the two
