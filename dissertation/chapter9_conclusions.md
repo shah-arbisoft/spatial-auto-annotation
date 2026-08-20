@@ -56,7 +56,7 @@ fitted where the cost of a false positive was invisible, the claim that it
 reached 0.9 was an artefact of auditing unblinded, and refitting the threshold
 lifted a measured 0.404 to a measured 0.535 rather than to the 0.667 the
 held-out fit had predicted. The qualification is
-`in front of` and `behind` at 0.64/0.66 pooled: not a failure of the criterion
+`in front of` and `behind` at 0.70/0.71 pooled: not a failure of the criterion
 but a disagreement about the words, since §4.12 shows the tool reproducing its
 own verdict across viewpoints 0.955 of the time while two annotator groups
 applied the opposite convention. A per-predicate answer was required precisely

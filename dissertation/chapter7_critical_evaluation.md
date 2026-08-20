@@ -17,12 +17,12 @@ blind-audited precision 0.92–1.00, and for `near` a perfect held-out score
 against the one annotator who used the label and never influenced the
 threshold. For
 support, after two evidence upgrades motivated by measurement (depth
-co-location, mask contact), recall is 0.88/0.81, but the claim stops there:
+co-location, mask contact), recall is 0.81/0.75, but the claim stops there:
 blind-audited precision is 0.535 [0.42, 0.65] after the threshold repair of
 §4.14, up from 0.404 before it, so the labels the tool adds beyond the human
 record are trustworthy for five predicates and right about half the time for
 this one. For the depth pair the cascade of relative depth
-and the ground-plane fallback reaches 0.64/0.66 pooled (0.84 once the two
+and the ground-plane fallback reaches 0.70/0.71 pooled (0.84 once the two
 inverted-convention groups are aligned), and where the tool commits it agrees
 at 0.95–1.00 with six of the seven same-convention annotators, the seventh
 being the dataset's smallest sample at 65 triplets; the remaining shortfall
@@ -317,7 +317,7 @@ this the objection a reader should weight most heavily.
 **Reference frame: answered as far as it can be, which is not all the way.**
 The dissertation does not assert that the camera frame is correct; it shows
 that the tool applies one frame consistently (§4.12), that two annotator
-groups applied another (§4.5), and that recall rises from 0.64/0.66 to 0.84
+groups applied another (§4.5), and that recall rises from 0.70/0.71 to 0.84
 once the convention is aligned. That establishes disagreement rather than
 error, and identifies which party is consistent. It does not establish which
 convention a robot should obey, and no measurement in this dissertation

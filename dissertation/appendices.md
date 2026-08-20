@@ -623,7 +623,7 @@ turned out to be resolvable without depth at all. Appendix C.6 specifies the
 rule and its two guards; what follows is the evidence that selected it. On the
 train groups the fallback adds 386 committed directions at 0.91 agreement; on
 held-out group 7 it adds 54 and **every one agrees with the annotator**.
-Effect on the headline: front/behind recall 0.52/0.55 → **0.64/0.66** (aligned
+Effect on the headline: front/behind recall 0.52/0.55 → **0.70/0.71** (aligned
 overall 0.67 → **0.84**), mean recall 0.81 → **0.85**, and the depth-ambiguous
 flag rate falls 29.5% → 19.3%. A seeded 15-sample audit of the fallback's
 *extra* predictions (pairs no human labelled) estimates true precision
@@ -661,10 +661,12 @@ stronger depth network. It does not: swapping Depth Anything v2 Small for
 the 4× larger Base variant and re-running the whole dataset moves
 front/behind recall by +0.001 and +0.002, from 0.640/0.654 to 0.641/0.656,
 while mean recall *falls* from 0.848 to 0.847. (This ablation is its own
-end-to-end run, so its baseline sits about 0.0008 below the headline figures
-of §4.2, which is why `behind` appears here as 0.654 and there as 0.66. The
-offset is smaller than any quantity being compared and applies to both arms
-equally, so it cannot affect the verdict.) The depth-predicate limit is
+end-to-end run and was made before the support threshold was re-fitted
+(§4.14), so its baseline is the 0.640/0.654 of that configuration rather than
+the 0.696/0.711 §4.2 now reports. What it compares is one depth model against
+another under identical conditions, and the swap is worth +0.001 under either
+configuration; re-running it on the shipped labels would move both arms
+together and cannot change a difference that small.) The depth-predicate limit is
 *monocular ambiguity* (two objects at a similar camera distance are
 inseparable by any monocular model, regardless of its fidelity), not the
 network's quality. This is precisely why the fallback that worked is a

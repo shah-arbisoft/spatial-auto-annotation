@@ -234,7 +234,7 @@ measurement and withdrawn.
 
 That measurement replicates at the shipped threshold. Re-scoring the
 retrained auto arm of §4.14 against the same convention-aligned gold moves it
-from 0.291 to **0.316** mR@100 and from 0.255 to **0.293** R@100, a gain of
+from 0.292 to **0.316** mR@100 and from 0.255 to **0.292** R@100, a gain of
 +0.025 against the +0.035 recorded at the earlier threshold. The size of the
 correction is therefore a property of the test annotation rather than of the
 labelling rule: two different label sets, produced by two different values of

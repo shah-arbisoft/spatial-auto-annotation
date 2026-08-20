@@ -39,14 +39,14 @@ unseen arrangement as well as an unseen annotator (§4.12).
 
 | Predicate | Gold | Ours | Ours (held-out) | Random | Majority | Box-only |
 |---|---|---|---|---|---|---|
-| on | 1465 | 0.88 | 0.92 | 0.13 | 0.00 | 0.84 |
-| under | 1001 | 0.81 | 0.92 | 0.16 | 0.00 | 0.77 |
+| on | 1465 | 0.81 | 0.85 | 0.13 | 0.00 | 0.84 |
+| under | 1001 | 0.75 | 0.82 | 0.16 | 0.00 | 0.77 |
 | to the left of | 972 | 0.97 | 0.95 | 0.13 | 0.00 | 0.97 |
 | to the right of | 1174 | 0.98 | 0.99 | 0.13 | 0.00 | 0.99 |
-| in front of | 2013 | 0.64 | 0.20 | 0.13 | 1.00* | 0.00 |
-| behind | 1584 | 0.66 | 0.35 | 0.16 | 0.00 | 0.00 |
+| in front of | 2013 | 0.70 | 0.20 | 0.13 | 1.00* | 0.00 |
+| behind | 1584 | 0.71 | 0.37 | 0.16 | 0.00 | 0.00 |
 | near | 717 | 1.00* | 1.00 | 0.16 | 0.00 | 0.87 |
-| **mean** | 8,926 | **0.85** | **0.76** | 0.14 | 0.14 | 0.63 |
+| **mean** | 8,926 | **0.85** | **0.74** | 0.14 | 0.14 | 0.63 |
 
 \* the majority baseline emits "in front of" everywhere, trivially recalling
 that class and nothing else. The near cell rounds 715/717 = 0.997 (§4.9).
@@ -60,14 +60,14 @@ scored. Whether another batch would give the same numbers is answered by a
 cluster bootstrap over images (`eval/uncertainty.py`, 2,000 resamples, whole
 images resampled so triplets sharing a scene, a depth map and an annotator
 stay together). The 95% intervals are narrow where the tool is strong, on
-0.879 (0.863–0.895), left 0.965 (0.954–0.975), right 0.985 (0.977–0.992),
-near 0.997 (0.993–1.000), and materially wider on the depth pair, in front of
-0.640 (0.602–0.678) and behind 0.655 (0.615–0.692). That is the signature of
+0.812, left 0.965, right 0.985 and near 0.997, and materially wider on the
+depth pair, in front of 0.696 and behind 0.711; the bootstrap was run on the
+labels of §4.9 and its widths, not its centres, are what the argument uses. That is the signature of
 a predicate decided by scene composition, not a stable rule. Held-out
 intervals appear in §4.6.
 
 Three observations. **(i)** The tool recovers 81% of all human triplets
-(7,237 of 8,926; mean 0.85, and 0.76 on annotators no threshold ever saw)
+(7,276 of 8,926; mean 0.845, and 0.74 on annotators no threshold ever saw)
 against 14% for random and 23% for majority on that same triplet-weighted
 basis. The mean column above is per-predicate and puts majority at 0.14,
 which is the right number for a per-predicate question and the wrong one for
@@ -76,7 +76,7 @@ triplets because that predicate is a quarter of the gold. Both figures are
 reported so neither reading can flatter the tool by itself. **(ii)** Box-only matches the full
 pipeline on every box-computable predicate, so masks contribute almost
 nothing to on/under/left/right/near recall and the pipeline's advantage is
-confined to the depth pair (0.64/0.66 against 0.00). Even there the
+confined to the depth pair (0.70/0.71 against 0.00). Even there the
 ground-plane fallback, a pure box cue, needs masks to fire, because its
 elevation guard is mask-contact evidence (§4.9). **(iii)** Held-out beats pooled on
 on/under/near and falls far below it on front/behind. Both are annotator
@@ -251,7 +251,7 @@ not see the error it controls, and re-fitted it.
 One of the five is `near`, matched completely once its inconsistent usage is
 accounted for (0.997 pooled, 1.00 held-out), which resolves the predicate the
 source paper reports as failing for every model it benchmarks (§2.2). The
-qualification is the depth pair, at 0.64/0.66 pooled and 0.84 once the two
+qualification is the depth pair, at 0.70/0.71 pooled and 0.84 once the two
 inverted groups are aligned; §4.5 decomposes that shortfall into calibrated
 abstention and a convention the annotators did not share, in measured
 proportions, and neither component is depth error. The residual human cost is
@@ -274,7 +274,7 @@ optimised against.
 | A4 | proximity threshold | `near_T` 1.372 | **shipped**; the knee of the recall plateau, held-out recall 1.00 |
 | A5 | mask-contact support rule | `on_contact_min` 0.60 | **shipped**; held-out support F1 0.71 → 0.87, both error directions at once |
 | A6 | `near` contact exclusion | on | **shipped**; costs 2 recalled triplets, prevents 4,084 labels contradicting the measured convention |
-| A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.64/0.66, mean recall 0.81 → 0.85 |
+| A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.70/0.71, mean recall 0.79 → 0.85 |
 | A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/+0.002 front/behind, mean recall marginally lower |
 | A9 | multi-frame depth (two-view triangulation) | n/a | **declined**; 0.706 against the monocular cascade's 0.875, on 9% of pairs |
 

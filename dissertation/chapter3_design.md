@@ -169,7 +169,7 @@ against. The design rationale in brief:
   when either object rests on another (mask contact ≥ 0.60), because an
   elevated object's box bottom says where its *support* is, and it has its own
   band (0.005). Pairs both stages abstain on are flagged, not guessed
-  (recall 0.64/0.66 *(measured)*, from 0.52/0.55 depth-only).
+  (recall 0.70/0.71 *(measured)*, from 0.52/0.55 depth-only).
 - **near** is a size-relative proximity test: edge-to-edge box gap divided by
   mean object size, below a fitted threshold, and **never on contact pairs**,
   since `near` co-occurs with on/under on 0 of 469 human pairs, so the

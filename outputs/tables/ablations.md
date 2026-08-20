@@ -41,14 +41,14 @@ calibrated on_depth_eps = **0.06** — selected by support F1 on TRAIN groups on
 
 | T | near recall | near recall (held-out) | near P(restr.) | emitted |
 |---|---|---|---|---|
-| 0.600 | 0.911 | 0.624 | 0.125 | 22536 |
-| 0.800 | 0.944 | 0.710 | 0.122 | 27972 |
-| 1.000 | 0.967 | 0.817 | 0.119 | 33166 |
-| 1.200 | 0.990 | 0.978 | 0.117 | 38154 |
-| 1.372 | 0.997 | 1.000 | 0.116 | 42432 |
-| 1.600 | 0.997 | 1.000 | 0.114 | 47556 |
-| 1.900 | 0.997 | 1.000 | 0.114 | 53350 |
-| 2.200 | 0.997 | 1.000 | 0.113 | 58354 |
+| 0.600 | 0.911 | 0.624 | 0.117 | 23492 |
+| 0.800 | 0.944 | 0.710 | 0.114 | 28928 |
+| 1.000 | 0.967 | 0.817 | 0.112 | 34122 |
+| 1.200 | 0.990 | 0.978 | 0.111 | 39110 |
+| 1.372 | 0.997 | 1.000 | 0.109 | 43388 |
+| 1.600 | 0.997 | 1.000 | 0.108 | 48512 |
+| 1.900 | 0.997 | 1.000 | 0.107 | 54306 |
+| 2.200 | 0.997 | 1.000 | 0.107 | 59310 |
 
 ## A5 - Mask-contact support rule (`on_contact_min`)
 
@@ -70,10 +70,10 @@ calibrated on_contact_min = **0.6** (train-group selection; compare the box-rule
 
 | setting | near recall | near P(restr.) | near emitted |
 |---|---|---|---|
-| on (shipped) | 0.997 | 0.116 | 42432 |
+| on (shipped) | 0.997 | 0.109 | 43388 |
 | off | 1.000 | 0.083 | 46516 |
 
-The exclusion costs 2 recalled triplets and prevents 4,084 near labels on contact pairs - labels that would contradict the measured human convention (near co-occurs with on/under on 0 of 469 pairs).
+The exclusion costs 2 recalled triplets and prevents 3,128 near labels on contact pairs - labels that would contradict the measured human convention (near co-occurs with on/under on 0 of 469 pairs).
 
 
 ## A7 - Ground-plane depth fallback (`plane_band`)
@@ -81,10 +81,10 @@ The exclusion costs 2 recalled triplets and prevents 4,084 near labels on contac
 | band | front recall | front (held-out) | front P(restr.) | behind recall | behind (held-out) | behind P(restr.) |
 |---|---|---|---|---|---|---|
 | off | 0.517 | 0.167 | 0.467 | 0.547 | 0.264 | 0.413 |
-| 0.000 | 0.650 | 0.197 | 0.416 | 0.666 | 0.369 | 0.345 |
-| 0.005 | 0.640 | 0.197 | 0.429 | 0.655 | 0.347 | 0.356 |
-| 0.010 | 0.623 | 0.197 | 0.445 | 0.643 | 0.329 | 0.370 |
-| 0.020 | 0.580 | 0.187 | 0.462 | 0.607 | 0.303 | 0.392 |
-| 0.050 | 0.533 | 0.171 | 0.472 | 0.562 | 0.271 | 0.414 |
+| 0.000 | 0.709 | 0.199 | 0.417 | 0.723 | 0.391 | 0.338 |
+| 0.005 | 0.696 | 0.199 | 0.432 | 0.711 | 0.369 | 0.350 |
+| 0.010 | 0.664 | 0.197 | 0.445 | 0.694 | 0.352 | 0.366 |
+| 0.020 | 0.598 | 0.187 | 0.459 | 0.633 | 0.324 | 0.387 |
+| 0.050 | 0.537 | 0.171 | 0.470 | 0.566 | 0.271 | 0.410 |
 
 shipped plane_band = **0.005** - selected on train groups (added commits at 0.91 direction agreement; held-out group 7: all added commits correct). The fallback fires only when the depth rule abstained and neither object rests on another by the tool's own contact evidence; without masks it is off (A2 is the pure-depth trade for reference).
