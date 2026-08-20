@@ -70,8 +70,10 @@ FIGURES = {
     "planner_sources.png": (
         "chapter5_results_rq2.md",
         "Scenes with a safe grasp plan, by the relation source given to the "
-        "planner. Neither automatic source matches human annotation alone; "
-        "their union does, because their failures are disjoint.",
+        "planner. Neither automatic source matches human annotation alone, and "
+        "under the shipped support threshold the vision-language source is "
+        "marginally ahead of the geometric one; their union matches it, "
+        "because their failures are disjoint.",
         "## 5.8 Answer to RQ2"),
     "rq2_with_vlm.png": (
         "chapter5_results_rq2.md",

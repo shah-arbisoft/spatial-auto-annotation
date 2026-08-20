@@ -304,8 +304,9 @@ where the annotation itself is defective. But the objection also predicts
 that consistent-but-wrong supervision is worse than inconsistent human
 supervision, and on this dataset that is refuted at every level where the
 question was asked, by a factor of two and a half in the controlled
-experiment and by a planner that clears the occluder in 22 of 25 scenes
-on the pre-refit labels (§5.7)
+experiment and by a planner that clears the occluder in 19 of 25 scenes on
+the tool's relations alone and 25 of 25 on their union with the
+vision-language model's (§5.7)
 against 0 with no relations at all. The reconciliation is that systematic
 error is worse than random error only when it is *wrong*; §4.12's finding
 that front/behind agrees with itself across viewpoints 0.955 of the time

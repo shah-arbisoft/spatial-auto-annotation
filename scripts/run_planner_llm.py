@@ -186,9 +186,12 @@ def call_gemini(prompt: str, model: str, api_key: str, retries: int = 4) -> str:
             parts = data["candidates"][0]["content"]["parts"]
             return "\n".join(p.get("text", "") for p in parts).strip()
         except urllib.error.HTTPError as e:
-            body = e.read().decode("utf-8", "replace")
+            # NB: not `body`, which holds the encoded request. Overwriting it
+            # here made every retry after a 429 fail with a TypeError, so the
+            # backoff this function implements had never actually run.
+            detail = e.read().decode("utf-8", "replace")
             if e.code == 429:
-                daily, delay = _quota_info(body)
+                daily, delay = _quota_info(detail)
                 if daily:
                     # a per-day cap: no amount of waiting helps within this run
                     raise QuotaExhausted(model) from None

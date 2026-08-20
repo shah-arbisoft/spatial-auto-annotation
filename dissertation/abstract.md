@@ -50,8 +50,8 @@ labelling defect and reverses on the one without, so the metric rewards
 annotation habits as well as spatial correctness. One link down the chain the answer is unambiguous: asked for a
 safe grasp plan on 25 held-out scenes where an object rests on the target, a
 planner clears it in 0 of 25 given objects alone, 25 of 25 given human
-relationships and 22 of 25 given automatic ones as measured before the
-threshold refit, identically on two planners
+relationships, 19 of 25 given automatic ones and 25 of 25 given the union of
+the automatic and vision-language sources, identically on two planners
 of very different capability. Automatic labels are the better supervision
 where ground truth means geometry, human labels where it means annotation
 practice, and robot planning needs the former. The bottleneck removed was

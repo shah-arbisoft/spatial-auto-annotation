@@ -236,13 +236,13 @@ model's from §4.13, and **E** supplies the union of C and D.
 |---|---|---|---|
 | A | objects only | 0 / 25 | 0 / 25 |
 | B | human relationships | 25 / 25 | 25 / 25 |
-| C | automatic relationships | 22 / 25 | 22 / 25 |
+| C | automatic relationships | 19 / 25 | 19 / 25 |
 | D | vision-language relationships | not run | 20 / 25 |
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
 {{fig:planner-sources}} shows the five conditions side by side. The two
-planners agree exactly, and not merely in the totals: the three scenes
-C fails on are scenes 4, 16 and 24 under *both* models. A finding that survives
+planners agree exactly, and not merely in the totals: the six scenes
+C fails on are scenes 1, 4, 16, 19, 24 and 25 under *both* models. A finding that survives
 replacing the reasoning engine, down to which scenes fail, is a property of the
 information in the prompt, not of the model consuming it, which is the
 claim the experiment exists to make. It also disposes of the objection to
@@ -253,25 +253,29 @@ the A plans the planner *names* the occluder but only as something to steer
 around, treating something resting on the target as a neighbour to avoid, not a load to remove.
 
 **The two automatic sources fail on different scenes, and the union closes
-the gap.** Condition D is the weaker source alone, 20 of 25 against the tool's
-22, consistent with §4.13. What matters is the structure underneath: C fails
-on scenes 4, 16 and 24, D on 3, 5, 6, 13 and 14, and **the two sets do not
+the gap.** Condition D scores 20 of 25 against the tool's 19, so under the
+shipped rule the vision-language source is marginally the stronger of the two
+alone. What matters is the structure underneath: C fails on scenes 1, 4, 16,
+19, 24 and 25, D on 3, 5, 6, 13 and 14, and **the two sets do not
 intersect**. Every failure in both arms is a support relation the source did
 not supply, never a plan that reasoned badly from what it was given, so a
 union supplying more support relations repairs exactly those cases and cannot
 break the ones already working. It does: condition E clears the occluder in
-all 25 scenes, drawing level with the human labels at 0 gained, 0 lost, 25
-tied. This is the only measurement here on which automatic labels *match*
+all 25 scenes, drawing level with the human labels, and gains six scenes over
+condition C while losing none. This is the only measurement here on which automatic labels *match*
 human annotation on a robot-relevant task rather than approaching it, with no
 human in the labelling loop.
 
-All three C failures have the same cause, and it is not a planning failure:
-the automatic relation list did not contain the support relation. The occluder
-was described accurately in every way except the one the task depended on, and
-in zero cases was the support relation present and ignored. Three misses in
-twenty-five scenes is 12%, against the measured support recall of 0.88 in
-§4.2, so the planner result is the fidelity result showing up one level higher
-in the chain.
+All six C failures have the same cause, and it is not a planning failure: the
+automatic relation list did not contain the support relation. The occluder was
+described accurately in every way except the one the task depended on, and in
+zero cases was the support relation present and ignored. The converse is
+nearly but not quite true: seven scenes lack the relation and six fail, scene
+7 being recovered from the surrounding description alone. Six misses in
+twenty-five scenes is 24%, against the measured support recall of 0.81/0.75 in
+§4.2 and the refit that traded recall for precision in §4.14, so the planner
+result is the fidelity result showing up one level higher in the chain — and
+it moves when that fidelity does.
 
 **What this does not show.** Twenty-five scenes is a small sample, and the
 interest is the disjointness of the failures, not the two-scene margin
@@ -282,23 +286,29 @@ sources, not planners: condition B is handed the exact fact the task tests. And
 no robot moved, so this measures plans, not executions, and closes the gap
 between labels and robot behaviour by one link, not entirely.
 
-**The figures above predate the threshold refit of §4.14 and would change.**
-This experiment was run on the labels `on_contact_min` 0.60 produced; the
-shipped rule is 0.85, which emits support more sparingly. Checking the 25
-scenes against the shipped labels, the support relation the task depends on is
-present in 18 of them rather than 22: it is now absent in scenes 1, 4, 7, 16,
-19, 24 and 25, where before it was absent in 4, 16 and 24 alone. Since every C
-failure recorded here is a missing support relation and none is a plan that
-reasoned badly from one it was given, condition C would be expected to fall to
-about 18 of 25 on a re-run. That expectation is stated rather than measured,
-and the re-run is the one experiment in this dissertation the threshold change
-has not yet been carried through to.
+**The threshold refit of §4.14 cost condition C three scenes, and E none.**
+An earlier version of this experiment ran on the labels `on_contact_min` 0.60
+produced and recorded C at 22 of 25. The shipped rule is 0.85, which emits
+support more sparingly: across the same 25 scenes the support relation the
+task depends on is now present in 18 rather than 22, absent in scenes 1, 4, 7,
+16, 19, 24 and 25 where before it was absent in 4, 16 and 24 alone. Re-run on
+the shipped labels, **C scores 19 of 25 on both planners** and E still scores
+25 of 25, with 6 scenes gained over C and none lost.
 
-Condition E is unaffected, and the reason is the finding this section rests
-on. The seven scenes the tool now misses and the five the vision-language
-model misses remain **disjoint**, so their union still supplies a support
-relation for all 25. Making the geometric source stricter widened its gap and
-left the complementarity intact, which is a stronger form of the same result.
+That the two planners again agree exactly, and at a different value from
+before, is the same evidence the earlier agreement gave: what the prompt
+contains decides the outcome, and which engine consumes it does not. C
+recovers one scene more than the count of available support relations would
+predict, so absence of the relation is nearly but not quite sufficient for
+failure; `grasps_target` and `no_invented` remain 1.00 throughout, so no plan
+failed for any other reason.
+
+**The complementarity result strengthens under the stricter rule.** The seven
+scenes the tool now misses and the five the vision-language model misses are
+still **disjoint**, so their union supplies a support relation for all 25.
+Tightening the geometric source widened its own gap by three scenes and left
+the union closing every one of them, which is a harder test of the same claim
+than the original passed.
 
 One further limitation is structural and worth stating plainly, because it
 bounds what the result can mean. **The scoring rule cannot see a false positive.** It asks
@@ -311,11 +321,14 @@ motion, or one where moving the wrong object is unsafe, not merely
 inefficient, would rank these label sources differently, and nothing here
 predicts how.
 
-What it settles is the question §5.6 could only frame. Automatic labels carry
-88% of the decision-relevant content that human labels carry on this task,
-against 0% for no labels at all, and the residual gap is not a property of
-computed labels in general but of one predicate whose recall is already
-measured and whose failure modes are diagnosed in §4.9 and §4.14.
+What it settles is the question §5.6 could only frame. The tool's relations
+alone carry 76% of the decision-relevant content human labels carry on this
+task, against 0% for no labels at all, and combined with the
+vision-language model's they carry all of it. The residual gap in the
+single-source arm is not a property of computed labels in general but of one
+predicate whose recall is measured, whose precision was refitted, and whose
+failure modes are diagnosed in §4.9 and §4.14 — which is why tightening that
+predicate moved this number and moved nothing else in the chapter.
 
 
 ## 5.8 Answer to RQ2
