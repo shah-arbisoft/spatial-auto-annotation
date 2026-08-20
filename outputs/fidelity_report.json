@@ -3,15 +3,15 @@
     "ours": {
       "on": {
         "gold": 1465,
-        "recall": 0.8791808873720136,
+        "recall": 0.8122866894197952,
         "gold_heldout": 348,
-        "recall_heldout": 0.9224137931034483
+        "recall_heldout": 0.853448275862069
       },
       "under": {
         "gold": 1001,
-        "recall": 0.8131868131868132,
+        "recall": 0.7472527472527473,
         "gold_heldout": 192,
-        "recall_heldout": 0.921875
+        "recall_heldout": 0.8229166666666666
       },
       "to the left of": {
         "gold": 972,
@@ -27,15 +27,15 @@
       },
       "in front of": {
         "gold": 2013,
-        "recall": 0.6398410332836563,
+        "recall": 0.6964729259811226,
         "gold_heldout": 609,
-        "recall_heldout": 0.19704433497536947
+        "recall_heldout": 0.1986863711001642
       },
       "behind": {
         "gold": 1584,
-        "recall": 0.6553030303030303,
+        "recall": 0.711489898989899,
         "gold_heldout": 580,
-        "recall_heldout": 0.34655172413793106
+        "recall_heldout": 0.3689655172413793
       },
       "near": {
         "gold": 717,
@@ -44,8 +44,8 @@
         "recall_heldout": 1.0
       },
       "MEAN": {
-        "recall": 0.8477729631976099,
-        "recall_heldout": 0.7608934565539389
+        "recall": 0.8449144628401886,
+        "recall_heldout": 0.7403408820758718
       }
     },
     "random": {
@@ -196,15 +196,15 @@
   },
   "restricted_prf": {
     "on": {
-      "precision": 0.8786,
-      "recall": 0.8792,
-      "f1": 0.8789,
+      "precision": 0.9528,
+      "recall": 0.8123,
+      "f1": 0.8769,
       "support": 1465
     },
     "under": {
-      "precision": 0.8444,
-      "recall": 0.8132,
-      "f1": 0.8285,
+      "precision": 0.9246,
+      "recall": 0.7473,
+      "f1": 0.8265,
       "support": 1001
     },
     "to the left of": {
@@ -220,21 +220,21 @@
       "support": 1174
     },
     "in front of": {
-      "precision": 0.4293,
-      "recall": 0.6398,
-      "f1": 0.5139,
+      "precision": 0.432,
+      "recall": 0.6965,
+      "f1": 0.5333,
       "support": 2013
     },
     "behind": {
-      "precision": 0.3556,
-      "recall": 0.6553,
-      "f1": 0.461,
+      "precision": 0.3501,
+      "recall": 0.7115,
+      "f1": 0.4693,
       "support": 1584
     },
     "near": {
-      "precision": 0.116,
+      "precision": 0.1094,
       "recall": 0.9972,
-      "f1": 0.2078,
+      "f1": 0.1972,
       "support": 717
     },
     "n_annotated_pairs": 8790
@@ -243,23 +243,23 @@
     "on": {
       "n": 1465,
       "responses": {
-        "correct": 1288,
-        "near": 177,
-        "behind": 155,
-        "to the right of": 48,
-        "to the left of": 46,
-        "in front of": 13
+        "correct": 1190,
+        "near": 275,
+        "behind": 248,
+        "to the right of": 56,
+        "to the left of": 48,
+        "in front of": 17
       }
     },
     "under": {
       "n": 1001,
       "responses": {
-        "correct": 814,
-        "in front of": 167,
-        "near": 166,
-        "to the left of": 63,
-        "to the right of": 46,
-        "behind": 11
+        "correct": 748,
+        "in front of": 234,
+        "near": 232,
+        "to the left of": 68,
+        "to the right of": 47,
+        "behind": 14
       }
     },
     "to the left of": {
@@ -285,25 +285,25 @@
     "in front of": {
       "n": 2013,
       "responses": {
-        "correct": 1288,
-        "near": 574,
-        "behind": 422,
-        "to the left of": 261,
-        "to the right of": 131,
-        "under": 93,
-        "on": 51
+        "correct": 1402,
+        "near": 548,
+        "behind": 460,
+        "to the left of": 256,
+        "to the right of": 123,
+        "under": 34,
+        "on": 22
       }
     },
     "behind": {
       "n": 1584,
       "responses": {
-        "correct": 1038,
-        "near": 421,
-        "in front of": 353,
-        "to the right of": 173,
-        "to the left of": 126,
-        "on": 91,
-        "under": 34
+        "correct": 1127,
+        "near": 419,
+        "in front of": 368,
+        "to the right of": 164,
+        "to the left of": 123,
+        "on": 25,
+        "under": 13
       }
     },
     "near": {
@@ -317,23 +317,23 @@
   "per_group_recall": {
     "group_0": {
       "gold_triplets": 1949,
-      "recall": 0.8666
+      "recall": 0.8512
     },
     "group_1": {
       "gold_triplets": 1489,
-      "recall": 0.9261
+      "recall": 0.8993
     },
     "group_2": {
       "gold_triplets": 1192,
-      "recall": 0.8624
+      "recall": 0.9211
     },
     "group_3": {
       "gold_triplets": 435,
-      "recall": 0.7172
+      "recall": 0.8805
     },
     "group_4": {
       "gold_triplets": 356,
-      "recall": 0.868
+      "recall": 0.8596
     },
     "group_5": {
       "gold_triplets": 687,
@@ -341,11 +341,11 @@
     },
     "group_6": {
       "gold_triplets": 970,
-      "recall": 0.5784
+      "recall": 0.5557
     },
     "group_7": {
       "gold_triplets": 796,
-      "recall": 0.9083
+      "recall": 0.8995
     },
     "group_8": {
       "gold_triplets": 1052,
@@ -355,35 +355,35 @@
   "front_behind_decomposition": {
     "group_0": {
       "gold": 724,
-      "emit_rate": 0.9227,
-      "direction_agreement_when_committed": 0.9491,
-      "raw_recall": 0.8757,
+      "emit_rate": 0.9392,
+      "direction_agreement_when_committed": 0.95,
+      "raw_recall": 0.8923,
       "convention": "same",
-      "convention_aligned_recall": 0.8757
+      "convention_aligned_recall": 0.8923
     },
     "group_1": {
       "gold": 639,
-      "emit_rate": 0.9812,
+      "emit_rate": 0.9969,
       "direction_agreement_when_committed": 1.0,
-      "raw_recall": 0.9812,
+      "raw_recall": 0.9969,
       "convention": "same",
-      "convention_aligned_recall": 0.9812
+      "convention_aligned_recall": 0.9969
     },
     "group_2": {
       "gold": 351,
-      "emit_rate": 0.584,
+      "emit_rate": 0.8547,
       "direction_agreement_when_committed": 1.0,
-      "raw_recall": 0.584,
+      "raw_recall": 0.8547,
       "convention": "same",
-      "convention_aligned_recall": 0.584
+      "convention_aligned_recall": 0.8547
     },
     "group_3": {
       "gold": 258,
-      "emit_rate": 0.5426,
-      "direction_agreement_when_committed": 0.9786,
-      "raw_recall": 0.531,
+      "emit_rate": 0.8217,
+      "direction_agreement_when_committed": 0.9858,
+      "raw_recall": 0.8101,
       "convention": "same",
-      "convention_aligned_recall": 0.531
+      "convention_aligned_recall": 0.8101
     },
     "group_4": {
       "gold": 65,
@@ -403,41 +403,41 @@
     },
     "group_6": {
       "gold": 415,
-      "emit_rate": 0.9807,
-      "direction_agreement_when_committed": 0.0467,
+      "emit_rate": 0.9904,
+      "direction_agreement_when_committed": 0.0462,
       "raw_recall": 0.0458,
       "convention": "inverted",
-      "convention_aligned_recall": 0.9349
+      "convention_aligned_recall": 0.9446
     },
     "group_7": {
       "gold": 330,
-      "emit_rate": 0.897,
+      "emit_rate": 0.9364,
       "direction_agreement_when_committed": 1.0,
-      "raw_recall": 0.897,
+      "raw_recall": 0.9364,
       "convention": "same",
-      "convention_aligned_recall": 0.897
+      "convention_aligned_recall": 0.9364
     },
     "group_8": {
       "gold": 444,
-      "emit_rate": 0.7275,
-      "direction_agreement_when_committed": 0.0186,
-      "raw_recall": 0.0135,
+      "emit_rate": 0.8401,
+      "direction_agreement_when_committed": 0.0188,
+      "raw_recall": 0.0158,
       "convention": "inverted",
-      "convention_aligned_recall": 0.714
+      "convention_aligned_recall": 0.8243
     },
     "OVERALL": {
       "gold": 3597,
-      "raw_recall": 0.6466,
-      "convention_aligned_recall": 0.8357
+      "raw_recall": 0.7031,
+      "convention_aligned_recall": 0.9066
     }
   },
   "flag_rates": {
-    "pairs_flagged": 26716,
-    "rate": 0.3148,
+    "pairs_flagged": 24712,
+    "rate": 0.2911,
     "by_type": {
       "depth_ambiguous": {
-        "count": 16412,
-        "rate": 0.1934
+        "count": 13258,
+        "rate": 0.1562
       },
       "lateral_ambiguous": {
         "count": 8454,
