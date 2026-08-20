@@ -25,7 +25,7 @@ The human arm reaches 95\% of its best validation score by \textbf{epoch 4}, pea
 \label{fig:sgg-training-curves}
 \end{figure}
 
-\section{Test results: predictions 2 and 3 refuted on the ranking metric}
+\section{Test results: prediction 2 unresolved, prediction 3 refuted}
 
 Both best checkpoints evaluated on the identical test set (210 images, human gold, groups 6--8):
 
@@ -134,7 +134,7 @@ The critical reading is not novel to this project, which is what makes it credib
 
 \section{What Chapter 5's predictions got right and wrong}
 
-Registered before the run, judged after: prediction 1 (early human-arm saturation) is \textbf{confirmed} and replicates the source paper. Prediction 2 (higher plateau) is \textbf{refuted on mR@100 as stated}, the plateau being higher only on the zero-shot component the prediction did not name. Prediction 3 (\texttt{near} recovery) is \textbf{refuted}: it wrongly assumed the test gold could reward dense \texttt{near} prediction. The value of pre-registration is that these verdicts are checkable, and the mechanism analysis above is what the misses taught.
+Registered before the run, judged after: prediction 1 (early human-arm saturation) is \textbf{confirmed} and replicates the source paper. Prediction 2 (higher plateau) is \textbf{unresolved on mR@100}, and the honest word matters: an earlier version of this chapter recorded it as refuted on the strength of a 0.048 gap that the retrained arms of \S{}6.3 reduce to 0.001, which no experiment of this size can call in either direction. Where the plateau \textit{is} higher is the zero-shot component the prediction did not name, 0.268 against 0.052. Prediction 3 (\texttt{near} recovery) is \textbf{refuted}: it wrongly assumed the test gold could reward dense \texttt{near} prediction. The value of pre-registration is that these verdicts are checkable, and that one of them had to be revised when the measurement improved is a point in its favour rather than against it.
 
 The replication adds a fourth verdict, on a claim made \textit{after} the run rather than before: \S{}6.3.1 withdraws the single-seed group-7 result, not quietly editing it away. The lesson is the one already applied to the pre-registered predictions and not to that one, that a difference is worth naming only once its size is compared with the variation of the procedure that produced it.
 

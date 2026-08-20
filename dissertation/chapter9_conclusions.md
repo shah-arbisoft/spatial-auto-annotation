@@ -25,7 +25,7 @@ audited precision and cluster-bootstrap intervals, giving mean recall 0.85 and
 0.76 on annotators no threshold ever saw. **O4** is the diagnosis: every one
 of the 1,689 missed triplets attributed to a cause, leaving roughly 7%
 attributable to genuine tool error (§4.10, §7.2). **O5** is the controlled
-experiment isolating the label source, at 0.76 mean recall against held-out
+experiment isolating the label source, at 0.75 mean recall against held-out
 human gold for the automatic arm against 0.30 human and 0.36 self-trained.
 **O6** repeats that comparison in the source paper's own framework, with a
 frozen detector and three seeds per arm, and carries it one link further to a
@@ -50,7 +50,13 @@ interval within which those annotators can be shown to agree with one another
 (§4.6), so the tool is not distinguishable from a tenth annotator. The second
 condition, that labels beyond the human record survive audit, holds for the
 lateral, proximity and depth-decided predicates at blind-audited precision
-0.92–1.00. It holds only partly for support, at 0.535 [0.42, 0.65]: the
+0.92–1.00. **It is not met for support.** At 0.535 [0.42, 0.65] about half the
+support labels the tool adds beyond the human record are wrong, which is well
+above noise and well below a standard anything should be built on, and the
+criterion of §1.2.2 asked for labels that survive audit rather than labels
+that beat chance. Support therefore answers RQ1 on recall and fails it on
+precision, and the per-predicate form of the question exists so that this
+cannot be averaged away. The
 contact rule repaired the box rule's failure but was left at a threshold
 fitted where the cost of a false positive was invisible, the claim that it
 reached 0.9 was an artefact of auditing unblinded, and refitting the threshold
@@ -62,23 +68,27 @@ own verdict across viewpoints 0.955 of the time while two annotator groups
 applied the opposite convention. A per-predicate answer was required precisely
 so this could not hide inside a mean.
 
-**RQ2 is answered yes at all three levels the criterion named, decisively at
-two of them and narrowly at the third.** The controlled classifier gives 0.76
-against 0.30 and the planner 22 of 25 against 0 of 25 with no relations, both
-in the harder direction the criterion specified: held-out *human* gold, the
-rival source's own yardstick. The benchmark neither confirms the margin nor
-contradicts it. Over three seeds in the source paper's own framework the two
-arms rank level, 0.292 against 0.293, with overlapping seed ranges on every
-slice, so what Chapter 5 measures as a two-and-a-half-fold advantage the
-ranked metric measures as parity. Section 1.2.2 committed to reporting that
-honestly rather than resolving it favourably, and Chapter 6 does: what
+**RQ2 is answered yes at two of the three levels and is undecided at the
+third.** The controlled classifier gives 0.75 against 0.30 and the planner 22
+of 25 against 0 of 25 with no relations, both in the harder direction the
+criterion specified: held-out *human* gold, the rival source's own yardstick.
+The benchmark neither confirms the margin nor contradicts it, and the honest
+word for 0.292 against 0.293 is *undecided* rather than *yes*: the automatic
+arm's point estimate sits 0.001 below the human arm's, which is a difference
+no experiment of this size could resolve in either direction, with overlapping
+seed ranges on every slice. Section 1.2.2 required agreement across all three
+for an unqualified yes, and a tie is not agreement. What Chapter 5 measures as
+a two-and-a-half-fold advantage the ranked metric measures as parity, and
+§1.2.2 committed to reporting that rather than resolving it favourably.
+Chapter 6 does: what
 difference remains sits on the two test annotators carrying measured
 labelling defects and reverses on the one without, on a test gold whose
 front/behind relations are 72% written by those two, while the auto arm
 recovers five times more of the relation types the manual annotation never
 recorded and reproduces itself across seeds nearly nine times more tightly.
-"Good enough to replace" is met at every level; "better", which Chapter 5
-supports, holds only where ground truth means geometry.
+"Good enough to replace" is met at two levels and unrefuted at the third;
+"better", which Chapter 5 and the planner both support, holds where ground
+truth means geometry and not where it means annotation practice.
 
 The condition is legible, and it is the sentence the evidence supports:
 **automatic labels are at least the equal of human ones wherever ground truth

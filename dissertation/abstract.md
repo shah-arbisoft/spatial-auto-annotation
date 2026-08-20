@@ -35,7 +35,7 @@ verdict across viewpoints 0.96 of the time, so a predicate recovering only
 0.64 of the human labels is applying an unshared criterion rather than
 guessing.
 
-A classifier trained on the automatic labels reaches 0.76 mean recall
+A classifier trained on the automatic labels reaches 0.75 mean recall
 against held-out human annotations, against 0.30 for human labels and 0.36
 when those are stretched by self-training.
 

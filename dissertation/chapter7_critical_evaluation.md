@@ -33,13 +33,23 @@ is more consistent than the human process it is measured against.
 **RQ2** asked whether the automatic labels can train a relation model as well
 as human labels. The controlled experiment answered more strongly than the
 question was posed: with identical features, model, seed and split, the
-auto-trained classifier reaches 0.76 mean recall against held-out *human* gold
+auto-trained classifier reaches 0.75 mean recall against held-out *human* gold
 versus 0.30 for its human-trained twin. At this dataset's annotation scale,
 the automatic labels are better training material than the labels they were
 validated against. The mechanism is not mysterious: density (20× more
 triplets) and consistency (one definition, uniformly applied). But it converts
 the project's premise from "removing the bottleneck loses little" to "removing
 the bottleneck gains".
+
+That claim is scoped by the third measurement rather than confirmed by it.
+Chapter 6 puts the same two label sources through the source paper's own
+framework and cannot separate them, 0.292 against 0.293 over three seeds, so
+the advantage the classifier measures does not appear on a ranked metric
+scored against sparse human annotation. Both results are about the same
+labels; what differs is what each yardstick asks for, and §6.4 spends the
+chapter on that difference. The defensible sentence is that automatic labels
+*teach better where correctness is the criterion and equally well where
+resemblance to the annotators is*, not that they are simply better.
 
 The third arm is what makes that claim hard to dismiss. Self-training on the
 human labels, the standard semi-supervised remedy for exactly this problem,

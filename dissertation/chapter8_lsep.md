@@ -73,7 +73,9 @@ details, IP addresses or tracking identifiers are collected, an information
 panel states the purpose and data handling before play, and the collection
 runs under the University's ethics self-assessment process (Appendix A).
 Third, research integrity: predictions were registered before the benchmark
-run and two of three are reported refuted (§6.6), a withdrawn hypothesis
+run and reported as they fell, one confirmed, one refuted and one left
+unresolved once a better-controlled replication shrank the margin it rested
+on (§6.6); a withdrawn hypothesis
 remains in the text (§6.4), and two built refinements are reported as
 measured and declined (Appendix D.4). The dissertation treats honest negative
 results as results.

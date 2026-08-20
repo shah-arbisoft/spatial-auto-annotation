@@ -48,14 +48,14 @@ Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 
 | predicate | human-trained | self-trained | vision-language | auto-trained | gold (held-out) |
 |---|---|---|---|---|---|
-| on | 0.84 (0.83–0.86) | 0.90 (0.89–0.92) | 0.76 (0.68–0.89) | 0.92 (0.92–0.93) | 348 |
-| under | 0.44 (0.36–0.53) | 0.59 (0.59–0.60) | 0.84 (0.71–0.91) | 0.92 (0.92–0.93) | 192 |
+| on | 0.84 (0.83–0.86) | 0.90 (0.89–0.92) | 0.76 (0.68–0.89) | 0.88 (0.87–0.89) | 348 |
+| under | 0.44 (0.36–0.53) | 0.59 (0.59–0.60) | 0.84 (0.71–0.91) | 0.85 (0.85–0.85) | 192 |
 | to the left of | 0.22 (0.18–0.29) | 0.31 (0.27–0.34) | 0.42 (0.41–0.43) | 0.95 (0.95–0.95) | 446 |
 | to the right of | 0.25 (0.22–0.31) | 0.38 (0.37–0.39) | 0.35 (0.30–0.44) | 0.99 (0.99–0.99) | 550 |
 | in front of | 0.09 (0.08–0.10) | 0.12 (0.12–0.13) | 0.08 (0.07–0.09) | 0.19 (0.19–0.19) | 609 |
-| behind | 0.15 (0.12–0.17) | 0.22 (0.17–0.28) | 0.21 (0.21–0.23) | 0.33 (0.32–0.34) | 580 |
+| behind | 0.15 (0.12–0.17) | 0.22 (0.17–0.28) | 0.21 (0.21–0.23) | 0.37 (0.37–0.37) | 580 |
 | near | 0.08 (0.00–0.19) | 0.03 (0.00–0.06) | 0.00 (0.00–0.00) | 1.00 (1.00–1.00) | 93 |
-| **mean** | **0.30** | **0.36** | **0.38** | **0.76** | |
+| **mean** | **0.30** | **0.36** | **0.38** | **0.75** | |
 
 A fourth arm answers what §4.13 raises but cannot settle: if a
 vision-language model is not a good enough *annotator*, is it a good enough
@@ -70,7 +70,7 @@ while remaining half as useful as computed geometry.
 
 {{fig:rq2-with-vlm}} draws the four arms per predicate. Training on the
 automatic labels multiplies downstream mean recall by ~2.5
-against the human annotators' own held-out labels: 0.76 vs 0.30. Self-training
+against the human annotators' own held-out labels: 0.75 vs 0.30. Self-training
 lands between the two but far closer to the floor: it improves the human
 baseline on six of seven predicates and lifts the mean to 0.36, which closes
 **15% of the distance** between the human and automatic arms. Stretching the
@@ -153,13 +153,13 @@ The mechanism is the one measured throughout. A classifier trained on labels
 that are sparse (~10% of pairs) and inconsistent (§4.5, §4.7) learns above all
 to be silent, and its recall collapses exactly where labelling was thinnest
 (`near` 0.08, lateral 0.22–0.25); trained on dense rule-consistent labels the
-same model learns the geometry (near 1.00, lateral 0.95–0.99, support 0.92).
-That is §2.3's weak-supervision prediction confirmed under controlled
-conditions. Two checks argue the result is real, not an artefact: the
-auto-trained model's profile almost exactly reproduces the rule layer's own
-held-out performance (mean 0.76; front/behind 0.19/0.33 against the rules'
-0.20/0.35), so the classifier *distilled the annotator*, which is what "the
-labels are learnable" means; and all three arms face identical features, the
+same model learns the geometry (near 1.00, lateral 0.95–0.99, support
+0.85–0.88). That is §2.3's weak-supervision prediction confirmed under
+controlled conditions. Two checks argue the result is real, not an artefact:
+the auto-trained model's profile almost exactly reproduces the rule layer's
+own held-out performance (mean 0.75 against the rules' 0.74; front/behind
+0.19/0.37 against the rules' 0.20/0.37), so the classifier *distilled the
+annotator*, which is what "the labels are learnable" means; and all three arms face identical features, the
 same oversampling cap and the same held-out gold, including the
 convention-inverted annotators, which penalises every arm's front/behind
 equally.

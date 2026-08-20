@@ -39,7 +39,7 @@ and sees 213 distinct triplet types in training against the human arm's 94.
 series uses its own arm's labels, so only the *shapes* compare, never the
 heights.
 
-## 6.3 Test results: predictions 2 and 3 refuted on the ranking metric
+## 6.3 Test results: prediction 2 unresolved, prediction 3 refuted
 
 Both best checkpoints evaluated on the identical test set (210 images,
 human gold, groups 6–8):
@@ -296,12 +296,15 @@ the analogue of §4.4, left as designed follow-up.
 
 Registered before the run, judged after: prediction 1 (early human-arm
 saturation) is **confirmed** and replicates the source paper. Prediction 2
-(higher plateau) is **refuted on mR@100 as stated**, the plateau being higher
-only on the zero-shot component the prediction did not name. Prediction 3
-(`near` recovery) is **refuted**: it wrongly assumed the test gold could
-reward dense `near` prediction. The value of pre-registration is that these
-verdicts are checkable, and the mechanism analysis above is what the misses
-taught.
+(higher plateau) is **unresolved on mR@100**, and the honest word matters: an
+earlier version of this chapter recorded it as refuted on the strength of a
+0.048 gap that the retrained arms of §6.3 reduce to 0.001, which no experiment
+of this size can call in either direction. Where the plateau *is* higher is
+the zero-shot component the prediction did not name, 0.268 against 0.052.
+Prediction 3 (`near` recovery) is **refuted**: it wrongly assumed the test gold
+could reward dense `near` prediction. The value of pre-registration is that
+these verdicts are checkable, and that one of them had to be revised when the
+measurement improved is a point in its favour rather than against it.
 
 The replication adds a fourth verdict, on a claim made *after* the run rather
 than before: §6.3.1 withdraws the single-seed group-7 result, not
