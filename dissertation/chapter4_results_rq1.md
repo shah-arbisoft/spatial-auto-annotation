@@ -378,18 +378,18 @@ object-matching rule and the coverage figures.
 
 | Predicate | Stability | Recall (propagated) | Recall (per frame) |
 |---|---|---|---|
-| on | 0.909 | 0.897 | 0.864 |
-| under | 0.909 | 0.829 | 0.795 |
+| on | 0.878 | 0.798 | 0.798 |
+| under | 0.878 | 0.760 | 0.740 |
 | to the left of | 0.989 | 0.959 | 0.966 |
 | to the right of | 0.989 | 0.989 | 0.989 |
-| in front of | 0.955 | 0.627 | 0.601 |
-| behind | 0.955 | 0.601 | 0.613 |
-| near | 0.966 | 1.000 | 1.000 |
-| **Mean** | **0.953** | **0.843** | **0.832** |
+| in front of | 0.958 | 0.682 | 0.648 |
+| behind | 0.958 | 0.636 | 0.659 |
+| near | 0.972 | 1.000 | 1.000 |
+| **Mean** | **0.946** | **0.832** | **0.829** |
 
 Skipping frames costs nothing measurable: mean recall under propagation is
-0.843 against 0.832 per frame, and the ordering holds at every threshold
-tested (0.879 against 0.861 at τ = 20, a 4.0× reduction). The small advantage
+0.832 against 0.829 per frame, and the ordering holds at every threshold
+tested (0.862 against 0.855 at τ = 20, a 4.0× reduction). The small advantage
 is likely an artefact of the selection rule, the segment representative being
 the frame nearest the segment mean and so less likely to be caught
 mid-transition.
@@ -397,8 +397,8 @@ mid-transition.
 **The first column holds the finding, and it is not the expected one.**
 Front/behind was the predicted loser, on the assumption its errors are depth
 noise near the boundary, which is exactly what a viewpoint change perturbs.
-It does not behave that way: it agrees with itself 0.955 of the time, above
-`on` and `under` at 0.909, and still 0.924 at 89× compression, where segment
+It does not behave that way: it agrees with itself 0.958 of the time, above
+`on` and `under` at 0.878, and still 0.911 at 89× compression, where segment
 members are substantially different views. A predicate recalling 0.64 of the
 human labels while agreeing with itself at 0.955 is not making random errors;
 it is making the same call repeatedly and disagreeing systematically. That
@@ -431,19 +431,19 @@ reasoning model an order of magnitude larger.
 
 | Predicate | Gold | Flash | Pro | Pipeline |
 |---|---|---|---|---|
-| on | 57 | 0.667 | 0.737 | 0.912 |
-| under | 47 | 0.660 | 0.766 | 0.851 |
+| on | 57 | 0.667 | 0.737 | 0.860 |
+| under | 47 | 0.660 | 0.766 | 0.809 |
 | to the left of | 49 | 0.408 | 0.469 | 0.918 |
 | to the right of | 49 | 0.327 | 0.388 | 0.939 |
-| in front of | 80 | 0.188 | 0.237 | 0.600 |
-| behind | 65 | 0.169 | 0.138 | 0.615 |
+| in front of | 80 | 0.188 | 0.237 | 0.650 |
+| behind | 65 | 0.169 | 0.138 | 0.662 |
 | near | 34 | 0.382 | 0.382 | 1.000 |
 | **Mean** | **381** | **0.400** | **0.445** | **0.834** |
 
 {{fig:rq1-with-vlm}} plots all three against the human triplets. On recall
 both lose everywhere, and the size of the improvement is the point:
 mean recall moves from 0.400 to 0.445, real but barely half the pipeline's
-0.834, and on the depth pair 0.24 against 0.60 puts the model below the
+0.834, and on the depth pair 0.24 against 0.65 puts the model below the
 geometric method's known weak point. Scaling the model does not scale the
 ability being measured.
 
@@ -461,8 +461,9 @@ the same instruction to omit what it was unsure of that the rules implement as
 abstention, so the two are answering the same question. It nonetheless never
 addressed **171 of the 381 gold triplets at all**, 44.9%. Scored only on the
 pairs it did judge, its recall is **0.686** rather than 0.378, and on the
-predicates where the tool's advantage looks largest the gap nearly closes:
-`to the left of` 0.909 against 0.965, `on` 0.864 against 0.912. A headline
+predicates where the tool's advantage looks largest the gap closes entirely:
+`to the left of` 0.909 against 0.918, and `on` 0.864 against 0.860, where the
+model is marginally the better of the two on the pairs it chose to judge. A headline
 recall of 0.40 therefore measures two things at once, how often the model is
 wrong and how often it declines, and only the first is a claim about spatial
 competence. What it is bad at is *exhaustiveness*; where it speaks it is

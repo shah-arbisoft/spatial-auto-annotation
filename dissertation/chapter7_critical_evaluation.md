@@ -103,7 +103,7 @@ decisions and not hidden constants (ablations A2, A7).
 Section 4.12 settles what the ablations could not. If the front/behind gap
 were depth *noise*, estimates jittering either side of a boundary, moving the
 camera would flip verdicts, since that is the perturbation such noise responds
-to. It does not: the predicate reproduces itself 0.955 of the time, above `on`
+to. It does not: the predicate reproduces itself 0.958 of the time, above `on`
 and `under`, and holds at 0.924 at 89-fold compression. A predicate recovering
 0.64 of the human labels while agreeing with itself at that rate is not
 guessing; it is applying a consistent criterion the annotators did not share.
@@ -309,7 +309,7 @@ the tool's relations alone and 25 of 25 on their union with the
 vision-language model's (§5.7)
 against 0 with no relations at all. The reconciliation is that systematic
 error is worse than random error only when it is *wrong*; §4.12's finding
-that front/behind agrees with itself across viewpoints 0.955 of the time
+that front/behind agrees with itself across viewpoints 0.958 of the time
 while agreeing with the annotators 0.64 of the time is the shape of a
 consistent rule meeting a different convention, not of a consistent mistake.
 

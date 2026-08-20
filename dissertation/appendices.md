@@ -762,7 +762,7 @@ better than two views and an assumed focal length. What the ablation
 establishes is that geometric depth is not free here, that the obvious
 implementations lose to the monocular cascade on both accuracy and coverage,
 and, read with §4.12, that the return on any of them is bounded: a predicate
-that already reproduces its own verdict 0.955 of the time across viewpoints
+that already reproduces its own verdict 0.958 of the time across viewpoints
 does not have much room to gain from measuring depth more precisely. There is
 also a design cost that no accuracy figure captures. Every multi-frame method
 requires neighbouring frames at inference time, which the single-image
@@ -1016,7 +1016,7 @@ The rest of this section records how the clips were processed and what went
 wrong, both of which qualify the reading above.
 
 **What the clips show.** Relations are stable wherever identity is: for pairs
-co-visible in at least 20 frames the predicate persists at 0.90/0.94 mean
+co-visible in at least 20 frames the predicate persists at 0.77/0.96 mean
 (`eval/video_stability.py`). The rules transfer to objects never calibrated
 on, a pen on a notepad and a wallet-and-photograph stack labelled by the same
 mask-contact evidence fitted on six classes. And the camera-frame semantics
@@ -1028,12 +1028,22 @@ from RoboSpatial, demonstrated rather than asserted.
 desk (clip 1, 99 frames), where any variation is measurement noise, and a
 static overhead camera with moving hands (clip 2, 79 frames), where relations
 genuinely change and smoothing must not erase them. The temporal vote
-separates them, lifting persistence from 0.896 to 0.902 on the static clip and
-from 0.915 to 0.938 on the one with moving hands, where per-frame detection
+separates them, lifting persistence from 0.763 to 0.774 on the static clip and
+from 0.928 to 0.964 on the one with moving hands, where per-frame detection
 churns, which is the behaviour a majority filter should show. Frame-to-frame
-triplet agreement (Jaccard 0.89 and 0.70) is dominated by zero-shot detection
+triplet agreement (Jaccard 0.84 and 0.59) is dominated by zero-shot detection
 churn and, in clip 2, by genuine hand motion, mirroring §4.11: the variation
 is detection, not relations.
+
+These figures are lower on clip 1 and higher on clip 2 than the version of
+this appendix written before the support threshold was refitted (§4.14),
+which reported 0.90 and 0.94. The refit removes support emissions on weak
+contact evidence, and on a desk viewed from a moving camera those are exactly
+the borderline pairs that persisted across frames by inertia; on the overhead
+clip, where the hands make support genuinely intermittent, removing them
+raises persistence instead. Both clips were re-processed end to end on the
+shipped configuration, so the numbers here describe the tool being
+submitted.
 
 Two royalty-free stock clips were processed frame by frame by the
 deployment stack of §4.11 with no threshold retuned. They share nothing with

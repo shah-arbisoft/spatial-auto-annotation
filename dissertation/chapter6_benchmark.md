@@ -37,7 +37,10 @@ auto arm is still improving at epoch 9, peaks at epoch 18 without declining,
 and sees 213 distinct triplet types in training against the human arm's 94.
 {{fig:sgg-training-curves}} plots both: each validation
 series uses its own arm's labels, so only the *shapes* compare, never the
-heights.
+heights. The curves come from the first benchmark run rather than the
+retrained arms of §6.3, whose per-epoch logs were not retained; what they
+support is the shape claim above, which is a statement about when each arm
+saturates and not about where it finishes.
 
 ## 6.3 Test results: prediction 2 unresolved, prediction 3 refuted
 

@@ -8,12 +8,12 @@
     "pairs_unmatched": 544,
     "support": {
       "to the left of": 1903,
-      "in front of": 1567,
-      "near": 2212,
-      "behind": 1567,
+      "in front of": 1682,
+      "near": 2266,
+      "behind": 1682,
       "to the right of": 1903,
-      "on": 118,
-      "under": 118
+      "on": 91,
+      "under": 91
     },
     "gold": {
       "in front of": 90,
@@ -25,35 +25,35 @@
       "to the right of": 65
     },
     "stability": {
-      "on": 0.9152542372881356,
-      "under": 0.9152542372881356,
+      "on": 0.8901098901098901,
+      "under": 0.8901098901098901,
       "to the left of": 0.9957961114030478,
       "to the right of": 0.9957961114030478,
-      "in front of": 0.9419272495213784,
-      "behind": 0.9419272495213784,
-      "near": 0.969258589511754
+      "in front of": 0.9447086801426873,
+      "behind": 0.9447086801426873,
+      "near": 0.9752868490732568
     },
     "recall_propagated": {
-      "on": 0.9195402298850575,
-      "under": 0.8125,
+      "on": 0.8620689655172413,
+      "under": 0.75,
       "to the left of": 0.9375,
       "to the right of": 1.0,
-      "in front of": 0.45555555555555555,
-      "behind": 0.5094339622641509,
+      "in front of": 0.5777777777777777,
+      "behind": 0.6037735849056604,
       "near": 1.0
     },
     "recall_per_frame": {
-      "on": 0.8850574712643678,
-      "under": 0.7708333333333334,
+      "on": 0.8275862068965517,
+      "under": 0.75,
       "to the left of": 0.9375,
       "to the right of": 1.0,
-      "in front of": 0.4888888888888889,
-      "behind": 0.5094339622641509,
+      "in front of": 0.5888888888888889,
+      "behind": 0.5849056603773585,
       "near": 1.0
     },
-    "mean_stability": 0.953601969419554,
-    "mean_recall_propagated": 0.8049328211006805,
-    "mean_recall_per_frame": 0.79881623653582
+    "mean_stability": 0.9480737446263582,
+    "mean_recall_propagated": 0.8187314754572398,
+    "mean_recall_per_frame": 0.8126972508803998
   },
   {
     "tau": 10.0,
@@ -64,12 +64,12 @@
     "pairs_unmatched": 8044,
     "support": {
       "to the left of": 5067,
-      "in front of": 4579,
-      "near": 6058,
-      "behind": 4579,
+      "in front of": 4781,
+      "near": 6188,
+      "behind": 4781,
       "to the right of": 5067,
-      "on": 286,
-      "under": 286
+      "on": 221,
+      "under": 221
     },
     "gold": {
       "in front of": 233,
@@ -81,35 +81,35 @@
       "to the right of": 184
     },
     "stability": {
-      "on": 0.9090909090909091,
-      "under": 0.9090909090909091,
+      "on": 0.8778280542986425,
+      "under": 0.8778280542986425,
       "to the left of": 0.9893428063943162,
       "to the right of": 0.9893428063943162,
-      "in front of": 0.9550120113561913,
-      "behind": 0.9550120113561913,
-      "near": 0.9663255199735886
+      "in front of": 0.9577494248065258,
+      "behind": 0.9577494248065258,
+      "near": 0.9715578539107951
     },
     "recall_propagated": {
-      "on": 0.8967136150234741,
-      "under": 0.8287671232876712,
+      "on": 0.7981220657276995,
+      "under": 0.7602739726027398,
       "to the left of": 0.9586206896551724,
       "to the right of": 0.9891304347826086,
-      "in front of": 0.6266094420600858,
-      "behind": 0.6011560693641619,
+      "in front of": 0.6824034334763949,
+      "behind": 0.6358381502890174,
       "near": 1.0
     },
     "recall_per_frame": {
-      "on": 0.863849765258216,
-      "under": 0.7945205479452054,
+      "on": 0.7981220657276995,
+      "under": 0.7397260273972602,
       "to the left of": 0.9655172413793104,
       "to the right of": 0.9891304347826086,
-      "in front of": 0.6008583690987125,
-      "behind": 0.6127167630057804,
+      "in front of": 0.648068669527897,
+      "behind": 0.6589595375722543,
       "near": 1.0
     },
-    "mean_stability": 0.953316710522346,
-    "mean_recall_propagated": 0.842999624881882,
-    "mean_recall_per_frame": 0.8323704459242619
+    "mean_stability": 0.9459140607013949,
+    "mean_recall_propagated": 0.8320555352190905,
+    "mean_recall_per_frame": 0.8285034251981472
   },
   {
     "tau": 20.0,
@@ -120,12 +120,12 @@
     "pairs_unmatched": 44576,
     "support": {
       "to the left of": 7220,
-      "in front of": 6710,
-      "near": 8970,
-      "behind": 6710,
+      "in front of": 6981,
+      "near": 9146,
+      "behind": 6981,
       "to the right of": 7220,
-      "on": 393,
-      "under": 393
+      "on": 305,
+      "under": 305
     },
     "gold": {
       "in front of": 322,
@@ -137,35 +137,35 @@
       "to the right of": 220
     },
     "stability": {
-      "on": 0.9134860050890585,
-      "under": 0.9134860050890585,
+      "on": 0.9081967213114754,
+      "under": 0.9081967213114754,
       "to the left of": 0.9869806094182826,
       "to the right of": 0.9869806094182826,
-      "in front of": 0.9640834575260805,
-      "behind": 0.9640834575260805,
-      "near": 0.9652173913043478
+      "in front of": 0.9604641168886979,
+      "behind": 0.9604641168886979,
+      "near": 0.966542750929368
     },
     "recall_propagated": {
-      "on": 0.8389830508474576,
-      "under": 0.7813620071684588,
+      "on": 0.751412429378531,
+      "under": 0.7060931899641577,
       "to the left of": 0.9609756097560975,
       "to the right of": 0.990909090909091,
-      "in front of": 0.7950310559006211,
-      "behind": 0.7837837837837838,
+      "in front of": 0.8291925465838509,
+      "behind": 0.7953667953667953,
       "near": 1.0
     },
     "recall_per_frame": {
-      "on": 0.7994350282485876,
-      "under": 0.7455197132616488,
+      "on": 0.7288135593220338,
+      "under": 0.6774193548387096,
       "to the left of": 0.9658536585365853,
       "to the right of": 0.990909090909091,
-      "in front of": 0.7577639751552795,
-      "behind": 0.7644787644787645,
+      "in front of": 0.8167701863354038,
+      "behind": 0.806949806949807,
       "near": 1.0
     },
-    "mean_stability": 0.9563310764815987,
-    "mean_recall_propagated": 0.8787206569093584,
-    "mean_recall_per_frame": 0.8605657472271366
+    "mean_stability": 0.9539750923094685,
+    "mean_recall_propagated": 0.8619928088512177,
+    "mean_recall_per_frame": 0.8552450938416616
   },
   {
     "tau": 30.0,
@@ -176,12 +176,12 @@
     "pairs_unmatched": 71218,
     "support": {
       "to the left of": 3619,
-      "in front of": 3434,
-      "near": 4686,
-      "behind": 3434,
+      "in front of": 3530,
+      "near": 4756,
+      "behind": 3530,
       "to the right of": 3619,
-      "on": 204,
-      "under": 204
+      "on": 169,
+      "under": 169
     },
     "gold": {
       "in front of": 181,
@@ -193,35 +193,35 @@
       "to the right of": 115
     },
     "stability": {
-      "on": 0.8774509803921569,
-      "under": 0.8774509803921569,
+      "on": 0.8106508875739645,
+      "under": 0.8106508875739645,
       "to the left of": 0.9820392373583863,
       "to the right of": 0.9820392373583863,
-      "in front of": 0.9627256843331392,
-      "behind": 0.9627256843331392,
-      "near": 0.9684165599658557
+      "in front of": 0.9660056657223796,
+      "behind": 0.9660056657223796,
+      "near": 0.9701429772918418
     },
     "recall_propagated": {
-      "on": 0.7777777777777778,
-      "under": 0.7344632768361582,
+      "on": 0.6666666666666666,
+      "under": 0.6045197740112994,
       "to the left of": 0.9883720930232558,
       "to the right of": 1.0,
-      "in front of": 0.7348066298342542,
-      "behind": 0.7468354430379747,
+      "in front of": 0.8011049723756906,
+      "behind": 0.7658227848101266,
       "near": 1.0
     },
     "recall_per_frame": {
-      "on": 0.7874396135265701,
-      "under": 0.7570621468926554,
+      "on": 0.714975845410628,
+      "under": 0.672316384180791,
       "to the left of": 0.9883720930232558,
       "to the right of": 1.0,
-      "in front of": 0.7292817679558011,
-      "behind": 0.7721518987341772,
+      "in front of": 0.7624309392265194,
+      "behind": 0.7848101265822784,
       "near": 1.0
     },
-    "mean_stability": 0.9446926234476029,
-    "mean_recall_propagated": 0.854607888644203,
-    "mean_recall_per_frame": 0.8620439314474942
+    "mean_stability": 0.9267906512287576,
+    "mean_recall_propagated": 0.8323551844124342,
+    "mean_recall_per_frame": 0.8461293412033531
   },
   {
     "tau": 45.0,
@@ -232,12 +232,12 @@
     "pairs_unmatched": 83108,
     "support": {
       "to the left of": 427,
-      "in front of": 380,
-      "near": 618,
+      "in front of": 405,
+      "near": 638,
       "to the right of": 427,
-      "behind": 380,
-      "on": 33,
-      "under": 33
+      "behind": 405,
+      "on": 23,
+      "under": 23
     },
     "gold": {
       "to the left of": 24,
@@ -249,35 +249,35 @@
       "behind": 19
     },
     "stability": {
-      "on": 0.9393939393939394,
-      "under": 0.9393939393939394,
+      "on": 0.8695652173913043,
+      "under": 0.8695652173913043,
       "to the left of": 0.9742388758782201,
       "to the right of": 0.9742388758782201,
-      "in front of": 0.9236842105263158,
-      "behind": 0.9236842105263158,
-      "near": 0.9611650485436893
+      "in front of": 0.9111111111111111,
+      "behind": 0.9111111111111111,
+      "near": 0.9529780564263323
     },
     "recall_propagated": {
       "on": 1.0,
       "under": 0.625,
       "to the left of": 1.0,
       "to the right of": 1.0,
-      "in front of": 0.6363636363636364,
+      "in front of": 0.7272727272727273,
       "behind": 0.47368421052631576,
       "near": 1.0
     },
     "recall_per_frame": {
-      "on": 1.0,
+      "on": 0.9166666666666666,
       "under": 0.625,
       "to the left of": 1.0,
       "to the right of": 1.0,
       "in front of": 0.5454545454545454,
-      "behind": 0.5789473684210527,
+      "behind": 0.631578947368421,
       "near": 1.0
     },
-    "mean_stability": 0.9479713000200916,
-    "mean_recall_propagated": 0.8192925495557075,
-    "mean_recall_per_frame": 0.8213431305536568
+    "mean_stability": 0.9232583521696577,
+    "mean_recall_propagated": 0.8322795625427205,
+    "mean_recall_per_frame": 0.8169571656413762
   },
   {
     "tau": 60.0,
@@ -288,12 +288,12 @@
     "pairs_unmatched": 83108,
     "support": {
       "to the left of": 427,
-      "in front of": 380,
-      "near": 618,
+      "in front of": 405,
+      "near": 638,
       "to the right of": 427,
-      "behind": 380,
-      "on": 33,
-      "under": 33
+      "behind": 405,
+      "on": 23,
+      "under": 23
     },
     "gold": {
       "to the left of": 24,
@@ -305,34 +305,34 @@
       "behind": 19
     },
     "stability": {
-      "on": 0.9393939393939394,
-      "under": 0.9393939393939394,
+      "on": 0.8695652173913043,
+      "under": 0.8695652173913043,
       "to the left of": 0.9742388758782201,
       "to the right of": 0.9742388758782201,
-      "in front of": 0.9236842105263158,
-      "behind": 0.9236842105263158,
-      "near": 0.9611650485436893
+      "in front of": 0.9111111111111111,
+      "behind": 0.9111111111111111,
+      "near": 0.9529780564263323
     },
     "recall_propagated": {
       "on": 1.0,
       "under": 0.625,
       "to the left of": 1.0,
       "to the right of": 1.0,
-      "in front of": 0.6363636363636364,
+      "in front of": 0.7272727272727273,
       "behind": 0.47368421052631576,
       "near": 1.0
     },
     "recall_per_frame": {
-      "on": 1.0,
+      "on": 0.9166666666666666,
       "under": 0.625,
       "to the left of": 1.0,
       "to the right of": 1.0,
       "in front of": 0.5454545454545454,
-      "behind": 0.5789473684210527,
+      "behind": 0.631578947368421,
       "near": 1.0
     },
-    "mean_stability": 0.9479713000200916,
-    "mean_recall_propagated": 0.8192925495557075,
-    "mean_recall_per_frame": 0.8213431305536568
+    "mean_stability": 0.9232583521696577,
+    "mean_recall_propagated": 0.8322795625427205,
+    "mean_recall_per_frame": 0.8169571656413762
   }
 ]

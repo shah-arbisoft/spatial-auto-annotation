@@ -62,22 +62,22 @@
   "per_group": {
     "group_0": {
       "gold": 80,
-      "pipe": 72,
+      "pipe": 74,
       "vlm": 41
     },
     "group_1": {
       "gold": 62,
-      "pipe": 58,
+      "pipe": 56,
       "vlm": 32
     },
     "group_2": {
       "gold": 44,
-      "pipe": 37,
+      "pipe": 38,
       "vlm": 7
     },
     "group_3": {
       "gold": 17,
-      "pipe": 15,
+      "pipe": 16,
       "vlm": 6
     },
     "group_4": {
@@ -107,47 +107,47 @@
     }
   },
   "pipeline_emitted": {
-    "behind": 1548,
-    "in front of": 1548,
-    "near": 1808,
-    "on": 82,
+    "behind": 1589,
+    "in front of": 1589,
+    "near": 1836,
+    "on": 68,
     "to the left of": 1711,
     "to the right of": 1711,
-    "under": 82
+    "under": 68
   },
   "pipeline_f1_judged": {
-    "behind": 0.4102564102564103,
-    "in front of": 0.4465116279069768,
-    "near": 0.2274247491638796,
-    "on": 0.9043478260869565,
+    "behind": 0.42156862745098045,
+    "in front of": 0.4663677130044843,
+    "near": 0.21864951768488747,
+    "on": 0.9074074074074074,
     "to the left of": 0.5421686746987951,
     "to the right of": 0.5476190476190476,
-    "under": 0.8791208791208791
+    "under": 0.8837209302325582
   },
-  "pipeline_mean": 0.833696000581299,
+  "pipeline_mean": 0.8338344399694584,
   "pipeline_micro": {
-    "assertions": 868,
-    "f1": 0.48839071257005606,
-    "precision": 0.3513824884792627,
-    "recall": 0.800524934383202
+    "assertions": 885,
+    "f1": 0.48499210110584523,
+    "precision": 0.34689265536723163,
+    "recall": 0.8057742782152231
   },
   "pipeline_precision_judged": {
-    "behind": 0.3076923076923077,
-    "in front of": 0.35555555555555557,
-    "near": 0.12830188679245283,
-    "on": 0.896551724137931,
+    "behind": 0.30935251798561153,
+    "in front of": 0.36363636363636365,
+    "near": 0.12274368231046931,
+    "on": 0.9607843137254902,
     "to the left of": 0.38461538461538464,
     "to the right of": 0.3865546218487395,
-    "under": 0.9090909090909091
+    "under": 0.9743589743589743
   },
   "pipeline_recall": {
-    "behind": 0.6153846153846154,
-    "in front of": 0.6,
+    "behind": 0.6615384615384615,
+    "in front of": 0.65,
     "near": 1.0,
-    "on": 0.9122807017543859,
+    "on": 0.8596491228070176,
     "to the left of": 0.9183673469387755,
     "to the right of": 0.9387755102040817,
-    "under": 0.851063829787234
+    "under": 0.8085106382978723
   },
   "vlm_emitted": {
     "behind": 117,

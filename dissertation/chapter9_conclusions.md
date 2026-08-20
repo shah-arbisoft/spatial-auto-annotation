@@ -64,7 +64,7 @@ lifted a measured 0.404 to a measured 0.535 rather than to the 0.667 the
 held-out fit had predicted. The qualification is
 `in front of` and `behind` at 0.70/0.71 pooled: not a failure of the criterion
 but a disagreement about the words, since §4.12 shows the tool reproducing its
-own verdict across viewpoints 0.955 of the time while two annotator groups
+own verdict across viewpoints 0.958 of the time while two annotator groups
 applied the opposite convention. A per-predicate answer was required precisely
 so this could not hide inside a mean.
 
@@ -170,7 +170,7 @@ Section 4.9 bounds the engineering: neither a larger depth model nor
 multi-frame geometry moves the pair, so the limit is monocular ambiguity in
 the scenes, not model capacity. What that leaves is a limitation of a
 different kind, since a predicate reproducing its own verdict across
-viewpoints 0.955 of the time while recovering 0.64 of the human labels is not
+viewpoints 0.958 of the time while recovering 0.64 of the human labels is not
 mismeasuring the scene but applying a criterion the annotators did not share.
 The intervention with the best expected return is therefore a written
 annotation guideline rather than a better network, which is an uncomfortable
