@@ -50,7 +50,7 @@ unseen arrangement as well as an unseen annotator (§4.12).
 
 \* the majority baseline emits "in front of" everywhere, trivially recalling
 that class and nothing else. The near cell rounds 715/717 = 0.997 (§4.9).
-The held-out front/behind cells (0.20/0.35) are dominated by two held-out
+The held-out front/behind cells (0.20/0.37) are dominated by two held-out
 annotator groups that labelled the pair with the *opposite direction
 convention*; §4.5 decomposes this, and convention-aligned depth recall is
 0.84.
@@ -90,9 +90,9 @@ because two stray annotation files without matching images are excluded
 
 ## 4.3 Precision on the annotated pairs
 
-Restricted to the 8,790 annotated pairs, precision runs 0.88 and 0.84 on the
-support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.36 on the depth pair
-and 0.12 on `near`, against the recall column of §4.2 (full table in Appendix
+Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.93 on the
+support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair
+and 0.11 on `near`, against the recall column of §4.2 (full table in Appendix
 F.6). Every one of those figures is bounded below by construction: the human
 typically recorded one or two relations where several hold at once, a pair
 being near, left-of and in-front-of simultaneously. The `near` row is the
@@ -215,9 +215,13 @@ reference and applying the Fréchet inequalities across all 21 pairs of
 consistent annotators places annotator-to-annotator agreement in
 **[0.74, 0.92]**, an interval containing the tool's own mean agreement of
 **0.869** (Appendix F.7). The bound is the loosest available and rests on an
-assumption the disjoint batches cannot test, so what it supports is a
-*failure to distinguish* the tool from a tenth annotator rather than a
-demonstration that it is one. The independent study of Appendix E.3 is what
+assumption the batches actively undermine: they differ by threefold in object
+density, from 4.47 objects per frame in group 4 to 14.30 in group 1, so two
+annotators' agreement rates with a common reference were not earned on
+comparable work and the step that treats them as exchangeable is unsafe. What
+the interval supports is therefore a *failure to distinguish* the tool from a
+tenth annotator, and a weak one — not a demonstration that it is one, and not
+a number to quote on its own. The independent study of Appendix E.3 is what
 would test the precision claim without the assumption.
 
 ## 4.7 Flags: the honest human cost
@@ -525,10 +529,11 @@ definitions and the same instruction to answer wrong when unsure, were put to
 **The two precision measurements point in opposite directions, and which way
 is diagnostic.** Section 4.3 measured precision on the pairs a human labelled;
 this section measures it on the pairs a human did not. For five predicates the
-first badly understates the second (`near` 0.12 against 1.000, the laterals
+first badly understates the second (`near` 0.11 against 1.000, the laterals
 0.35 and 0.42 against 0.917 and 0.958), which is the sparse-gold artefact §4.1
-anticipated. For support the relation inverts: 0.88 and 0.84 on annotated
-pairs against 0.372 and 0.431 off them.
+anticipated. For support the relation inverts, and sharply: 0.95 and 0.93 on
+annotated pairs against 0.372 and 0.431 off them under the pre-refit labels
+these audits used.
 
 The direction of that gap says what the human record *is*. A lateral relation
 holds for nearly every ordered pair and the annotators wrote down a handful,

@@ -46,8 +46,12 @@ criterion was per-predicate recall on annotator groups no threshold ever saw,
 judged against two references fixed in advance, and both are met: the trivial
 baselines are beaten by a wide margin (0.85 against 0.14), and the tool's mean
 agreement with the consistent annotators, 0.869, falls inside the [0.74, 0.92]
-interval within which those annotators can be shown to agree with one another
-(§4.6), so the tool is not distinguishable from a tenth annotator. The second
+interval within which those annotators can be *estimated* to agree with one
+another (§4.6). That interval rests on treating batches as exchangeable when
+they differ threefold in object density, so it establishes a failure to
+distinguish the tool from a tenth annotator rather than a positive result, and
+the criterion is met on the trivial-baseline reference with the second
+reference offering only weak support. The second
 condition, that labels beyond the human record survive audit, holds for the
 lateral, proximity and depth-decided predicates at blind-audited precision
 0.92–1.00. **It is not met for support.** At 0.535 [0.42, 0.65] about half the
@@ -69,8 +73,9 @@ applied the opposite convention. A per-predicate answer was required precisely
 so this could not hide inside a mean.
 
 **RQ2 is answered yes at two of the three levels and is undecided at the
-third.** The controlled classifier gives 0.75 against 0.30 and the planner 22
-of 25 against 0 of 25 with no relations, both in the harder direction the
+third.** The controlled classifier gives 0.75 against 0.30, and the planner 19
+of 25 on the tool's relations and 25 of 25 on their union with the
+vision-language model's against 0 of 25 with no relations, both in the harder direction the
 criterion specified: held-out *human* gold, the rival source's own yardstick.
 The benchmark neither confirms the margin nor contradicts it, and the honest
 word for 0.292 against 0.293 is *undecided* rather than *yes*: the automatic

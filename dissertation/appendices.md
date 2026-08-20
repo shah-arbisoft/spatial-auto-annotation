@@ -1326,8 +1326,21 @@ Two things limit what that is worth, and neither is buried. Fréchet bounds
 are the loosest bounds available, so an 18-point interval rules little out:
 had the tool scored 0.75 or 0.91 the same sentence could be written. And the
 groups labelled disjoint batches, so the bounds presume each annotator's rate
-would carry to another ~100-image batch, which nothing in this dataset can
-check. The interval is an estimate, not a measurement. The assumption-free
+would carry to another ~100-image batch.
+
+That presumption is doubtful, and the dataset can say so. The batches differ
+substantially in what they contain: mean objects per frame runs from **4.47 in
+group 4 to 14.30 in group 1**, a coefficient of variation of 0.31 across the
+nine, and pair count grows with the square of that. An annotator working a
+sparse batch faces fewer and easier decisions than one working a dense batch,
+so their agreement rates with a common reference are not measured under
+comparable conditions and cannot be assumed transferable between them. The
+Fréchet inequalities themselves hold for any joint distribution and are not
+affected; what the batch heterogeneity undermines is the step *before* them,
+which treats p_A and p_B as though they described the same task. The interval
+is therefore an estimate resting on an assumption this dissertation can show
+to be false rather than merely unverified, and it should be read as
+indicative only. The assumption-free
 half of §4.6 is the heterogeneity spread, which needs no such presumption:
 the tool is deterministic, so the 0.216 range in its agreement across the
 seven consistent annotators is variation in the annotators and nothing else.
