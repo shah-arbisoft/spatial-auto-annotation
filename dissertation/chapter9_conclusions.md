@@ -50,10 +50,12 @@ interval within which those annotators can be shown to agree with one another
 (§4.6), so the tool is not distinguishable from a tenth annotator. The second
 condition, that labels beyond the human record survive audit, holds for the
 lateral, proximity and depth-decided predicates at blind-audited precision
-0.92–1.00. It does **not** hold for support, at 0.40 [0.31, 0.51]: the
+0.92–1.00. It holds only partly for support, at 0.535 [0.42, 0.65]: the
 contact rule repaired the box rule's failure but was left at a threshold
-fitted where the cost of a false positive was invisible, and the claim that
-it reached 0.9 was an artefact of auditing unblinded. The qualification is
+fitted where the cost of a false positive was invisible, the claim that it
+reached 0.9 was an artefact of auditing unblinded, and refitting the threshold
+lifted a measured 0.404 to a measured 0.535 rather than to the 0.667 the
+held-out fit had predicted. The qualification is
 `in front of` and `behind` at 0.64/0.66 pooled: not a failure of the criterion
 but a disagreement about the words, since §4.12 shows the tool reproducing its
 own verdict across viewpoints 0.955 of the time while two annotator groups

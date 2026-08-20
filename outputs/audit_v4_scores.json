@@ -1,0 +1,106 @@
+{
+  "n_claims": 191,
+  "n_decoys": 28,
+  "precision": {
+    "on": {
+      "author": [
+        14,
+        31
+      ],
+      "model": [
+        24,
+        31
+      ]
+    },
+    "under": {
+      "author": [
+        24,
+        40
+      ],
+      "model": [
+        35,
+        40
+      ]
+    },
+    "to the left of": {
+      "author": [
+        23,
+        24
+      ],
+      "model": [
+        24,
+        24
+      ]
+    },
+    "to the right of": {
+      "author": [
+        24,
+        24
+      ],
+      "model": [
+        24,
+        24
+      ]
+    },
+    "in front of": {
+      "author": [
+        21,
+        24
+      ],
+      "model": [
+        23,
+        24
+      ]
+    },
+    "behind": {
+      "author": [
+        23,
+        24
+      ],
+      "model": [
+        22,
+        24
+      ]
+    },
+    "near": {
+      "author": [
+        19,
+        24
+      ],
+      "model": [
+        16,
+        24
+      ]
+    }
+  },
+  "support_pooled": {
+    "author": [
+      38,
+      71
+    ],
+    "model": [
+      59,
+      71
+    ]
+  },
+  "decoys": {
+    "author": [
+      27,
+      28
+    ],
+    "model": [
+      26,
+      28
+    ]
+  },
+  "agreement": {
+    "all": [
+      0.8401826484018264,
+      0.6008020415603353
+    ],
+    "claims": [
+      0.8324607329842932,
+      0.4249153180278509
+    ]
+  }
+}

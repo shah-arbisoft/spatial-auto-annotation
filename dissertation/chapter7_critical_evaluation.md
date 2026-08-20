@@ -18,9 +18,10 @@ against the one annotator who used the label and never influenced the
 threshold. For
 support, after two evidence upgrades motivated by measurement (depth
 co-location, mask contact), recall is 0.88/0.81, but the claim stops there:
-blind-audited precision is 0.404 [0.31, 0.51], so the labels the tool adds
-beyond the human record are trustworthy for five predicates and not for this
-one (§4.14). For the depth pair the cascade of relative depth
+blind-audited precision is 0.535 [0.42, 0.65] after the threshold repair of
+§4.14, up from 0.404 before it, so the labels the tool adds beyond the human
+record are trustworthy for five predicates and right about half the time for
+this one. For the depth pair the cascade of relative depth
 and the ground-plane fallback reaches 0.64/0.66 pooled (0.84 once the two
 inverted-convention groups are aligned), and where the tool commits it agrees
 at 0.95–1.00 with six of the seven same-convention annotators, the seventh
@@ -187,16 +188,18 @@ not name. A controlled comparison has to control the code as explicitly as it
 controls the data, by pinning versions and training every arm in one session;
 §6.3 now does, and its figures supersede the earlier ones.
 
-One consequence follows for further work, and it is costed rather than
-speculative. **Ship the re-fitted `on_contact_min`.** Section 4.14 traces the
-support result to a threshold fitted on train F1 against gold covering a tenth
-of pairs, where a false positive outside the gold was free, and measures the
-repair on held-out annotators under this dissertation's own protocol: 0.367 to
-0.667 precision for eight points of recall. The evidence for the change is
-therefore already out-of-sample; what is missing is only the re-run of every
-experiment that consumes the labels, which is a fortnight of compute and
-rewriting, not a question of method. A replication starting from this
-repository should make that its first change and its first re-measurement. The
+That weakness was acted on rather than only recorded, and the sequence is the
+part worth carrying forward. Section 4.14 traced the support result to a
+threshold fitted on train F1 against gold covering a tenth of pairs, where a
+false positive outside the gold was free. The threshold was re-fitted on the
+audited claims from the training annotators, shipped, every experiment re-run
+against the new labels, and a second pack drawn from those labels and audited
+blind. Support precision moved from a measured 0.404 to a measured 0.535, and
+the decoy control moved with it: 27 of 28 rejected against 19 of 28 first
+time. The held-out fit had predicted 0.667, so the loop also priced its own
+extrapolation at about 0.13. The lesson is not the number but the order — a
+threshold worth changing is worth re-auditing on labels it produced, because
+the estimate that justifies a change is not evidence for it. The
 SGDet **threshold tuning used one
 disclosed iteration on a trial slice** that over-estimated full-set detection
 quality, an instructive case of trial-set optimism; and invariant fuzzing pins

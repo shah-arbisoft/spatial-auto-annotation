@@ -239,6 +239,11 @@ TABLES = {
         "Wilson intervals. The final row is the decoy control: relations the "
         "tool did not emit, which a judge who agreed with everything would "
         "reject none of.",
+        # 4.14, second table: the re-audit after the threshold was re-fitted
+        "The same audit repeated on labels produced by the re-fitted "
+        "threshold, drawn fresh from the new emissions rather than re-scored "
+        "from the old sample, so the comparison is between two independent "
+        "draws and not between two readings of one.",
     ],
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "

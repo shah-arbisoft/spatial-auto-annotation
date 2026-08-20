@@ -112,8 +112,9 @@ reported as found because it motivated the support-rule repairs; §4.9
 re-audits the shipped rules and §4.14 audits them again under blinding, so
 the support rows below describe a fixed failure, not the final tool. How far
 it was fixed is the subject of those two sections, and they disagree: pooled
-support precision moves 0.13 → 0.77 on an unblinded re-audit and back to
-0.40 when the same rules are judged blind against decoys.
+support precision moves 0.13 → 0.77 on an unblinded re-audit, back to 0.40
+when the same rules are judged blind against decoys, and to 0.54 once the
+threshold that caused the over-emission is refitted and audited again.
 
 | Predicate | Correct / n | Precision est. | Wilson 95% CI |
 |---|---|---|---|
@@ -243,9 +244,10 @@ threshold ever saw, with blind-audited true precision 0.92–1.00 for lateral,
 proximity and depth-decided front/behind. Those five rest on 24 samples each,
 so the point estimates are firm only to within intervals reaching 0.74 at the
 lower end, and the claim they support is comparability, not a
-particular value. Support is the exception and is answered separately: 0.40
-[0.31, 0.51] on 94 samples, which §4.14 traces to a threshold fitted on a
-metric that could not see the error it controls.
+particular value. Support is the exception and is answered separately: 0.535
+[0.42, 0.65] on 71 samples of the shipped rule, up from a measured 0.404
+before §4.14 traced the shortfall to a threshold fitted on a metric that could
+not see the error it controls, and re-fitted it.
 One of the five is `near`, matched completely once its inconsistent usage is
 accounted for (0.997 pooled, 1.00 held-out), which resolves the predicate the
 source paper reports as failing for every model it benchmarks (§2.2). The
@@ -583,26 +585,42 @@ error the parameter controls. A second, independent signal is the supporting
 object's size, since `on(A, B)` requires B to be able to hold A up and a 20-pixel
 cube is not a surface.
 
-**The repair is measured under this dissertation's own protocol, and is not
-shipped.** The obvious response, raising the threshold until precision
-recovers, cannot be evaluated on the sample that suggested it: a cut-off
-chosen by inspecting these 94 verdicts and then scored against them would be
-optimistic by an unknown amount, which is the error that produced the 0.9.
-The audit is therefore split the way every threshold in Chapter 3 is split.
-The cut-off is fitted on the 63 audited claims from annotator groups 0–5,
-where precision rises steeply to 0.686 at 0.85 and flattens after, and it is
-reported on the 31 from groups 6–8, which no part of the fit saw.
+**The repair was fitted, shipped, and then re-audited from scratch.** The
+obvious response, raising the threshold until precision recovers, cannot be
+evaluated on the sample that suggested it: a cut-off chosen by inspecting
+these 94 verdicts and then scored against them would be optimistic by an
+unknown amount, which is the error that produced the 0.9. The cut-off was
+therefore fitted the way every threshold in Chapter 3 is fitted, on the 63
+audited claims from annotator groups 0–5, where precision rises steeply to
+0.686 at 0.85 and flattens after; on the 31 claims from groups 6–8 that no
+part of the fit saw, it predicted **0.367 → 0.667**.
 
-On those held-out annotators, raising `on_contact_min` from 0.60 to 0.85 moves
-support precision from **0.367 [0.22, 0.54] to 0.667 [0.42, 0.85]** while
-held-out support recall falls from 0.92 to **0.843**. Precision nearly doubles
-for eight points of recall, and the estimate is out-of-sample by construction.
+`on_contact_min` was then set to 0.85 and every experiment in this
+dissertation re-run against the new labels. That prediction is not what this
+section reports, because a projection from held-out items selected under the
+*old* labels is still an extrapolation. A second pack was drawn from the new
+emissions instead — 219 items, 191 claims and 28 decoys, same construction,
+same blinding, same two judges — and audited independently.
 
-It is nonetheless not shipped, for a reason of scope rather than evidence.
-Changing the threshold changes every emitted label, and with it §4.2, both
-experiments of Chapter 5, the benchmark of Chapter 6 and the planner
-conditions; re-running all of them inside the time remaining would produce a
-partially re-measured dissertation, not a better one. What is reported
-here is the size of the repair and the protocol that establishes it, so a
-reader can act on it without repeating the audit. Section 7.4 records it as
-the first thing further work should do, and Appendix D.2 carries the sweep.
+| | audit v3 (0.60) | audit v4 (0.85) |
+|---|---|---|
+| support, author | 0.404 [0.31, 0.51] | **0.535 [0.42, 0.65]** |
+| support, model | 0.638 [0.54, 0.73] | **0.831 [0.73, 0.90]** |
+| `on` / `under`, author | 0.372 / 0.431 | **0.452 / 0.600** |
+| decoys rejected, author | 19/28 = 0.679 | **27/28 = 0.964** |
+| decoys rejected, model | 24/28 = 0.857 | **26/28 = 0.929** |
+
+**The change is confirmed and the projection was optimistic.** Both judges
+record a large improvement on an independent draw, and both record it below
+what the held-out fit predicted: 0.535 against 0.667 by the author's verdicts.
+Held-out support recall falls from 0.92 to 0.843 in exchange. A threshold
+fitted on one audit and validated on the next is as far as this design can go
+towards an unbiased estimate, and the gap between the two numbers is the price
+of the extrapolation the earlier draft would have quoted.
+
+The auditor also improved, which matters for reading both columns. Nine of 28
+decoys were accepted in v3 and one in v4, so the second sheet is the work of a
+stricter judge than the first; the model's decoy rejection rose over the same
+interval, 0.857 to 0.929, which suggests the v4 pack is also easier to judge.
+Neither reading rescues the support figure: at 0.535 the labels the tool adds
+beyond the human record on this predicate are right about half the time.
