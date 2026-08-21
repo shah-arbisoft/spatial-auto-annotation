@@ -44,6 +44,15 @@ CHAPTERS = [
 
 # figure -> (chapter file it belongs in, caption, anchor text to insert after)
 FIGURES = {
+    "qualitative_examples.png": (
+        "chapter4_results_rq1.md",
+        "Two scenes as the pipeline labels them, with the detected boxes and "
+        "class instances drawn. Left, a calibration group on which every emitted "
+        "relation is correct. Right, a held-out group whose annotators recorded "
+        "front and behind under the opposite convention, which is the failure "
+        "Section 4.5 decomposes. Faces are pixelated from the dataset's own "
+        "human boxes, as Section 8.1 requires of anything republished.",
+        "## 4.2 Headline: recall of the human triplets"),
     "rq1_recall.png": (
         "chapter4_results_rq1.md",
         "Recall of the human triplets per predicate: the full pipeline against "

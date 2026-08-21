@@ -4,6 +4,9 @@ Ahn, M. et al. (2022) 'Do as I can, not as I say: grounding language in
 robotic affordances', *Proceedings of the 6th Conference on Robot Learning
 (CoRL)*. Available at: https://arxiv.org/abs/2204.01691
 
+Allen, J.F. (1983) 'Maintaining knowledge about temporal intervals',
+*Communications of the ACM*, 26(11), pp. 832-843.
+
 Armeni, I., He, Z.-Y., Gwak, J., Zamir, A.R., Fischer, M., Malik, J. and
 Savarese, S. (2019) '3D scene graph: a structure for unified semantics, 3D
 space, and camera', *Proceedings of the IEEE/CVF International Conference on
@@ -19,6 +22,11 @@ pp. 182–185.
 BCS (2022) *BCS Code of Conduct*. Swindon: BCS, The Chartered Institute for
 IT. Available at:
 https://www.bcs.org/membership-and-registrations/become-a-member/bcs-code-of-conduct/
+
+Carion, N., Massa, F., Synnaeve, G., Usunier, N., Kirillov, A. and
+Zagoruyko, S. (2020) 'End-to-end object detection with transformers',
+*Proceedings of the European Conference on Computer Vision (ECCV)*,
+pp. 213-229.
 
 Chang, X., Ren, P., Xu, P., Li, Z., Chen, X. and Hauptmann, A. (2023) 'A
 comprehensive survey of scene graphs: generation and application', *IEEE
@@ -37,6 +45,10 @@ vision-language models', *Advances in Neural Information Processing Systems
 Cohen, J. (1960) 'A coefficient of agreement for nominal scales',
 *Educational and Psychological Measurement*, 20(1), pp. 37–46.
 
+Cohn, A.G. and Renz, J. (2008) 'Qualitative spatial representation and
+reasoning', in van Harmelen, F., Lifschitz, V. and Porter, B. (eds)
+*Handbook of Knowledge Representation*. Amsterdam: Elsevier, pp. 551-596.
+
 *Computer Misuse Act 1990*, c. 18. Available at:
 https://www.legislation.gov.uk/ukpga/1990/18/contents
 
@@ -45,6 +57,11 @@ https://www.legislation.gov.uk/ukpga/2018/12/contents
 
 Fayyad, U., Piatetsky-Shapiro, G. and Smyth, P. (1996) 'From data mining to
 knowledge discovery in databases', *AI Magazine*, 17(3), pp. 37–54.
+
+Freksa, C. (1992) 'Using orientation information for qualitative spatial
+reasoning', in Frank, A.U., Campari, I. and Formentini, U. (eds) *Theories
+and Methods of Spatio-Temporal Reasoning in Geographic Space*. Berlin:
+Springer, pp. 162-178.
 
 Goyal, A., Yang, K., Yang, D. and Deng, J. (2020) 'Rel3D: a minimally
 contextualized benchmark for grounding spatial relations in 3D', *Advances
@@ -63,6 +80,14 @@ and Girshick, R. (2017) 'CLEVR: a diagnostic dataset for compositional
 language and elementary visual reasoning', *Proceedings of the IEEE
 Conference on Computer Vision and Pattern Recognition (CVPR)*.
 
+Kamath, A., Hessel, J. and Chang, K.-W. (2023) 'What's "up" with
+vision-language models? Investigating their struggle with spatial reasoning',
+*Proceedings of the 2023 Conference on Empirical Methods in Natural Language
+Processing (EMNLP)*.
+
+Kirillov, A. et al. (2023) 'Segment Anything', *Proceedings of the IEEE/CVF
+International Conference on Computer Vision (ICCV)*.
+
 Krishna, R. et al. (2017) 'Visual Genome: connecting language and vision using
 crowdsourced dense image annotations', *International Journal of Computer
 Vision*, 123(1), pp. 32–73.
@@ -73,6 +98,10 @@ and spatial cognition', *Behavioral and Brain Sciences*, 16(2), pp. 217-238.
 Lee, D.-H. (2013) 'Pseudo-label: the simple and efficient semi-supervised
 learning method for deep neural networks', *ICML Workshop on Challenges in
 Representation Learning*.
+
+Liu, F., Emerson, G. and Collier, N. (2023) 'Visual spatial reasoning',
+*Transactions of the Association for Computational Linguistics*, 11,
+pp. 635-651.
 
 Liu, S. et al. (2024) 'Grounding DINO: marrying DINO with grounded
 pre-training for open-set object detection', *Proceedings of the European
@@ -91,9 +120,22 @@ Northcutt, C.G., Athalye, A. and Mueller, J. (2021) 'Pervasive label errors
 in test sets destabilize machine learning benchmarks', *Advances in Neural
 Information Processing Systems (NeurIPS), Datasets and Benchmarks Track*.
 
+Plank, B. (2022) 'The "problem" of human label variation: on ground truth in
+data, modeling and evaluation', *Proceedings of the 2022 Conference on
+Empirical Methods in Natural Language Processing (EMNLP)*, pp. 10671-10682.
+
 Radford, A. et al. (2021) 'Learning transferable visual models from natural
 language supervision', *Proceedings of the 38th International Conference on
 Machine Learning (ICML)*, PMLR 139, pp. 8748–8763.
+
+Randell, D.A., Cui, Z. and Cohn, A.G. (1992) 'A spatial logic based on
+regions and connection', *Proceedings of the 3rd International Conference on
+Principles of Knowledge Representation and Reasoning (KR)*, pp. 165-176.
+
+Ranftl, R., Lasinger, K., Hafner, D., Schindler, K. and Koltun, V. (2022)
+'Towards robust monocular depth estimation: mixing datasets for zero-shot
+cross-dataset transfer', *IEEE Transactions on Pattern Analysis and Machine
+Intelligence*, 44(3), pp. 1623-1637.
 
 Ratner, A., Bach, S.H., Ehrenberg, H., Fries, J., Wu, S. and Ré, C. (2017)
 'Snorkel: rapid training data creation with weak supervision', *Proceedings of
@@ -104,6 +146,11 @@ preprint. Available at: https://arxiv.org/abs/2408.00714
 
 Remyx AI (2024) *VQASynth* [computer program]. Available at:
 https://github.com/remyxai/VQASynth
+
+Rosinol, A., Violette, A., Abate, M., Hughes, N., Chang, Y., Shi, J.,
+Gupta, A. and Carlone, L. (2021) 'Kimera: from SLAM to spatial perception
+with 3D dynamic scene graphs', *The International Journal of Robotics
+Research*, 40(12-14), pp. 1510-1546.
 
 Settles, B. (2009) *Active learning literature survey*. Computer Sciences
 Technical Report 1648, University of Wisconsin–Madison.
@@ -129,6 +176,11 @@ Research*, 72, pp. 1385–1470. doi:10.1613/jair.1.12752
 van Engelen, J.E. and Hoos, H.H. (2020) 'A survey on semi-supervised
 learning', *Machine Learning*, 109(2), pp. 373–440.
 
+Wald, J., Dhamo, H., Navab, N. and Tombari, F. (2020) 'Learning 3D semantic
+scene graphs from 3D indoor reconstructions', *Proceedings of the IEEE/CVF
+Conference on Computer Vision and Pattern Recognition (CVPR)*,
+pp. 3961-3970.
+
 Wang, A. et al. (2024) 'YOLOv10: real-time end-to-end object detection',
 *Advances in Neural Information Processing Systems (NeurIPS)*. Available at:
 https://arxiv.org/abs/2405.14458
@@ -149,13 +201,17 @@ Xie, Q., Luong, M.-T., Hovy, E. and Le, Q.V. (2020) 'Self-training with
 Noisy Student improves ImageNet classification', *Proceedings of the IEEE/CVF
 Conference on Computer Vision and Pattern Recognition (CVPR)*.
 
-Yang, J., Ang, Y.Z., Guo, Z., Zhou, K., Zhang, W. and Liu, Z. (2022)
-'Panoptic scene graph generation', *Proceedings of the European Conference
-on Computer Vision (ECCV)*.
+Xu, D., Zhu, Y., Choy, C.B. and Fei-Fei, L. (2017) 'Scene graph generation
+by iterative message passing', *Proceedings of the IEEE Conference on
+Computer Vision and Pattern Recognition (CVPR)*, pp. 5410-5419.
 
 Yang, K., Russakovsky, O. and Deng, J. (2019) 'SpatialSense: an adversarially
 crowdsourced benchmark for spatial relation recognition', *Proceedings of the
 IEEE/CVF International Conference on Computer Vision (ICCV)*.
+
+Yang, J., Ang, Y.Z., Guo, Z., Zhou, K., Zhang, W. and Liu, Z. (2022)
+'Panoptic scene graph generation', *Proceedings of the European Conference
+on Computer Vision (ECCV)*.
 
 Yang, L. et al. (2024) 'Depth Anything V2', *Advances in Neural Information
 Processing Systems (NeurIPS)*. Available at: https://arxiv.org/abs/2406.09414

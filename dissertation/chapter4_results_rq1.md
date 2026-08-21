@@ -33,6 +33,10 @@ Thresholds were fitted on annotator groups 0–5 only, with 6–8 held out. Each
 group is also a contiguous block of the capture, so the split holds out an
 unseen arrangement as well as an unseen annotator (§4.12).
 
+{{fig:qualitative-examples}} shows what the tool emits on two frames, one
+from a calibration group and one from a held-out group, before any of the
+numbers below abstract away from it.
+
 ## 4.2 Headline: recall of the human triplets
 
 {{fig:rq1-recall}} plots the per-predicate result; the table below carries the same figures with the baselines.
