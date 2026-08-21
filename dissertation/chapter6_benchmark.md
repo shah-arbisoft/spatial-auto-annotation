@@ -281,6 +281,29 @@ inherits every defect measured in the gold, and the advantage is concentrated
 exactly where the annotation is defective and absent where it is not, which is
 what annotation-prior agreement would look like.
 
+**The criterion was non-inferiority, and the arithmetic of that belongs
+here.** Section 1.2.2 asked whether a model trained on automatic labels
+performs *at least as well* as one trained on human labels, not whether it
+wins, so parity is the shape a pass takes and not an advantage evaporating.
+That reframing is worth only as much as the numbers behind it, and the
+numbers refuse a strong claim in either direction. Paired by seed the
+automatic arm leads at 42 and 43 and trails at 44; the mean difference is
+-0.0006 with a 95% interval of [-0.070, +0.069]. Three seeds bound the gap
+to about a quarter of the metric's own value, and a margin of ±0.01 would
+need roughly forty runs per arm. The experiment therefore establishes
+neither superiority nor equivalence, and a reader entitled to say the
+automatic labels did not beat the human ones is equally entitled to say this
+design could not have shown it if they had.
+
+**What the same three seeds do resolve** is the part that is not a null.
+Zero-shot recall separates with disjoint ranges, 0.225-0.309 against
+0.004-0.079, and so does reproducibility, a 0.006 spread against 0.052.
+Those are the comparisons this sample size can make and both run the
+automatic arm's way. Set against the cost of obtaining them, nine annotators
+against five minutes on one consumer GPU, indistinguishability on the
+ranking metric is close to the result the project set out to obtain: RQ1 and
+RQ2 ask whether the human can be removed, not whether the machine wins.
+
 The critical reading is not novel to this project, which is what makes it
 credible. Neural Motifs (Zellers et al., 2018) established that a frequency
 baseline ignoring the image is hard to beat; Unbiased SGG (Tang et al.,

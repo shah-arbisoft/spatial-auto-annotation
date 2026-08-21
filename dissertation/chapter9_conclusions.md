@@ -77,8 +77,11 @@ vision-language source at 25 of 25, and the union is admissible here because
 no human labels anything in it either. The level is therefore carried by the
 automatic sources together and lost by the shipped tool on its own, and the
 answer has to contain both halves of that.
-The benchmark neither confirms the margin nor contradicts it, and the word
-for 0.292 against 0.293 is *undecided* rather than *yes*: the automatic
+The benchmark neither confirms the margin nor contradicts it. Section 1.2.2
+asked for *at least as well*, which parity satisfies as written, but a null
+result is not a demonstration of equivalence: paired by seed the difference is
+-0.0006 with a 95% interval of [-0.070, +0.069], so the honest word for 0.292
+against 0.293 is *undecided* rather than *yes*: the automatic
 arm's point estimate sits 0.001 below the human arm's, which is a difference
 no experiment of this size could resolve in either direction, with overlapping
 seed ranges on every slice. Section 1.2.2 required agreement across all three
@@ -105,12 +108,12 @@ sources decisively while the ranked benchmark cannot separate them at all.
 
 **For the source dataset and its authors.** An annotator that labels the
 existing images 20 times more densely in five minutes, in the dataset's own
-formats, and the written operational definitions the annotation process
-never had. The fitted `near` threshold is a direct answer to the future-work
-request in Wang et al. (2025) for "spatial thresholds for near". Two
-annotation defects are quantified for the first time: an inverted
-front/behind convention in two of nine annotator groups, and `near` used by
-only three groups with fourfold variation in exhaustiveness.
+formats, with the operational definitions the annotation process never had.
+The fitted `near` threshold answers the future-work request in Wang et al.
+(2025) for "spatial thresholds for near", and two annotation defects are
+quantified for the first time: front/behind inverted in two of nine annotator
+groups, and `near` used by only three, with fourfold variation in
+exhaustiveness.
 
 **For work on scene-graph benchmarks.** Evidence that ranked recall against
 sparse, guideline-free annotation partly measures agreement with annotator habits and not only spatial correctness. The evidence is a dissociation:
@@ -127,12 +130,12 @@ The mechanism is measured, not inferred: self-training contributes
 roughly a thousand confident negative pseudo-labels for every positive one,
 propagating the annotators' silence and not their judgement.
 
-**Methodologically.** Calibration held out by *annotator* and not by image; a sparse-gold evaluation protocol that pairs recall with audited
-precision; exhaustive loss attribution; a way to estimate what annotators
-would score against one another when they never labelled the same images, by
-using a deterministic annotator as a fixed common reference (§4.6); and a
-reliability check that needs no labels at all, obtained by recovering the fact
-that an image dataset was cut from a continuous capture (§4.12). The last is
+**Methodologically.** Calibration held out by *annotator* and not by image; a
+sparse-gold protocol pairing recall with audited precision; exhaustive loss
+attribution; a way to estimate what annotators would score against one another
+without ever having labelled the same images (§4.6); and a reliability check
+needing no labels at all, from recovering the fact that the dataset was cut
+from a continuous capture (§4.12). The last is
 the one most likely to transfer, since many robotics datasets are sequences
 presented as image sets, and there a predicate's agreement with itself across
 viewpoints separates a rule that is wrong from one that is merely uncertain.
@@ -147,10 +150,10 @@ closes one of the two remaining links: across 25 held-out scenes an LLM
 planner never clears an occluding object when given objects alone (0/25),
 always clears it when given the human relationships (25/25), and does so on 19
 of 25 with the automatic ones, all six failures traced to a missing support
-relation, not to faulty reasoning. What is missing is execution. No robot moved, so the evidence runs from
-labels to models to plans and stops. Putting the same conditions on a physical
-Spot, or in a simulator with contact physics, would close the last link, and
-it is the only one left.
+relation, not to faulty reasoning. What is missing is execution: no robot moved, so the evidence runs from labels
+to models to plans and stops. The same conditions on a physical Spot, or in a
+simulator with contact physics, would close the last link, and it is the only
+one left.
 
 **Precision estimates remain partly author-verdicted.** The independent
 validation study (Appendix E.3) is deployed and collecting. Until it completes

@@ -261,18 +261,15 @@ is checked by a manual audit in the evaluation chapter.
 
 ## 3.9 Modularity: the detector as the replaceable part
 
-The claim that the rules are detector-agnostic (§4.11) is an architectural
-property, not a description of intent. The rule layer (`src/predicates.py`)
-imports nothing but `numpy` and never receives an image; the pipeline's entry
-point takes boxes as an argument, `annotate_image(image_rgb, boxes_px,
-labels, segmenter, depther, cfg)`. A detector is therefore not wired into the
-pipeline at all, it is simply what supplies that argument.
-
-That is what makes the conditional measurement in §4.11 meaningful. Holding
-the boxes fixed, the relation layer scores the same whether they came from a
-detector or from ground truth, so detector quality and relation quality are
-separately attributable, and a better detector improves the system without a
-line of rule code changing.
+The claim that the rules are detector-agnostic (§4.11) is architectural, not
+a statement of intent. The rule layer (`src/predicates.py`) imports nothing
+but `numpy` and never receives an image, and the entry point takes boxes as an
+argument, so no detector is wired into the pipeline: one simply supplies that
+argument. That is what makes §4.11's conditional measurement meaningful.
+Holding the boxes fixed, the relation layer scores the same whether they came
+from a detector or from ground truth, so detector quality and relation quality
+are separately attributable and a better detector improves the system without
+a line of rule code changing.
 
 To make the property usable, not merely true, the contract is explicit
 (`src/detectors.py`): one method returning pixel boxes, class names and
