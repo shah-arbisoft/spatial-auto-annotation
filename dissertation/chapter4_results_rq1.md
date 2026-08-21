@@ -251,28 +251,38 @@ definition of these predicates, which §7.3 draws out.
 
 ## 4.8 Answer to RQ1
 
-Automated annotation reaches human-comparable quality on five of seven
-predicates outright, at 0.75–1.00 recall, mean 0.85 and 0.74 on annotators
-no threshold ever saw, with blind-audited true precision 0.79–1.00 for
-lateral, proximity and depth-decided front/behind, each on 24 samples, so
-the claim they support is comparability. Support is the exception and is
-answered separately: 0.535 [0.42, 0.65] on 71 samples of the shipped rule,
-up from 0.404 before §4.14 traced the shortfall to a threshold fitted on a
-metric that could not see the error it controls. One of the five is `near`,
-recovered completely once its inconsistent usage is accounted for (0.997
-pooled, 1.00 held-out), which answers the predicate the source paper reports
-as failing for every model it benchmarks (§2.2). That is a claim about
+The two axes divide the seven predicates differently, and saying so plainly
+matters more than a single headline. On **recall**, five reach
+human-comparable levels at 0.75 to 1.00, mean 0.85 and 0.74 on annotators no
+threshold ever saw; the exception is the depth pair, at 0.70/0.71 pooled and
+0.84 once the two inverted groups are aligned. On **precision**, a different
+five audit blind at 0.79–1.00, the two laterals, the two depth
+predicates and `near`, each on 24 samples, so the claim they support is
+comparability; the exception there is support, at 0.535 [0.42, 0.65] on 71
+samples of the shipped rule, up from 0.404 before §4.14 traced the shortfall
+to a threshold fitted on a metric that could not see the error it controls.
+
+So no predicate is weak on both axes and none is strong on both except the
+laterals and `near`. Support recalls well and cannot be trusted where it
+adds; the depth pair is trustworthy where it commits and commits less often
+than the annotators did. Section 9.1 answers RQ1 against the criteria of
+§1.2.2 on that basis.
+
+`near` appears in both fives and deserves its own note. It is recovered
+completely once its inconsistent usage is accounted for (0.997 pooled, 1.00
+held-out), which answers the predicate the source paper reports as failing
+for every model it benchmarks (§2.2). That is a claim about
 recall, and on the precision side `near` is the weakest of the five: 0.792
 audited, the widest disagreement between the two judges, and two of its four
 decoys accepted by the author (§4.14). A rule that fires on sixty times more
 pairs than the annotators labelled will recover their labels almost by
 construction, so this is the predicate where the recall figure most
-overstates what is known. The qualification is the depth pair, at 0.70/0.71
-pooled and 0.84 once the two inverted groups are aligned; §4.5 decomposes
-that shortfall into calibrated abstention and a convention the annotators
-did not share, in measured proportions, and neither component is depth
-error. The residual human cost is an 8.5% review queue (§4.7), against
-labels 20× denser than the human set.
+overstates what is known.
+
+Section 4.5 decomposes the depth pair's shortfall into calibrated abstention
+and a convention the annotators did not share, in measured proportions, and
+neither component is depth error. The residual human cost is an 8.5% review
+queue (§4.7), against labels 20× denser than the human set.
 
 ## 4.9 Shipped from the ablations
 
