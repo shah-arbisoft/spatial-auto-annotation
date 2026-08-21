@@ -363,7 +363,7 @@ walk-through, and the repository is public.
 ## 3.12 Summary of design decisions
 
 Every decision above shares one shape: an alternative was available, it was
-rejected for a stated reason, and where that reason is a measurement the
+rejected for a stated reason, and where a measurement settled it the
 measurement is named. Four were settled by evidence that arrived *after* the
 decision and could have overturned it, which is the test of whether a
 justification is real: the Small depth model against ablation A8, the

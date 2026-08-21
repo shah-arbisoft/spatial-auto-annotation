@@ -151,7 +151,7 @@ can differ at all, and it makes the absolute mR@100 figures in this chapter
 lower bounds on both sides, not estimates of spatial competence.
 
 What difference remains is a separate effect, and §6.4 localises it to
-annotator *selection* , not annotator convention: it appears on the lateral
+annotator *selection*, not annotator convention: it appears on the lateral
 predicates too, which have no direction to invert. The two defects co-occur
 in the same annotators without one causing the other.
 
@@ -274,7 +274,7 @@ and the auto arm saw 24, so its 0.172 against 0.003 records that its labels
 the annotation bottleneck predicts, and it is not compositional
 generalisation; this dissertation does not claim it as such.
 
-## 6.5 Two readings that both survive
+## 6.5 What survives, read both ways
 
 Two interpretations survive and neither is available without the other. The
 benchmark result is real: a consumer *evaluated against human-annotated scene
@@ -304,7 +304,7 @@ Registered before the run, judged after: prediction 1 (early human-arm
 saturation) is **confirmed** and replicates the source paper. Prediction 2
 (higher plateau) is **unresolved on mR@100**, and the word matters: an
 earlier version of this chapter recorded it as refuted on the strength of a
-0.048 gap that the retrained arms of §6.3 reduce to 0.001, which no
+0.048 gap that the retrained arms of §6.3.1 reduce to 0.001, which no
 experiment of this size can call in either direction. Where the plateau *is*
 higher is the zero-shot component the prediction did not name, 0.268 against
 0.052. Prediction 3 (`near` recovery) is **refuted**: it wrongly assumed the

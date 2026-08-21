@@ -403,8 +403,7 @@ follows.
 
 **Limits.** The figures are an upper bound: only pairs matched between
 keyframe and frame contribute, and those are the ones whose objects moved
-least. Coverage also thins as segments grow, so aggressive compression leaves
-pairs uncovered, which Appendix E.2 traces to box
+least. Coverage also thins as segments grow, so aggressive compression leaves pairs uncovered instead of mislabelled, which Appendix E.2 traces to box
 drift and not absent annotation, making a tracker the straightforward
 remedy.
 

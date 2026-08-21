@@ -171,11 +171,11 @@ longer a suspicion but a measurement. The **audits were verdicted by the
 author**, and §4.14 shows what that cost: the same rules on the same data
 score 0.77 when the auditor knows every item is a tool assertion and 0.404
 when decoys are mixed in unmarked. The **support-rule iteration used the
-same audit machinery twice**, making the second audit confirmatory, and it
-confirmed a figure that a blind instrument does not support. Blind
-verdicting with decoys should have been the instrument from the first audit,
-not the third; it is cheap, and it is the only step here that changed a
-headline number instead of tightening one.
+same audit machinery twice**, leaving the second audit dependent on the
+first, and it confirmed a figure that a blind instrument does not support.
+Blind verdicting with decoys should have been the instrument from the first
+audit, not the third; it is cheap, and it is the only step here that changed
+a headline number instead of tightening one.
 
 One finding belongs here and not in Chapter 6, because it is about method
 and not about labels. The benchmark arms were originally trained weeks
@@ -281,9 +281,7 @@ two the evidence does not settle.
 
 **Vocabulary scale: not answered, and conceded.** Nothing in this
 dissertation bears on predicates beyond the seven, and the objection is that
-a hand-written rule set does not extend by learning. It stands in full. What
-the work can offer is a boundary: the rules are
-decidable because the predicates are spatial, and §3.3 makes that
+a hand-written rule set does not extend by learning. It stands in full. What the work can offer is a boundary and no rebuttal: the rules are decidable because the predicates are spatial, and §3.3 makes that
 dependence explicit instead of hoping it generalises. Section 9.3 records
 it as the limitation most likely to matter to anyone reusing the method.
 

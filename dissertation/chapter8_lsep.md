@@ -38,7 +38,7 @@ noted only for completeness.
 ## 8.2 Social considerations
 
 **Automation of annotation work.** The project automates paid human work.
-The framing the measurements support: at this scale the
+The framing the measurements support is this: at this scale the
 manual process produced sparse, inconsistent labels at a cost of nine
 annotators, and the realistic effect of automation is not displacing a
 profession but changing the human role, from labelling every pair to

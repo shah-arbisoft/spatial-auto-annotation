@@ -115,7 +115,7 @@ front/behind convention in two of nine annotator groups, and `near` used by
 only three groups with fourfold variation in exhaustiveness.
 
 **For work on scene-graph benchmarks.** Evidence that ranked recall against
-sparse, guideline-free annotation partly measures agreement with annotator habits as much as spatial correctness. The evidence is a dissociation:
+sparse, guideline-free annotation partly measures agreement with annotator habits and not only spatial correctness. The evidence is a dissociation:
 the model that ranks better memorises which pairs annotators record, and the
 model that covers the relation types they never recorded is the one trained
 on consistent computed labels. The per-annotator decomposition localises the

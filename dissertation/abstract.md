@@ -45,7 +45,8 @@ the relation types its own annotation omits (zR@100 0.268 against 0.052) and
 reproduces itself across seeds more than eight times more tightly. What
 difference remains sits on the two test annotators carrying a measured
 labelling defect and reverses on the one without, so the metric rewards
-annotation habits as well as spatial correctness. One link down the chain the answer is unambiguous: asked for a
+annotation habits as well as spatial correctness. One link down the chain it
+is the relations that decide the outcome: asked for a
 safe grasp plan on 25 held-out scenes where an object rests on the target, a
 planner clears it in 0 of 25 given objects alone, 25 of 25 given human
 relationships, 19 of 25 given automatic ones and 25 of 25 given the union of

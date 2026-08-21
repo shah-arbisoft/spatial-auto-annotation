@@ -87,14 +87,15 @@ The complementary literature dismantles the premise that human annotation is
 a single reliable gold standard. **Uma et al.'s (2021) survey of learning
 from disagreement** documents systematic annotator disagreement across
 vision and language, driven by ambiguous guidelines, subjective category
-boundaries and annotator-specific conventions, and reviews methods treating
-disagreement as signal. The frame fits exactly: Chapter 4 measures three
-annotator behaviours, selective `near` usage, an inverted front/behind
-convention in two groups, and one-directional support labelling, which make
-"agreement with the humans" per-annotator, not global. Two design decisions
-follow in Chapters 3–4: evaluation is reported per annotator group, never
-only pooled, and thresholds are calibrated only on annotators who used a
-label, with the rest held out.
+boundaries and annotator-specific conventions, and reviews methods that
+treat disagreement as signal to be modelled and not noise to be averaged
+away. The frame fits exactly: Chapter 4 measures three annotator behaviours,
+selective `near` usage, an inverted front/behind convention in two groups,
+and one-directional support labelling, which make "agreement with the
+humans" per-annotator, not global. Two design decisions follow in Chapters
+3–4: evaluation is reported per annotator group, never only pooled, and
+thresholds are calibrated only on annotators who used a label, with the rest
+held out.
 
 Where the human judgements must themselves be evaluated, the measurement
 tradition supplies the instruments: **Cohen's kappa** (Cohen, 1960) for
