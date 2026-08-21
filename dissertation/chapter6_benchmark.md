@@ -120,8 +120,8 @@ real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm
 leads fivefold, 0.268 against 0.052.
 
 **The arms differ far more in stability than in score.** Across seeds the
-automatic arm's pooled mR@100 spans 0.006; the human arm's spans 0.052 and the
-vision-language arm's 0.044, eight and seven times wider. One definition
+automatic arm's pooled mR@100 spans 0.006 against the human arm's 0.052 and
+the vision-language arm's 0.044, eight and seven times wider. One definition
 applied uniformly produces a model that lands in the same place whatever the
 initialisation, and nine annotators applying nine conventions do not. A margin
 of 0.001 between arms whose own seeds move by 0.052 is not a result in either
@@ -138,17 +138,16 @@ followed the stated convention. None of these three differences is separable
 across seeds, so the ordering is offered as a consistent direction and not as
 three measured effects.
 
-The size of that contamination can be measured. Of the 2,818
-relations in the test gold, **1,189 (42%) are front/behind, and 859 of those
-(72%) come from the two inverted annotators** — so **30% of the entire
-yardstick is a predicate labelled in the opposite direction to the
-convention every training group used**. Both arms train on groups 0–5, where
-no inversion is measured, so neither can score those relations and the
-penalty falls on them equally. What the inversion sets is therefore a
-*ceiling*, not a bias: it caps what any model trained on this data can
-achieve on 30% of the test gold, compressing the range in which the two arms
-can differ at all, and it makes the absolute mR@100 figures in this chapter
-lower bounds on both sides, not estimates of spatial competence.
+The size of that contamination can be measured. Of the 2,818 relations in
+the test gold, **1,189 (42%) are front/behind, and 859 of those (72%) come
+from the two inverted annotators** — so **30% of the entire yardstick is a
+predicate labelled in the opposite direction to the convention every
+training group used**. Both arms train on groups 0–5, where no inversion is
+measured, so neither can score those relations and the penalty falls on them
+equally. The inversion therefore sets a *ceiling*, not a bias. It caps what
+any model trained on this data can reach on 30% of the test gold, which
+compresses the range the two arms can differ across and makes every absolute
+mR@100 in this chapter a lower bound on both sides.
 
 What difference remains is a separate effect, and §6.4 localises it to
 annotator *selection*, not annotator convention: it appears on the lateral
@@ -198,13 +197,12 @@ the three readings the experiment cannot separate.
 
 ## 6.4 Why the advantage disappears between Chapter 5 and this chapter
 
-The same labels, the same held-out human gold, and two very different
-verdicts. Per-pair recall (Chapter 5) says the automatic labels teach two and
-a half times better, 0.748 against 0.297. Ranked evaluation against sparse
-gold says the two are level, 0.292 against 0.293. Nothing about the labels or
-the gold differs between the experiments, so an advantage of that size cannot
-evaporate for any reason other than the **structure of the metric**, and
-decomposing it yields the chapter's real findings.
+The same labels, the same held-out human gold, two very different verdicts.
+Per-pair recall says the automatic labels teach two and a half times better,
+0.748 against 0.297; ranked evaluation against sparse gold says they are
+level. Neither the labels nor the gold differ between the experiments, so an
+advantage that size can only have evaporated into the **structure of the
+metric**, and decomposing it yields the chapter's real findings.
 
 An earlier version of this chapter had a stronger claim to explain: the human
 arm ahead at 0.326 against 0.278. That comparison drew its arms from training
@@ -230,8 +228,7 @@ gold rewards.
 hypothesised, a differential one.** Both arms were trained on
 consistent-convention front/behind (the tool's by construction; groups
 0–4's by measurement), while groups 6 and 8, two thirds of the test gold,
-invert it (§4.5). Re-scoring against convention-aligned gold lifts the two
-arms almost equally (+0.041 human, +0.035 auto; the human arm's *in front
+invert it (§4.5). Re-scoring against aligned gold lifts both arms almost equally (+0.041 human, +0.035 auto; the human arm's *in front
 of* recall jumps 0.124 → 0.386, the auto arm's 0.101 → 0.248): both models
 learned the consistent convention, both pay the same tax on inverted gold,
 and the gap between them barely moves. The initial hypothesis that the
@@ -322,14 +319,11 @@ its size is compared with the variation of the procedure that produced it.
 ## 6.7 Answer, at the level the source paper measures
 
 At the level the source paper evaluates robot-readiness, automatic labels
-train a model that trains longer, covers the relation types the manual
-annotation never recorded five times more fully (zR@100 0.268 against 0.052),
-reproduces itself across seeds more than eight times more tightly (spread 0.006
-against 0.052), ranks level overall (0.292 against 0.293), and ranks slightly
-ahead on the one test annotator with no measured defect. The claim the evidence supports is conditional:
-**automatic labels are better training material wherever ground truth means
-geometry; human labels remain better wherever it means human annotation
-habits.** The first condition is the operative one for a robot, which needs
-relations that are *correct* rather than *human-like*, and §5.7 tests that a
-link further down, where it survives. The chain still lacks execution on a
-physical robot (§9.3).
+train a model that trains longer, covers five times more of the relation
+types the manual annotation never recorded, reproduces itself across seeds
+more than eight times more tightly, ranks level overall, and ranks slightly
+ahead on the one test annotator with no measured defect. The evidence supports a conditional claim: **automatic labels are better training
+material wherever ground truth means geometry; human labels remain better
+wherever it means human annotation habits.** The first condition is the
+operative one for a robot, which needs relations that are *correct*, not
+*human-like*, and §5.7 tests that one link further down, where it survives.

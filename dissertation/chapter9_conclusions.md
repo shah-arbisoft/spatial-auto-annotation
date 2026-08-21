@@ -51,17 +51,15 @@ and the yardstick §1.2.2 hoped for is one this dataset could not supply. The
 second
 condition, that labels beyond the human record survive audit, holds for the
 lateral, proximity and depth-decided predicates at blind-audited precision
-0.79–1.00. **It is not met for support.** At 0.535 [0.42, 0.65] about half the
-support labels the tool adds beyond the human record are wrong, which is well
-above noise and well below a standard anything should be built on, and the
-criterion of §1.2.2 asked for labels that survive audit, not labels that beat chance. Support therefore answers RQ1 on recall and fails it on
+0.79–1.00. **It is not met for support.** At 0.535 [0.42, 0.65] about half the support
+labels the tool adds beyond the human record are wrong. That beats chance and
+falls well short of a standard anything should be built on, and §1.2.2 asked
+for labels that survive audit. Support therefore answers RQ1 on recall and fails it on
 precision, and the per-predicate form of the question exists so that this
-cannot be averaged away. The
-contact rule repaired the box rule's failure but was left at a threshold
-fitted where the cost of a false positive was invisible, the claim that it
-reached 0.9 was an artefact of auditing unblinded, and refitting the threshold
-lifted a measured 0.404 to a measured 0.535 and not to the 0.667 the
-held-out fit had predicted. The qualification is
+cannot be averaged away. The contact rule repaired the box rule's failure but kept a threshold fitted
+where a false positive cost nothing; the claim that it reached 0.9 was an
+artefact of auditing unblinded; and refitting lifted a measured 0.404 to a
+measured 0.535, short of the 0.667 predicted. The qualification is
 `in front of` and `behind` at 0.70/0.71 pooled: not a failure of the criterion
 but a disagreement about the words, since §4.12 shows the tool reproducing its
 own verdict across viewpoints 0.958 of the time while two annotator groups
@@ -209,13 +207,14 @@ single-image annotator.
 The most useful thing this project taught me was to distrust a number until
 I know how it was produced.
 
-That lesson arrived early and painfully. My first depth-based results were
-poor and the unit tests all passed. The dataset's images are stored rotated
-180 degrees behind an EXIF flag, so every mask and depth value was being read
-from an upside-down image while the boxes stayed upright. No automated check could have caught it, because every component
-was behaving exactly as written. I found it by rendering an image with its
-boxes drawn on and looking at it. Since then I have rendered and inspected
-samples after every significant change, and it has caught things twice more.
+That lesson arrived early and painfully. My first depth results were poor
+and every unit test passed. The dataset's images are stored rotated 180
+degrees behind an EXIF flag, so masks and depth were read from an
+upside-down image while the boxes stayed upright, and no automated check
+could have caught it: every component was behaving as written. I found it by
+rendering an image with its boxes drawn on and looking at it. Since then I
+have rendered and inspected samples after every significant change, and it
+has caught things twice more.
 
 The second lesson was that "agreement with the humans" is not one target. I
 began by treating the human labels as ground truth and my disagreements as
@@ -249,7 +248,7 @@ have had two people annotate the same fifty images in week two, since one
 afternoon would have produced outright the inter-annotator agreement figure I
 estimated indirectly.
 
-Technically, the thing I am most pleased with is not the accuracy figure but
-the two refinements I built, measured and then declined. Both were plausible,
-both took real work, and the data said neither helped. Reporting them as null
-results was the point at which this started feeling like research.
+What I am most pleased with is not the accuracy figure but the two
+refinements I built, measured and declined. Both were plausible, both took
+real work, and the data said neither helped. Reporting them as null results
+was the point this started feeling like research.

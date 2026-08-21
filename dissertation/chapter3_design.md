@@ -65,22 +65,20 @@ directly on the released files, drive specific design responses:
 ## 3.3 Design principle: compute, don't predict
 
 Learned scene-graph generators (REACT++ and predecessors; Neau and Falomir,
-2026) *predict* relations from visual patterns and therefore require labelled
-training data. They sit downstream of annotation and cannot replace it. This
-pipeline *computes* relations from measured geometry with deterministic rules,
-so it can run before any learned model and supply the labels such models
-consume. The approach is valid precisely because the seven predicates are
-spatial: each is decidable from positions, extents and depth order. The
-perception models used (SAM2, Depth Anything) only *measure* where things are;
-no learned component decides a relationship.
+2026) *predict* relations from visual patterns, so they need labelled training
+data and sit downstream of annotation. This pipeline *computes* relations from
+measured geometry with deterministic rules, so it runs before any learned
+model and supplies what those models consume. That works only because the
+seven predicates are spatial: each is decidable from positions, extents and
+depth order. SAM2 and Depth Anything only *measure* where things are; no
+learned component decides a relationship.
 
 The alternative was not to compute at all. Section 2.4 sets out the
 established rival, which is to keep the human labels and stretch them by
-semi-supervised pseudo-labelling or by active learning. That route is easier
-to build, and it was rejected on three grounds stated there and verified
-here. The seed labels are internally inconsistent, so a teacher trained on
-them propagates two front/behind conventions and a selective `near` with
-added confidence instead of correcting either. The labelled tenth is not a
+semi-supervised pseudo-labelling or by active learning. That route is easier to build and was rejected on three grounds stated there
+and verified here. The seed labels are internally inconsistent, so a teacher
+trained on them propagates two front/behind conventions and a selective `near`
+with added confidence. The labelled tenth is not a
 random sample of the rest but whatever nine annotators found salient, which
 is exactly the assumption pseudo-labelling requires and does not have. And
 the seed is weakest where the task is hardest: Chapter 5's human-trained
@@ -124,12 +122,11 @@ image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
 | Confidence | flag ambiguity bands for optional review | silent guesses | human-in-the-loop accelerator claim needs an explicit abstention mechanism |
 | Writers | byte-compatible VG JSON / YOLO / h5 | own schema + converter | drop-in comparability (requirement 2); verified against real exports |
 
-All coordinates are normalised by image size so thresholds transfer across
-resolutions; depth is inverted to "smaller is nearer" and min–max normalised
-per image (the HF model emits larger = nearer; the sign was fixed after
-front/behind agreement rose from ~26% to ~74%). Images are loaded through an
-EXIF-aware helper so the 180°-rotated captures are made upright before any
-box, mask or depth is read; the boxes are stored in the upright frame.
+Coordinates are normalised by image size so thresholds transfer across
+resolutions, and depth is inverted to "smaller is nearer" and min-max
+normalised per image; the sign was fixed after front/behind agreement rose
+from ~26% to ~74%. An EXIF-aware loader makes the 180°-rotated captures
+upright before any box, mask or depth is read.
 
 ## 3.5 The seven rules
 
@@ -201,13 +198,13 @@ code, so a different dataset can revise it.
 Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
 near-threshold edge, and the resolved contradiction above. They are the
 design's honesty mechanism. The tool is offered as a human-in-the-loop
-accelerator whose residual human cost is *measurable*, not as an
-infallible oracle, and about a third of ordered pairs carry a flag; §4.7
-decomposes that into the part which is silent abstention and the much smaller
-part which is a genuine review queue. The structural guarantees this section
-promises are asserted in a randomised invariant test over two thousand
-synthetic scenes (§3.11), because they hold by construction and would
-otherwise be easy for a later rule edit to break quietly.
+accelerator with a *measurable* residual cost, not as an oracle, and about a
+third of ordered pairs carry a flag; §4.7 decomposes that into the part
+which is silent abstention and the much smaller part which is a genuine
+review queue. The structural guarantees this section promises are asserted
+in a randomised invariant test over two thousand synthetic scenes (§3.11),
+because they hold by construction and would otherwise be easy for a later
+rule edit to break quietly.
 
 ## 3.7 Output compatibility
 
@@ -218,15 +215,14 @@ confound the labels with the loader, and no result would be attributable. The
 outputs therefore have to be substitutable for the human ones without touching
 anything that reads them.
 
-Three formats are written because three consumers need them: Visual Genome
-JSON, which is the dataset's own annotation format and the one a replication
-would diff against; YOLO txt, which trains the detector the deployment mode
-and the benchmark share; and the h5 layout the scene-graph framework of
-Chapter 6 ingests. The writers reproduce the SGDET-Annotate structure exactly:
+Three formats are written for three consumers: Visual Genome JSON, which a
+replication would diff against; YOLO txt, which trains the detector the
+deployment mode and the benchmark share; and the h5 layout Chapter 6's
+framework ingests. The writers reproduce the SGDET-Annotate structure exactly:
 centre-form `boxes_1024`/`boxes_512` in the resized frames, index-aligned
-`labels` and `attribute` arrays, `relationships` as subject–object index pairs
-with a parallel `predicates` ID array, and the same six-dataset h5 layout with
-int64 attributes.
+`labels` and `attribute` arrays, `relationships` as subject–object index
+pairs with a parallel `predicates` ID array, and the same six-dataset h5
+layout with int64 attributes.
 
 The alternative was an internal schema plus a converter (§3.4), which is
 easier to write and would have left every comparison one translation away
@@ -245,12 +241,12 @@ and testing on 6–8 yields held-out F1 = 0.009: the training annotators' habits
 do not predict the test annotator's, because the label was applied by only
 three of nine groups and with very different exhaustiveness.
 
-The adopted protocol therefore (i) uses only human-*annotated*, non-contact
-pairs as fit data, since unannotated pairs are not reliable negatives under
-sparse annotation and contact pairs are never `near` by the measured
-convention; (ii) fits only on annotator groups that used the label within the
-training split (groups 0 and 4); and (iii) reports agreement on the held-out
-near-using annotator (group 8), who contributed nothing to the fit.
+The protocol therefore fits on human-*annotated*, non-contact pairs only,
+since unannotated pairs are not reliable negatives under sparse annotation
+and contact pairs are never `near` by the measured convention; it uses only
+the training-split groups that used the label at all (0 and 4); and it
+reports agreement on the held-out near-user, group 8, which contributed
+nothing to the fit.
 
 Results *(measured)*: fitted **T = 1.372** (gap/mean-size units); held-out
 recall **1.000**, meaning every pair the unseen annotator called near lies
@@ -304,28 +300,25 @@ which requires deciding where one viewpoint ends and the next begins.
 
 The standard tool does not apply. Shot-boundary detection thresholds the
 difference between consecutive frames, which presumes cuts, and a robot
-walking through a room produces none. The failure is structural, not a
-matter of threshold choice, as §4.12 verifies by sweeping it: motion
-arriving at 0.08 px per frame is never larger than the noise at any single
-step, while the same motion integrated over forty frames displaces the image
-by 13 px, so only the accumulated drift carries the signal.
+walking through a room produces none. The failure is structural rather than a
+matter of threshold, as §4.12 verifies by sweeping it: 0.08 px per frame never
+exceeds the noise at any single step, while the same motion over forty frames
+displaces the image by 13 px, so only accumulated drift carries the signal.
 
 `segment_sequence` (`src/keyframes.py`) therefore measures drift from the
 *anchor* of the current segment, not the preceding frame, opening a new
 segment when drift exceeds τ, so gradual motion accumulates instead of being
-rounded away while a genuine cut still crosses in one step. Distances are mean
-absolute differences over 64×48 mean-subtracted greyscale thumbnails, the
-subtraction discarding the global exposure shifts of an auto-exposing camera,
-which would otherwise fire boundaries of their own. Each segment nominates the
-frame closest to its mean signature, a better representative on a moving
-camera than the first, which is usually mid-transition.
+rounded away while a genuine cut still crosses in one step. Distances are mean absolute differences over 64×48 mean-subtracted greyscale
+thumbnails, the subtraction discarding the exposure shifts of an auto-exposing
+camera, which would otherwise fire boundaries of their own. Each segment
+nominates the frame closest to its mean signature, which on a moving camera
+beats taking the first.
 
 A single parameter spans two uses. Small τ isolates near-duplicates, so each
-segment is one viewpoint and the representative can stand for the rest;
-large τ groups several viewpoints of one arrangement, which is what the
-cross-viewpoint consistency measurement of §4.12 consumes. The threshold is
-chosen from the data by sweep, and §4.12 reports both what the segmentation
-recovers and what skipping the intervening frames costs.
+segment is one viewpoint; large τ groups several viewpoints of one
+arrangement, which is what §4.12's cross-viewpoint measurement consumes. The
+threshold is chosen by sweep, and §4.12 reports what the segmentation recovers
+and what skipping frames costs.
 
 ## 3.11 Reproducibility by construction
 
@@ -362,33 +355,25 @@ walk-through, and the repository is public.
 
 ## 3.12 Summary of design decisions
 
-Every decision above shares one shape: an alternative was available, it was
-rejected for a stated reason, and where a measurement settled it the
-measurement is named. Four were settled by evidence that arrived *after* the
-decision and could have overturned it, which is the test of whether a
-justification is real: the Small depth model against ablation A8, the
-relative-gap `near` metric against the centroid variants, masks against
-box-only geometry, and the ground-plane fallback against its own contact
-guard. Each is reported where it was measured (§4.9, Appendix D). Appendix
-F.3 tabulates all eleven decisions with the alternative each displaced.
+Every decision above shares one shape: an alternative was available and was
+rejected for a stated reason. Four were settled by evidence that arrived
+*after* the decision and could have overturned it, which is the test of
+whether a justification is real: the Small depth model, the relative-gap
+`near` metric, masks over box-only geometry, and the ground-plane fallback.
+Appendix F.3 tabulates all eleven with the alternative each displaced.
 
-The decisions also answer the four objections §2.9 directs at the method
-itself, none of them added afterwards to fit. Against **vocabulary scale**,
-predicates live in configuration (§3.9), so extending the set does not
-touch the engine; that bounds the objection without defeating it, since a
-predicate with no geometric criterion cannot be specified at all. Against
-**systematic error**, the rules abstain and flag instead of guessing (§3.6),
-so an unreliable case becomes a countable review item, not a confident wrong
-label repeated wherever the geometry repeats, and §4.7 prices that. Against
-**circular validation**, the structural guarantees are asserted by
-randomised invariant testing over synthetic scenes (§3.11), independent of
-the author's judgement about any image. Against the **reference frame**, the
-camera frame is committed to explicitly and stated with the rules (§3.5), so
-a disagreement is locatable as a convention difference and is not diffused
-into general error, and §4.5 locates two such groups.
+The decisions also carry the design's answer to the four objections §2.9
+directs at the method, none added afterwards to fit. Predicates live in
+configuration rather than code (§3.9), so the vocabulary extends without
+touching the engine; the rules abstain and flag instead of guessing (§3.6),
+so an unreliable case becomes a countable review item; randomised invariant
+testing over synthetic scenes (§3.11) asserts the structural guarantees
+without the author's judgement; and the camera frame is committed to
+explicitly (§3.5), so a disagreement is locatable as a convention
+difference. Section 7.7 returns to all four with the evidence, which is
+where they are settled or conceded.
 
-Three of the four are mitigations, not refutations, and §7.4 reports what
-they proved to be worth. The fourth the design could not settle alone:
-invariant testing pins rule *consistency* and says nothing about rule
-*truth*, which took an instrument built to attack the author's own verdicts
-(§4.14), and it overturned one of them.
+Three are mitigations, not refutations. The fourth the design could not
+settle alone: invariant testing pins rule *consistency* and says nothing about
+rule *truth*, which took §4.14's instrument, built to attack the author's own
+verdicts. It overturned one.

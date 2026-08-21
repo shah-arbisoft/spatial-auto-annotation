@@ -68,17 +68,18 @@ error are roughly 7%. The bulk of the miss mass is calibrated abstention
 defects (38–42%, a share that *grew* as the ground-plane fallback shrank the
 abstention share around it).
 
-Second, **the support arc shows the method working as a method**, and it
-ran one step further than the chapter originally recorded: the threshold that
-survived those repairs was itself re-fitted after §4.14 found it over-emitting,
-and the shipped value is now 0.85. The box rule shipped at 0.13 true precision; the audit localised the failure
-(projection adjacency), the gallery localised the misses (containment), one
-geometric insight (stacked objects share a camera distance) fixed half the
-false fires, and one perception upgrade (mask-bottom contact) fixed most of
-the rest while *raising* recall, each step calibrated on train annotators and
-validated held-out. The residual failure mode is precisely characterised too:
-a person *holding* an object satisfies pixel contact (3 of the 7 remaining
-audited errors), and a class-aware guard is the documented next refinement.
+Second, **the support arc shows the method working as a method**, and it ran
+one step further than the chapter originally recorded: the threshold that
+survived those repairs was itself re-fitted after §4.14 found it
+over-emitting, and the shipped value is now 0.85. The box rule shipped at
+0.13 true precision. The audit localised the failure to projection adjacency
+and the gallery the misses to containment; one geometric insight, that
+stacked objects share a camera distance, fixed half the false fires, and
+mask-bottom contact fixed most of the rest while *raising* recall, each step
+calibrated on train annotators and validated held-out. The residual failure
+mode is precisely characterised too: a person *holding* an object satisfies
+pixel contact (3 of the 7 remaining audited errors), and a class-aware guard
+is the documented next refinement.
 
 Third, **what looked like a depth-resolution ceiling was mostly a rules
 ceiling, and it moved**. Two objects at similar camera distance cannot be
@@ -134,14 +135,13 @@ dataset's label semantics have been made explicit.
 The "tenth annotator" framing survives contact with the data, and §4.6 puts
 numbers on it. The tool is deterministic, the same labeller for every group,
 so the 0.082 spread in its agreement across the seven consistent annotators
-(0.851 to 0.933) measures their heterogeneity, not its inconsistency, and on
-the shipped labels that spread is narrow enough to be weak evidence of
-heterogeneity on its own. Fréchet bounds with the tool as common reference
-place annotator-to-annotator agreement in [0.78, 0.96], containing the tool's
-own 0.892. The claim is
-deliberately modest, since the bounds assume the batches are exchangeable: the
-automatic annotator cannot be shown to agree with the humans any less well
-than they can be shown to agree with each other. Without overlapping
+(0.851 to 0.933) measures their heterogeneity and not its own. On the
+shipped labels that spread is narrow enough to be weak evidence. Fréchet
+bounds with the tool as common reference place annotator-to-annotator
+agreement in [0.78, 0.96], containing the tool's own 0.892. The claim is
+deliberately modest, since the bounds assume the batches are exchangeable:
+the automatic annotator cannot be shown to agree with the humans any less
+well than they can be shown to agree with each other. Without overlapping
 assignments the quantity cannot be measured outright, and that absence is
 itself a finding about the dataset's construction, one a replication should
 design away by having two annotators share a batch.
@@ -179,18 +179,17 @@ a headline number instead of tightening one.
 
 One finding belongs here and not in Chapter 6, because it is about method
 and not about labels. The benchmark arms were originally trained weeks
-apart, against whatever state the upstream framework happened to be in on
-the day; retraining all nine runs in a single session on one clone moved the
-human arm's pooled mR@100 from 0.326 to 0.293, while the vision-language arm
-moved 0.001 and neither arm's labels had changed. **A third of the margin
-this dissertation once reported between label sources was an artefact of
-*when* each arm was trained.** Nothing in the original protocol was
-careless: seeds were fixed, the detector frozen, the configuration shared.
-The confound entered through an unpinned dependency, which is the one axis
-the protocol did not name. A controlled comparison has to control the code
-as explicitly as it controls the data, by pinning versions and training
-every arm in one session; §6.3 now does, and its figures supersede the
-earlier ones.
+apart, against whatever state the upstream framework was in on the day.
+Retraining all nine runs in one session on one clone moved the human arm's
+pooled mR@100 from 0.326 to 0.293 and the vision-language arm by 0.001, with
+no label changed. **A third of the margin this dissertation once reported
+between label sources was an artefact of *when* each arm was trained.**
+Nothing in the original protocol was careless: seeds were fixed, the
+detector frozen, the configuration shared. The confound entered through an
+unpinned dependency, which is the one axis the protocol did not name. A
+controlled comparison has to control the code as explicitly as it controls
+the data, by pinning versions and training every arm in one session; §6.3
+now does, and its figures supersede the earlier ones.
 
 That weakness was acted on, not only recorded, and §4.14 gives the sequence:
 the support threshold had been fitted where a false positive outside the
@@ -208,23 +207,24 @@ consistency but not rule *truth*, which only the audits address.
 The pipeline borrows its skeleton from the SpatialVLM family (Chen et al.,
 2024) and, further back, from CLEVR (Johnson et al., 2017); neither supplies
 the recovery of geometry from real photographs, where this project's
-difficulty sits. What it adds is not the skeleton but the parts the lineage
-leaves implicit, because SpatialVLM and VQASynth (Remyx AI, 2024) generate
-*training text* at internet scale without ever confronting a fixed predicate
-vocabulary with human ground truth, and SpatialRGPT (Cheng et al., 2024)
-curates region representations with depth but validates downstream and not against annotators. This project contributes three. **Annotator-aware
-calibration**: fit only on annotators who used a label, and hold out
-annotators and not merely images. **Contact as the support signature**:
-mask-bottom adjacency, unused by the box-geometry lineage, which repaired both
-error directions at once and parallels the argument for pixel-accurate
-grounding in panoptic scene-graph generation (Yang, J. et al., 2022). And
-**loss attribution as methodology**: every miss diagnosed, every gap
-decomposed into abstention against annotator against error, and detection
-against relations. RoboSpatial's reference-frame taxonomy (Song et al.,
-2025), cited in Chapter 3 to justify camera-frame laterality, proved the
-right lens for a *measured* phenomenon: the front/behind inversion is a
-reference-frame disagreement inside one annotation team, an instance of the
-frame-dependence Landau and Jackendoff (1993) describe.
+difficulty sits. What it adds are the parts the lineage leaves implicit.
+SpatialVLM and VQASynth (Remyx AI, 2024) generate *training text* at
+internet scale without confronting a fixed predicate vocabulary with human
+ground truth, and SpatialRGPT (Cheng et al., 2024) curates region
+representations with depth but validates downstream. This project
+contributes three. **Annotator-aware calibration**: fit only on annotators
+who used a label, and hold out annotators and not merely images. **Contact
+as the support signature**: mask-bottom adjacency, unused by the
+box-geometry lineage, which repaired both error directions at once and
+parallels the argument for pixel-accurate grounding in panoptic scene-graph
+generation (Yang, J. et al., 2022). And **loss attribution as methodology**:
+every miss diagnosed, every gap decomposed into abstention against annotator
+against error, and detection against relations. RoboSpatial's
+reference-frame taxonomy (Song et al., 2025), cited in Chapter 3 to justify
+camera-frame laterality, proved the right lens for a *measured* phenomenon:
+the front/behind inversion is a reference-frame disagreement inside one
+annotation team, an instance of the frame-dependence Landau and Jackendoff
+(1993) describe.
 
 Two results connect this project to literatures outside its lineage. Chapter
 6's benchmark finding is a case of the problem Northcutt, Athalye and
