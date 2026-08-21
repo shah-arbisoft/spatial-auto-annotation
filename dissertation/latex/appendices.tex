@@ -347,7 +347,7 @@ Monocular cascade, same pairs & 0.902 & 337 of 3,597 \\
 
 Both numbers fall on the same pairs, so the comparison is like for like. The multi-frame estimate is 0.20 worse where it applies, and the two disagree on 27\% of pairs, with the monocular cascade right more often in that disagreement. Coverage is the harsher problem: triangulation returns an answer for 9\% of the depth-labelled pairs, because it needs several trackable corners inside an object's box and the dataset's objects are small, low-texture cubes and boxes photographed at 640$\times$480 in greyscale. Widening the baseline trades coverage for geometry and makes accuracy worse, not better: at 40 frames it falls to 0.562 on 258 pairs.
 
-Splitting those pairs by how far apart the two triangulated depths actually are says more than the aggregate does, and it is the check that separates a weak estimator from a broken one:
+Splitting those pairs by how far apart the two triangulated depths actually are says more than the aggregate does, and it is the check that separates a weak estimator from a broken one. The split is computed by the ablation script itself, so the four rows sum to the 337 pairs above:
 
 \begin{center}
 \small
@@ -361,15 +361,15 @@ Relative depth separation & Pairs & Ordering accuracy \\
 Relative depth separation & Pairs & Ordering accuracy \\
 \hline
 \endhead
-0.000--0.014 & 86 & 0.453 \\
-0.014--0.045 & 85 & 0.776 \\
-0.045--0.124 & 86 & 0.895 \\
-0.124 and above & 86 & 0.721 \\
+0.000--0.013 & 84 & 0.440 \\
+0.014--0.044 & 84 & 0.774 \\
+0.044--0.117 & 84 & 0.893 \\
+0.117 and above & 85 & 0.718 \\
 \hline
 \end{longtable}
 \end{center}
 
-The estimator is real. Given objects at moderately different depths it reaches 0.895, which is the monocular cascade's own accuracy on this slice, so the implementation is not the thing holding it back. What it cannot do is the part that matters: on the quartile of pairs whose depths are nearly equal it performs at chance, 0.453. Those are precisely the pairs the monocular cascade abstains on, and the reason is the same for both methods. Two objects at genuinely similar camera distance are not separated by measuring depth more carefully, because the quantity being measured is almost the same for each of them. Multi-view geometry inherits that limit rather than removing it. The fall to 0.721 in the top quartile is the opposite failure and a real weakness of two-view triangulation: a handful of badly conditioned points produce depths that are wrong \textit{and} far apart, so the largest separations include the worst outliers.
+The estimator is real. Given objects at moderately different depths it reaches 0.893, within a point of the monocular cascade's 0.902 over all 337 pairs, so the implementation is not the thing holding it back. What it cannot do is the part that matters: on the quartile of pairs whose depths are nearly equal it performs at chance, 0.440. Those are precisely the pairs the monocular cascade abstains on, and the reason is the same for both methods. Two objects at genuinely similar camera distance are not separated by measuring depth more carefully, because the quantity being measured is almost the same for each of them. Multi-view geometry inherits that limit rather than removing it. The fall to 0.718 in the top quartile is the opposite failure and a real weakness of two-view triangulation: a handful of badly conditioned points produce depths that are wrong \textit{and} far apart, so the largest separations include the worst outliers.
 
 The scope of this result is that it rules out the cheap version of the idea rather than the idea itself. A careful multi-view reconstruction over many frames, with bundle adjustment and real intrinsics, would estimate depth better than two views and an assumed focal length. What the ablation establishes is that geometric depth is not free here, that the obvious implementations lose to the monocular cascade on both accuracy and coverage, and, read with \S{}4.12, that the return on any of them is bounded: a predicate that already reproduces its own verdict 0.958 of the time across viewpoints does not have much room to gain from measuring depth more precisely. There is also a design cost that no accuracy figure captures. Every multi-frame method requires neighbouring frames at inference time, which the single-image annotator this project set out to build does not have.
 

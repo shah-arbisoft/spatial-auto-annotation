@@ -751,25 +751,26 @@ better: at 40 frames it falls to 0.562 on 258 pairs.
 
 Splitting those pairs by how far apart the two triangulated depths actually
 are says more than the aggregate does, and it is the check that separates a
-weak estimator from a broken one:
+weak estimator from a broken one. The split is computed by the ablation
+script itself, so the four rows sum to the 337 pairs above:
 
 | Relative depth separation | Pairs | Ordering accuracy |
 |---|---|---|
-| 0.000–0.014 | 86 | 0.453 |
-| 0.014–0.045 | 85 | 0.776 |
-| 0.045–0.124 | 86 | 0.895 |
-| 0.124 and above | 86 | 0.721 |
+| 0.000–0.013 | 84 | 0.440 |
+| 0.014–0.044 | 84 | 0.774 |
+| 0.044–0.117 | 84 | 0.893 |
+| 0.117 and above | 85 | 0.718 |
 
 The estimator is real. Given objects at moderately different depths it
-reaches 0.895, which is the monocular cascade's own accuracy on this slice,
-so the implementation is not the thing holding it back. What it cannot do is
-the part that matters: on the quartile of pairs whose depths are nearly
-equal it performs at chance, 0.453. Those are precisely the pairs the
+reaches 0.893, within a point of the monocular cascade's 0.902 over all 337
+pairs, so the implementation is not the thing holding it back. What it cannot
+do is the part that matters: on the quartile of pairs whose depths are nearly
+equal it performs at chance, 0.440. Those are precisely the pairs the
 monocular cascade abstains on, and the reason is the same for both methods.
 Two objects at genuinely similar camera distance are not separated by
 measuring depth more carefully, because the quantity being measured is
 almost the same for each of them. Multi-view geometry inherits that limit
-rather than removing it. The fall to 0.721 in the top quartile is the
+rather than removing it. The fall to 0.718 in the top quartile is the
 opposite failure and a real weakness of two-view triangulation: a handful of
 badly conditioned points produce depths that are wrong *and* far apart, so
 the largest separations include the worst outliers.

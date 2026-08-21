@@ -9,7 +9,33 @@
     "parallax_accuracy": 0.7062314540059347,
     "monocular_accuracy": 0.9020771513353115,
     "pairs_monocular_committed": 334,
-    "agreement_parallax_vs_monocular": 0.7245508982035929
+    "agreement_parallax_vs_monocular": 0.7245508982035929,
+    "separation_quartiles": [
+      {
+        "lo": 0.0,
+        "hi": 0.013353708011653186,
+        "pairs": 84,
+        "accuracy": 0.44047619047619047
+      },
+      {
+        "lo": 0.013838838075867652,
+        "hi": 0.04443810021759227,
+        "pairs": 84,
+        "accuracy": 0.7738095238095238
+      },
+      {
+        "lo": 0.04443810021759227,
+        "hi": 0.11664697318671609,
+        "pairs": 84,
+        "accuracy": 0.8928571428571429
+      },
+      {
+        "lo": 0.11664697318671609,
+        "hi": 0.9817643597252477,
+        "pairs": 85,
+        "accuracy": 0.7176470588235294
+      }
+    ]
   },
   {
     "method": "triangulate",
@@ -21,7 +47,33 @@
     "parallax_accuracy": 0.6784660766961652,
     "monocular_accuracy": 0.8908554572271387,
     "pairs_monocular_committed": 336,
-    "agreement_parallax_vs_monocular": 0.6845238095238095
+    "agreement_parallax_vs_monocular": 0.6845238095238095,
+    "separation_quartiles": [
+      {
+        "lo": 0.0,
+        "hi": 0.0156758417660943,
+        "pairs": 84,
+        "accuracy": 0.4166666666666667
+      },
+      {
+        "lo": 0.0156758417660943,
+        "hi": 0.03841983530291934,
+        "pairs": 84,
+        "accuracy": 0.7619047619047619
+      },
+      {
+        "lo": 0.04002915499171908,
+        "hi": 0.10925446142409763,
+        "pairs": 84,
+        "accuracy": 0.8452380952380952
+      },
+      {
+        "lo": 0.11343335666980826,
+        "hi": 0.9624625854478602,
+        "pairs": 87,
+        "accuracy": 0.6896551724137931
+      }
+    ]
   },
   {
     "method": "triangulate",
@@ -33,6 +85,32 @@
     "parallax_accuracy": 0.562015503875969,
     "monocular_accuracy": 0.8875968992248062,
     "pairs_monocular_committed": 257,
-    "agreement_parallax_vs_monocular": 0.5447470817120622
+    "agreement_parallax_vs_monocular": 0.5447470817120622,
+    "separation_quartiles": [
+      {
+        "lo": 0.0,
+        "hi": 0.038158573260703446,
+        "pairs": 64,
+        "accuracy": 0.609375
+      },
+      {
+        "lo": 0.039507312857245645,
+        "hi": 0.1368374678963113,
+        "pairs": 64,
+        "accuracy": 0.5
+      },
+      {
+        "lo": 0.1368374678963113,
+        "hi": 0.3458235837591403,
+        "pairs": 64,
+        "accuracy": 0.546875
+      },
+      {
+        "lo": 0.3466539959342712,
+        "hi": 0.9658806693105974,
+        "pairs": 66,
+        "accuracy": 0.5909090909090909
+      }
+    ]
   }
 ]
