@@ -264,7 +264,7 @@ optimised against.
 | A5 | mask-contact support rule | `on_contact_min` 0.60 | **shipped**; held-out support F1 0.71 → 0.87, both error directions at once |
 | A6 | `near` contact exclusion | on | **shipped**; costs 2 recalled triplets, prevents 4,084 labels contradicting the measured convention |
 | A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.70/0.71, mean recall 0.79 → 0.85 |
-| A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/+0.002 front/behind, mean recall marginally lower |
+| A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.000/−0.002 front/behind, mean recall marginally lower |
 | A9 | multi-frame depth (two-view triangulation) | n/a | **declined**; 0.706 against the monocular cascade's 0.875, on 9% of pairs |
 
 Three changed the headline table materially, and their order is this

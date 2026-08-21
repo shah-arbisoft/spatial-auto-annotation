@@ -659,14 +659,14 @@ results bound where further engineering can and cannot help.
 It is worth asking whether the depth pair would improve simply by using a
 stronger depth network. It does not: swapping Depth Anything v2 Small for
 the 4× larger Base variant and re-running the whole dataset moves
-front/behind recall by +0.001 and +0.002, from 0.640/0.654 to 0.641/0.656,
-while mean recall *falls* from 0.848 to 0.847. (This ablation is its own
-end-to-end run and was made before the support threshold was re-fitted
-(§4.14), so its baseline is the 0.640/0.654 of that configuration rather than
-the 0.696/0.711 §4.2 now reports. What it compares is one depth model against
-another under identical conditions, and the swap is worth +0.001 under either
-configuration; re-running it on the shipped labels would move both arms
-together and cannot change a difference that small.) The depth-predicate limit is
+front/behind recall by +0.000 and −0.002, from 0.696/0.711 to 0.697/0.709,
+while mean recall *falls* from 0.845 to 0.843, and the front/behind emit rate
+moves by +0.001. Both arms are end-to-end runs on the shipped rule set, so the
+comparison isolates the depth model alone. An earlier version of this appendix
+reported the same ablation with both arms at the pre-refit support threshold
+and predicted that re-running it on the shipped labels would move the two arms
+together without changing a difference that small; it did. The
+depth-predicate limit is
 *monocular ambiguity* (two objects at a similar camera distance are
 inseparable by any monocular model, regardless of its fidelity), not the
 network's quality. This is precisely why the fallback that worked is a
