@@ -97,6 +97,7 @@ command & produces & time \\
 \texttt{python eval/keyframe\_\allowbreak{}propagation.py --sweep 5,10,20,30,45,60} & \S{}4.12 frame selection, stability and propagation cost, \texttt{keyframe\_\allowbreak{}propagation.json} & \textasciitilde{}3 min \\
 \texttt{python eval/ablations.py} & ablations A1--A7, \texttt{tables/ablations.md} & \textasciitilde{}30 s \\
 \texttt{python eval/depth\_\allowbreak{}ablation.py} & ablation A8; needs the \texttt{outputs\_\allowbreak{}base} pass below & <1 min \\
+\texttt{python eval/support\_\allowbreak{}guard\_\allowbreak{}ablation.py} & ablation A10, whether contact height can replace the class guard, \texttt{support\_\allowbreak{}guard\_\allowbreak{}ablation.json} & <1 min \\
 \texttt{python eval/parallax\_\allowbreak{}ablation.py --method triangulate --gap 10} & ablation A9; needs the raw capture (D.6), \texttt{parallax\_\allowbreak{}ablation.json} & \textasciitilde{}5 min \\
 \texttt{python eval/video\_\allowbreak{}stability.py --dir outputs/video\_\allowbreak{}085} & the E.4 persistence and Jaccard figures, \texttt{video\_\allowbreak{}stability.json}; the \texttt{--dir} is required, since the default points at the pre-refit pass & <1 min \\
 \texttt{python eval/extension\_\allowbreak{}scale.py} & E.6 throughput, density and predicate distribution & <1 min \\
@@ -174,7 +175,7 @@ Encoding support as \textit{above, touching and horizontally overlapping} is wha
 
 \textbf{Mask-contact evidence, primary where masks exist.} The box conditions above are the no-mask fallback. With SAM2 masks the rule uses the physical support signature instead: \texttt{contact\_\allowbreak{}below(A, B)} is the fraction of A's mask-bottom columns with B's mask within five pixels below (\texttt{src/contact.py}), and \texttt{on} requires \texttt{contact >= on\_\allowbreak{}contact\_\allowbreak{}min} (0.60, calibrated on the training groups, with a flat optimum from 0.60 to 0.80) together with the depth gate and the centroid order. This recovers the containment case the box test misses, nested boxes at shallow viewing angles, formerly 79 to 88\% of support misses, and rejects cluster neighbours whose boxes touch but whose masks do not. Measured: held-out support F1 0.71 to 0.87, and re-audited extra-label precision 0.07 to 0.73 for \texttt{on} and 0.20 to 0.80 for \texttt{under}.
 
-\textbf{Class guard.} Classes listed in \texttt{no\_\allowbreak{}support\_\allowbreak{}classes} (shipped value: \texttt{human}) are excluded from \texttt{on} and \texttt{under} in either role. The justification is measured rather than assumed: the annotators never recorded a person as supporting or being supported, on 0 of 2,466 gold support triplets, and mask contact alone cannot distinguish a person \textit{holding} an object from a surface \textit{supporting} one. The guard is a configuration entry rather than a hard-coded name, so a deployment with different classes revises it in one line. The residual failure mode it does not cover is one object held by another non-guarded object, which remains a documented refinement.
+\textbf{Class guard.} Classes listed in \texttt{no\_\allowbreak{}support\_\allowbreak{}classes} (shipped value: \texttt{human}) are excluded from \texttt{on} and \texttt{under} in either role. The justification is measured rather than assumed: the annotators never recorded a person as supporting or being supported, on 0 of 2,466 gold support triplets, and mask contact alone cannot distinguish a person \textit{holding} an object from a surface \textit{supporting} one. The guard is a configuration entry rather than a hard-coded name, so a deployment with different classes revises it in one line, and it does not cover one object held by another unguarded object: a manipulator, a trolley or an animal would defeat it. That is a fair objection to a class list standing in for geometry, and ablation A10 (Appendix D.8) tests the obvious geometric replacement rather than conceding the point in the abstract. It does not work, and the measurement says why.
 
 \subsection{C.3 \texttt{under(A, B)}: A is below and supports B}
 
@@ -424,6 +425,37 @@ to the left/right of & centre flip 71--89\% $\cdot$ abstained 11--29\% (52 cases
 \end{longtable}
 \end{center}
 
+\subsection{D.8 Can geometry replace the class guard? (ablation A10)}
+
+A class list is a semantic patch on a geometric rule, so the natural question is whether the distinction it encodes has a geometric signature. It should: an object \textit{resting} on something meets it at the supporter's top edge, while an object \textit{held} meets it partway down the holder's body. That is measurable without any class name. For every pair passing the contact and depth gates, \texttt{eval/support\_\allowbreak{}guard\_\allowbreak{}ablation.py} computes the drop fraction, the height at which the subject's bottom edge falls inside the object's vertical extent, where 0 means the subject sits on the object's top surface.
+
+The two populations overlap too much to separate. Across 836 images, the 1,190 gold-confirmed resting pairs above the contact threshold have a median drop of 0.19 and a 10th-to-90th percentile range of -0.04 to 0.50; the 51 pairs the guard blocks have a median of 0.38 and a range of 0.33 to 0.41, which sits inside the resting distribution rather than beside it.
+
+\begin{center}
+\small
+\begin{longtable}{lrr}
+\caption{The vision-language comparison of \textbackslash{}S4.16 restricted to the pairs carrying a human label, where precision is defined. The model is the more precise labeller and loses F1 on every predicate.}\\
+\hline
+drop threshold & gold resting pairs kept & person pairs blocked \\
+\hline
+\endfirsthead
+\hline
+drop threshold & gold resting pairs kept & person pairs blocked \\
+\hline
+\endhead
+$\leq$ 0.10 & 31.5\% & 100\% \\
+$\leq$ 0.20 & 52.8\% & 100\% \\
+$\leq$ 0.30 & 72.5\% & 92.2\% \\
+$\leq$ 0.40 & 83.4\% & 13.7\% \\
+$\leq$ 0.50 & 89.9\% & 2.0\% \\
+\hline
+\end{longtable}
+\end{center}
+
+There is no threshold that does both jobs. Excluding every blocked pair costs about half the genuine support recall; keeping most of the support recall lets almost every held object back in. The conclusion is a negative one and it is the useful kind: the objection assumes a geometric solution exists and is merely being skipped, and on this data it does not exist at this level of geometry. Contact height cannot tell a hand from a shelf because a hand at waist height and a shelf at waist height are the same measurement. Separating them needs something the pipeline does not have, either surface normals from real 3D or an affordance notion of what can support, and both are the future work of \S{}9.3 rather than a threshold.
+
+What the ablation does settle is the guard's blast radius. Fifty-one pairs in 836 images reach the contact threshold with a person on either side, so the class list changes 51 decisions out of the 42,440 the tool makes. It is a narrow patch over a real gap, and the gap is a limit of monocular geometry rather than of the rule set.
+
 
 \chapter{Extended validation studies}
 
@@ -441,7 +473,7 @@ Section 4.13 reports the headline comparison over two models and carries the rec
 \begin{center}
 \small
 \begin{longtable}{llrrrrl}
-\caption{The vision-language comparison of \textbackslash{}S4.16 restricted to the pairs carrying a human label, where precision is defined. The model is the more precise labeller and loses F1 on every predicate.}\\
+\caption{Benchmark per-predicate mean recall at 100 for both arms, seed 42.}\\
 \hline
 Predicate & Flash P & Pro P & Pipeline P & Flash F1 & Pro F1 & Pipeline F1 \\
 \hline
@@ -580,7 +612,7 @@ Section 6.3 reports the headline benchmark result and Appendix F.1 the two decom
 \begin{center}
 \small
 \begin{longtable}{llr}
-\caption{Benchmark per-predicate mean recall at 100 for both arms, seed 42.}\\
+\caption{Benchmark mean recall at 100 by test slice for both arms, seed 42. Section 6.3.1 replicates every row but the convention-aligned one across three seeds.}\\
 \hline
 per-predicate mR@100 & human-trained & auto-trained \\
 \hline
@@ -603,7 +635,7 @@ near & \textbf{0.117} & 0.108 \\
 \begin{center}
 \small
 \begin{longtable}{lrl}
-\caption{Benchmark mean recall at 100 by test slice for both arms, seed 42. Section 6.3.1 replicates every row but the convention-aligned one across three seeds.}\\
+\caption{Summary of the design decisions, the alternatives rejected and the reasons.}\\
 \hline
 test slice (mR@100) & human-trained & auto-trained \\
 \hline
@@ -637,7 +669,7 @@ Section 3.12 states what the decisions have in common and names the four that la
 \begin{center}
 \small
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.185\textwidth}>{\raggedright\arraybackslash}p{0.167\textwidth}>{\raggedright\arraybackslash}p{0.559\textwidth}}
-\caption{Summary of the design decisions, the alternatives rejected and the reasons.}\\
+\caption{A third label source in the benchmark: mean recall at 100 by test slice for the human, automatic and vision-language arms.}\\
 \hline
 Decision & Alternative rejected & Why \\
 \hline
@@ -668,7 +700,7 @@ Section 6.3.2 reports what this arm establishes and the one result that does not
 \begin{center}
 \small
 \begin{longtable}{lrrl}
-\caption{A third label source in the benchmark: mean recall at 100 by test slice for the human, automatic and vision-language arms.}\\
+\caption{The downstream experiment on four further indicators. The automatic arm leads on recall and trails on every other column, which is the sparse-gold artefact of \textbackslash{}S4.3 reappearing downstream rather than a verdict on label quality.}\\
 \hline
 slice & human & automatic & vision-language \\
 \hline
@@ -695,7 +727,7 @@ Section 5.2.1 states the finding and why the columns cannot be read as an error 
 \begin{center}
 \small
 \begin{longtable}{lrrrrr}
-\caption{The downstream experiment on four further indicators. The automatic arm leads on recall and trails on every other column, which is the sparse-gold artefact of \textbackslash{}S4.3 reappearing downstream rather than a verdict on label quality.}\\
+\caption{Restricted precision, recall and F1 on the human-annotated pairs only, where an unannotated pair cannot be scored and precision is therefore a floor.}\\
 \hline
 arm & macro R & macro P & macro F1 & macro AP & micro F1 \\
 \hline
@@ -721,7 +753,7 @@ Section 4.3 quotes these figures and states why they are a floor rather than an 
 \begin{center}
 \small
 \begin{longtable}{lrrrr}
-\caption{Restricted precision, recall and F1 on the human-annotated pairs only, where an unannotated pair cannot be scored and precision is therefore a floor.}\\
+\caption{Per-predicate recall on the held-out annotator groups with 95\% cluster-bootstrap intervals over images.}\\
 \hline
 Predicate & P & R & F1 & support \\
 \hline
@@ -758,7 +790,6 @@ Section 4.6 quotes the two depth predicates and states that the other five sit a
 \begin{center}
 \small
 \begin{longtable}{lrr}
-\caption{Per-predicate recall on the held-out annotator groups with 95\% cluster-bootstrap intervals over images.}\\
 \hline
 Predicate & Recall (held-out) & 95\% interval \\
 \hline

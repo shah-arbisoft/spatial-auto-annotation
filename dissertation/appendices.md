@@ -230,6 +230,7 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/keyframe_propagation.py --sweep 5,10,20,30,45,60` | §4.12 frame selection, stability and propagation cost, `keyframe_propagation.json` | ~3 min |
 | `python eval/ablations.py` | ablations A1–A7, `tables/ablations.md` | ~30 s |
 | `python eval/depth_ablation.py` | ablation A8; needs the `outputs_base` pass below | <1 min |
+| `python eval/support_guard_ablation.py` | ablation A10, whether contact height can replace the class guard, `support_guard_ablation.json` | <1 min |
 | `python eval/parallax_ablation.py --method triangulate --gap 10` | ablation A9; needs the raw capture (D.6), `parallax_ablation.json` | ~5 min |
 | `python eval/video_stability.py --dir outputs/video_085` | the E.4 persistence and Jaccard figures, `video_stability.json`; the `--dir` is required, since the default points at the pre-refit pass | <1 min |
 | `python eval/extension_scale.py` | E.6 throughput, density and predicate distribution | <1 min |
@@ -384,10 +385,13 @@ held-out support F1 0.71 to 0.87, and re-audited extra-label precision 0.07 to
 is measured rather than assumed: the annotators never recorded a person as
 supporting or being supported, on 0 of 2,466 gold support triplets, and mask
 contact alone cannot distinguish a person *holding* an object from a surface
-*supporting* one. The guard is a configuration entry rather than a hard-coded
-name, so a deployment with different classes revises it in one line. The
-residual failure mode it does not cover is one object held by another
-non-guarded object, which remains a documented refinement.
+*supporting* one. The guard is a configuration entry rather than a hard-coded name, so a
+deployment with different classes revises it in one line, and it does not
+cover one object held by another unguarded object: a manipulator, a trolley
+or an animal would defeat it. That is a fair objection to a class list
+standing in for geometry, and ablation A10 (Appendix D.8) tests the obvious
+geometric replacement rather than conceding the point in the abstract. It
+does not work, and the measurement says why.
 
 ### C.3 `under(A, B)`: A is below and supports B
 
@@ -809,6 +813,48 @@ geometry and mask-contact maps, attributing every miss to a cause.
 | under | contact below threshold 50% · depth-gate suppressed 33% · no contact measured (occlusion) 17% |
 | near | 2 remaining misses (contact boundary) |
 | to the left/right of | centre flip 71–89% · abstained 11–29% (52 cases total) |
+
+### D.8 Can geometry replace the class guard? (ablation A10)
+
+A class list is a semantic patch on a geometric rule, so the natural
+question is whether the distinction it encodes has a geometric signature. It
+should: an object *resting* on something meets it at the supporter's top
+edge, while an object *held* meets it partway down the holder's body. That
+is measurable without any class name. For every pair passing the contact and
+depth gates, `eval/support_guard_ablation.py` computes the drop fraction,
+the height at which the subject's bottom edge falls inside the object's
+vertical extent, where 0 means the subject sits on the object's top surface.
+
+The two populations overlap too much to separate. Across 836 images, the
+1,190 gold-confirmed resting pairs above the contact threshold have a median
+drop of 0.19 and a 10th-to-90th percentile range of -0.04 to 0.50; the 51
+pairs the guard blocks have a median of 0.38 and a range of 0.33 to 0.41,
+which sits inside the resting distribution rather than beside it.
+
+| drop threshold | gold resting pairs kept | person pairs blocked |
+|---|---|---|
+| ≤ 0.10 | 31.5% | 100% |
+| ≤ 0.20 | 52.8% | 100% |
+| ≤ 0.30 | 72.5% | 92.2% |
+| ≤ 0.40 | 83.4% | 13.7% |
+| ≤ 0.50 | 89.9% | 2.0% |
+
+There is no threshold that does both jobs. Excluding every blocked pair
+costs about half the genuine support recall; keeping most of the support
+recall lets almost every held object back in. The conclusion is a negative
+one and it is the useful kind: the objection assumes a geometric solution
+exists and is merely being skipped, and on this data it does not exist at
+this level of geometry. Contact height cannot tell a hand from a shelf
+because a hand at waist height and a shelf at waist height are the same
+measurement. Separating them needs something the pipeline does not have,
+either surface normals from real 3D or an affordance notion of what can
+support, and both are the future work of §9.3 rather than a threshold.
+
+What the ablation does settle is the guard's blast radius. Fifty-one pairs
+in 836 images reach the contact threshold with a person on either side, so
+the class list changes 51 decisions out of the 42,440 the tool makes. It is
+a narrow patch over a real gap, and the gap is a limit of monocular geometry
+rather than of the rule set.
 
 ## Appendix E: Extended validation studies
 

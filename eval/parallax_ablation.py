@@ -74,22 +74,24 @@ def box_shift(cv2, a, b, box_px):
     return np.median((nxt[ok] - pts[ok]).reshape(-1, 2), axis=0)
 
 
-def triangulated_depths(cv2, a, b, boxes_px):
+def triangulated_depths(cv2, a, b, boxes_px, focal_mult=0.9):
     """Per-object depth from two views, by essential matrix + triangulation.
 
     The residual-magnitude reading below assumes displacement falls off with
     depth alone. It does not: under forward motion the flow is radial from
     the focus of expansion, so an object near that point barely moves however
     close it is. Recovering the pose and triangulating handles any camera
-    motion, at the cost of needing intrinsics. Focal length is assumed rather
-    than calibrated, which is tolerable because only the depth *ordering*
-    matters here and that is insensitive to moderate focal error.
+    motion, at the cost of needing intrinsics. No calibration exists for this
+    capture, so focal length is assumed at `focal_mult * W`. Whether that
+    matters is not asserted here but measured: `--focal-sweep` re-runs the
+    ablation across a range of assumptions and reports whether the ordering
+    accuracy moves (Appendix D.6).
 
     Returns {object index: depth} for objects whose points triangulate.
     """
     H, W = a.shape
-    K = np.array([[0.9 * W, 0, W / 2], [0, 0.9 * W, H / 2], [0, 0, 1]],
-                 dtype=np.float64)
+    f = focal_mult * W
+    K = np.array([[f, 0, W / 2], [0, f, H / 2], [0, 0, 1]], dtype=np.float64)
 
     # correspondences over the whole image drive the pose estimate
     pts = cv2.goodFeaturesToTrack(a, maxCorners=1200, qualityLevel=0.01,
@@ -138,7 +140,8 @@ def gold_pairs(pairs_csv: str) -> dict:
     return dict(out)
 
 
-def run(ds, gold, raw_dir, gap, method="residual", verbose=True) -> dict:
+def run(ds, gold, raw_dir, gap, method="residual", verbose=True,
+        focal_mult=0.9) -> dict:
     import cv2  # noqa: PLC0415
 
     n_img = n_pair = 0
@@ -166,7 +169,7 @@ def run(ds, gold, raw_dir, gap, method="residual", verbose=True) -> dict:
                  for i, o in enumerate(im.objects)}
 
         if method == "triangulate":
-            depths = triangulated_depths(cv2, a, b, boxes)
+            depths = triangulated_depths(cv2, a, b, boxes, focal_mult)
             if len(depths) < 3:
                 skipped_img += 1
                 continue
@@ -208,6 +211,7 @@ def run(ds, gold, raw_dir, gap, method="residual", verbose=True) -> dict:
     return {
         "method": method,
         "gap": gap,
+        "focal_mult": focal_mult,
         "images": n_img,
         "images_skipped": skipped_img,
         "pairs": n_pair,
@@ -228,6 +232,9 @@ def main():
     ap.add_argument("--method", default="residual",
                     choices=["residual", "triangulate"])
     ap.add_argument("--limit", type=int, default=0, help="cap images, for a quick run")
+    ap.add_argument("--focal-sweep", default=None,
+                    help="comma-separated focal multipliers of image width, "
+                         "e.g. 0.5,0.7,0.9,1.2,1.6,2.0; triangulate only")
     ap.add_argument("--out", default="outputs/parallax_ablation.json")
     args = ap.parse_args()
 
@@ -246,10 +253,20 @@ def main():
           f"({sum(len(v) for v in gold.values())} such pairs)")
 
     gaps = [int(g) for g in args.sweep.split(",")] if args.sweep else [args.gap]
+    focals = ([float(f) for f in args.focal_sweep.split(",")]
+              if args.focal_sweep else [0.9])
+    if len(focals) > 1 and args.method != "triangulate":
+        raise SystemExit("--focal-sweep only affects the triangulate method")
+
     rows = []
     for g in gaps:
-        r = run(ds, gold, Path(args.raw), g, args.method)
+      for fm in focals:
+        r = run(ds, gold, Path(args.raw), g, args.method, focal_mult=fm)
         rows.append(r)
+        if len(focals) > 1:
+            print(f"  focal {fm:.2f}xW: ordering accuracy "
+                  f"{r['parallax_accuracy']:.3f} on {r['pairs']} pairs")
+            continue
         print(f"\n[{args.method}] gap {g:3d} frames: {r['images']} images, {r['pairs']} pairs "
               f"({r['images_skipped']} images skipped, too few trackable objects)")
         print(f"  multi-frame ordering accuracy {r['parallax_accuracy']:.3f}")

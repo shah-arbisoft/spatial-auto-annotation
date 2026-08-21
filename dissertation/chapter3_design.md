@@ -190,10 +190,13 @@ One further correction is class-aware, not geometric. Support is not
 evaluated at all when either object is a person: the annotators never
 recorded one, on **0 of 2,466 gold support triplets**, and mask contact
 cannot distinguish an object *resting on* someone from one being *held* by
-them. A geometric rule that cannot represent the distinction its evidence
-turns on should decline the pair instead of guessing, and the guard is a
+them. A geometric rule that cannot represent the distinction its evidence turns on
+should decline the pair instead of guessing, and the guard is a
 configuration entry (`no_support_classes`), not a special case buried in
-code, so a different dataset can revise it.
+code. It is still a class list standing in for geometry, and it would not
+cover a manipulator or an animal holding something; ablation A10 tests
+whether contact height can replace it and finds that it cannot, at a cost of
+half the support recall (Appendix D.8).
 
 Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
 near-threshold edge, and the resolved contradiction above. They are the
