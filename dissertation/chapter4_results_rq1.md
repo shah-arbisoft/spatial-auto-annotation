@@ -107,17 +107,21 @@ conservative rule under which any case not clearly true was marked wrong
 spot-checked). This audit was run against the *pre-gate box rule* and is
 reported as found because it motivated the support-rule repairs; §4.9
 re-audits the shipped rules and §4.14 audits them again under blinding, so
-the support figures in this section describe a fixed failure, not the final
-tool. How far it was fixed is the subject of those two sections, and they
-disagree: pooled
+the support rows below describe a fixed failure, not the final tool. How far
+it was fixed is the subject of those two sections, and they disagree: pooled
 support precision moves 0.13 → 0.77 on an unblinded re-audit, back to 0.40
 when the same rules are judged blind against decoys, and to 0.54 once the
 threshold that caused the over-emission is refitted and audited again.
 
-Support failed and nothing else did: `on` scored 1/15 and `under` 3/15
-(Wilson [0.01, 0.30] and [0.07, 0.45]), while the two laterals, the two depth
-predicates and `near` each scored 15/15 ([0.80, 1.00]). The per-item sheet is
-`outputs/audit/audit_sheet.csv`.
+| Predicate | Correct / n | Precision est. | Wilson 95% CI |
+|---|---|---|---|
+| on | 1 / 15 | 0.07 | [0.01, 0.30] |
+| under | 3 / 15 | 0.20 | [0.07, 0.45] |
+| to the left of | 15 / 15 | 1.00 | [0.80, 1.00] |
+| to the right of | 15 / 15 | 1.00 | [0.80, 1.00] |
+| in front of | 15 / 15 | 1.00 | [0.80, 1.00] |
+| behind | 15 / 15 | 1.00 | [0.80, 1.00] |
+| near | 15 / 15 | 1.00 | [0.80, 1.00] |
 
 The audit splits the predicates in two. For lateral, depth and proximity,
 **every sampled extra prediction was correct**: §4.3's low restricted

@@ -1,0 +1,407 @@
+{
+ "react_human_s42|full": {
+  "on": 0.5711,
+  "under": 0.4541,
+  "to the left of": 0.185,
+  "to the right of": 0.3498,
+  "in front of": 0.0783,
+  "behind": 0.1353,
+  "near": 0.1171
+ },
+ "react_human_s42|group_6": {
+  "on": 0.5867,
+  "under": 0.4,
+  "to the left of": 0.4679,
+  "to the right of": 0.6121,
+  "in front of": 0.0,
+  "behind": 0.0231,
+  "near": 0.0
+ },
+ "react_human_s42|group_7": {
+  "on": 0.5469,
+  "under": 0.6452,
+  "to the left of": 0.0,
+  "to the right of": 0.1331,
+  "in front of": 0.1825,
+  "behind": 0.2725,
+  "near": 0.0
+ },
+ "react_human_s42|group_8": {
+  "on": 0.0,
+  "under": 0.3964,
+  "to the left of": 0.0268,
+  "to the right of": 0.0533,
+  "in front of": 0.161,
+  "behind": 0.1638,
+  "near": 0.1081
+ },
+ "react_human_s42|full_aligned": {
+  "on": 0.5711,
+  "under": 0.4541,
+  "to the left of": 0.185,
+  "to the right of": 0.3498,
+  "in front of": 0.3348,
+  "behind": 0.1386,
+  "near": 0.1351
+ },
+ "react_human_s43|full": {
+  "on": 0.6331,
+  "under": 0.5507,
+  "to the left of": 0.198,
+  "to the right of": 0.4087,
+  "in front of": 0.0471,
+  "behind": 0.1548,
+  "near": 0.009
+ },
+ "react_human_s43|group_6": {
+  "on": 0.5867,
+  "under": 0.4,
+  "to the left of": 0.4872,
+  "to the right of": 0.7193,
+  "in front of": 0.0077,
+  "behind": 0.0194,
+  "near": 0.0
+ },
+ "react_human_s43|group_7": {
+  "on": 0.7057,
+  "under": 0.7903,
+  "to the left of": 0.0104,
+  "to the right of": 0.1542,
+  "in front of": 0.1389,
+  "behind": 0.287,
+  "near": 0.0
+ },
+ "react_human_s43|group_8": {
+  "on": 0.0,
+  "under": 0.6351,
+  "to the left of": 0.0375,
+  "to the right of": 0.0524,
+  "in front of": 0.0438,
+  "behind": 0.2593,
+  "near": 0.009
+ },
+ "react_human_s43|full_aligned": {
+  "on": 0.6331,
+  "under": 0.5507,
+  "to the left of": 0.1986,
+  "to the right of": 0.4087,
+  "in front of": 0.2408,
+  "behind": 0.219,
+  "near": 0.0
+ },
+ "react_human_s44|full": {
+  "on": 0.748,
+  "under": 0.651,
+  "to the left of": 0.1955,
+  "to the right of": 0.3732,
+  "in front of": 0.0487,
+  "behind": 0.1282,
+  "near": 0.1081
+ },
+ "react_human_s44|group_6": {
+  "on": 0.755,
+  "under": 0.6,
+  "to the left of": 0.4872,
+  "to the right of": 0.7011,
+  "in front of": 0.0034,
+  "behind": 0.0028,
+  "near": 0.0
+ },
+ "react_human_s44|group_7": {
+  "on": 0.737,
+  "under": 0.7742,
+  "to the left of": 0.0,
+  "to the right of": 0.0945,
+  "in front of": 0.0853,
+  "behind": 0.2718,
+  "near": 0.0
+ },
+ "react_human_s44|group_8": {
+  "on": 0.0,
+  "under": 0.6441,
+  "to the left of": 0.04,
+  "to the right of": 0.0208,
+  "in front of": 0.1487,
+  "behind": 0.1708,
+  "near": 0.1216
+ },
+ "react_human_s44|full_aligned": {
+  "on": 0.748,
+  "under": 0.651,
+  "to the left of": 0.1954,
+  "to the right of": 0.3732,
+  "in front of": 0.3437,
+  "behind": 0.1665,
+  "near": 0.1036
+ },
+ "react_auto_s42|full": {
+  "on": 0.6484,
+  "under": 0.7379,
+  "to the left of": 0.1651,
+  "to the right of": 0.232,
+  "in front of": 0.06,
+  "behind": 0.084,
+  "near": 0.1081
+ },
+ "react_auto_s42|group_6": {
+  "on": 0.6933,
+  "under": 0.8714,
+  "to the left of": 0.3333,
+  "to the right of": 0.2644,
+  "in front of": 0.0,
+  "behind": 0.0,
+  "near": 0.0
+ },
+ "react_auto_s42|group_7": {
+  "on": 0.5781,
+  "under": 0.5806,
+  "to the left of": 0.0941,
+  "to the right of": 0.2649,
+  "in front of": 0.2123,
+  "behind": 0.2299,
+  "near": 0.0
+ },
+ "react_auto_s42|group_8": {
+  "on": 0.0,
+  "under": 0.6171,
+  "to the left of": 0.0103,
+  "to the right of": 0.0527,
+  "in front of": 0.0446,
+  "behind": 0.0045,
+  "near": 0.1306
+ },
+ "react_auto_s42|full_aligned": {
+  "on": 0.6484,
+  "under": 0.7379,
+  "to the left of": 0.1644,
+  "to the right of": 0.232,
+  "in front of": 0.1627,
+  "behind": 0.1379,
+  "near": 0.1036
+ },
+ "react_auto_s43|full": {
+  "on": 0.6545,
+  "under": 0.7331,
+  "to the left of": 0.2205,
+  "to the right of": 0.1976,
+  "in front of": 0.0644,
+  "behind": 0.0694,
+  "near": 0.1306
+ },
+ "react_auto_s43|group_6": {
+  "on": 0.7167,
+  "under": 0.8714,
+  "to the left of": 0.3718,
+  "to the right of": 0.2107,
+  "in front of": 0.0103,
+  "behind": 0.0,
+  "near": 0.0
+ },
+ "react_auto_s43|group_7": {
+  "on": 0.5573,
+  "under": 0.6935,
+  "to the left of": 0.166,
+  "to the right of": 0.2488,
+  "in front of": 0.246,
+  "behind": 0.1896,
+  "near": 0.0
+ },
+ "react_auto_s43|group_8": {
+  "on": 0.0,
+  "under": 0.5045,
+  "to the left of": 0.0724,
+  "to the right of": 0.0342,
+  "in front of": 0.003,
+  "behind": 0.0045,
+  "near": 0.1351
+ },
+ "react_auto_s43|full_aligned": {
+  "on": 0.6545,
+  "under": 0.7331,
+  "to the left of": 0.2186,
+  "to the right of": 0.1976,
+  "in front of": 0.1791,
+  "behind": 0.1398,
+  "near": 0.1171
+ },
+ "react_auto_s44|full": {
+  "on": 0.6626,
+  "under": 0.7319,
+  "to the left of": 0.1606,
+  "to the right of": 0.2275,
+  "in front of": 0.0513,
+  "behind": 0.0847,
+  "near": 0.1081
+ },
+ "react_auto_s44|group_6": {
+  "on": 0.7067,
+  "under": 0.8714,
+  "to the left of": 0.2372,
+  "to the right of": 0.2538,
+  "in front of": 0.0,
+  "behind": 0.0,
+  "near": 0.0
+ },
+ "react_auto_s44|group_7": {
+  "on": 0.5938,
+  "under": 0.5968,
+  "to the left of": 0.1399,
+  "to the right of": 0.2525,
+  "in front of": 0.2123,
+  "behind": 0.2116,
+  "near": 0.0
+ },
+ "react_auto_s44|group_8": {
+  "on": 0.0,
+  "under": 0.5811,
+  "to the left of": 0.0903,
+  "to the right of": 0.0857,
+  "in front of": 0.003,
+  "behind": 0.0473,
+  "near": 0.1081
+ },
+ "react_auto_s44|full_aligned": {
+  "on": 0.6626,
+  "under": 0.7319,
+  "to the left of": 0.1587,
+  "to the right of": 0.2275,
+  "in front of": 0.1877,
+  "behind": 0.1492,
+  "near": 0.0991
+ },
+ "react_vlm_s42|full": {
+  "on": 0.5864,
+  "under": 0.7742,
+  "to the left of": 0.2809,
+  "to the right of": 0.4724,
+  "in front of": 0.0816,
+  "behind": 0.1173,
+  "near": 0.1847
+ },
+ "react_vlm_s42|group_6": {
+  "on": 0.5983,
+  "under": 0.8143,
+  "to the left of": 0.6122,
+  "to the right of": 0.5249,
+  "in front of": 0.0129,
+  "behind": 0.0,
+  "near": 0.0
+ },
+ "react_vlm_s42|group_7": {
+  "on": 0.5677,
+  "under": 0.7419,
+  "to the left of": 0.0573,
+  "to the right of": 0.5149,
+  "in front of": 0.3095,
+  "behind": 0.3056,
+  "near": 0.0
+ },
+ "react_vlm_s42|group_8": {
+  "on": 0.0,
+  "under": 0.7252,
+  "to the left of": 0.1036,
+  "to the right of": 0.2078,
+  "in front of": 0.003,
+  "behind": 0.045,
+  "near": 0.1982
+ },
+ "react_vlm_s42|full_aligned": {
+  "on": 0.5864,
+  "under": 0.7742,
+  "to the left of": 0.2789,
+  "to the right of": 0.4724,
+  "in front of": 0.177,
+  "behind": 0.2723,
+  "near": 0.1712
+ },
+ "react_vlm_s43|full": {
+  "on": 0.5976,
+  "under": 0.7572,
+  "to the left of": 0.295,
+  "to the right of": 0.3641,
+  "in front of": 0.0731,
+  "behind": 0.091,
+  "near": 0.009
+ },
+ "react_vlm_s43|group_6": {
+  "on": 0.5517,
+  "under": 0.8,
+  "to the left of": 0.516,
+  "to the right of": 0.341,
+  "in front of": 0.0,
+  "behind": 0.0,
+  "near": 0.0
+ },
+ "react_vlm_s43|group_7": {
+  "on": 0.6693,
+  "under": 0.7581,
+  "to the left of": 0.1229,
+  "to the right of": 0.4527,
+  "in front of": 0.3036,
+  "behind": 0.2444,
+  "near": 0.0
+ },
+ "react_vlm_s43|group_8": {
+  "on": 0.0,
+  "under": 0.6757,
+  "to the left of": 0.2089,
+  "to the right of": 0.2241,
+  "in front of": 0.0034,
+  "behind": 0.0135,
+  "near": 0.0225
+ },
+ "react_vlm_s43|full_aligned": {
+  "on": 0.5976,
+  "under": 0.7572,
+  "to the left of": 0.2964,
+  "to the right of": 0.3641,
+  "in front of": 0.193,
+  "behind": 0.2636,
+  "near": 0.009
+ },
+ "react_vlm_s44|full": {
+  "on": 0.6951,
+  "under": 0.7645,
+  "to the left of": 0.2143,
+  "to the right of": 0.3219,
+  "in front of": 0.0967,
+  "behind": 0.1263,
+  "near": 0.0
+ },
+ "react_vlm_s44|group_6": {
+  "on": 0.7017,
+  "under": 0.8286,
+  "to the left of": 0.4327,
+  "to the right of": 0.3295,
+  "in front of": 0.0034,
+  "behind": 0.0074,
+  "near": 0.0
+ },
+ "react_vlm_s44|group_7": {
+  "on": 0.6849,
+  "under": 0.7581,
+  "to the left of": 0.0396,
+  "to the right of": 0.3918,
+  "in front of": 0.371,
+  "behind": 0.3007,
+  "near": 0.0
+ },
+ "react_vlm_s44|group_8": {
+  "on": 0.0,
+  "under": 0.6486,
+  "to the left of": 0.1356,
+  "to the right of": 0.1313,
+  "in front of": 0.0317,
+  "behind": 0.0714,
+  "near": 0.0
+ },
+ "react_vlm_s44|full_aligned": {
+  "on": 0.6951,
+  "under": 0.7645,
+  "to the left of": 0.218,
+  "to the right of": 0.3219,
+  "in front of": 0.2434,
+  "behind": 0.2935,
+  "near": 0.0
+ }
+}

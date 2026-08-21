@@ -57,9 +57,30 @@ Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.93 on the sup
 
 \section{Manual audit of extra predictions (true-precision estimate)}
 
-105 extra predictions (15 per predicate, seeded stratified sample) were rendered with subject/object boxes and manually verdicted, using a conservative rule under which any case not clearly true was marked wrong (\texttt{outputs/audit/audit\_\allowbreak{}sheet.csv}; verdicts to be independently spot-checked). This audit was run against the \textit{pre-gate box rule} and is reported as found because it motivated the support-rule repairs; \S{}4.9 re-audits the shipped rules and \S{}4.14 audits them again under blinding, so the support figures in this section describe a fixed failure, not the final tool. How far it was fixed is the subject of those two sections, and they disagree: pooled support precision moves 0.13 $\rightarrow$ 0.77 on an unblinded re-audit, back to 0.40 when the same rules are judged blind against decoys, and to 0.54 once the threshold that caused the over-emission is refitted and audited again.
+105 extra predictions (15 per predicate, seeded stratified sample) were rendered with subject/object boxes and manually verdicted, using a conservative rule under which any case not clearly true was marked wrong (\texttt{outputs/audit/audit\_\allowbreak{}sheet.csv}; verdicts to be independently spot-checked). This audit was run against the \textit{pre-gate box rule} and is reported as found because it motivated the support-rule repairs; \S{}4.9 re-audits the shipped rules and \S{}4.14 audits them again under blinding, so the support rows below describe a fixed failure, not the final tool. How far it was fixed is the subject of those two sections, and they disagree: pooled support precision moves 0.13 $\rightarrow$ 0.77 on an unblinded re-audit, back to 0.40 when the same rules are judged blind against decoys, and to 0.54 once the threshold that caused the over-emission is refitted and audited again.
 
-Support failed and nothing else did: \texttt{on} scored 1/15 and \texttt{under} 3/15 (Wilson [0.01, 0.30] and [0.07, 0.45]), while the two laterals, the two depth predicates and \texttt{near} each scored 15/15 ([0.80, 1.00]). The per-item sheet is \texttt{outputs/audit/audit\_\allowbreak{}sheet.csv}.
+\begin{center}
+\small
+\begin{longtable}{lrrl}
+\caption{Manual audit of a stratified sample of extra predictions against the pre-gate box rule, with Wilson intervals. Superseded by the blind re-audit of Section 4.14; reported because it motivated the repair.}\\
+\hline
+Predicate & Correct / n & Precision est. & Wilson 95\% CI \\
+\hline
+\endfirsthead
+\hline
+Predicate & Correct / n & Precision est. & Wilson 95\% CI \\
+\hline
+\endhead
+on & 1 / 15 & 0.07 & [0.01, 0.30] \\
+under & 3 / 15 & 0.20 & [0.07, 0.45] \\
+to the left of & 15 / 15 & 1.00 & [0.80, 1.00] \\
+to the right of & 15 / 15 & 1.00 & [0.80, 1.00] \\
+in front of & 15 / 15 & 1.00 & [0.80, 1.00] \\
+behind & 15 / 15 & 1.00 & [0.80, 1.00] \\
+near & 15 / 15 & 1.00 & [0.80, 1.00] \\
+\hline
+\end{longtable}
+\end{center}
 
 The audit splits the predicates in two. For lateral, depth and proximity, \textbf{every sampled extra prediction was correct}: \S{}4.3's low restricted precision is the sparse-gold artefact the protocol anticipated, and the dense labels on unannotated pairs are trustworthy within the sample's bounds. For support the picture inverts, extra \texttt{on}/\texttt{under} labels being mostly \textbf{false fires}: box adjacency triggers on objects that merely project next to each other (a book \textit{behind} a bottle, a cube on the floor with a remote in front). With \S{}4.2's containment misses, both error directions point to one repair, a mask-contact test instead of box adjacency, which the ablations evaluate. Two caveats: 15 per predicate gives wide per-predicate intervals, and depth verdicts on near-coincident objects were occasionally marginal (noted in the sheet).
 

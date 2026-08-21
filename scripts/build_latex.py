@@ -219,6 +219,10 @@ TABLES = {
         # 4.2
         "Per-predicate recall of the human triplets, pooled and on held-out "
         "annotators, against three baselines.",
+        # 4.4
+        "Manual audit of a stratified sample of extra predictions against the "
+        "pre-gate box rule, with Wilson intervals. Superseded by the blind "
+        "re-audit of Section 4.14; reported because it motivated the repair.",
         # 4.5
         "Front/behind by annotator group: emission rate, agreement where the "
         "tool commits, and the effect of aligning the direction convention.",

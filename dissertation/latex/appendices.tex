@@ -574,7 +574,7 @@ Section 4.14 reports the instrument and the result. The construction rules are h
 
 \subsection{F.1 Per-predicate and per-slice results at seed 42}
 
-Section 6.3 reports the headline benchmark result and Appendix F.1 the two decompositions it draws on. Both come from the same pair of best checkpoints scored on the same 210-image test set, at seed 42 only; \S{}6.3.1 replicates the slice decomposition across three seeds, and where the two disagree the three-seed figures are the ones any claim rests on.
+Section 6.3 reports the headline benchmark result and Appendix F.1 the two decompositions it draws on. Both come from the same pair of best checkpoints scored on the same 210-image test set, at seed 42 only, and from the same single training session as every other figure in Chapter 6; \S{}6.3.1 replicates the slice decomposition across three seeds, and where the two disagree the three-seed figures are the ones any claim rests on. They do disagree here: at this seed the automatic arm leads on group 6, where the three-seed mean puts the human arm ahead, which is the disagreement the replication exists to expose. Per-predicate figures are parsed from the evaluation log of the all-arms run (\texttt{scripts/kaggle/executed\_\allowbreak{}6\_\allowbreak{}all\_\allowbreak{}arms\_\allowbreak{}085.ipynb}, collected in \texttt{outputs/sgg\_\allowbreak{}benchmark/per\_\allowbreak{}predicate\_\allowbreak{}085.json}).
 
 \begin{center}
 \small
@@ -588,20 +588,20 @@ per-predicate mR@100 & human-trained & auto-trained \\
 per-predicate mR@100 & human-trained & auto-trained \\
 \hline
 \endhead
-on & \textbf{0.741} & 0.637 \\
-under & 0.731 & \textbf{0.762} \\
-to the left of & \textbf{0.203} & 0.120 \\
-to the right of & \textbf{0.373} & 0.180 \\
-in front of & \textbf{0.124} & 0.101 \\
-behind & \textbf{0.195} & 0.109 \\
-near & \textbf{0.054} & 0.032 \\
+on & 0.571 & \textbf{0.648} \\
+under & 0.454 & \textbf{0.738} \\
+to the left of & \textbf{0.185} & 0.165 \\
+to the right of & \textbf{0.350} & 0.232 \\
+in front of & \textbf{0.078} & 0.060 \\
+behind & \textbf{0.135} & 0.084 \\
+near & \textbf{0.117} & 0.108 \\
 \hline
 \end{longtable}
 \end{center}
 
 \begin{center}
 \small
-\begin{longtable}{llr}
+\begin{longtable}{lrl}
 \caption{Benchmark mean recall at 100 by test slice for both arms, seed 42. Section 6.3.1 replicates every row but the convention-aligned one across three seeds.}\\
 \hline
 test slice (mR@100) & human-trained & auto-trained \\
@@ -611,11 +611,11 @@ test slice (mR@100) & human-trained & auto-trained \\
 test slice (mR@100) & human-trained & auto-trained \\
 \hline
 \endhead
-full test, as annotated & \textbf{0.346} & 0.277 \\
-full test, conventions aligned* & \textbf{0.387} & 0.312 \\
-group 6 alone (inverted convention) & \textbf{0.382} & 0.261 \\
-group 7 alone (consistent annotator) & 0.323 & 0.334 \\
-group 8 alone (inverted, dense \texttt{near} user) & \textbf{0.190} & 0.116 \\
+full test, as annotated & 0.270 & \textbf{0.291} \\
+full test, conventions aligned* & 0.310 & \textbf{0.312} \\
+group 6 alone (inverted convention) & 0.299 & \textbf{0.309} \\
+group 7 alone (consistent annotator) & 0.254 & \textbf{0.280} \\
+group 8 alone (inverted, dense \texttt{near} user) & \textbf{0.130} & 0.123 \\
 \hline
 \end{longtable}
 \end{center}

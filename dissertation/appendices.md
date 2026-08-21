@@ -1221,27 +1221,33 @@ later re-audit unblindable.
 
 Section 6.3 reports the headline benchmark result and Appendix F.1 the two
 decompositions it draws on. Both come from the same pair of best checkpoints
-scored on the same 210-image test set, at seed 42 only; §6.3.1 replicates the
-slice decomposition across three seeds, and where the two disagree the
-three-seed figures are the ones any claim rests on.
+scored on the same 210-image test set, at seed 42 only, and from the same
+single training session as every other figure in Chapter 6; §6.3.1 replicates
+the slice decomposition across three seeds, and where the two disagree the
+three-seed figures are the ones any claim rests on. They do disagree here: at
+this seed the automatic arm leads on group 6, where the three-seed mean puts
+the human arm ahead, which is the disagreement the replication exists to
+expose. Per-predicate figures are parsed from the evaluation log of the
+all-arms run (`scripts/kaggle/executed_6_all_arms_085.ipynb`, collected in
+`outputs/sgg_benchmark/per_predicate_085.json`).
 
 | per-predicate mR@100 | human-trained | auto-trained |
 |---|---|---|
-| on | **0.741** | 0.637 |
-| under | 0.731 | **0.762** |
-| to the left of | **0.203** | 0.120 |
-| to the right of | **0.373** | 0.180 |
-| in front of | **0.124** | 0.101 |
-| behind | **0.195** | 0.109 |
-| near | **0.054** | 0.032 |
+| on | 0.571 | **0.648** |
+| under | 0.454 | **0.738** |
+| to the left of | **0.185** | 0.165 |
+| to the right of | **0.350** | 0.232 |
+| in front of | **0.078** | 0.060 |
+| behind | **0.135** | 0.084 |
+| near | **0.117** | 0.108 |
 
 | test slice (mR@100) | human-trained | auto-trained |
 |---|---|---|
-| full test, as annotated | **0.346** | 0.277 |
-| full test, conventions aligned* | **0.387** | 0.312 |
-| group 6 alone (inverted convention) | **0.382** | 0.261 |
-| group 7 alone (consistent annotator) | 0.323 | 0.334 |
-| group 8 alone (inverted, dense `near` user) | **0.190** | 0.116 |
+| full test, as annotated | 0.270 | **0.291** |
+| full test, conventions aligned* | 0.310 | **0.312** |
+| group 6 alone (inverted convention) | 0.299 | **0.309** |
+| group 7 alone (consistent annotator) | 0.254 | **0.280** |
+| group 8 alone (inverted, dense `near` user) | **0.130** | 0.123 |
 
 \* groups 6/8's front/behind gold flipped, one disclosed bit per group, as in
 §4.5.

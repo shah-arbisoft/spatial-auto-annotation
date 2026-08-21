@@ -45,33 +45,38 @@ heights.
 ## 6.3 Test results: prediction 2 unresolved, prediction 3 refuted
 
 Both best checkpoints evaluated on the identical test set (210 images,
-human gold, groups 6–8):
+human gold, groups 6–8), at seed 42:
 
 | metric (test, sgdet) | human-trained | auto-trained |
 |---|---|---|
-| R@100 | **0.348** | 0.260 |
-| mR@100 | **0.346** | 0.277 |
-| F1@100 | **0.347** | 0.268 |
-| zero-shot recall zR@100 | 0.004 | **0.157** |
+| R@100 | **0.280** | 0.259 |
+| mR@100 | 0.270 | **0.291** |
+| F1@100 | **0.275** | 0.274 |
+| zero-shot recall zR@100 | 0.073 | **0.309** |
 
-The human-trained arm wins the headline ranking metrics (mR@100 0.346 vs
-0.277) and leads on six of the seven predicates individually, the exception
-being `under` at 0.762 against 0.731; `near` fails for both arms (0.054 and
-0.032), close to the source paper's 0.22–0.25 floor, not recovered.
-Predictions 2 and 3 are refuted as stated. Appendix F.1 carries the
-per-predicate breakdown. One result points sharply the other way: on triplet *types never
-seen in training*, the auto-trained arm recalls 0.157 against the human
-arm's 0.004, a 39× gap at this seed (replicated at ~60× over three seeds;
-§6.3.1). What that column measures here is set out in §6.4, and it is
-coverage of the relation types the manual annotation never recorded rather
+At this seed the automatic arm leads the mean-recall metric, 0.291 against
+0.270, while the human arm keeps raw recall and the two are level on F1. The
+ordering inverts predicate by predicate: the human arm is ahead on five of the
+seven and the automatic arm on the support pair, by 0.077 on `on` and 0.284 on
+`under`. For `near` both arms sit far below the source paper's 0.22–0.25
+floor, 0.117 and 0.108, so prediction 3 is refuted as stated and the automatic
+arm's dense, fitted `near` does not survive the trip through a learned model.
+Appendix F.1 carries the per-predicate breakdown. The sharpest separation is
+on triplet *types never seen in training*, where the automatic arm recalls
+0.309 against the human arm's 0.073, a fourfold gap at this seed and fivefold
+over three (§6.3.1). What that column measures here is set out in §6.4, and it
+is coverage of the relation types the manual annotation never recorded rather
 than compositional generalisation.
 
-Re-scoring the same checkpoints on individual test slices decomposes that
-headline, and the seed replication below repeats the decomposition with a
-spread, not a point, so the single-run slice figures are in Appendix
-F.1. One of them has no counterpart there: aligning the front/behind
-convention of groups 6 and 8, one disclosed bit per group as in §4.5, lifts
-both arms without changing the ordering, 0.387 against 0.312.
+Prediction 2 is the one a single run cannot carry, in either direction: the
+margin above is well inside the human arm's own seed spread, which is why
+§6.3.1 exists and why the heading calls it unresolved rather than confirmed.
+Re-scoring the same checkpoints on individual test slices decomposes the
+headline, and the seed replication below repeats that decomposition with a
+spread rather than a point, so the single-run slice figures are in Appendix
+F.1. Aligning the front/behind convention of groups 6 and 8, one disclosed bit
+per group as in §4.5, lifts both arms and leaves them level, 0.310 against
+0.312.
 
 ### 6.3.1 Replication across seeds, and one claim withdrawn
 

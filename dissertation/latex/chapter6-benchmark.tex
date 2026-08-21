@@ -27,11 +27,11 @@ The human arm \textbf{peaks at epoch 4 of 25} and never improves again, oscillat
 
 \section{Test results: prediction 2 unresolved, prediction 3 refuted}
 
-Both best checkpoints evaluated on the identical test set (210 images, human gold, groups 6--8):
+Both best checkpoints evaluated on the identical test set (210 images, human gold, groups 6--8), at seed 42:
 
 \begin{center}
 \small
-\begin{longtable}{llr}
+\begin{longtable}{lll}
 \caption{Benchmark test results (SGDet) for the human-trained and auto-trained arms.}\\
 \hline
 metric (test, sgdet) & human-trained & auto-trained \\
@@ -41,17 +41,17 @@ metric (test, sgdet) & human-trained & auto-trained \\
 metric (test, sgdet) & human-trained & auto-trained \\
 \hline
 \endhead
-R@100 & \textbf{0.348} & 0.260 \\
-mR@100 & \textbf{0.346} & 0.277 \\
-F1@100 & \textbf{0.347} & 0.268 \\
-zero-shot recall zR@100 & 0.004 & \textbf{0.157} \\
+R@100 & \textbf{0.280} & 0.259 \\
+mR@100 & 0.270 & \textbf{0.291} \\
+F1@100 & \textbf{0.275} & 0.274 \\
+zero-shot recall zR@100 & 0.073 & \textbf{0.309} \\
 \hline
 \end{longtable}
 \end{center}
 
-The human-trained arm wins the headline ranking metrics (mR@100 0.346 vs 0.277) and leads on six of the seven predicates individually, the exception being \texttt{under} at 0.762 against 0.731; \texttt{near} fails for both arms (0.054 and 0.032), close to the source paper's 0.22--0.25 floor, not recovered. Predictions 2 and 3 are refuted as stated. Appendix F.1 carries the per-predicate breakdown. One result points sharply the other way: on triplet \textit{types never seen in training}, the auto-trained arm recalls 0.157 against the human arm's 0.004, a 39$\times$ gap at this seed (replicated at \textasciitilde{}60$\times$ over three seeds; \S{}6.3.1). What that column measures here is set out in \S{}6.4, and it is coverage of the relation types the manual annotation never recorded rather than compositional generalisation.
+At this seed the automatic arm leads the mean-recall metric, 0.291 against 0.270, while the human arm keeps raw recall and the two are level on F1. The ordering inverts predicate by predicate: the human arm is ahead on five of the seven and the automatic arm on the support pair, by 0.077 on \texttt{on} and 0.284 on \texttt{under}. For \texttt{near} both arms sit far below the source paper's 0.22--0.25 floor, 0.117 and 0.108, so prediction 3 is refuted as stated and the automatic arm's dense, fitted \texttt{near} does not survive the trip through a learned model. Appendix F.1 carries the per-predicate breakdown. The sharpest separation is on triplet \textit{types never seen in training}, where the automatic arm recalls 0.309 against the human arm's 0.073, a fourfold gap at this seed and fivefold over three (\S{}6.3.1). What that column measures here is set out in \S{}6.4, and it is coverage of the relation types the manual annotation never recorded rather than compositional generalisation.
 
-Re-scoring the same checkpoints on individual test slices decomposes that headline, and the seed replication below repeats the decomposition with a spread, not a point, so the single-run slice figures are in Appendix F.1. One of them has no counterpart there: aligning the front/behind convention of groups 6 and 8, one disclosed bit per group as in \S{}4.5, lifts both arms without changing the ordering, 0.387 against 0.312.
+Prediction 2 is the one a single run cannot carry, in either direction: the margin above is well inside the human arm's own seed spread, which is why \S{}6.3.1 exists and why the heading calls it unresolved rather than confirmed. Re-scoring the same checkpoints on individual test slices decomposes the headline, and the seed replication below repeats that decomposition with a spread rather than a point, so the single-run slice figures are in Appendix F.1. Aligning the front/behind convention of groups 6 and 8, one disclosed bit per group as in \S{}4.5, lifts both arms and leaves them level, 0.310 against 0.312.
 
 \subsection{Replication across seeds, and one claim withdrawn}
 
