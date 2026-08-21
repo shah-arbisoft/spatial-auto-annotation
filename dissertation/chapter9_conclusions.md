@@ -195,7 +195,7 @@ named `rightimg`, implying a left counterpart held by the supervising group.
 True stereo would attack the front/behind bound directly, supplying disparity
 at every frame from a known baseline, which is what the multi-frame estimators
 of A9 lack: those must recover the camera's motion first, and on small
-low-texture objects they answer for only 9% of pairs and are 0.17 less
+low-texture objects they answer for only 9% of pairs and are 0.20 less
 accurate where they do (§4.9, Appendix D.6). A calibrated pair removes both
 problems and is the cheapest experiment left on this predicate. It also keeps
 the method's premise intact, since stereo is available at capture time whereas

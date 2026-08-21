@@ -128,6 +128,25 @@ def triangulated_depths(cv2, a, b, boxes_px, focal_mult=0.9):
     return out
 
 
+def _quartiles(seps):
+    """Ordering accuracy by how far apart the two estimates actually are.
+
+    A weak estimator and a broken one look alike in the aggregate; splitting
+    by separation tells them apart, which is what D.6 reads.
+    """
+    if len(seps) < 8:
+        return []
+    seps = sorted(seps)
+    q, out = len(seps) // 4, []
+    for k in range(4):
+        lo = k * q
+        hi = len(seps) if k == 3 else (k + 1) * q
+        chunk = seps[lo:hi]
+        out.append({"lo": chunk[0][0], "hi": chunk[-1][0], "pairs": len(chunk),
+                    "accuracy": sum(c for _, c in chunk) / len(chunk)})
+    return out
+
+
 def gold_pairs(pairs_csv: str) -> dict:
     """{image_id: {(subj, obj): gold_predicates}} for depth-labelled pairs."""
     out: dict = defaultdict(dict)
@@ -146,6 +165,7 @@ def run(ds, gold, raw_dir, gap, method="residual", verbose=True,
 
     n_img = n_pair = 0
     par_hit = mono_hit = both = 0
+    seps: list = []
     agree = 0
     skipped_img = 0
 
@@ -195,6 +215,11 @@ def run(ds, gold, raw_dir, gap, method="residual", verbose=True,
                 continue
             n_pair += 1
             truth = "in front of" if "in front of" in g else "behind"
+            # relative separation of the two estimates, for the quartile split
+            denom = max(abs(resid[si]), abs(resid[oi]), 1e-9)
+            seps.append((abs(resid[si] - resid[oi]) / denom,
+                         (("in front of" if resid[si] > resid[oi] else "behind")
+                          == truth)))
             # bigger residual = nearer the camera = in front of
             par = "in front of" if resid[si] > resid[oi] else "behind"
             mono = ("in front of" if "in front of" in pred
@@ -219,6 +244,7 @@ def run(ds, gold, raw_dir, gap, method="residual", verbose=True,
         "monocular_accuracy": mono_hit / n_pair if n_pair else None,
         "pairs_monocular_committed": both,
         "agreement_parallax_vs_monocular": agree / both if both else None,
+        "separation_quartiles": _quartiles(seps),
     }
 
 

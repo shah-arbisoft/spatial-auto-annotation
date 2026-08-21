@@ -2,34 +2,37 @@
   {
     "method": "triangulate",
     "gap": 10,
-    "images": 109,
-    "images_skipped": 41,
-    "pairs": 232,
-    "parallax_accuracy": 0.6681034482758621,
-    "monocular_accuracy": 0.853448275862069,
-    "pairs_monocular_committed": 226,
-    "agreement_parallax_vs_monocular": 0.6858407079646017
+    "focal_mult": 0.9,
+    "images": 247,
+    "images_skipped": 322,
+    "pairs": 337,
+    "parallax_accuracy": 0.7062314540059347,
+    "monocular_accuracy": 0.9020771513353115,
+    "pairs_monocular_committed": 334,
+    "agreement_parallax_vs_monocular": 0.7245508982035929
   },
   {
     "method": "triangulate",
     "gap": 20,
-    "images": 113,
-    "images_skipped": 37,
-    "pairs": 240,
-    "parallax_accuracy": 0.6333333333333333,
-    "monocular_accuracy": 0.8416666666666667,
-    "pairs_monocular_committed": 234,
-    "agreement_parallax_vs_monocular": 0.6324786324786325
+    "focal_mult": 0.9,
+    "images": 244,
+    "images_skipped": 325,
+    "pairs": 339,
+    "parallax_accuracy": 0.6784660766961652,
+    "monocular_accuracy": 0.8908554572271387,
+    "pairs_monocular_committed": 336,
+    "agreement_parallax_vs_monocular": 0.6845238095238095
   },
   {
     "method": "triangulate",
     "gap": 40,
-    "images": 100,
-    "images_skipped": 50,
-    "pairs": 164,
-    "parallax_accuracy": 0.6097560975609756,
-    "monocular_accuracy": 0.8048780487804879,
-    "pairs_monocular_committed": 158,
-    "agreement_parallax_vs_monocular": 0.5569620253164557
+    "focal_mult": 0.9,
+    "images": 221,
+    "images_skipped": 348,
+    "pairs": 258,
+    "parallax_accuracy": 0.562015503875969,
+    "monocular_accuracy": 0.8875968992248062,
+    "pairs_monocular_committed": 257,
+    "agreement_parallax_vs_monocular": 0.5447470817120622
   }
 ]

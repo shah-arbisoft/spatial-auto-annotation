@@ -737,17 +737,17 @@ not well enough:
 | Depth cue | Ordering accuracy | Pairs answered |
 |---|---|---|
 | Two-view triangulation (10-frame baseline) | 0.706 | 337 of 3,597 |
-| Monocular cascade, same pairs | 0.875 | 337 of 3,597 |
+| Monocular cascade, same pairs | 0.902 | 337 of 3,597 |
 
 Both numbers fall on the same pairs, so the comparison is like for like. The
-multi-frame estimate is 0.17 worse where it applies, and the two disagree on
+multi-frame estimate is 0.20 worse where it applies, and the two disagree on
 27% of pairs, with the monocular cascade right more often in that
 disagreement. Coverage is the harsher problem: triangulation returns an
 answer for 9% of the depth-labelled pairs, because it needs several trackable
 corners inside an object's box and the dataset's objects are small,
 low-texture cubes and boxes photographed at 640×480 in greyscale. Widening
-the baseline trades coverage for geometry without helping accuracy: at 40
-frames, accuracy falls to 0.610.
+the baseline trades coverage for geometry and makes accuracy worse, not
+better: at 40 frames it falls to 0.562 on 258 pairs.
 
 Splitting those pairs by how far apart the two triangulated depths actually
 are says more than the aggregate does, and it is the check that separates a
