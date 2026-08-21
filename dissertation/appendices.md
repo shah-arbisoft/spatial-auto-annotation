@@ -1136,7 +1136,9 @@ that relation was never stated. It reasoned correctly from incomplete input.
 with a preamble restating the task ("To pick up box0 safely, follow these
 steps:"), and counting that preamble as a step made every such plan appear
 to grasp the target before clearing anything. Before the fix condition C
-scored 0.64; after it, 0.88. The figure below the fix is the correct one.
+scored 0.64; after it, 0.88, and the post-fix number is the correct one. Both
+were measured on the pre-refit labels, where C stood at 22 of 25; on the
+shipped labels of §4.14 the same corrected scorer gives 19 of 25 (§5.7).
 The episode is recorded because it is the only evidence that the blind
 scorer measures what it claims to: a rule-based judge inherits whatever its
 author failed to anticipate, and the hand-read sample is what exposed this

@@ -67,7 +67,7 @@ uses. Held-out intervals appear in §4.6.
 
 Three observations. **(i)** The tool recovers 81% of all human triplets (7,276 of 8,926; mean
 0.845, and 0.74 on annotators no threshold ever saw) against 14% for random
-and 23% for majority on the same triplet-weighted basis. The mean column above is per-predicate and puts majority at 0.14,
+and 23% for majority on the same triplet-weighted basis. The mean row above is per-predicate and puts majority at 0.14,
 which is the right number for a per-predicate question and the wrong one for
 this comparison: guessing `in front of` everywhere recovers 2,013 of 8,926
 triplets because that predicate is a quarter of the gold. Both figures are
@@ -107,8 +107,9 @@ conservative rule under which any case not clearly true was marked wrong
 spot-checked). This audit was run against the *pre-gate box rule* and is
 reported as found because it motivated the support-rule repairs; §4.9
 re-audits the shipped rules and §4.14 audits them again under blinding, so
-the support rows below describe a fixed failure, not the final tool. How far
-it was fixed is the subject of those two sections, and they disagree: pooled
+the support figures in this section describe a fixed failure, not the final
+tool. How far it was fixed is the subject of those two sections, and they
+disagree: pooled
 support precision moves 0.13 → 0.77 on an unblinded re-audit, back to 0.40
 when the same rules are judged blind against decoys, and to 0.54 once the
 threshold that caused the over-emission is refitted and audited again.
