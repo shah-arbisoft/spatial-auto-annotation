@@ -134,10 +134,12 @@ dataset's label semantics have been made explicit.
 
 The "tenth annotator" framing survives contact with the data, and §4.6 puts
 numbers on it. The tool is deterministic, the same labeller for every group,
-so the 0.216 spread in its agreement across the seven consistent annotators
-(0.717 to 0.933) measures their heterogeneity, not its inconsistency. Fréchet
-bounds with the tool as common reference place annotator-to-annotator
-agreement in [0.74, 0.92], containing the tool's own 0.869. The claim is
+so the 0.082 spread in its agreement across the seven consistent annotators
+(0.851 to 0.933) measures their heterogeneity, not its inconsistency, and on
+the shipped labels that spread is narrow enough to be weak evidence of
+heterogeneity on its own. Fréchet bounds with the tool as common reference
+place annotator-to-annotator agreement in [0.78, 0.96], containing the tool's
+own 0.892. The claim is
 deliberately modest, since the bounds assume the batches are exchangeable: the
 automatic annotator cannot be shown to agree with the humans any less well
 than they can be shown to agree with each other. Without overlapping

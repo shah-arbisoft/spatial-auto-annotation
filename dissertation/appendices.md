@@ -231,7 +231,7 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/ablations.py` | ablations A1–A7, `tables/ablations.md` | ~30 s |
 | `python eval/depth_ablation.py` | ablation A8; needs the `outputs_base` pass below | <1 min |
 | `python eval/parallax_ablation.py --method triangulate --gap 10` | ablation A9; needs the raw capture (D.6), `parallax_ablation.json` | ~5 min |
-| `python eval/video_stability.py` | the E.4 persistence and Jaccard figures, `video_stability.json` | <1 min |
+| `python eval/video_stability.py --dir outputs/video_085` | the E.4 persistence and Jaccard figures, `video_stability.json`; the `--dir` is required, since the default points at the pre-refit pass | <1 min |
 | `python eval/extension_scale.py` | E.6 throughput, density and predicate distribution | <1 min |
 | `python eval/seed_stats.py` | the benchmark arms aggregated across seeds, `tables/seed_replication.md` | <1 min |
 | `python eval/downstream.py --seeds 42,43,44` | RQ2, all arms, `rq2_report.json`, `tables/rq2.md` | ~20 min |
@@ -1350,12 +1350,12 @@ Against any common reference, if annotators A and B agree with it on
 fractions p_A and p_B, their mutual agreement obeys the Fréchet inequalities
 max(0, p_A + p_B − 1) ≤ p_AB ≤ 1 − |p_A − p_B|. Averaged over all 21 pairs of
 consistent annotators these place annotator-to-annotator agreement in
-[0.74, 0.92], and the tool's own mean agreement of 0.869 lies inside it
+[0.78, 0.96], and the tool's own mean agreement of 0.892 lies inside it
 (`eval/annotator_agreement.py`).
 
 Two things limit what that is worth, and neither is buried. Fréchet bounds
 are the loosest bounds available, so an 18-point interval rules little out:
-had the tool scored 0.75 or 0.91 the same sentence could be written. And the
+had the tool scored 0.80 or 0.94 the same sentence could be written. And the
 groups labelled disjoint batches, so the bounds presume each annotator's rate
 would carry to another ~100-image batch.
 
@@ -1373,22 +1373,23 @@ is therefore an estimate resting on an assumption this dissertation can show
 to be false rather than merely unverified, and it should be read as
 indicative only. The assumption-free
 half of §4.6 is the heterogeneity spread, which needs no such presumption:
-the tool is deterministic, so the 0.216 range in its agreement across the
-seven consistent annotators is variation in the annotators and nothing else.
+the tool is deterministic, so the 0.082 range in its agreement across the
+seven consistent annotators is variation in the annotators and nothing else,
+though a range that narrow carries correspondingly little weight.
 
 ### F.8 Held-out cluster-bootstrap intervals
 
 Section 4.6 quotes the two depth predicates and states that the other five sit
-entirely above 0.87. The full set is below, from the same 2,000-resample
+at 0.82 or better. The full set is below, from the same 2,000-resample
 cluster bootstrap over images described in §4.2, computed on the held-out
 annotator groups only.
 
 | Predicate | Recall (held-out) | 95% interval |
 |---|---|---|
-| on | 0.922 | 0.891–0.951 |
-| under | 0.922 | 0.879–0.960 |
+| on | 0.853 | 0.813–0.890 |
+| under | 0.823 | 0.768–0.875 |
 | to the left of | 0.953 | 0.937–0.970 |
 | to the right of | 0.985 | 0.974–0.996 |
-| in front of | 0.197 | 0.147–0.255 |
-| behind | 0.347 | 0.281–0.417 |
+| in front of | 0.199 | 0.148–0.257 |
+| behind | 0.369 | 0.300–0.443 |
 | near | 1.000 | 1.000–1.000 |

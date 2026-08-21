@@ -171,15 +171,15 @@ distinct causes:
 ## 4.6 The tenth annotator, and what the annotators would score against each other
 
 Per-group recall of each annotator's triplets (all predicates):
-group_0 0.87 · group_1 0.93 · group_2 0.86 · group_3 0.72 · group_4 0.87 ·
-group_5 0.93 · group_6 0.58 · group_7 0.91 · group_8 0.57. The dispersion is
-driven almost entirely by the two convention-inverted groups (6, 8): the
-tool agrees with the *consistent* annotators at 0.72–0.93 (0.86–0.93 outside
-the abstention-heavy group 3).
+group_0 0.85 · group_1 0.90 · group_2 0.92 · group_3 0.88 · group_4 0.86 ·
+group_5 0.93 · group_6 0.56 · group_7 0.90 · group_8 0.57. The dispersion is
+almost entirely the two convention-inverted groups (6, 8): the tool agrees
+with the *consistent* annotators at 0.85–0.93, a band the support refit of
+§4.14 tightened by lifting group 3 from 0.72.
 
 On the held-out annotators the cluster-bootstrap intervals of §4.2 put five of
-the seven predicates entirely above 0.87 and the depth pair far below, at
-0.197 (0.147–0.255) and 0.347 (0.281–0.417); Appendix F.8 gives all seven with
+the seven predicates at 0.82 or better and the depth pair far below, at
+0.199 (0.148–0.257) and 0.369 (0.300–0.443); Appendix F.8 gives all seven with
 their intervals. The gap between the two groups is
 far wider than the sampling uncertainty, which is what makes the convention
 explanation below a claim about the labels, not about noise.
@@ -196,16 +196,18 @@ automatic annotator as a fixed common reference
 deterministic: it is literally the same labeller for every group, applying
 one definition. Any variation in its agreement across annotators is
 therefore variation in the *annotators*. Across the seven consistent groups
-that variation spans 0.717 to 0.933, a spread of 0.216 (sd 0.068). Before any
-inference about human-human agreement, this alone establishes that the
-annotators are not interchangeable, and it puts a number on how far apart
-they are.
+that variation spans 0.851 to 0.933, a spread of 0.082 (sd 0.028). That is a
+modest number and it is reported as one: on the shipped labels the consistent
+annotators are much closer to interchangeable than the pre-refit spread of
+0.216 suggested, and the case that they differ rests on the two inverted
+groups and the three measured defects of §4.5 and §4.9 rather than on this
+band.
 
 **Bounds on human-human agreement.** Taking the tool as a fixed common
 reference and applying the Fréchet inequalities across all 21 pairs of
 consistent annotators places annotator-to-annotator agreement in
-**[0.74, 0.92]**, an interval containing the tool's own mean agreement of
-**0.869**. These are the loosest bounds available, and they assume the
+**[0.78, 0.96]**, an interval containing the tool's own mean agreement of
+**0.892**. These are the loosest bounds available, and they assume the
 batches are exchangeable when they differ threefold in object density, so the
 interval supports a weak *failure to distinguish* the tool from a tenth
 annotator and not a demonstration that it is one. Appendix F.7 derives it and

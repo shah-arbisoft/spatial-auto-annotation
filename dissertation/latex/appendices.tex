@@ -78,7 +78,7 @@ The check that the perception stage reproduces is \texttt{scripts/reannotate\_\a
 
 \begin{center}
 \small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.395\textwidth}>{\raggedright\arraybackslash}p{0.432\textwidth}>{\raggedright\arraybackslash}p{0.083\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.309\textwidth}>{\raggedright\arraybackslash}p{0.526\textwidth}>{\raggedright\arraybackslash}p{0.075\textwidth}}
 \caption{Commands reproducing every experiment from the cached geometry, with run times.}\\
 \hline
 command & produces & time \\
@@ -98,7 +98,7 @@ command & produces & time \\
 \texttt{python eval/ablations.py} & ablations A1--A7, \texttt{tables/ablations.md} & \textasciitilde{}30 s \\
 \texttt{python eval/depth\_\allowbreak{}ablation.py} & ablation A8; needs the \texttt{outputs\_\allowbreak{}base} pass below & <1 min \\
 \texttt{python eval/parallax\_\allowbreak{}ablation.py --method triangulate --gap 10} & ablation A9; needs the raw capture (D.6), \texttt{parallax\_\allowbreak{}ablation.json} & \textasciitilde{}5 min \\
-\texttt{python eval/video\_\allowbreak{}stability.py} & the E.4 persistence and Jaccard figures, \texttt{video\_\allowbreak{}stability.json} & <1 min \\
+\texttt{python eval/video\_\allowbreak{}stability.py --dir outputs/video\_\allowbreak{}085} & the E.4 persistence and Jaccard figures, \texttt{video\_\allowbreak{}stability.json}; the \texttt{--dir} is required, since the default points at the pre-refit pass & <1 min \\
 \texttt{python eval/extension\_\allowbreak{}scale.py} & E.6 throughput, density and predicate distribution & <1 min \\
 \texttt{python eval/seed\_\allowbreak{}stats.py} & the benchmark arms aggregated across seeds, \texttt{tables/seed\_\allowbreak{}replication.md} & <1 min \\
 \texttt{python eval/downstream.py --seeds 42,43,44} & RQ2, all arms, \texttt{rq2\_\allowbreak{}report.json}, \texttt{tables/rq2.md} & \textasciitilde{}20 min \\
@@ -744,15 +744,15 @@ near & 0.12 & 1.00 & 0.21 & 717 \\
 
 Section 4.6 states the result and its weight. The derivation is here, with the assumption it rests on.
 
-Against any common reference, if annotators A and B agree with it on fractions p\_\allowbreak{}A and p\_\allowbreak{}B, their mutual agreement obeys the Fréchet inequalities max(0, p\_\allowbreak{}A + p\_\allowbreak{}B - 1) $\leq$ p\_\allowbreak{}AB $\leq$ 1 - |p\_\allowbreak{}A - p\_\allowbreak{}B|. Averaged over all 21 pairs of consistent annotators these place annotator-to-annotator agreement in [0.74, 0.92], and the tool's own mean agreement of 0.869 lies inside it (\texttt{eval/annotator\_\allowbreak{}agreement.py}).
+Against any common reference, if annotators A and B agree with it on fractions p\_\allowbreak{}A and p\_\allowbreak{}B, their mutual agreement obeys the Fréchet inequalities max(0, p\_\allowbreak{}A + p\_\allowbreak{}B - 1) $\leq$ p\_\allowbreak{}AB $\leq$ 1 - |p\_\allowbreak{}A - p\_\allowbreak{}B|. Averaged over all 21 pairs of consistent annotators these place annotator-to-annotator agreement in [0.78, 0.96], and the tool's own mean agreement of 0.892 lies inside it (\texttt{eval/annotator\_\allowbreak{}agreement.py}).
 
-Two things limit what that is worth, and neither is buried. Fréchet bounds are the loosest bounds available, so an 18-point interval rules little out: had the tool scored 0.75 or 0.91 the same sentence could be written. And the groups labelled disjoint batches, so the bounds presume each annotator's rate would carry to another \textasciitilde{}100-image batch.
+Two things limit what that is worth, and neither is buried. Fréchet bounds are the loosest bounds available, so an 18-point interval rules little out: had the tool scored 0.80 or 0.94 the same sentence could be written. And the groups labelled disjoint batches, so the bounds presume each annotator's rate would carry to another \textasciitilde{}100-image batch.
 
-That presumption is doubtful, and the dataset can say so. The batches differ substantially in what they contain: mean objects per frame runs from \textbf{4.47 in group 4 to 14.30 in group 1}, a coefficient of variation of 0.31 across the nine, and pair count grows with the square of that. An annotator working a sparse batch faces fewer and easier decisions than one working a dense batch, so their agreement rates with a common reference are not measured under comparable conditions and cannot be assumed transferable between them. The Fréchet inequalities themselves hold for any joint distribution and are not affected; what the batch heterogeneity undermines is the step \textit{before} them, which treats p\_\allowbreak{}A and p\_\allowbreak{}B as though they described the same task. The interval is therefore an estimate resting on an assumption this dissertation can show to be false rather than merely unverified, and it should be read as indicative only. The assumption-free half of \S{}4.6 is the heterogeneity spread, which needs no such presumption: the tool is deterministic, so the 0.216 range in its agreement across the seven consistent annotators is variation in the annotators and nothing else.
+That presumption is doubtful, and the dataset can say so. The batches differ substantially in what they contain: mean objects per frame runs from \textbf{4.47 in group 4 to 14.30 in group 1}, a coefficient of variation of 0.31 across the nine, and pair count grows with the square of that. An annotator working a sparse batch faces fewer and easier decisions than one working a dense batch, so their agreement rates with a common reference are not measured under comparable conditions and cannot be assumed transferable between them. The Fréchet inequalities themselves hold for any joint distribution and are not affected; what the batch heterogeneity undermines is the step \textit{before} them, which treats p\_\allowbreak{}A and p\_\allowbreak{}B as though they described the same task. The interval is therefore an estimate resting on an assumption this dissertation can show to be false rather than merely unverified, and it should be read as indicative only. The assumption-free half of \S{}4.6 is the heterogeneity spread, which needs no such presumption: the tool is deterministic, so the 0.082 range in its agreement across the seven consistent annotators is variation in the annotators and nothing else, though a range that narrow carries correspondingly little weight.
 
 \subsection{F.8 Held-out cluster-bootstrap intervals}
 
-Section 4.6 quotes the two depth predicates and states that the other five sit entirely above 0.87. The full set is below, from the same 2,000-resample cluster bootstrap over images described in \S{}4.2, computed on the held-out annotator groups only.
+Section 4.6 quotes the two depth predicates and states that the other five sit at 0.82 or better. The full set is below, from the same 2,000-resample cluster bootstrap over images described in \S{}4.2, computed on the held-out annotator groups only.
 
 \begin{center}
 \small
@@ -766,12 +766,12 @@ Predicate & Recall (held-out) & 95\% interval \\
 Predicate & Recall (held-out) & 95\% interval \\
 \hline
 \endhead
-on & 0.922 & 0.891--0.951 \\
-under & 0.922 & 0.879--0.960 \\
+on & 0.853 & 0.813--0.890 \\
+under & 0.823 & 0.768--0.875 \\
 to the left of & 0.953 & 0.937--0.970 \\
 to the right of & 0.985 & 0.974--0.996 \\
-in front of & 0.197 & 0.147--0.255 \\
-behind & 0.347 & 0.281--0.417 \\
+in front of & 0.199 & 0.148--0.257 \\
+behind & 0.369 & 0.300--0.443 \\
 near & 1.000 & 1.000--1.000 \\
 \hline
 \end{longtable}

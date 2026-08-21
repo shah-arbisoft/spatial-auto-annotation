@@ -37,7 +37,7 @@ verdict against those criteria and its conditions.
 criterion was per-predicate recall on annotator groups no threshold ever saw,
 judged against two references fixed in advance, and both are met: the trivial
 baselines are beaten by a wide margin (0.85 against 0.14), and the tool's mean
-agreement with the consistent annotators, 0.869, falls inside the [0.74, 0.92]
+agreement with the consistent annotators, 0.892, falls inside the [0.78, 0.96]
 interval within which those annotators can be *estimated* to agree with one
 another (§4.6). That interval rests on treating batches as exchangeable when
 they differ threefold in object density, so it establishes a failure to

@@ -1,13 +1,13 @@
 {
   "per_group_agreement": {
-    "group_0": 0.8666,
-    "group_1": 0.9261,
-    "group_2": 0.8624,
-    "group_3": 0.7172,
-    "group_4": 0.868,
+    "group_0": 0.8512,
+    "group_1": 0.8993,
+    "group_2": 0.9211,
+    "group_3": 0.8805,
+    "group_4": 0.8596,
     "group_5": 0.933,
-    "group_6": 0.5784,
-    "group_7": 0.9083,
+    "group_6": 0.5557,
+    "group_7": 0.8995,
     "group_8": 0.5656
   },
   "inverted_groups": [
@@ -16,16 +16,16 @@
   ],
   "consistent_annotators": {
     "n": 7,
-    "mean": 0.8688,
-    "min": 0.7172,
+    "mean": 0.892,
+    "min": 0.8512,
     "max": 0.933,
-    "spread": 0.2158,
-    "sd": 0.0676
+    "spread": 0.0818,
+    "sd": 0.028
   },
   "human_human_estimate": {
     "n_pairs": 21,
-    "mean_lower_bound": 0.7376,
-    "mean_upper_bound": 0.9222,
+    "mean_lower_bound": 0.7841,
+    "mean_upper_bound": 0.9631,
     "tool_inside_interval": true,
     "assumption": "batch exchangeability; see module docstring"
   }
