@@ -20,7 +20,7 @@ The human arm \textbf{peaks at epoch 4 of 25} and never improves again, oscillat
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/sgg-training-curves.png}
+\includegraphics[width=0.80\textwidth]{figures/sgg-training-curves.png}
 \caption{Validation curves for both benchmark arms, each against its own training-source labels, so only the shapes are comparable. The human arm peaks early and declines; the automatic arm does not.}
 \label{fig:sgg-training-curves}
 \end{figure}
@@ -88,7 +88,7 @@ Mean over three seeds, with the per-seed range in brackets; "separable" records 
 
 \textbf{On the metric this chapter is organised around, the two label sources are indistinguishable.} Pooled mR@100 is 0.293 for the human arm and 0.292 for the automatic one. No slice separates them: on every row above the two seed ranges overlap, and the automatic arm's range sits \textit{inside} the human arm's on the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and 43 (+0.010) and trails at 44 (-0.032), so the pooled difference of 0.001 rests on a single run. The correct statement is parity, and it is a statement about this metric rather than about the labels: on raw R@100 the human arm keeps a real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm leads fivefold, 0.268 against 0.052.
 
-\textbf{The arms differ far more in stability than in score.} Across seeds the automatic arm's pooled mR@100 spans 0.006; the human arm's spans 0.052 and the vision-language arm's 0.044, nearly nine and seven times wider. One definition applied uniformly produces a model that lands in the same place whatever the initialisation, and nine annotators applying nine conventions do not. A margin of 0.001 between arms whose own seeds move by 0.052 is not a result in either direction, which is the reading the spread column exists to force.
+\textbf{The arms differ far more in stability than in score.} Across seeds the automatic arm's pooled mR@100 spans 0.006; the human arm's spans 0.052 and the vision-language arm's 0.044, eight and seven times wider. One definition applied uniformly produces a model that lands in the same place whatever the initialisation, and nine annotators applying nine conventions do not. A margin of 0.001 between arms whose own seeds move by 0.052 is not a result in either direction, which is the reading the spread column exists to force.
 
 \textbf{Where the arms do differ, they differ by annotator.} The human arm is ahead on the two annotators \S{}4.5 convicts of inverting the front/behind convention, by 0.022 on group 6 and 0.027 on group 8, and \textit{behind} on group 7, the one annotator this dissertation convicts of nothing, by 0.011. The ordering runs with annotation quality rather than with geometry, and the sign change on the clean annotator is the part worth noting: whatever advantage human labels carry here does not survive contact with an annotator who followed the stated convention. None of these three differences is separable across seeds, so the ordering is offered as a consistent direction and not as three measured effects.
 

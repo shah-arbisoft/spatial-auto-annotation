@@ -118,7 +118,7 @@ leads fivefold, 0.268 against 0.052.
 
 **The arms differ far more in stability than in score.** Across seeds the
 automatic arm's pooled mR@100 spans 0.006; the human arm's spans 0.052 and the
-vision-language arm's 0.044, nearly nine and seven times wider. One definition
+vision-language arm's 0.044, eight and seven times wider. One definition
 applied uniformly produces a model that lands in the same place whatever the
 initialisation, and nine annotators applying nine conventions do not. A margin
 of 0.001 between arms whose own seeds move by 0.052 is not a result in either

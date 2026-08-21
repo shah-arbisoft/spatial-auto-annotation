@@ -10,37 +10,31 @@ that follow from it (§3.3–§3.11), and every decision collected in one table
 
 Three process models dominate data-science practice. **KDD** (Fayyad,
 Piatetsky-Shapiro and Smyth, 1996) frames the work as a nine-step pipeline
-from selection through transformation to interpretation, oriented at
-discovering patterns in existing databases. **SEMMA** (Sample, Explore,
-Modify, Model, Assess), associated with the SAS toolchain, compresses this
-into five tool-centred stages and says little about the surrounding business
-problem. **CRISP-DM** (Wirth and Hipp, 2000) adds two things the others lack:
-an explicit *Business Understanding* phase before any data is touched, and an
-explicit cycle in which evaluation results feed back into earlier phases.
-Azevedo and Santos (2008) compare the three and observe that CRISP-DM is
-effectively a superset of SEMMA and an implementation of KDD with stronger
-process guidance.
+oriented at discovering patterns in existing databases, and **SEMMA**
+compresses that into five tool-centred stages while saying little about the
+surrounding problem. **CRISP-DM** (Wirth and Hipp, 2000) adds two things both
+lack: an explicit *Business Understanding* phase before any data is touched,
+and a cycle in which evaluation feeds back into earlier phases. Azevedo and
+Santos (2008) find it effectively a superset of SEMMA and an implementation of
+KDD with stronger process guidance.
 
-CRISP-DM was chosen for two concrete reasons. The motivating problem is not
-pattern discovery but an engineering question posed by a dataset's own
-authors, so a phase pinning the business problem (the annotation bottleneck,
-Chapters 1–2) before modelling is structurally necessary. Decisively, the
-project's actual course followed CRISP-DM's evaluation-to-modelling loop in a
-way the linear models do not describe: the audit of support-rule precision
-(Chapter 4) sent the work back to modelling twice, a depth gate then a
-mask-contact test, each pass re-validated on held-out annotators. §1.3 maps
-every phase to a concrete part of this dissertation, including the two
-findings that came straight out of Data Understanding: the stored image
-orientation and the three measured annotator behaviours. Ethical
-considerations are summarised in §1.3 and detailed in Appendix A.
+CRISP-DM was chosen for two concrete reasons. The motivating problem is an
+engineering question posed by a dataset's own authors rather than pattern
+discovery, so a phase pinning the business problem before modelling is
+structurally necessary. Decisively, the project's course followed CRISP-DM's
+evaluation-to-modelling loop in a way the linear models do not describe: the
+audit of support-rule precision sent the work back to modelling twice, a depth
+gate then a mask-contact test, each pass re-validated on held-out annotators.
+§1.3 maps every phase to a part of this dissertation, including the two
+findings that came out of Data Understanding, and summarises the ethical
+considerations detailed in Appendix A.
 
 ## 3.2 Problem analysis
 
 The task is to produce, from a raw robot-acquired RGB image, the same
 artefact a human annotator produces with SGDET-Annotate: a scene graph over
-the dataset's six object classes with the seven spatial predicates (*on,
-under, to the left of, to the right of, in front of, behind, near*) exported
-in Visual Genome JSON, YOLO txt and h5. Four requirements shape the design:
+the six object classes with the seven spatial predicates, exported in Visual
+Genome JSON, YOLO txt and h5. Four requirements shape the design:
 
 1. **No human decides any label.** The point is to remove the per-image human
    bottleneck; a rule may abstain and flag, but it may not ask.
@@ -56,19 +50,18 @@ in Visual Genome JSON, YOLO txt and h5. Four requirements shape the design:
 Three properties of the dataset, established in Chapter 2 and verified
 directly on the released files, drive specific design responses:
 
-- **Monocular RGB only.** No metric depth exists, so depth must be estimated,
-  and estimated depth is *relative and per-image* (Yang, L. et al., 2024). Design
-  response: all depth comparisons are ordinal and within-image; no rule
-  consumes absolute depth.
+- **Monocular RGB only.** No metric depth exists and estimated depth is
+  *relative and per-image* (Yang, L. et al., 2024), so all depth comparisons
+  are ordinal and within-image and no rule consumes absolute depth.
 - **Sparse annotation.** Humans labelled ~10% of object pairs *(measured:
-  6,458 annotated of 42,440 unordered pairs)*. Design response: the tool labels
-  every pair (density is the value added), and the evaluation protocol treats
-  human labels as a recall target, not an exhaustive gold standard.
-- **Inconsistent `near`.** The source paper flags this qualitatively; measured,
-  only 3 of 9 annotator groups ever used `near` (244/129/93 labels; the rest
-  0–3), and those three each labelled a different fraction of equally-close
-  pairs. Design response: a fitted, annotator-aware threshold (§3.8) rather
-  than agreement with a consensus that does not exist.
+  6,458 of 42,440 unordered pairs)*, so the tool labels every pair, density
+  being the value added, and the protocol treats human labels as a recall
+  target rather than an exhaustive gold standard.
+- **Inconsistent `near`.** Only 3 of 9 annotator groups ever used `near`
+  (244/129/93 labels; the rest 0–3), and those three each labelled a different
+  fraction of equally-close pairs, so the threshold is fitted and
+  annotator-aware (§3.8) rather than matched to a consensus that does not
+  exist.
 
 ## 3.3 Design principle: compute, don't predict
 
@@ -338,11 +331,11 @@ the segmentation recovers and what skipping the intervening frames costs.
 
 ## 3.11 Reproducibility by construction
 
-Reproducibility here is a design property, not a documentation
+Reproducibility here is a design property rather than a documentation
 exercise, because three of the four requirements in §3.2 are unverifiable
-without it: a threshold cannot be said to be fitted on groups 0-5 if nobody
-else can refit it, and an ablation is an assertion unless the reader can
-re-run the arm it removes.
+without it: a threshold is not fitted on groups 0-5 if nobody else can refit
+it, and an ablation is an assertion unless the reader can re-run the arm it
+removes.
 
 **Configuration and caching.** Every threshold, seed and model identifier
 lives in `configs/default.yaml`, so no constant is buried in a function, and
@@ -355,21 +348,19 @@ affordable and let the ablation battery run as a sweep.
 
 **Test strategy.** The suite is 66 tests running in about a second, which is
 deliberate: a suite slow enough to skip constrains nothing. Worked examples
-from the predicate specification are encoded as unit tests over the rule
-layer, so specification and code cannot drift apart silently; a randomised
-invariant test fuzzes two thousand synthetic scenes and asserts the structural
-guarantees §3.6 promises, which a later rule edit would otherwise break
-quietly; and the rest cover the format writers, the detector adapters of §3.9,
-frame selection and the reply parsers.
+from the predicate specification are encoded as unit tests over the rule layer
+so the two cannot drift apart silently, a randomised invariant test fuzzes two
+thousand synthetic scenes against the structural guarantees §3.6 promises, and
+the rest cover the format writers, the detector adapters of §3.9, frame
+selection and the reply parsers.
 
 **Environment.** Python 3.11 with CUDA torch 2.5.1, pinned, and the one
-genuinely awkward step documented, not left to be rediscovered:
+genuinely awkward step documented rather than left to be rediscovered:
 installing SAM2 can silently replace the CUDA build of torch with a CPU wheel,
-so the pipeline still runs, produces identical labels, and takes an order of
+so the pipeline still runs, produces identical labels and takes an order of
 magnitude longer, which is the worst class of failure because nothing reports
-it. A container applies the same fix at build time, and a smoke test verifies
-on first setup that both models load, that CUDA is in use, and that peak
-memory sits inside the 6 GB budget of requirement 3. Appendix B gives the full
+it. A smoke test verifies on first setup that both models load, that CUDA is
+in use, and that peak memory sits inside the 6 GB budget. Appendix B gives the
 walk-through, and the repository is public.
 
 ## 3.12 Summary of design decisions
@@ -385,29 +376,22 @@ guard. Each is reported where it was measured (§4.9, Appendix D). Appendix F.3
 tabulates all eleven decisions with the alternative each displaced.
 
 The decisions also answer the four objections §2.9 directs at the method
-itself, and it is worth naming which answers which, because none was added
-afterwards to fit the objection:
-
-- **Rules do not scale with the vocabulary.** Predicates are configuration
-  rather than code, a specification the rule engine reads (§3.9), so
-  extending the set does not touch the engine. This bounds the objection; it
-  does not defeat it, since a predicate with no geometric criterion cannot be
-  specified at all.
-- **Systematic error is worse for training than random error.** The rules
-  abstain and flag instead of guessing (§3.6), so an unreliable case becomes
-  a countable review item, not a confident wrong label repeated
-  wherever the geometry repeats. §4.7 prices what that abstention costs.
-- **Validating one's own labelling functions is circular.** The structural
-  guarantees are asserted by randomised invariant testing over synthetic
-  scenes (§3.11), which is independent of the author's judgement about any
-  particular image.
-- **The reference frame is a decision, not a fact.** The camera frame is
-  committed to explicitly and the convention stated with the rules (§3.5), so
-  a disagreement with an annotator is locatable as a convention difference, not diffused into general error. §4.5 locates two such groups.
+itself, none of them added afterwards to fit. Against **vocabulary scale**,
+predicates are configuration rather than code (§3.9), so extending the set
+does not touch the engine; that bounds the objection without defeating it,
+since a predicate with no geometric criterion cannot be specified at all.
+Against **systematic error**, the rules abstain and flag instead of guessing
+(§3.6), so an unreliable case becomes a countable review item rather than a
+confident wrong label repeated wherever the geometry repeats, and §4.7 prices
+that. Against **circular validation**, the structural guarantees are asserted
+by randomised invariant testing over synthetic scenes (§3.11), independent of
+the author's judgement about any image. Against the **reference frame**, the
+camera frame is committed to explicitly and stated with the rules (§3.5), so a
+disagreement is locatable as a convention difference rather than diffused into
+general error, and §4.5 locates two such groups.
 
 Three of the four are mitigations rather than refutations, and §7.4 reports
-what they proved to be worth. The fourth is the one the design could not
-settle on its own: invariant testing pins rule *consistency* but says nothing
-about rule *truth*, and establishing that took an instrument built
-specifically to attack the author's own verdicts (§4.14), which duly
-overturned one of them.
+what they proved to be worth. The fourth the design could not settle alone:
+invariant testing pins rule *consistency* and says nothing about rule *truth*,
+which took an instrument built to attack the author's own verdicts (§4.14),
+and it overturned one of them.

@@ -219,9 +219,6 @@ TABLES = {
         # 4.2
         "Per-predicate recall of the human triplets, pooled and on held-out "
         "annotators, against three baselines.",
-        # 4.4
-        "Manual audit of a stratified sample of extra predictions, with "
-        "Wilson intervals.",
         # 4.5
         "Front/behind by annotator group: emission rate, agreement where the "
         "tool commits, and the effect of aligning the direction convention.",
@@ -242,9 +239,9 @@ TABLES = {
         "tool did not emit, which a judge who agreed with everything would "
         "reject none of.",
         # 4.14, second table: the re-audit after the threshold was re-fitted
-        "The same audit repeated on labels produced by the re-fitted "
-        "threshold, drawn fresh from the new emissions rather than re-scored "
-        "from the old sample, so the comparison is between two independent "
+        "Per-predicate precision of the shipped tool: the re-fitted "
+        "threshold audited on a fresh draw, beside the superseded v3 column, "
+        "so the comparison is between two independent "
         "draws and not between two readings of one.",
     ],
     "chapter5_results_rq2.md": [
@@ -543,7 +540,7 @@ def figure_block(fname: str, caption: str) -> str:
     safe = tex_figname(fname)
     return "\n".join([
         r"\begin{figure}[htbp]", r"\centering",
-        r"\includegraphics[width=0.95\textwidth]{figures/" + safe + "}",
+        r"\includegraphics[width=0.80\textwidth]{figures/" + safe + "}",
         r"\caption{" + caption + "}",
         r"\label{fig:" + Path(safe).stem + "}",
         r"\end{figure}", ""])

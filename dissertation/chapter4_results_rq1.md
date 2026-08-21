@@ -59,17 +59,15 @@ These are population values, not sample estimates: every human triplet is
 scored. Whether another batch would give the same numbers is answered by a
 cluster bootstrap over images (`eval/uncertainty.py`, 2,000 resamples, whole
 images resampled so triplets sharing a scene, a depth map and an annotator
-stay together). The 95% intervals are narrow where the tool is strong, on
-0.812, left 0.965, right 0.985 and near 0.997, and materially wider on the
-depth pair, in front of 0.696 and behind 0.711; the bootstrap was run on the
-labels of §4.9 and its widths, not its centres, are what the argument uses. That is the signature of
-a predicate decided by scene composition, not a stable rule. Held-out
-intervals appear in §4.6.
+stay together). The 95% intervals are narrow where the tool is strong and
+materially wider on the depth pair, which is the signature of a predicate
+decided by scene composition rather than a stable rule; the bootstrap ran on
+the labels of §4.9 and its widths, not its centres, are what the argument
+uses. Held-out intervals appear in §4.6.
 
-Three observations. **(i)** The tool recovers 81% of all human triplets
-(7,276 of 8,926; mean 0.845, and 0.74 on annotators no threshold ever saw)
-against 14% for random and 23% for majority on that same triplet-weighted
-basis. The mean column above is per-predicate and puts majority at 0.14,
+Three observations. **(i)** The tool recovers 81% of all human triplets (7,276 of 8,926; mean
+0.845, and 0.74 on annotators no threshold ever saw) against 14% for random
+and 23% for majority on the same triplet-weighted basis. The mean column above is per-predicate and puts majority at 0.14,
 which is the right number for a per-predicate question and the wrong one for
 this comparison: guessing `in front of` everywhere recovers 2,013 of 8,926
 triplets because that predicate is a quarter of the gold. Both figures are
@@ -92,13 +90,12 @@ because two stray annotation files without matching images are excluded
 
 Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.93 on the
 support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair
-and 0.11 on `near`, against the recall column of §4.2 (full table in Appendix
-F.6). Every one of those figures is bounded below by construction: the human
-typically recorded one or two relations where several hold at once, a pair
-being near, left-of and in-front-of simultaneously. The `near` row is the
-extreme case, since the tool emits `near` wherever the fitted gap holds while
-only 3 of 9 annotator groups ever used the label. That is why the protocol
-includes the audit (§4.4) instead of reading these columns at face value.
+and 0.11 on `near` (full table in Appendix F.6). Every one is bounded below by
+construction: the human typically recorded one or two relations where several
+hold at once, a pair being near, left-of and in-front-of simultaneously.
+`near` is the extreme case, emitted wherever the fitted gap holds while only 3
+of 9 annotator groups ever used the label. That is why the protocol includes
+the audit (§4.4) instead of reading these columns at face value.
 
 
 ## 4.4 Manual audit of extra predictions (true-precision estimate)
@@ -116,15 +113,10 @@ support precision moves 0.13 → 0.77 on an unblinded re-audit, back to 0.40
 when the same rules are judged blind against decoys, and to 0.54 once the
 threshold that caused the over-emission is refitted and audited again.
 
-| Predicate | Correct / n | Precision est. | Wilson 95% CI |
-|---|---|---|---|
-| on | 1 / 15 | 0.07 | [0.01, 0.30] |
-| under | 3 / 15 | 0.20 | [0.07, 0.45] |
-| to the left of | 15 / 15 | 1.00 | [0.80, 1.00] |
-| to the right of | 15 / 15 | 1.00 | [0.80, 1.00] |
-| in front of | 15 / 15 | 1.00 | [0.80, 1.00] |
-| behind | 15 / 15 | 1.00 | [0.80, 1.00] |
-| near | 15 / 15 | 1.00 | [0.80, 1.00] |
+Support failed and nothing else did: `on` scored 1/15 and `under` 3/15
+(Wilson [0.01, 0.30] and [0.07, 0.45]), while the two laterals, the two depth
+predicates and `near` each scored 15/15 ([0.80, 1.00]). The per-item sheet is
+`outputs/audit/audit_sheet.csv`.
 
 The audit splits the predicates in two. For lateral, depth and proximity,
 **every sampled extra prediction was correct**: §4.3's low restricted
@@ -164,18 +156,17 @@ distinct causes:
    errors are rare.
 2. **Two annotator groups used the inverted convention.** Groups 6 and 8
    agree with the committed direction 2–5% of the time; flipping their labels
-   recovers 0.93/0.71, and aligned overall recall is 0.84 (alignment uses one
+   recovers 0.93/0.71 and aligned overall recall is 0.84 (alignment uses one
    disclosed bit per group, the majority direction of its own labels). After
-   `near`, this is a second measured annotation defect: the front/behind
-   convention was not applied uniformly. It is the reference-frame ambiguity
-   RoboSpatial formalises (§2.5), observed in the wild, with no frame
-   declared in the guidance and two teams resolving it oppositely.
-3. **The remaining gap is abstention, not error.** Groups 2 and 3 agree
-   almost perfectly when the tool commits, but their pairs sit inside the
-   `depth_eps` band *and* beyond the ground-plane fallback's reach (elevated
-   objects, near-tied bottom edges), so the tool abstains: emit rates 0.58
-   and 0.54, roughly doubled by the fallback from 0.30 and 0.08. The
-   `depth_eps` and `plane_band` sweeps trade this against precision.
+   `near`, this is a second measured annotation defect, and it is the
+   reference-frame ambiguity RoboSpatial formalises (§2.5) observed in the
+   wild, with no frame declared in the guidance and two teams resolving it
+   oppositely.
+3. **The remaining gap is abstention, not error.** Groups 2 and 3 agree almost
+   perfectly when the tool commits, but their pairs sit inside the `depth_eps`
+   band *and* beyond the ground-plane fallback's reach, so the tool abstains:
+   emit rates 0.58 and 0.54, roughly doubled by the fallback. The `depth_eps`
+   and `plane_band` sweeps trade this against precision.
 
 ## 4.6 The tenth annotator, and what the annotators would score against each other
 
@@ -214,15 +205,11 @@ they are.
 reference and applying the Fréchet inequalities across all 21 pairs of
 consistent annotators places annotator-to-annotator agreement in
 **[0.74, 0.92]**, an interval containing the tool's own mean agreement of
-**0.869** (Appendix F.7). The bound is the loosest available and rests on an
-assumption the batches actively undermine: they differ by threefold in object
-density, from 4.47 objects per frame in group 4 to 14.30 in group 1, so two
-annotators' agreement rates with a common reference were not earned on
-comparable work and the step that treats them as exchangeable is unsafe. What
-the interval supports is therefore a *failure to distinguish* the tool from a
-tenth annotator, and a weak one — not a demonstration that it is one, and not
-a number to quote on its own. The independent study of Appendix E.3 is what
-would test the precision claim without the assumption.
+**0.869**. These are the loosest bounds available, and they assume the
+batches are exchangeable when they differ threefold in object density, so the
+interval supports a weak *failure to distinguish* the tool from a tenth
+annotator and not a demonstration that it is one. Appendix F.7 derives it and
+sets out why the assumption is false rather than merely unverified.
 
 ## 4.7 Flags: the honest human cost
 
@@ -230,14 +217,12 @@ would test the precision claim without the assumption.
 before the ground-plane fallback, which resolved a third of the depth
 abstentions) and lateral-ambiguous 10.0% are *abstentions* (no label emitted;
 nothing to review), while the borderline-near band, 8.5% of pairs, is the
-genuine review queue. At a conservative 3 seconds per queued pair this is
-≈6 hours of review for the full dataset, versus the original nine-annotator
-manual pass. And it is optional, not required, for the fidelity reported
-above. The guidance the annotators worked from, confirmed at the
-SGDET-Annotate repository, is vocabulary lists only: object names and 19
-relationship terms, no operational definitions, so Chapter 3's specification
-is not a re-implementation but the first operational definition of these
-predicates (§7.3 draws that out).
+genuine review queue. At a conservative 3 seconds per queued pair this is ≈6 hours of review for
+the full dataset against the original nine-annotator manual pass, and it is
+optional rather than required for the fidelity reported above. The guidance
+the annotators worked from is vocabulary lists only, so Chapter 3's
+specification is the first operational definition of these predicates, which
+§7.3 draws out.
 
 
 ## 4.8 Answer to RQ1
@@ -245,16 +230,14 @@ predicates (§7.3 draws that out).
 Automated annotation reaches human-comparable quality on five of seven
 predicates outright, at 0.75–1.00 recall, mean 0.85 and 0.74 on annotators no
 threshold ever saw, with blind-audited true precision 0.79–1.00 for lateral,
-proximity and depth-decided front/behind. Those five rest on 24 samples each,
-so the point estimates are firm only to within intervals reaching 0.74 at the
-lower end, and the claim they support is comparability, not a
-particular value. Support is the exception and is answered separately: 0.535
-[0.42, 0.65] on 71 samples of the shipped rule, up from a measured 0.404
-before §4.14 traced the shortfall to a threshold fitted on a metric that could
-not see the error it controls, and re-fitted it.
-One of the five is `near`, matched completely once its inconsistent usage is
-accounted for (0.997 pooled, 1.00 held-out), which resolves the predicate the
-source paper reports as failing for every model it benchmarks (§2.2). The
+proximity and depth-decided front/behind, each on 24 samples, so the claim
+they support is comparability rather than a particular value. Support is the
+exception and is answered separately: 0.535 [0.42, 0.65] on 71 samples of the
+shipped rule, up from 0.404 before §4.14 traced the shortfall to a threshold
+fitted on a metric that could not see the error it controls. One of the five
+is `near`, matched completely once its inconsistent usage is accounted for
+(0.997 pooled, 1.00 held-out), resolving the predicate the source paper
+reports as failing for every model it benchmarks (§2.2). The
 qualification is the depth pair, at 0.70/0.71 pooled and 0.84 once the two
 inverted groups are aligned; §4.5 decomposes that shortfall into calibrated
 abstention and a convention the annotators did not share, in measured
@@ -308,13 +291,13 @@ individual conditions against the cached geometry and mask-contact maps
 `outputs/failure_gallery/`). Appendix D.7 breaks the 1,689 misses of the
 shipped rule set down by predicate and cause.
 
-Genuine depth-ordering errors remain 1–5% of front/behind misses; the support
-misses are threshold/gate trades on real contact evidence, not
-box-geometry artefacts; and `near` misses have all but vanished. The
-convention-inverted *share* grew (38–42%, from 28–32%) not because those
-misses increased but because the ground-plane fallback shrank the abstention
-share around them; total misses fell from 2,107 to 1,689. Misses
-attributable to avoidable tool error across all seven predicates: ~7%.
+Genuine depth-ordering errors remain 1–5% of front/behind misses, the support
+misses are threshold trades on real contact evidence rather than box-geometry
+artefacts, and `near` misses have all but vanished. The convention-inverted
+*share* grew to 38–42% not because those misses increased but because the
+ground-plane fallback shrank the abstention share around them, total misses
+falling from 2,107 to 1,689. Misses attributable to avoidable tool error
+across all seven predicates: ~7%.
 
 
 ## 4.11 Detector-in-the-loop: full automation, attributed
@@ -337,14 +320,12 @@ well-separated objects). The gap is a detection problem, not a relations one:
 the rules are detector-agnostic.
 
 Two honest notes. Zero-shot open-vocabulary detection is the worst-case
-detector, exactly the reach-versus-per-class-recall trade §2.6 identifies,
-and it was used because the authors' trained YOLOv10m weights (0.93 mAP@50 in
-the source paper) were not available; with that detector the end-to-end gap
-would largely close. And the 20-image trial over-estimated detection quality
-(its scenes come from one annotator batch), a reminder that the full-set
-numbers are the ones that matter. The same attribution holds on two
-out-of-domain video clips, where every visible failure is again a detection
-failure (Appendix E.4).
+detector, the trade §2.6 identifies, and it was used because the authors'
+trained YOLOv10m weights were not available; with those the end-to-end gap
+would largely close. And the 20-image trial over-estimated detection quality,
+its scenes coming from one annotator batch. The same attribution holds on two
+out-of-domain clips, where every visible failure is again a detection failure
+(Appendix E.4).
 
 
 
@@ -393,10 +374,8 @@ object-matching rule and the coverage figures.
 
 Skipping frames costs nothing measurable: mean recall under propagation is
 0.832 against 0.829 per frame, and the ordering holds at every threshold
-tested (0.862 against 0.855 at τ = 20, a 4.0× reduction). The small advantage
-is likely an artefact of the selection rule, the segment representative being
-the frame nearest the segment mean and so less likely to be caught
-mid-transition.
+tested. The small advantage is likely an artefact of the selection rule, the
+segment representative being the frame nearest the segment mean.
 
 **The first column holds the finding, and it is not the expected one.**
 Front/behind was the predicted loser, on the assumption its errors are depth
@@ -474,11 +453,11 @@ wrong and how often it declines, and only the first is a claim about spatial
 competence. What it is bad at is *exhaustiveness*; where it speaks it is
 roughly as good as the geometry.
 
-That is not a defence of the model as an annotator, because exhaustiveness is
-the property this project exists to supply and a source that skips 45% of the
+That is not a defence of the model as an annotator, since exhaustiveness is
+the property this project exists to supply and a source skipping 45% of the
 pairs cannot deliver it. But the fair statement is that the pipeline beats it
-on coverage and matches it on judgement, which is weaker than the recall
-column alone suggests and is the version this dissertation should be held to.
+on coverage and matches it on judgement, which is the version this
+dissertation should be held to.
 
 The shape of the failure settles the question. Neither model contradicts
 itself or inverts the front/behind convention; what they do is fall silent,
@@ -503,17 +482,13 @@ removed at once.
 
 **Design.** 242 items: 214 claims the tool emitted and **28 decoys**,
 relations it did *not* emit and no annotator labelled, mixed in unmarked. The
-decoys are the instrument. Every item in the earlier sheets was a tool
-assertion, so an auditor who simply agreed would have scored 100% and looked
-calibrated; here that auditor scores zero on the decoys. Sampling enforces
-independence the earlier sheets lacked: at most one claim per (annotator
-group, subject class, object class), because §4.12 establishes each group is
-one continuous walk holding one arrangement, so two claims from a group can
-otherwise be the same physical relation seen twice. The shipped class guard is
-applied, so nothing is audited the tool would no longer emit. The sheet is
-shuffled and the key held separately. The same 242 images, with the same
-definitions and the same instruction to answer wrong when unsure, were put to
-`gemini-3.6-flash` as an independent second judge (`scripts/judge_audit_vlm.py`).
+decoys are the instrument: every item in the earlier sheets was a tool
+assertion, so an auditor who simply agreed scored 100% and looked calibrated,
+where here that auditor scores zero. Sampling, the class guard and the
+separation of sheet from key are in Appendix E.7. The same 242
+images, with the same definitions and the same instruction to answer wrong
+when unsure, were put to `gemini-3.6-flash` as an independent second judge
+(`scripts/judge_audit_vlm.py`).
 
 | Predicate | Author | Model |
 |---|---|---|
@@ -576,10 +551,9 @@ annotators themselves used inconsistently, and it is reported and not
 corrected because the same conservative instruction governed both judges.
 
 **Most of the drop is the blinding, not the sample.** The same rules on the
-same data scored 0.77 unblinded (§4.9) and 0.404 blind. In the earlier sheet
-every row was known to be a tool emission, and that knowledge is a prior the
-decoys remove. The rest of the gap is the independence rule, which stops one
-easy arrangement being counted several times.
+same data scored 0.77 unblinded (§4.9) and 0.404 blind, because every row of
+the earlier sheet was known to be a tool emission and that knowledge is a
+prior the decoys remove. The rest is the independence rule.
 
 **The cause is a threshold fitted where its error was invisible.** Sorted by
 the contact fraction the rule fires on, audited claims below 0.85 are correct
@@ -609,25 +583,30 @@ section reports, because a projection from held-out items selected under the
 emissions instead — 219 items, 191 claims and 28 decoys, same construction,
 same blinding, same two judges — and audited independently.
 
-| | audit v3 (0.60) | audit v4 (0.85) |
-|---|---|---|
-| support, author | 0.404 [0.31, 0.51] | **0.535 [0.42, 0.65]** |
-| support, model | 0.638 [0.54, 0.73] | **0.831 [0.73, 0.90]** |
-| `on` / `under`, author | 0.372 / 0.431 | **0.452 / 0.600** |
-| decoys rejected, author | 19/28 = 0.679 | **27/28 = 0.964** |
-| decoys rejected, model | 24/28 = 0.857 | **26/28 = 0.929** |
+| Predicate | v3 author | v4 author (shipped) | v4 model |
+|---|---|---|---|
+| on | 0.372 | **14/31 0.452 [0.29, 0.62]** | 24/31 0.774 [0.60, 0.89] |
+| under | 0.431 | **24/40 0.600 [0.45, 0.74]** | 35/40 0.875 [0.74, 0.95] |
+| to the left of | 0.917 | **23/24 0.958 [0.80, 0.99]** | 24/24 1.000 [0.86, 1.00] |
+| to the right of | 0.958 | **24/24 1.000 [0.86, 1.00]** | 24/24 1.000 [0.86, 1.00] |
+| in front of | 0.958 | **21/24 0.875 [0.69, 0.96]** | 23/24 0.958 [0.80, 0.99] |
+| behind | 0.917 | **23/24 0.958 [0.80, 0.99]** | 22/24 0.917 [0.74, 0.98] |
+| near | 1.000 | **19/24 0.792 [0.60, 0.91]** | 16/24 0.667 [0.47, 0.82] |
+| **support pooled** | 0.404 | **38/71 0.535 [0.42, 0.65]** | 59/71 0.831 [0.73, 0.90] |
+| decoys rejected | 19/28 0.679 | **27/28 0.964 [0.82, 0.99]** | 26/28 0.929 [0.77, 0.98] |
+
+The middle column is the shipped tool, and the 0.79–1.00 range quoted for the
+non-support predicates elsewhere is `near` at its floor and `to the right of`
+at its ceiling.
 
 **The change is confirmed and the projection was optimistic.** Both judges
 record a large improvement on an independent draw, and both record it below
-what the held-out fit predicted: 0.535 against 0.667 by the author's verdicts.
-Held-out support recall falls from 0.92 to 0.843 in exchange. A threshold
-fitted on one audit and validated on the next is as far as this design can go
-towards an unbiased estimate, and the gap between the two numbers is the price
-of the extrapolation the earlier draft would have quoted.
+the 0.667 the held-out fit predicted, held-out support recall falling from
+0.92 to 0.843 in exchange. Fitting on one audit and validating on the next is
+as far as this design can go towards an unbiased estimate, and the gap between
+the two numbers is the price of the extrapolation the earlier draft quoted.
 
-The auditor also improved, which matters for reading both columns. Nine of 28
-decoys were accepted in v3 and one in v4, so the second sheet is the work of a
-stricter judge than the first; the model's decoy rejection rose over the same
-interval, 0.857 to 0.929, which suggests the v4 pack is also easier to judge.
-Neither reading rescues the support figure: at 0.535 the labels the tool adds
-beyond the human record on this predicate are right about half the time.
+The auditor also improved between the two packs, which Appendix E.7 reads in
+full. Neither that nor the model's parallel movement rescues the support
+figure: at 0.535 the labels the tool adds beyond the human record on this
+predicate are right about half the time.

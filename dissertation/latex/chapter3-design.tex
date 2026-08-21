@@ -3,13 +3,13 @@ This chapter sets out how the project was conducted and why the annotator is bui
 
 \section{Research methodology}
 
-Three process models dominate data-science practice. \textbf{KDD} (Fayyad, Piatetsky-Shapiro and Smyth, 1996) frames the work as a nine-step pipeline from selection through transformation to interpretation, oriented at discovering patterns in existing databases. \textbf{SEMMA} (Sample, Explore, Modify, Model, Assess), associated with the SAS toolchain, compresses this into five tool-centred stages and says little about the surrounding business problem. \textbf{CRISP-DM} (Wirth and Hipp, 2000) adds two things the others lack: an explicit \textit{Business Understanding} phase before any data is touched, and an explicit cycle in which evaluation results feed back into earlier phases. Azevedo and Santos (2008) compare the three and observe that CRISP-DM is effectively a superset of SEMMA and an implementation of KDD with stronger process guidance.
+Three process models dominate data-science practice. \textbf{KDD} (Fayyad, Piatetsky-Shapiro and Smyth, 1996) frames the work as a nine-step pipeline oriented at discovering patterns in existing databases, and \textbf{SEMMA} compresses that into five tool-centred stages while saying little about the surrounding problem. \textbf{CRISP-DM} (Wirth and Hipp, 2000) adds two things both lack: an explicit \textit{Business Understanding} phase before any data is touched, and a cycle in which evaluation feeds back into earlier phases. Azevedo and Santos (2008) find it effectively a superset of SEMMA and an implementation of KDD with stronger process guidance.
 
-CRISP-DM was chosen for two concrete reasons. The motivating problem is not pattern discovery but an engineering question posed by a dataset's own authors, so a phase pinning the business problem (the annotation bottleneck, Chapters 1--2) before modelling is structurally necessary. Decisively, the project's actual course followed CRISP-DM's evaluation-to-modelling loop in a way the linear models do not describe: the audit of support-rule precision (Chapter 4) sent the work back to modelling twice, a depth gate then a mask-contact test, each pass re-validated on held-out annotators. \S{}1.3 maps every phase to a concrete part of this dissertation, including the two findings that came straight out of Data Understanding: the stored image orientation and the three measured annotator behaviours. Ethical considerations are summarised in \S{}1.3 and detailed in Appendix A.
+CRISP-DM was chosen for two concrete reasons. The motivating problem is an engineering question posed by a dataset's own authors rather than pattern discovery, so a phase pinning the business problem before modelling is structurally necessary. Decisively, the project's course followed CRISP-DM's evaluation-to-modelling loop in a way the linear models do not describe: the audit of support-rule precision sent the work back to modelling twice, a depth gate then a mask-contact test, each pass re-validated on held-out annotators. \S{}1.3 maps every phase to a part of this dissertation, including the two findings that came out of Data Understanding, and summarises the ethical considerations detailed in Appendix A.
 
 \section{Problem analysis}
 
-The task is to produce, from a raw robot-acquired RGB image, the same artefact a human annotator produces with SGDET-Annotate: a scene graph over the dataset's six object classes with the seven spatial predicates (\textit{on, under, to the left of, to the right of, in front of, behind, near}) exported in Visual Genome JSON, YOLO txt and h5. Four requirements shape the design:
+The task is to produce, from a raw robot-acquired RGB image, the same artefact a human annotator produces with SGDET-Annotate: a scene graph over the six object classes with the seven spatial predicates, exported in Visual Genome JSON, YOLO txt and h5. Four requirements shape the design:
 
 \begin{enumerate}
 \item \textbf{No human decides any label.} The point is to remove the per-image human
@@ -25,12 +25,12 @@ rule changes re-evaluable without re-running perception.
 Three properties of the dataset, established in Chapter 2 and verified directly on the released files, drive specific design responses:
 
 \begin{itemize}
-\item \textbf{Monocular RGB only.} No metric depth exists, so depth must be estimated,
-and estimated depth is \textit{relative and per-image} (Yang, L. et al., 2024). Design response: all depth comparisons are ordinal and within-image; no rule consumes absolute depth.
+\item \textbf{Monocular RGB only.} No metric depth exists and estimated depth is
+\textit{relative and per-image} (Yang, L. et al., 2024), so all depth comparisons are ordinal and within-image and no rule consumes absolute depth.
 \item \textbf{Sparse annotation.} Humans labelled \textasciitilde{}10\% of object pairs *(measured:
-6,458 annotated of 42,440 unordered pairs)*. Design response: the tool labels every pair (density is the value added), and the evaluation protocol treats human labels as a recall target, not an exhaustive gold standard.
-\item \textbf{Inconsistent \texttt{near}.} The source paper flags this qualitatively; measured,
-only 3 of 9 annotator groups ever used \texttt{near} (244/129/93 labels; the rest 0--3), and those three each labelled a different fraction of equally-close pairs. Design response: a fitted, annotator-aware threshold (\S{}3.8) rather than agreement with a consensus that does not exist.
+6,458 of 42,440 unordered pairs)*, so the tool labels every pair, density being the value added, and the protocol treats human labels as a recall target rather than an exhaustive gold standard.
+\item \textbf{Inconsistent \texttt{near}.} Only 3 of 9 annotator groups ever used \texttt{near}
+(244/129/93 labels; the rest 0--3), and those three each labelled a different fraction of equally-close pairs, so the threshold is fitted and annotator-aware (\S{}3.8) rather than matched to a consensus that does not exist.
 \end{itemize}
 
 \section{Design principle: compute, don't predict}
@@ -121,7 +121,7 @@ Results \textit{(measured)}: fitted \textbf{T = 1.372} (gap/mean-size units); he
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.95\textwidth]{figures/near-T-sweep.png}
+\includegraphics[width=0.80\textwidth]{figures/near-T-sweep.png}
 \caption{Fitting the \texttt{near} threshold. Recall against all annotators and against the held-out annotator, with restricted precision. The fitted value is the tightest threshold at the plateau.}
 \label{fig:near-T-sweep}
 \end{figure}
@@ -146,29 +146,18 @@ A single parameter spans two uses. Small $\tau$ isolates near-duplicates, so eac
 
 \section{Reproducibility by construction}
 
-Reproducibility here is a design property, not a documentation exercise, because three of the four requirements in \S{}3.2 are unverifiable without it: a threshold cannot be said to be fitted on groups 0-5 if nobody else can refit it, and an ablation is an assertion unless the reader can re-run the arm it removes.
+Reproducibility here is a design property rather than a documentation exercise, because three of the four requirements in \S{}3.2 are unverifiable without it: a threshold is not fitted on groups 0-5 if nobody else can refit it, and an ablation is an assertion unless the reader can re-run the arm it removes.
 
 \textbf{Configuration and caching.} Every threshold, seed and model identifier lives in \texttt{configs/default.yaml}, so no constant is buried in a function, and the runner caches each object's lifted geometry after the single GPU pass. That separates the expensive stage from the cheap one: any rule or threshold change re-evaluates the whole dataset offline in about 20 seconds with no GPU (\texttt{scripts/reannotate\_\allowbreak{}from\_\allowbreak{}cache.py}) against roughly five minutes for a full perception run, which is what made the audit-driven rule repairs of Chapter 4 affordable and let the ablation battery run as a sweep.
 
-\textbf{Test strategy.} The suite is 66 tests running in about a second, which is deliberate: a suite slow enough to skip constrains nothing. Worked examples from the predicate specification are encoded as unit tests over the rule layer, so specification and code cannot drift apart silently; a randomised invariant test fuzzes two thousand synthetic scenes and asserts the structural guarantees \S{}3.6 promises, which a later rule edit would otherwise break quietly; and the rest cover the format writers, the detector adapters of \S{}3.9, frame selection and the reply parsers.
+\textbf{Test strategy.} The suite is 66 tests running in about a second, which is deliberate: a suite slow enough to skip constrains nothing. Worked examples from the predicate specification are encoded as unit tests over the rule layer so the two cannot drift apart silently, a randomised invariant test fuzzes two thousand synthetic scenes against the structural guarantees \S{}3.6 promises, and the rest cover the format writers, the detector adapters of \S{}3.9, frame selection and the reply parsers.
 
-\textbf{Environment.} Python 3.11 with CUDA torch 2.5.1, pinned, and the one genuinely awkward step documented, not left to be rediscovered: installing SAM2 can silently replace the CUDA build of torch with a CPU wheel, so the pipeline still runs, produces identical labels, and takes an order of magnitude longer, which is the worst class of failure because nothing reports it. A container applies the same fix at build time, and a smoke test verifies on first setup that both models load, that CUDA is in use, and that peak memory sits inside the 6 GB budget of requirement 3. Appendix B gives the full walk-through, and the repository is public.
+\textbf{Environment.} Python 3.11 with CUDA torch 2.5.1, pinned, and the one genuinely awkward step documented rather than left to be rediscovered: installing SAM2 can silently replace the CUDA build of torch with a CPU wheel, so the pipeline still runs, produces identical labels and takes an order of magnitude longer, which is the worst class of failure because nothing reports it. A smoke test verifies on first setup that both models load, that CUDA is in use, and that peak memory sits inside the 6 GB budget. Appendix B gives the walk-through, and the repository is public.
 
 \section{Summary of design decisions}
 
 Every decision above shares one shape: an alternative was available, it was rejected for a stated reason, and where that reason is a measurement rather than a judgement the measurement is named. Four were settled by evidence that arrived \textit{after} the decision and could have overturned it, which is the test of whether a justification is real: the Small depth model against ablation A8, the relative-gap \texttt{near} metric against the centroid variants, masks against box-only geometry, and the ground-plane fallback against its own contact guard. Each is reported where it was measured (\S{}4.9, Appendix D). Appendix F.3 tabulates all eleven decisions with the alternative each displaced.
 
-The decisions also answer the four objections \S{}2.9 directs at the method itself, and it is worth naming which answers which, because none was added afterwards to fit the objection:
+The decisions also answer the four objections \S{}2.9 directs at the method itself, none of them added afterwards to fit. Against \textbf{vocabulary scale}, predicates are configuration rather than code (\S{}3.9), so extending the set does not touch the engine; that bounds the objection without defeating it, since a predicate with no geometric criterion cannot be specified at all. Against \textbf{systematic error}, the rules abstain and flag instead of guessing (\S{}3.6), so an unreliable case becomes a countable review item rather than a confident wrong label repeated wherever the geometry repeats, and \S{}4.7 prices that. Against \textbf{circular validation}, the structural guarantees are asserted by randomised invariant testing over synthetic scenes (\S{}3.11), independent of the author's judgement about any image. Against the \textbf{reference frame}, the camera frame is committed to explicitly and stated with the rules (\S{}3.5), so a disagreement is locatable as a convention difference rather than diffused into general error, and \S{}4.5 locates two such groups.
 
-\begin{itemize}
-\item \textbf{Rules do not scale with the vocabulary.} Predicates are configuration
-rather than code, a specification the rule engine reads (\S{}3.9), so extending the set does not touch the engine. This bounds the objection; it does not defeat it, since a predicate with no geometric criterion cannot be specified at all.
-\item \textbf{Systematic error is worse for training than random error.} The rules
-abstain and flag instead of guessing (\S{}3.6), so an unreliable case becomes a countable review item, not a confident wrong label repeated wherever the geometry repeats. \S{}4.7 prices what that abstention costs.
-\item \textbf{Validating one's own labelling functions is circular.} The structural
-guarantees are asserted by randomised invariant testing over synthetic scenes (\S{}3.11), which is independent of the author's judgement about any particular image.
-\item \textbf{The reference frame is a decision, not a fact.} The camera frame is
-committed to explicitly and the convention stated with the rules (\S{}3.5), so a disagreement with an annotator is locatable as a convention difference, not diffused into general error. \S{}4.5 locates two such groups.
-\end{itemize}
-
-Three of the four are mitigations rather than refutations, and \S{}7.4 reports what they proved to be worth. The fourth is the one the design could not settle on its own: invariant testing pins rule \textit{consistency} but says nothing about rule \textit{truth}, and establishing that took an instrument built specifically to attack the author's own verdicts (\S{}4.14), which duly overturned one of them.
+Three of the four are mitigations rather than refutations, and \S{}7.4 reports what they proved to be worth. The fourth the design could not settle alone: invariant testing pins rule \textit{consistency} and says nothing about rule \textit{truth}, which took an instrument built to attack the author's own verdicts (\S{}4.14), and it overturned one of them.

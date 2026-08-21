@@ -11,24 +11,17 @@ objective-by-objective audit belongs with the conclusions and is in §9.1.
 
 **RQ1** asked whether spatial-relationship annotation can be automated at a
 quality comparable to human annotation. The answer is predicate-shaped rather
-than singular. For the lateral and proximity predicates the tool is, by every
-measure available, *at least* as good as the human process: 0.97–0.998 recall,
-blind-audited precision 0.79–1.00, and for `near` a recall of 1.00 held-out
-against the one annotator who used the label and never influenced the
-threshold. For
-support, after two evidence upgrades motivated by measurement (depth
-co-location, mask contact), recall is 0.81/0.75, but the claim stops there:
-blind-audited precision is 0.535 [0.42, 0.65] after the threshold repair of
-§4.14, up from 0.404 before it, so the labels the tool adds beyond the human
-record are trustworthy for five predicates and right about half the time for
-this one. For the depth pair the cascade of relative depth
-and the ground-plane fallback reaches 0.70/0.71 pooled (0.84 once the two
-inverted-convention groups are aligned), and where the tool commits it agrees
-at 0.95–1.00 with six of the seven same-convention annotators, the seventh
-being the dataset's smallest sample at 65 triplets; the remaining shortfall
-is calibrated abstention plus that inverted direction convention.
-"Comparable to human quality" understates that case: on front/behind the tool
-is more consistent than the human process it is measured against.
+than singular, and §9.1 states it against the criteria of §1.2.2; what matters
+here is its shape. For the lateral and proximity predicates the tool is by
+every measure available *at least* as good as the human process. For support
+it is not: two evidence upgrades motivated by measurement lifted recall, but
+blind-audited precision stops the claim at about half the labels the tool adds
+beyond the human record. For the depth pair the shortfall is calibrated
+abstention plus an inverted direction convention rather than error, and where
+the tool commits it agrees at 0.95–1.00 with six of the seven same-convention
+annotators. "Comparable to human quality" understates that case: on
+front/behind the tool is more consistent than the human process it is
+measured against.
 
 **RQ2** asked whether the automatic labels can train a relation model as well
 as human labels. The controlled experiment answered more strongly than the
@@ -42,14 +35,13 @@ the project's premise from "removing the bottleneck loses little" to "removing
 the bottleneck gains".
 
 That claim is scoped by the third measurement rather than confirmed by it.
-Chapter 6 puts the same two label sources through the source paper's own
-framework and cannot separate them, 0.292 against 0.293 over three seeds, so
-the advantage the classifier measures does not appear on a ranked metric
-scored against sparse human annotation. Both results are about the same
-labels; what differs is what each yardstick asks for, and §6.4 spends the
-chapter on that difference. The defensible sentence is that automatic labels
-*teach better where correctness is the criterion and equally well where
-resemblance to the annotators is*, not that they are simply better.
+Chapter 6 cannot separate the same two label sources in the source paper's own
+framework, so the advantage the classifier measures does not appear on a
+ranked metric scored against sparse human annotation. Both results are about
+the same labels; what differs is what each yardstick asks for. The defensible
+sentence is that automatic labels *teach better where correctness is the
+criterion and equally well where resemblance to the annotators is*, not that
+they are simply better.
 
 The third arm is what makes that claim hard to dismiss. Self-training on the
 human labels, the standard semi-supervised remedy for exactly this problem,
@@ -198,19 +190,13 @@ not name. A controlled comparison has to control the code as explicitly as it
 controls the data, by pinning versions and training every arm in one session;
 §6.3 now does, and its figures supersede the earlier ones.
 
-That weakness was acted on rather than only recorded, and the sequence is the
-part worth carrying forward. Section 4.14 traced the support result to a
-threshold fitted on train F1 against gold covering a tenth of pairs, where a
-false positive outside the gold was free. The threshold was re-fitted on the
-audited claims from the training annotators, shipped, every experiment re-run
-against the new labels, and a second pack drawn from those labels and audited
-blind. Support precision moved from a measured 0.404 to a measured 0.535, and
-the decoy control moved with it: 27 of 28 rejected against 19 of 28 first
-time. The held-out fit had predicted 0.667, so the loop also priced its own
-extrapolation at about 0.13. The lesson is not the number but the order — a
-threshold worth changing is worth re-auditing on labels it produced, because
-the estimate that justifies a change is not evidence for it. The
-SGDet **threshold tuning used one
+That weakness was acted on rather than only recorded, and §4.14 gives the
+sequence: the support threshold had been fitted where a false positive outside
+the gold was free, so it was re-fitted, shipped, every experiment re-run, and a
+second pack drawn from the new labels and audited blind. The lesson is not the
+number but the order — a threshold worth changing is worth re-auditing on
+labels it produced, because the estimate that justifies a change is not
+evidence for it. The SGDet **threshold tuning used one
 disclosed iteration on a trial slice** that over-estimated full-set detection
 quality, an instructive case of trial-set optimism; and invariant fuzzing pins
 rule consistency but not rule *truth*, which only the audits address.
@@ -302,21 +288,16 @@ it as the limitation most likely to matter to anyone reusing the method.
 
 **Systematic error: partly confirmed, partly refuted, and the split is
 informative.** The objection predicts that a downstream model absorbs the
-rule's blind spot as though it were fact. Chapter 6 is that prediction
-coming true and is reported as such: the auto-trained arm ranks below the
-human-trained one on the metric the field uses, and the gap is concentrated
-where the annotation itself is defective. But the objection also predicts
-that consistent-but-wrong supervision is worse than inconsistent human
-supervision, and on this dataset that is refuted at every level where the
-question was asked, by a factor of two and a half in the controlled
-experiment and by a planner that clears the occluder in 19 of 25 scenes on
-the tool's relations alone and 25 of 25 on their union with the
-vision-language model's (§5.7)
-against 0 with no relations at all. The reconciliation is that systematic
-error is worse than random error only when it is *wrong*; §4.12's finding
-that front/behind agrees with itself across viewpoints 0.958 of the time
-while agreeing with the annotators 0.70 of the time is the shape of a
-consistent rule meeting a different convention, not of a consistent mistake.
+rule's blind spot as though it were fact, and Chapter 6 is that prediction
+coming true: the gap on the field's own metric is concentrated where the
+annotation itself is defective. But the objection also predicts that
+consistent-but-wrong supervision is worse than inconsistent human supervision,
+and on this dataset that is refuted at every level where the question was
+asked (§5.6, §5.7). The reconciliation is that systematic error is worse than
+random error only when it is *wrong*; §4.12's finding that front/behind agrees
+with itself across viewpoints 0.958 of the time while agreeing with the
+annotators 0.70 of the time is the shape of a consistent rule meeting a
+different convention, not of a consistent mistake.
 
 **Circular validation: conceded.** Section 7.4 already lists this first
 among the choices a stricter replication should improve, and no result in

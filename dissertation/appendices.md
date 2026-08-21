@@ -1097,46 +1097,6 @@ real relations to the objects around it. And items outside the prompt list
 snap to the nearest prompted class: an earbuds case is labelled a `cup`.
 Neither is corrected, and both are present in the released overlays.
 
-### E.6 The scale run: timing and the distribution check
-
-Throughput and density in Chapter 4 are measured on the 836 annotated images,
-which leaves the claim that the method extends to new captures resting on an
-extrapolation. The 1,766 unannotated frames of the raw sequence (§4.12,
-Appendix A) remove that gap: robot output nobody has labelled, from the same
-platform but later in the session, with arrangements the tool has never been
-shown. Content-adaptive selection reduces them to 562 keyframes, 3.1×, at
-6.15 s per frame on the RTX 2060, finishing in 58 minutes against just over
-three hours for every frame (`outputs/extension_scale.json`). The run emits
-185,242 triplets, 330 per frame, with no empty graph anywhere, against the
-human process's 8,926 triplets across 836 images. The risk with unfamiliar
-input is not loud failure but quiet drift, a pipeline still emitting labels
-whose distribution has silently changed, and that does not happen: against the
-same detector on the annotated images the predicate distribution shifts by a
-total variation distance of 0.032, largest single move 0.015.
-
-What this demonstrates is capacity and stability, not correctness. There is no
-ground truth and no accuracy claim is made; establishing correctness on this
-portion needs labels that do not exist, and §4.12's viewpoint-consistency
-measurement is the closest available substitute, being a check on
-self-agreement rather than on truth. Two figures above need accounting for.
-
-*Yield and detections.* The run averages 330 triplets per frame from 11.7
-detected objects, and the human process recorded about 11 triplets per image.
-
-*Timing.* 6.15 s per frame is 586 frames per hour. It includes writing an inspection overlay per
-frame to make the output checkable by eye. Annotation is roughly half of it,
-so a JSON-only deployment run would land near 3.3 s per frame. The measured
-figure leads above because it is the one the repository reproduces.
-
-*The two distribution differences.* The largest predicate shift is *in front
-of*, 0.181 to 0.195. The `on`/`under` share is low in both runs, 0.006
-annotated against 0.003 here, which is a property of open-vocabulary
-detection rather than of the new frames: more detections means more pairs,
-and most pairs are not in contact. Density per frame is lower for the same
-reason in reverse, 330 against 633 triplets, since the later arrangements
-hold fewer objects (11.7 detections against 16.9) and pair count grows with
-the square.
-
 ### E.5 The planner experiment: prompt construction and scoring rules
 
 Section 5.7 reports the design in outline and the result. Two components
@@ -1182,6 +1142,76 @@ scorer measures what it claims to: a rule-based judge inherits whatever its
 author failed to anticipate, and the hand-read sample is what exposed this
 one.
 
+
+### E.6 The scale run: timing and the distribution check
+
+Throughput and density in Chapter 4 are measured on the 836 annotated images,
+which leaves the claim that the method extends to new captures resting on an
+extrapolation. The 1,766 unannotated frames of the raw sequence (§4.12,
+Appendix A) remove that gap: robot output nobody has labelled, from the same
+platform but later in the session, with arrangements the tool has never been
+shown. Content-adaptive selection reduces them to 562 keyframes, 3.1×, at
+6.15 s per frame on the RTX 2060, finishing in 58 minutes against just over
+three hours for every frame (`outputs/extension_scale.json`). The run emits
+185,242 triplets, 330 per frame, with no empty graph anywhere, against the
+human process's 8,926 triplets across 836 images. The risk with unfamiliar
+input is not loud failure but quiet drift, a pipeline still emitting labels
+whose distribution has silently changed, and that does not happen: against the
+same detector on the annotated images the predicate distribution shifts by a
+total variation distance of 0.032, largest single move 0.015.
+
+What this demonstrates is capacity and stability, not correctness. There is no
+ground truth and no accuracy claim is made; establishing correctness on this
+portion needs labels that do not exist, and §4.12's viewpoint-consistency
+measurement is the closest available substitute, being a check on
+self-agreement rather than on truth. Two figures above need accounting for.
+
+*Yield and detections.* The run averages 330 triplets per frame from 11.7
+detected objects, and the human process recorded about 11 triplets per image.
+
+*Timing.* 6.15 s per frame is 586 frames per hour. It includes writing an inspection overlay per
+frame to make the output checkable by eye. Annotation is roughly half of it,
+so a JSON-only deployment run would land near 3.3 s per frame. The measured
+figure leads above because it is the one the repository reproduces.
+
+*The two distribution differences.* The largest predicate shift is *in front
+of*, 0.181 to 0.195. The `on`/`under` share is low in both runs, 0.006
+annotated against 0.003 here, which is a property of open-vocabulary
+detection rather than of the new frames: more detections means more pairs,
+and most pairs are not in contact. Density per frame is lower for the same
+reason in reverse, 330 against 633 triplets, since the later arrangements
+hold fewer objects (11.7 detections against 16.9) and pair count grows with
+the square.
+
+### E.7 The blind audit: sampling, guards and key handling
+
+Section 4.14 reports the instrument and the result. The construction rules
+are here, because a blind audit is only as good as the independence of the
+items in it.
+
+**Sampling independence.** At most one claim is drawn per (annotator group,
+subject class, object class). Section 4.12 establishes that each group is one
+continuous walk holding a single physical arrangement, so two claims sharing
+a group and a class pair can otherwise be the same physical relation seen
+from two viewpoints, which would make the sample narrower than its item count
+suggests.
+
+**Class guard.** The shipped class guard is applied before sampling, so
+nothing is audited that the tool would no longer emit. Without it the audit
+would measure a rule set the project does not distribute.
+
+**Judge drift between the two packs.** Nine of 28 decoys were accepted in v3
+and one in v4, so the second sheet is the work of a stricter judge than the
+first. The model's decoy rejection rose over the same interval, 0.857 to
+0.929, which suggests the v4 pack is also the easier of the two to judge.
+Neither movement accounts for the size of the support change, but both are
+reasons to read the v3 and v4 columns of §4.14 as two measurements rather than
+one series.
+
+**Blinding.** Claims and decoys are shuffled together and the answer key is
+written to a separate file that the judging interface never reads. The key is
+not distributed with the repository, since publishing it would make any
+later re-audit unblindable.
 
 ## Appendix F: Supplementary tables and figures
 
