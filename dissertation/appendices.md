@@ -232,6 +232,7 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/depth_ablation.py` | ablation A8; needs the `outputs_base` pass below | <1 min |
 | `python eval/support_guard_ablation.py` | ablation A10, whether contact height can replace the class guard, `support_guard_ablation.json` | <1 min |
 | `python eval/parallax_ablation.py --method triangulate --gap 10` | ablation A9; needs the raw capture (D.6), `parallax_ablation.json` | ~5 min |
+| `python eval/parallax_ablation.py --method triangulate --gap 20 --focal-sweep 0.5,0.7,0.9,1.2,1.6,2.0` | D.6's focal-length sensitivity check, `parallax_focal_sweep.json` | ~25 min |
 | `python eval/video_stability.py --dir outputs/video_085` | the E.4 persistence and Jaccard figures, `video_stability.json`; the `--dir` is required, since the default points at the pre-refit pass | <1 min |
 | `python eval/extension_scale.py` | E.6 throughput, density and predicate distribution | <1 min |
 | `python eval/seed_stats.py` | the benchmark arms aggregated across seeds, `tables/seed_replication.md` | <1 min |
@@ -718,6 +719,18 @@ survive, and the distortion is worst away from the image centre and under the
 forward translation a walking robot supplies. The result below therefore
 bounds *uncalibrated* two-view triangulation on this capture, and should not
 be read as a measurement of what multi-view geometry can do here.
+Whether that limitation decides the result is testable rather than arguable,
+and `--focal-sweep` tests it. Re-running the 20-frame baseline across a
+fourfold range of assumed focal lengths, 0.5 to 2.0 image widths, moves
+ordering accuracy between 0.678 and 0.739 while the monocular cascade on the
+same pairs holds at 0.888 to 0.900. Two things follow. The shipped
+assumption of 0.9 widths is the worst of the six tested, so the objection
+that the intrinsic was picked rather than measured is correct, and moving to
+the best of them buys 0.061. And that is not enough to matter: at its
+narrowest the gap to the monocular cascade is 0.148, and no focal assumption
+in the range closes it. The projective distortion is real, and it is not
+what decides this comparison.
+
 This is the correct construction and it does much better than the first, but
 not well enough:
 

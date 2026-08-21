@@ -1,0 +1,14 @@
+[
+  {
+    "method": "triangulate",
+    "gap": 10,
+    "focal_mult": 0.9,
+    "images": 247,
+    "images_skipped": 322,
+    "pairs": 337,
+    "parallax_accuracy": 0.7062314540059347,
+    "monocular_accuracy": 0.9020771513353115,
+    "pairs_monocular_committed": 334,
+    "agreement_parallax_vs_monocular": 0.7245508982035929
+  }
+]
