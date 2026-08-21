@@ -136,15 +136,13 @@ The "tenth annotator" framing survives contact with the data, and §4.6 puts
 numbers on it. The tool is deterministic, the same labeller for every group,
 so the 0.082 spread in its agreement across the seven consistent annotators
 (0.851 to 0.933) measures their heterogeneity and not its own. On the
-shipped labels that spread is narrow enough to be weak evidence. Fréchet
-bounds with the tool as common reference place annotator-to-annotator
-agreement in [0.78, 0.96], containing the tool's own 0.892. The claim is
-deliberately modest, since the bounds assume the batches are exchangeable:
-the automatic annotator cannot be shown to agree with the humans any less
-well than they can be shown to agree with each other. Without overlapping
-assignments the quantity cannot be measured outright, and that absence is
-itself a finding about the dataset's construction, one a replication should
-design away by having two annotators share a batch.
+shipped labels that spread is narrow enough to be weak evidence. The Fréchet
+bound §4.6 attempts on top of that, [0.78, 0.96], is not claimed here: it
+needs batches that are exchangeable, and these differ threefold in object
+density, so §4.6 reports it as a measurement this dataset cannot support.
+Without overlapping assignments the quantity cannot be measured outright,
+and that absence is itself a finding about the dataset's construction, one a
+replication should design away by having two annotators share a batch.
 
 ## 7.4 Methodological reflection
 

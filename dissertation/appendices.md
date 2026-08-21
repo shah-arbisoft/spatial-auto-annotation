@@ -1353,8 +1353,9 @@ an error rate. Recall and F1 are restricted to the same 8,790 annotated pairs.
 
 ### F.7 Bounding annotator agreement without overlapping assignments
 
-Section 4.6 states the result and its weight. The derivation is here, with
-the assumption it rests on.
+Section 4.6 reports this bound as a measurement this dataset cannot support
+and gives the reason there. The derivation and the batch figures behind that
+refusal are here.
 
 Against any common reference, if annotators A and B agree with it on
 fractions p_A and p_B, their mutual agreement obeys the Fréchet inequalities

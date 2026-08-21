@@ -37,15 +37,12 @@ verdict against those criteria and its conditions.
 criterion was per-predicate recall on annotator groups no threshold ever saw,
 judged against two references fixed in advance. One of them is met and the
 other turned out to be unavailable. The trivial baselines are beaten by a wide
-margin, 0.85 against 0.14. The second reference asked how well two human
-annotators would agree with each other, and this dataset cannot say, because
-the nine groups labelled disjoint batches. Bounding it puts the tool's mean
-agreement of 0.892 inside an estimated [0.78, 0.96], but Appendix F.7 shows
-the exchangeability those bounds need is not merely unverified: the batches
-differ threefold in object density, so the annotators' rates were not earned
-on comparable work. That interval is therefore a failed measurement and is
-given no weight here, and the assumption-free half of §4.6, a spread of 0.082
-across the consistent annotators, is too narrow to carry any either.
+margin, 0.85 against 0.14. The second asked how well two human annotators would agree with each other,
+and this dataset cannot say: the nine groups labelled disjoint batches, and
+§4.6 reports the Fréchet bound over them as a measurement the data cannot
+support, since the batches differ threefold in object density. That interval
+carries no weight here, and the assumption-free half of §4.6, a spread of
+0.082, is too narrow to carry any either.
 Comparability rests on the trivial baselines and on the per-predicate audit,
 and the yardstick §1.2.2 hoped for is one this dataset could not supply. The
 second

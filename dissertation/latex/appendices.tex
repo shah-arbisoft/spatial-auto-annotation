@@ -742,7 +742,7 @@ near & 0.12 & 1.00 & 0.21 & 717 \\
 
 \subsection{F.7 Bounding annotator agreement without overlapping assignments}
 
-Section 4.6 states the result and its weight. The derivation is here, with the assumption it rests on.
+Section 4.6 reports this bound as a measurement this dataset cannot support and gives the reason there. The derivation and the batch figures behind that refusal are here.
 
 Against any common reference, if annotators A and B agree with it on fractions p\_\allowbreak{}A and p\_\allowbreak{}B, their mutual agreement obeys the Fréchet inequalities max(0, p\_\allowbreak{}A + p\_\allowbreak{}B - 1) $\leq$ p\_\allowbreak{}AB $\leq$ 1 - |p\_\allowbreak{}A - p\_\allowbreak{}B|. Averaged over all 21 pairs of consistent annotators these place annotator-to-annotator agreement in [0.78, 0.96], and the tool's own mean agreement of 0.892 lies inside it (\texttt{eval/annotator\_\allowbreak{}agreement.py}).
 

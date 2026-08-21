@@ -211,15 +211,29 @@ annotators are much closer to interchangeable than the pre-refit spread of
 groups and the three measured defects of §4.5 and §4.9 rather than on this
 band.
 
-**Bounds on human-human agreement.** Taking the tool as a fixed common
-reference and applying the Fréchet inequalities across all 21 pairs of
-consistent annotators places annotator-to-annotator agreement in
-**[0.78, 0.96]**, an interval containing the tool's own mean agreement of
-**0.892**. These are the loosest bounds available, and they assume the
-batches are exchangeable when they differ threefold in object density, so the
-interval supports a weak *failure to distinguish* the tool from a tenth
-annotator and not a demonstration that it is one. Appendix F.7 derives it and
-sets out why the assumption is false rather than merely unverified.
+**The yardstick this dataset cannot supply.** The natural way to get one is
+to bound it. With the tool as a fixed common reference, the Fréchet
+inequalities across all 21 pairs of consistent
+annotators place annotator-to-annotator agreement in [0.78, 0.96], an
+interval containing the tool's own 0.892. That interval is used nowhere in
+this dissertation, and the reason belongs beside it rather than in an
+appendix. The inequalities hold for any joint distribution, but applying
+them across annotators presumes each one's agreement rate would carry to
+another batch, and these batches are not comparable: mean objects per frame
+runs from 4.47 in group 4 to 14.30 in group 1, a coefficient of variation of
+0.31 across the nine, and pair count grows with the square of that. An
+annotator working a sparse batch faces fewer and easier decisions than one
+working a dense batch, so the presumption is false on this dataset and not
+merely unverified. Appendix F.7 gives the derivation and the density figures
+in full.
+
+What remains is a negative result worth stating plainly. Because the nine
+groups labelled disjoint batches of unequal difficulty, this dataset cannot
+yield an inter-annotator agreement figure even by bounding, and a
+replication that wants one has to collect overlapping assignments. RQ1's
+comparability claim therefore rests on the trivial baselines and the
+per-predicate audit (§4.8), and the attempt is reported because knowing
+which yardsticks a dataset cannot support is part of describing it.
 
 ## 4.7 Flags: what review actually costs
 
