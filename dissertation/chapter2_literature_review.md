@@ -462,9 +462,9 @@ annotation cannot adjudicate a dispute about the annotation.
 
 An honest review states the strongest version of the opposing argument, not
 a version chosen because it is answerable. Four objections stand against the
-approach this project takes, and they are set out here so that later
-chapters can be read as attempts on them, not as a defence assembled
-after the fact.
+method this project uses and a fifth against its premise, and they are set out
+here so that later chapters can be read as attempts on them, not as a defence
+assembled after the fact.
 
 **Rules do not scale with the vocabulary.** Each predicate here is an
 explicitly authored geometric test with fitted thresholds. Seven are

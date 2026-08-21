@@ -43,7 +43,7 @@ detector and three seeds per arm, that advantage disappears without
 reversing: the two arms rank level against human test annotation (mR@100
 0.292 against 0.293), while the automatic model recovers five times more of
 the relation types its own annotation omits (zR@100 0.268 against 0.052) and
-reproduces itself across seeds nearly nine times more tightly. What
+reproduces itself across seeds more than eight times more tightly. What
 difference remains sits on the two test annotators carrying a measured
 labelling defect and reverses on the one without, so the metric rewards
 annotation habits as well as spatial correctness. One link down the chain the answer is unambiguous: asked for a

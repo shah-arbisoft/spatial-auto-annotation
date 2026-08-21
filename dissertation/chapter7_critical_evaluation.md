@@ -257,8 +257,9 @@ work did not address, with the standard semi-supervised alternative (Lee,
 ## 7.6 Limitations and threats to validity
 
 **Internal.** Thresholds are fitted to six annotator groups of one dataset;
-audits are author-verdicted (§7.4); the two-stage audit shares machinery with
-the rule change it evaluates.
+audits are partly author-verdicted, the blinded sheet being the author's own
+and a vision-language judge scoring the same items independently (§7.4); the
+two-stage audit shares machinery with the rule change it evaluates.
 
 **External.** One laboratory domain, six object classes, one camera and
 mounting; the fitted constants (`near_T`, ε values, contact threshold) are
@@ -277,8 +278,12 @@ cannot eliminate this. The RQ2 result compares supervision *at this dataset's
 annotation scale*. It does not claim automatic labels beat abundant,
 guideline-driven human annotation, a regime this dataset does not contain.
 
-**Ethics.** Scene images contain identifiable people; figures for publication
-use the dataset as released (CC-BY 4.0) with faces blurred as a courtesy.
+**Ethics.** Some frames contain identifiable people, so those images are
+personal data under the Data Protection Act 2018 and anonymising them is data
+minimisation, not a courtesy (§8.1). No figure in this dissertation reproduces
+a scene photograph. Where images are put in front of people, in the audit pack
+and on the validation site, faces are pixelated automatically and any item
+whose judgement that would compromise is dropped instead of shown.
 
 ## 7.7 The objections of §2.9, answered
 
@@ -310,7 +315,7 @@ vision-language model's (§5.7)
 against 0 with no relations at all. The reconciliation is that systematic
 error is worse than random error only when it is *wrong*; §4.12's finding
 that front/behind agrees with itself across viewpoints 0.958 of the time
-while agreeing with the annotators 0.64 of the time is the shape of a
+while agreeing with the annotators 0.70 of the time is the shape of a
 consistent rule meeting a different convention, not of a consistent mistake.
 
 **Circular validation: conceded.** Section 7.4 already lists this first

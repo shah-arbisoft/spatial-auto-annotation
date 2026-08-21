@@ -403,8 +403,9 @@ Front/behind was the predicted loser, on the assumption its errors are depth
 noise near the boundary, which is exactly what a viewpoint change perturbs.
 It does not behave that way: it agrees with itself 0.958 of the time, above
 `on` and `under` at 0.878, and still 0.911 at 89× compression, where segment
-members are substantially different views. A predicate recalling 0.64 of the
-human labels while agreeing with itself at 0.955 is not making random errors;
+members are substantially different views. A predicate recalling 0.648 of the
+human labels on these frames while agreeing with itself at 0.958 is not making
+random errors;
 it is making the same call repeatedly and disagreeing systematically. That
 converges with A8, where a four-times-larger depth model changed nothing, and
 with §4.5, where two groups labelled the pair oppositely. §7.2 develops what

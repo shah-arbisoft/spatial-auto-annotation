@@ -321,7 +321,7 @@ that produced it.
 At the level the source paper evaluates robot-readiness, automatic labels
 train a model that trains longer, covers the relation types the manual
 annotation never recorded five times more fully (zR@100 0.268 against 0.052),
-reproduces itself across seeds nearly nine times more tightly (spread 0.006
+reproduces itself across seeds more than eight times more tightly (spread 0.006
 against 0.052), ranks level overall (0.292 against 0.293), and ranks slightly
 ahead on the one test annotator with no measured defect. The claim the evidence supports is conditional:
 **automatic labels are better training material wherever ground truth means

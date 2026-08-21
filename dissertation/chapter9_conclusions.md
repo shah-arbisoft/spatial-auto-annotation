@@ -72,11 +72,17 @@ own verdict across viewpoints 0.958 of the time while two annotator groups
 applied the opposite convention. A per-predicate answer was required precisely
 so this could not hide inside a mean.
 
-**RQ2 is answered yes at two of the three levels and is undecided at the
-third.** The controlled classifier gives 0.75 against 0.30, and the planner 19
-of 25 on the tool's relations and 25 of 25 on their union with the
-vision-language model's against 0 of 25 with no relations, both in the harder direction the
-criterion specified: held-out *human* gold, the rival source's own yardstick.
+**RQ2 is answered yes at the classifier, met at the planner by the automatic
+sources together, and undecided at the benchmark.** The controlled classifier
+gives 0.75 against 0.30 on held-out *human* gold, the rival source's own
+yardstick and the harder direction the criterion specified. The planner is the
+one level where the choice of comparator decides the verdict, and §1.2.2 fixed
+it as the human arm: against that arm's 25 of 25 the tool's relations alone
+clear 19, which falls short. What draws level is the union with the
+vision-language source at 25 of 25, and the union is admissible here because
+no human labels anything in it either. The level is therefore carried by the
+automatic sources together and lost by the shipped tool on its own, and the
+answer has to contain both halves of that.
 The benchmark neither confirms the margin nor contradicts it, and the honest
 word for 0.292 against 0.293 is *undecided* rather than *yes*: the automatic
 arm's point estimate sits 0.001 below the human arm's, which is a difference
@@ -90,7 +96,7 @@ difference remains sits on the two test annotators carrying measured
 labelling defects and reverses on the one without, on a test gold whose
 front/behind relations are 72% written by those two, while the auto arm
 recovers five times more of the relation types the manual annotation never
-recorded and reproduces itself across seeds nearly nine times more tightly.
+recorded and reproduces itself across seeds more than eight times more tightly.
 "Good enough to replace" is met at two levels and unrefuted at the third;
 "better", which Chapter 5 and the planner both support, holds where ground
 truth means geometry and not where it means annotation practice.
@@ -150,8 +156,8 @@ settle it, because that is more useful than an apology.
 **The chain reaches the plan, not the robot.** The planner experiment (§5.7)
 closes one of the two remaining links: across 25 held-out scenes an LLM
 planner never clears an occluding object when given objects alone (0/25),
-always clears it when given the human relationships (25/25), and does so on 22
-of 25 with the automatic ones, all three failures traced to a missing support
+always clears it when given the human relationships (25/25), and does so on 19
+of 25 with the automatic ones, all six failures traced to a missing support
 relation, not to faulty reasoning. What is missing is execution. No
 robot moved during this project, so the evidence runs from labels to models to
 plans and stops. Putting the same conditions on a physical Spot, or in a
