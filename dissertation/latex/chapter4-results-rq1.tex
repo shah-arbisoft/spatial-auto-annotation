@@ -10,17 +10,24 @@ Two properties of the gold shape the protocol. It is \textbf{sparse}: 8,790 of 8
 The evaluation therefore uses per-predicate \textbf{recall of the human triplets} as the primary metric, following the source paper's convention; \textbf{restricted precision, recall and F1} on annotated pairs; a \textbf{manual audit} of a stratified sample of the extra predictions, for an unbiased true-precision estimate; per-type \textbf{flag rates}, costing the human-in-the-loop claim; and three baselines, random, majority and \textbf{box-only geometry} (box centres, no masks, no depth). Boxes and classes are ground truth throughout (PredCls), so box IoU does not apply; detector-in-the-loop results sit with the ablations. Thresholds were fitted on annotator groups 0--5 only, with 6--8 held out. Each group is also a contiguous block of the capture, so the split holds out an unseen arrangement as well as an unseen annotator (\S{}4.12).
 
 Figure~\ref{fig:qualitative-examples} shows what the tool emits on two frames, one from a calibration group and one from a held-out group, before any of the numbers below abstract away from it.
-
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/qualitative-examples.png}
 \caption{Two scenes as the pipeline labels them, with the detected boxes and class instances drawn. Left, a calibration group on which every emitted relation is correct. Right, a held-out group whose annotators recorded front and behind under the opposite convention, which is the failure Section 4.5 decomposes. Faces are pixelated from the dataset's own human boxes, as Section 8.1 requires of anything republished.}
 \label{fig:qualitative-examples}
 \end{figure}
 
+
 \section{Headline: recall of the human triplets}
 
 Figure~\ref{fig:rq1-recall} plots the per-predicate result; the table below carries the same figures with the baselines.
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.80\textwidth]{figures/rq1-recall.png}
+\caption{Recall of the human triplets per predicate: the full pipeline against a box-only ablation and a random baseline. Front and behind have no box-only bar because that ablation cannot compute depth.}
+\label{fig:rq1-recall}
+\end{figure}
+
 
 \begin{center}
 \small
@@ -51,13 +58,6 @@ near & 717 & 1.00* & 1.00 & 0.16 & 0.00 & 0.87 \\
 These are population values, not sample estimates: every human triplet is scored. Whether another batch would give the same numbers is answered by a cluster bootstrap over images (\texttt{eval/uncertainty.py}, 2,000 resamples, whole images resampled so triplets sharing a scene, a depth map and an annotator stay together). The 95\% intervals are narrow where the tool is strong and materially wider on the depth pair, which is the signature of a predicate decided by scene composition and not a stable rule; the bootstrap ran on the labels of \S{}4.9 and its widths, not its centres, are what the argument uses. Held-out intervals appear in \S{}4.6.
 
 Three observations. \textbf{(i)} The tool recovers 81\% of all human triplets (7,276 of 8,926; mean 0.845, and 0.74 on annotators no threshold ever saw) against 14\% for random and 23\% for majority on the same triplet-weighted basis. The mean row above is per-predicate and puts majority at 0.14, which is the right number for a per-predicate question and the wrong one for this comparison: guessing \texttt{in front of} everywhere recovers 2,013 of 8,926 triplets because that predicate is a quarter of the gold. Both figures are reported so neither reading can flatter the tool by itself. \textbf{(ii)} Box-only matches the full pipeline on every box-computable predicate, so masks contribute almost nothing to on/under/left/right/near recall and the pipeline's advantage is confined to the depth pair (0.70/0.71 against 0.00). Even there the ground-plane fallback, a pure box cue, needs masks to fire, because its elevation guard is mask-contact evidence (\S{}4.9). \textbf{(iii)} Held-out beats pooled on on/under/near and falls far below it on front/behind. Both are annotator signatures: convention inversion for the depth pair (\S{}4.5), and direction-usage asymmetry for support, where several groups label one direction only (group\_\allowbreak{}2 records 188 \textit{on} and no \textit{under}; group\_\allowbreak{}8 only \textit{under}) while the held-out groups' support labels happen to be canonical stackings the rules recover at 0.95--1.00. Gold totals 8,926, not 8,928, because two stray annotation files without matching images are excluded (Chapter 3).
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.80\textwidth]{figures/rq1-recall.png}
-\caption{Recall of the human triplets per predicate: the full pipeline against a box-only ablation and a random baseline. Front and behind have no box-only bar because that ablation cannot compute depth.}
-\label{fig:rq1-recall}
-\end{figure}
 
 \section{Precision on the annotated pairs}
 
@@ -122,6 +122,13 @@ group\_\allowbreak{}8 & 444 & 0.73 & \textbf{0.02} & \textbf{inverted} & 0.01 & 
 \end{center}
 
 Figure~\ref{fig:front-behind-decomposition} plots the same decomposition, where the two inverted groups are the pair sitting alone near zero. (The table reports the shipped cascade, depth ordering plus the ground-plane fallback of \S{}4.9; the fallback roughly doubled the emit rates of the abstention-heavy groups 2 and 3.) The pooled 0.65 decomposes into three distinct causes:
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.80\textwidth]{figures/front-behind-decomposition.png}
+\caption{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
+\label{fig:front-behind-decomposition}
+\end{figure}
+
 
 \begin{enumerate}
 \item \textbf{Direction agreement is near-perfect where the tool commits}, 0.95--1.00
@@ -131,13 +138,6 @@ agree with the committed direction 2--5\% of the time; flipping their labels rec
 \item \textbf{The remaining gap is abstention, not error.} Groups 2 and 3 agree almost
 perfectly when the tool commits, but their pairs sit inside the \texttt{depth\_\allowbreak{}eps} band \textit{and} beyond the ground-plane fallback's reach, so the tool abstains: emit rates 0.58 and 0.54, roughly doubled by the fallback. The \texttt{depth\_\allowbreak{}eps} and \texttt{plane\_\allowbreak{}band} sweeps trade this against precision.
 \end{enumerate}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=0.80\textwidth]{figures/front-behind-decomposition.png}
-\caption{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
-\label{fig:front-behind-decomposition}
-\end{figure}
 
 \section{The tenth annotator, and what the annotators would score against each other}
 
@@ -254,7 +254,7 @@ Skipping frames costs nothing measurable: mean recall under propagation is 0.832
 
 
 \section{Would a vision-language model do this instead?}
-\begin{figure}[htbp]
+\begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/rq1-with-vlm.png}
 \caption{Recall of the human triplets per predicate: the geometric pipeline against both vision-language models on the same 30 images, the same numbered boxes and the same written definitions. The dotted lines are the two means. Scaling the model lifts every predicate a little and closes none of the gap.}

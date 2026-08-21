@@ -55,6 +55,19 @@
 \setlength{\parindent}{1.5em}
 \setlength{\parskip}{0pt}
 \singlespacing
+% Float placement. LaTeX's defaults reserve so much of a page for text that a
+% figure at 0.8\textwidth is often deferred, and three of the eight were
+% landing two or three pages after the sentence that points at them, which
+% makes the reader hunt. Loosening the fractions lets a figure sit on the page
+% that refers to it.
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.7}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{2}
+\setcounter{totalnumber}{4}
+
 \sloppy
 % Lets TeX stretch a stubborn line rather than push it into the margin. Without
 % it, prose containing a long unbreakable token (a URL, a file path, a hash)
