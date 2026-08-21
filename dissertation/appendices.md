@@ -516,7 +516,7 @@ than a filter that fires in practice.
 (Zhang et al., 2025): `near` is suppressed on contact pairs (C.7), and
 ambiguous cases are abstained and flagged rather than guessed (C.9).
 
-### C.9 Confidence flags, and the honest cost
+### C.9 Confidence flags, and what they cost
 
 A pair is flagged, not dropped, when any of the following holds: the `near`
 gap is within `flag_near_band` of `near_T`; the left/right centres are within
@@ -659,9 +659,10 @@ results bound where further engineering can and cannot help.
 It is worth asking whether the depth pair would improve simply by using a
 stronger depth network. It does not: swapping Depth Anything v2 Small for
 the 4× larger Base variant and re-running the whole dataset moves
-front/behind recall by +0.000 and −0.002, from 0.696/0.711 to 0.697/0.709,
+front/behind recall by +0.001 and −0.002, from 0.696/0.711 to 0.697/0.709,
 while mean recall *falls* from 0.845 to 0.843, and the front/behind emit rate
-moves by +0.001. Both arms are end-to-end runs on the shipped rule set, so the
+moves by +0.001. Deltas are differences between the rounded figures printed
+here, so the columns add up as read. Both arms are end-to-end runs on the shipped rule set, so the
 comparison isolates the depth model alone. An earlier version of this appendix
 reported the same ablation with both arms at the pre-refit support threshold
 and predicted that re-running it on the shipped labels would move the two arms
@@ -755,7 +756,7 @@ opposite failure and a real weakness of two-view triangulation: a handful of
 badly conditioned points produce depths that are wrong *and* far apart, so
 the largest separations include the worst outliers.
 
-The honest scope of this result is that it rules out the cheap version of the
+The scope of this result is that it rules out the cheap version of the
 idea rather than the idea itself. A careful multi-view reconstruction over
 many frames, with bundle adjustment and real intrinsics, would estimate depth
 better than two views and an assumed focal length. What the ablation
@@ -964,7 +965,7 @@ would recover it.
 The true-precision estimates of §4.4 and §4.9 carry one weakness no amount of
 sampling fixes: they were verdicted by the author of the tool being evaluated.
 Conservative rules and published evidence mitigate that without removing it,
-and the honest description is "author-verdicted". This study re-estimates
+and the accurate description is "author-verdicted". This study re-estimates
 precision with disinterested judges. **The instrument is complete and
 collection is under way; no results exist yet, and the limitation recorded in
 §7.4 stands until they do.** What follows is the design, recorded so that a
@@ -1305,7 +1306,8 @@ separate them. The arm trains on 14,626 relations against the human arm's
 5,421, so the gain may be density rather than the source. Group 7 is 73
 images, small enough that a 0.07 margin over three seeds is suggestive rather
 than settled. And the arm's assertions were never audited as the tool's were
-(§4.4), so their correctness is assumed, not measured. The honest position is
+(§4.4), so their correctness is assumed, not measured. The position this
+supports is
 that on clean gold a vision-language source is at least competitive with both
 alternatives, and that establishing why would need the audit and a larger
 clean slice, neither of which this project has.

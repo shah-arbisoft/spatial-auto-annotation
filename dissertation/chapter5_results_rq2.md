@@ -88,10 +88,10 @@ and self-training passes the instability on to its student.
 
 A recall-only table invites one obvious objection: the automatic arm labels
 twenty times more densely, so of course it recovers more. The objection is
-answered by measuring rather than by argument, and the answer is not the
-flattering one. **On every indicator except recall the automatic arm comes
-last**: macro precision 0.136 against the human arm's 0.252, F1 0.194 against
-0.267, average precision 0.164 against 0.230, and micro F1, which weights
+answered by measurement, and the answer is not the flattering one. **On
+every indicator except recall the automatic arm comes last**: macro
+precision 0.136 against the human arm's 0.252, F1 0.194 against 0.267,
+average precision 0.164 against 0.230, and micro F1, which weights
 predicates by how often the annotators used them, harshest of all at 0.066
 against 0.262. Taken at face value the table says the automatic labels are
 the worst supervision of the four.
@@ -165,7 +165,7 @@ convention-inverted annotators, which penalises every arm's front/behind
 equally.
 
 
-## 5.5 Honest boundaries
+## 5.5 Boundaries of the claim
 
 The evaluation gold is itself sparse human annotation, so recall is primary,
 mirroring RQ1, and §5.2.1 shows why none of the other columns reads as an
@@ -222,8 +222,7 @@ One filter runs over both relation conditions first, so no relation is offered
 to one planner that would have been withheld from the other; density is
 deliberately not equalised, since matching a sparser source would mean
 throwing away true relations. A plan is safe if it moves the occluder before
-the step that grasps the target, judged by published rules rather than by
-reading (`eval/score_planner.py`), so scoring is blind by construction and a
+the step that grasps the target, judged by published rules and not by reading (`eval/score_planner.py`), so scoring is blind by construction and a
 reader who disputes a verdict can inspect the rule. Appendix E.5 gives the
 filter, the prompt construction, the scene-level forensics and a scoring
 defect that hand-reading caught. The experiment was run twice, on
@@ -263,7 +262,7 @@ union supplying more support relations repairs exactly those cases and cannot
 break the ones already working. It does: condition E clears the occluder in
 all 25 scenes, drawing level with the human labels, and gains six scenes over
 condition C while losing none. This is the only measurement here on which automatic labels *match*
-human annotation on a robot-relevant task rather than approaching it, with no
+human annotation on a robot-relevant task instead of approaching it, with no
 human in the labelling loop.
 
 All six C failures have the same cause, and it is not a planning failure: the
@@ -290,7 +289,7 @@ between labels and robot behaviour by one link, not entirely.
 An earlier version of this experiment ran on the labels `on_contact_min` 0.60
 produced and recorded C at 22 of 25. The shipped rule is 0.85, which emits
 support more sparingly: across the same 25 scenes the support relation the
-task depends on is now present in 18 rather than 22, absent in scenes 1, 4, 7,
+task depends on is now present in 18, not 22, absent in scenes 1, 4, 7,
 16, 19, 24 and 25 where before it was absent in 4, 16 and 24 alone. Re-run on
 the shipped labels, **C scores 19 of 25 on both planners** and E still scores
 25 of 25, with 6 scenes gained over C and none lost.
@@ -311,13 +310,13 @@ the union closing every one of them, which is a harder test of the same claim
 than the original passed.
 
 One further limitation is structural and worth stating plainly, because it
-bounds what the result can mean. **The scoring rule cannot see a false positive.** It asks
-whether the plan moves the occluder before grasping the target, so a support
-relation the tool asserts wrongly costs an unnecessary step rather than a
-failed plan. Section 4.14 measures those at 0.40 precision, and this
-experiment is insensitive to them by construction: it tests whether the labels
-carry *enough*, not whether they carry *too much*. A task penalising wasted
-motion, or one where moving the wrong object is unsafe, not merely
+bounds what the result can mean. **The scoring rule cannot see a false
+positive.** It asks whether the plan moves the occluder before grasping the
+target, so a support relation the tool asserts wrongly costs an unnecessary
+step, not a failed plan. Section 4.14 measures those at 0.40 precision, and
+this experiment is insensitive to them by construction: it tests whether the
+labels carry *enough*, not whether they carry *too much*. A task penalising
+wasted motion, or one where moving the wrong object is unsafe, not merely
 inefficient, would rank these label sources differently, and nothing here
 predicts how.
 
@@ -337,9 +336,9 @@ Yes, with more than was asked. At this dataset's scale of human annotation
 the automatic labels are not merely "good enough" but **substantially better
 training material than the human labels themselves**, because density and
 consistency dominate raw human authority when supervision is sparse. The
-self-trained arm rules out the cheap alternative: the standard semi-supervised
-remedy recovers only 15% of the gap, because it propagates the annotators'
-silence, not their knowledge. That is the dissertation's core claim,
-that removing the bottleneck can *grow* dataset utility rather than
-approximate it, demonstrated on the dataset's own held-out annotators and
-against the obvious rival.
+self-trained arm rules out the cheap alternative: the standard
+semi-supervised remedy recovers only 15% of the gap, because it propagates
+the annotators' silence, not their knowledge. That is the dissertation's
+core claim, that removing the bottleneck can *grow* dataset utility instead
+of approximating it, demonstrated on the dataset's own held-out annotators
+and against the obvious rival.

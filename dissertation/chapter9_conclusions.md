@@ -26,37 +26,41 @@ self-trained. **O6** repeats it in the source paper's own framework with a
 frozen detector and three seeds per arm, and carries it one link further to a
 planner.
 
-O6 is met in the sense that matters for an honest answer: the heavyweight
-test does not agree with the lightweight one, the disagreement is localised to
-the annotators whose labels Chapter 4 convicted of measured defects, and both
-readings are reported rather than one selected. Section 1.2.2 fixed what would
+O6 is met in the sense that decides the answer: the heavyweight test does
+not agree with the lightweight one, the disagreement is localised to the
+annotators whose labels Chapter 4 convicted of measured defects, and both
+readings are reported and not one selected. Section 1.2.2 fixed what would
 count as an answer before any result was reported, so what follows is the
 verdict against those criteria and its conditions.
 
 **RQ1 is answered yes on five of seven predicates and qualified on two.** The
 criterion was per-predicate recall on annotator groups no threshold ever saw,
-judged against two references fixed in advance, and both are met: the trivial
-baselines are beaten by a wide margin (0.85 against 0.14), and the tool's mean
-agreement with the consistent annotators, 0.892, falls inside the [0.78, 0.96]
-interval within which those annotators can be *estimated* to agree with one
-another (§4.6). That interval rests on treating batches as exchangeable when
-they differ threefold in object density, so it establishes a failure to
-distinguish the tool from a tenth annotator rather than a positive result, and
-the criterion is met on the trivial-baseline reference with the second
-reference offering only weak support. The second
+judged against two references fixed in advance. One of them is met and the
+other turned out to be unavailable. The trivial baselines are beaten by a wide
+margin, 0.85 against 0.14. The second reference asked how well two human
+annotators would agree with each other, and this dataset cannot say, because
+the nine groups labelled disjoint batches. Bounding it puts the tool's mean
+agreement of 0.892 inside an estimated [0.78, 0.96], but Appendix F.7 shows
+the exchangeability those bounds need is not merely unverified: the batches
+differ threefold in object density, so the annotators' rates were not earned
+on comparable work. That interval is therefore a failed measurement and is
+given no weight here, and the assumption-free half of §4.6, a spread of 0.082
+across the consistent annotators, is too narrow to carry any either.
+Comparability rests on the trivial baselines and on the per-predicate audit,
+and the yardstick §1.2.2 hoped for is one this dataset could not supply. The
+second
 condition, that labels beyond the human record survive audit, holds for the
 lateral, proximity and depth-decided predicates at blind-audited precision
 0.79–1.00. **It is not met for support.** At 0.535 [0.42, 0.65] about half the
 support labels the tool adds beyond the human record are wrong, which is well
 above noise and well below a standard anything should be built on, and the
-criterion of §1.2.2 asked for labels that survive audit rather than labels
-that beat chance. Support therefore answers RQ1 on recall and fails it on
+criterion of §1.2.2 asked for labels that survive audit, not labels that beat chance. Support therefore answers RQ1 on recall and fails it on
 precision, and the per-predicate form of the question exists so that this
 cannot be averaged away. The
 contact rule repaired the box rule's failure but was left at a threshold
 fitted where the cost of a false positive was invisible, the claim that it
 reached 0.9 was an artefact of auditing unblinded, and refitting the threshold
-lifted a measured 0.404 to a measured 0.535 rather than to the 0.667 the
+lifted a measured 0.404 to a measured 0.535 and not to the 0.667 the
 held-out fit had predicted. The qualification is
 `in front of` and `behind` at 0.70/0.71 pooled: not a failure of the criterion
 but a disagreement about the words, since §4.12 shows the tool reproducing its
@@ -75,14 +79,14 @@ vision-language source at 25 of 25, and the union is admissible here because
 no human labels anything in it either. The level is therefore carried by the
 automatic sources together and lost by the shipped tool on its own, and the
 answer has to contain both halves of that.
-The benchmark neither confirms the margin nor contradicts it, and the honest
-word for 0.292 against 0.293 is *undecided* rather than *yes*: the automatic
+The benchmark neither confirms the margin nor contradicts it, and the word
+for 0.292 against 0.293 is *undecided* rather than *yes*: the automatic
 arm's point estimate sits 0.001 below the human arm's, which is a difference
 no experiment of this size could resolve in either direction, with overlapping
 seed ranges on every slice. Section 1.2.2 required agreement across all three
 for an unqualified yes, and a tie is not agreement. What Chapter 5 measures as
 a two-and-a-half-fold advantage the ranked metric measures as parity, and
-§1.2.2 committed to reporting that rather than resolving it favourably.
+§1.2.2 committed to reporting that instead of resolving it favourably.
 Chapter 6 does: what
 difference remains sits on the two test annotators carrying measured
 labelling defects and reverses on the one without, on a test gold whose
@@ -111,8 +115,7 @@ front/behind convention in two of nine annotator groups, and `near` used by
 only three groups with fourfold variation in exhaustiveness.
 
 **For work on scene-graph benchmarks.** Evidence that ranked recall against
-sparse, guideline-free annotation partly measures agreement with annotator
-habits rather than spatial correctness. The evidence is a dissociation:
+sparse, guideline-free annotation partly measures agreement with annotator habits as much as spatial correctness. The evidence is a dissociation:
 the model that ranks better memorises which pairs annotators record, and the
 model that covers the relation types they never recorded is the one trained
 on consistent computed labels. The per-annotator decomposition localises the
@@ -126,8 +129,7 @@ The mechanism is measured, not inferred: self-training contributes
 roughly a thousand confident negative pseudo-labels for every positive one,
 propagating the annotators' silence and not their judgement.
 
-**Methodologically.** Calibration held out by *annotator* rather than by
-image; a sparse-gold evaluation protocol that pairs recall with audited
+**Methodologically.** Calibration held out by *annotator* and not by image; a sparse-gold evaluation protocol that pairs recall with audited
 precision; exhaustive loss attribution; a way to estimate what annotators
 would score against one another when they never labelled the same images, by
 using a deterministic annotator as a fixed common reference (§4.6); and a
@@ -164,12 +166,11 @@ into a measurement, and is cheap enough that a replication should include one.
 
 **Front/behind is bounded, but less by depth than the number suggests.**
 Section 4.9 bounds the engineering: neither a larger depth model nor
-multi-frame geometry moves the pair, so the limit is monocular ambiguity in
-the scenes rather than model capacity. A predicate reproducing its own verdict
+multi-frame geometry moves the pair, so the limit is monocular ambiguity in the scenes, not model capacity. A predicate reproducing its own verdict
 across viewpoints 0.958 of the time while recovering 0.70 of the human labels
 is not mismeasuring the scene but applying a criterion the annotators did not
 share, so the intervention with the best expected return is a written
-annotation guideline rather than a better network — an uncomfortable
+annotation guideline, not a better network — an uncomfortable
 conclusion for a computer-vision project and the one the evidence supports.
 The routes that stay open are a calibrated stereo pair or an RGB-D capture;
 wider surface detection was built, measured and declined (Appendix D.4).
@@ -186,8 +187,7 @@ pipeline was run over the 1,766 frames nobody has annotated: 562 keyframes
 after content-adaptive selection, 58 minutes, 185,242 triplets, a predicate
 distribution 0.032 in total variation from the annotated portion
 (Appendix E.6).
-Capacity and stability on unfamiliar input are therefore measured rather than
-argued. Correctness on that portion is not, and cannot be without labels;
+Capacity and stability on unfamiliar input are therefore measured. Correctness on that portion is not, and cannot be without labels;
 §4.12 substitutes self-agreement for truth and should be read as the weaker
 thing it is. Closing it needs a few hundred labelled triplets from those
 frames, an afternoon of annotation.

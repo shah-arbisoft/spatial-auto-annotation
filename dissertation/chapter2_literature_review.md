@@ -68,31 +68,33 @@ thresholds for near."
 
 The premise, replacing scarce human labels with dense computed ones, has an
 established name: **weak supervision**. **Snorkel** (Ratner et al., 2017)
-formalised *data programming*: experts write labelling functions rather than
+formalised *data programming*: experts write labelling functions instead of
 labelling examples, and their noisy overlapping votes are combined into
 training labels, trading per-label authority for coverage and consistency.
 Its deployments repeatedly matched or beat hand-labelled baselines wherever
 the labelled set, not the model, was the bottleneck. This project's
 geometric rules are labelling functions in that sense, deterministic,
-auditable and dense, with two departures. Measured geometry gives near-exact, not noisy votes for five of the seven predicates (blind-audited
+auditable and dense, with two departures. Measured geometry gives
+near-exact, not noisy votes for five of the seven predicates (blind-audited
 precision 0.79–1.00) and demonstrably noisy ones for the other two, where
 §4.14 puts support at 0.40; on the five, no probabilistic aggregation is
 needed, and on the two the objection Snorkel answers with aggregation is
 answered here by abstention instead. The second departure is that the
-computed labels are *validated against* the human labels they replace (RQ1), not assumed comparable.
+computed labels are *validated against* the human labels they replace (RQ1),
+not assumed comparable.
 
 The complementary literature dismantles the premise that human annotation is
 a single reliable gold standard. **Uma et al.'s (2021) survey of learning
-from disagreement** documents systematic annotator disagreement across vision
-and language, driven by ambiguous guidelines, subjective category boundaries
-and annotator-specific conventions, and reviews methods treating disagreement
-as signal rather than noise. The frame fits exactly: Chapter 4 measures three
+from disagreement** documents systematic annotator disagreement across
+vision and language, driven by ambiguous guidelines, subjective category
+boundaries and annotator-specific conventions, and reviews methods treating
+disagreement as signal. The frame fits exactly: Chapter 4 measures three
 annotator behaviours, selective `near` usage, an inverted front/behind
 convention in two groups, and one-directional support labelling, which make
-"agreement with the humans" per-annotator, not global. Two design
-decisions follow in Chapters 3–4: evaluation is reported per annotator group,
-never only pooled, and thresholds are calibrated only on annotators who used
-a label, with the rest held out.
+"agreement with the humans" per-annotator, not global. Two design decisions
+follow in Chapters 3–4: evaluation is reported per annotator group, never
+only pooled, and thresholds are calibrated only on annotators who used a
+label, with the rest held out.
 
 Where the human judgements must themselves be evaluated, the measurement
 tradition supplies the instruments: **Cohen's kappa** (Cohen, 1960) for
@@ -140,21 +142,20 @@ retraining, and its strongest modern form is noisy self-training (Xie et al.,
 
 Applied here the recipe would be: train on the ~10% of pairs the annotators
 labelled, pseudo-label the remaining 90%, retrain. Three properties of this
-dataset argue against it, each measured rather than assumed. First,
-self-training *amplifies its seed*, and this seed is sparse and internally
-inconsistent (selective `near`, two inverted front/behind conventions,
-one-directional support; §2.2, Chapter 4); a teacher trained on
-contradictory conventions teaches them on, with added confidence. Second,
-the seed is not merely small but *selectively* small: annotators labelled
-what they found salient, so the labelled 10% is not an unbiased sample of
-the 90% to be filled in, which is the assumption pseudo-labelling needs.
-Third, the empirical anchor: Chapter 5's human-trained classifier is exactly
-the seed such a loop would start from, and it collapses on the
-sparsely-labelled predicates (recall 0.08–0.25) and is unstable across seeds.
-A loop built on that teacher has little reliable to amplify. Active learning
-fails differently: it still buys *human* labels, reducing the bottleneck's
-slope without removing it, and it rations inconsistency between annotators
-instead of fixing it.
+dataset argue against it, each of them measured. First, self-training
+*amplifies its seed*, and this seed is sparse and internally inconsistent
+(selective `near`, two inverted front/behind conventions, one-directional
+support; §2.2, Chapter 4); a teacher trained on contradictory conventions
+teaches them on, with added confidence. Second, the seed is not merely small
+but *selectively* small: annotators labelled what they found salient, so the
+labelled 10% is not an unbiased sample of the 90% to be filled in, which is
+the assumption pseudo-labelling needs. Third, the empirical anchor: Chapter
+5's human-trained classifier is exactly the seed such a loop would start
+from, and it collapses on the sparsely-labelled predicates (recall
+0.08–0.25) and is unstable across seeds. A loop built on that teacher has
+little reliable to amplify. Active learning fails differently: it still buys
+*human* labels, reducing the bottleneck's slope without removing it, and it
+rations inconsistency between annotators instead of fixing it.
 
 The geometric route sidesteps all three failure modes because its labelling
 function does not derive from the flawed seed at all: the rules are fitted to
@@ -303,7 +304,7 @@ ablation**, is:
   six classes. Chapter 4's deployment mode uses it at a 0.25 box threshold
   precisely because it is the worst reasonable detector, so the end-to-end
   bound it produces (0.38 triplet recall, against 0.85 conditional on both
-  endpoints being found) is conservative rather than flattering.
+  endpoints being found) errs low.
 - **Segmentation.** **SAM2** (Ravi et al., 2024), box-prompted. The
   silhouette is load-bearing twice over: depth is sampled by median over
   object pixels, not over the whole box, and the support rule's contact
@@ -317,7 +318,7 @@ ablation**, is:
   dense through a training-free *Correlative Self-Attention*, bear on
   open-vocabulary scaling and not on relation logic; **PrimitiveAnything** (Ye et al., 2025) decomposes 3D shapes
   into primitives and assumes clean 3D input this project does not have. All
-  three are future directions rather than components.
+  three are future directions.
 
 The division of labour is deliberate. The neural components only *measure*,
 and every relationship decision is made by an explicit rule over those
@@ -385,10 +386,10 @@ executed and reported in Chapter 6.
 ## 2.8 How the field measures success, and what those measures miss
 
 The metrics introduced in §2.7 are not neutral instruments: each was adopted
-to fix a defect in the one before it and carries a defect of its own. Because
-Chapters 4 and 6 report results *in* these metrics and then argue about what
-the results mean, the arguments belong here, established from the literature,
-rather than improvised alongside the numbers.
+to fix a defect in the one before it and carries a defect of its own.
+Because Chapters 4 and 6 report results *in* these metrics and then argue
+about what the results mean, the arguments belong here, established from the
+literature and not improvised alongside the numbers.
 
 **Recall without precision is a consequence of incomplete annotation, not a
 choice.** The convention descends from visual relationship detection on
@@ -478,8 +479,7 @@ all.
 
 **Systematic error is worse for training than random error.** The appeal of
 computed labels is consistency, but consistency guarantees only that mistakes
-recur, and a rule's mistakes correlate with scene geometry rather than
-scattering at random. Tang et al. (2020) established how thoroughly SGG models
+recur, and a rule's mistakes correlate with scene geometry and do not scatter at random. Tang et al. (2020) established how thoroughly SGG models
 absorb the distribution of their supervision, a result that cuts both ways: a
 model trained on rule output can learn the rule's blind spot as a property of
 the world, and no amount of extra data averages it out. Independent human
@@ -504,7 +504,7 @@ will disagree systematically. Calling the rule correct in that situation is
 an assertion about which convention should govern, not a measurement, and
 the dissertation is obliged to argue for it, not assume it (§4.5).
 
-A fifth objection is directed at the premise rather than the method. If the
+A fifth objection is directed at the premise, not the method. If the
 existing annotation is inconsistent, the direct remedy is better collection,
 not cheaper labels; SpatialSense (Yang, K., Russakovsky and Deng, 2019) and
 Rel3D (Goyal et al., 2020) both responded to defective relation annotation

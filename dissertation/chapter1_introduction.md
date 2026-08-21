@@ -58,17 +58,17 @@ annotators, because both scale with the number of humans involved.
 
 Three families of method already exist for a shortage of labels, and each is
 reviewed in Chapter 2 and tested here, not dismissed on paper. Learned
-scene-graph generators predict relations from visual patterns, but they train
-on labelled triplets and so sit *downstream* of an annotator rather than
-replacing one. Semi-supervised methods stretch the labels that exist, which
-presupposes a consistent seed; this one is 10% dense and internally
-contradictory, and Chapter 5 measures what self-training does with it. A large
-vision-language model can be asked directly, the most plausible modern
+scene-graph generators predict relations from visual patterns, but they
+train on labelled triplets and so sit *downstream* of an annotator instead
+of replacing one. Semi-supervised methods stretch the labels that exist,
+which presupposes a consistent seed; this one is 10% dense and internally
+contradictory, and Chapter 5 measures what self-training does with it. A
+large vision-language model can be asked directly, the most plausible modern
 shortcut and the one a reader will propose; §4.13 runs it on the same images
 with the same definitions and finds it reproduces the *human* annotation's
-characteristic failures, not a geometric one's. None of the three
-produces a dense, self-consistent label for every ordered pair with no human
-deciding anything, which is the gap this project addresses.
+characteristic failures, not a geometric one's. None of the three produces a
+dense, self-consistent label for every ordered pair with no human deciding
+anything, which is the gap this project addresses.
 
 ## 1.2 Research aim and objectives
 
@@ -140,8 +140,7 @@ RQ1 is answered **yes** if per-predicate recall of the human triplets is
 comparable to what the human process itself achieves, on annotator groups
 whose data influenced no threshold, and if the labels the tool emits beyond
 the human record survive manual audit instead of turning out to be noise.
-*Comparable* is given content by two references rather than by a number
-chosen for convenience: the trivial random and majority baselines, which any
+*Comparable* is given content by two references and not by a number chosen for convenience: the trivial random and majority baselines, which any
 method must beat, and an estimate of how well the human annotators would
 have scored against one another, which is the ceiling any annotator can
 fairly be held to (§4.6). A per-predicate answer is required, not a mean,
@@ -195,8 +194,7 @@ whole approach. Deferred to future work and not attempted: copy-paste
 augmentation of under-represented relations, and any revision of the
 dataset's own predicate definitions.
 
-**Delimitations and assumptions.** Five, each a decision rather than an
-oversight, and each argued in §7.6 with the threat it carries. The work
+**Delimitations and assumptions.** Five, each a deliberate decision, and each argued in §7.6 with the threat it carries. The work
 covers **one indoor environment and six annotated object classes**, so it is
 the method and not the fitted numbers that is claimed to transfer. Relations
 are computed in the **camera frame**, a choice among the reference frames
@@ -210,11 +208,11 @@ a different project.
 ## 1.3 Research approach
 
 The project follows CRISP-DM, chosen over KDD and SEMMA for the reasons §3.1
-gives. The mapping below is descriptive, not decorative: two findings
-(the dataset's stored image orientation and the three measured annotator
+gives. The mapping below is descriptive, not decorative: two findings (the
+dataset's stored image orientation and the three measured annotator
 behaviours) came straight out of Data Understanding, and the audit-driven
 repair of the support rules is a documented iteration between Evaluation and
-Modelling. That is CRISP-DM's loop, made explicit rather than hidden.
+Modelling. That is CRISP-DM's loop, made explicit.
 
 | CRISP-DM stage | In this project | Where |
 |---|---|---|
@@ -237,8 +235,7 @@ project uses **one dataset**, the one whose bottleneck the work exists to
 address, and the price is that generalisation is argued, not
 demonstrated. And the benchmark runs use **free hosted GPU sessions**, which
 caps the affordable seeds and rules out a hyper-parameter search; Chapter 6's
-replication is what that budget allows, and its width is reported rather than
-smoothed over.
+replication is what that budget allows, and its width is reported and not smoothed over.
 
 Ethical considerations are summarised here and detailed in Appendix A. The
 work is a secondary analysis of a published, openly licensed dataset (CC-BY

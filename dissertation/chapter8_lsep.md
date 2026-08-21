@@ -38,7 +38,7 @@ noted only for completeness.
 ## 8.2 Social considerations
 
 **Automation of annotation work.** The project automates paid human work.
-The honest framing is the one the measurements support: at this scale the
+The framing the measurements support: at this scale the
 manual process produced sparse, inconsistent labels at a cost of nine
 annotators, and the realistic effect of automation is not displacing a
 profession but changing the human role, from labelling every pair to
@@ -60,7 +60,7 @@ learned, and detection quality for the `human` class cannot be assumed
 uniform across people; published detectors have documented performance
 disparities. In this dataset the people are members of the collecting
 research group, so the question is not testable here, and it is recorded as
-a deployment consideration rather than a resolved issue.
+a deployment consideration, not a resolved issue.
 
 ## 8.3 Ethical considerations
 

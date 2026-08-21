@@ -19,15 +19,15 @@ Santos (2008) find it effectively a superset of SEMMA and an implementation of
 KDD with stronger process guidance.
 
 CRISP-DM was chosen for two concrete reasons. The motivating problem is an
-engineering question posed by a dataset's own authors rather than pattern
-discovery, so a phase pinning the business problem before modelling is
-structurally necessary. Decisively, the project's course followed CRISP-DM's
-evaluation-to-modelling loop in a way the linear models do not describe: the
-audit of support-rule precision sent the work back to modelling twice, a depth
-gate then a mask-contact test, each pass re-validated on held-out annotators.
-§1.3 maps every phase to a part of this dissertation, including the two
-findings that came out of Data Understanding, and summarises the ethical
-considerations detailed in Appendix A.
+engineering question posed by a dataset's own authors, so a phase pinning
+the business problem before modelling is structurally necessary. Decisively,
+the project's course followed CRISP-DM's evaluation-to-modelling loop in a
+way the linear models do not describe: the audit of support-rule precision
+sent the work back to modelling twice, a depth gate then a mask-contact
+test, each pass re-validated on held-out annotators. §1.3 maps every phase
+to a part of this dissertation, including the two findings that came out of
+Data Understanding, and summarises the ethical considerations detailed in
+Appendix A.
 
 ## 3.2 Problem analysis
 
@@ -55,12 +55,11 @@ directly on the released files, drive specific design responses:
   are ordinal and within-image and no rule consumes absolute depth.
 - **Sparse annotation.** Humans labelled ~10% of object pairs *(measured:
   6,458 of 42,440 unordered pairs)*, so the tool labels every pair, density
-  being the value added, and the protocol treats human labels as a recall
-  target rather than an exhaustive gold standard.
+  being the value added, and the protocol treats human labels as a recall target, not an exhaustive gold standard.
 - **Inconsistent `near`.** Only 3 of 9 annotator groups ever used `near`
   (244/129/93 labels; the rest 0–3), and those three each labelled a different
   fraction of equally-close pairs, so the threshold is fitted and
-  annotator-aware (§3.8) rather than matched to a consensus that does not
+  annotator-aware (§3.8) and not matched to a consensus that does not
   exist.
 
 ## 3.3 Design principle: compute, don't predict
@@ -94,7 +93,7 @@ validated on annotators held out from that fit, and is exactly as consistent
 on the unlabelled 90% as on the labelled 10%. None of this is left as
 argument: §5.3 runs the self-training loop as a third arm of the same
 controlled experiment, so the two routes meet on the humans' own held-out
-annotations rather than on plausibility.
+annotations and not on plausibility.
 
 **Evaluation setting.** The relation stage is evaluated with ground-truth
 boxes and classes (the SGG literature's *PredCls* setting, §2.7). This
@@ -177,8 +176,7 @@ against. The design rationale in brief:
 Three predicate families are mutually exclusive: on/under, left/right and
 front/behind. Two of them cannot contradict, because the rule branches: a pair
 is left of, or right of, or neither, and the same for the depth pair, so
-exclusivity is a property of the control flow rather than something to check
-afterwards. Support is different. `on` and `under` are independent tests over
+exclusivity is a property of the control flow, not something to check afterwards. Support is different. `on` and `under` are independent tests over
 *different* contact evidence, the mask-contact fraction measured each way
 round, so noise in either can make both fire on the same pair. That case is
 demoted to an `on_under_conflict` flag and neither label is emitted.
@@ -192,13 +190,13 @@ because geometric consistency is checkable for free, and because RQ2's
 consumer is a model, which has no way to sort it out.
 
 One further correction is class-aware, not geometric. Support is not
-evaluated at all when either object is a person: the annotators never recorded
-one, on **0 of 2,466 gold support triplets**, and mask contact cannot
-distinguish an object *resting on* someone from one being *held* by them. A
-geometric rule that cannot represent the distinction its evidence turns on
-should decline the pair rather than guess, and the guard is a configuration
-entry (`no_support_classes`), not a special case buried in code, so a
-different dataset can revise it.
+evaluated at all when either object is a person: the annotators never
+recorded one, on **0 of 2,466 gold support triplets**, and mask contact
+cannot distinguish an object *resting on* someone from one being *held* by
+them. A geometric rule that cannot represent the distinction its evidence
+turns on should decline the pair instead of guessing, and the guard is a
+configuration entry (`no_support_classes`), not a special case buried in
+code, so a different dataset can revise it.
 
 Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
 near-threshold edge, and the resolved contradiction above. They are the
@@ -231,13 +229,13 @@ with a parallel `predicates` ID array, and the same six-dataset h5 layout with
 int64 attributes.
 
 The alternative was an internal schema plus a converter (§3.4), which is
-easier to write and would have left every comparison one translation away from
-the thing it claims to measure. Compatibility is therefore verified rather
-than assumed: a load→write round trip reproduces `boxes_1024` and `labels`
-with zero error, and the h5 matches a real export key-for-key and
-dtype-for-dtype *(measured)*, with both checks in the test suite so a later
-change to a writer cannot pass unnoticed. Auto-labels are drop-in replacements
-for human labels, which is the property RQ2 depends on.
+easier to write and would have left every comparison one translation away
+from the thing it claims to measure. Compatibility is therefore verified by
+test: a load→write round trip reproduces `boxes_1024` and `labels` with zero
+error, and the h5 matches a real export key-for-key and dtype-for-dtype
+*(measured)*, with both checks in the test suite so a later change to a
+writer cannot pass unnoticed. Auto-labels are drop-in replacements for human
+labels, which is the property RQ2 depends on.
 
 ## 3.8 Calibrating `near`: an annotator-aware protocol
 
@@ -263,7 +261,7 @@ varies (by ~4×) is how exhaustively each annotator applied the label. The
 fitted threshold applies one definition uniformly, which is exactly the
 "spatial thresholds for near" the source paper's future work requests.
 Whether the tool's extra near pairs (the precision gap) are genuinely near
-is checked by a manual audit in the evaluation chapter rather than assumed.
+is checked by a manual audit in the evaluation chapter.
 
 ## 3.9 Modularity: the detector as the replaceable part
 
@@ -307,10 +305,10 @@ which requires deciding where one viewpoint ends and the next begins.
 The standard tool does not apply. Shot-boundary detection thresholds the
 difference between consecutive frames, which presumes cuts, and a robot
 walking through a room produces none. The failure is structural, not a
-matter of threshold choice, as §4.12 verifies by sweeping it: motion arriving
-at 0.08 px per frame is never larger than the noise at any single step, while
-the same motion integrated over forty frames displaces the image by 13 px, so
-only the accumulated drift carries the signal.
+matter of threshold choice, as §4.12 verifies by sweeping it: motion
+arriving at 0.08 px per frame is never larger than the noise at any single
+step, while the same motion integrated over forty frames displaces the image
+by 13 px, so only the accumulated drift carries the signal.
 
 `segment_sequence` (`src/keyframes.py`) therefore measures drift from the
 *anchor* of the current segment, not the preceding frame, opening a new
@@ -323,19 +321,18 @@ frame closest to its mean signature, a better representative on a moving
 camera than the first, which is usually mid-transition.
 
 A single parameter spans two uses. Small τ isolates near-duplicates, so each
-segment is one viewpoint and the representative can stand for the rest; large
-τ groups several viewpoints of one arrangement, which is what the
+segment is one viewpoint and the representative can stand for the rest;
+large τ groups several viewpoints of one arrangement, which is what the
 cross-viewpoint consistency measurement of §4.12 consumes. The threshold is
-chosen from the data by sweep rather than assumed, and §4.12 reports both what
-the segmentation recovers and what skipping the intervening frames costs.
+chosen from the data by sweep, and §4.12 reports both what the segmentation
+recovers and what skipping the intervening frames costs.
 
 ## 3.11 Reproducibility by construction
 
-Reproducibility here is a design property rather than a documentation
-exercise, because three of the four requirements in §3.2 are unverifiable
-without it: a threshold is not fitted on groups 0-5 if nobody else can refit
-it, and an ablation is an assertion unless the reader can re-run the arm it
-removes.
+Reproducibility here is a design property, not a documentation exercise,
+because three of the four requirements in §3.2 are unverifiable without it:
+a threshold is not fitted on groups 0-5 if nobody else can refit it, and an
+ablation is an assertion unless the reader can re-run the arm it removes.
 
 **Configuration and caching.** Every threshold, seed and model identifier
 lives in `configs/default.yaml`, so no constant is buried in a function, and
@@ -355,7 +352,7 @@ the rest cover the format writers, the detector adapters of §3.9, frame
 selection and the reply parsers.
 
 **Environment.** Python 3.11 with CUDA torch 2.5.1, pinned, and the one
-genuinely awkward step documented rather than left to be rediscovered:
+genuinely awkward step documented instead of left to be rediscovered:
 installing SAM2 can silently replace the CUDA build of torch with a CPU wheel,
 so the pipeline still runs, produces identical labels and takes an order of
 magnitude longer, which is the worst class of failure because nothing reports
@@ -366,32 +363,32 @@ walk-through, and the repository is public.
 ## 3.12 Summary of design decisions
 
 Every decision above shares one shape: an alternative was available, it was
-rejected for a stated reason, and where that reason is a measurement rather
-than a judgement the measurement is named. Four were settled by evidence that
-arrived *after* the decision and could have overturned it, which is the test
-of whether a justification is real: the Small depth model against ablation A8,
-the relative-gap `near` metric against the centroid variants, masks against
+rejected for a stated reason, and where that reason is a measurement the
+measurement is named. Four were settled by evidence that arrived *after* the
+decision and could have overturned it, which is the test of whether a
+justification is real: the Small depth model against ablation A8, the
+relative-gap `near` metric against the centroid variants, masks against
 box-only geometry, and the ground-plane fallback against its own contact
-guard. Each is reported where it was measured (§4.9, Appendix D). Appendix F.3
-tabulates all eleven decisions with the alternative each displaced.
+guard. Each is reported where it was measured (§4.9, Appendix D). Appendix
+F.3 tabulates all eleven decisions with the alternative each displaced.
 
 The decisions also answer the four objections §2.9 directs at the method
 itself, none of them added afterwards to fit. Against **vocabulary scale**,
-predicates are configuration rather than code (§3.9), so extending the set
-does not touch the engine; that bounds the objection without defeating it,
-since a predicate with no geometric criterion cannot be specified at all.
-Against **systematic error**, the rules abstain and flag instead of guessing
-(§3.6), so an unreliable case becomes a countable review item rather than a
-confident wrong label repeated wherever the geometry repeats, and §4.7 prices
-that. Against **circular validation**, the structural guarantees are asserted
-by randomised invariant testing over synthetic scenes (§3.11), independent of
+predicates live in configuration (§3.9), so extending the set does not
+touch the engine; that bounds the objection without defeating it, since a
+predicate with no geometric criterion cannot be specified at all. Against
+**systematic error**, the rules abstain and flag instead of guessing (§3.6),
+so an unreliable case becomes a countable review item, not a confident wrong
+label repeated wherever the geometry repeats, and §4.7 prices that. Against
+**circular validation**, the structural guarantees are asserted by
+randomised invariant testing over synthetic scenes (§3.11), independent of
 the author's judgement about any image. Against the **reference frame**, the
-camera frame is committed to explicitly and stated with the rules (§3.5), so a
-disagreement is locatable as a convention difference rather than diffused into
-general error, and §4.5 locates two such groups.
+camera frame is committed to explicitly and stated with the rules (§3.5), so
+a disagreement is locatable as a convention difference and is not diffused
+into general error, and §4.5 locates two such groups.
 
-Three of the four are mitigations rather than refutations, and §7.4 reports
-what they proved to be worth. The fourth the design could not settle alone:
-invariant testing pins rule *consistency* and says nothing about rule *truth*,
-which took an instrument built to attack the author's own verdicts (§4.14),
-and it overturned one of them.
+Three of the four are mitigations, not refutations, and §7.4 reports what
+they proved to be worth. The fourth the design could not settle alone:
+invariant testing pins rule *consistency* and says nothing about rule
+*truth*, which took an instrument built to attack the author's own verdicts
+(§4.14), and it overturned one of them.

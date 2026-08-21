@@ -56,27 +56,26 @@ human gold, groups 6–8), at seed 42:
 
 At this seed the automatic arm leads the mean-recall metric, 0.291 against
 0.270, while the human arm keeps raw recall and the two are level on F1. The
-ordering inverts predicate by predicate: the human arm is ahead on five of the
-seven and the automatic arm on the support pair, by 0.077 on `on` and 0.284 on
-`under`. For `near` both arms sit far below the source paper's 0.22–0.25
-floor, 0.117 and 0.108, so prediction 3 is refuted as stated and the automatic
-arm's dense, fitted `near` does not survive the trip through a learned model.
-Appendix F.1 carries the per-predicate breakdown. The sharpest separation is
-on triplet *types never seen in training*, where the automatic arm recalls
-0.309 against the human arm's 0.073, a fourfold gap at this seed and fivefold
-over three (§6.3.1). What that column measures here is set out in §6.4, and it
-is coverage of the relation types the manual annotation never recorded rather
-than compositional generalisation.
+ordering inverts predicate by predicate: the human arm is ahead on five of
+the seven and the automatic arm on the support pair, by 0.077 on `on` and
+0.284 on `under`. For `near` both arms sit far below the source paper's
+0.22–0.25 floor, 0.117 and 0.108, so prediction 3 is refuted as stated and
+the automatic arm's dense, fitted `near` does not survive the trip through a
+learned model. Appendix F.1 carries the per-predicate breakdown. The
+sharpest separation is on triplet *types never seen in training*, where the
+automatic arm recalls 0.309 against the human arm's 0.073, a fourfold gap at
+this seed and fivefold over three (§6.3.1). What that column measures here
+is set out in §6.4, and it is coverage of the relation types the manual
+annotation never recorded, not compositional generalisation.
 
 Prediction 2 is the one a single run cannot carry, in either direction: the
 margin above is well inside the human arm's own seed spread, which is why
-§6.3.1 exists and why the heading calls it unresolved rather than confirmed.
+§6.3.1 exists and why the heading calls it unresolved and not confirmed.
 Re-scoring the same checkpoints on individual test slices decomposes the
-headline, and the seed replication below repeats that decomposition with a
-spread rather than a point, so the single-run slice figures are in Appendix
-F.1. Aligning the front/behind convention of groups 6 and 8, one disclosed bit
-per group as in §4.5, lifts both arms and leaves them level, 0.310 against
-0.312.
+headline, and the seed replication below repeats that decomposition as a
+spread, so the single-run slice figures are in Appendix F.1. Aligning the
+front/behind convention of groups 6 and 8, one disclosed bit per group as in
+§4.5, lifts both arms and leaves them level, 0.310 against 0.312.
 
 ### 6.3.1 Replication across seeds, and one claim withdrawn
 
@@ -116,8 +115,7 @@ the automatic one. No slice separates them: on every row above the two seed
 ranges overlap, and the automatic arm's range sits *inside* the human arm's on
 the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and
 43 (+0.010) and trails at 44 (−0.032), so the pooled difference of 0.001 rests
-on a single run. The correct statement is parity, and it is a statement about
-this metric rather than about the labels: on raw R@100 the human arm keeps a
+on a single run. The correct statement is parity, and it is a statement about this metric and not about the labels: on raw R@100 the human arm keeps a
 real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm
 leads fivefold, 0.268 against 0.052.
 
@@ -133,33 +131,33 @@ direction, which is the reading the spread column exists to force.
 ahead on the two annotators §4.5 convicts of inverting the front/behind
 convention, by 0.022 on group 6 and 0.027 on group 8, and *behind* on group 7,
 the one annotator this dissertation convicts of nothing, by 0.011. The
-ordering runs with annotation quality rather than with geometry, and the sign
+ordering runs with annotation quality and not with geometry, and the sign
 change on the clean annotator is the part worth noting: whatever advantage
 human labels carry here does not survive contact with an annotator who
 followed the stated convention. None of these three differences is separable
 across seeds, so the ordering is offered as a consistent direction and not as
 three measured effects.
 
-The size of that contamination is measurable rather than rhetorical. Of the
-2,818 relations in the test gold, **1,189 (42%) are front/behind, and 859 of
-those (72%) come from the two inverted annotators** — so **30% of the entire
-yardstick is a predicate labelled in the opposite direction to the convention
-every training group used**. Both arms train on groups 0–5, where no inversion
-is measured, so neither can score those relations and the penalty falls on
-them equally. What the inversion sets is therefore a *ceiling*, not a bias: it
-caps what any model trained on this data can achieve on 30% of the test gold,
-compressing the range in which the two arms can differ at all, and it makes
-the absolute mR@100 figures in this chapter lower bounds on both sides rather
-than estimates of spatial competence.
+The size of that contamination can be measured. Of the 2,818
+relations in the test gold, **1,189 (42%) are front/behind, and 859 of those
+(72%) come from the two inverted annotators** — so **30% of the entire
+yardstick is a predicate labelled in the opposite direction to the
+convention every training group used**. Both arms train on groups 0–5, where
+no inversion is measured, so neither can score those relations and the
+penalty falls on them equally. What the inversion sets is therefore a
+*ceiling*, not a bias: it caps what any model trained on this data can
+achieve on 30% of the test gold, compressing the range in which the two arms
+can differ at all, and it makes the absolute mR@100 figures in this chapter
+lower bounds on both sides, not estimates of spatial competence.
 
 What difference remains is a separate effect, and §6.4 localises it to
-annotator *selection* rather than annotator convention: it appears on the
-lateral predicates too, which have no direction to invert. The two defects
-co-occur in the same annotators without one causing the other.
+annotator *selection* , not annotator convention: it appears on the lateral
+predicates too, which have no direction to invert. The two defects co-occur
+in the same annotators without one causing the other.
 
-Two labelling rules support this rather than one. The figures above are the
-shipped `on_contact_min` of 0.85 (§4.14); the same experiment at the earlier
-0.60 gave 0.278, 0.286, 0.307 and 0.109 across the same four slices. Raising the
+Two labelling rules support this, not one. The figures above are the shipped
+`on_contact_min` of 0.85 (§4.14); the same experiment at the earlier 0.60
+gave 0.278, 0.286, 0.307 and 0.109 across the same four slices. Raising the
 threshold improved three slices and cost the fourth, and the ordering by
 annotator defect held under both. A pattern that survives changing the
 labelling rule is a property of the test annotation rather than of one
@@ -276,7 +274,7 @@ and the auto arm saw 24, so its 0.172 against 0.003 records that its labels
 the annotation bottleneck predicts, and it is not compositional
 generalisation; this dissertation does not claim it as such.
 
-## 6.5 An honest reading, both ways
+## 6.5 Two readings that both survive
 
 Two interpretations survive and neither is available without the other. The
 benchmark result is real: a consumer *evaluated against human-annotated scene
@@ -287,39 +285,39 @@ exactly where the annotation is defective and absent where it is not, which is
 what annotation-prior agreement would look like.
 
 The critical reading is not novel to this project, which is what makes it
-credible rather than self-serving. Neural Motifs (Zellers et al., 2018)
-established that a frequency baseline ignoring the image is hard to beat;
-Unbiased SGG (Tang et al., 2020) formalised how thoroughly such models absorb
-the annotation distribution; Northcutt, Athalye and Mueller (2021) showed
-erroneous test labels reorder rankings across ten benchmarks. What this
-chapter adds is a case where the confound is *isolated by construction*: the
-arms differ only in label source and share a frozen detector, and the
-per-annotator defects were measured beforehand in Chapter 4, so the advantage
-is attributed to annotation practice, not inferred. The one remaining
-instrument is a manual audit of the auto arm's top-ranked "false positives",
-the analogue of §4.4, left as designed follow-up.
+credible. Neural Motifs (Zellers et al., 2018) established that a frequency
+baseline ignoring the image is hard to beat; Unbiased SGG (Tang et al.,
+2020) formalised how thoroughly such models absorb the annotation
+distribution; Northcutt, Athalye and Mueller (2021) showed erroneous test
+labels reorder rankings across ten benchmarks. What this chapter adds is a
+case where the confound is *isolated by construction*: the arms differ only
+in label source and share a frozen detector, and the per-annotator defects
+were measured beforehand in Chapter 4, so the advantage is attributed to
+annotation practice, not inferred. The one remaining instrument is a manual
+audit of the auto arm's top-ranked "false positives", the analogue of §4.4,
+left as designed follow-up.
 
 
 ## 6.6 What Chapter 5's predictions got right and wrong
 
 Registered before the run, judged after: prediction 1 (early human-arm
 saturation) is **confirmed** and replicates the source paper. Prediction 2
-(higher plateau) is **unresolved on mR@100**, and the honest word matters: an
+(higher plateau) is **unresolved on mR@100**, and the word matters: an
 earlier version of this chapter recorded it as refuted on the strength of a
-0.048 gap that the retrained arms of §6.3 reduce to 0.001, which no experiment
-of this size can call in either direction. Where the plateau *is* higher is
-the zero-shot component the prediction did not name, 0.268 against 0.052.
-Prediction 3 (`near` recovery) is **refuted**: it wrongly assumed the test gold
-could reward dense `near` prediction. The value of pre-registration is that
-these verdicts are checkable, and that one of them had to be revised when the
-measurement improved is a point in its favour rather than against it.
+0.048 gap that the retrained arms of §6.3 reduce to 0.001, which no
+experiment of this size can call in either direction. Where the plateau *is*
+higher is the zero-shot component the prediction did not name, 0.268 against
+0.052. Prediction 3 (`near` recovery) is **refuted**: it wrongly assumed the
+test gold could reward dense `near` prediction. The value of
+pre-registration is that these verdicts are checkable, and that one of them
+had to be revised when the measurement improved is a point in its favour and
+not against it.
 
-The replication adds a fourth verdict, on a claim made *after* the run rather
-than before: §6.3.1 withdraws the single-seed group-7 result, not
-quietly editing it away. The lesson is the one already applied to the
-pre-registered predictions and not to that one, that a difference is worth
-naming only once its size is compared with the variation of the procedure
-that produced it.
+The replication adds a fourth verdict, on a claim made *after* the run, not
+before: §6.3.1 withdraws the single-seed group-7 result, not quietly editing
+it away. The lesson is the one already applied to the pre-registered
+predictions and not to that one, that a difference is worth naming only once
+its size is compared with the variation of the procedure that produced it.
 
 ## 6.7 Answer, at the level the source paper measures
 

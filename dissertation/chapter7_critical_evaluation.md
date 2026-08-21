@@ -10,14 +10,13 @@ objective-by-objective audit belongs with the conclusions and is in §9.1.
 ## 7.1 Achievement against the research questions
 
 **RQ1** asked whether spatial-relationship annotation can be automated at a
-quality comparable to human annotation. The answer is predicate-shaped rather
-than singular, and §9.1 states it against the criteria of §1.2.2; what matters
+quality comparable to human annotation. The answer is different for each predicate, and §9.1 states it against the criteria of §1.2.2; what matters
 here is its shape. For the lateral and proximity predicates the tool is by
 every measure available *at least* as good as the human process. For support
 it is not: two evidence upgrades motivated by measurement lifted recall, but
 blind-audited precision stops the claim at about half the labels the tool adds
 beyond the human record. For the depth pair the shortfall is calibrated
-abstention plus an inverted direction convention rather than error, and where
+abstention plus an inverted direction convention, not error, and where
 the tool commits it agrees at 0.95–1.00 with six of the seven same-convention
 annotators. "Comparable to human quality" understates that case: on
 front/behind the tool is more consistent than the human process it is
@@ -34,14 +33,14 @@ triplets) and consistency (one definition, uniformly applied). But it converts
 the project's premise from "removing the bottleneck loses little" to "removing
 the bottleneck gains".
 
-That claim is scoped by the third measurement rather than confirmed by it.
-Chapter 6 cannot separate the same two label sources in the source paper's own
-framework, so the advantage the classifier measures does not appear on a
+That claim is scoped by the third measurement and is not confirmed by it.
+Chapter 6 cannot separate the same two label sources in the source paper's
+own framework, so the advantage the classifier measures does not appear on a
 ranked metric scored against sparse human annotation. Both results are about
-the same labels; what differs is what each yardstick asks for. The defensible
-sentence is that automatic labels *teach better where correctness is the
-criterion and equally well where resemblance to the annotators is*, not that
-they are simply better.
+the same labels; what differs is what each yardstick asks for. The
+defensible sentence is that automatic labels *teach better where correctness
+is the criterion and equally well where resemblance to the annotators is*,
+not that they are simply better.
 
 The third arm is what makes that claim hard to dismiss. Self-training on the
 human labels, the standard semi-supervised remedy for exactly this problem,
@@ -93,19 +92,19 @@ tie within the band. Both operating points are documented, revisable
 decisions and not hidden constants (ablations A2, A7).
 
 Section 4.12 settles what the ablations could not. If the front/behind gap
-were depth *noise*, estimates jittering either side of a boundary, moving the
-camera would flip verdicts, since that is the perturbation such noise responds
-to. It does not: the predicate reproduces itself 0.958 of the time, above `on`
-and `under`, and holds at 0.911 at 89-fold compression. A predicate recovering
-0.70 of the human labels while agreeing with itself at that rate is not
-guessing; it is applying a consistent criterion the annotators did not share.
-With A8, where quadrupling the depth model changed nothing, and §4.5, where
-two groups labelled the pair oppositely, the weight of the shortfall sits on
-definitional disagreement rather than perception. That does not dissolve
-monocular ambiguity, which genuinely bounds the predicate at equal camera
-distance, but it relocates most of the measured gap away from it. The
-implication is unglamorous: the best expected return here is a written
-annotation guideline, not a better depth network.
+were depth *noise*, estimates jittering either side of a boundary, moving
+the camera would flip verdicts, since that is the perturbation such noise
+responds to. It does not: the predicate reproduces itself 0.958 of the time,
+above `on` and `under`, and holds at 0.911 at 89-fold compression. A
+predicate recovering 0.70 of the human labels while agreeing with itself at
+that rate is not guessing; it is applying a consistent criterion the
+annotators did not share. With A8, where quadrupling the depth model changed
+nothing, and §4.5, where two groups labelled the pair oppositely, the weight
+of the shortfall sits on definitional disagreement, not perception. That
+does not dissolve monocular ambiguity, which genuinely bounds the predicate
+at equal camera distance, but it relocates most of the measured gap away
+from it. The implication is unglamorous: the best expected return here is a
+written annotation guideline, not a better depth network.
 
 ## 7.3 The dataset's annotation process, examined
 
@@ -167,41 +166,42 @@ late. The fix was cheap, four extra runs on a free GPU tier, and a replication
 designed from the start would have trained every arm at three seeds and
 reported ranges throughout, which is what the final version does.
 
-Choices a stricter replication should improve, the first of which is no longer
-a suspicion but a measurement. The **audits were verdicted by the author**,
-and §4.14 shows what that cost: the same rules on the same data score 0.77
-when the auditor knows every item is a tool assertion and 0.404 when decoys
-are mixed in unmarked. The **support-rule iteration used the same audit
-machinery twice**, making the second audit confirmatory rather than
-independent, and it confirmed a figure that a blind instrument does not
-support. Blind verdicting with decoys should have been the instrument from
-the first audit, not the third; it is cheap, and it is the only step
-here that changed a headline number instead of tightening one.
+Choices a stricter replication should improve, the first of which is no
+longer a suspicion but a measurement. The **audits were verdicted by the
+author**, and §4.14 shows what that cost: the same rules on the same data
+score 0.77 when the auditor knows every item is a tool assertion and 0.404
+when decoys are mixed in unmarked. The **support-rule iteration used the
+same audit machinery twice**, making the second audit confirmatory, and it
+confirmed a figure that a blind instrument does not support. Blind
+verdicting with decoys should have been the instrument from the first audit,
+not the third; it is cheap, and it is the only step here that changed a
+headline number instead of tightening one.
 
-One finding belongs here rather than in Chapter 6, because it is about method
-and not about labels. The benchmark arms were originally trained weeks apart,
-against whatever state the upstream framework happened to be in on the day;
-retraining all nine runs in a single session on one clone moved the
+One finding belongs here and not in Chapter 6, because it is about method
+and not about labels. The benchmark arms were originally trained weeks
+apart, against whatever state the upstream framework happened to be in on
+the day; retraining all nine runs in a single session on one clone moved the
 human arm's pooled mR@100 from 0.326 to 0.293, while the vision-language arm
-moved 0.001 and neither arm's labels had changed. **A third of the margin this
-dissertation once reported between label sources was an artefact of *when*
-each arm was trained.** Nothing in the original protocol was careless: seeds
-were fixed, the detector frozen, the configuration shared. The confound
-entered through an unpinned dependency, which is the one axis the protocol did
-not name. A controlled comparison has to control the code as explicitly as it
-controls the data, by pinning versions and training every arm in one session;
-§6.3 now does, and its figures supersede the earlier ones.
+moved 0.001 and neither arm's labels had changed. **A third of the margin
+this dissertation once reported between label sources was an artefact of
+*when* each arm was trained.** Nothing in the original protocol was
+careless: seeds were fixed, the detector frozen, the configuration shared.
+The confound entered through an unpinned dependency, which is the one axis
+the protocol did not name. A controlled comparison has to control the code
+as explicitly as it controls the data, by pinning versions and training
+every arm in one session; §6.3 now does, and its figures supersede the
+earlier ones.
 
-That weakness was acted on rather than only recorded, and §4.14 gives the
-sequence: the support threshold had been fitted where a false positive outside
-the gold was free, so it was re-fitted, shipped, every experiment re-run, and a
-second pack drawn from the new labels and audited blind. The lesson is not the
-number but the order — a threshold worth changing is worth re-auditing on
-labels it produced, because the estimate that justifies a change is not
-evidence for it. The SGDet **threshold tuning used one
-disclosed iteration on a trial slice** that over-estimated full-set detection
-quality, an instructive case of trial-set optimism; and invariant fuzzing pins
-rule consistency but not rule *truth*, which only the audits address.
+That weakness was acted on, not only recorded, and §4.14 gives the sequence:
+the support threshold had been fitted where a false positive outside the
+gold was free, so it was re-fitted, shipped, every experiment re-run, and a
+second pack drawn from the new labels and audited blind. The lesson is not
+the number but the order — a threshold worth changing is worth re-auditing
+on labels it produced, because the estimate that justifies a change is not
+evidence for it. The SGDet **threshold tuning used one disclosed iteration
+on a trial slice** that over-estimated full-set detection quality, an
+instructive case of trial-set optimism; and invariant fuzzing pins rule
+consistency but not rule *truth*, which only the audits address.
 
 ## 7.5 Synthesis against the geometry-to-label lineage
 
@@ -212,8 +212,7 @@ difficulty sits. What it adds is not the skeleton but the parts the lineage
 leaves implicit, because SpatialVLM and VQASynth (Remyx AI, 2024) generate
 *training text* at internet scale without ever confronting a fixed predicate
 vocabulary with human ground truth, and SpatialRGPT (Cheng et al., 2024)
-curates region representations with depth but validates downstream rather
-than against annotators. This project contributes three. **Annotator-aware
+curates region representations with depth but validates downstream and not against annotators. This project contributes three. **Annotator-aware
 calibration**: fit only on annotators who used a label, and hold out
 annotators and not merely images. **Contact as the support signature**:
 mask-bottom adjacency, unused by the box-geometry lineage, which repaired both
@@ -228,19 +227,19 @@ reference-frame disagreement inside one annotation team, an instance of the
 frame-dependence Landau and Jackendoff (1993) describe.
 
 Two results connect this project to literatures outside its lineage. Chapter
-6's benchmark finding is a case of the problem Northcutt, Athalye and Mueller
-(2021) demonstrated across ten benchmarks, that errors in test annotation
-change model rankings and can select the wrong model; here the defect is
-systematic annotator convention rather than random noise, and it distorts a
-ranking between two label *sources*, not two architectures. The
-diagnosis matches the motivation for SpatialSense (Yang, K., Russakovsky and
-Deng, 2019) and Rel3D (Goyal et al., 2020), both built after their authors
-found relation benchmarks could be scored well without using spatial
-information; this dissertation observes the mirror image, a model scoring
-well by reproducing annotator selection habits. The RQ2 result is Ratner et
-al.'s (2017) weak-supervision prediction confirmed in a domain the original
-work did not address, with the standard semi-supervised alternative (Lee,
-2013) implemented and measured and not argued away.
+6's benchmark finding is a case of the problem Northcutt, Athalye and
+Mueller (2021) demonstrated across ten benchmarks, that errors in test
+annotation change model rankings and can select the wrong model; here the
+defect is systematic annotator convention, not random noise, and it distorts
+a ranking between two label *sources*, not two architectures. The diagnosis
+matches the motivation for SpatialSense (Yang, K., Russakovsky and Deng,
+2019) and Rel3D (Goyal et al., 2020), both built after their authors found
+relation benchmarks could be scored well without using spatial information;
+this dissertation observes the mirror image, a model scoring well by
+reproducing annotator selection habits. The RQ2 result is Ratner et al.'s
+(2017) weak-supervision prediction confirmed in a domain the original work
+did not address, with the standard semi-supervised alternative (Lee, 2013)
+implemented and measured and not argued away.
 
 ## 7.6 Limitations and threats to validity
 
@@ -283,7 +282,7 @@ two the evidence does not settle.
 **Vocabulary scale: not answered, and conceded.** Nothing in this
 dissertation bears on predicates beyond the seven, and the objection is that
 a hand-written rule set does not extend by learning. It stands in full. What
-the work can offer is a boundary rather than a rebuttal: the rules are
+the work can offer is a boundary: the rules are
 decidable because the predicates are spatial, and §3.3 makes that
 dependence explicit instead of hoping it generalises. Section 9.3 records
 it as the limitation most likely to matter to anyone reusing the method.
@@ -318,8 +317,7 @@ this the objection a reader should weight most heavily.
 The dissertation does not assert that the camera frame is correct; it shows
 that the tool applies one frame consistently (§4.12), that two annotator
 groups applied another (§4.5), and that recall rises from 0.70/0.71 to 0.84
-once the convention is aligned. That establishes disagreement rather than
-error, and identifies which party is consistent. It does not establish which
+once the convention is aligned. That establishes disagreement, not error, and identifies which party is consistent. It does not establish which
 convention a robot should obey, and no measurement in this dissertation
 could, because that is a question about the specification and not about the
 data.

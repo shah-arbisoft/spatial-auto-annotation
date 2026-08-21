@@ -60,19 +60,25 @@ def main():
     small, se = _score("outputs/pairs.csv", gold)
     base, be = _score("outputs_base/pairs.csv", gold)
 
+    # Deltas are taken between the *displayed* (3dp) values, not the raw
+    # ones, so a reader can check the arithmetic against the printed
+    # columns: two figures that print one apart can differ by +0.0005.
+    def d3(a, b):
+        return round(round(b, 3) - round(a, 3), 3)
+
     md = ["# A8 - Depth model ablation (Depth Anything v2 Small vs Base)\n",
           "| predicate | Small | Base | delta |", "|---|---|---|---|"]
     for k in PREDICATES:
-        md.append(f"| {k} | {small[k]:.3f} | {base[k]:.3f} | {base[k]-small[k]:+.3f} |")
+        md.append(f"| {k} | {small[k]:.3f} | {base[k]:.3f} | {d3(small[k], base[k]):+.3f} |")
     md.append(f"| **mean** | **{sum(small.values())/7:.3f}** | "
               f"**{sum(base.values())/7:.3f}** | "
-              f"**{(sum(base.values())-sum(small.values()))/7:+.3f}** |")
+              f"**{d3(sum(small.values())/7, sum(base.values())/7):+.3f}** |")
     md.append(f"\nfront/behind emit rate (commit vs abstain): "
-              f"Small {se:.3f}, Base {be:.3f} ({be-se:+.3f}).\n")
+              f"Small {se:.3f}, Base {be:.3f} ({d3(se, be):+.3f}).\n")
     md.append(f"A 4x-larger depth model moves front/behind recall by "
-              f"{base['in front of']-small['in front of']:+.3f}/"
-              f"{base['behind']-small['behind']:+.3f} and mean recall by "
-              f"{(sum(base.values())-sum(small.values()))/7:+.3f}. "
+              f"{d3(small['in front of'], base['in front of']):+.3f}/"
+              f"{d3(small['behind'], base['behind']):+.3f} and mean recall by "
+              f"{d3(sum(small.values())/7, sum(base.values())/7):+.3f}. "
               "The depth-predicate limit is monocular "
               "ambiguity - two objects at a similar distance are inseparable by "
               "*any* monocular model - not the depth network's fidelity. This is "

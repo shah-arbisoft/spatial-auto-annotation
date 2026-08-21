@@ -61,9 +61,9 @@ cluster bootstrap over images (`eval/uncertainty.py`, 2,000 resamples, whole
 images resampled so triplets sharing a scene, a depth map and an annotator
 stay together). The 95% intervals are narrow where the tool is strong and
 materially wider on the depth pair, which is the signature of a predicate
-decided by scene composition rather than a stable rule; the bootstrap ran on
-the labels of §4.9 and its widths, not its centres, are what the argument
-uses. Held-out intervals appear in §4.6.
+decided by scene composition and not a stable rule; the bootstrap ran on the
+labels of §4.9 and its widths, not its centres, are what the argument uses.
+Held-out intervals appear in §4.6.
 
 Three observations. **(i)** The tool recovers 81% of all human triplets (7,276 of 8,926; mean
 0.845, and 0.74 on annotators no threshold ever saw) against 14% for random
@@ -82,8 +82,7 @@ signatures: convention inversion for the depth pair (§4.5), and
 direction-usage asymmetry for support, where several groups label one
 direction only (group_2 records 188 *on* and no *under*; group_8 only
 *under*) while the held-out groups' support labels happen to be canonical
-stackings the rules recover at 0.95–1.00. Gold totals 8,926 rather than 8,928
-because two stray annotation files without matching images are excluded
+stackings the rules recover at 0.95–1.00. Gold totals 8,926, not 8,928, because two stray annotation files without matching images are excluded
 (Chapter 3).
 
 ## 4.3 Precision on the annotated pairs
@@ -218,38 +217,44 @@ interval supports a weak *failure to distinguish* the tool from a tenth
 annotator and not a demonstration that it is one. Appendix F.7 derives it and
 sets out why the assumption is false rather than merely unverified.
 
-## 4.7 Flags: the honest human cost
+## 4.7 Flags: what review actually costs
 
 31.5% of ordered pairs carry a flag: depth-ambiguous 19.3% (down from 29.5%
 before the ground-plane fallback, which resolved a third of the depth
-abstentions) and lateral-ambiguous 10.0% are *abstentions* (no label emitted;
-nothing to review), while the borderline-near band, 8.5% of pairs, is the
-genuine review queue. At a conservative 3 seconds per queued pair this is ≈6 hours of review for
-the full dataset against the original nine-annotator manual pass, and it is
-optional rather than required for the fidelity reported above. The guidance
-the annotators worked from is vocabulary lists only, so Chapter 3's
-specification is the first operational definition of these predicates, which
-§7.3 draws out.
+abstentions) and lateral-ambiguous 10.0% are *abstentions* (no label
+emitted; nothing to review), while the borderline-near band, 8.5% of pairs,
+is the genuine review queue. At a conservative 3 seconds per queued pair
+this is ≈6 hours of review for the full dataset against the original
+nine-annotator manual pass, and it is optional, not required, for the
+fidelity reported above. The guidance the annotators worked from is
+vocabulary lists only, so Chapter 3's specification is the first operational
+definition of these predicates, which §7.3 draws out.
 
 
 ## 4.8 Answer to RQ1
 
 Automated annotation reaches human-comparable quality on five of seven
-predicates outright, at 0.75–1.00 recall, mean 0.85 and 0.74 on annotators no
-threshold ever saw, with blind-audited true precision 0.79–1.00 for lateral,
-proximity and depth-decided front/behind, each on 24 samples, so the claim
-they support is comparability rather than a particular value. Support is the
-exception and is answered separately: 0.535 [0.42, 0.65] on 71 samples of the
-shipped rule, up from 0.404 before §4.14 traced the shortfall to a threshold
-fitted on a metric that could not see the error it controls. One of the five
-is `near`, matched completely once its inconsistent usage is accounted for
-(0.997 pooled, 1.00 held-out), resolving the predicate the source paper
-reports as failing for every model it benchmarks (§2.2). The
-qualification is the depth pair, at 0.70/0.71 pooled and 0.84 once the two
-inverted groups are aligned; §4.5 decomposes that shortfall into calibrated
-abstention and a convention the annotators did not share, in measured
-proportions, and neither component is depth error. The residual human cost is
-an 8.5% review queue (§4.7), against labels 20× denser than the human set.
+predicates outright, at 0.75–1.00 recall, mean 0.85 and 0.74 on annotators
+no threshold ever saw, with blind-audited true precision 0.79–1.00 for
+lateral, proximity and depth-decided front/behind, each on 24 samples, so
+the claim they support is comparability. Support is the exception and is
+answered separately: 0.535 [0.42, 0.65] on 71 samples of the shipped rule,
+up from 0.404 before §4.14 traced the shortfall to a threshold fitted on a
+metric that could not see the error it controls. One of the five is `near`,
+recovered completely once its inconsistent usage is accounted for (0.997
+pooled, 1.00 held-out), which answers the predicate the source paper reports
+as failing for every model it benchmarks (§2.2). That is a claim about
+recall, and on the precision side `near` is the weakest of the five: 0.792
+audited, the widest disagreement between the two judges, and two of its four
+decoys accepted by the author (§4.14). A rule that fires on sixty times more
+pairs than the annotators labelled will recover their labels almost by
+construction, so this is the predicate where the recall figure most
+overstates what is known. The qualification is the depth pair, at 0.70/0.71
+pooled and 0.84 once the two inverted groups are aligned; §4.5 decomposes
+that shortfall into calibrated abstention and a convention the annotators
+did not share, in measured proportions, and neither component is depth
+error. The residual human cost is an 8.5% review queue (§4.7), against
+labels 20× denser than the human set.
 
 ## 4.9 Shipped from the ablations
 
@@ -269,7 +274,7 @@ optimised against.
 | A5 | mask-contact support rule | `on_contact_min` 0.60 | **shipped**; held-out support F1 0.71 → 0.87, both error directions at once |
 | A6 | `near` contact exclusion | on | **shipped**; costs 2 recalled triplets, prevents 4,084 labels contradicting the measured convention |
 | A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.70/0.71, mean recall 0.79 → 0.85 |
-| A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.000/−0.002 front/behind, mean recall marginally lower |
+| A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/−0.002 front/behind, mean recall marginally lower |
 | A9 | multi-frame depth (two-view triangulation) | n/a | **declined**; 0.706 against the monocular cascade's 0.875, on 9% of pairs |
 
 Three changed the headline table materially, and their order is this
@@ -281,10 +286,10 @@ once; and the ground-plane fallback then recovered most of the front/behind
 abstention band without depth at all.
 
 The two declined ablations bound where engineering can help: neither a
-four-times-larger depth model nor two-view triangulation over the raw capture
-improves the depth pair, and the second is 0.17 *worse* where it answers at
-all. The limit is monocular ambiguity in the scenes, not model
-capacity, and multi-view geometry inherits it rather than removing it; §7.2
+four-times-larger depth model nor two-view triangulation over the raw
+capture improves the depth pair, and the second is 0.17 *worse* where it
+answers at all. The limit is monocular ambiguity in the scenes, not model
+capacity, and multi-view geometry inherits it instead of removing it; §7.2
 takes up what follows.
 
 Full derivations, calibration evidence, audit samples and the failure
@@ -299,8 +304,7 @@ individual conditions against the cached geometry and mask-contact maps
 shipped rule set down by predicate and cause.
 
 Genuine depth-ordering errors remain 1–5% of front/behind misses, the support
-misses are threshold trades on real contact evidence rather than box-geometry
-artefacts, and `near` misses have all but vanished. The convention-inverted
+misses are threshold trades on real contact evidence, not box-geometry artefacts, and `near` misses have all but vanished. The convention-inverted
 *share* grew to 38–42% not because those misses increased but because the
 ground-plane fallback shrank the abstention share around them, total misses
 falling from 2,107 to 1,689. Misses attributable to avoidable tool error
@@ -326,7 +330,7 @@ shipped, so those are a floor, and detectable pairs skew towards
 well-separated objects). The gap is a detection problem, not a relations one:
 the rules are detector-agnostic.
 
-Two honest notes. Zero-shot open-vocabulary detection is the worst-case
+Two caveats. Zero-shot open-vocabulary detection is the worst-case
 detector, the trade §2.6 identifies, and it was used because the authors'
 trained YOLOv10m weights were not available; with those the end-to-end gap
 would largely close. And the 20-image trial over-estimated detection quality,
@@ -400,7 +404,7 @@ follows.
 **Limits.** The figures are an upper bound: only pairs matched between
 keyframe and frame contribute, and those are the ones whose objects moved
 least. Coverage also thins as segments grow, so aggressive compression leaves
-pairs uncovered rather than mislabelled, which Appendix E.2 traces to box
+pairs uncovered, which Appendix E.2 traces to box
 drift and not absent annotation, making a tracker the straightforward
 remedy.
 
@@ -471,7 +475,7 @@ itself or inverts the front/behind convention; what they do is fall silent,
 and supply one direction of a symmetric pair without the other in a third of
 cases, which are the two defects §4.5 measures in the *human* annotation.
 **Asked to annotate, a capable vision-language model reproduces the
-characteristic failure of the human process rather than a geometric one**,
+characteristic failure of the human process and not a geometric one**,
 and its conservatism is both why its precision beats the pipeline's and why
 most relations go unrecorded. That it is more precise where it speaks still
 begins a case for it as an adjudicator on the depth pair, which §7.6 takes up.
@@ -545,7 +549,7 @@ most freely: 43,388 ordered pairs against 717 in the human record. The
 threshold generalised to a held-out annotator at recall 1.00 (§3.8), so the
 *notion* is calibrated; what 24 samples cannot establish is that a rule firing
 sixty times more often than the annotators did is right every time it fires.
-The honest reading of the 1.000 is that no counter-example appeared in 24
+The most the 1.000 supports is that no counter-example appeared in 24
 draws, not that none exists.
 
 **The decoys establish this is not an auditor being harsh.** Both judges
