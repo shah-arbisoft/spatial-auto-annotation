@@ -237,6 +237,7 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/downstream.py --seeds 42,43,44` | RQ2, all arms, `rq2_report.json`, `tables/rq2.md` | ~20 min |
 | `python eval/score_vlm_pilot.py`, then `python eval/compare_vlm_models.py` | the §4.13 comparison and `tables/vlm_models.md`, from the stored replies | <1 min |
 | `python eval/score_planner.py` | the §5.7 blind scoring, `planner_scores.json` | <1 min |
+| `python eval/planner_paired_tests.py` | §5.7's exact McNemar tests over the paired scenes, `planner_paired_tests.json` | <1 min |
 | `python scripts/make_figures.py` | every figure | ~1 min |
 
 Four commands have a trap or an option worth knowing, and they are the ones

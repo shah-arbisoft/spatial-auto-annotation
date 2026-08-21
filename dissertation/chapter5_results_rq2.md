@@ -276,14 +276,34 @@ twenty-five scenes is 24%, against the measured support recall of 0.81/0.75 in
 result is the fidelity result showing up one level higher in the chain — and
 it moves when that fidelity does.
 
-**What this does not show.** Twenty-five scenes is a small sample, and the
-interest is the disjointness of the failures, not the two-scene margin
-between C and D, which that sample cannot resolve. The vision-language model's
-assertions were never audited as the tool's were (§4.4), so the union's gain
-is measured on the planning task alone. The comparison is between label
-sources, not planners: condition B is handed the exact fact the task tests. And
-no robot moved, so this measures plans, not executions, and closes the gap
-between labels and robot behaviour by one link, not entirely.
+**Twenty-five scenes is small, and the pairing is what makes it enough.**
+Every condition is put to the same scenes, so the evidence sits in the scenes
+where two conditions disagree, and an exact McNemar test over those
+(`eval/planner_paired_tests.py`) says which comparisons this sample can
+settle. It settles the ones the argument rests on. Supplying relations at all
+separates from supplying none, 25 discordant scenes for the human labels and
+19 for the tool's, all in one direction, p < 10^-5. The union's gain over the
+tool alone is 6 scenes to 0, p = 0.031, as is the human arm's lead over the
+tool alone, the comparison that runs against this project.
+
+The same test names what 25 scenes cannot settle. The tool against the
+vision-language source is 6 discordant scenes to 5, p = 1.00, so the two-scene
+margin means nothing and this section declines to read it; the union's edge
+over that source alone, 5 to 0, reaches only p = 0.063. The paired tests are
+also sharp exactly where the absolute rates are not: C's own rate is 19 of 25
+with a 95% interval of [0.55, 0.91]. This experiment measures *which source is
+better on these scenes* far more precisely than how often any of them would
+succeed in general, and that generalisation is weak because of what the scenes
+are, not how many.
+
+**What this does not show.** The scenes were selected to contain an
+occluder, so the result speaks to that situation and not to task planning at
+large. The vision-language model's assertions were never audited as the
+tool's were (§4.4), so the union's gain is measured on the planning task
+alone. The comparison is between label sources and not planners: condition B
+is handed the exact fact the task tests. And no robot moved, so this
+measures plans, not executions, and closes the gap between labels and robot
+behaviour by one link rather than entirely.
 
 **The threshold refit of §4.14 cost condition C three scenes, and E none.**
 An earlier version of this experiment ran on the labels `on_contact_min` 0.60
