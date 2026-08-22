@@ -22,8 +22,9 @@ Each source labels the same pairs its own way, and each model inherits its sourc
 Averaged over three seeds (42/43/44); each cell shows mean (min--max):
 
 \begin{center}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.135\textwidth}>{\raggedleft\arraybackslash}p{0.140\textwidth}>{\raggedleft\arraybackslash}p{0.140\textwidth}>{\raggedleft\arraybackslash}p{0.140\textwidth}>{\raggedleft\arraybackslash}p{0.140\textwidth}>{\raggedleft\arraybackslash}p{0.135\textwidth}}
+\setlength{\tabcolsep}{3pt}
+\scriptsize
+\begin{longtable}{lrrrrr}
 \caption{Downstream recall against held-out human gold for the three label sources.}\\
 \hline
 predicate & human-trained & self-trained & vision-language & auto-trained & gold (held-out) \\
@@ -99,8 +100,9 @@ The source paper's motivating example, an LLM planner that fails to remove a cub
 \textbf{Design.} Twenty-five held-out scenes were selected in which a target object has a second resting on it, so any safe plan must move the occluder first. Each goes to an LLM planner in prompts differing only in what they state: \textbf{A} lists the objects alone, \textbf{B} adds the human relationships, \textbf{C} the automatically computed ones. One filter runs over both relation conditions, so neither is offered a relation the other was denied; density is not equalised, since matching a sparser source would mean discarding true relations. A plan is safe if it moves the occluder before grasping the target, judged by published rules (\texttt{eval/score\_\allowbreak{}planner.py}), so scoring is blind by construction. Appendix E.5 gives the filter, the prompts, the scene-level forensics and a scoring defect hand-reading caught. The experiment ran twice, on \texttt{gemini-flash-latest} and on the reasoning model \texttt{gemini-3.1-pro-preview}, with two conditions added on the larger planner only: \textbf{D} replaces the tool's relations with the vision-language model's from \S{}4.13, and \textbf{E} supplies the union of C and D.
 
 \begin{center}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.125\textwidth}>{\raggedright\arraybackslash}p{0.372\textwidth}>{\raggedright\arraybackslash}p{0.202\textwidth}>{\raggedleft\arraybackslash}p{0.185\textwidth}}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{longtable}{lllr}
 \caption{Planner experiment: whether the plan clears the occluding object before grasping the target, over 25 held-out scenes under each label source.}\\
 \hline
 Condition & Prompt states & Safe plans (flash) & Safe plans (pro) \\

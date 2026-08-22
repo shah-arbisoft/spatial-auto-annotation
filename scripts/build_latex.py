@@ -336,8 +336,25 @@ COLPAD_PT = 12.0       # 2 * \tabcolsep
 CHAR_PT = 5.2          # mean glyph advance at \small in a 12pt document
 
 
-def char_budget(ncol: int) -> float:
-    return max(20.0, (TEXT_PT - COLPAD_PT * ncol) / CHAR_PT)
+# Sizes a wide table may fall back to before its columns are made to wrap,
+# with the mean glyph advance each implies and the \tabcolsep it uses.
+SIZE_STEPS = [(r"\small", CHAR_PT, 6.0),
+              (r"\footnotesize", CHAR_PT * 10.0 / 11.0, 3.0),
+              (r"\footnotesize", CHAR_PT * 10.0 / 11.0, 2.0),
+              (r"\scriptsize", CHAR_PT * 8.0 / 11.0, 3.0)]
+
+
+def char_budget(ncol: int, char_pt: float = CHAR_PT,
+                tabcolsep: float = 6.0) -> float:
+    return max(20.0, (TEXT_PT - 2.0 * tabcolsep * ncol) / char_pt)
+
+
+def fit_size(widest_total: float, ncol: int):
+    """Smallest shrink that lets the row sit on one line; None if none does."""
+    for size, char_pt, sep in SIZE_STEPS:
+        if widest_total <= char_budget(ncol, char_pt, sep):
+            return size, sep
+    return None, None
 
 
 def is_numeric_col(body: list[list[str]], i: int) -> bool:
@@ -364,7 +381,8 @@ def col_spec(cells: list[list[str]], ncol: int) -> str:
               for i in range(ncol)]
     numeric = [is_numeric_col(body, i) for i in range(ncol)]
 
-    if sum(widest) <= char_budget(ncol):
+    size, sep = fit_size(sum(widest), ncol)
+    if size is not None:
         if ncol <= 2:
             return "l" * ncol
         return "l" + "".join("r" if numeric[i] else "l" for i in range(1, ncol))
@@ -398,7 +416,13 @@ def table(rows: list[str], caption: str = "") -> str:
     head, body = cells[0], cells[1:]
     head += [""] * (ncol - len(head))
     spec = col_spec(cells, ncol)
-    out = [r"\begin{center}", r"\small",
+    widest = [max((len(r[i]) for r in cells if i < len(r)), default=1)
+              for i in range(ncol)]
+    size, sep = fit_size(sum(widest), ncol)
+    if size is None:                      # nothing fits: columns must wrap
+        size, sep = r"\footnotesize", 3.0
+    out = [r"\begin{center}",
+           r"\setlength{\tabcolsep}{" + f"{sep:g}" + "pt}", size,
            r"\begin{longtable}{" + spec + "}"]
     if caption:
         # longtable takes its caption as the first row; this is what puts the

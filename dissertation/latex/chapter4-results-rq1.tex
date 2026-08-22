@@ -30,6 +30,7 @@ Figure~\ref{fig:rq1-recall} plots the per-predicate result; the table below carr
 
 
 \begin{center}
+\setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrrrrr}
 \caption{Per-predicate recall of the human triplets, pooled and on held-out annotators, against three baselines.}\\
@@ -69,6 +70,7 @@ Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.93 on the sup
 105 extra predictions (15 per predicate, seeded stratified sample) were rendered with subject/object boxes and manually verdicted, using a conservative rule under which any case not clearly true was marked wrong (\texttt{outputs/audit/audit\_\allowbreak{}sheet.csv}; verdicts to be independently spot-checked). This audit was run against the \textit{pre-gate box rule} and is reported as found because it motivated the support-rule repairs; \S{}4.9 re-audits the shipped rules and \S{}4.14 audits them again under blinding, so the support rows below describe a fixed failure, not the final tool. How far it was fixed is the subject of those two sections, and they disagree: pooled support precision moves 0.13 $\rightarrow$ 0.77 on an unblinded re-audit, back to 0.40 when the same rules are judged blind against decoys, and to 0.54 once the threshold that caused the over-emission is refitted and audited again.
 
 \begin{center}
+\setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrl}
 \caption{Manual audit of a stratified sample of extra predictions against the pre-gate box rule, with Wilson intervals. Superseded by the blind re-audit of Section 4.14; reported because it motivated the repair.}\\
@@ -96,8 +98,9 @@ The audit splits the predicates in two. For lateral, depth and proximity, \textb
 \section{The front/behind decomposition: a second measured annotation defect}
 
 \begin{center}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.109\textwidth}>{\raggedleft\arraybackslash}p{0.068\textwidth}>{\raggedleft\arraybackslash}p{0.097\textwidth}>{\raggedleft\arraybackslash}p{0.186\textwidth}>{\raggedright\arraybackslash}p{0.115\textwidth}>{\raggedleft\arraybackslash}p{0.103\textwidth}>{\raggedleft\arraybackslash}p{0.127\textwidth}}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{longtable}{lrrrlrr}
 \caption{Front/behind by annotator group: emission rate, agreement where the tool commits, and the effect of aligning the direction convention.}\\
 \hline
 Group & Gold & Emit rate & Agreement when committed & Convention & Raw recall & Aligned recall \\
@@ -173,7 +176,8 @@ Section 4.5 decomposes the depth pair's shortfall into calibrated abstention and
 Nine ablations were run. Seven sweep a shipped parameter over the cached geometry and are re-runnable offline in about twenty seconds (\texttt{eval/ablations.py}); two test whether a heavier perception stack would do better, and both say no. Every parameter was selected on the training annotator groups alone, with the held-out column reported and never optimised against.
 
 \begin{center}
-\small
+\setlength{\tabcolsep}{3pt}
+\footnotesize
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.065\textwidth}>{\raggedright\arraybackslash}p{0.219\textwidth}>{\raggedright\arraybackslash}p{0.150\textwidth}>{\raggedright\arraybackslash}p{0.450\textwidth}}
 \caption{The nine ablations: what each tests, the setting that shipped, and the verdict on held-out annotators.}\\
 \hline
@@ -229,6 +233,7 @@ The 884 released images are not independent photographs. Pixel-matching them aga
 \textbf{The measurement.} Consecutive frames show a scene from different viewpoints, so the pipeline's verdicts can be checked against themselves with no human labels: a relation fixed by geometry should survive the camera moving, and one decided by a coin toss at a threshold should not. Frames were segmented by content drift (\S{}3.10), which compresses the released frames 2.7$\times$ at $\tau$ = 10 and locates all eight known layout changes within five frames, and each segment's predicates were propagated from its keyframe to the rest (\texttt{eval/keyframe\_\allowbreak{}propagation.py}). The propagation runs over the 802 \textit{annotated} frames, not the 884 released ones, which segment differently because a subset sits further apart in the original capture (E.2); at $\tau$ = 10 those 802 give 568 keyframes, leaving 234 propagated frames and 11,352 comparable object pairs. Appendix E.2 reports the sweeps, the object-matching rule and the coverage figures.
 
 \begin{center}
+\setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrr}
 \caption{Stability of each predicate across viewpoints of the same scene, with recall under keyframe propagation against per-frame computation.}\\
@@ -271,6 +276,7 @@ The first column holds the finding, and it is not the expected one. Front/behind
 The three baselines of \S{}4.2 are deliberately weak, and a reader is entitled to ask about the strong one: if a vision-language model annotates this dataset as well as the geometric pipeline does, the pipeline is unnecessary. Thirty images, stratified across all nine annotator groups, go to the model with the ground-truth boxes drawn on and numbered, and it answers by index (\texttt{scripts/run\_\allowbreak{}vlm\_\allowbreak{}pilot.py}). That is the PredCls setting the pipeline is evaluated in, so neither is scored on detection, and the prompt carries Chapter 3's definitions verbatim, without which the run would measure \S{}2.5's reference-frame ambiguity, not accuracy. Two models were run, because the objection to one is that a larger model would close the gap: \texttt{gemini-flash-latest} is small and non-reasoning, \texttt{gemini-3.1-pro-preview} a reasoning model an order of magnitude larger.
 
 \begin{center}
+\setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrrr}
 \caption{A vision-language model against the geometric pipeline on the same 30 images, the same pairs and the same human gold: recall.}\\
@@ -316,6 +322,7 @@ Why a model may judge what \S{}4.13 shows it cannot annotate. The objection is o
 That would still be only an argument if the audit did not test it, and the decoys test it. The model rejected 26 of 28 relations the tool never emitted, against the author's 27 of 28, so on this pack it is a strict judge and not one that agrees with whatever it is shown; the two reach Cohen's $\kappa$ 0.601 over all items and 0.425 over the claims alone, moderate agreement rather than an echo. What the model is not is a human. Two judges who disagree at $\kappa$ 0.601 are better evidence than one, and neither is the independent human estimate Appendix E.3 was built to supply and has not yet returned.
 
 \begin{center}
+\setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lll}
 \caption{Blind, decoy-controlled audit of 242 sampled items, verdicted independently by the author and by a vision-language model, with Wilson intervals. The final row is the decoy control: relations the tool did not emit, which a judge who agreed with everything would reject none of.}\\
@@ -359,8 +366,9 @@ The repair was fitted, shipped, and then re-audited from scratch. The obvious re
 \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} was then set to 0.85 and every experiment in this dissertation re-run against the new labels. That prediction is not what this section reports, because a projection from held-out items selected under the \textit{old} labels is still an extrapolation. A second pack was drawn from the new emissions instead --- 219 items, 191 claims and 28 decoys, same construction, same blinding, same two judges --- and audited independently.
 
 \begin{center}
-\small
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.202\textwidth}>{\raggedleft\arraybackslash}p{0.142\textwidth}>{\raggedright\arraybackslash}p{0.287\textwidth}>{\raggedright\arraybackslash}p{0.253\textwidth}}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{longtable}{lrll}
 \caption{Per-predicate precision of the shipped tool: the re-fitted threshold audited on a fresh draw, beside the superseded v3 column, so the comparison is between two independent draws and not between two readings of one.}\\
 \hline
 Predicate & v3 author & v4 author (shipped) & v4 model \\
