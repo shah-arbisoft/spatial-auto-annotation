@@ -241,10 +241,13 @@ implemented and measured and not argued away.
 
 ## 7.6 Limitations and threats to validity
 
-**Internal.** Thresholds are fitted to six annotator groups of one dataset;
-audits are partly author-verdicted, the blinded sheet being the author's own
-and a vision-language judge scoring the same items independently (§7.4); the
-two-stage audit shares machinery with the rule change it evaluates.
+**Internal.** Thresholds are fitted to six annotator groups of one dataset.
+The audits are verdicted by the author and by a vision-language model, and
+neither is a disinterested human: the author built the tool, and the model
+is a system of the kind §4.13 shows annotates poorly, admissible here only
+because judging a supplied claim needs the half of it that works and because
+the decoys measure it doing so (§4.14). §7.4 reflects on what that cost; the independent human estimate is Appendix E.3 and it has not reported. The two-stage audit also shares
+machinery with the rule change it evaluates.
 
 **External.** One laboratory domain, six object classes, one camera and
 mounting; the fitted constants (`near_T`, ε values, contact threshold) are

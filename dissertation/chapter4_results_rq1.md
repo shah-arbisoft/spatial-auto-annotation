@@ -493,9 +493,11 @@ roughly as good as the geometry.
 
 That is not a defence of the model as an annotator, since exhaustiveness is
 the property this project exists to supply and a source skipping 45% of the
-pairs cannot deliver it. But the fair statement is that the pipeline beats it
-on coverage and matches it on judgement, which is the version this
-dissertation should be held to.
+pairs cannot deliver it. But the fair statement is that the pipeline beats
+it on coverage and matches it on judgement, which is the version this
+dissertation should be held to. The asymmetry matters again in §4.14, which
+asks the same family of model to judge claims it is handed rather than to
+find them, and so asks only for the half measured here as sound.
 
 The shape of the failure settles the question. Neither model contradicts
 itself or inverts the front/behind convention; what they do is fall silent,
@@ -523,10 +525,29 @@ relations it did *not* emit and no annotator labelled, mixed in unmarked. The
 decoys are the instrument: every item in the earlier sheets was a tool
 assertion, so an auditor who simply agreed scored 100% and looked calibrated,
 where here that auditor scores zero. Sampling, the class guard and the
-separation of sheet from key are in Appendix E.7. The same 242
-images, with the same definitions and the same instruction to answer wrong
-when unsure, were put to `gemini-3.6-flash` as an independent second judge
-(`scripts/judge_audit_vlm.py`).
+separation of sheet from key are in Appendix E.7. The same 242 images, with the same definitions and the same instruction to
+answer wrong when unsure, were put to `gemini-3.6-flash` as a second judge
+independent of the author (`scripts/judge_audit_vlm.py`).
+
+**Why a model may judge what §4.13 shows it cannot annotate.** The objection
+is obvious: §4.13 spends a section establishing that a vision-language model
+makes a poor annotator, and this section then gives one a vote. The two
+tasks differ in the half that failed. What §4.13 measures is *coverage* —
+the model never addressed 171 of 381 gold triplets, 44.9%, and its headline
+recall is mostly that silence — while on the pairs it did judge it was the
+*more precise* of the two, 0.419 against the pipeline's 0.351. Judging a
+claim that is handed to it asks only for the half that measured sound, since
+the item is supplied and nothing has to be enumerated.
+
+That would still be only an argument if the audit did not test it, and the
+decoys test it. The model rejected 26 of 28 relations the tool never
+emitted, against the author's 27 of 28, so on this pack it is a strict judge
+and not one that agrees with whatever it is shown; the two reach Cohen's κ
+0.601 over all items and 0.425 over the claims alone, moderate agreement
+rather than an echo. What the model is not is a human. Two judges who
+disagree at κ 0.601 are better evidence than one, and neither is the
+independent human estimate Appendix E.3 was built to supply and has not yet
+returned.
 
 | Predicate | Author | Model |
 |---|---|---|
