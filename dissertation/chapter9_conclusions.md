@@ -12,19 +12,17 @@ robot-acquired images can be automated, and whether the resulting labels are
 good enough to replace the human ones. Six objectives carried it, and the
 evidence for each is already reported.
 
-**O1** is the pipeline: all 836 images annotated in about five minutes on a
-6 GB consumer GPU, no human deciding any label, the dataset's own formats
-written byte-compatibly. **O2** is the specification: operational definitions
-of all seven predicates with every threshold fitted on groups 0 to 5 alone.
-**O3** is the fidelity study, mean recall 0.85 and 0.74 on annotators no
-threshold ever saw, against three trivial baselines, a vision-language model
-under the same definitions, nine ablations and audited precision. **O4** is
-the diagnosis: every one of the 1,689 missed triplets attributed to a cause,
-leaving roughly 7% genuine tool error (§4.10, §7.2). **O5** is the controlled
-experiment isolating the label source, 0.75 against 0.30 human and 0.36
-self-trained. **O6** repeats it in the source paper's own framework with a
-frozen detector and three seeds per arm, and carries it one link further to a
-planner.
+**O1** is the pipeline: 836 images annotated in about five minutes on a 6 GB
+GPU, no human deciding any label, the dataset's formats written
+byte-compatibly. **O2** is the specification, with every threshold fitted on
+groups 0 to 5 alone. **O3** is the fidelity study, mean recall 0.85 and 0.74
+on annotators no threshold saw, against three baselines, a vision-language
+model, nine ablations and audited precision. **O4** attributes every one of
+the 1,689 missed triplets to a cause, leaving roughly 7% genuine tool error
+(§4.10, §7.2). **O5** is the controlled experiment, 0.75 against 0.30 human
+and 0.36 self-trained. **O6** repeats it in the source paper's framework
+with a frozen detector and three seeds per arm, and carries it one link
+further to a planner.
 
 O6 is met in the sense that decides the answer: the heavyweight test does
 not agree with the lightweight one, the disagreement is localised to the

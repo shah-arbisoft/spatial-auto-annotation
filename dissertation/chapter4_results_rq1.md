@@ -513,10 +513,10 @@ of a thirty-image pilot.
 ## 4.14 Auditing the audit: blinding, decoys, and a second judge
 
 Every precision figure so far rests on the author verdicting the author's
-tool. Section 2.9 raises that objection and §7.4 concedes it. More verdicts of
-the same kind would only narrow an interval around a possibly biased centre,
-so this section re-runs the audit with the three defects of §4.4 and §4.9
-removed at once.
+tool, the objection §2.9 raises and §7.4 concedes. More verdicts of the same
+kind would only narrow an interval around a possibly biased centre, so this
+section re-runs the audit with the three defects of §4.4 and §4.9 removed at
+once.
 
 **Design.** 242 items: 214 claims the tool emitted and **28 decoys**,
 relations it did *not* emit and no annotator labelled, mixed in unmarked. The
@@ -581,12 +581,12 @@ draws, not that none exists.
 
 **The decoys establish this is not an auditor being harsh.** Both judges
 rejected **all eight** support decoys, so on support neither is disposed to
-agree with the tool for the sake of it. Where the author *is* more generous is
-elsewhere and consistently so: three of four `behind` decoys accepted against
-the model's one, and two of four for `in front of` and for `near`. That is a
-measured author bias, confined to exactly the family §4.5 shows the
-annotators themselves used inconsistently, and it is reported and not
-corrected because the same conservative instruction governed both judges.
+agree with the tool for the sake of it. The author is more generous
+elsewhere and consistently so: three of four `behind` decoys accepted
+against the model's one, and two of four for `in front of` and for `near`.
+That is a measured author bias, confined to the family §4.5 shows the
+annotators used inconsistently, reported and not corrected because the same
+instruction governed both judges.
 
 **Most of the drop is the blinding, not the sample.** The same rules on the
 same data scored 0.77 unblinded (§4.9) and 0.404 blind, because every row of

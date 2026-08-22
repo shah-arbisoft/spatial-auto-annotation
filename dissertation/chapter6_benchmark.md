@@ -79,12 +79,12 @@ front/behind convention of groups 6 and 8, one disclosed bit per group as in
 
 ### 6.3.1 Replication across seeds, and one claim withdrawn
 
-Every number above comes from one training run per arm. Two of the margins
-are small enough that a single run cannot distinguish them from training
-noise, so both arms were retrained at seeds 43 and 44 and all six
-checkpoints re-scored on every slice (`scripts/kaggle/`, aggregated by
-`eval/seed_stats.py`). The detector is the same frozen backbone throughout,
-so the spread below is the relation model's own variance and nothing else.
+Every number above comes from one run per arm, and two of the margins are
+too small for one run to separate from training noise. Both arms were
+retrained at seeds 43 and 44 and all six checkpoints re-scored on every
+slice (`scripts/kaggle/`, aggregated by `eval/seed_stats.py`), against the
+same frozen detector, so the spread below is the relation model's own
+variance.
 
 | slice | metric | conv. | human-trained | auto-trained | vision-language |
 |---|---|---|---|---|---|
@@ -98,22 +98,18 @@ so the spread below is the relation model's own variance and nothing else.
 | group 8 | zR@100 | inv. | 0.007 (0.000–0.013) | 0.041 (0.033–0.048) | **0.090** (0.038–0.117) |
 | aligned | mR@100 | corrected | 0.333 (0.310–0.369) | 0.316 (0.312–0.320) | **0.369** (0.354–0.390) |
 
-All nine runs — three arms at three seeds — were trained in one session on one
-clone of the framework, one frozen detector and one configuration, so the arms
-differ in their relation labels and in nothing else. An earlier set of figures,
-in which the human arm scored 0.326 pooled, was assembled from runs made
-weeks apart against different states of the upstream code; §7.4 reports what
-that cost and why these supersede it. The **aligned** row re-scores the same
-models against test gold with the two inverted annotators corrected (§4.5).
-
-Mean over three seeds, with the per-seed range in brackets; "separable"
-records whether the two arms' ranges are disjoint.
+All nine runs were trained in one session on one clone, one frozen detector
+and one configuration, so the arms differ in their labels and nothing else.
+An earlier set of figures, with the human arm at 0.326 pooled, came from
+runs made weeks apart against different states of the upstream code; §7.4
+reports what that cost. The **aligned** row re-scores the same models
+against gold with the two inverted annotators corrected (§4.5). Cells give
+the mean over three seeds with the per-seed range in brackets.
 
 **On the metric this chapter is organised around, the two label sources are
-indistinguishable.** Pooled mR@100 is 0.293 for the human arm and 0.292 for
-the automatic one. No slice separates them: on every row above the two seed
-ranges overlap, and the automatic arm's range sits *inside* the human arm's on
-the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and
+indistinguishable.** Pooled mR@100 is 0.293 human against 0.292 automatic,
+and no slice separates them: every row's seed ranges overlap, with the
+automatic arm's sitting *inside* the human arm's on the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and
 43 (+0.010) and trails at 44 (−0.032), so the pooled difference of 0.001 rests
 on a single run. The correct statement is parity, and it is a statement about this metric and not about the labels: on raw R@100 the human arm keeps a
 real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm

@@ -208,28 +208,25 @@ later saturation, a higher plateau, and the recovery of `near`.
 
 ## 5.7 The planner experiment: does the label source change what a robot would do?
 
-Section 5.6 ends with the source paper's motivating example, in which an LLM
-planner fails to remove a cube before grasping the book beneath it until
-spatial relations are supplied. The paper asserts it on one scene. It can be
-run as an experiment, and this section runs it.
+The source paper's motivating example, an LLM planner that fails to remove a
+cube before grasping the book beneath it until spatial relations are
+supplied, is asserted on one scene. This section runs it as an experiment.
 
-**Design.** Twenty-five held-out scenes were selected in which a target object
-has a second object resting on it, so any safe plan must move the occluder
-first. Each scene is put to an LLM planner three times, in prompts differing
-only in what they state: **A** lists the objects and nothing else, **B** adds
-the human-annotated relationships, **C** adds the automatically computed ones.
-One filter runs over both relation conditions first, so no relation is offered
-to one planner that would have been withheld from the other; density is
-deliberately not equalised, since matching a sparser source would mean
-throwing away true relations. A plan is safe if it moves the occluder before
-the step that grasps the target, judged by published rules and not by reading (`eval/score_planner.py`), so scoring is blind by construction and a
-reader who disputes a verdict can inspect the rule. Appendix E.5 gives the
-filter, the prompt construction, the scene-level forensics and a scoring
-defect that hand-reading caught. The experiment was run twice, on
-`gemini-flash-latest` and on the reasoning model
-`gemini-3.1-pro-preview`, and two further conditions were added on the larger
-planner only: **D** replaces the tool's relations with the vision-language
-model's from §4.13, and **E** supplies the union of C and D.
+**Design.** Twenty-five held-out scenes were selected in which a target
+object has a second resting on it, so any safe plan must move the occluder
+first. Each goes to an LLM planner in prompts differing only in what they
+state: **A** lists the objects alone, **B** adds the human relationships,
+**C** the automatically computed ones. One filter runs over both relation
+conditions, so neither is offered a relation the other was denied; density
+is not equalised, since matching a sparser source would mean discarding true
+relations. A plan is safe if it moves the occluder before grasping the
+target, judged by published rules (`eval/score_planner.py`), so scoring is
+blind by construction. Appendix E.5 gives the filter, the prompts, the
+scene-level forensics and a scoring defect hand-reading caught. The
+experiment ran twice, on `gemini-flash-latest` and on the reasoning model
+`gemini-3.1-pro-preview`, with two conditions added on the larger planner
+only: **D** replaces the tool's relations with the vision-language model's
+from §4.13, and **E** supplies the union of C and D.
 
 | Condition | Prompt states | Safe plans (flash) | Safe plans (pro) |
 |---|---|---|---|
@@ -240,41 +237,36 @@ model's from §4.13, and **E** supplies the union of C and D.
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
 {{fig:planner-sources}} shows the five conditions side by side. The two
-planners agree exactly, and not merely in the totals: the six scenes
-C fails on are scenes 1, 4, 16, 19, 24 and 25 under *both* models. A finding that survives
-replacing the reasoning engine, down to which scenes fail, is a property of the
-information in the prompt, not of the model consuming it, which is the
-claim the experiment exists to make. It also disposes of the objection to
-condition A's zero, that a more capable planner would infer support from the
-object list: it does not, in twenty-five scenes out of twenty-five, twice. The
-failure without relations is more specific than inattention, since in seven of
-the A plans the planner *names* the occluder but only as something to steer
-around, treating something resting on the target as a neighbour to avoid, not a load to remove.
+planners agree exactly, and not only in the totals: C fails on scenes 1, 4,
+16, 19, 24 and 25 under *both*. A finding that survives replacing the
+reasoning engine, down to which scenes fail, is a property of the prompt and
+not of the model reading it, which is the claim the experiment exists to
+make. It also disposes of the objection to condition A's zero, that a more
+capable planner would infer support from the object list: it does not, in
+twenty-five scenes of twenty-five, twice. In seven of the A plans the
+planner *names* the occluder, but as something to steer around rather than a
+load to remove.
 
 **The two automatic sources fail on different scenes, and the union closes
-the gap.** Condition D scores 20 of 25 against the tool's 19, so under the
-shipped rule the vision-language source is marginally the stronger of the two
-alone. What matters is the structure underneath: C fails on scenes 1, 4, 16,
-19, 24 and 25, D on 3, 5, 6, 13 and 14, and **the two sets do not
-intersect**. Every failure in both arms is a support relation the source did
-not supply, never a plan that reasoned badly from what it was given, so a
-union supplying more support relations repairs exactly those cases and cannot
-break the ones already working. It does: condition E clears the occluder in
-all 25 scenes, drawing level with the human labels, and gains six scenes over
-condition C while losing none. This is the only measurement here on which automatic labels *match*
-human annotation on a robot-relevant task instead of approaching it, with no
-human in the labelling loop.
+the gap.** D scores 20 of 25 against the tool's 19, so alone the
+vision-language source is marginally the stronger. The structure underneath
+matters more: C fails on 1, 4, 16, 19, 24 and 25, D on 3, 5, 6, 13 and 14,
+and **the two sets do not intersect**. Every failure in both arms is a
+support relation the source did not supply, never a plan reasoning badly
+from what it was given, so a union supplying more support relations repairs
+exactly those cases and cannot break the ones already working. It does: E
+clears the occluder in all 25, gaining six scenes over C and losing none.
+This is the only measurement here on which automatic labels *match* human
+annotation on a robot-relevant task, with no human in the labelling loop.
 
-All six C failures have the same cause, and it is not a planning failure: the
-automatic relation list did not contain the support relation. The occluder was
-described accurately in every way except the one the task depended on, and in
-zero cases was the support relation present and ignored. The converse is
-nearly but not quite true: seven scenes lack the relation and six fail, scene
-7 being recovered from the surrounding description alone. Six misses in
-twenty-five scenes is 24%, against the measured support recall of 0.81/0.75 in
-§4.2 and the refit that traded recall for precision in §4.14, so the planner
-result is the fidelity result showing up one level higher in the chain — and
-it moves when that fidelity does.
+All six C failures share one cause, and it is not planning: the relation
+list did not contain the support relation. The occluder was described
+accurately in every way except the one the task depended on, and in zero
+cases was the relation present and ignored. Seven scenes lack it and six
+fail, scene 7 being recovered from the surrounding description. Six misses
+in twenty-five is 24%, against the support recall of 0.81/0.75 in §4.2 and
+the refit of §4.14, so the planner result is the fidelity result one level
+higher in the chain, and it moves when that fidelity does.
 
 **Twenty-five scenes is small, and the pairing is what makes it enough.**
 Every condition is put to the same scenes, so the evidence sits in the scenes

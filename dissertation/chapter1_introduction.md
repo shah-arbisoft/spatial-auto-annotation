@@ -73,41 +73,38 @@ anything, which is the gap this project addresses.
 ## 1.2 Research aim and objectives
 
 This project removes the human from the labelling loop. The seven predicates
-are *spatial*, and spatial relationships are *computable from geometry*.
-Given a raw RGB image, the proposed pipeline detects objects, segments them,
-estimates monocular depth, lifts each object to a simple 3D position, and
-then **computes** each predicate for every ordered pair of objects from
-explicit geometric rules. The output is a scene graph in the dataset's own
+are *spatial*, so they are computable from geometry: given a raw RGB image
+the pipeline detects objects, segments them, estimates monocular depth,
+lifts each object to a 3D position and **computes** each predicate for every
+ordered pair from explicit rules, writing a scene graph in the dataset's own
 formats (Visual Genome JSON, YOLO txt, h5).
 
-A distinction at the heart of this work must be stated plainly. Scene-graph
-generation (SGG) models such as REACT++ *predict* relationships from learned
-visual patterns; they exist only because humans first labelled their
-training data. This pipeline instead *computes* relationships from measured
-geometry, with no human, and runs *before* any learned relation model. It is
-therefore the **supplier** of the labelled data such models consume, not a
-competitor to them. The perception components used (detector, segmentation,
-depth) only *measure* where things are and how far away; a deterministic
-rule decides the relationship. This is valid precisely because the
-predicates are spatial.
+One distinction is central. Scene-graph generation models such as REACT++
+*predict* relationships from learned visual patterns and exist only because
+humans first labelled their training data. This pipeline *computes* them
+from measured geometry and runs *before* any learned relation model, so it
+is the **supplier** of what such models consume rather than a competitor.
+The perception components only measure where things are; a deterministic
+rule decides the relationship, which works precisely because the predicates
+are spatial.
 
 The one predicate the authors found unreliable, *near*, is handled by
-fitting a single proximity threshold (a size-relative gap between the two
-objects) to the human labels and reporting it. A fixed, data-fitted
-threshold is by construction more self-consistent than nine separate human
-judgements, directly addressing the inconsistency the source paper flagged.
+fitting a size-relative gap threshold to the human labels and reporting it.
+A fitted threshold is by construction more self-consistent than nine
+separate human judgements, which addresses the inconsistency the source
+paper flagged.
 
 ### 1.2.1 Research questions and objectives
 
-- **RQ1 (accuracy).** Can spatial-relationship annotation for robot images be
-  automated to a quality comparable to human annotation? Measured against the
-  ~900 human-labelled images, per predicate.
+- **RQ1 (accuracy).** Can spatial-relationship annotation for robot images
+  be automated to a quality comparable to human annotation? Measured per
+  predicate against the ~900 human-labelled images.
 - **RQ2 (utility).** Are the automatic labels good enough to train a
-  relation-prediction model as effectively as human labels are? Measured with a
-  controlled lightweight classifier trained once on each label source.
+  relation-prediction model as effectively as human labels are? Measured
+  with a controlled classifier trained once on each label source.
 
 RQ1 asks whether the labels are *accurate*, RQ2 whether they are *useful*.
-The two decompose into six verifiable objectives:
+They decompose into six verifiable objectives:
 
 - **O1 (build).** A fully-automatic pipeline (detection, segmentation, depth,
   geometric rules) that annotates the complete dataset in its native formats
