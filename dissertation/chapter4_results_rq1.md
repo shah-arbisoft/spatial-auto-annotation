@@ -704,10 +704,7 @@ arise.
 **On support the disinterested judges side with the author.** Pooled `on`
 and `under` precision is 0.371 against the author's 0.404 and the model's
 0.638, and if anything the volunteers are harsher. This is the comparison
-the audit most needed. Support is where the author's blind verdict was most
-damaging to the author's own tool, and therefore where a reader is entitled
-to suspect the verdict of being theatre; three independent judges agreeing
-that support precision is roughly four claims in ten is not theatre. It also
+the audit most needed. Support is where the author's blind verdict was most damaging to the author's own tool, and therefore where a reader is entitled to suspect the verdict of being theatre. A judge with no stake arriving independently at a slightly lower number is the evidence against that reading. It also
 settles the §4.13 objection with evidence rather than argument: where the
 two judges disagree, the humans stand with the author and against the model.
 `near` repeats the pattern, 1.000 against the author's 1.000 and the model's
