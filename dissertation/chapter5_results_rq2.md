@@ -60,13 +60,14 @@ Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 A fourth arm answers what §4.13 raises but cannot settle: if a
 vision-language model is not a good enough *annotator*, is it a good enough
 *teacher*? The same model labelled all 600 training images, used exactly as
-the other three sources are. Every arm trains on precisely the pairs that arm
-covers, so none is advantaged by seeing more of the split, and the human,
-self-trained and automatic figures are unchanged from the three-arm
-experiment to the last decimal, which is the check that this is an addition, not a different experiment. The answer is a qualified yes: at 0.38
-the vision-language labels teach better than the sparse human labels they
-would replace and about as well as the standard remedy for scarce labels,
-while remaining half as useful as computed geometry.
+the other three sources are. Every arm trains on precisely the pairs that
+arm covers, so none is advantaged by seeing more of the split, and the
+human, self-trained and automatic figures are unchanged from the three-arm
+experiment to the last decimal, which is the check that this is an addition,
+not a different experiment. The answer is a qualified yes: at 0.38 the
+vision-language labels teach better than the sparse human labels they would
+replace and about as well as the standard remedy for scarce labels, while
+remaining half as useful as computed geometry.
 
 {{fig:rq2-with-vlm}} draws the four arms per predicate. Training on the
 automatic labels multiplies downstream mean recall by ~2.5
@@ -150,19 +151,19 @@ bottleneck's cost without removing it.
 ## 5.4 Why the automatic labels win, and two consistency checks
 
 The mechanism is the one measured throughout. A classifier trained on labels
-that are sparse (~10% of pairs) and inconsistent (§4.5, §4.7) learns above all
-to be silent, and its recall collapses exactly where labelling was thinnest
-(`near` 0.08, lateral 0.22–0.25); trained on dense rule-consistent labels the
-same model learns the geometry (near 1.00, lateral 0.95–0.99, support
-0.85–0.88). That is §2.3's weak-supervision prediction confirmed under
-controlled conditions. Two checks argue the result is real, not an artefact:
-the auto-trained model's profile almost exactly reproduces the rule layer's
-own held-out performance (mean 0.75 against the rules' 0.74; front/behind
-0.19/0.37 against the rules' 0.20/0.37), so the classifier *distilled the
-annotator*, which is what "the labels are learnable" means; and all three arms face identical features, the
-same oversampling cap and the same held-out gold, including the
-convention-inverted annotators, which penalises every arm's front/behind
-equally.
+that are sparse (~10% of pairs) and inconsistent (§4.5, §4.7) learns above
+all to be silent, and its recall collapses exactly where labelling was
+thinnest (`near` 0.08, lateral 0.22–0.25); trained on dense rule-consistent
+labels the same model learns the geometry (near 1.00, lateral 0.95–0.99,
+support 0.85–0.88). That is §2.3's weak-supervision prediction confirmed
+under controlled conditions. Two checks argue the result is real, not an
+artefact: the auto-trained model's profile almost exactly reproduces the
+rule layer's own held-out performance (mean 0.75 against the rules' 0.74;
+front/behind 0.19/0.37 against the rules' 0.20/0.37), so the classifier
+*distilled the annotator*, which is what "the labels are learnable" means;
+and all three arms face identical features, the same oversampling cap and
+the same held-out gold, including the convention-inverted annotators, which
+penalises every arm's front/behind equally.
 
 
 ## 5.5 Boundaries of the claim
@@ -247,17 +248,17 @@ twenty-five scenes of twenty-five, twice. In seven of the A plans the
 planner *names* the occluder, but as something to steer around rather than a
 load to remove.
 
-**The two automatic sources fail on different scenes, and the union closes
-the gap.** D scores 20 of 25 against the tool's 19, so alone the
-vision-language source is marginally the stronger. The structure underneath
-matters more: C fails on 1, 4, 16, 19, 24 and 25, D on 3, 5, 6, 13 and 14,
-and **the two sets do not intersect**. Every failure in both arms is a
-support relation the source did not supply, never a plan reasoning badly
-from what it was given, so a union supplying more support relations repairs
-exactly those cases and cannot break the ones already working. It does: E
-clears the occluder in all 25, gaining six scenes over C and losing none.
-This is the only measurement here on which automatic labels *match* human
-annotation on a robot-relevant task, with no human in the labelling loop.
+The two automatic sources fail on different scenes, and the union closes the
+gap. D scores 20 of 25 against the tool's 19, so alone the vision-language
+source is marginally the stronger. The structure underneath matters more: C
+fails on 1, 4, 16, 19, 24 and 25, D on 3, 5, 6, 13 and 14, and **the two
+sets do not intersect**. Every failure in both arms is a support relation
+the source did not supply, never a plan reasoning badly from what it was
+given, so a union supplying more support relations repairs exactly those
+cases and cannot break the ones already working. It does: E clears the
+occluder in all 25, gaining six scenes over C and losing none. This is the
+only measurement here on which automatic labels *match* human annotation on
+a robot-relevant task, with no human in the labelling loop.
 
 All six C failures share one cause, and it is not planning: the relation
 list did not contain the support relation. The occluder was described
@@ -268,7 +269,7 @@ in twenty-five is 24%, against the support recall of 0.81/0.75 in §4.2 and
 the refit of §4.14, so the planner result is the fidelity result one level
 higher in the chain, and it moves when that fidelity does.
 
-**Twenty-five scenes is small, and the pairing is what makes it enough.**
+Twenty-five scenes is small, and the pairing is what makes it enough.
 Every condition is put to the same scenes, so the evidence sits in the scenes
 where two conditions disagree, and an exact McNemar test over those
 (`eval/planner_paired_tests.py`) says which comparisons this sample can
@@ -288,16 +289,16 @@ better on these scenes* far more precisely than how often any of them would
 succeed in general, and that generalisation is weak because of what the scenes
 are, not how many.
 
-**What this does not show.** The scenes were selected to contain an
+Four things this does not show. The scenes were selected to contain an
 occluder, so the result speaks to that situation and not to task planning at
 large. The vision-language model's assertions were never audited as the
 tool's were (§4.4), so the union's gain is measured on the planning task
-alone. The comparison is between label sources and not planners: condition B
+alone. The comparison runs between label sources: condition B
 is handed the exact fact the task tests. And no robot moved, so this
 measures plans, not executions, and closes the gap between labels and robot
 behaviour by one link rather than entirely.
 
-**The threshold refit of §4.14 cost condition C three scenes, and E none.**
+The threshold refit of §4.14 cost condition C three scenes, and E none.
 An earlier version of this experiment ran on the labels `on_contact_min` 0.60
 produced and recorded C at 22 of 25. The shipped rule is 0.85, which emits
 support more sparingly: across the same 25 scenes the support relation the
@@ -314,7 +315,7 @@ predict, so absence of the relation is nearly but not quite sufficient for
 failure; `grasps_target` and `no_invented` remain 1.00 throughout, so no plan
 failed for any other reason.
 
-**The complementarity result strengthens under the stricter rule.** The seven
+The complementarity result strengthens under the stricter rule. The seven
 scenes the tool now misses and the five the vision-language model misses are
 still **disjoint**, so their union supplies a support relation for all 25.
 Tightening the geometric source widened its own gap by three scenes and left
@@ -325,12 +326,12 @@ One further limitation is structural and worth stating plainly, because it
 bounds what the result can mean. **The scoring rule cannot see a false
 positive.** It asks whether the plan moves the occluder before grasping the
 target, so a support relation the tool asserts wrongly costs an unnecessary
-step, not a failed plan. Section 4.14 measures those at 0.40 precision, and
-this experiment is insensitive to them by construction: it tests whether the
-labels carry *enough*, not whether they carry *too much*. A task penalising
-wasted motion, or one where moving the wrong object is unsafe, not merely
-inefficient, would rank these label sources differently, and nothing here
-predicts how.
+step and never a failed plan. Section 4.14 measures those at 0.40 precision,
+and this experiment is insensitive to them by construction: it tests whether
+the labels carry *enough*, not whether they carry *too much*. A task
+penalising wasted motion, or one where moving the wrong object is unsafe,
+not merely inefficient, would rank these label sources differently, and
+nothing here predicts how.
 
 What it settles is the question §5.6 could only frame. The tool's relations
 alone carry 76% of the decision-relevant content human labels carry on this

@@ -15,8 +15,7 @@ here is its shape. For the lateral and proximity predicates the tool is by
 every measure available *at least* as good as the human process. For support
 it is not: two evidence upgrades motivated by measurement lifted recall, but
 blind-audited precision stops the claim at about half the labels the tool adds
-beyond the human record. For the depth pair the shortfall is calibrated
-abstention plus an inverted direction convention, not error, and where
+beyond the human record. For the depth pair the shortfall is calibrated abstention plus an inverted direction convention rather than error, and where
 the tool commits it agrees at 0.95–1.00 with six of the seven same-convention
 annotators. "Comparable to human quality" understates that case: on
 front/behind the tool is more consistent than the human process it is
@@ -101,7 +100,7 @@ predicate recovering 0.70 of the human labels while agreeing with itself at
 that rate is not guessing; it is applying a consistent criterion the
 annotators did not share. With A8, where quadrupling the depth model changed
 nothing, and §4.5, where two groups labelled the pair oppositely, the weight
-of the shortfall sits on definitional disagreement, not perception. That
+of the shortfall sits on definitional disagreement and not on perception. That
 does not dissolve monocular ambiguity, which genuinely bounds the predicate
 at equal camera distance, but it relocates most of the measured gap away
 from it. The implication is unglamorous: the best expected return here is a
@@ -228,16 +227,16 @@ Two results connect this project to literatures outside its lineage. Chapter
 6's benchmark finding is a case of the problem Northcutt, Athalye and
 Mueller (2021) demonstrated across ten benchmarks, that errors in test
 annotation change model rankings and can select the wrong model; here the
-defect is systematic annotator convention, not random noise, and it distorts
-a ranking between two label *sources*, not two architectures. The diagnosis
-matches the motivation for SpatialSense (Yang, K., Russakovsky and Deng,
-2019) and Rel3D (Goyal et al., 2020), both built after their authors found
-relation benchmarks could be scored well without using spatial information;
-this dissertation observes the mirror image, a model scoring well by
-reproducing annotator selection habits. The RQ2 result is Ratner et al.'s
-(2017) weak-supervision prediction confirmed in a domain the original work
-did not address, with the standard semi-supervised alternative (Lee, 2013)
-implemented and measured and not argued away.
+defect is systematic annotator convention where the literature assumes
+random noise, and it distorts a ranking between two label *sources*, not two
+architectures. The diagnosis matches the motivation for SpatialSense (Yang,
+K., Russakovsky and Deng, 2019) and Rel3D (Goyal et al., 2020), both built
+after their authors found relation benchmarks could be scored well without
+using spatial information; this dissertation observes the mirror image, a
+model scoring well by reproducing annotator selection habits. The RQ2 result
+is Ratner et al.'s (2017) weak-supervision prediction confirmed in a domain
+the original work did not address, with the standard semi-supervised
+alternative (Lee, 2013) implemented and measured and not argued away.
 
 ## 7.6 Limitations and threats to validity
 
@@ -316,7 +315,7 @@ this the objection a reader should weight most heavily.
 The dissertation does not assert that the camera frame is correct; it shows
 that the tool applies one frame consistently (§4.12), that two annotator
 groups applied another (§4.5), and that recall rises from 0.70/0.71 to 0.84
-once the convention is aligned. That establishes disagreement, not error, and identifies which party is consistent. It does not establish which
+once the convention is aligned. That establishes disagreement rather than error, and identifies which party is consistent. It does not establish which
 convention a robot should obey, and no measurement in this dissertation
 could, because that is a question about the specification and not about the
 data.

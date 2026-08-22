@@ -34,17 +34,17 @@ SGDET-Annotate only accelerates manual labelling; a human still decides
 every label.
 
 The cost is structural, and it grows faster than the data. Objects relate
-pairwise, so an image holding *n* annotated objects presents *n(n−1)* ordered
-pairs a conscientious annotator must consider. This dataset averages 101 per
-image, so an exhaustive pass means a hundred judgements per photograph.
-Relationship annotation is therefore never exhaustive in practice: Visual
-Genome, the reference corpus, records about eighteen relationships per image
-over scenes of roughly twenty objects (Krishna et al., 2017), and here humans
-labelled about 10% of ordered pairs. That sparsity is arithmetic, not
-laziness, and it has a consequence the field absorbs without comment: a model
-evaluated against such labels is rewarded for reproducing which pairs
-annotators happened to record, not only which relationships hold. Chapter 6
-shows this is measurable, not theoretical.
+pairwise, so an image holding *n* annotated objects presents *n(n−1)*
+ordered pairs a conscientious annotator must consider. This dataset averages
+101 per image, so an exhaustive pass means a hundred judgements per
+photograph. Relationship annotation is therefore never exhaustive in
+practice: Visual Genome, the reference corpus, records about eighteen
+relationships per image over scenes of roughly twenty objects (Krishna et
+al., 2017), and here humans labelled about 10% of ordered pairs. That
+sparsity is arithmetic and implies no inattention, and it has a consequence
+the field absorbs without comment: a model evaluated against such labels is
+rewarded for reproducing which pairs annotators happened to record as much
+as which relationships hold, and Chapter 6 measures that.
 
 A second cost is consistency. Nine annotators working independently in
 batches, with no written definition of what "near" or "in front of" means,
@@ -57,7 +57,7 @@ annotators, because both scale with the number of humans involved.
 ### 1.1.2 Why the existing remedies do not remove it
 
 Three families of method already exist for a shortage of labels, and each is
-reviewed in Chapter 2 and tested here, not dismissed on paper. Learned
+reviewed in Chapter 2 and tested here rather than dismissed on paper. Learned
 scene-graph generators predict relations from visual patterns, but they
 train on labelled triplets and so sit *downstream* of an annotator instead
 of replacing one. Semi-supervised methods stretch the labels that exist,
@@ -137,11 +137,12 @@ RQ1 is answered **yes** if per-predicate recall of the human triplets is
 comparable to what the human process itself achieves, on annotator groups
 whose data influenced no threshold, and if the labels the tool emits beyond
 the human record survive manual audit instead of turning out to be noise.
-*Comparable* is given content by two references and not by a number chosen for convenience: the trivial random and majority baselines, which any
-method must beat, and an estimate of how well the human annotators would
-have scored against one another, which is the ceiling any annotator can
-fairly be held to (§4.6). A per-predicate answer is required, not a mean,
-because a mean over seven predicates can conceal one that fails outright.
+*Comparable* is given content by two references and not by a number chosen
+for convenience: the trivial random and majority baselines, which any method
+must beat, and an estimate of how well the human annotators would have
+scored against one another, which is the ceiling any annotator can fairly be
+held to (§4.6). The answer has to be given per predicate, because a mean
+over seven predicates can conceal one that fails outright.
 
 RQ2 is answered **yes** if a model trained on the automatic labels performs
 at least as well as the same model trained on the human labels, under
@@ -174,28 +175,26 @@ it, and says who can use it.
 ### 1.2.4 Scope
 
 In scope: the automatic annotator; the fidelity study with baselines and
-ablations; the controlled downstream classifier; the direct benchmark test, in
-which the source paper's own SGG framework (REACT++) is trained on each label
-source (Chapter 6); the planner experiment that carries the comparison one
-link further towards robot behaviour (§5.7); the vision-language baseline run
-on the same images under the same definitions (§4.13); and a critical
-evaluation chapter. Two items entered scope during the project, not at
-its start, and both are marked as such where they are reported. Scaling to
-robot captures beyond the annotated release became possible when the
-supervising group supplied the full capture the release was cut from
-(Appendix E.6),
-with the limits that follow from those frames having no ground truth; and the
-vision-language comparison, originally deferred, was brought forward once it
-became clear that a reader would treat it as the obvious alternative to the
-whole approach. Deferred to future work and not attempted: copy-paste
-augmentation of under-represented relations, and any revision of the
-dataset's own predicate definitions.
+ablations; the controlled downstream classifier; the direct benchmark test,
+in which the source paper's own SGG framework (REACT++) is trained on each
+label source (Chapter 6); the planner experiment that carries the comparison
+one link further towards robot behaviour (§5.7); the vision-language
+baseline run on the same images under the same definitions (§4.13); and a
+critical evaluation chapter. Two items entered scope during the project
+rather than at its start, and both are marked as such where they are
+reported. Scaling to robot captures beyond the annotated release became
+possible when the supervising group supplied the full capture the release
+was cut from (Appendix E.6), with the limits that follow from those frames
+having no ground truth; and the vision-language comparison, originally
+deferred, was brought forward once it became clear that a reader would treat
+it as the obvious alternative to the whole approach. Deferred to future work
+and not attempted: copy-paste augmentation of under-represented relations,
+and any revision of the dataset's own predicate definitions.
 
 **Delimitations and assumptions.** Five, each a deliberate decision, and each argued in §7.6 with the threat it carries. The work
 covers **one indoor environment and six annotated object classes**, so it is
 the method and not the fitted numbers that is claimed to transfer. Relations
-are computed in the **camera frame**, a choice among the reference frames
-Chapter 2 sets out, not a fact about the world, and §4.5 measures what
+are computed in the **camera frame**, a choice among the reference frames Chapter 2 sets out, and no fact about the world, and §4.5 measures what
 it costs where an annotator chose differently. Depth is **monocular and
 relative**. Fidelity is measured in the **PredCls setting**, so detection
 error is held out of the comparison and reported separately (§4.11). And the
@@ -205,7 +204,7 @@ a different project.
 ## 1.3 Research approach
 
 The project follows CRISP-DM, chosen over KDD and SEMMA for the reasons §3.1
-gives. The mapping below is descriptive, not decorative: two findings (the
+gives. The mapping below earns its place: two findings (the
 dataset's stored image orientation and the three measured annotator
 behaviours) came straight out of Data Understanding, and the audit-driven
 repair of the support rules is a documented iteration between Evaluation and
@@ -220,19 +219,20 @@ Modelling. That is CRISP-DM's loop, made explicit.
 | Evaluation | fidelity protocol (baselines, ablations, audits), controlled label-source comparison, exhaustive failure attribution | Ch. 4–6 |
 | Deployment | detector-in-the-loop mode, runtime/VRAM footprint, reproducibility package | Ch. 4, appendices |
 
-Four constraints shaped the design as much as the research questions did, and
-stating them makes several later choices legible. All perception runs on a
-**single 6 GB consumer GPU**, which rules out the largest segmentation and
-depth checkpoints and makes Chapter 3's small-model choices a requirement, not a preference; ablation A8 asks what that costs and finds almost
-nothing on the predicate it was expected to hurt. There was **no budget for
-paid annotation**, so the independent re-estimate of precision is a volunteer
-study (Appendix E.3), and the audits preceding it are the author's own, with the
-circularity §2.9 states as an objection before any result is reported. The
-project uses **one dataset**, the one whose bottleneck the work exists to
-address, and the price is that generalisation is argued, not
-demonstrated. And the benchmark runs use **free hosted GPU sessions**, which
-caps the affordable seeds and rules out a hyper-parameter search; Chapter 6's
-replication is what that budget allows, and its width is reported and not smoothed over.
+Four constraints shaped the design as much as the research questions did,
+and stating them makes several later choices legible. All perception runs on
+a **single 6 GB consumer GPU**, which rules out the largest segmentation and
+depth checkpoints and makes Chapter 3's small-model choices obligatory;
+ablation A8 asks what that costs and finds almost nothing on the predicate
+it was expected to hurt. There was **no budget for paid annotation**, so the
+independent re-estimate of precision is a volunteer study (Appendix E.3),
+and the audits preceding it are the author's own, with the circularity §2.9
+states as an objection before any result is reported. The project uses **one
+dataset**, the one whose bottleneck the work exists to address, and the
+price is that generalisation rests on argument. And the benchmark runs use
+**free hosted GPU sessions**, which caps the affordable seeds and rules out
+a hyper-parameter search; Chapter 6's replication is what that budget
+allows, and its width is reported and not smoothed over.
 
 Ethical considerations are summarised here and detailed in Appendix A. The
 work is a secondary analysis of a published, openly licensed dataset (CC-BY

@@ -23,6 +23,10 @@ XREF = re.compile(r"§(\d+\.\d+(?:\.\d+)?)|Appendix ([A-F](?:\.\d+)?)")
 
 
 def tokens(text: str):
+    # Markdown is hard-wrapped, so a citation can split across two lines and
+    # the pattern then misses it. Flatten first: a reflowed paragraph must not
+    # be reported as a lost reference.
+    text = " ".join(text.split())
     nums = set(NUM.findall(text))
     cites = {f"{a} {b}" for a, b in CITE.findall(text)}
     xrefs = {a or b for a, b in XREF.findall(text)}

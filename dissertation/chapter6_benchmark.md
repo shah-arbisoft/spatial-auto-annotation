@@ -115,7 +115,7 @@ on a single run. The correct statement is parity, and it is a statement about th
 real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm
 leads fivefold, 0.268 against 0.052.
 
-**The arms differ far more in stability than in score.** Across seeds the
+The arms differ far more in stability than in score. Across seeds the
 automatic arm's pooled mR@100 spans 0.006 against the human arm's 0.052 and
 the vision-language arm's 0.044, eight and seven times wider. One definition
 applied uniformly produces a model that lands in the same place whatever the
@@ -123,7 +123,7 @@ initialisation, and nine annotators applying nine conventions do not. A margin
 of 0.001 between arms whose own seeds move by 0.052 is not a result in either
 direction, which is the reading the spread column exists to force.
 
-**Where the arms do differ, they differ by annotator.** The human arm is
+Where the arms do differ, they differ by annotator. The human arm is
 ahead on the two annotators §4.5 convicts of inverting the front/behind
 convention, by 0.022 on group 6 and 0.027 on group 8, and *behind* on group 7,
 the one annotator this dissertation convicts of nothing, by 0.011. The
@@ -146,9 +146,9 @@ compresses the range the two arms can differ across and makes every absolute
 mR@100 in this chapter a lower bound on both sides.
 
 What difference remains is a separate effect, and §6.4 localises it to
-annotator *selection*, not annotator convention: it appears on the lateral
-predicates too, which have no direction to invert. The two defects co-occur
-in the same annotators without one causing the other.
+annotator *selection* rather than annotator convention: it appears on the
+lateral predicates too, which have no direction to invert. The two defects
+co-occur in the same annotators without one causing the other.
 
 Two labelling rules support this, not one. The figures above are the shipped
 `on_contact_min` of 0.85 (§4.14); the same experiment at the earlier 0.60
@@ -257,7 +257,7 @@ selection habits, not because it knows more geometry.
 (§3.8). Neither arm can rank exactly those pairs highly; prediction 3
 underestimated not the labels but the gold.
 
-**The zero-shot column does not measure what its name implies here.** zR@100
+The zero-shot column does not measure what its name implies here. zR@100
 is recall on triplet types absent from a model's *own* training data, but both
 arms are scored against one shared reference, the human training annotation,
 since that is the only way their numbers sit in one column. Of the 25 test
@@ -277,19 +277,19 @@ inherits every defect measured in the gold, and the advantage is concentrated
 exactly where the annotation is defective and absent where it is not, which is
 what annotation-prior agreement would look like.
 
-**The criterion was non-inferiority, and the arithmetic of that belongs
-here.** Section 1.2.2 asked whether a model trained on automatic labels
-performs *at least as well* as one trained on human labels, not whether it
-wins, so parity is the shape a pass takes and not an advantage evaporating.
-That reframing is worth only as much as the numbers behind it, and the
-numbers refuse a strong claim in either direction. Paired by seed the
-automatic arm leads at 42 and 43 and trails at 44; the mean difference is
--0.0006 with a 95% interval of [-0.070, +0.069]. Three seeds bound the gap
-to about a quarter of the metric's own value, and a margin of ±0.01 would
-need roughly forty runs per arm. The experiment therefore establishes
-neither superiority nor equivalence, and a reader entitled to say the
-automatic labels did not beat the human ones is equally entitled to say this
-design could not have shown it if they had.
+The criterion was non-inferiority, and the arithmetic of that belongs here.
+Section 1.2.2 asked whether a model trained on automatic labels performs *at
+least as well* as one trained on human labels, not whether it wins, so
+parity is the shape a pass takes and not an advantage evaporating. That
+reframing is worth only as much as the numbers behind it, and the numbers
+refuse a strong claim in either direction. Paired by seed the automatic arm
+leads at 42 and 43 and trails at 44; the mean difference is -0.0006 with a
+95% interval of [-0.070, +0.069]. Three seeds bound the gap to about a
+quarter of the metric's own value, and a margin of ±0.01 would need roughly
+forty runs per arm. The experiment therefore establishes neither superiority
+nor equivalence, and a reader entitled to say the automatic labels did not
+beat the human ones is equally entitled to say this design could not have
+shown it if they had.
 
 **What the same three seeds do resolve** is the part that is not a null.
 Zero-shot recall separates with disjoint ranges, 0.225-0.309 against
@@ -341,8 +341,10 @@ At the level the source paper evaluates robot-readiness, automatic labels
 train a model that trains longer, covers five times more of the relation
 types the manual annotation never recorded, reproduces itself across seeds
 more than eight times more tightly, ranks level overall, and ranks slightly
-ahead on the one test annotator with no measured defect. The evidence supports a conditional claim: **automatic labels are better training
+ahead on the one test annotator with no measured defect. The evidence
+supports a conditional claim: **automatic labels are better training
 material wherever ground truth means geometry; human labels remain better
 wherever it means human annotation habits.** The first condition is the
-operative one for a robot, which needs relations that are *correct*, not
-*human-like*, and §5.7 tests that one link further down, where it survives.
+operative one for a robot, which needs relations that are *correct* before
+they are *human-like*, and §5.7 tests that one link further down, where it
+survives.

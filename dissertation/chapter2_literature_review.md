@@ -32,18 +32,18 @@ where the geometry must be recovered from monocular images first.
 Deciding those edges by rule is also not a new idea but an old one with a
 formal literature behind it. **Qualitative spatial reasoning** represents
 space through a finite vocabulary of relations and reasons over it with
-composition tables instead of coordinates. Allen's interval algebra (Allen, 1983) fixes the thirteen ways two intervals
-can lie on a line, RCC-8 does the same for connection and containment
-(Randell, Cui and Cohn, 1992), orientation calculi add direction from a
-viewpoint (Freksa, 1992), and Cohn and Renz (2008) survey the family. Three of its
-properties bear on this project. Its relations are *defined*, so annotators
-applying them cannot disagree about what a label means, which is the defect
-§2.2 finds. Its calculi are *decidable*, so a relation holds, fails, or is
-underdetermined by what was measured, and the third case is where abstention
-comes from. And its vocabularies are finite and hand-authored, which is the
-limitation §2.9 raises and this dissertation concedes. What it does not
-supply is the step from pixels to regions; §2.5 does, and this project joins
-the two.
+composition tables instead of coordinates. Allen's interval algebra (Allen,
+1983) fixes the thirteen ways two intervals can lie on a line, RCC-8 does
+the same for connection and containment (Randell, Cui and Cohn, 1992),
+orientation calculi add direction from a viewpoint (Freksa, 1992), and Cohn
+and Renz (2008) survey the family. Three of its properties bear on this
+project. Its relations are *defined*, so annotators applying them cannot
+disagree about what a label means, which is the defect §2.2 finds. Its
+calculi are *decidable*, so a relation holds, fails, or is underdetermined
+by what was measured, and the third case is where abstention comes from. And
+its vocabularies are finite and hand-authored, which is the limitation §2.9
+raises and this dissertation concedes. What it does not supply is the step
+from pixels to regions; §2.5 does, and this project joins the two.
 
 This review concentrates on how those edges are **produced**: by hand, by
 learned prediction, or, as this project argues, by computation from measured
@@ -94,15 +94,15 @@ formalised *data programming*: experts write labelling functions instead of
 labelling examples, and their noisy overlapping votes are combined into
 training labels, trading per-label authority for coverage and consistency.
 Its deployments repeatedly matched or beat hand-labelled baselines wherever
-the labelled set, not the model, was the bottleneck. This project's
+the labelled set, and never the model, was the bottleneck. This project's
 geometric rules are labelling functions in that sense, deterministic,
-auditable and dense, with two departures. Measured geometry gives near-exact votes for five predicates (blind-audited
-0.79–1.00) and demonstrably noisy ones for the support pair, where §4.14
-puts precision at 0.40. The five need no probabilistic aggregation, and on
-the two, the objection Snorkel answers by aggregating is answered here by
-abstaining. The second departure is that the
-computed labels are *validated against* the human labels they replace (RQ1),
-not assumed comparable.
+auditable and dense, with two departures. Measured geometry gives near-exact
+votes for five predicates (blind-audited 0.79–1.00) and demonstrably noisy
+ones for the support pair, where §4.14 puts precision at 0.40. The five need
+no probabilistic aggregation, and on the two, the objection Snorkel answers
+by aggregating is answered here by abstaining. The second departure is that
+the computed labels are *validated against* the human labels they replace
+(RQ1), not assumed comparable.
 
 The complementary literature dismantles the premise that human annotation is
 a single reliable gold standard. Plank (2022) puts the sharper form of the
@@ -118,7 +118,7 @@ that treat disagreement as signal to be modelled and not noise to be
 averaged away. The frame fits exactly: Chapter 4 measures three annotator
 behaviours, selective `near` usage, an inverted front/behind convention in
 two groups, and one-directional support labelling, which make "agreement
-with the humans" per-annotator, not global. Two design decisions follow in
+with the humans" a per-annotator quantity. Two design decisions follow in
 Chapters 3–4: evaluation is reported per annotator group, never only pooled,
 and thresholds are calibrated only on annotators who used a label, with the
 rest held out.
@@ -141,16 +141,16 @@ heavily-used benchmarks (3.3% average, including 6% of ImageNet's validation
 labels) and showed that correcting them changes model rankings:
 practitioners may have been selecting the wrong model because the yardstick
 was wrong. Spatial-relation benchmarks met the same problem from the
-collection side. SpatialSense (Yang, Russakovsky and Deng, 2019) used *adversarial*
-crowdsourcing, since relations collected without that pressure are dominated
-by guessable co-occurrences; Rel3D (Goyal et al., 2020) rebuilt the task on
-3D scenes with minimally contrastive pairs, having found that 2D datasets
-let models score well without using spatial information at all. Both respond to the fact this dissertation
-measures in its own dataset: what a benchmark appears to test and what its
-annotation rewards can diverge, invisibly, until someone measures the
-labels. Chapter 6 shows the consequence here, and Northcutt et al.'s
-conclusion, that rankings flip when gold is corrected, is the shape of that
-result.
+collection side. SpatialSense (Yang, Russakovsky and Deng, 2019) used
+*adversarial* crowdsourcing, since relations collected without that pressure
+are dominated by guessable co-occurrences; Rel3D (Goyal et al., 2020)
+rebuilt the task on 3D scenes with minimally contrastive pairs, having found
+that 2D datasets let models score well without using spatial information at
+all. Both respond to the fact this dissertation measures in its own dataset:
+what a benchmark appears to test and what its annotation rewards can
+diverge, invisibly, until someone measures the labels. Chapter 6 shows the
+consequence here, and Northcutt et al.'s conclusion, that rankings flip when
+gold is corrected, is the shape of that result.
 
 ## 2.4 The rival family: semi-supervised and active learning
 
@@ -220,8 +220,7 @@ a scene-graph annotation for these seven predicates.
   regional representations from 3D scene graphs, and a **depth plugin** that
   injects relative depth into a VLM's visual encoder. It is the cleanest
   published RGB→depth→relation recipe and the key reference for this project's
-  depth use, but the artefact is a region-reasoning VLM, not a deterministic
-  labeller writing VG-format triplets.
+  depth use, but the artefact is a region-reasoning VLM rather than a deterministic labeller writing VG-format triplets.
 
 - **VQASynth** (Remyx AI, 2024) reproduces that pipeline openly: expert models
   (SAM2, monocular depth, grounded captioning) building a spatial-VQA dataset.
@@ -238,8 +237,7 @@ a scene-graph annotation for these seven predicates.
 - **RoboSpatial** (Song et al., 2025) is the closest robotics-domain match and
   is cited by the source paper. It teaches spatial understanding to 2D/3D VLMs
   from real indoor scans, and formalises **reference frames**: ego-centric,
-  world-centric and object-centric readings of one spatial phrase. The ambiguity is a documented property of spatial language, not an
-engineering nuisance: Landau and Jackendoff (1993) showed that language
+  world-centric and object-centric readings of one spatial phrase. The ambiguity is a documented property of spatial language and no engineering nuisance: Landau and Jackendoff (1993) showed that language
 encodes location through frame-dependent primitives, so "the cup is left of
 the box" is true in one frame and false in another, and an annotator must
 pin the frame before any label is well defined. That justifies expressing
@@ -323,8 +321,7 @@ literature. The relevant design space, which is also the basis of the
   successor to Segment Anything, whose promptable formulation and
   eleven-million-image corpus made class-agnostic segmentation a component
   other systems could simply call (Kirillov et al., 2023). The
-  silhouette is load-bearing twice over: depth is sampled by median over
-  object pixels, not over the whole box, and the support rule's contact
+  silhouette is load-bearing twice over: depth is sampled by median over object pixels instead of the whole box, and the support rule's contact
   test needs the object's bottom boundary pixel by pixel (§3.5).
 - **Monocular depth.** **Depth Anything v2** (Yang, L. et al., 2024) emits a
   *relative* map, ordering pixels without a unit, and that single property
@@ -350,28 +347,28 @@ quantifies what each actually contributes.
 ## 2.7 Learned scene-graph generation (the consumer of our output)
 
 Scene-graph generation (SGG) models **predict** relationships from learned
-visual patterns. The task predates the scene-graph framing (Lu et al., 2016, whose language
-priors already leaned on label statistics), and the first whole-graph models
-worked by passing messages between object and relationship nodes until the
-two agreed (Xu et al., 2017). The field's shape was set by **Visual Genome**
-(Krishna et al., 2017), 108k images of crowdsourced triplets whose JSON
-format this dataset and this project's writer inherit. Chang et al. (2023)
-survey the lineage benchmarked on it and name annotation cost and label bias
-as its two persistent constraints, which is this project's premise from the
-consumer's side. **Neural Motifs** (Zellers et al., 2018) showed that
-context and label statistics dominate: their frequency baseline, predicting
-the commonest predicate for a pair while ignoring the image, proved hard to
-beat, a warning that relation "accuracy" can be memorised co-occurrence, not
-understood geometry. **VCTree** (Tang et al., 2019) composes dynamic tree
-structures over objects and is the best model in the source paper's own
-benchmark (mR@100 = 0.49). **Unbiased SGG** (Tang et al., 2020) showed
-formally that such models absorb the *annotation distribution*, its long
-tail and its biases, and proposed counterfactual debiasing. The field's
-corrective direction is telling: panoptic scene graph generation (Yang, J.
-et al., 2022) replaced box grounding with pixel-accurate masks after showing
-boxes systematically mislocalise the objects whose relations are being
-learned, the reasoning that puts SAM2 masks at the centre of this project's
-support rule.
+visual patterns. The task predates the scene-graph framing (Lu et al., 2016,
+whose language priors already leaned on label statistics), and the first
+whole-graph models worked by passing messages between object and
+relationship nodes until the two agreed (Xu et al., 2017). The field's shape
+was set by **Visual Genome** (Krishna et al., 2017), 108k images of
+crowdsourced triplets whose JSON format this dataset and this project's
+writer inherit. Chang et al. (2023) survey the lineage benchmarked on it and
+name annotation cost and label bias as its two persistent constraints, which
+is this project's premise from the consumer's side. **Neural Motifs**
+(Zellers et al., 2018) showed that context and label statistics dominate:
+their frequency baseline, predicting the commonest predicate for a pair
+while ignoring the image, proved hard to beat, a warning that relation
+"accuracy" can measure memorised co-occurrence instead of understood geometry.
+**VCTree** (Tang et al., 2019) composes dynamic tree structures over objects
+and is the best model in the source paper's own benchmark (mR@100 = 0.49).
+**Unbiased SGG** (Tang et al., 2020) showed formally that such models absorb
+the *annotation distribution*, its long tail and its biases, and proposed
+counterfactual debiasing. The field's corrective direction is telling:
+panoptic scene graph generation (Yang, J. et al., 2022) replaced box
+grounding with pixel-accurate masks after showing boxes systematically
+mislocalise the objects whose relations are being learned, the reasoning
+that puts SAM2 masks at the centre of this project's support rule.
 
 The lineage also fixes the evaluation vocabulary used in Chapters 4 and 7.
 SGG models are scored by recall of annotated triplets among their top K
@@ -481,8 +478,8 @@ annotation cannot adjudicate a dispute about the annotation.
 
 ## 2.9 The case against a rule-based annotator
 
-An honest review states the strongest version of the opposing argument, not
-a version chosen because it is answerable. Four objections stand against the
+An honest review states the strongest version of the opposing argument, and
+never one chosen because it is answerable. Four objections stand against the
 method this project uses and a fifth against its premise, and they are set
 out here so that later chapters can be read as attempts on them, not as a
 defence assembled after the fact.
@@ -520,10 +517,10 @@ distinguish viewer-, object- and environment-centred description, and
 RoboSpatial (Song et al., 2025) maintains all three rather than choosing. A rule set must
 commit to a convention, and where an annotator used a different one the two
 will disagree systematically. Calling the rule correct in that situation is
-an assertion about which convention should govern, not a measurement, and
-the dissertation is obliged to argue for it, not assume it (§4.5).
+an assertion about which convention should govern rather than a measurement, and
+the dissertation is obliged to argue for it and may not assume it (§4.5).
 
-A fifth objection is directed at the premise, not the method. If the
+A fifth objection is aimed at the premise instead of the method. If the
 existing annotation is inconsistent, the direct remedy is better collection,
 not cheaper labels; SpatialSense (Yang, K., Russakovsky and Deng, 2019) and
 Rel3D (Goyal et al., 2020) both responded to defective relation annotation
@@ -564,10 +561,11 @@ instantiation as a validated automatic annotator for this dataset is new.
 ## 2.11 Summary and positioning
 
 The gap is precise: no automatic, geometry-based annotator emits these seven
-predicates in the dataset's native formats and is validated against its human
-labels, though its authors ask for exactly that. Two constraints follow. The field's metrics are recall-shaped by its own
-incomplete annotation (§2.8), so no number from them can settle a dispute
-*about* that annotation, and the protocol of Chapters 4 to 6 is built around
-that limitation instead of inside it. And the strongest case against the
-approach is stated in advance (§2.9), so the results can be read as an
-attempt on it, with §7.7 the reckoning.
+predicates in the dataset's native formats and is validated against its
+human labels, though its authors ask for exactly that. Two constraints
+follow. The field's metrics are recall-shaped by its own incomplete
+annotation (§2.8), so no number from them can settle a dispute *about* that
+annotation, and the protocol of Chapters 4 to 6 is built around that
+limitation instead of inside it. And the strongest case against the approach
+is stated in advance (§2.9), so the results can be read as an attempt on it,
+with §7.7 the reckoning.

@@ -111,7 +111,7 @@ groups, and `near` used by only three, with fourfold variation in
 exhaustiveness.
 
 **For work on scene-graph benchmarks.** Evidence that ranked recall against
-sparse, guideline-free annotation partly measures agreement with annotator habits and not only spatial correctness. The evidence is a dissociation:
+sparse, guideline-free annotation partly measures agreement with annotator habits as well as spatial correctness. The evidence is a dissociation:
 the model that ranks better memorises which pairs annotators record, and the
 model that covers the relation types they never recorded is the one trained
 on consistent computed labels. The per-annotator decomposition localises the
@@ -162,11 +162,10 @@ into a measurement, and is cheap enough that a replication should include one.
 
 **Front/behind is bounded, but less by depth than the number suggests.**
 Section 4.9 bounds the engineering: neither a larger depth model nor
-multi-frame geometry moves the pair, so the limit is monocular ambiguity in the scenes, not model capacity. A predicate reproducing its own verdict
+multi-frame geometry moves the pair, so the limit is monocular ambiguity in the scenes rather than model capacity. A predicate reproducing its own verdict
 across viewpoints 0.958 of the time while recovering 0.70 of the human labels
 is not mismeasuring the scene but applying a criterion the annotators did not
-share, so the intervention with the best expected return is a written
-annotation guideline, not a better network — an uncomfortable
+share, so the intervention with the best expected return is a written annotation guideline ahead of a better network — an uncomfortable
 conclusion for a computer-vision project and the one the evidence supports.
 The routes that stay open are a calibrated stereo pair or an RGB-D capture;
 wider surface detection was built, measured and declined (Appendix D.4).
