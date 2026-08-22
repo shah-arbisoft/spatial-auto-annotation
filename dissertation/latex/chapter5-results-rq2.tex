@@ -25,7 +25,7 @@ Averaged over three seeds (42/43/44); each cell shows mean (min--max):
 \setlength{\tabcolsep}{3pt}
 \scriptsize
 \begin{longtable}{lrrrrr}
-\caption{Downstream recall against held-out human gold for the three label sources.}\\
+\caption[Downstream recall against held-out human gold]{Downstream recall against held-out human gold for the three label sources.}\\
 \hline
 predicate & human-trained & self-trained & vision-language & auto-trained & gold (held-out) \\
 \hline
@@ -52,7 +52,7 @@ Figure~\ref{fig:rq2-with-vlm} draws the four arms per predicate. Training on the
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/rq2-with-vlm.png}
-\caption{Downstream recall against held-out human gold by label source. Every arm trains on the same pairs, so the label source is the only variable. Self-training improves on the human labels everywhere except \texttt{near}, where it falls below them.}
+\caption[Downstream recall against held-out human gold by label source]{Downstream recall against held-out human gold by label source. Every arm trains on the same pairs, so the label source is the only variable. Self-training improves on the human labels everywhere except \texttt{near}, where it falls below them.}
 \label{fig:rq2-with-vlm}
 \end{figure}
 
@@ -103,7 +103,7 @@ The source paper's motivating example, an LLM planner that fails to remove a cub
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{lllr}
-\caption{Planner experiment: whether the plan clears the occluding object before grasping the target, over 25 held-out scenes under each label source.}\\
+\caption[Planner experiment]{Planner experiment: whether the plan clears the occluding object before grasping the target, over 25 held-out scenes under each label source.}\\
 \hline
 Condition & Prompt states & Safe plans (flash) & Safe plans (pro) \\
 \hline
@@ -125,7 +125,7 @@ Figure~\ref{fig:planner-sources} shows the five conditions side by side. The two
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/planner-sources.png}
-\caption{Scenes with a safe grasp plan, by the relation source given to the planner. Neither automatic source matches human annotation alone, and under the shipped support threshold the vision-language source is marginally ahead of the geometric one; their union matches it, because their failures are disjoint.}
+\caption[Scenes with a safe grasp plan, by the relation source given]{Scenes with a safe grasp plan, by the relation source given to the planner. Neither automatic source matches human annotation alone, and under the shipped support threshold the vision-language source is marginally ahead of the geometric one; their union matches it, because their failures are disjoint.}
 \label{fig:planner-sources}
 \end{figure}
 

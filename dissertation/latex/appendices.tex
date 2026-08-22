@@ -80,7 +80,7 @@ The check that the perception stage reproduces is \texttt{scripts/reannotate\_\a
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.428\textwidth}>{\raggedright\arraybackslash}p{0.438\textwidth}>{\raggedright\arraybackslash}p{0.084\textwidth}}
-\caption{Commands reproducing every experiment from the cached geometry, with run times.}\\
+\caption[Commands reproducing every experiment from the cached]{Commands reproducing every experiment from the cached geometry, with run times.}\\
 \hline
 command & produces & time \\
 \hline
@@ -269,7 +269,7 @@ The flag types serve different purposes and are reported separately, which is wh
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.132\textwidth}>{\raggedright\arraybackslash}p{0.274\textwidth}>{\raggedright\arraybackslash}p{0.366\textwidth}>{\raggedright\arraybackslash}p{0.164\textwidth}}
-\caption{The seven predicates: core geometric test, shipped threshold values and the symmetry each rule guarantees by construction.}\\
+\caption[The seven predicates]{The seven predicates: core geometric test, shipped threshold values and the symmetry each rule guarantees by construction.}\\
 \hline
 Predicate & Core test on the ordered pair (A, B) & Thresholds, shipped values & Symmetry \\
 \hline
@@ -334,7 +334,7 @@ This is the correct construction and it does much better than the first, but not
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrl}
-\caption{Ablation A9: two-view triangulation against the monocular cascade on the same front/behind pairs.}\\
+\caption[Ablation A9]{Ablation A9: two-view triangulation against the monocular cascade on the same front/behind pairs.}\\
 \hline
 Depth cue & Ordering accuracy & Pairs answered \\
 \hline
@@ -357,7 +357,7 @@ Splitting those pairs by how far apart the two triangulated depths actually are 
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrr}
-\caption{Ablation A9 by depth separation: multi-frame ordering accuracy is at chance where the two objects sit at nearly equal camera distance.}\\
+\caption[Ablation A9 by depth separation]{Ablation A9 by depth separation: multi-frame ordering accuracy is at chance where the two objects sit at nearly equal camera distance.}\\
 \hline
 Relative depth separation & Pairs & Ordering accuracy \\
 \hline
@@ -388,7 +388,7 @@ For each human triplet the tool failed to recover, the labels it \textit{did} em
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{lrl}
-\caption{For each missed human triplet, the predicates the tool emitted instead.}\\
+\caption[For each missed human triplet, the predicates the tool]{For each missed human triplet, the predicates the tool emitted instead.}\\
 \hline
 Gold predicate & Missed & Most frequent co-emissions on missed pairs \\
 \hline
@@ -445,7 +445,7 @@ The two populations overlap too much to separate. Across 836 images, the 1,190 g
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrr}
-\caption{Ablation A10: whether contact height can replace the class guard. Drop fraction is where the subject's bottom edge falls inside the object's vertical extent, 0 being the object's top surface. No threshold both keeps the gold resting pairs and blocks the held ones.}\\
+\caption[Ablation A10: whether contact height can replace the class]{Ablation A10: whether contact height can replace the class guard. Drop fraction is where the subject's bottom edge falls inside the object's vertical extent, 0 being the object's top surface. No threshold both keeps the gold resting pairs and blocks the held ones.}\\
 \hline
 drop threshold & gold resting pairs kept & person pairs blocked \\
 \hline
@@ -485,7 +485,7 @@ Section 4.13 reports the headline comparison over two models and carries the rec
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{llrrrrl}
-\caption{The vision-language comparison of \S{}4.13 restricted to the pairs carrying a human label, where precision is defined. The model is the more precise labeller and loses F1 on every predicate.}\\
+\caption[The vision-language comparison of \S{}4.13 restricted]{The vision-language comparison of \S{}4.13 restricted to the pairs carrying a human label, where precision is defined. The model is the more precise labeller and loses F1 on every predicate.}\\
 \hline
 Predicate & Flash P & Pro P & Pipeline P & Flash F1 & Pro F1 & Pipeline F1 \\
 \hline
@@ -553,7 +553,7 @@ It measures three things the author-verdicted audits cannot: crowd precision per
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/video-stability.png}
-\caption{Frame-to-frame stability of the emitted triplets on the two demonstration clips, before and after temporal smoothing.}
+\caption[Frame-to-frame stability of the emitted triplets]{Frame-to-frame stability of the emitted triplets on the two demonstration clips, before and after temporal smoothing.}
 \label{fig:video-stability}
 \end{figure}
 
@@ -651,7 +651,7 @@ near & \textbf{0.117} & 0.108 \\
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrl}
-\caption{Benchmark mean recall at 100 by test slice for both arms, seed 42. Section 6.3.1 replicates every row but the convention-aligned one across three seeds.}\\
+\caption[Benchmark mean recall at 100 by test slice for both arms]{Benchmark mean recall at 100 by test slice for both arms, seed 42. Section 6.3.1 replicates every row but the convention-aligned one across three seeds.}\\
 \hline
 test slice (mR@100) & human-trained & auto-trained \\
 \hline
@@ -686,7 +686,7 @@ Section 3.12 states what the decisions have in common and names the four that la
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.234\textwidth}>{\raggedright\arraybackslash}p{0.281\textwidth}>{\raggedright\arraybackslash}p{0.435\textwidth}}
-\caption{Summary of the design decisions, the alternatives rejected and the reasons.}\\
+\caption[Summary of the design decisions, the alternatives rejected]{Summary of the design decisions, the alternatives rejected and the reasons.}\\
 \hline
 Decision & Alternative rejected & Why \\
 \hline
@@ -718,7 +718,7 @@ Section 6.3.2 reports what this arm establishes and the one result that does not
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrl}
-\caption{A third label source in the benchmark: mean recall at 100 by test slice for the human, automatic and vision-language arms.}\\
+\caption[A third label source in the benchmark]{A third label source in the benchmark: mean recall at 100 by test slice for the human, automatic and vision-language arms.}\\
 \hline
 slice & human & automatic & vision-language \\
 \hline
@@ -746,7 +746,7 @@ Section 5.2.1 states the finding and why the columns cannot be read as an error 
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrrrr}
-\caption{The downstream experiment on four further indicators. The automatic arm leads on recall and trails on every other column, which is the sparse-gold artefact of \S{}4.3 reappearing downstream rather than a verdict on label quality.}\\
+\caption[The downstream experiment on four further indicators]{The downstream experiment on four further indicators. The automatic arm leads on recall and trails on every other column, which is the sparse-gold artefact of \S{}4.3 reappearing downstream rather than a verdict on label quality.}\\
 \hline
 arm & macro R & macro P & macro F1 & macro AP & micro F1 \\
 \hline
@@ -773,7 +773,7 @@ Section 4.3 quotes these figures and states why they are a floor rather than an 
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrrr}
-\caption{Restricted precision, recall and F1 on the human-annotated pairs only, where an unannotated pair cannot be scored and precision is therefore a floor.}\\
+\caption[Restricted precision, recall and F1 on the human-annotated]{Restricted precision, recall and F1 on the human-annotated pairs only, where an unannotated pair cannot be scored and precision is therefore a floor.}\\
 \hline
 Predicate & P & R & F1 & support \\
 \hline
@@ -811,7 +811,7 @@ Section 4.6 quotes the two depth predicates and states that the other five sit a
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrr}
-\caption{Per-predicate recall on the held-out annotator groups with 95\% cluster-bootstrap intervals over images.}\\
+\caption[Per-predicate recall on the held-out annotator groups]{Per-predicate recall on the held-out annotator groups with 95\% cluster-bootstrap intervals over images.}\\
 \hline
 Predicate & Recall (held-out) & 95\% interval \\
 \hline

@@ -20,7 +20,7 @@ The human arm \textbf{peaks at epoch 4 of 25} and never improves again, oscillat
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/sgg-training-curves.png}
-\caption{Validation curves for both benchmark arms, each against its own training-source labels, so only the shapes are comparable. The human arm peaks early and declines; the automatic arm does not.}
+\caption[Validation curves for both benchmark arms]{Validation curves for both benchmark arms, each against its own training-source labels, so only the shapes are comparable. The human arm peaks early and declines; the automatic arm does not.}
 \label{fig:sgg-training-curves}
 \end{figure}
 
@@ -33,7 +33,7 @@ Both best checkpoints evaluated on the identical test set (210 images, human gol
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lll}
-\caption{Benchmark test results (SGDet) for the human-trained and auto-trained arms.}\\
+\caption[Benchmark test results (SGDet) for the human-trained]{Benchmark test results (SGDet) for the human-trained and auto-trained arms.}\\
 \hline
 metric (test, sgdet) & human-trained & auto-trained \\
 \hline
@@ -62,7 +62,7 @@ Every number above comes from one run per arm, and two of the margins are too sm
 \setlength{\tabcolsep}{2pt}
 \footnotesize
 \begin{longtable}{lllrrl}
-\caption{Seed replication: which differences separate across three seeds per arm.}\\
+\caption[Seed replication]{Seed replication: which differences separate across three seeds per arm.}\\
 \hline
 slice & metric & conv. & human-trained & auto-trained & vision-language \\
 \hline

@@ -55,7 +55,7 @@ image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.121\textwidth}>{\raggedright\arraybackslash}p{0.292\textwidth}>{\raggedright\arraybackslash}p{0.188\textwidth}>{\raggedright\arraybackslash}p{0.336\textwidth}}
-\caption{Pipeline stages, the alternative rejected at each stage, and the justification.}\\
+\caption[Pipeline stages, the alternative rejected at each stage]{Pipeline stages, the alternative rejected at each stage, and the justification.}\\
 \hline
 Stage & Choice & Rejected alternative & Justification \\
 \hline
@@ -95,7 +95,7 @@ mean object size, below a fitted threshold, and \textbf{never on contact pairs},
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/near-T-sweep.png}
-\caption{Fitting the \texttt{near} threshold. Recall against all annotators and against the held-out annotator, with restricted precision. The fitted value is the tightest threshold at the plateau.}
+\caption[Fitting the near threshold]{Fitting the \texttt{near} threshold. Recall against all annotators and against the held-out annotator, with restricted precision. The fitted value is the tightest threshold at the plateau.}
 \label{fig:near-T-sweep}
 \end{figure}
 

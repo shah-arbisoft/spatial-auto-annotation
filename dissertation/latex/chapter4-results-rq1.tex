@@ -13,7 +13,7 @@ Figure~\ref{fig:qualitative-examples} shows what the tool emits on two frames, o
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/qualitative-examples.png}
-\caption{Two scenes as the pipeline labels them, with the detected boxes and class instances drawn. Left, a calibration group on which every emitted relation is correct. Right, a held-out group whose annotators recorded front and behind under the opposite convention, which is the failure Section 4.5 decomposes. Faces are pixelated from the dataset's own human boxes, as Section 8.1 requires of anything republished.}
+\caption[Two scenes as the pipeline labels them, with the detected]{Two scenes as the pipeline labels them, with the detected boxes and class instances drawn. Left, a calibration group on which every emitted relation is correct. Right, a held-out group whose annotators recorded front and behind under the opposite convention, which is the failure Section 4.5 decomposes. Faces are pixelated from the dataset's own human boxes, as Section 8.1 requires of anything republished.}
 \label{fig:qualitative-examples}
 \end{figure}
 
@@ -24,7 +24,7 @@ Figure~\ref{fig:rq1-recall} plots the per-predicate result; the table below carr
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/rq1-recall.png}
-\caption{Recall of the human triplets per predicate: the full pipeline against a box-only ablation and a random baseline. Front and behind have no box-only bar because that ablation cannot compute depth.}
+\caption[Recall of the human triplets per predicate]{Recall of the human triplets per predicate: the full pipeline against a box-only ablation and a random baseline. Front and behind have no box-only bar because that ablation cannot compute depth.}
 \label{fig:rq1-recall}
 \end{figure}
 
@@ -33,7 +33,7 @@ Figure~\ref{fig:rq1-recall} plots the per-predicate result; the table below carr
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrrrrr}
-\caption{Per-predicate recall of the human triplets, pooled and on held-out annotators, against three baselines.}\\
+\caption[Per-predicate recall of the human triplets, pooled]{Per-predicate recall of the human triplets, pooled and on held-out annotators, against three baselines.}\\
 \hline
 Predicate & Gold & Ours & Ours (held-out) & Random & Majority & Box-only \\
 \hline
@@ -73,7 +73,7 @@ Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.93 on the sup
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrl}
-\caption{Manual audit of a stratified sample of extra predictions against the pre-gate box rule, with Wilson intervals. Superseded by the blind re-audit of Section 4.14; reported because it motivated the repair.}\\
+\caption[Manual audit of a stratified sample of extra predictions]{Manual audit of a stratified sample of extra predictions against the pre-gate box rule, with Wilson intervals. Superseded by the blind re-audit of Section 4.14; reported because it motivated the repair.}\\
 \hline
 Predicate & Correct / n & Precision est. & Wilson 95\% CI \\
 \hline
@@ -101,7 +101,7 @@ The audit splits the predicates in two. For lateral, depth and proximity, \textb
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{lrrrlrr}
-\caption{Front/behind by annotator group: emission rate, agreement where the tool commits, and the effect of aligning the direction convention.}\\
+\caption[Front/behind by annotator group]{Front/behind by annotator group: emission rate, agreement where the tool commits, and the effect of aligning the direction convention.}\\
 \hline
 Group & Gold & Emit rate & Agreement when committed & Convention & Raw recall & Aligned recall \\
 \hline
@@ -128,7 +128,7 @@ Figure~\ref{fig:front-behind-decomposition} plots the same decomposition, where 
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/front-behind-decomposition.png}
-\caption{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
+\caption[Front/behind decomposed per annotator group]{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
 \label{fig:front-behind-decomposition}
 \end{figure}
 
@@ -179,7 +179,7 @@ Nine ablations were run. Seven sweep a shipped parameter over the cached geometr
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.031\textwidth}>{\raggedright\arraybackslash}p{0.251\textwidth}>{\raggedright\arraybackslash}p{0.286\textwidth}>{\raggedright\arraybackslash}p{0.369\textwidth}}
-\caption{The nine ablations: what each tests, the setting that shipped, and the verdict on held-out annotators.}\\
+\caption[The nine ablations]{The nine ablations: what each tests, the setting that shipped, and the verdict on held-out annotators.}\\
 \hline
 \# & What it tests & Setting & Verdict \\
 \hline
@@ -236,7 +236,7 @@ The 884 released images are not independent photographs. Pixel-matching them aga
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrr}
-\caption{Stability of each predicate across viewpoints of the same scene, with recall under keyframe propagation against per-frame computation.}\\
+\caption[Stability of each predicate across viewpoints]{Stability of each predicate across viewpoints of the same scene, with recall under keyframe propagation against per-frame computation.}\\
 \hline
 Predicate & Stability & Recall (propagated) & Recall (per frame) \\
 \hline
@@ -268,7 +268,7 @@ The first column holds the finding, and it is not the expected one. Front/behind
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/rq1-with-vlm.png}
-\caption{Recall of the human triplets per predicate: the geometric pipeline against both vision-language models on the same 30 images, the same numbered boxes and the same written definitions. The dotted lines are the two means. Scaling the model lifts every predicate a little and closes none of the gap.}
+\caption[Recall of the human triplets per predicate: the geometric]{Recall of the human triplets per predicate: the geometric pipeline against both vision-language models on the same 30 images, the same numbered boxes and the same written definitions. The dotted lines are the two means. Scaling the model lifts every predicate a little and closes none of the gap.}
 \label{fig:rq1-with-vlm}
 \end{figure}
 
@@ -279,7 +279,7 @@ The three baselines of \S{}4.2 are deliberately weak, and a reader is entitled t
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrrr}
-\caption{A vision-language model against the geometric pipeline on the same 30 images, the same pairs and the same human gold: recall.}\\
+\caption[A vision-language model against the geometric pipeline]{A vision-language model against the geometric pipeline on the same 30 images, the same pairs and the same human gold: recall.}\\
 \hline
 Predicate & Gold & Flash & Pro & Pipeline \\
 \hline
@@ -325,7 +325,7 @@ That would still be only an argument if the audit did not test it, and the decoy
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lll}
-\caption{Blind, decoy-controlled audit of 242 sampled items, verdicted independently by the author and by a vision-language model, with Wilson intervals. The final row is the decoy control: relations the tool did not emit, which a judge who agreed with everything would reject none of.}\\
+\caption[Blind, decoy-controlled audit of 242 sampled items, verdicted]{Blind, decoy-controlled audit of 242 sampled items, verdicted independently by the author and by a vision-language model, with Wilson intervals. The final row is the decoy control: relations the tool did not emit, which a judge who agreed with everything would reject none of.}\\
 \hline
 Predicate & Author & Model \\
 \hline
@@ -369,7 +369,7 @@ The repair was fitted, shipped, and then re-audited from scratch. The obvious re
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{lrll}
-\caption{Per-predicate precision of the shipped tool: the re-fitted threshold audited on a fresh draw, beside the superseded v3 column, so the comparison is between two independent draws and not between two readings of one.}\\
+\caption[Per-predicate precision of the shipped tool]{Per-predicate precision of the shipped tool: the re-fitted threshold audited on a fresh draw, beside the superseded v3 column, so the comparison is between two independent draws and not between two readings of one.}\\
 \hline
 Predicate & v3 author & v4 author (shipped) & v4 model \\
 \hline
@@ -407,7 +407,7 @@ The item set was drawn on 17 July, a month before \texttt{on\_\allowbreak{}conta
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrr}
-\caption{Precision on the same pre-refit label generation under three judges: volunteers who did not build the tool (Appendix E.3), the blinded author, and the vision-language model.}\\
+\caption[Precision on the same pre-refit label generation]{Precision on the same pre-refit label generation under three judges: volunteers who did not build the tool (Appendix E.3), the blinded author, and the vision-language model.}\\
 \hline
 Predicate & Volunteers & Author & Model \\
 \hline

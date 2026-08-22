@@ -100,6 +100,13 @@
 \renewcommand{\cftchapaftersnum}{:\hspace{0.5em}}
 \settowidth{\cftchapnumwidth}{\bfseries CHAPTER~9:\hspace{0.75em}}
 \renewcommand{\cftchapfont}{\bfseries}
+% tocloft leaves a line of air before every chapter block. Over nineteen
+% of them that is a page of contents spent on nothing.
+\setlength{\cftbeforechapskip}{0.35em}
+\setlength{\cftbeforesecskip}{0pt}
+\setlength{\cftbeforesubsecskip}{0pt}
+\setlength{\cftbeforetabskip}{0pt}
+\setlength{\cftbeforefigskip}{0pt}
 \renewcommand{\cftchappagefont}{\bfseries}
 
 \pagestyle{fancy}

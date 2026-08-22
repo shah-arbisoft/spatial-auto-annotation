@@ -459,7 +459,7 @@ def table(rows: list[str], caption: str = "") -> str:
     if caption:
         # longtable takes its caption as the first row; this is what puts the
         # table into \listoftables and gives it a number.
-        out.append(r"\caption{" + inline(caption) + r"}\\")
+        out.append(caption_cmd(caption) + r"\\")
     out += [r"\hline",
             " & ".join(inline(h) for h in head) + r" \\", r"\hline",
             r"\endfirsthead", r"\hline",
@@ -628,12 +628,74 @@ def tex_figname(fname: str) -> str:
     return Path(fname).stem.replace("_", "-") + Path(fname).suffix
 
 
+# Words a shortened caption should not end on.
+CAPTION_STOP = {"the", "a", "an", "of", "on", "for", "in", "with", "and",
+                "to", "by", "at", "from", "its", "their", "every", "each",
+                "that", "as", "is", "are", "was", "which", "where", "when",
+                "than", "against", "over", "under", "into", "per",
+                "both", "two", "three", "same", "such", "this",
+                "these", "those", "one"}
+
+# Short forms already handed out, keyed by the full caption so that
+# asking twice for the same caption gives the same answer.
+_SHORT_USED: dict[str, str] = {}
+
+def short_caption(caption: str) -> str:
+    """An identifying form of a caption, for the List of Tables/Figures.
+
+    The full caption belongs under the float, where the reader is looking at
+    the thing it describes; in the lists it only has to be distinguishable.
+    Cuts at the first sentence or clause boundary, then at a word boundary."""
+    full = " ".join(caption.split())
+    if full in _SHORT_USED:
+        return _SHORT_USED[full]
+    s = re.sub(r"\\[a-zA-Z]+\{([^{}]*)\}", r"\1", full)  # \texttt{near} -> near
+    plain = s
+    for sep in (". ", ": ", "; ", ", which ", " -- "):
+        if sep in s[:90]:
+            s = s.split(sep)[0]
+            break
+    if s in _SHORT_USED.values():
+        # Two captions opening with the same clause would be listed under one
+        # name. Take the plain 62-character cut instead, which keeps whatever
+        # distinguishes them.
+        s = plain
+    # 62 characters is what fits on one line of the List of Tables once the
+    # number box, the dot leader and the folio have taken their share. Above
+    # that the entry wraps, and a wrapped list entry costs more than the
+    # words it carries are worth.
+    if len(s) > 62:
+        s = s[:62].rsplit(" ", 1)[0]
+        # A cut at a word boundary can still land on "of" or "the", which
+        # reads as an abandoned sentence rather than a short title.
+        words = s.split()
+        while len(words) > 3 and words[-1].lower().strip(".,;:") in CAPTION_STOP:
+            words.pop()
+        s = " ".join(words)
+    # a ] would close the optional argument early
+    s = s.split("]")[0].rstrip(" ,;:.")
+    _SHORT_USED[full] = s
+    return s
+
+
+def caption_cmd(caption: str, escape: bool = True) -> str:
+    """\\caption, with a short form when the full one is long enough to want
+    one. Figure captions carry hand-written LaTeX and are passed through."""
+    body = inline(caption) if escape else caption
+    short = short_caption(caption)
+    # The optional argument is LaTeX too: an unescaped % there comments out
+    # the rest of the line, which ends the longtable's caption mid-scan.
+    short_tex = inline(short) if escape else short.replace("%", r"\%")
+    if len(short) < len(" ".join(caption.split())) - 12:
+        return r"\caption[" + short_tex + "]{" + body + "}"
+    return r"\caption{" + body + "}"
+
 def figure_block(fname: str, caption: str) -> str:
     safe = tex_figname(fname)
     return "\n".join([
         r"\begin{figure}[!htbp]", r"\centering",
         r"\includegraphics[width=0.80\textwidth]{figures/" + safe + "}",
-        r"\caption{" + caption + "}",
+        caption_cmd(caption, escape=False),
         r"\label{fig:" + Path(safe).stem + "}",
         r"\end{figure}", ""])
 
@@ -641,10 +703,16 @@ def figure_block(fname: str, caption: str) -> str:
 def build_references(md: str) -> str:
     entries = [b.strip() for b in re.split(r"\n\s*\n", md) if b.strip()
                and not b.strip().startswith("#")]
-    out = [r"\begin{description}[leftmargin=2em, labelindent=0em]"]
+    # Set a step down, as reference lists conventionally are: fifty-seven
+    # hanging-indent entries at body size run four lines past the third
+    # page and leave a fourth one almost empty.
+    out = [r"\small",
+           r"\begin{description}[leftmargin=2em, labelindent=0em,"
+           r" itemsep=0.1em, parsep=0pt, topsep=0.3em]"]
     for e in entries:
         out.append(r"\item[] " + inline(" ".join(e.split())))
     out.append(r"\end{description}")
+    out.append(r"\normalsize")
     return "\n".join(out)
 
 
@@ -711,7 +779,7 @@ def main():
         placed = sum(1 for f, _c, a in figs
                      if a and a.removeprefix("after:") in md)
         n_tab = tex.count(r"\begin{longtable}")
-        n_cap = tex.count(r"\caption{") - sum(1 for f, _c, a in figs
+        n_cap = len(re.findall(r"\\caption[\[{]", tex)) - sum(1 for f, _c, a in figs
                                               if (FIGDIR / f).exists())
         stem = Path(md_name).stem.replace("_", "-")
         (out / (stem + ".tex")).write_text(tex, encoding="utf-8")
@@ -894,6 +962,13 @@ MAIN = r"""% GENERATED by scripts/build_latex.py -- do not edit by hand.
 \renewcommand{\cftchapaftersnum}{:\hspace{0.5em}}
 \settowidth{\cftchapnumwidth}{\bfseries CHAPTER~9:\hspace{0.75em}}
 \renewcommand{\cftchapfont}{\bfseries}
+% tocloft leaves a line of air before every chapter block. Over nineteen
+% of them that is a page of contents spent on nothing.
+\setlength{\cftbeforechapskip}{0.35em}
+\setlength{\cftbeforesecskip}{0pt}
+\setlength{\cftbeforesubsecskip}{0pt}
+\setlength{\cftbeforetabskip}{0pt}
+\setlength{\cftbeforefigskip}{0pt}
 \renewcommand{\cftchappagefont}{\bfseries}
 
 \pagestyle{fancy}
