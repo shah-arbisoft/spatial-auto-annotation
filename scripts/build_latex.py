@@ -290,7 +290,13 @@ TABLES = {
         # D.7
         "Diagnosed cause of every missed human triplet, by predicate.",
         # E.1
-        "The vision-language comparison of \\S4.16 restricted to the pairs "
+        # D.8
+        "Ablation A10: whether contact height can replace the class guard. "
+        "Drop fraction is where the subject's bottom edge falls inside the "
+        "object's vertical extent, 0 being the object's top surface. No "
+        "threshold both keeps the gold resting pairs and blocks the held ones.",
+        # E.1
+        "The vision-language comparison of §4.13 restricted to the pairs "
         "carrying a human label, where precision is defined. The model is the "
         "more precise labeller and loses F1 on every predicate.",
         # F.1
@@ -308,7 +314,7 @@ TABLES = {
         # F.5
         "The downstream experiment on four further indicators. The automatic "
         "arm leads on recall and trails on every other column, which is the "
-        "sparse-gold artefact of \\S4.3 reappearing downstream rather than a "
+        "sparse-gold artefact of §4.3 reappearing downstream rather than a "
         "verdict on label quality.",
         # F.6
         "Restricted precision, recall and F1 on the human-annotated pairs "
@@ -693,7 +699,21 @@ def main():
                       + convert(body, here, take))
     (out / "appendices.tex").write_text(
         "\n\n".join(chunks) if chunks else convert(app_md, []), encoding="utf-8")
-    print(f"  appendices.md{'':21s} -> appendices.tex  ({len(chunks)} appendices)")
+    # The chapter loop checks the caption registry against the tables it is
+    # applied to; the appendices did not. A table added to D.8 without a
+    # caption shifted every caption after it onto the wrong table, down to
+    # F.8, which ended up with none. Same check, same reason.
+    n_app_tab = sum(1 for ln in app_md.splitlines()
+                    if ln.strip().startswith("|---"))
+    n_app_cap = len(TABLES.get("appendices.md", []))
+    app_note = ""
+    if n_app_cap != n_app_tab:
+        app_note = (f"  WARNING: {n_app_cap} captions declared for "
+                    f"{n_app_tab} tables; captions are positional, so every "
+                    f"one after the mismatch sits on the wrong table")
+    elif app_caps:
+        app_note = f"  WARNING: {len(app_caps)} captions never consumed"
+    print(f"  appendices.md{'':21s} -> appendices.tex  ({len(chunks)} appendices, {n_app_tab} tables){app_note}")
     (out / "references.tex").write_text(
         build_references((SRC / "references.md").read_text(encoding="utf-8")),
         encoding="utf-8")
