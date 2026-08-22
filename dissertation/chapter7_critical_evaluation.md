@@ -10,7 +10,7 @@ objective-by-objective audit belongs with the conclusions and is in §9.1.
 ## 7.1 Achievement against the research questions
 
 **RQ1** asked whether spatial-relationship annotation can be automated at a
-quality comparable to human annotation. The answer is different for each predicate, and §9.1 states it against the criteria of §1.2.2; what matters
+quality comparable to human annotation. It differs by predicate, and §9.1 states it against the criteria of §1.2.2; what matters
 here is its shape. For the lateral and proximity predicates the tool is by
 every measure available *at least* as good as the human process. For support
 it is not: two evidence upgrades motivated by measurement lifted recall, but
@@ -100,11 +100,11 @@ predicate recovering 0.70 of the human labels while agreeing with itself at
 that rate is not guessing; it is applying a consistent criterion the
 annotators did not share. With A8, where quadrupling the depth model changed
 nothing, and §4.5, where two groups labelled the pair oppositely, the weight
-of the shortfall sits on definitional disagreement and not on perception. That
-does not dissolve monocular ambiguity, which genuinely bounds the predicate
-at equal camera distance, but it relocates most of the measured gap away
-from it. The implication is unglamorous: the best expected return here is a
-written annotation guideline, not a better depth network.
+of the shortfall sits on definitional disagreement and not on perception.
+That does not dissolve monocular ambiguity, which genuinely bounds the
+predicate at equal camera distance, but it relocates most of the measured
+gap away from it. What would pay best here is therefore a written annotation
+guideline, which is a duller prescription than a better depth network.
 
 ## 7.3 The dataset's annotation process, examined
 

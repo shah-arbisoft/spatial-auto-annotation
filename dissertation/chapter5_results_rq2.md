@@ -64,7 +64,7 @@ the other three sources are. Every arm trains on precisely the pairs that
 arm covers, so none is advantaged by seeing more of the split, and the
 human, self-trained and automatic figures are unchanged from the three-arm
 experiment to the last decimal, which is the check that this is an addition,
-not a different experiment. The answer is a qualified yes: at 0.38 the
+not a different experiment. It does, with a qualification: at 0.38 the
 vision-language labels teach better than the sparse human labels they would
 replace and about as well as the standard remedy for scarce labels, while
 remaining half as useful as computed geometry.
@@ -88,14 +88,14 @@ and self-training passes the instability on to its student.
 ### 5.2.1 The same experiment on four other indicators
 
 A recall-only table invites one obvious objection: the automatic arm labels
-twenty times more densely, so of course it recovers more. The objection is
-answered by measurement, and the answer is not the flattering one. **On
-every indicator except recall the automatic arm comes last**: macro
-precision 0.136 against the human arm's 0.252, F1 0.194 against 0.267,
-average precision 0.164 against 0.230, and micro F1, which weights
-predicates by how often the annotators used them, harshest of all at 0.066
-against 0.262. Taken at face value the table says the automatic labels are
-the worst supervision of the four.
+twenty times more densely, so of course it recovers more. Measuring it
+answers the objection, and the answer does not flatter the tool. **On every
+indicator except recall the automatic arm comes last**: macro precision
+0.136 against the human arm's 0.252, F1 0.194 against 0.267, average
+precision 0.164 against 0.230, and micro F1, which weights predicates by how
+often the annotators used them, harshest of all at 0.066 against 0.262.
+Taken at face value the table says the automatic labels are the worst
+supervision of the four.
 
 They are not, and one number shows why. Average precision is threshold-free,
 so no arm improves it by committing to more pairs, and the automatic arm
@@ -289,14 +289,14 @@ better on these scenes* far more precisely than how often any of them would
 succeed in general, and that generalisation is weak because of what the scenes
 are, not how many.
 
-Four things this does not show. The scenes were selected to contain an
+Four limits belong with that. The scenes were selected to contain an
 occluder, so the result speaks to that situation and not to task planning at
 large. The vision-language model's assertions were never audited as the
 tool's were (§4.4), so the union's gain is measured on the planning task
-alone. The comparison runs between label sources: condition B
-is handed the exact fact the task tests. And no robot moved, so this
-measures plans, not executions, and closes the gap between labels and robot
-behaviour by one link rather than entirely.
+alone. Condition B is handed the exact fact the task tests, so what is being
+compared is the label sources and not the planners. And no robot moved, so
+this measures plans, not executions, and closes the gap between labels and
+robot behaviour by one link rather than entirely.
 
 The threshold refit of §4.14 cost condition C three scenes, and E none.
 An earlier version of this experiment ran on the labels `on_contact_min` 0.60

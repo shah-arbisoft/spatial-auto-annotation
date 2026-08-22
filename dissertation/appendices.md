@@ -102,7 +102,8 @@ Training logs and parsed results: `outputs/sgg_benchmark/`.
 
 ### Where each chapter's numbers come from
 
-Every quantitative claim names the script that produced it and the artefact it is reproducible from.
+Every quantitative claim names the script that produced it and the artefact
+it is reproducible from.
 
 **Chapter 1.** Chapter summary: the manual-annotation bottleneck, the compute-not-predict idea, the research questions and objectives, and the shape of the argument.
 
@@ -607,20 +608,21 @@ the last contact-boundary suppressions disappear; headline mean recall 0.79
 → **0.81**. The A4 sweep confirms the fitted threshold sits exactly at the
 recall plateau's knee: recall is flat from T = 1.372 upward while emissions
 keep growing, so the fitted value is the least-permissive point achieving
-maximal agreement. A 30-sample re-audit of the new support extras appeared to
-confirm the precision claim: extras correct rise from 1/15 and 3/15 (box
+maximal agreement. A 30-sample re-audit of the new support extras appeared
+to confirm the precision claim: extras correct rise from 1/15 and 3/15 (box
 rule) to **11/15 and 12/15**, pooled 0.13 → 0.77. That re-audit was
 unblinded, and §4.14 shows the figure does not survive blinding; the
 threshold below was fitted on train F1 against gold covering a tenth of
 ordered pairs, so a false positive outside the gold cost the fit nothing,
-and the plateau called uncritical here is flat for that reason. The seven remaining wrong/uncertain extras have structure: a
-person *holding* a remote fires contact (holding ≠ resting), one occluded
-bottle-behind-bottle pair, and three distant clusters too small to verdict
-confidently. The person-holding mode is closed by a **class-aware guard**:
-annotators never label person-support (0 of 2,466 gold support triplets
-involve a person on either side), so `on`/`under` are simply not evaluated
-for that class, removing ~130 false emissions at no recall cost, since the
-person side carried no gold to recover.
+and the plateau called uncritical here is flat for that reason. The seven
+remaining wrong/uncertain extras have structure: a person *holding* a remote
+fires contact (holding ≠ resting), one occluded bottle-behind-bottle pair,
+and three distant clusters too small to verdict confidently. The
+person-holding mode is closed by a **class-aware guard**: annotators never
+label person-support (0 of 2,466 gold support triplets involve a person on
+either side), so `on`/`under` are simply not evaluated for that class,
+removing ~130 false emissions at no recall cost, since the person side
+carried no gold to recover.
 
 ### D.3 The ground-plane fallback (ablation A7)
 
@@ -666,20 +668,19 @@ It is worth asking whether the depth pair would improve simply by using a
 stronger depth network. It does not: swapping Depth Anything v2 Small for
 the 4× larger Base variant and re-running the whole dataset moves
 front/behind recall by +0.001 and −0.002, from 0.696/0.711 to 0.697/0.709,
-while mean recall *falls* from 0.845 to 0.843, and the front/behind emit rate
-moves by +0.001. Deltas are differences between the rounded figures printed
-here, so the columns add up as read. Both arms are end-to-end runs on the shipped rule set, so the
-comparison isolates the depth model alone. An earlier version of this appendix
-reported the same ablation with both arms at the pre-refit support threshold
-and predicted that re-running it on the shipped labels would move the two arms
-together without changing a difference that small; it did. The
-depth-predicate limit is
-*monocular ambiguity* (two objects at a similar camera distance are
-inseparable by any monocular model, regardless of its fidelity), not the
-network's quality. This is precisely why the fallback that worked is a
-geometric projection cue rather than a heavier perception model, and it
-justifies shipping the Small variant: identical accuracy, an Apache-2.0
-licence, and half the VRAM.
+while mean recall *falls* from 0.845 to 0.843, and the front/behind emit
+rate moves by +0.001. Deltas are differences between the rounded figures
+printed here, so the columns add up as read. Both arms are end-to-end runs
+on the shipped rule set, so the comparison isolates the depth model alone.
+An earlier version of this appendix reported the same ablation with both
+arms at the pre-refit support threshold and predicted that re-running it on
+the shipped labels would move the two arms together without changing a
+difference that small; it did. The depth-predicate limit is *monocular
+ambiguity* (two objects at a similar camera distance are inseparable by any
+monocular model, regardless of its fidelity), not the network's quality.
+This is precisely why the fallback that worked is a geometric projection cue
+rather than a heavier perception model, and it justifies shipping the Small
+variant: identical accuracy, an Apache-2.0 licence, and half the VRAM.
 
 
 ### D.6 Why not multi-frame depth either (ablation A9)
@@ -855,14 +856,14 @@ which sits inside the resting distribution rather than beside it.
 
 There is no threshold that does both jobs. Excluding every blocked pair
 costs about half the genuine support recall; keeping most of the support
-recall lets almost every held object back in. The conclusion is a negative
-one and it is the useful kind: the objection assumes a geometric solution
-exists and is merely being skipped, and on this data it does not exist at
-this level of geometry. Contact height cannot tell a hand from a shelf
-because a hand at waist height and a shelf at waist height are the same
-measurement. Separating them needs something the pipeline does not have,
-either surface normals from real 3D or an affordance notion of what can
-support, and both are the future work of §9.3 rather than a threshold.
+recall lets almost every held object back in. That is a negative result, and
+a useful one, because the objection assumes a geometric solution exists and
+is merely being skipped, and on this data it does not exist at this level of
+geometry. Contact height cannot tell a hand from a shelf because a hand at
+waist height and a shelf at waist height are the same measurement.
+Separating them needs something the pipeline does not have, either surface
+normals from real 3D or an affordance notion of what can support, and both
+are the future work of §9.3 rather than a threshold.
 
 What the ablation does settle is the guard's blast radius. Fifty-one pairs
 in 836 images reach the contact threshold with a person on either side, so

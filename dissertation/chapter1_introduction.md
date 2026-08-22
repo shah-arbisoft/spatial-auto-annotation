@@ -33,7 +33,7 @@ Crucially, **no automatic annotator exists for this dataset**.
 SGDET-Annotate only accelerates manual labelling; a human still decides
 every label.
 
-The cost is structural, and it grows faster than the data. Objects relate
+That cost is structural and grows faster than the data. Objects relate
 pairwise, so an image holding *n* annotated objects presents *n(n−1)*
 ordered pairs a conscientious annotator must consider. This dataset averages
 101 per image, so an exhaustive pass means a hundred judgements per

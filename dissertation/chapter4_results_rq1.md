@@ -360,8 +360,8 @@ detection recall spans 0.40 (cube) to 0.95 (human), and a triplet needs
 scores 0.85 mean, matching PredCls** (lateral 0.96/0.98, near 1.00, support
 0.83/0.77; front/behind 0.69/0.70, computed before the ground-plane fallback
 shipped, so those are a floor, and detectable pairs skew towards
-well-separated objects). The gap belongs to detection:
-the rules are detector-agnostic.
+well-separated objects). Detection accounts for the gap, and the rules
+themselves are detector-agnostic.
 
 Two caveats. Zero-shot open-vocabulary detection is the worst-case
 detector, the trade §2.6 identifies, and it was used because the authors'
@@ -534,15 +534,16 @@ separation of sheet from key are in Appendix E.7. The same 242 images, with the 
 answer wrong when unsure, were put to `gemini-3.6-flash` as a second judge
 independent of the author (`scripts/judge_audit_vlm.py`).
 
-Why a model may judge what §4.13 shows it cannot annotate. The objection
-is obvious: §4.13 spends a section establishing that a vision-language model
-makes a poor annotator, and this section then gives one a vote. The two
-tasks differ in the half that failed. What §4.13 measures is *coverage* —
-the model never addressed 171 of 381 gold triplets, 44.9%, and its headline
-recall is mostly that silence — while on the pairs it did judge it was the
-*more precise* of the two, 0.419 against the pipeline's 0.351. Judging a
-claim that is handed to it asks only for the half that measured sound, since
-the item is supplied and nothing has to be enumerated.
+Why a model may judge what §4.13 shows it cannot annotate. One objection
+arrives immediately: §4.13 spends a section establishing that a
+vision-language model makes a poor annotator, and this section then gives
+one a vote. The two tasks differ in the half that failed. What §4.13
+measures is *coverage* — the model never addressed 171 of 381 gold triplets,
+44.9%, and its headline recall is mostly that silence — while on the pairs
+it did judge it was the *more precise* of the two, 0.419 against the
+pipeline's 0.351. Judging a claim that is handed to it asks only for the
+half that measured sound, since the item is supplied and nothing has to be
+enumerated.
 
 That would still be only an argument if the audit did not test it, and the
 decoys test it. The model rejected 26 of 28 relations the tool never

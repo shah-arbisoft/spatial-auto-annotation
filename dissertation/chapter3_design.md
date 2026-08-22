@@ -75,15 +75,16 @@ learned component decides a relationship.
 
 The alternative was not to compute at all. Section 2.4 sets out the
 established rival, which is to keep the human labels and stretch them by
-semi-supervised pseudo-labelling or by active learning. That route is easier to build and was rejected on three grounds stated there
-and verified here. The seed labels are internally inconsistent, so a teacher
-trained on them propagates two front/behind conventions and a selective `near`
-with added confidence. The labelled tenth is not a
-random sample of the rest but whatever nine annotators found salient, which
-is exactly the assumption pseudo-labelling requires and does not have. And
-the seed is weakest where the task is hardest: Chapter 5's human-trained
-classifier, the very teacher such a loop would start from, reaches 0.08–0.25
-recall on the sparsely-labelled predicates.
+semi-supervised pseudo-labelling or by active learning. That route is easier
+to build and was rejected on three grounds stated there and verified here.
+The seed labels are internally inconsistent, so a teacher trained on them
+propagates two front/behind conventions and a selective `near` with added
+confidence. The labelled tenth is not a random sample of the rest but
+whatever nine annotators found salient, which is exactly the assumption
+pseudo-labelling requires and does not have. And the seed is weakest where
+the task is hardest: Chapter 5's human-trained classifier, the very teacher
+such a loop would start from, reaches 0.08–0.25 recall on the
+sparsely-labelled predicates.
 
 A geometric labelling function inherits none of those, because it does not
 derive from the seed at all. It is fitted on a handful of thresholds,
@@ -171,12 +172,13 @@ against. The design rationale in brief:
 ## 3.6 Correction and confidence
 
 Three predicate families are mutually exclusive: on/under, left/right and
-front/behind. Two of them cannot contradict, because the rule branches: a pair
-is left of, or right of, or neither, and the same for the depth pair, so
-exclusivity is a property of the control flow, not something to check afterwards. Support is different. `on` and `under` are independent tests over
-*different* contact evidence, the mask-contact fraction measured each way
-round, so noise in either can make both fire on the same pair. That case is
-demoted to an `on_under_conflict` flag and neither label is emitted.
+front/behind. Two of them cannot contradict, because the rule branches: a
+pair is left of, or right of, or neither, and the same for the depth pair,
+so exclusivity is a property of the control flow, not something to check
+afterwards. Support is different. `on` and `under` are independent tests
+over *different* contact evidence, the mask-contact fraction measured each
+way round, so noise in either can make both fire on the same pair. That case
+is demoted to an `on_under_conflict` flag and neither label is emitted.
 
 Demoting instead of resolving is the deliberate part. Picking the stronger of
 two contradictory signals would produce a label the evidence does not support
@@ -190,8 +192,8 @@ One further correction is class-aware, not geometric. Support is not
 evaluated at all when either object is a person: the annotators never
 recorded one, on **0 of 2,466 gold support triplets**, and mask contact
 cannot distinguish an object *resting on* someone from one being *held* by
-them. A geometric rule that cannot represent the distinction its evidence turns on
-should decline the pair instead of guessing, and the guard is a
+them. A geometric rule that cannot represent the distinction its evidence
+turns on should decline the pair instead of guessing, and the guard is a
 configuration entry (`no_support_classes`), not a special case buried in
 code. It is still a class list standing in for geometry, and it would not
 cover a manipulator or an animal holding something; ablation A10 tests
@@ -300,19 +302,20 @@ which requires deciding where one viewpoint ends and the next begins.
 
 The standard tool does not apply. Shot-boundary detection thresholds the
 difference between consecutive frames, which presumes cuts, and a robot
-walking through a room produces none. The failure is structural rather than a
-matter of threshold, as §4.12 verifies by sweeping it: 0.08 px per frame never
-exceeds the noise at any single step, while the same motion over forty frames
-displaces the image by 13 px, so only accumulated drift carries the signal.
+walking through a room produces none. No threshold repairs it, as the sweep
+in §4.12 confirms: 0.08 px per frame never exceeds the noise at any single
+step, while the same motion over forty frames displaces the image by 13 px,
+so only accumulated drift carries the signal.
 
 `segment_sequence` (`src/keyframes.py`) therefore measures drift from the
 *anchor* of the current segment, not the preceding frame, opening a new
 segment when drift exceeds τ, so gradual motion accumulates instead of being
-rounded away while a genuine cut still crosses in one step. Distances are mean absolute differences over 64×48 mean-subtracted greyscale
-thumbnails, the subtraction discarding the exposure shifts of an auto-exposing
-camera, which would otherwise fire boundaries of their own. Each segment
-nominates the frame closest to its mean signature, which on a moving camera
-beats taking the first.
+rounded away while a genuine cut still crosses in one step. Distances are
+mean absolute differences over 64×48 mean-subtracted greyscale thumbnails,
+the subtraction discarding the exposure shifts of an auto-exposing camera,
+which would otherwise fire boundaries of their own. Each segment nominates
+the frame closest to its mean signature, which on a moving camera beats
+taking the first.
 
 A single parameter spans two uses. Small τ isolates near-duplicates, so each
 segment is one viewpoint; large τ groups several viewpoints of one
