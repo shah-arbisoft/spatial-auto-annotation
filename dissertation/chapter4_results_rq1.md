@@ -303,7 +303,7 @@ optimised against.
 | A2 | front/behind abstention band | `depth_eps` 0.03 | **shipped**; bounds the trade (recall 0.71 at ε=0 for 0.26–0.36 precision) |
 | A3 | lateral abstention band | `lateral_center_eps` 0.02 | **shipped**; recall flat to 0.02 while precision rises |
 | A4 | proximity threshold | `near_T` 1.372 | **shipped**; the knee of the recall plateau, held-out recall 1.00 |
-| A5 | mask-contact support rule | `on_contact_min` 0.60 | **shipped**; held-out support F1 0.71 → 0.87, both error directions at once |
+| A5 | mask-contact support rule | `on_contact_min` 0.60, re-fitted to 0.85 (§4.14) | **shipped**; held-out support F1 0.71 → 0.87, both error directions at once |
 | A6 | `near` contact exclusion | on | **shipped**; costs 2 recalled triplets, prevents 4,084 labels contradicting the measured convention |
 | A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.70/0.71, mean recall 0.79 → 0.85 |
 | A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/−0.002 front/behind, mean recall marginally lower |
@@ -622,14 +622,14 @@ prior the decoys remove. The rest is the independence rule.
 
 The cause is a threshold fitted where its error was invisible. Sorted by the
 contact fraction the rule fires on, audited claims below 0.85 are correct 1
-time in 11 (4/44) and above it 2 times in 3 (34/50). The shipped
-`on_contact_min` is 0.60, and Appendix D.2 fitted it on train F1 against the
-human annotation, which covers ~10% of ordered pairs: a false positive on
-the other 90% is not in the gold and cost the fit nothing. The plateau D.2
-calls "uncritical" from 0.60 to 0.80 is flat because the metric could not
-see the error the parameter controls. A second, independent signal is the
-supporting object's size, since `on(A, B)` requires B to be able to hold A
-up and a 20-pixel cube is not a surface.
+time in 11 (4/44) and above it 2 times in 3 (34/50). The value shipped at
+that point, `on_contact_min` 0.60, came from Appendix D.2's fit on train F1
+against the human annotation, which covers ~10% of ordered pairs: a false
+positive on the other 90% is not in the gold and cost the fit nothing. The
+plateau D.2 calls "uncritical" from 0.60 to 0.80 is flat because the metric
+could not see the error the parameter controls. A second, independent signal
+is the supporting object's size, since `on(A, B)` requires B to be able to
+hold A up and a 20-pixel cube is not a surface.
 
 The repair was fitted, shipped, and then re-audited from scratch. The
 obvious response, raising the threshold until precision recovers, cannot be

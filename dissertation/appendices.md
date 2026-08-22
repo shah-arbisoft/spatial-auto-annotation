@@ -374,8 +374,9 @@ stops a cup floating in front of a shelf from reading as resting on it.
 are the no-mask fallback. With SAM2 masks the rule uses the physical support
 signature instead: `contact_below(A, B)` is the fraction of A's mask-bottom
 columns with B's mask within five pixels below (`src/contact.py`), and `on`
-requires `contact >= on_contact_min` (0.60, calibrated on the training groups,
-with a flat optimum from 0.60 to 0.80) together with the depth gate and the
+requires `contact >= on_contact_min` (0.85; first calibrated at 0.60 on the
+training groups and re-fitted after the blind audit of §4.14 measured what
+the lower value cost in precision) together with the depth gate and the
 centroid order. This recovers the containment case the box test misses, nested
 boxes at shallow viewing angles, formerly 79 to 88% of support misses, and
 rejects cluster neighbours whose boxes touch but whose masks do not. Measured:
@@ -551,7 +552,7 @@ nearly four.
 
 | Predicate | Core test on the ordered pair (A, B) | Thresholds, shipped values | Symmetry |
 |---|---|---|---|
-| `on` | mask contact below, depth co-location, centroid order; box test is the no-mask fallback | `on_contact_min` 0.60, `on_depth_eps` 0.06, `on_vertical_gap` 0.05, `on_horizontal_overlap` 0.20 | `on(A,B) = under(B,A)` |
+| `on` | mask contact below, depth co-location, centroid order; box test is the no-mask fallback | `on_contact_min` 0.85, `on_depth_eps` 0.06, `on_vertical_gap` 0.05, `on_horizontal_overlap` 0.20 | `on(A,B) = under(B,A)` |
 | `under` | inverse of `on` | as `on` | `under(A,B) = on(B,A)` |
 | `left of` | `cx_A < cx_B` | `lateral_center_eps` 0.02 | `left(A,B) = right(B,A)` |
 | `right of` | `cx_A > cx_B` | `lateral_center_eps` 0.02 | `right(A,B) = left(B,A)` |
@@ -597,8 +598,9 @@ The support signature that boxes cannot see, masks can: A rests on B iff the
 pixels directly below A's mask-bottom boundary belong to B
 (`src/contact.py`), which captures both stacking and the containment case,
 and rejects side-by-side neighbours. Calibrated on the train groups
-(`on_contact_min` = 0.60; the train-F1 plateau is flat from 0.60–0.80, so
-the choice is uncritical), ablation A5: support F1 on held-out annotators
+(`on_contact_min` = 0.60 here; the train-F1 plateau is flat from 0.60–0.80,
+so the choice looked uncritical, and §4.14 later shows why that plateau was
+the wrong thing to read), ablation A5: support F1 on held-out annotators
 rises again, 0.71 → **0.87**, with `on` recall 0.82 → 0.88 and restricted
 precision 0.73 → 0.88 simultaneously, the rare change that improves both
 error directions at once, exactly as the failure gallery and audit
