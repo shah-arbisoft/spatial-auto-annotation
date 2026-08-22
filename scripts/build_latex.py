@@ -368,14 +368,30 @@ def is_numeric_col(body: list[list[str]], i: int) -> bool:
     return numish >= 0.7 * len(vals)
 
 
-def col_spec(cells: list[list[str]], ncol: int) -> str:
-    """Column spec that fits the text block.
+def longest_token(cells: list[list[str]], ncol: int) -> list[int]:
+    """Longest unbreakable word in each column, in characters.
 
-    Short tables keep natural widths, which look better. Wide ones get
-    \\p{} columns in proportion to their longest cell, so the text wraps
-    instead of overflowing the margin. Widths are expressed as fractions of
-    \\textwidth and deliberately sum to less than 1 to leave room for the
-    inter-column padding longtable adds."""
+    Emphasis and code markers are stripped: they do not survive into the
+    typeset word, so counting them would overstate the width needed."""
+    out = []
+    for i in range(ncol):
+        longest = 1
+        for r in cells:
+            if i < len(r):
+                for w in re.sub(r"[*`_]", "", r[i]).split():
+                    longest = max(longest, len(w))
+        out.append(longest)
+    return out
+
+
+def plan_table(cells: list[list[str]], ncol: int):
+    """Type size, inter-column padding and column spec, chosen together.
+
+    A table that fits keeps natural column widths, which look better. One
+    that does not is shrunk a step at a time, and only when no size fits are
+    the columns made to wrap. Wrapped columns are floored at the width of
+    their own longest word so that nothing can overprint, and whatever room
+    is left over is shared out by how much text each column actually holds."""
     body = cells[1:] or cells
     widest = [max((len(r[i]) for r in cells if i < len(r)), default=1)
               for i in range(ncol)]
@@ -384,26 +400,43 @@ def col_spec(cells: list[list[str]], ncol: int) -> str:
     size, sep = fit_size(sum(widest), ncol)
     if size is not None:
         if ncol <= 2:
-            return "l" * ncol
-        return "l" + "".join("r" if numeric[i] else "l" for i in range(1, ncol))
+            return "l" * ncol, size, sep
+        return ("l" + "".join("r" if numeric[i] else "l"
+                              for i in range(1, ncol)), size, sep)
 
-    # Give every column a floor so a narrow numeric column stays readable,
-    # then share the rest out by how much text each actually holds.
-    floor = 0.055
+    # Wrapping. TT glyphs in code spans run wider than the mean proportional
+    # advance CHAR_PT measures, so the floors carry 6% slack.
+    # A column whose widest cell is itself short should never wrap: breaking
+    # "<1 min" over two lines to save four points helps nobody.
+    tok = [max(k, min(w, 10)) for k, w in
+           zip(longest_token(cells, ncol), widest)]
     share = [max(w, 4) for w in widest]
     total = sum(share)
-    frac = [floor + (1.0 - floor * ncol) * (s / total) for s in share]
-    # longtable adds 2*\tabcolsep of padding to EVERY column, so the room left
-    # for the p{} widths shrinks as columns are added. Scaling to a fixed 0.94
-    # regardless of ncol put a 3-column table 9pt into the margin and a
-    # 7-column one 57pt into it. 0.01 is slack for the rules.
-    budget = 1.0 - ncol * COLPAD_PT / TEXT_PT - 0.01
-    scale = budget / sum(frac)
-    frac = [f * scale for f in frac]
+    # Wrapped tables start a step down. A table that has to wrap is already
+    # dense, and setting it at the largest size that merely fits widens every
+    # floor, which buys wider columns at the cost of more wrapped lines.
+    frac = None
+    for size, char_pt, sep in SIZE_STEPS[1:]:
+        budget = 1.0 - 2.0 * sep * ncol / TEXT_PT - 0.01
+        floors = [1.06 * k * char_pt / TEXT_PT for k in tok]
+        slack = budget - sum(floors)
+        if slack > 0.0:
+            frac = [f + slack * (s / total) for f, s in zip(floors, share)]
+            break
+    if frac is None:
+        # Even the smallest size cannot hold every long word. Nothing avoids
+        # a break here, so share the budget out in proportion and let LaTeX
+        # report the overfull box rather than hiding it.
+        size, char_pt, sep = SIZE_STEPS[-1]
+        budget = 1.0 - 2.0 * sep * ncol / TEXT_PT - 0.01
+        floors = [1.06 * k * char_pt / TEXT_PT for k in tok]
+        frac = [f * budget / sum(floors) for f in floors]
+
     align = [r">{\raggedleft\arraybackslash}" if numeric[i]
              else r">{\raggedright\arraybackslash}" for i in range(ncol)]
-    return "".join(f"{align[i]}p{{{frac[i]:.3f}\\textwidth}}"
+    spec = "".join(f"{align[i]}p{{{frac[i]:.3f}\\textwidth}}"
                    for i in range(ncol))
+    return spec, size, sep
 
 
 def table(rows: list[str], caption: str = "") -> str:
@@ -415,12 +448,7 @@ def table(rows: list[str], caption: str = "") -> str:
     ncol = max(len(r) for r in cells)
     head, body = cells[0], cells[1:]
     head += [""] * (ncol - len(head))
-    spec = col_spec(cells, ncol)
-    widest = [max((len(r[i]) for r in cells if i < len(r)), default=1)
-              for i in range(ncol)]
-    size, sep = fit_size(sum(widest), ncol)
-    if size is None:                      # nothing fits: columns must wrap
-        size, sep = r"\footnotesize", 3.0
+    spec, size, sep = plan_table(cells, ncol)
     out = [r"\begin{center}",
            r"\setlength{\tabcolsep}{" + f"{sep:g}" + "pt}", size,
            r"\begin{longtable}{" + spec + "}"]
@@ -470,7 +498,8 @@ def convert(md: str, figures: list[tuple[str, str, str]],
             flush_table()
             close_lists()
             in_code = not in_code
-            out.append(r"\begin{verbatim}" if in_code else r"\end{verbatim}")
+            out.append(r"\begingroup\small\begin{verbatim}" if in_code
+                       else r"\end{verbatim}\endgroup")
             i += 1
             continue
         if in_code:
@@ -577,7 +606,7 @@ def convert(md: str, figures: list[tuple[str, str, str]],
     flush_table()
     close_lists()
     if in_code:
-        out.append(r"\end{verbatim}")
+        out.append(r"\end{verbatim}\endgroup")
 
     # A figure declared for this chapter whose anchor never matched would
     # otherwise vanish from the PDF in silence. Append it and say so loudly.
@@ -859,7 +888,7 @@ MAIN = r"""% GENERATED by scripts/build_latex.py -- do not edit by hand.
 % prefix, the separator and a wider number box are all that is needed.
 \renewcommand{\cftchappresnum}{CHAPTER~}
 \renewcommand{\cftchapaftersnum}{:\hspace{0.5em}}
-\settowidth{\cftchapnumwidth}{CHAPTER~9:~}
+\settowidth{\cftchapnumwidth}{\bfseries CHAPTER~9:\hspace{0.75em}}
 \renewcommand{\cftchapfont}{\bfseries}
 \renewcommand{\cftchappagefont}{\bfseries}
 

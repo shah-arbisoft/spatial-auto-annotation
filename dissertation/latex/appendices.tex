@@ -79,7 +79,7 @@ The check that the perception stage reproduces is \texttt{scripts/reannotate\_\a
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.367\textwidth}>{\raggedright\arraybackslash}p{0.472\textwidth}>{\raggedright\arraybackslash}p{0.072\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.428\textwidth}>{\raggedright\arraybackslash}p{0.438\textwidth}>{\raggedright\arraybackslash}p{0.084\textwidth}}
 \caption{Commands reproducing every experiment from the cached geometry, with run times.}\\
 \hline
 command & produces & time \\
@@ -183,25 +183,25 @@ Encoding support as \textit{above, touching and horizontally overlapping} is wha
 
 \texttt{under} is the strict inverse of \texttt{on}, computed by evaluating the \texttt{on} conditions with the arguments swapped:
 
-\begin{verbatim}
+\begingroup\small\begin{verbatim}
 under(A, B)  ==  on(B, A)
-\end{verbatim}
+\end{verbatim}\endgroup
 
 This guarantees consistency by construction: a pair can never be both \texttt{on(A,B)} and \texttt{under(A,B)}.
 
 \subsection{C.4 \texttt{left of(A, B)}: A's centre is left of B's}
 
-\begin{verbatim}
+\begingroup\small\begin{verbatim}
 left_of(A, B)  ==  (cx_A < cx_B)    in camera-frame image coordinates
-\end{verbatim}
+\end{verbatim}\endgroup
 
 The magnitude \texttt{|cx\_\allowbreak{}A - cx\_\allowbreak{}B|}, normalised by width, gives the confidence. Below \texttt{lateral\_\allowbreak{}center\_\allowbreak{}eps} (0.02) the centres nearly coincide, and the pair is flagged ambiguous rather than silently labelled.
 
 \subsection{C.5 \texttt{right of(A, B)}: A's centre is right of B's}
 
-\begin{verbatim}
+\begingroup\small\begin{verbatim}
 right_of(A, B)  ==  (cx_A > cx_B)
-\end{verbatim}
+\end{verbatim}\endgroup
 
 The strict mirror of \texttt{left of}. Exactly one of the two holds outside the ambiguity band; inside it neither is emitted and the pair is flagged. \texttt{right\_\allowbreak{}of(A,B) == left\_\allowbreak{}of(B,A)}.
 
@@ -209,19 +209,19 @@ The strict mirror of \texttt{left of}. Exactly one of the two holds outside the 
 
 A two-stage cascade. Stage one is depth ordering:
 
-\begin{verbatim}
+\begingroup\small\begin{verbatim}
 in_front_of(A, B)  ==  (d_A < d_B)      (smaller depth = nearer)
 behind(A, B)       ==  (d_A > d_B)
-\end{verbatim}
+\end{verbatim}\endgroup
 
 with \texttt{|d\_\allowbreak{}A - d\_\allowbreak{}B|} below \texttt{depth\_\allowbreak{}eps} (0.03) meaning the depths are too close to separate, which defers to stage two.
 
 Stage two is the \textbf{ground-plane fallback}, which fires only where stage one abstained. Two objects standing on the same floor are depth-ordered by projection: the nearer object's box bottom sits lower in the image.
 
-\begin{verbatim}
+\begingroup\small\begin{verbatim}
 plane(A, B)  ==  (y2_A - y2_B) >  plane_band   =>  in front of
              ==  (y2_A - y2_B) < -plane_band   =>  behind
-\end{verbatim}
+\end{verbatim}\endgroup
 
 with \texttt{plane\_\allowbreak{}band} = 0.005 of normalised image height, calibrated on the training groups (ablation A7). Two guards apply. The fallback fires only when neither object is elevated, meaning neither has mask contact at or above \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} with any partner, because an elevated object's box bottom locates its support rather than itself; and only when mask evidence exists at all, so it is off in box-only mode. Pairs both stages abstain on are flagged, never guessed.
 
@@ -231,10 +231,10 @@ Worked example, encoded in \texttt{tests/test\_\allowbreak{}predicates.py}: a bo
 
 \subsection{C.7 \texttt{near(A, B)}: A and B are close, relative to their size}
 
-\begin{verbatim}
+\begingroup\small\begin{verbatim}
 near(A, B)  ==  box_gap_rel(A, B) <= near_T
                 AND not (on(A, B) or under(A, B))
-\end{verbatim}
+\end{verbatim}\endgroup
 
 \texttt{box\_\allowbreak{}gap\_\allowbreak{}rel} is the edge-to-edge gap between the two normalised boxes divided by the mean object size, the square root of box area. Proximity therefore scales with the objects: a small gap between two books reads as near, while the same absolute gap between a person and a cube may not. The gap is zero when boxes touch or overlap, and \texttt{near} is symmetric, \texttt{near(A,B) == near(B,A)}.
 
@@ -267,7 +267,7 @@ The flag types serve different purposes and are reported separately, which is wh
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.089\textwidth}>{\raggedright\arraybackslash}p{0.319\textwidth}>{\raggedright\arraybackslash}p{0.347\textwidth}>{\raggedright\arraybackslash}p{0.129\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.132\textwidth}>{\raggedright\arraybackslash}p{0.274\textwidth}>{\raggedright\arraybackslash}p{0.366\textwidth}>{\raggedright\arraybackslash}p{0.164\textwidth}}
 \caption{The seven predicates: core geometric test, shipped threshold values and the symmetry each rule guarantees by construction.}\\
 \hline
 Predicate & Core test on the ordered pair (A, B) & Thresholds, shipped values & Symmetry \\
@@ -414,7 +414,7 @@ The second re-checks each rule's individual conditions against the cached geomet
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.194\textwidth}>{\raggedright\arraybackslash}p{0.743\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.221\textwidth}>{\raggedright\arraybackslash}p{0.743\textwidth}}
 \caption{Diagnosed cause of every missed human triplet, by predicate.}\\
 \hline
 Predicate & Dominant causes (share of that predicate's misses) \\
@@ -682,7 +682,7 @@ Section 3.12 states what the decisions have in common and names the four that la
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.185\textwidth}>{\raggedright\arraybackslash}p{0.167\textwidth}>{\raggedright\arraybackslash}p{0.559\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.234\textwidth}>{\raggedright\arraybackslash}p{0.281\textwidth}>{\raggedright\arraybackslash}p{0.435\textwidth}}
 \caption{Summary of the design decisions, the alternatives rejected and the reasons.}\\
 \hline
 Decision & Alternative rejected & Why \\
