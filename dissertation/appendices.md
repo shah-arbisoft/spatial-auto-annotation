@@ -794,13 +794,7 @@ annotator this project set out to build does not have.
 
 ### D.7 Failure diagnosis by predicate
 
-Section 4.3 and §4.10 state what the diagnosis establishes. Two tables reach
-it from opposite sides. The first records, for each missed human triplet, the
-labels the tool emitted on that pair instead, which identifies the failure
-mode directly.
-
-For each human triplet the tool failed to recover, the labels it *did* emit on
-that pair identify the failure mode directly:
+Section 4.3 and §4.10 state what the diagnosis establishes. Two tables reach it from opposite sides. The first records, for each human triplet the tool failed to recover, the labels it *did* emit on that pair, which identifies the failure mode directly:
 
 | Gold predicate | Missed | Most frequent co-emissions on missed pairs |
 |---|---|---|
@@ -1090,65 +1084,19 @@ reproduces them from the scorer's report.
 
 ### E.4 Video processing: settings and the open-vocabulary failures
 
-The rest of this section records how the clips were processed and what went
-wrong, both of which qualify the reading above.
+This records how the clips were processed and what went wrong, both of which
+qualify the reading above.
 
-**What the clips show.** Relations are stable wherever identity is: for pairs
-co-visible in at least 20 frames the predicate persists at 0.77/0.96 mean
-(`eval/video_stability.py`). The rules transfer to objects never calibrated
-on, a pen on a notepad and a wallet-and-photograph stack labelled by the same
-mask-contact evidence fitted on six classes. And the camera-frame semantics
-behave as designed: in the bird's-eye clip front/behind re-maps to distance
-from the viewer's edge of the desk, the reference-frame dependence §2.5 cites
-from RoboSpatial, demonstrated rather than asserted.
-
-**The two regimes.** They are complementary: a moving camera over a static
-desk (clip 1, 99 frames), where any variation is measurement noise, and a
-static overhead camera with moving hands (clip 2, 79 frames), where relations
-genuinely change and smoothing must not erase them. The temporal vote
-separates them, and {{fig:video-stability}} plots the frame-to-frame agreement
-each clip produces before and after it, lifting persistence from 0.763 to 0.774 on the static clip and
-from 0.928 to 0.964 on the one with moving hands, where per-frame detection
-churns, which is the behaviour a majority filter should show. Frame-to-frame
-triplet agreement (Jaccard 0.84 and 0.59) is dominated by zero-shot detection
-churn and, in clip 2, by genuine hand motion, mirroring §4.11: the variation
-is detection, not relations.
-
-These figures are lower on clip 1 and higher on clip 2 than the version of
-this appendix written before the support threshold was refitted (§4.14),
-which reported 0.90 and 0.94. The refit removes support emissions on weak
-contact evidence, and on a desk viewed from a moving camera those are exactly
-the borderline pairs that persisted across frames by inertia; on the overhead
-clip, where the hands make support genuinely intermittent, removing them
-raises persistence instead. Both clips were re-processed end to end on the
-shipped configuration, so the numbers here describe the tool being
-submitted.
-
-Two royalty-free stock clips were processed frame by frame by the
-deployment stack of §4.11 with no threshold retuned. They share nothing with
-the robot dataset: different scenes, a different camera, and objects almost
-entirely outside the six annotated classes. Three things hold there. Relations
-are stable wherever identity is. The rules transfer to objects never
-calibrated on: a pen on a notepad and a wallet-and-photograph stack are
-labelled by the same mask-contact evidence fitted on six classes. And the
-camera-frame semantics behave as designed, front/behind re-mapping in the
-bird's-eye clip to distance from the viewer's edge of the desk, which is the
-reference-frame dependence §2.5 cites from RoboSpatial demonstrated rather
-than asserted.
-
-This measures nothing and is recorded for what it bounds rather than what it
-establishes. There is no video ground truth, so these are qualitative
-judgements over two clips, and a labelled cross-domain sample remains future
-work (§7.6). What they settle is that transfer is not blocked by the object
-vocabulary, because every failure visible in them is a detection failure,
-which is the attribution §4.11 makes for the dataset itself.
-
-**The clips and the thresholds.** Both are royalty-free stock, sourced in
-Appendix A. Nothing was retuned for them: `near_T`, the depth band, the
-contact fraction and the plane band keep the values fitted on groups 0-5. The
-objects are almost entirely outside the six annotated classes (monitor,
-keyboard, mouse, mug, spectacles, plants, lamp, notepad, laptop, wallet,
-earbuds case).
+**The clips and the thresholds.** Two royalty-free stock clips, sourced in
+Appendix A, share nothing with the robot dataset: different scenes, a
+different camera, and objects almost entirely outside the six annotated
+classes (monitor, keyboard, mouse, mug, spectacles, plants, lamp, notepad,
+laptop, wallet, earbuds case). Nothing was retuned for them, so `near_T`,
+the depth band, the contact fraction and the plane band keep the values
+fitted on groups 0-5. The two are complementary regimes: a moving camera
+over a static desk (clip 1, 99 frames), where any variation is measurement
+noise, and a static overhead camera with moving hands (clip 2, 79 frames),
+where relations genuinely change and smoothing must not erase them.
 
 **Processing.** Each frame is annotated independently by the deployment-mode
 stack of §4.11 with open-vocabulary prompts; object identities are carried
@@ -1156,24 +1104,53 @@ between frames by greedy IoU tracking, and each pair's predicates are
 smoothed by a plus-or-minus-two-frame temporal majority vote
 (`scripts/run_video.py`; overlays and per-frame records in
 `outputs/video/`). The vote is the only component with no counterpart in the
-still-image pipeline, and its effect is measured rather than
-assumed: a small gain on the static scene and a larger one where detection
-churns, which is the behaviour a majority filter should show.
+still-image pipeline, and its effect is measured rather than assumed:
+{{fig:video-stability}} plots frame-to-frame agreement before and after it,
+lifting persistence from 0.763 to 0.774 on the static clip and from 0.928 to
+0.964 where the hands make detection churn, which is the behaviour a
+majority filter should show.
+
+**What the clips show.** Three things hold. Relations are stable wherever
+identity is: for pairs co-visible in at least 20 frames the predicate
+persists at 0.77/0.96 mean (`eval/video_stability.py`). The rules transfer
+to objects never calibrated on, a pen on a notepad and a
+wallet-and-photograph stack labelled by the same mask-contact evidence
+fitted on six classes. And the camera-frame semantics behave as designed: in
+the bird's-eye clip front/behind re-maps to distance from the viewer's edge
+of the desk, which is the reference-frame dependence §2.5 cites from
+RoboSpatial, demonstrated rather than asserted.
+
+These figures are lower on clip 1 and higher on clip 2 than the version of
+this appendix written before the support threshold was refitted (§4.14),
+which reported 0.90 and 0.94. The refit removes support emissions on weak
+contact evidence, and on a desk viewed from a moving camera those are
+exactly the borderline pairs that persisted across frames by inertia; on the
+overhead clip, where the hands make support genuinely intermittent, removing
+them raises persistence instead. Both clips were re-processed end to end on
+the shipped configuration, so the numbers here describe the tool being
+submitted.
 
 **Persistence and agreement.** Persistence is measured over pairs co-visible
 in at least 20 frames, where co-visible means both track identities appear
 in that frame; 81% and 89% of pair-predicates are present in at least 90% of
-their co-visible frames. The frame-to-frame Jaccard dips in clip 2 align
-with the hands picking objects up, which is the change the smoothing is
-required not to erase.
+their co-visible frames. Frame-to-frame triplet agreement (Jaccard 0.84 and
+0.59) is dominated by zero-shot detection churn and, in clip 2, by genuine
+hand motion; the dips there align with the hands picking objects up, which
+is the change the smoothing is required not to erase.
 
-**Open-vocabulary failures.** Two are plainly visible and worth recording,
-because both are detection failures rather than relation failures and so
-support the same attribution §4.11 makes for the dataset itself. Content
-displayed *on the laptop screen* is detected as real objects standing in
-real relations to the objects around it. And items outside the prompt list
-snap to the nearest prompted class: an earbuds case is labelled a `cup`.
-Neither is corrected, and both are present in the released overlays.
+**Open-vocabulary failures.** Two are plainly visible and worth recording.
+Content displayed *on the laptop screen* is detected as real objects
+standing in real relations to the objects around it, and items outside the
+prompt list snap to the nearest prompted class: an earbuds case is labelled
+a `cup`. Neither is corrected, and both are present in the released
+overlays.
+
+**What this bounds.** There is no video ground truth, so these are
+qualitative judgements over two clips and a labelled cross-domain sample
+remains future work (§7.6). What they settle is that transfer is not blocked
+by the object vocabulary, because every failure visible in them is a
+detection failure rather than a relation failure, which is the attribution
+§4.11 makes for the dataset itself.
 
 ### E.5 The planner experiment: prompt construction and scoring rules
 
