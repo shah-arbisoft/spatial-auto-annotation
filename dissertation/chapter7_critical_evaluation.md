@@ -136,12 +136,12 @@ numbers on it. The tool is deterministic, the same labeller for every group,
 so the 0.082 spread in its agreement across the seven consistent annotators
 (0.851 to 0.933) measures their heterogeneity and not its own. On the
 shipped labels that spread is narrow enough to be weak evidence. The Fréchet
-bound §4.6 attempts on top of that, [0.78, 0.96], is not claimed here: it
-needs batches that are exchangeable, and these differ threefold in object
-density, so §4.6 reports it as a measurement this dataset cannot support.
-Without overlapping assignments the quantity cannot be measured outright,
-and that absence is itself a finding about the dataset's construction, one a
-replication should design away by having two annotators share a batch.
+bound §4.6 attempts on top of that is not claimed here: it needs batches
+that are exchangeable, and these differ threefold in object density, so §4.6
+reports it as a measurement this dataset cannot support. Without overlapping
+assignments the quantity cannot be measured outright, and that absence is
+itself a finding about the dataset's construction, one a replication should
+design away by having two annotators share a batch.
 
 ## 7.4 Methodological reflection
 
@@ -245,7 +245,7 @@ The audits are verdicted by the author and by a vision-language model, and
 neither is a disinterested human: the author built the tool, and the model
 is a system of the kind §4.13 shows annotates poorly, admissible here only
 because judging a supplied claim needs the half of it that works and because
-the decoys measure it doing so (§4.14). §7.4 reflects on what that cost; the independent human estimate is Appendix E.3 and it has not reported. The two-stage audit also shares
+the decoys measure it doing so (§4.14). §7.4 reflects on what that cost. The disinterested human estimate is Appendix E.3, and it reported a pilot only: five raters, no control claims, corroborating the author on support and diverging on the laterals (§4.15). The two-stage audit also shares
 machinery with the rule change it evaluates.
 
 **External.** One laboratory domain, six object classes, one camera and
@@ -306,10 +306,7 @@ concession, not a restatement of it. The circularity bounds the
 does not reach the structural guarantees of §3.6, which are checkable
 without any verdict at all, nor the downstream findings of Chapters 5 and 6,
 which are scored against human annotation the author did not produce and in
-which the automatic arm is judged by its rival's yardstick. The designed
-remedy is the study of Appendix E.3 and it has no results at the time of
-writing, which leaves
-this the objection a reader should weight most heavily.
+which the automatic arm is judged by its rival's yardstick. The designed remedy is the study of Appendix E.3, which returned too few raters to carry the weight it was built for. What it does return (§4.15) moves the objection rather than retiring it: on support, the measurement most exposed to author bias, disinterested judges score the tool slightly lower than the author did.
 
 **Reference frame: answered as far as it can be, which is not all the way.**
 The dissertation does not assert that the camera frame is correct; it shows

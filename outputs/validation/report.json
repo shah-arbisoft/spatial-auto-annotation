@@ -1,0 +1,120 @@
+{
+  "n_raw": 238,
+  "n_clean": 226,
+  "n_raters": 5,
+  "n_items_total": 2002,
+  "n_items_voted": 176,
+  "coverage_by_votes": {
+    "1": 176,
+    "2": 46,
+    "3": 4,
+    "5": 0
+  },
+  "ties_resolved_to_n": 12,
+  "crowd_precision_overall": {
+    "n": 176,
+    "precision": 0.5852272727272727,
+    "ci95": [
+      0.511376115774452,
+      0.6554373467392266
+    ]
+  },
+  "crowd_precision_per_predicate": {
+    "on": {
+      "n": 31,
+      "precision": 0.45161290322580644,
+      "lo": 0.29161482836586106,
+      "hi": 0.6222812039633085
+    },
+    "under": {
+      "n": 31,
+      "precision": 0.2903225806451613,
+      "lo": 0.1609562071843287,
+      "hi": 0.4659265995754067
+    },
+    "to the left of": {
+      "n": 22,
+      "precision": 0.7272727272727273,
+      "lo": 0.5184787630099802,
+      "hi": 0.8684941798418556
+    },
+    "to the right of": {
+      "n": 18,
+      "precision": 0.7222222222222222,
+      "lo": 0.49126922453805477,
+      "hi": 0.8750043085364452
+    },
+    "in front of": {
+      "n": 27,
+      "precision": 0.5925925925925926,
+      "lo": 0.4072638305536409,
+      "hi": 0.7548548662714265
+    },
+    "behind": {
+      "n": 28,
+      "precision": 0.5714285714285714,
+      "lo": 0.390704789856154,
+      "hi": 0.7349170381926877
+    },
+    "near": {
+      "n": 19,
+      "precision": 1.0,
+      "lo": 0.8318156346315496,
+      "hi": 1.0
+    }
+  },
+  "author_bias_check": {
+    "n": 133,
+    "agreement": 0.7443609022556391,
+    "kappa": 0.47011952191235057
+  },
+  "by_arm": {
+    "treatment": {
+      "claims": 176,
+      "judged_true": 103,
+      "precision": 0.5852272727272727,
+      "wilson95": [
+        0.5114,
+        0.6554
+      ]
+    }
+  },
+  "krippendorff_alpha_crowd": 0.39697265625,
+  "raters": [
+    {
+      "rater": "8143b4ca",
+      "votes": 120,
+      "median_ms": 6212,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.71
+    },
+    {
+      "rater": "9346efba",
+      "votes": 45,
+      "median_ms": 6016,
+      "fast_frac": 0.0,
+      "agree_with_others": 1.0
+    },
+    {
+      "rater": "212cf995",
+      "votes": 45,
+      "median_ms": 4396,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.71
+    },
+    {
+      "rater": "e28d853d",
+      "votes": 15,
+      "median_ms": 6952,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.85
+    },
+    {
+      "rater": "eede75a4",
+      "votes": 1,
+      "median_ms": 12985,
+      "fast_frac": 0.0,
+      "agree_with_others": null
+    }
+  ]
+}

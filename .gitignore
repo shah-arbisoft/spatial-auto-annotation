@@ -101,3 +101,10 @@ dissertation/latex/*.toc
 dissertation/latex/*.lot
 dissertation/latex/*.lof
 dissertation/latex/main.pdf
+
+# The validation study's aggregate report is the evidence behind 4.15, so it
+# ships. Its inputs do not: the item key would let a participant look up the
+# answers while collection is open, and the votes are participant data.
+!outputs/validation/
+outputs/validation/*
+!outputs/validation/report.json

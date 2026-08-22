@@ -150,11 +150,11 @@ On the held-out annotators the cluster-bootstrap intervals of \S{}4.2 put five o
 
 Reading those numbers as a quality verdict requires a yardstick the dataset does not supply: how well would two \textit{human} annotators agree with each other? The groups labelled disjoint image batches, so the quantity cannot be measured directly, and that absence is itself a finding about the dataset's construction. Two things can nevertheless be recovered by treating the automatic annotator as a fixed common reference (\texttt{eval/annotator\_\allowbreak{}agreement.py}).
 
-Annotator heterogeneity, measured without assumptions. The tool is deterministic: it is literally the same labeller for every group, applying one definition. Any variation in its agreement across annotators is therefore variation in the \textit{annotators}. Across the seven consistent groups that variation spans 0.851 to 0.933, a spread of 0.082 (sd 0.028). That is a modest number and it is reported as one: on the shipped labels the consistent annotators are much closer to interchangeable than the pre-refit spread of 0.216 suggested, and the case that they differ rests on the two inverted groups and the three measured defects of \S{}4.5 and \S{}4.9 rather than on this band.
+Annotator heterogeneity, measured without assumptions. The tool is deterministic: it is literally the same labeller for every group, applying one definition. Any variation in its agreement across annotators is therefore variation in the \textit{annotators}. Across the seven consistent groups that variation spans 0.851 to 0.933 about a mean of 0.892, a spread of 0.082 (sd 0.028). That is a modest number and it is reported as one: on the shipped labels the consistent annotators are much closer to interchangeable than the pre-refit spread of 0.216 suggested, and the case that they differ rests on the two inverted groups and the three measured defects of \S{}4.5 and \S{}4.9 rather than on this band.
 
-The yardstick this dataset cannot supply. The natural way to get one is to bound it. With the tool as a fixed common reference, the Fréchet inequalities across all 21 pairs of consistent annotators place annotator-to-annotator agreement in [0.78, 0.96], an interval containing the tool's own 0.892. That interval is used nowhere in this dissertation, and the reason belongs beside it rather than in an appendix. The inequalities hold for any joint distribution, but applying them across annotators presumes each one's agreement rate would carry to another batch, and these batches are not comparable: mean objects per frame runs from 4.47 in group 4 to 14.30 in group 1, a coefficient of variation of 0.31 across the nine, and pair count grows with the square of that. An annotator working a sparse batch faces fewer and easier decisions than one working a dense batch, so the presumption is false on this dataset and not merely unverified. Appendix F.7 gives the derivation and the density figures in full.
+The yardstick this dataset cannot supply. The natural way to get one is to bound it: with the tool as a fixed common reference, the Fréchet inequalities turn each pair of annotator agreement rates into an interval for those annotators' agreement with each other. No such interval is quoted here, because deriving it exposed an assumption this dataset violates. The inequalities hold for any joint distribution, but carrying one annotator's rate onto another's batch presumes the two batches are comparable, and these are not: mean objects per frame runs from 4.47 in group 4 to 14.30 in group 1, a coefficient of variation of 0.31 across the nine, and pair count grows with the square of that. A sparse batch is an easier batch, so the presumption is false here and not merely unverified. Appendix F.7 gives the derivation, the interval it produces and the density figures, so the objection can be checked rather than taken on trust.
 
-What remains is a negative result worth stating plainly. Because the nine groups labelled disjoint batches of unequal difficulty, this dataset cannot yield an inter-annotator agreement figure even by bounding, and a replication that wants one has to collect overlapping assignments. RQ1's comparability claim therefore rests on the trivial baselines and the per-predicate audit (\S{}4.8), and the attempt is reported because knowing which yardsticks a dataset cannot support is part of describing it.
+Because the nine groups labelled disjoint batches of unequal difficulty, this dataset cannot yield an inter-annotator agreement figure even by bounding, and a replication that wants one has to collect overlapping assignments. RQ1's comparability claim therefore rests on the trivial baselines and the per-predicate audit (\S{}4.8). Knowing which yardsticks a dataset cannot support is part of describing it.
 
 \section{Flags: what review actually costs}
 
@@ -396,3 +396,42 @@ The middle column is the shipped tool, and the 0.79--1.00 range quoted for the n
 The change is confirmed and the projection was optimistic. Both judges record a large improvement on an independent draw, and both record it below the 0.667 the held-out fit predicted, held-out support recall falling from 0.92 to 0.843 in exchange. Fitting on one audit and validating on the next is as far as this design can go towards an unbiased estimate, and the gap between the two numbers is the price of the extrapolation the earlier draft quoted.
 
 The auditor also improved between the two packs, which Appendix E.7 reads in full. Neither that nor the model's parallel movement rescues the support figure: at 0.535 the labels the tool adds beyond the human record on this predicate are right about half the time.
+
+\section{The disinterested estimate: what the volunteers returned}
+
+Both judges in \S{}4.14 carry an objection. One built the tool; the other is a system \S{}4.13 shows annotates poorly. Appendix E.3 specifies the arm that removes both, putting sampled claims to volunteers who did not build the tool and are not shown what it predicted. It ran, and it returned much less than it was designed to collect: 226 usable judgements from five raters against a sample of 2,002, covering 176 claims, with one rater supplying 53\% of them. What follows is a pilot rather than the study, and nothing below leans on it harder than that allows.
+
+The item set was drawn on 17 July, a month before \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} was re-fitted, so the volunteers judged pre-refit labels and the comparison is against \S{}4.14's first pack rather than the shipped second one. For the five predicates the support threshold does not touch, the distinction does not arise.
+
+\begin{center}
+\setlength{\tabcolsep}{6pt}
+\small
+\begin{longtable}{lrrr}
+\caption{Precision on the same pre-refit label generation under three judges: volunteers who did not build the tool (Appendix E.3), the blinded author, and the vision-language model.}\\
+\hline
+Predicate & Volunteers & Author & Model \\
+\hline
+\endfirsthead
+\hline
+Predicate & Volunteers & Author & Model \\
+\hline
+\endhead
+on & 14/31 0.452 & 16/43 0.372 & 25/43 0.581 \\
+under & 9/31 0.290 & 22/51 0.431 & 35/51 0.686 \\
+to the left of & 16/22 0.727 & 22/24 0.917 & 23/24 0.958 \\
+to the right of & 13/18 0.722 & 23/24 0.958 & 22/24 0.917 \\
+in front of & 16/27 0.593 & 23/24 0.958 & 22/24 0.917 \\
+behind & 16/28 0.571 & 22/24 0.917 & 20/24 0.833 \\
+near & 19/19 1.000 & 24/24 1.000 & 15/24 0.625 \\
+\textbf{support pooled} & \textbf{23/62 0.371} & \textbf{38/94 0.404} & \textbf{60/94 0.638} \\
+\hline
+\end{longtable}
+\end{center}
+
+\textbf{On support the disinterested judges side with the author.} Pooled \texttt{on} and \texttt{under} precision is 0.371 against the author's 0.404 and the model's 0.638, and if anything the volunteers are harsher. This is the comparison the audit most needed. Support is where the author's blind verdict was most damaging to the author's own tool, and therefore where a reader is entitled to suspect the verdict of being theatre; three independent judges agreeing that support precision is roughly four claims in ten is not theatre. It also settles the \S{}4.13 objection with evidence rather than argument: where the two judges disagree, the humans stand with the author and against the model. \texttt{near} repeats the pattern, 1.000 against the author's 1.000 and the model's 0.625.
+
+\textbf{On the laterals and the depth pair they side with neither.} The volunteers score \texttt{to the left of} 0.727, \texttt{to the right of} 0.722, \texttt{in front of} 0.593 and \texttt{behind} 0.571, where both expert judges sit between 0.833 and 0.958. That gap is too wide and too consistent across four predicates to be sampling. The reading consistent with \S{}4.5 is that the reference frame is doing it: an instructed but untrained judge applies camera-frame laterality unevenly, which is the defect the two inverted annotator groups exhibit and the one \S{}4.5 measures in the gold. On that reading the volunteers are partly measuring their own convention, which is exactly what \S{}4.14's decoys exist to detect and exactly what this arm lacks. No decoys were delivered with the item set, so volunteer calibration is unmeasured, and the four figures above should be read as a lower bound on precision rather than an estimate of it.
+
+\textbf{The author-bias check.} On the 133 claims carrying both a volunteer and an author verdict the two agree 0.744 of the time, Cohen's $\kappa$ 0.470. The author is therefore neither rubber-stamping nor fully reproducible by a stranger, and the fair summary is that the author's verdicts are corroborated where they are unflattering and disputed where they turn on a convention. Crowd-internal reliability is Krippendorff's $\alpha$ 0.397 across the 46 claims with two or more judgements, poor by any standard, and \S{}2.3's account of spatial language predicts that better than rater carelessness does.
+
+\textbf{What this arm settles and what it leaves open.} It bounds the direction of the author's bias on the measurement that matters most, and on support it finds that bias, if it exists at all, running against the tool rather than for it. It does not replace the author's audit, and at five raters and 8.8\% of the designed sample it could not: the arm is reported here because a weak disinterested estimate pointing the same way as a strong interested one is worth more than the absence it replaces, not because it closes the question. \S{}7.6 and \S{}9.3 carry the limitation that survives.

@@ -242,7 +242,7 @@ TABLES = {
         "Stability of each predicate across viewpoints of the same scene, "
         "with recall under keyframe propagation against per-frame "
         "computation.",
-        # 4.16
+        # 4.13
         "A vision-language model against the geometric pipeline on the same "
         "30 images, the same pairs and the same human gold: recall.",
         # 4.14 (the blind re-audit; last table in the chapter)
@@ -256,6 +256,10 @@ TABLES = {
         "threshold audited on a fresh draw, beside the superseded v3 column, "
         "so the comparison is between two independent "
         "draws and not between two readings of one.",
+        # 4.15, the volunteer arm against both audit judges
+        "Precision on the same pre-refit label generation under three "
+        "judges: volunteers who did not build the tool (Appendix E.3), the "
+        "blinded author, and the vision-language model.",
     ],
     "chapter5_results_rq2.md": [
         "Downstream recall against held-out human gold for the three label "

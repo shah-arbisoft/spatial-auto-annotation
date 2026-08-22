@@ -239,6 +239,7 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/seed_stats.py` | the benchmark arms aggregated across seeds, `tables/seed_replication.md` | <1 min |
 | `python eval/downstream.py --seeds 42,43,44` | RQ2, all arms, `rq2_report.json`, `tables/rq2.md` | ~20 min |
 | `python eval/score_vlm_pilot.py`, then `python eval/compare_vlm_models.py` | the §4.13 comparison and `tables/vlm_models.md`, from the stored replies | <1 min |
+| `python eval/crowd_validation.py` | the §4.15 volunteer comparison, `crowd_validation.json`; needs the study's `report.json`, which is not in this repository | <1 min |
 | `python eval/score_planner.py` | the §5.7 blind scoring, `planner_scores.json` | <1 min |
 | `python eval/planner_paired_tests.py` | §5.7's exact McNemar tests over the paired scenes, `planner_paired_tests.json` | <1 min |
 | `python scripts/make_figures.py` | every figure | ~1 min |
@@ -1026,14 +1027,13 @@ would recover it.
 
 ### E.3 The independent validation study: design and scoring
 
-The true-precision estimates of §4.4 and §4.9 carry one weakness no amount of
-sampling fixes: they were verdicted by the author of the tool being evaluated.
-Conservative rules and published evidence mitigate that without removing it,
-and the accurate description is "author-verdicted". This study re-estimates
-precision with disinterested judges. **The instrument is complete and
-collection is under way; no results exist yet, and the limitation recorded in
-§7.4 stands until they do.** What follows is the design, recorded so that a
-reader can judge the instrument before its results exist.
+The true-precision estimates of §4.4 and §4.9 carry one weakness no amount
+of sampling fixes: they were verdicted by the author of the tool being
+evaluated. Conservative rules and published evidence mitigate that without
+removing it, and the accurate description is "author-verdicted". This study
+re-estimates precision with disinterested judges. It returned a thin but
+usable pilot, reported in §4.15 and scored below; the design is given first,
+so that a reader can judge the instrument independently of what it found.
 
 It measures three things the author-verdicted audits cannot: crowd precision
 per predicate at a sample two orders of magnitude larger than §4.4's fifteen;
@@ -1074,6 +1074,19 @@ raters who disagree systematically with everyone else can be excluded by
 pre-declared filters. Crowd precision is reported per predicate with binomial
 intervals, author agreement as percentage and Cohen's kappa (Cohen, 1960),
 and crowd-internal reliability as Krippendorff's alpha.
+
+**What it returned.** Collection stood at 226 usable judgements from five raters when this was submitted, against a design that assumed roughly thirty. 176 of the 2,002 claims
+carry a verdict, one rater supplied 53% of them, and only 46 claims drew the
+two or more judgements a reliability figure needs. The graceful degradation
+claimed above did hold: 133 of the 147 author-verdicted claims were served,
+which is why §4.15 can report an author-bias check at all, while the
+precision estimate stays a pilot. Of the pre-declared filters, the duplicate
+rule fired on 12 submissions, no response fell below the 800 ms floor, and
+no rater was excluded as a systematic outlier. One planned element was never
+delivered: the item set carries no control claims, so unlike the audits of
+§4.14 this arm has no decoys and rater calibration is unmeasured. Section
+4.15 gives the figures and what they support; `eval/crowd_validation.py`
+reproduces them from the scorer's report.
 
 ### E.4 Video processing: settings and the open-vocabulary failures
 
