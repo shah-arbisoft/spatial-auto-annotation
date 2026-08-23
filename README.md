@@ -91,6 +91,78 @@ python scripts/reannotate_from_cache.py  # re-run rules offline after any change
 pytest -q                                # rule-layer unit + invariant tests
 ```
 
+### Data
+
+Clone the released dataset (CC-BY 4.0) and point `dataset.root` in
+`configs/default.yaml` at it. The loader expects the release's own layout
+(`img_data/group_N/*.jpg` plus the annotation JSONs) and corrects the images'
+180-degree EXIF orientation itself; nothing is preprocessed on disk.
+
+### Exact replication in a container
+
+```bash
+docker build -t spatial-annotator .          # base image pinned by digest
+docker run --rm --gpus all spatial-annotator pytest -q
+```
+
+The `Dockerfile` pins Python 3.11, torch 2.5.1+cu121 and SAM2 at commit
+`2b90b9f5`, and applies the CUDA-wheel fix described in `requirements.txt`.
+Appendix B of the dissertation records what the built image was checked
+against.
+
+### The vision-language arms
+
+Each begins with an API pass that costs money and cannot be repeated
+byte-for-byte, so the replies are committed and every scoring step reads them
+rather than re-querying. Only step (a) needs a key.
+
+```bash
+# (a) label the training images
+python scripts/run_vlm_pilot.py --make --n 600 \
+    --prompts outputs/vlm_pilot/prompts_train.jsonl
+python scripts/run_vlm_pilot.py \
+    --replies outputs/vlm_pilot/replies_train_f35.jsonl --model <model>
+
+# (b) the RQ2 fourth arm
+python eval/downstream.py --seeds 42,43,44 \
+    --vlm-replies outputs/vlm_pilot/replies_train_f35.jsonl \
+    --out outputs/rq2_report_vlm.json --table outputs/tables/rq2_vlm.md
+
+# (c) the planner's conditions D and E
+python scripts/planner_experiment.py \
+    --vlm-replies outputs/vlm_pilot/replies_planner_pro.jsonl
+python scripts/run_planner_llm.py --model <model> \
+    --replies outputs/planner/replies_pro.jsonl
+python eval/score_planner.py --replies outputs/planner/replies_pro.jsonl \
+    --out outputs/planner_scores_abcde.json
+
+# (d) the benchmark's third arm
+python scripts/export_sgg_benchmark.py \
+    --vlm-replies outputs/vlm_pilot/replies_train_f35.jsonl
+python eval/seed_stats.py
+```
+
+`--vlm-replies` in (b) restricts *every* arm to the pairs the model covered,
+not just the new column, which is what makes the four columns comparable.
+
+### The benchmark (Chapter 6)
+
+Runs on Kaggle rather than locally, since REACT++ training needs more than
+6 GB. Upload `datasets/spatial_sgg_upload.zip` (built by
+`scripts/export_sgg_benchmark.py` and `scripts/export_yolo_det.py`), then
+commit the notebooks in `scripts/kaggle/` in order — training in
+`notebook_cells.md`, seed replication in `seed_replication.ipynb`,
+re-evaluation in `reeval_seeds_and_groups.ipynb` — on a T4 x2 accelerator.
+Download each committed version's outputs into `outputs/sgg_benchmark/` and
+run `python eval/seed_stats.py`.
+
+### The validation study
+
+Lives in its own public repository (`robot-factcheck`).
+`tools/build_validation_set.py` regenerates the claim set and site images
+from this repository's caches; `analysis/score_votes.py` scores the exported
+votes sheet. The private answer key never enters the public repository.
+
 ## Licences
 
 YOLO (Ultralytics) AGPL-3.0 · Depth Anything v2 **Small** Apache 2.0 (avoid

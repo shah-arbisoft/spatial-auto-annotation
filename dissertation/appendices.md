@@ -62,34 +62,17 @@ day. The stored replies are therefore committed, and every scoring step below
 reads them rather than re-querying, so all reported numbers reproduce offline
 from this repository alone. Only step (a) needs a key.
 
-- **(a) Label the training images.** `python scripts/run_vlm_pilot.py --make
-  --n 600 --prompts outputs/vlm_pilot/prompts_train.jsonl` builds the
-  prompts, then the same script without `--make` and with `--replies
-  outputs/vlm_pilot/replies_train_f35.jsonl --model <model>` runs the pass.
-  The committed replies are the ones every step below consumes.
-- **(b) The RQ2 fourth arm (§5.2).** `python eval/downstream.py --seeds
-  42,43,44 --vlm-replies outputs/vlm_pilot/replies_train_f35.jsonl --out
-  outputs/rq2_report_vlm.json --table outputs/tables/rq2_vlm.md`. Note that
-  the flag changes the *whole* experiment, not just the new column: every arm
-  is restricted to the pairs the model covered, which is what makes the four
-  columns comparable. That the human, self-trained and automatic figures come
-  out identical to the three-arm run is the check that the restriction is
-  fair, and it is why both JSONs are kept.
-- **(c) The planner's conditions D and E (§5.7).** `python
-  scripts/planner_experiment.py --vlm-replies
-  outputs/vlm_pilot/replies_planner_pro.jsonl` rebuilds the prompt set with
-  condition D (the model's relations through the identical filter) and
-  condition E (the union of C and D); then `python scripts/run_planner_llm.py
-  --model <model> --replies outputs/planner/replies_pro.jsonl` and `python
-  eval/score_planner.py --replies outputs/planner/replies_pro.jsonl --out
-  outputs/planner_scores_abcde.json`.
-- **(d) The benchmark's third arm (§6.3.2).** `python
-  scripts/export_sgg_benchmark.py --vlm-replies
-  outputs/vlm_pilot/replies_train_f35.jsonl` emits a third annotation
-  variant, `_annotations.vlm.coco.json`, alongside the human and automatic
-  ones; `scripts/kaggle/notebook_cells_vlm.md` is the run recipe for training
-  and evaluating that arm at three seeds, and `python eval/seed_stats.py`
-  aggregates all three arms into `outputs/tables/seed_replication.md`.
+Four passes produce them, and the repository README carries the exact
+invocations. Only the first, labelling 600 training images, needs a key; the
+rest read the committed replies. Two of the four carry a caveat that belongs
+here rather than in a README. In the RQ2 arm (§5.2) the `--vlm-replies` flag
+changes the *whole* experiment and not just the new column, restricting every
+arm to the pairs the model covered, which is what makes the four columns
+comparable; that the human, self-trained and automatic figures come out
+identical to the three-arm run is the check that the restriction is fair, and
+it is why both JSONs are kept. In the planner (§5.7) condition D is the
+model's relations through the identical filter and condition E the union of C
+and D, so neither condition sees a filter the others did not.
 
 The Chapter 6 experiment is reproducible from `scripts/kaggle/`: the dataset
 converters (`export_sgg_benchmark.py`, `export_yolo_det.py`), the adapted
@@ -121,14 +104,12 @@ it is reproducible from.
 
 ### Full reproduction walk-through
 
-**1. Environment.** Either build the container (`docker build -t
-spatial-annotator .`) or create a Python 3.11/3.12 venv and follow the three
-numbered notes at the top of `requirements.txt`. The known pitfall is
-documented in those notes: installing SAM2 can silently replace CUDA torch
-with a CPU wheel, fixed by reinstalling torch with `--no-deps
---force-reinstall` from the cu121 index. Either way, verify with `python
-scripts/smoke_test.py --image assets/sample.jpg`, which loads SAM2 and Depth
-Anything and reports CUDA availability and peak memory (~0.65 GB).
+**1. Environment.** The container or a Python 3.11/3.12 virtual
+environment; the README gives both recipes and `requirements.txt` the three
+notes they depend on. One pitfall is worth naming because it fails silently:
+installing SAM2 can replace CUDA torch with a CPU wheel, so the smoke test
+reports peak memory (~0.65 GB) and CUDA availability rather than merely
+importing.
 
 The `Dockerfile` at the repository root pins Python 3.11, torch 2.5.1 +
 cu121 and installs SAM2 from GitHub, applying that same fix in the build
@@ -191,11 +172,10 @@ sharing its SHA-256, together with the same 2,508 annotation files. The
 container therefore does not merely install; it reproduces the annotations
 this dissertation reports, exactly.
 
-**2. Data.** Clone the released dataset (CC-BY 4.0) and point
-`dataset.root` in `configs/default.yaml` at it. The loader expects the
-release's own layout (`img_data/group_N/*.jpg` plus the annotation JSONs)
-and corrects the images' 180° EXIF orientation itself; nothing is
-preprocessed on disk.
+**2. Data.** The released dataset (CC-BY 4.0), read from its own layout
+with `dataset.root` pointed at it. Nothing is preprocessed on disk: the
+loader corrects the images' 180° EXIF orientation in memory, so no derived
+copy exists that could drift from the release.
 
 **3. Everything below is offline, and the cache ships.**
 `python scripts/run_annotator.py` (~5 min on the RTX 2060) writes the
@@ -271,24 +251,19 @@ deployment-mode pass (~47 min) and `python scripts/run_annotator.py
 --config configs/depth_base.yaml --out outputs_base` for A8's Base-model
 pass (~7 min).
 
-**4. The benchmark (Chapter 6)** runs on Kaggle rather than locally
-(REACT++ training needs more than 6 GB): upload
-`datasets/spatial_sgg_upload.zip` (built by
-`scripts/export_sgg_benchmark.py` and `scripts/export_yolo_det.py`), then
-commit the notebooks in `scripts/kaggle/` in order (the training run in
-`notebook_cells.md`, the seed replication in `seed_replication.ipynb`, and
-the re-evaluation in `reeval_seeds_and_groups.ipynb`) on a T4 x2
-accelerator. Download each committed version's outputs into
-`outputs/sgg_benchmark/` and run `python eval/seed_stats.py`. The two
-framework traps are documented in the notebooks themselves: class index 0
-is reserved (patched idempotently in a cell), and `--eval-only` is silently
-a no-op with this config, so evaluation calls `inference()` directly.
+**4. The benchmark (Chapter 6)** runs on Kaggle rather than locally,
+since REACT++ training needs more than 6 GB; the README gives the upload and
+notebook order. Two framework traps cost real runs and are documented in the
+notebooks themselves, because either one silently produces a plausible wrong
+number: class index 0 is reserved, patched idempotently in a cell, and
+`--eval-only` is a no-op with this configuration, so evaluation calls
+`inference()` directly rather than trusting the flag.
 
 **5. The validation study** lives in its own public repository
-(`robot-factcheck`): `tools/build_validation_set.py` regenerates the claim
-set and site images from this repository's caches, and
-`analysis/score_votes.py` scores the exported votes sheet. The private
-answer key never enters the public repository.
+(`robot-factcheck`), which regenerates its claim set from this repository's
+caches and scores the exported votes. The private answer key never enters
+either repository, so the study can stay open while its answers stay
+closed.
 
 Every reported number traces to one of the JSON/markdown artefacts these
 commands write; no figure or table in this dissertation is produced by hand.
@@ -794,7 +769,10 @@ annotator this project set out to build does not have.
 
 ### D.7 Failure diagnosis by predicate
 
-Section 4.3 and §4.10 state what the diagnosis establishes. Two tables reach it from opposite sides. The first records, for each human triplet the tool failed to recover, the labels it *did* emit on that pair, which identifies the failure mode directly:
+Section 4.3 and §4.10 state what the diagnosis establishes. Two tables reach
+it from opposite sides. The first records, for each human triplet the tool
+failed to recover, the labels it *did* emit on that pair, which identifies
+the failure mode directly:
 
 | Gold predicate | Missed | Most frequent co-emissions on missed pairs |
 |---|---|---|
