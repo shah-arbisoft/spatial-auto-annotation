@@ -7,7 +7,8 @@
     "claims_sampled": 2002,
     "coverage_fraction": 0.08791208791208792,
     "largest_rater_share": 0.5309734513274337,
-    "claims_with_2plus": 46
+    "claims_with_2plus": 46,
+    "duplicate_rows_dropped": 12
   },
   "crowd_precision_overall": {
     "n": 176,

@@ -112,6 +112,12 @@ def main() -> int:
             "largest_rater_share": max(r["votes"] for r in rep["raters"])
                                    / rep["n_clean"],
             "claims_with_2plus": rep["coverage_by_votes"]["2"],
+            # Duplicate rows were a real defect: a flush whose response never
+            # reached the client left the queue intact and re-sent votes the
+            # sheet already held. Fixed server-side on 11 August by a vote id
+            # minted at answer time, so this should read 0 on every export
+            # after that date.
+            "duplicate_rows_dropped": rep["n_raw"] - rep["n_clean"],
         },
         "crowd_precision_overall": rep["crowd_precision_overall"],
         "per_predicate": rows,
@@ -143,6 +149,11 @@ def main() -> int:
           f"({t['coverage_fraction']:.1%})")
     print(f"  largest single rater supplied {t['largest_rater_share']:.0%}"
           " of the judgements")
+    dups = t["duplicate_rows_dropped"]
+    if dups:
+        print(f"  {dups} duplicate row(s) dropped before scoring"
+              + ("  <-- expected 0 after the 11 Aug server fix"
+                 if dups and rep.get("n_raw", 0) > 238 else ""))
     print("\n".join("  " + ln for ln in lines))
     ab = out["author_bias_check"]
     print(f"  author agreement {ab['agreement']:.3f}, kappa {ab['kappa']:.3f}"
