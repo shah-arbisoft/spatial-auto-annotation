@@ -187,6 +187,16 @@ def inline(text: str) -> str:
 
     REFS: dict[int, str] = {}
     text = re.sub(r"\{\{(fig:[A-Za-z0-9_-]+)\}\}", stash_ref, text)
+
+    # 10^-5 -> a real exponent. Stashed with the code spans because esc()
+    # would otherwise escape the caret and print it literally, which is how
+    # a p-value in 5.7 reached the page reading "10^-5".
+    def stash_pow(m):
+        spans.append(None)
+        REFS[len(spans) - 1] = f"${m.group(1)}^{{{m.group(2)}}}$"
+        return f"\x00{len(spans) - 1}\x00"
+
+    text = re.sub(r"\b(\d+)\^(-?\d+)\b", stash_pow, text)
     text = esc(text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"\\textbf{\1}", text)
     text = re.sub(r"(?<!\*)\*([^*]+)\*(?!\*)", r"\\textit{\1}", text)

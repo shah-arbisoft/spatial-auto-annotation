@@ -243,7 +243,7 @@ The audits are verdicted by the author and by a vision-language model, and
 neither is a disinterested human: the author built the tool, and the model
 is a system of the kind §4.13 shows annotates poorly, admissible here only
 because judging a supplied claim needs the half of it that works and because
-the decoys measure it doing so (§4.14). §7.4 reflects on what that cost. The disinterested human estimate is Appendix E.3, and it reported a pilot only: five raters, no control claims, corroborating the author on support and diverging on the laterals (§4.15). The two-stage audit also shares
+the decoys measure it doing so (§4.14). §7.4 reflects on what that cost. The disinterested human estimate is Appendix E.3, and it reported a pilot only: five raters, no control claims, and drawn from pre-refit labels, so it checks the author's verdicts rather than the shipped support rule (§4.15). The two-stage audit also shares
 machinery with the rule change it evaluates.
 
 **External.** One laboratory domain, six object classes, one camera and
@@ -303,7 +303,7 @@ Chapters 4 to 6 removes it. What belongs here is the extent of the concession. T
 does not reach the structural guarantees of §3.6, which are checkable
 without any verdict at all, nor the downstream findings of Chapters 5 and 6,
 which are scored against human annotation the author did not produce and in
-which the automatic arm is judged by its rival's yardstick. The designed remedy is the study of Appendix E.3, which returned too few raters to carry the weight it was built for. What it does return (§4.15) moves the objection rather than retiring it: on support, the measurement most exposed to author bias, disinterested judges score the tool slightly lower than the author did.
+which the automatic arm is judged by its rival's yardstick. The designed remedy is the study of Appendix E.3, which returned too few raters to carry the weight it was built for. What it does return (§4.15) narrows the objection rather than retiring it: on the pre-refit labels both judged, disinterested judges scored support slightly lower than the author did, so the author's audit is not flattering its own tool. The shipped rule remains unexamined by anyone outside this project.
 
 **Reference frame: answered as far as it can be, which is not all the way.**
 The dissertation does not assert that the camera frame is correct; it shows
