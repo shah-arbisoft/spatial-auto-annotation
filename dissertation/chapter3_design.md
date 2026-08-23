@@ -213,7 +213,7 @@ rule edit to break quietly.
 
 ## 3.7 Output compatibility
 
-Byte-compatibility is a requirement of the research design, not tidiness. RQ2
+Byte-compatibility is a requirement of the research design. RQ2
 compares two label sources by training the same model on each; if the automatic
 labels arrived in a different container, every downstream difference would
 confound the labels with the loader, and no result would be attributable. The
@@ -266,28 +266,28 @@ is checked by a manual audit in the evaluation chapter.
 
 ## 3.9 Modularity: the detector as the replaceable part
 
-The claim that the rules are detector-agnostic (§4.11) is architectural, not
-a statement of intent. The rule layer (`src/predicates.py`) imports nothing
-but `numpy` and never receives an image, and the entry point takes boxes as an
-argument, so no detector is wired into the pipeline: one simply supplies that
-argument. That is what makes §4.11's conditional measurement meaningful.
-Holding the boxes fixed, the relation layer scores the same whether they came
-from a detector or from ground truth, so detector quality and relation quality
-are separately attributable and a better detector improves the system without
-a line of rule code changing.
+The claim that the rules are detector-agnostic (§4.11) rests on the
+architecture. The rule layer (`src/predicates.py`) imports nothing but
+`numpy` and never receives an image, and the entry point takes boxes as an
+argument, so no detector is wired into the pipeline: one simply supplies
+that argument. That is what makes §4.11's conditional measurement
+meaningful. Holding the boxes fixed, the relation layer scores the same
+whether they came from a detector or from ground truth, so detector quality
+and relation quality are separately attributable and a better detector
+improves the system without a line of rule code changing.
 
-To make the property usable, not merely true, the contract is explicit
+To make the property usable as well as true, the contract is explicit
 (`src/detectors.py`): one method returning pixel boxes, class names and
 scores, with three implementations, open-vocabulary prompting where no
-trained model exists, an adapter for any ultralytics checkpoint including the
-source paper's YOLOv10m weights, and a reader for externally computed
+trained model exists, an adapter for any ultralytics checkpoint including
+the source paper's YOLOv10m weights, and a reader for externally computed
 detections. Twelve unit tests pin it, one driving the rule layer from a
 detector written against the documentation alone. Two coupling points are
-documented, not hidden: the support guard keys on the literal class
-name `human`, and the fitted thresholds assume boxes of roughly the tightness
-the annotators drew, so a detector with systematically different boxes should
-re-run §3.8's calibration (twenty seconds offline from the cache). A worked
-example is in `docs/CUSTOM_DETECTOR.md`.
+documented: the support guard keys on the literal class name `human`, and
+the fitted thresholds assume boxes of roughly the tightness the annotators
+drew, so a detector with systematically different boxes should re-run §3.8's
+calibration (twenty seconds offline from the cache). A worked example is in
+`docs/CUSTOM_DETECTOR.md`.
 
 ## 3.10 Selecting frames by content
 
@@ -325,10 +325,10 @@ and what skipping frames costs.
 
 ## 3.11 Reproducibility by construction
 
-Reproducibility here is a design property, not a documentation exercise,
-because three of the four requirements in §3.2 are unverifiable without it:
-a threshold is not fitted on groups 0-5 if nobody else can refit it, and an
-ablation is an assertion unless the reader can re-run the arm it removes.
+Reproducibility here is a design property, because three of the four
+requirements in §3.2 are unverifiable without it: a threshold is not fitted
+on groups 0-5 if nobody else can refit it, and an ablation is an assertion
+unless the reader can re-run the arm it removes.
 
 **Configuration and caching.** Every threshold, seed and model identifier
 lives in `configs/default.yaml`, so no constant is buried in a function, and

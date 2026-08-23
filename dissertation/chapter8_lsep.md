@@ -14,9 +14,7 @@ validation website, and in the released repository; the automatic
 annotations are a derivative work distributed under the same attribution
 terms.
 
-**Model licences as a design constraint.** Licensing was an engineering
-requirement, not an afterthought, and in one case it shaped the
-pipeline: Depth Anything v2 is Apache-2.0 only in its Small variant, the
+**Model licences as a design constraint.** Licensing was an engineering requirement, and in one case it shaped the pipeline: Depth Anything v2 is Apache-2.0 only in its Small variant, the
 larger ones being non-commercial, so Small was preferred, a choice ablation
 A8 later justified independently on accuracy (Appendix D.5). SAM2 and
 Grounding DINO are Apache-2.0. The benchmark detector's YOLO training uses

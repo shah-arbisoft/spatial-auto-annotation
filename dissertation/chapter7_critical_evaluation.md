@@ -113,17 +113,15 @@ annotation guidelines (e.g., spatial thresholds for 'near')". This project
 quantifies how much further the guideline problem goes:
 
 1. `near` was used by 3 of 9 annotator groups, with ~4× variance in how
-   exhaustively equally-close pairs were labelled. Yet all three annotators'
-   labels sit inside one fitted threshold (held-out recall 1.0): consistent
-   *notion*, non-exhaustive *application*.
-2. Two annotator groups applied the **inverted direction convention** for
-   in front of / behind (2–5% agreement where the tool commits; flipping
-   recovers 0.93/0.71).
-3. Support pairs were often labelled in **one direction only** (one group
-   all-`on`, another all-`under`).
-4. The official guidance, confirmed at the annotation tool's repository, is
-   **vocabulary lists with no definitions** (§4.7), which is what makes
-   every defect above predictable, not surprising.
+exhaustively equally-close pairs were labelled. Yet all three annotators'
+labels sit inside one fitted threshold (held-out recall 1.0): consistent
+*notion*, non-exhaustive *application*. 2. Two annotator groups applied the
+**inverted direction convention** for in front of / behind (2–5% agreement
+where the tool commits; flipping recovers 0.93/0.71). 3. Support pairs were
+often labelled in **one direction only** (one group all-`on`, another
+all-`under`). 4. The official guidance, confirmed at the annotation tool's
+repository, is **vocabulary lists with no definitions** (§4.7), which is
+what makes every defect above predictable.
 
 This reframes the evaluation itself: for several predicates there is no human
 consensus to agree with, only per-annotator behaviours. The dissertation's
@@ -300,8 +298,7 @@ different convention, not of a consistent mistake.
 
 **Circular validation: conceded.** Section 7.4 already lists this first
 among the choices a stricter replication should improve, and no result in
-Chapters 4 to 6 removes it. What belongs here is the extent of the
-concession, not a restatement of it. The circularity bounds the
+Chapters 4 to 6 removes it. What belongs here is the extent of the concession. The circularity bounds the
 *precision* estimates, because those rest on verdicts the author gave. It
 does not reach the structural guarantees of §3.6, which are checkable
 without any verdict at all, nor the downstream findings of Chapters 5 and 6,

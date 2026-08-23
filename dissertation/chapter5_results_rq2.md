@@ -63,8 +63,8 @@ vision-language model is not a good enough *annotator*, is it a good enough
 the other three sources are. Every arm trains on precisely the pairs that
 arm covers, so none is advantaged by seeing more of the split, and the
 human, self-trained and automatic figures are unchanged from the three-arm
-experiment to the last decimal, which is the check that this is an addition,
-not a different experiment. It does, with a qualification: at 0.38 the
+experiment to the last decimal, which is the check that this is an addition
+to the same experiment. It does, with a qualification: at 0.38 the
 vision-language labels teach better than the sparse human labels they would
 replace and about as well as the standard remedy for scarce labels, while
 remaining half as useful as computed geometry.

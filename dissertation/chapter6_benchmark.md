@@ -140,10 +140,10 @@ from the two inverted annotators** — so **30% of the entire yardstick is a
 predicate labelled in the opposite direction to the convention every
 training group used**. Both arms train on groups 0–5, where no inversion is
 measured, so neither can score those relations and the penalty falls on them
-equally. The inversion therefore sets a *ceiling*, not a bias. It caps what
-any model trained on this data can reach on 30% of the test gold, which
-compresses the range the two arms can differ across and makes every absolute
-mR@100 in this chapter a lower bound on both sides.
+equally. The inversion therefore sets a *ceiling* on what either arm can
+score. It caps what any model trained on this data can reach on 30% of the
+test gold, which compresses the range the two arms can differ across and
+makes every absolute mR@100 in this chapter a lower bound on both sides.
 
 What difference remains is a separate effect, and §6.4 localises it to
 annotator *selection* rather than annotator convention: it appears on the
@@ -330,10 +330,10 @@ had to be revised when the measurement improved is a point in its favour and
 not against it.
 
 The replication adds a fourth verdict, on a claim made *after* the run, not
-before: §6.3.1 withdraws the single-seed group-7 result, not quietly editing
-it away. The lesson is the one already applied to the pre-registered
-predictions and not to that one, that a difference is worth naming only once
-its size is compared with the variation of the procedure that produced it.
+before: §6.3.1 withdraws the single-seed group-7 result on the record. The
+lesson is the one already applied to the pre-registered predictions and not
+to that one, that a difference is worth naming only once its size is
+compared with the variation of the procedure that produced it.
 
 ## 6.7 Answer, at the level the source paper measures
 
