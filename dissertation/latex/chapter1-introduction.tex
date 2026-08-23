@@ -21,7 +21,7 @@ Three families of method already exist for a shortage of labels, and each is rev
 
 This project removes the human from the labelling loop. The seven predicates are \textit{spatial}, so they are computable from geometry: given a raw RGB image the pipeline detects objects, segments them, estimates monocular depth, lifts each object to a 3D position and \textbf{computes} each predicate for every ordered pair from explicit rules, writing a scene graph in the dataset's own formats (Visual Genome JSON, YOLO txt, h5).
 
-One distinction is central. Scene-graph generation models such as REACT++ \textit{predict} relationships from learned visual patterns and exist only because humans first labelled their training data. This pipeline \textit{computes} them from measured geometry and runs \textit{before} any learned relation model, so it is the \textbf{supplier} of what such models consume rather than a competitor. The perception components only measure where things are; a deterministic rule decides the relationship, which works precisely because the predicates are spatial.
+One distinction is central. Learned scene-graph models \textit{predict} relationships and therefore need labelled data; this pipeline \textit{computes} them from measured geometry and runs before any such model, making it the \textbf{supplier} of what they consume rather than a competitor. Section 3.3 sets out why that is possible for these seven predicates and what it costs.
 
 The one predicate the authors found unreliable, \textit{near}, is handled by fitting a size-relative gap threshold to the human labels and reporting it. A fitted threshold is by construction more self-consistent than nine separate human judgements, which addresses the inconsistency the source paper flagged.
 

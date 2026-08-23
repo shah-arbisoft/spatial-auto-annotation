@@ -79,14 +79,11 @@ lifts each object to a 3D position and **computes** each predicate for every
 ordered pair from explicit rules, writing a scene graph in the dataset's own
 formats (Visual Genome JSON, YOLO txt, h5).
 
-One distinction is central. Scene-graph generation models such as REACT++
-*predict* relationships from learned visual patterns and exist only because
-humans first labelled their training data. This pipeline *computes* them
-from measured geometry and runs *before* any learned relation model, so it
-is the **supplier** of what such models consume rather than a competitor.
-The perception components only measure where things are; a deterministic
-rule decides the relationship, which works precisely because the predicates
-are spatial.
+One distinction is central. Learned scene-graph models *predict*
+relationships and therefore need labelled data; this pipeline *computes*
+them from measured geometry and runs before any such model, making it the
+**supplier** of what they consume rather than a competitor. Section 3.3 sets
+out why that is possible for these seven predicates and what it costs.
 
 The one predicate the authors found unreliable, *near*, is handled by
 fitting a size-relative gap threshold to the human labels and reporting it.

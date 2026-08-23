@@ -150,20 +150,20 @@ bottleneck's cost without removing it.
 
 ## 5.4 Why the automatic labels win, and two consistency checks
 
-The mechanism is the one measured throughout. A classifier trained on labels
-that are sparse (~10% of pairs) and inconsistent (§4.5, §4.7) learns above
-all to be silent, and its recall collapses exactly where labelling was
-thinnest (`near` 0.08, lateral 0.22–0.25); trained on dense rule-consistent
-labels the same model learns the geometry (near 1.00, lateral 0.95–0.99,
-support 0.85–0.88). That is §2.3's weak-supervision prediction confirmed
-under controlled conditions. Two checks argue the result is real, not an
-artefact: the auto-trained model's profile almost exactly reproduces the
-rule layer's own held-out performance (mean 0.75 against the rules' 0.74;
-front/behind 0.19/0.37 against the rules' 0.20/0.37), so the classifier
-*distilled the annotator*, which is what "the labels are learnable" means;
-and all three arms face identical features, the same oversampling cap and
-the same held-out gold, including the convention-inverted annotators, which
-penalises every arm's front/behind equally.
+The mechanism is the one §5.3 has just traced through the pseudo-labelling
+arm, and the human arm shows it directly: where the annotation is thinnest
+and least consistent (§4.5, §4.7), recall collapses (`near` 0.08, lateral
+0.22–0.25); trained on dense rule-consistent labels the same model learns
+the geometry (near 1.00, lateral 0.95–0.99, support 0.85–0.88). That is
+§2.3's weak-supervision prediction confirmed under controlled conditions.
+Two checks argue the result is real, not an artefact: the auto-trained
+model's profile almost exactly reproduces the rule layer's own held-out
+performance (mean 0.75 against the rules' 0.74; front/behind 0.19/0.37
+against the rules' 0.20/0.37), so the classifier *distilled the annotator*,
+which is what "the labels are learnable" means; and all three arms face
+identical features, the same oversampling cap and the same held-out gold,
+including the convention-inverted annotators, which penalises every arm's
+front/behind equally.
 
 
 ## 5.5 Boundaries of the claim
