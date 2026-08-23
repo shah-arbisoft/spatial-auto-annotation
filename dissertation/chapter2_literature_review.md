@@ -422,9 +422,7 @@ it bites hardest when the annotation is itself the object of study: a method
 labelling the pairs humans skipped is penalised for coverage under a
 precision reading and rewarded under a recall one, with neither settling
 whether the extra labels are true.
-Chang et al. (2023) name annotation cost and label bias as the field's
-persistent constraints without resolving this measurement consequence of
-them.
+The two constraints Chang et al. (2023) name (§2.7) leave this measurement consequence of them unresolved.
 
 **A metric a context-free prior can saturate is measuring the prior.**
 Zellers et al.'s (2018) frequency baseline predicts the commonest predicate
