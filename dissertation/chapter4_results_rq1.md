@@ -707,10 +707,7 @@ same in both generations and the distinction does not arise.
 
 **On support the author's verdicts survive the check.** Pooled `on` and `under` precision on the v3 labels is 0.371 for the volunteers against the author's 0.404 and the model's 0.638. What carries is the sign of the first gap, and none of the three values as an estimate of anything the tool now ships: a judge with no stake in the outcome scored the author's own tool slightly *lower* than the author did. Support is where the author's blind verdict was most damaging to that tool, and so where a reader is entitled to suspect it of being theatre; a disinterested judge landing independently on a harsher number is the evidence against that reading. The same sign appears on `near`, 1.000 against the author's 1.000 and the model's 0.625, where it is the model and not the author that sits apart, which is the §4.13 objection answered by measurement rather than by argument.
 
-**On the laterals and the depth pair they side with neither.** The
-volunteers score `to the left of` 0.727, `to the right of` 0.722, `in front
-of` 0.593 and `behind` 0.571, where both expert judges sit between 0.833 and
-0.958. That gap is too wide and too consistent across four predicates to be
+**On the laterals and the depth pair they side with neither.** The volunteers put all four between 0.571 and 0.727, where both expert judges sit between 0.833 and 0.958. That gap is too wide and too consistent across four predicates to be
 sampling. The reading consistent with §4.5 is that the reference frame is
 doing it: an instructed but untrained judge applies camera-frame laterality
 unevenly, which is the defect the two inverted annotator groups exhibit and
