@@ -337,14 +337,13 @@ compared with the variation of the procedure that produced it.
 
 ## 6.7 Answer, at the level the source paper measures
 
-At the level the source paper evaluates robot-readiness, automatic labels
-train a model that trains longer, covers five times more of the relation
-types the manual annotation never recorded, reproduces itself across seeds
-more than eight times more tightly, ranks level overall, and ranks slightly
-ahead on the one test annotator with no measured defect. The evidence
-supports a conditional claim: **automatic labels are better training
-material wherever ground truth means geometry; human labels remain better
-wherever it means human annotation habits.** The first condition is the
-operative one for a robot, which needs relations that are *correct* before
-they are *human-like*, and §5.7 tests that one link further down, where it
-survives.
+At the source paper's level of robot-readiness, automatic labels train a
+model that trains longer, covers five times more of the relation types the
+manual annotation never recorded, reproduces across seeds more than eight
+times more tightly, ranks level overall, and ranks slightly ahead on the one
+test annotator with no measured defect. The evidence supports a conditional
+claim: **automatic labels are better training material wherever ground truth
+means geometry; human labels remain better wherever it means human
+annotation habits.** The first condition is the operative one for a robot,
+which needs relations that are *correct* before they are *human-like*, and
+§5.7 tests that one link further down, where it survives.

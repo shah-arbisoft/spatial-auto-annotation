@@ -2,10 +2,9 @@
 
 This chapter reviews the work this project builds on and the work it must be
 distinguished from. Its organising question is **label quality**, because
-that is what the project's evidence ultimately turns on: not whether spatial
-relations can be computed, which the literature already settles, but whether
-computed labels are better or worse than the human labels they replace, and
-how anyone would know.
+that is what the evidence turns on: not whether spatial relations can be
+computed, which the literature settles, but whether computed labels are
+better than the human labels they replace, and how anyone would know.
 
 It reaches the project's own approach only after the rival remedies that
 stretch scarce labels instead of replacing them (§2.4), and it ends on the
@@ -417,11 +416,7 @@ record a handful of the relations present in a scene and leave the rest
 unmarked. An unannotated pair is not a negative but an unexamined one, so a
 predicted relation absent from the gold cannot be scored wrong and precision
 computed against such a gold is not precision at all. The field's response
-was to drop it and rank by recall at K. The cost is a metric that cannot tell careful prediction from abundant, and
-it bites hardest when the annotation is itself the object of study: a method
-labelling the pairs humans skipped is penalised for coverage under a
-precision reading and rewarded under a recall one, with neither settling
-whether the extra labels are true.
+was to drop it and rank by recall at K. The cost is a metric that cannot tell careful prediction from abundant, and it bites hardest when the annotation is itself the object of study: a method labelling the pairs humans skipped is penalised for coverage under precision and rewarded under recall, with neither settling whether the extra labels are true.
 The two constraints Chang et al. (2023) name (§2.7) leave this measurement consequence of them unresolved.
 
 **A metric a context-free prior can saturate is measuring the prior.**
@@ -429,11 +424,7 @@ Zellers et al.'s (2018) frequency baseline predicts the commonest predicate
 for a pair with no access to the image, and proved hard to beat on R@K,
 which says as much about the metric as about the models. **mR@K**, proposed by VCTree (Tang et al., 2019) and adopted as
 standard after Tang et al. (2020), is the corrective: averaging recall per
-predicate stops head classes from carrying the score. It introduces its
-own sensitivity, however, because a predicate with few test instances now
-weighs as much as one with thousands, so the aggregate can move on a handful
-of triplets and, in a dataset annotated by different people in different
-blocks, on which annotator happened to supply them. Per-predicate and
+predicate stops head classes from carrying the score. It introduces its own sensitivity: a predicate with few test instances weighs as much as one with thousands, so the aggregate can move on a handful of triplets and, in a dataset annotated by different people in different blocks, on which annotator supplied them. Per-predicate and
 per-annotator decomposition is therefore not optional garnish; without it a
 mean recall is uninterpretable, which is why Chapters 4 and 6 report both.
 
@@ -442,11 +433,7 @@ must be stated.** zR@K scores only subject–predicate–object combinations
 absent from *training*, isolating composition from memorisation. It comes
 from visual relationship detection (Lu et al., 2016) and was first reported on
 Visual Genome by Tang et al. (2020). The definition is well posed when one model is compared against
-itself. It becomes ambiguous the moment two differently-supervised models are
-compared in a single column, because the exclusion set is then drawn from one
-shared reference, not from each model's own training data; what the
-column reports is the extent to which each label source covers combinations
-the reference omits. That is a real property, and for an annotation study
+itself. It becomes ambiguous the moment two differently-supervised models share a column, because the exclusion set is then drawn from one shared reference rather than each model's own training data; the column reports how far each label source covers combinations the reference omits. That is a real property, and for an annotation study
 arguably the more interesting one, but it is not compositional
 generalisation. Section 6.4 shows that this distinction is not hypothetical
 for the present experiment, and reports the quantity under its accurate name.
@@ -457,11 +444,7 @@ producing systematically higher figures than SGDet, where detection errors
 propagate; the two are frequently quoted side by side and are not comparable.
 Underneath both sits the assumption that the gold is correct, which Northcutt,
 Athalye and Mueller (2021) showed is false often enough to reorder published
-rankings (§2.3). For spatial relations the annotation may also be
-*consistently* wrong in the sense that matters here: where a group of
-annotators applied a different reference frame, a system agreeing with them
-scores well and a system that is right scores badly, and no recall metric can
-tell the two apart.
+rankings (§2.3). For spatial relations the annotation may also be *consistently* wrong in the way that matters here: where annotators applied a different reference frame, a system agreeing with them scores well and a correct system scores badly, and no recall metric tells the two apart.
 
 Three commitments follow for this dissertation, each traceable to a defect
 above. Recall against the human triplets is reported alongside an audited

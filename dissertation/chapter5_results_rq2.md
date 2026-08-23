@@ -35,8 +35,7 @@ introduced alongside the result it produced (§5.2).
   retrained on the union of real and pseudo labels (Lee, 2013). A pair the
   annotators touched at all counts as labelled, since their silence on its
   other predicates is informative; a pair they never recorded is the
-  unlabelled pool. This arm answers the question a reader should ask before
-  accepting the project's premise: if the human labels are too sparse, why
+  unlabelled pool. This arm answers the question that precedes the project's premise: if the human labels are too sparse, why
   not simply stretch them?
 
 Each source labels the same pairs its own way, and each model inherits its
@@ -60,14 +59,14 @@ Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 A fourth arm answers what §4.13 raises but cannot settle: if a
 vision-language model is not a good enough *annotator*, is it a good enough
 *teacher*? The same model labelled all 600 training images, used exactly as
-the other three sources are. Every arm trains on precisely the pairs that
-arm covers, so none is advantaged by seeing more of the split, and the
-human, self-trained and automatic figures are unchanged from the three-arm
-experiment to the last decimal, which is the check that this is an addition
-to the same experiment. It does, with a qualification: at 0.38 the
-vision-language labels teach better than the sparse human labels they would
-replace and about as well as the standard remedy for scarce labels, while
-remaining half as useful as computed geometry.
+the other three sources are. Every arm trains on precisely the pairs it
+covers, so none is advantaged by seeing more of the split; the human,
+self-trained and automatic figures are unchanged from the three-arm
+experiment to the last decimal, which checks that this is an addition to the
+same experiment. It does, with a qualification: at 0.38 the vision-language
+labels teach better than the sparse human labels they would replace and
+about as well as the standard remedy for scarce labels, while remaining half
+as useful as computed geometry.
 
 {{fig:rq2-with-vlm}} draws the four arms per predicate. Training on the
 automatic labels multiplies downstream mean recall by ~2.5
@@ -87,54 +86,51 @@ and self-training passes the instability on to its student.
 
 ### 5.2.1 The same experiment on four other indicators
 
-A recall-only table invites one obvious objection: the automatic arm labels
-twenty times more densely, so of course it recovers more. Measuring it
-answers the objection, and the answer does not flatter the tool. **On every
-indicator except recall the automatic arm comes last**: macro precision
-0.136 against the human arm's 0.252, F1 0.194 against 0.267, average
-precision 0.164 against 0.230, and micro F1, which weights predicates by how
-often the annotators used them, harshest of all at 0.066 against 0.262.
-Taken at face value the table says the automatic labels are the worst
-supervision of the four.
+A recall-only table invites one objection: the automatic arm labels twenty
+times more densely, so of course it recovers more. Measured, the answer does
+not flatter the tool. **On every indicator except recall the automatic arm
+comes last**: macro precision 0.136 against the human arm's 0.252, F1 0.194
+against 0.267, average precision 0.164 against 0.230, and micro F1, which
+weights predicates by how often the annotators used them, harshest of all at
+0.066 against 0.262. Taken at face value the table says the automatic labels
+are the worst supervision of the four. One number shows why they are not.
+Average precision is threshold-free, so no arm improves it by committing to
+more pairs, and the automatic arm still scores **0.040 on *to the left
+of***, the predicate on which §4.4 audited fifteen of its fifteen extra
+predictions and found every one correct. An arm cannot be both wrong and
+right about laterality. What the column measures is agreement with which
+pairs an annotator chose to write down, so this is the artefact of §4.3
+reappearing one level down the chain, and it charges the denser arm for the
+coverage that makes it useful. The columns cannot be argued away in the
+automatic arm's favour either, since §4.4 audited the *rule layer's* extra
+predictions and not the classifier's. Appendix F.5 gives the full table and
+both readings.
 
-They are not, and one number shows why. Average precision is threshold-free,
-so no arm improves it by committing to more pairs, and the automatic arm
-still scores **0.040 on *to the left of***, the predicate on which §4.4
-audited fifteen of its fifteen extra predictions and found every one correct.
-An arm cannot be both wrong and right about laterality. What the column
-measures is agreement with which pairs an annotator chose to write down, so
-this is the artefact of §4.3 reappearing one level down the chain, and it
-charges the denser arm for the coverage that makes it useful. The columns
-cannot be argued away in the automatic arm's favour either, since §4.4
-audited the *rule layer's* extra predictions and not the classifier's.
-Appendix F.5 gives the full table and both readings.
-
-What the four indicators establish is narrower than the recall column
-suggests and firmer than the precision column implies: judged on the labels'
-ability to teach a model to recover relations humans recorded, the automatic
-arm dominates; judged on its ability to imitate which relations humans chose
-to record, it does not, and no metric computed against this gold can separate
-the two.
+The four indicators establish less than the recall column suggests and more
+than the precision column implies: the automatic arm dominates at teaching a
+model to recover the relations humans recorded and loses at imitating which
+relations humans chose to record. No metric computed against this gold
+separates the two.
 
 
 ## 5.3 Why self-training does not rescue the human labels
 
-The pseudo-label arm's own bookkeeping explains its ceiling precisely. Of the
-60,762 training pairs, the annotators recorded just **6,026**. Filling in the
-rest, the teacher adds roughly **54,000 confident negative** pseudo-labels per
+The pseudo-label arm's own bookkeeping explains its ceiling. Of the 60,762
+training pairs the annotators recorded just **6,026**. Filling in the rest,
+the teacher adds roughly **54,000 confident negative** pseudo-labels per
 predicate against only **36 to 67 confident positives**: a ratio of about
 1,000 to 1. The teacher, trained on annotation in which most pairs carry no
 label, has learned above all that pairs usually have no relation, and
 self-training feeds that conviction back to the student as though it were
-evidence. What propagates is not the annotators' knowledge but their silence.
+evidence. What propagates is not the annotators' knowledge but their
+silence.
 
 This is the failure mode §2.4 predicted from the literature, now measured.
-Pseudo-labelling is well behaved when the labelled seed is a representative
-sample of the unlabelled pool. Here it is neither representative nor
-complete: the annotators labelled the pairs they found salient, so absence of
-a label conflates "no relation holds" with "nobody looked". A student trained
-on the union cannot distinguish the two, and inherits a systematic bias
-towards silence.
+Pseudo-labelling is well behaved when the seed is a representative sample of
+the pool. This seed is neither: the annotators labelled the pairs they found
+salient, so absence of a label conflates "no relation holds" with "nobody
+looked". A student trained on the union cannot distinguish the two, and
+inherits a systematic bias towards silence.
 
 The `near` row makes the point sharply. Human-trained recall is already at
 near-collapse, 0.08, and self-training pushes it *down* to 0.03: only three of
@@ -197,7 +193,7 @@ The paper's own evaluation of that chain stops at SGG quality: six models
 benchmarked on the human labels, topping out at mR@100 = 0.49 (VCTree), with
 every model saturating by epoch 2–6 and `near` stuck at 0.22–0.25 (§2.2).
 
-Each symptom has a cause this dissertation measured and a remedy it built.
+Each symptom has a measured cause and a built remedy.
 Saturation within six epochs is what training on the 8,926 sparse triplets of
 §4.2 looks like, and the automatic labels give 20× the supervision on the same
 images. The universal `near` failure is what an undefined, three-annotator

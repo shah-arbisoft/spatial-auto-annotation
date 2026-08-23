@@ -93,11 +93,11 @@ recorded and reproduces itself across seeds more than eight times more tightly.
 "better", which Chapter 5 and the planner both support, holds where ground
 truth means geometry and not where it means annotation practice.
 
-As a condition, this is the sentence the evidence will carry:
-**automatic labels are at least the equal of human ones wherever ground truth
-means human annotation practice, and better wherever it means geometry.**
-Robot planning needs the second, which is why the planner separates the
-sources decisively while the ranked benchmark cannot separate them at all.
+The evidence carries this conditional: **automatic labels are at least the
+equal of human ones wherever ground truth means human annotation practice,
+and better wherever it means geometry.** Robot planning needs the second,
+which is why the planner separates the sources decisively and the ranked
+benchmark cannot separate them at all.
 
 ## 9.2 Research contributions
 

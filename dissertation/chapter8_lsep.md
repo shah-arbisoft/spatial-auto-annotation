@@ -24,11 +24,7 @@ licence review. The note is recorded so a future user does not inherit the
 question unknowingly.
 
 **Data protection.** Some frames contain identifiable people, making them
-personal data under UK law (Data Protection Act 2018). The project processes
-them for research under the terms of their public release and applies data
-minimisation to everything it republishes: faces are anonymised in all
-published figures and in every image on the validation website, and items
-whose judgement anonymisation would compromise are removed, not shown.
+personal data under UK law (Data Protection Act 2018). The project processes them for research under their public release terms and applies data minimisation to what it republishes: faces are anonymised in all published figures and on the validation website, and items whose judgement anonymisation would compromise are removed rather than shown.
 The validation study itself collects no personal data (§8.3). No unauthorised
 access occurs anywhere in the project, so the Computer Misuse Act 1990 is
 noted only for completeness.
