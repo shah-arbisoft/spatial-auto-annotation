@@ -15,11 +15,16 @@ precision with disinterested judges (E.3).
 
 ## 4.1 Protocol
 
-Two properties of the gold shape the protocol. It is **sparse**: 8,790 of
-84,880 ordered pairs (~10%) carry a human label, so a label absent from the
-gold is unexamined, not wrong, and raw precision undercounts. And
-annotator behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second
-case), so agreement is reported per annotator group as well as pooled.
+Four counts recur below and each names a different set, so they are fixed
+here. The released subset holds **884** frames; **838** carry a non-empty
+annotation; the pipeline runs on **836**, the two dropped being annotation
+files with no matching image (§4.3); and **802** of those yield at least one
+ordered pair, the remaining 34 holding a single object. Two properties of
+the gold then shape the protocol. It is **sparse**: 8,790 of 84,880 ordered
+pairs (~10%) carry a human label, so a label absent from the gold is
+unexamined, not wrong, and raw precision undercounts. And annotator
+behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second case), so
+agreement is reported per annotator group as well as pooled.
 
 The evaluation therefore uses per-predicate **recall of the human triplets**
 as the primary metric, following the source paper's convention; **restricted
@@ -394,9 +399,7 @@ moving, and one decided by a coin toss at a threshold should not. Frames were
 segmented by content drift (§3.10), which compresses the released frames 2.7×
 at τ = 10 and locates all eight known layout changes within five frames, and
 each segment's predicates were propagated from its keyframe to the rest
-(`eval/keyframe_propagation.py`). The propagation runs over the 802 *annotated*
-frames, not the 884 released ones, which segment differently because a
-subset sits further apart in the original capture (E.2); at τ = 10 those 802
+(`eval/keyframe_propagation.py`). The propagation runs over the 802 frames that yield at least one ordered pair (§4.1), not the 884 released ones, which segment differently because a subset sits further apart in the original capture (E.2); at τ = 10 those 802
 give 568 keyframes, leaving 234 propagated frames and 11,352 comparable object
 pairs. Appendix E.2 reports the sweeps, the
 object-matching rule and the coverage figures.

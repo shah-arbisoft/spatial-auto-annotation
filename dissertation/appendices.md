@@ -965,9 +965,9 @@ inverse by construction.
 Object indices are not stable across frames, the annotators having recorded
 different subsets of the scene from frame to frame: `group_0` alone contains
 43 distinct object orderings, which is why matching is by class and box
-overlap rather than by index. Compression over the 802 annotated frames is
-lower than the 2.7× below because those frames are a subset, so consecutive
-members sit further apart in the original capture.
+overlap rather than by index. Compression over the 802 pair-bearing frames
+(§4.1) is lower than the 2.7× below because those frames are a subset, so
+consecutive members sit further apart in the original capture.
 
 *Segmentation.* At τ = 10 the full 2,650-frame sequence collapses to 892
 segments, a 3.0× reduction; over the 884 released frames it gives 331, 2.7×.
