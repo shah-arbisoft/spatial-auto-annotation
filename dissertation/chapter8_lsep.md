@@ -59,20 +59,18 @@ a deployment consideration, not a resolved issue.
 ## 8.3 Ethical considerations
 
 The ethical surface has three parts, each with a concrete safeguard. First,
-secondary use of images containing identifiable people: face anonymisation in
-everything republished, item removal where anonymisation would bias a
-judgement, and `noindex` on the validation site. Second, the human validation
-study: participation is anonymous, voluntary and brief, no names, contact
-details, IP addresses or tracking identifiers are collected, an information
-panel states the purpose and data handling before play, and the collection
-runs under the University's ethics self-assessment process (Appendix A).
-Third, research integrity: predictions were registered before the benchmark
-run and reported as they fell, one confirmed, one refuted and one left
-unresolved once a better-controlled replication shrank the margin it rested
-on (§6.6); a withdrawn hypothesis
-remains in the text (§6.4), and two built refinements are reported as
-measured and declined (Appendix D.4). The dissertation treats honest negative
-results as results.
+secondary use of images containing identifiable people: face anonymisation
+in everything republished, item removal where anonymisation would bias a
+judgement, and `noindex` on the validation site. Second, the human
+validation study: participation is anonymous, voluntary and brief, no names,
+contact details, IP addresses or tracking identifiers are collected, an
+information panel states the purpose and data handling before play, and the
+collection runs under the University's ethics self-assessment process
+(Appendix A). Third, research integrity: predictions were registered before
+the benchmark run and reported as they fell, one confirmed, one refuted and
+one left unresolved once a better-controlled replication shrank the margin
+it rested on (§6.6); a withdrawn hypothesis remains in the text (§6.4), and
+two built refinements are reported as measured and declined (Appendix D.4).
 
 ## 8.4 Professional considerations
 

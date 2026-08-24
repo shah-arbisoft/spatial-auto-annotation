@@ -47,11 +47,11 @@ Every quantitative claim names the script that produced it and the artefact it i
 
 The \texttt{Dockerfile} at the repository root pins Python 3.11, torch 2.5.1 + cu121 and installs SAM2 from GitHub, applying that same fix in the build itself, and a \texttt{.dockerignore} holds the build context to the 94 source files that belong in an image, keeping the caches, the dataset and the credentials file out of it. Both moving parts are pinned rather than tracked: the base image by digest, since a tag can be re-pointed upstream, and SAM2, which has no PyPI release, to commit \texttt{2b90b9f5}, since installing from a bare repository URL fetches whatever \texttt{main} happens to be on the day of the build.
 
-The build has been run rather than merely written, and its log is kept at \texttt{outputs/docker/build\_\allowbreak{}summary.txt}: the base image in 193 s, system packages in 31 s, and the Python dependencies, including SAM2 and the forced CUDA torch reinstall, in 328 s. The final stage runs the project's test suite \textit{inside the container} and reports \textbf{66 passed} followed by a successful import of the rule layer, so an environment that cannot import the rule layer cannot produce an image at all.
+The build has been run rather than merely written, and its log, with the per-stage timings, is committed at \texttt{outputs/docker/build\_\allowbreak{}summary.txt}. The final stage runs the project's test suite \textit{inside the container} and reports \textbf{66 passed} followed by a successful import of the rule layer, so an environment that cannot import the rule layer cannot produce an image at all.
 
 The image is checked as an artefact rather than trusted on the strength of its log, and the reason is worth recording as method. Two builds of this image have failed from a full disk: one during the export stage, one during unpacking, and the second wrote the tag before it died, so \texttt{docker images} listed a plausible entry for an image that was never finished. A build log and a tag are therefore not evidence; only the finished image is.
 
-Inside the current image the test suite reports \textbf{66 passed}, torch resolves to \texttt{2.5.1+cu121} rather than the CPU wheel the pitfall above produces, and sam2, cv2, numpy, scipy, scikit-learn, Pillow and transformers all import. \texttt{/app} is 19.3 MB, most of it the geometry cache, and the specification the rules implement is the current one, checked on three strings that changed in the last revision. The dataset and the credentials file are absent, \texttt{.env.example} being the only environment file shipped, and so are the bulk outputs the image has no use for: rendered annotations, the failure gallery, the figures and the video frames.
+Inside the current image the test suite reports \textbf{66 passed}, torch resolves to \texttt{2.5.1+cu121} rather than the CPU wheel the pitfall above produces, every expected dependency imports, and the specification the rules implement is the current one, checked on three strings that changed in the last revision. What the image does \textit{not} carry matters as much: no dataset, no credentials file, \texttt{.env.example} alone, and none of the bulk outputs it has no use for. The full inventory is in the README.
 
 The reproduction is the point. Mounting the dataset read-only, deleting \texttt{outputs/pairs.csv} and running \texttt{scripts/reannotate\_\allowbreak{}from\_\allowbreak{}cache.py} inside the container regenerates it at 84,881 rows with the SHA-256 of the file committed here, and repeating it gives the same digest. Deleting first is deliberate rather than tidy: the file ships inside the image, so a run that failed silently would leave the committed copy in place and a naive check would call that a reproduction. Twelve of the fifteen offline commands complete in the container; the three that do not need roughly 200 MB of GPU-produced intermediates the image deliberately omits, each of which already has its committed JSON summary. \texttt{outputs/docker/verification.md} records the full check, including the file-by-file integrity scan that catches the half-written image a full disk produces.
 
@@ -767,13 +767,13 @@ Predicate & P & R & F1 & support \\
 Predicate & P & R & F1 & support \\
 \hline
 \endhead
-on & 0.88 & 0.88 & 0.88 & 1465 \\
-under & 0.84 & 0.81 & 0.83 & 1001 \\
+on & 0.95 & 0.81 & 0.88 & 1465 \\
+under & 0.92 & 0.75 & 0.83 & 1001 \\
 to the left of & 0.35 & 0.96 & 0.51 & 972 \\
 to the right of & 0.42 & 0.98 & 0.59 & 1174 \\
-in front of & 0.43 & 0.64 & 0.51 & 2013 \\
-behind & 0.36 & 0.66 & 0.46 & 1584 \\
-near & 0.12 & 1.00 & 0.21 & 717 \\
+in front of & 0.43 & 0.70 & 0.53 & 2013 \\
+behind & 0.35 & 0.71 & 0.47 & 1584 \\
+near & 0.11 & 1.00 & 0.20 & 717 \\
 \hline
 \end{longtable}
 \end{center}

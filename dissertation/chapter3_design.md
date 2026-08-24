@@ -372,6 +372,6 @@ difference. Section 7.7 returns to all four with the evidence, which is
 where they are settled or conceded.
 
 Three are mitigations, not refutations. The fourth the design could not
-settle alone: invariant testing pins rule *consistency* and says nothing about
-rule *truth*, which took §4.14's instrument, built to attack the author's own
-verdicts. It overturned one.
+settle alone: invariant testing pins rule *consistency* and says nothing
+about rule *truth*, which took §4.14's instrument, built to attack the
+author's own verdicts, and it overturned one.

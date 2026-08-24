@@ -62,7 +62,7 @@ Three observations. \textbf{(i)} The tool recovers 81\% of all human triplets (7
 
 \section{Precision on the annotated pairs}
 
-Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.93 on the support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair and 0.11 on \texttt{near} (full table in Appendix F.6). Every one is bounded below by construction: the human typically recorded one or two relations where several hold at once, a pair being near, left-of and in-front-of simultaneously. \texttt{near} is the extreme case, emitted wherever the fitted gap holds while only 3 of 9 annotator groups ever used the label. That is why the protocol includes the audit (\S{}4.4) instead of reading these columns at face value.
+Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.92 on the support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair and 0.11 on \texttt{near} (full table in Appendix F.6). Every one is bounded below by construction: the human typically recorded one or two relations where several hold at once, a pair being near, left-of and in-front-of simultaneously. \texttt{near} is the extreme case, emitted wherever the fitted gap holds while only 3 of 9 annotator groups ever used the label. That is why the protocol includes the audit (\S{}4.4) instead of reading these columns at face value.
 
 
 \section{Manual audit of extra predictions (true-precision estimate)}
@@ -110,21 +110,21 @@ Group & Gold & Emit rate & Agreement when committed & Convention & Raw recall & 
 Group & Gold & Emit rate & Agreement when committed & Convention & Raw recall & Aligned recall \\
 \hline
 \endhead
-group\_\allowbreak{}0 & 724 & 0.92 & 0.95 & same & 0.88 & 0.88 \\
-group\_\allowbreak{}1 & 639 & 0.98 & 1.00 & same & 0.98 & 0.98 \\
-group\_\allowbreak{}2 & 351 & 0.58 & 1.00 & same & 0.58 & 0.58 \\
-group\_\allowbreak{}3 & 258 & 0.54 & 0.98 & same & 0.53 & 0.53 \\
+group\_\allowbreak{}0 & 724 & 0.94 & 0.95 & same & 0.89 & 0.89 \\
+group\_\allowbreak{}1 & 639 & 1.00 & 1.00 & same & 1.00 & 1.00 \\
+group\_\allowbreak{}2 & 351 & 0.85 & 1.00 & same & 0.85 & 0.85 \\
+group\_\allowbreak{}3 & 258 & 0.82 & 0.99 & same & 0.81 & 0.81 \\
 group\_\allowbreak{}4 & 65 & 1.00 & 0.57 & same & 0.57 & 0.57 \\
 group\_\allowbreak{}5 & 371 & 1.00 & 0.99 & same & 0.98 & 0.98 \\
-group\_\allowbreak{}6 & 415 & 0.98 & \textbf{0.05} & \textbf{inverted} & 0.05 & 0.93 \\
-group\_\allowbreak{}7 & 330 & 0.90 & 1.00 & same & 0.90 & 0.90 \\
-group\_\allowbreak{}8 & 444 & 0.73 & \textbf{0.02} & \textbf{inverted} & 0.01 & 0.71 \\
-\textbf{overall} & 3597 &  &  &  & \textbf{0.65} & \textbf{0.84} \\
+group\_\allowbreak{}6 & 415 & 0.99 & \textbf{0.05} & \textbf{inverted} & 0.05 & 0.94 \\
+group\_\allowbreak{}7 & 330 & 0.94 & 1.00 & same & 0.94 & 0.94 \\
+group\_\allowbreak{}8 & 444 & 0.84 & \textbf{0.02} & \textbf{inverted} & 0.02 & 0.82 \\
+\textbf{overall} & 3597 &  &  &  & \textbf{0.70} & \textbf{0.91} \\
 \hline
 \end{longtable}
 \end{center}
 
-Figure~\ref{fig:front-behind-decomposition} plots the same decomposition, where the two inverted groups are the pair sitting alone near zero. (The table reports the shipped cascade, depth ordering plus the ground-plane fallback of \S{}4.9; the fallback roughly doubled the emit rates of the abstention-heavy groups 2 and 3.) The pooled 0.65 decomposes into three distinct causes:
+Figure~\ref{fig:front-behind-decomposition} plots the same decomposition, where the two inverted groups are the pair sitting alone near zero. (The table reports the shipped cascade, depth ordering plus the ground-plane fallback of \S{}4.9, which lifted the emit rates of the abstention-heavy groups 2 and 3 by about half.) The pooled 0.70 decomposes into three distinct causes:
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/front-behind-decomposition.png}
@@ -137,7 +137,7 @@ Figure~\ref{fig:front-behind-decomposition} plots the same decomposition, where 
 \item \textbf{Direction agreement is near-perfect where the tool commits}, 0.95--1.00
 for six of the eight groups with meaningful counts. Genuine depth-ordering errors are rare.
 \item \textbf{Two annotator groups used the inverted convention.} Groups 6 and 8
-agree with the committed direction 2--5\% of the time; flipping their labels recovers 0.93/0.71 and aligned overall recall is 0.84 (alignment uses one disclosed bit per group, the majority direction of its own labels). After \texttt{near}, this is a second measured annotation defect, and it is the reference-frame ambiguity RoboSpatial formalises (\S{}2.5) observed in the wild, with no frame declared in the guidance and two teams resolving it oppositely.
+agree with the committed direction 2--5\% of the time; flipping their labels recovers 0.94/0.82 and aligned overall recall is 0.91 (alignment uses one disclosed bit per group, the majority direction of its own labels). After \texttt{near}, this is a second measured annotation defect, and it is the reference-frame ambiguity RoboSpatial formalises (\S{}2.5) observed in the wild, with no frame declared in the guidance and two teams resolving it oppositely.
 \item \textbf{The remaining gap is abstention, not error.} Groups 2 and 3 agree almost
 perfectly when the tool commits, but their pairs sit inside the \texttt{depth\_\allowbreak{}eps} band \textit{and} beyond the ground-plane fallback's reach, so the tool abstains: emit rates 0.58 and 0.54, roughly doubled by the fallback. The \texttt{depth\_\allowbreak{}eps} and \texttt{plane\_\allowbreak{}band} sweeps trade this against precision.
 \end{enumerate}
@@ -163,7 +163,7 @@ Because the nine groups labelled disjoint batches of unequal difficulty, this da
 
 \section{Answer to RQ1}
 
-The two axes divide the seven predicates differently, and saying so plainly matters more than a single headline. On \textbf{recall}, five reach human-comparable levels at 0.75 to 1.00, mean 0.85 and 0.74 on annotators no threshold ever saw; the exception is the depth pair, at 0.70/0.71 pooled and 0.84 once the two inverted groups are aligned. On \textbf{precision}, a different five audit blind at 0.79--1.00, the two laterals, the two depth predicates and \texttt{near}, each on 24 samples, so the claim they support is comparability; the exception there is support, at 0.535 [0.42, 0.65] on 71 samples of the shipped rule, up from 0.404 before \S{}4.14 traced the shortfall to a threshold fitted on a metric that could not see the error it controls.
+The two axes divide the seven predicates differently, and saying so plainly matters more than a single headline. On \textbf{recall}, five reach human-comparable levels at 0.75 to 1.00, mean 0.85 and 0.74 on annotators no threshold ever saw; the exception is the depth pair, at 0.70/0.71 pooled and 0.91 once the two inverted groups are aligned. On \textbf{precision}, a different five audit blind at 0.79--1.00, the two laterals, the two depth predicates and \texttt{near}, each on 24 samples, so the claim they support is comparability; the exception there is support, at 0.535 [0.42, 0.65] on 71 samples of the shipped rule, up from 0.404 before \S{}4.14 traced the shortfall to a threshold fitted on a metric that could not see the error it controls.
 
 So no predicate is weak on both axes and none is strong on both except the laterals and \texttt{near}. Support recalls well and cannot be trusted where it adds; the depth pair is trustworthy where it commits and commits less often than the annotators did. Section 9.1 answers RQ1 against the criteria of \S{}1.2.2 on that basis.
 

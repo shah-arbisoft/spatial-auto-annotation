@@ -121,13 +121,12 @@ no PyPI release, to commit `2b90b9f5`, since installing from a bare
 repository URL fetches whatever `main` happens to be on the day of the
 build.
 
-The build has been run rather than merely written, and its log is kept at
-`outputs/docker/build_summary.txt`: the base image in 193 s, system packages
-in 31 s, and the Python dependencies, including SAM2 and the forced CUDA
-torch reinstall, in 328 s. The final stage runs the project's test suite
-*inside the container* and reports **66 passed** followed by a successful
-import of the rule layer, so an environment that cannot import the rule
-layer cannot produce an image at all.
+The build has been run rather than merely written, and its log, with the
+per-stage timings, is committed at `outputs/docker/build_summary.txt`. The
+final stage runs the project's test suite *inside the container* and reports
+**66 passed** followed by a successful import of the rule layer, so an
+environment that cannot import the rule layer cannot produce an image at
+all.
 
 The image is checked as an artefact rather than trusted on the strength of
 its log, and the reason is worth recording as method. Two builds of this
@@ -136,15 +135,13 @@ unpacking, and the second wrote the tag before it died, so `docker images`
 listed a plausible entry for an image that was never finished. A build log
 and a tag are therefore not evidence; only the finished image is.
 
-Inside the current image the test suite reports **66 passed**, torch resolves
-to `2.5.1+cu121` rather than the CPU wheel the pitfall above produces, and
-sam2, cv2, numpy, scipy, scikit-learn, Pillow and transformers all import.
-`/app` is 19.3 MB, most of it the geometry cache, and the specification the
-rules implement is the current one, checked on three strings that changed in
-the last revision. The dataset and the credentials file are absent,
-`.env.example` being the only environment file shipped, and so are the bulk
-outputs the image has no use for: rendered annotations, the failure gallery,
-the figures and the video frames.
+Inside the current image the test suite reports **66 passed**, torch
+resolves to `2.5.1+cu121` rather than the CPU wheel the pitfall above
+produces, every expected dependency imports, and the specification the rules
+implement is the current one, checked on three strings that changed in the
+last revision. What the image does *not* carry matters as much: no dataset,
+no credentials file, `.env.example` alone, and none of the bulk outputs it
+has no use for. The full inventory is in the README.
 
 The reproduction is the point. Mounting the dataset read-only, deleting
 `outputs/pairs.csv` and running `scripts/reannotate_from_cache.py` inside the
@@ -1370,13 +1367,13 @@ an error rate. Recall and F1 are restricted to the same 8,790 annotated pairs.
 
 | Predicate | P | R | F1 | support |
 |---|---|---|---|---|
-| on | 0.88 | 0.88 | 0.88 | 1465 |
-| under | 0.84 | 0.81 | 0.83 | 1001 |
+| on | 0.95 | 0.81 | 0.88 | 1465 |
+| under | 0.92 | 0.75 | 0.83 | 1001 |
 | to the left of | 0.35 | 0.96 | 0.51 | 972 |
 | to the right of | 0.42 | 0.98 | 0.59 | 1174 |
-| in front of | 0.43 | 0.64 | 0.51 | 2013 |
-| behind | 0.36 | 0.66 | 0.46 | 1584 |
-| near | 0.12 | 1.00 | 0.21 | 717 |
+| in front of | 0.43 | 0.70 | 0.53 | 2013 |
+| behind | 0.35 | 0.71 | 0.47 | 1584 |
+| near | 0.11 | 1.00 | 0.20 | 717 |
 
 ### F.7 Bounding annotator agreement without overlapping assignments
 

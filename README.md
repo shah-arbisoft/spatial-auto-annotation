@@ -163,6 +163,22 @@ Lives in its own public repository (`robot-factcheck`).
 from this repository's caches; `analysis/score_votes.py` scores the exported
 votes sheet. The private answer key never enters the public repository.
 
+### What the container was checked against
+
+Build log with per-stage timings: `outputs/docker/build_summary.txt` — base
+image 193 s, system packages 31 s, Python dependencies including SAM2 and the
+forced CUDA torch reinstall 328 s.
+
+Inside the built image: `pytest -q` reports 66 passed; torch resolves to
+`2.5.1+cu121`; sam2, cv2, numpy, scipy, scikit-learn, Pillow and transformers
+all import. `/app` is 19.3 MB, most of it the geometry cache. Absent by
+design: the dataset, the credentials file (`.env.example` is the only
+environment file shipped), rendered annotations, the failure gallery, the
+figures and the video frames.
+
+Full verification record, including the file-by-file integrity scan that
+catches a half-written image: `outputs/docker/verification.md`.
+
 ## Licences
 
 YOLO (Ultralytics) AGPL-3.0 · Depth Anything v2 **Small** Apache 2.0 (avoid

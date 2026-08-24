@@ -207,7 +207,7 @@ later saturation, a higher plateau, and the recovery of `near`.
 
 The source paper's motivating example, an LLM planner that fails to remove a
 cube before grasping the book beneath it until spatial relations are
-supplied, is asserted on one scene. This section runs it as an experiment.
+supplied, is asserted on one scene and is run here as an experiment.
 
 **Design.** Twenty-five held-out scenes were selected in which a target
 object has a second resting on it, so any safe plan must move the occluder

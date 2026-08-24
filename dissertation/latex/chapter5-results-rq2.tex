@@ -93,7 +93,7 @@ Each symptom has a measured cause and a built remedy. Saturation within six epoc
 
 \section{The planner experiment: does the label source change what a robot would do?}
 
-The source paper's motivating example, an LLM planner that fails to remove a cube before grasping the book beneath it until spatial relations are supplied, is asserted on one scene. This section runs it as an experiment.
+The source paper's motivating example, an LLM planner that fails to remove a cube before grasping the book beneath it until spatial relations are supplied, is asserted on one scene and is run here as an experiment.
 
 \textbf{Design.} Twenty-five held-out scenes were selected in which a target object has a second resting on it, so any safe plan must move the occluder first. Each goes to an LLM planner in prompts differing only in what they state: \textbf{A} lists the objects alone, \textbf{B} adds the human relationships, \textbf{C} the automatically computed ones. One filter runs over both relation conditions, so neither is offered a relation the other was denied; density is not equalised, since matching a sparser source would mean discarding true relations. A plan is safe if it moves the occluder before grasping the target, judged by published rules (\texttt{eval/score\_\allowbreak{}planner.py}), so scoring is blind by construction. Appendix E.5 gives the filter, the prompts, the scene-level forensics and a scoring defect hand-reading caught. The experiment ran twice, on \texttt{gemini-flash-latest} and on the reasoning model \texttt{gemini-3.1-pro-preview}, with two conditions added on the larger planner only: \textbf{D} replaces the tool's relations with the vision-language model's from \S{}4.13, and \textbf{E} supplies the union of C and D.
 

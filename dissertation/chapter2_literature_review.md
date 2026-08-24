@@ -513,7 +513,7 @@ The dissertation answers the second and fourth objections empirically, in
 Chapters 5 and 6 for systematic error and in Chapters 4 and 7 for the
 reference frame, and it concedes the third while reporting what mitigation
 was possible. The first, vocabulary scale, it does not answer at all and
-records as a limitation (§9.3). The fifth is a different project.
+records as a limitation (§9.3); the fifth is a different project.
 
 ## 2.10 Critical comparison and the research gap
 

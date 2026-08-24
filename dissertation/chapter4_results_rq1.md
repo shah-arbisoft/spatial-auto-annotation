@@ -94,8 +94,7 @@ excluded (Chapter 3).
 
 ## 4.3 Precision on the annotated pairs
 
-Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.93 on the
-support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair
+Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.92 on the support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair
 and 0.11 on `near` (full table in Appendix F.6). Every one is bounded below by
 construction: the human typically recorded one or two relations where several
 hold at once, a pair being near, left-of and in-front-of simultaneously.
@@ -146,29 +145,29 @@ sheet).
 
 | Group | Gold | Emit rate | Agreement when committed | Convention | Raw recall | Aligned recall |
 |---|---|---|---|---|---|---|
-| group_0 | 724 | 0.92 | 0.95 | same | 0.88 | 0.88 |
-| group_1 | 639 | 0.98 | 1.00 | same | 0.98 | 0.98 |
-| group_2 | 351 | 0.58 | 1.00 | same | 0.58 | 0.58 |
-| group_3 | 258 | 0.54 | 0.98 | same | 0.53 | 0.53 |
+| group_0 | 724 | 0.94 | 0.95 | same | 0.89 | 0.89 |
+| group_1 | 639 | 1.00 | 1.00 | same | 1.00 | 1.00 |
+| group_2 | 351 | 0.85 | 1.00 | same | 0.85 | 0.85 |
+| group_3 | 258 | 0.82 | 0.99 | same | 0.81 | 0.81 |
 | group_4 | 65 | 1.00 | 0.57 | same | 0.57 | 0.57 |
 | group_5 | 371 | 1.00 | 0.99 | same | 0.98 | 0.98 |
-| group_6 | 415 | 0.98 | **0.05** | **inverted** | 0.05 | 0.93 |
-| group_7 | 330 | 0.90 | 1.00 | same | 0.90 | 0.90 |
-| group_8 | 444 | 0.73 | **0.02** | **inverted** | 0.01 | 0.71 |
-| **overall** | 3597 | | | | **0.65** | **0.84** |
+| group_6 | 415 | 0.99 | **0.05** | **inverted** | 0.05 | 0.94 |
+| group_7 | 330 | 0.94 | 1.00 | same | 0.94 | 0.94 |
+| group_8 | 444 | 0.84 | **0.02** | **inverted** | 0.02 | 0.82 |
+| **overall** | 3597 | | | | **0.70** | **0.91** |
 
 {{fig:front-behind-decomposition}} plots the same decomposition, where the
 two inverted groups are the pair sitting alone near zero. (The table reports
-the shipped cascade, depth ordering plus the ground-plane fallback of §4.9;
-the fallback roughly doubled the emit rates of the abstention-heavy groups 2
-and 3.) The pooled 0.65 decomposes into three distinct causes:
+the shipped cascade, depth ordering plus the ground-plane fallback of §4.9,
+which lifted the emit rates of the abstention-heavy groups 2 and 3 by about
+half.) The pooled 0.70 decomposes into three distinct causes:
 
 1. **Direction agreement is near-perfect where the tool commits**, 0.95–1.00
    for six of the eight groups with meaningful counts. Genuine depth-ordering
    errors are rare.
 2. **Two annotator groups used the inverted convention.** Groups 6 and 8
    agree with the committed direction 2–5% of the time; flipping their labels
-   recovers 0.93/0.71 and aligned overall recall is 0.84 (alignment uses one
+   recovers 0.94/0.82 and aligned overall recall is 0.91 (alignment uses one
    disclosed bit per group, the majority direction of its own labels). After
    `near`, this is a second measured annotation defect, and it is the
    reference-frame ambiguity RoboSpatial formalises (§2.5) observed in the
@@ -256,12 +255,12 @@ The two axes divide the seven predicates differently, and saying so plainly
 matters more than a single headline. On **recall**, five reach
 human-comparable levels at 0.75 to 1.00, mean 0.85 and 0.74 on annotators no
 threshold ever saw; the exception is the depth pair, at 0.70/0.71 pooled and
-0.84 once the two inverted groups are aligned. On **precision**, a different
-five audit blind at 0.79–1.00, the two laterals, the two depth
-predicates and `near`, each on 24 samples, so the claim they support is
-comparability; the exception there is support, at 0.535 [0.42, 0.65] on 71
-samples of the shipped rule, up from 0.404 before §4.14 traced the shortfall
-to a threshold fitted on a metric that could not see the error it controls.
+0.91 once the two inverted groups are aligned. On **precision**, a different
+five audit blind at 0.79–1.00, the two laterals, the two depth predicates
+and `near`, each on 24 samples, so the claim they support is comparability;
+the exception there is support, at 0.535 [0.42, 0.65] on 71 samples of the
+shipped rule, up from 0.404 before §4.14 traced the shortfall to a threshold
+fitted on a metric that could not see the error it controls.
 
 So no predicate is weak on both axes and none is strong on both except the
 laterals and `near`. Support recalls well and cannot be trusted where it

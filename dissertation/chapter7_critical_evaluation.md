@@ -119,7 +119,7 @@ exhaustively equally-close pairs were labelled. Yet all three annotators'
 labels sit inside one fitted threshold (held-out recall 1.0): consistent
 *notion*, non-exhaustive *application*. 2. Two annotator groups applied the
 **inverted direction convention** for in front of / behind (2–5% agreement
-where the tool commits; flipping recovers 0.93/0.71). 3. Support pairs were
+where the tool commits; flipping recovers 0.94/0.82). 3. Support pairs were
 often labelled in **one direction only** (one group all-`on`, another
 all-`under`). 4. The official guidance, confirmed at the annotation tool's
 repository, is **vocabulary lists with no definitions** (§4.7), which is
