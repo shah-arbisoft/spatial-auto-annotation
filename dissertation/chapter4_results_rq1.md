@@ -50,11 +50,9 @@ the same figures with the baselines.
 | to the right of | 1174 | 0.98 | 0.99 | 0.13 | 0.00 | 0.99 |
 | in front of | 2013 | 0.70 | 0.20 | 0.13 | 1.00* | 0.00 |
 | behind | 1584 | 0.71 | 0.37 | 0.16 | 0.00 | 0.00 |
-| near | 717 | 1.00* | 1.00 | 0.16 | 0.00 | 0.87 |
+| near | 717 | 1.00† | 1.00 | 0.16 | 0.00 | 0.87 |
 | **mean** | 8,926 | **0.85** | **0.74** | 0.14 | 0.14 | 0.63 |
 
-\* the majority baseline emits "in front of" everywhere, trivially recalling
-that class and nothing else. The near cell rounds 715/717 = 0.997 (§4.9).
 The held-out front/behind cells (0.20/0.37) are dominated by two held-out
 annotator groups that labelled the pair with the *opposite direction
 convention*; §4.5 decomposes this, and convention-aligned depth recall is
@@ -94,13 +92,15 @@ excluded (Chapter 3).
 
 ## 4.3 Precision on the annotated pairs
 
-Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.92 on the support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair
-and 0.11 on `near` (full table in Appendix F.6). Every one is bounded below by
-construction: the human typically recorded one or two relations where several
-hold at once, a pair being near, left-of and in-front-of simultaneously.
-`near` is the extreme case, emitted wherever the fitted gap holds while only 3
-of 9 annotator groups ever used the label. That is why the protocol includes
-the audit (§4.4) instead of reading these columns at face value.
+Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.92 on the
+support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair
+and 0.11 on `near` (full table in Appendix F.6). Every one is bounded below
+by construction: the human typically recorded one or two relations where
+several hold at once, a pair being near, left-of and in-front-of
+simultaneously. `near` is the extreme case, emitted wherever the fitted gap
+holds while only 3 of 9 annotator groups ever used the label. That is why
+the protocol includes the audit (§4.4) instead of reading these columns at
+face value.
 
 
 ## 4.4 Manual audit of extra predictions (true-precision estimate)

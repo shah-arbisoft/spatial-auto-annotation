@@ -16,8 +16,8 @@ All 836 images are annotated in five minutes on a consumer GPU, at 20 times
 the manual pass's label density.
 
 Against 8,926 human relationships the automatic labels match or exceed the
-human process on five of seven predicates (0.85 mean recall, 0.74 on held-
-out annotators). A blinded, decoy-controlled audit of 191 sampled claims
+human process on five of seven predicates (0.85 mean recall, 0.74 on
+held-out annotators). A blinded, decoy-controlled audit of 191 sampled claims
 puts precision at 0.79–1.00 for the lateral, depth and proximity predicates,
 on 24 samples each and so with wide intervals, but at **0.54 [0.42, 0.65]**
 on 71 samples for support, against 0.83 from an independent vision-language

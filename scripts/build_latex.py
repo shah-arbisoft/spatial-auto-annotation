@@ -120,6 +120,7 @@ UNICODE = {
     # \S4.12 was always safe, but \S is braced for the same reason.
     "\u201c": "``", "\u201d": "''", "\u00a7": r"\S{}", "\u2248": r"$\approx$",
     "\u2264": r"$\leq$", "\u2265": r"$\geq$", "\u00d7": r"$\times$",
+    "\u2020": r"\textdagger{}",
     "\u2192": r"$\rightarrow$", "\u2190": r"$\leftarrow$", "\u00b1": r"$\pm$",
     "\u03c4": r"$\tau$", "\u2212": "-", "\u2260": r"$\neq$",
     "\u00b7": r"$\cdot$", "\u00b0": r"$^{\circ}$", "\u03b5": r"$\epsilon$",
@@ -188,6 +189,17 @@ def inline(text: str) -> str:
     REFS: dict[int, str] = {}
     text = re.sub(r"\{\{(fig:[A-Za-z0-9_-]+)\}\}", stash_ref, text)
 
+    # A backslash-escaped asterisk is Markdown for a literal *. Stashed with
+    # the code spans so esc() cannot turn the backslash into
+    # \textbackslash{}, and so the surviving * cannot pair with a real
+    # italic marker later in the paragraph and italicise the span between.
+    def stash_literal_star(m):
+        spans.append(None)
+        REFS[len(spans) - 1] = "*"
+        return f"\x00{len(spans) - 1}\x00"
+
+    text = re.sub(r"\\\*", stash_literal_star, text)
+
     # 10^-5 -> a real exponent. Stashed with the code spans because esc()
     # would otherwise escape the caret and print it literally, which is how
     # a p-value in 5.7 reached the page reading "10^-5".
@@ -236,8 +248,13 @@ TABLES = {
     # them behind shifted every caption from the ablation table onward.
     "chapter4_results_rq1.md": [
         # 4.2
+        # The legend lives in the caption, not in a following paragraph: the
+        # table floats and the paragraph does not, so on one build they came
+        # out two pages apart with a full-page figure between them.
         "Per-predicate recall of the human triplets, pooled and on held-out "
-        "annotators, against three baselines.",
+        "annotators, against three baselines. *the majority baseline emits "
+        "“in front of” everywhere, trivially recalling that class "
+        "and nothing else; †near rounds 715/717 = 0.997 (§4.9).",
         # 4.4
         "Manual audit of a stratified sample of extra predictions against the "
         "pre-gate box rule, with Wilson intervals. Superseded by the blind "

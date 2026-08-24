@@ -633,7 +633,7 @@ objects with below-threshold contact (flat stacked books) or surfaces the
 detector missed; the machinery and its cache are retained as an ablation
 (`outputs/surface_guard_ablation/`). (ii) *A larger depth model* (Depth
 Anything v2 Base, 4× the parameters) moved front/behind recall by
-+0.001/+0.002: the remaining depth ambiguity lives in the scenes, not in
++0.001/−0.002: the remaining depth ambiguity lives in the scenes, not in
 model capacity, and the Small variant's Apache licence is kept. Both null
 results bound where further engineering can and cannot help.
 

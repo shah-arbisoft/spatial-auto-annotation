@@ -33,7 +33,7 @@ Figure~\ref{fig:rq1-recall} plots the per-predicate result; the table below carr
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lrrrrrr}
-\caption[Per-predicate recall of the human triplets, pooled]{Per-predicate recall of the human triplets, pooled and on held-out annotators, against three baselines.}\\
+\caption[Per-predicate recall of the human triplets, pooled]{Per-predicate recall of the human triplets, pooled and on held-out annotators, against three baselines. *the majority baseline emits ``in front of'' everywhere, trivially recalling that class and nothing else; \textdagger{}near rounds 715/717 = 0.997 (\S{}4.9).}\\
 \hline
 Predicate & Gold & Ours & Ours (held-out) & Random & Majority & Box-only \\
 \hline
@@ -48,13 +48,13 @@ to the left of & 972 & 0.97 & 0.95 & 0.13 & 0.00 & 0.97 \\
 to the right of & 1174 & 0.98 & 0.99 & 0.13 & 0.00 & 0.99 \\
 in front of & 2013 & 0.70 & 0.20 & 0.13 & 1.00* & 0.00 \\
 behind & 1584 & 0.71 & 0.37 & 0.16 & 0.00 & 0.00 \\
-near & 717 & 1.00* & 1.00 & 0.16 & 0.00 & 0.87 \\
+near & 717 & 1.00\textdagger{} & 1.00 & 0.16 & 0.00 & 0.87 \\
 \textbf{mean} & 8,926 & \textbf{0.85} & \textbf{0.74} & 0.14 & 0.14 & 0.63 \\
 \hline
 \end{longtable}
 \end{center}
 
-\textbackslash{}\textit{ the majority baseline emits "in front of" everywhere, trivially recalling that class and nothing else. The near cell rounds 715/717 = 0.997 (\S{}4.9). The held-out front/behind cells (0.20/0.37) are dominated by two held-out annotator groups that labelled the pair with the }opposite direction convention*; \S{}4.5 decomposes this, and convention-aligned depth recall is 0.84.
+The held-out front/behind cells (0.20/0.37) are dominated by two held-out annotator groups that labelled the pair with the \textit{opposite direction convention}; \S{}4.5 decomposes this, and convention-aligned depth recall is 0.84.
 
 These are population values, not sample estimates: every human triplet is scored. Whether another batch would give the same numbers is answered by a cluster bootstrap over images (\texttt{eval/uncertainty.py}, 2,000 resamples, whole images resampled so triplets sharing a scene, a depth map and an annotator stay together). The 95\% intervals are narrow where the tool is strong and materially wider on the depth pair, which is the signature of a predicate decided by scene composition, which no stable rule governs; the bootstrap ran on the labels of \S{}4.9 and its widths, not its centres, are what the argument uses. Held-out intervals appear in \S{}4.6.
 
