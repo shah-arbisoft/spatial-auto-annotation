@@ -16,7 +16,15 @@
 \usepackage{longtable}
 \usepackage{tocloft}
 \usepackage{enumitem}
-\usepackage{mathptmx}   % Times, as the Word template specifies
+% Latin Modern first, purely for a Type1 typewriter face. Without it the
+% typewriter default stays cmtt, for which MiKTeX has no Type1 outline
+% here, so it generates bitmaps and two thirds of the pages ship Type3
+% fonts: a raster that prints badly, resists copy and search, and can
+% lose glyphs in viewers that substitute for it.
+\usepackage{lmodern}
+% Times for roman and maths, as the Word template specifies. Loading it
+% after lmodern reasserts Times for rm and leaves lmtt in place for tt.
+\usepackage{mathptmx}
 \usepackage{array}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -190,7 +198,7 @@ will be penalised.
 \noindent Signature: \rule{6cm}{0.4pt} \hfill Date: \rule{4cm}{0.4pt}
 
 \vspace{1cm}
-\noindent \textbf{Total Number of Words:} 33,359
+\noindent \textbf{Total Number of Words:} 33,358
 
 \cleardoublepage
 

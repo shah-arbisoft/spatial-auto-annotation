@@ -342,8 +342,8 @@ model that trains longer, covers five times more of the relation types the
 manual annotation never recorded, reproduces across seeds more than eight
 times more tightly, ranks level overall, and ranks slightly ahead on the one
 test annotator with no measured defect. The evidence supports a conditional
-claim: **automatic labels are better training material wherever ground truth
-means geometry; human labels remain better wherever it means human
+claim: **automatic labels are the better training material wherever ground
+truth means geometry, and do not overtake human labels wherever it means
 annotation habits.** The first condition is the operative one for a robot,
 which needs relations that are *correct* before they are *human-like*, and
 §5.7 tests that one link further down, where it survives.
