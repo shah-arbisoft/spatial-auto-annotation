@@ -19,6 +19,8 @@ answers, and the votes are participant data.
 """
 from __future__ import annotations
 
+import collections
+import csv
 import json
 import math
 import subprocess
@@ -30,6 +32,7 @@ REPORT = ROOT / "outputs" / "validation" / "report.json"
 PACK = ROOT / "outputs" / "audit_v3"
 OUT = ROOT / "outputs" / "crowd_validation.json"
 TABLE = ROOT / "outputs" / "tables" / "crowd_validation.md"
+MAJORITY = ROOT / "outputs" / "validation" / "majority_verdicts.csv"
 
 PREDICATES = ["on", "under", "to the left of", "to the right of",
               "in front of", "behind", "near"]
@@ -74,21 +77,36 @@ def main() -> int:
     audit = audit_arm()
     a_pred = audit["precision"]
 
+    # Per-predicate figures are computed here rather than taken from
+    # report.json, because since the control arm went live that file's
+    # crowd_precision_per_predicate pools both arms: `on` reads n=119, which
+    # is 63 tool claims plus 56 human ones. Compared against the author's
+    # tool-only audit that inflates support from 0.413 to 0.688 and reverses
+    # what the comparison says. Control ids start at 3001 by construction,
+    # so the two arms separate on the id alone.
+    per_arm = collections.defaultdict(lambda: [0, 0])
+    for m in csv.DictReader(MAJORITY.open(encoding="utf-8")):
+        v = (m["crowd"] or "").strip().lower()
+        if v not in ("y", "n"):
+            continue
+        a = "control" if int(m["id"]) >= 3001 else "treatment"
+        per_arm[(a, m["predicate"])][1] += 1
+        if v == "y":
+            per_arm[(a, m["predicate"])][0] += 1
+
     rows = []
     ck = cn = 0
     for p in PREDICATES:
-        c = rep["crowd_precision_per_predicate"].get(p)
-        if not c:
+        k, n = per_arm[("treatment", p)]
+        if not n:
             continue
-        k = round(c["precision"] * c["n"])
         if p in SUPPORT:
             ck += k
-            cn += c["n"]
+            cn += n
         a = a_pred.get(p, {})
         rows.append({
             "predicate": p,
-            "crowd": {"k": k, "n": c["n"], "p": c["precision"],
-                      "ci": [c["lo"], c["hi"]]},
+            "crowd": {"k": k, "n": n, "p": k / n, "ci": list(wilson(k, n))},
             "author": arm(a.get("author")),
             "model": arm(a.get("model")),
         })
@@ -100,6 +118,20 @@ def main() -> int:
         "author": arm(sup["author"]),
         "model": arm(sup["model"]),
     }
+
+    # The control arm: the same raters, the same interface and the same
+    # "wrong when unsure" rule applied to claims the humans wrote, so the
+    # tool's score has something to be read against.
+    control = {}
+    for p in PREDICATES:
+        k, n = per_arm[("control", p)]
+        if n:
+            control[p] = {"k": k, "n": n, "p": k / n, "ci": list(wilson(k, n))}
+    csk = sum(per_arm[("control", p)][0] for p in SUPPORT)
+    csn = sum(per_arm[("control", p)][1] for p in SUPPORT)
+    control["support_pooled"] = {"k": csk, "n": csn,
+                                 "p": csk / csn if csn else None,
+                                 "ci": list(wilson(csk, csn))}
 
     out = {
         "label_generation": "pre-refit (on_contact_min 0.60), matching audit_v3",
@@ -124,8 +156,8 @@ def main() -> int:
         "support_pooled": pooled,
         "author_bias_check": rep["author_bias_check"],
         "krippendorff_alpha_crowd": rep["krippendorff_alpha_crowd"],
-        "control_arm": "not delivered; the crowd arm carries no decoys, so"
-                       " rater calibration is unmeasured",
+        "control_arm": control,
+        "arm_totals": rep.get("by_arm"),
     }
     OUT.write_text(json.dumps(out, indent=2), encoding="utf-8")
 
@@ -155,6 +187,15 @@ def main() -> int:
               + ("  <-- expected 0 after the 11 Aug server fix"
                  if dups and rep.get("n_raw", 0) > 238 else ""))
     print("\n".join("  " + ln for ln in lines))
+    at = out.get("arm_totals") or {}
+    if at.get("control"):
+        c, tr = at["control"], at["treatment"]
+        print(f"  control arm (human-written claims, same raters): "
+              f"{c['judged_true']}/{c['claims']} {c['precision']:.3f}")
+        print(f"  treatment arm (tool claims)                    : "
+              f"{tr['judged_true']}/{tr['claims']} {tr['precision']:.3f}")
+        print(f"  gap {tr['precision'] - c['precision']:+.3f} -- the raters are "
+              "not uniformly harsh, so a low tool score is not rater severity")
     ab = out["author_bias_check"]
     print(f"  author agreement {ab['agreement']:.3f}, kappa {ab['kappa']:.3f}"
           f" on n={ab['n']}")

@@ -1,116 +1,230 @@
 {
-  "n_raw": 238,
-  "n_clean": 226,
-  "n_raters": 5,
-  "n_items_total": 2002,
-  "n_items_voted": 176,
+  "n_raw": 1427,
+  "n_clean": 1415,
+  "n_raters": 20,
+  "n_items_total": 1000,
+  "n_items_voted": 832,
   "coverage_by_votes": {
-    "1": 176,
-    "2": 46,
-    "3": 4,
-    "5": 0
+    "1": 832,
+    "2": 147,
+    "3": 147,
+    "5": 88
   },
-  "ties_resolved_to_n": 12,
+  "ties_resolved_to_n": 2,
   "crowd_precision_overall": {
-    "n": 176,
-    "precision": 0.5852272727272727,
+    "n": 832,
+    "precision": 0.8341346153846154,
     "ci95": [
-      0.511376115774452,
-      0.6554373467392266
+      0.8073353811327437,
+      0.85786242668156
     ]
   },
   "crowd_precision_per_predicate": {
     "on": {
-      "n": 31,
-      "precision": 0.45161290322580644,
-      "lo": 0.29161482836586106,
-      "hi": 0.6222812039633085
+      "n": 119,
+      "precision": 0.6386554621848739,
+      "lo": 0.5492559860401528,
+      "hi": 0.7193826510339328
     },
     "under": {
-      "n": 31,
-      "precision": 0.2903225806451613,
-      "lo": 0.1609562071843287,
-      "hi": 0.4659265995754067
+      "n": 128,
+      "precision": 0.734375,
+      "lo": 0.6518454567766524,
+      "hi": 0.8032461076461094
     },
     "to the left of": {
-      "n": 22,
-      "precision": 0.7272727272727273,
-      "lo": 0.5184787630099802,
-      "hi": 0.8684941798418556
+      "n": 121,
+      "precision": 0.9008264462809917,
+      "lo": 0.8346292610982092,
+      "hi": 0.9423553337804208
     },
     "to the right of": {
-      "n": 18,
-      "precision": 0.7222222222222222,
-      "lo": 0.49126922453805477,
-      "hi": 0.8750043085364452
+      "n": 111,
+      "precision": 0.9279279279279279,
+      "lo": 0.8641960123478968,
+      "hi": 0.963030358583891
     },
     "in front of": {
-      "n": 27,
-      "precision": 0.5925925925925926,
-      "lo": 0.4072638305536409,
-      "hi": 0.7548548662714265
+      "n": 121,
+      "precision": 0.859504132231405,
+      "lo": 0.7864876625984059,
+      "hi": 0.9103954276535615
     },
     "behind": {
-      "n": 28,
-      "precision": 0.5714285714285714,
-      "lo": 0.390704789856154,
-      "hi": 0.7349170381926877
+      "n": 120,
+      "precision": 0.85,
+      "lo": 0.7753231505975375,
+      "hi": 0.9029626596633118
     },
     "near": {
-      "n": 19,
-      "precision": 1.0,
-      "lo": 0.8318156346315496,
-      "hi": 1.0
+      "n": 112,
+      "precision": 0.9464285714285714,
+      "lo": 0.8880283464156127,
+      "hi": 0.9752193987812767
     }
   },
   "author_bias_check": {
-    "n": 133,
-    "agreement": 0.7443609022556391,
-    "kappa": 0.47011952191235057
+    "n": 147,
+    "agreement": 0.8707482993197279,
+    "kappa": 0.6832255869343313
   },
   "by_arm": {
-    "treatment": {
-      "claims": 176,
-      "judged_true": 103,
-      "precision": 0.5852272727272727,
+    "control": {
+      "claims": 420,
+      "judged_true": 395,
+      "precision": 0.9404761904761905,
       "wilson95": [
-        0.5114,
-        0.6554
+        0.9136,
+        0.9594
+      ]
+    },
+    "treatment": {
+      "claims": 412,
+      "judged_true": 299,
+      "precision": 0.7257281553398058,
+      "wilson95": [
+        0.6807,
+        0.7666
       ]
     }
   },
-  "krippendorff_alpha_crowd": 0.39697265625,
+  "krippendorff_alpha_crowd": 0.7029428306755765,
   "raters": [
     {
-      "rater": "8143b4ca",
-      "votes": 120,
-      "median_ms": 6212,
+      "rater": "9346efba-977",
+      "votes": 218,
+      "median_ms": 3045,
       "fast_frac": 0.0,
-      "agree_with_others": 0.71
+      "agree_with_others": 0.97
     },
     {
-      "rater": "9346efba",
-      "votes": 45,
-      "median_ms": 6016,
+      "rater": "8143b4ca-f7b",
+      "votes": 195,
+      "median_ms": 6022,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.82
+    },
+    {
+      "rater": "f942af4e-b39",
+      "votes": 105,
+      "median_ms": 2164,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.97
+    },
+    {
+      "rater": "212cf995-e7b",
+      "votes": 90,
+      "median_ms": 4249,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.86
+    },
+    {
+      "rater": "5f499f76-c32",
+      "votes": 90,
+      "median_ms": 2270,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.86
+    },
+    {
+      "rater": "f78a4392-936",
+      "votes": 90,
+      "median_ms": 2351,
       "fast_frac": 0.0,
       "agree_with_others": 1.0
     },
     {
-      "rater": "212cf995",
-      "votes": 45,
-      "median_ms": 4396,
+      "rater": "f7357497-514",
+      "votes": 86,
+      "median_ms": 3879,
       "fast_frac": 0.0,
-      "agree_with_others": 0.71
+      "agree_with_others": 0.9
     },
     {
-      "rater": "e28d853d",
+      "rater": "5c66ac70-5b9",
+      "votes": 75,
+      "median_ms": 2620,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.97
+    },
+    {
+      "rater": "980250b7-495",
+      "votes": 75,
+      "median_ms": 4506,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.93
+    },
+    {
+      "rater": "2e22e0dd-a8a",
+      "votes": 45,
+      "median_ms": 2058,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.91
+    },
+    {
+      "rater": "abf67783-fe6",
+      "votes": 45,
+      "median_ms": 2274,
+      "fast_frac": 0.0,
+      "agree_with_others": 1.0
+    },
+    {
+      "rater": "ca62226e-6ae",
+      "votes": 45,
+      "median_ms": 2170,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.93
+    },
+    {
+      "rater": "553cf3e0-990",
+      "votes": 45,
+      "median_ms": 2419,
+      "fast_frac": 0.0,
+      "agree_with_others": null
+    },
+    {
+      "rater": "7a7bc500-758",
+      "votes": 45,
+      "median_ms": 2453,
+      "fast_frac": 0.0,
+      "agree_with_others": 1.0
+    },
+    {
+      "rater": "27d9c55f-eda",
+      "votes": 45,
+      "median_ms": 1918,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.8
+    },
+    {
+      "rater": "7db55609-3fc",
+      "votes": 45,
+      "median_ms": 2011,
+      "fast_frac": 0.0,
+      "agree_with_others": 1.0
+    },
+    {
+      "rater": "fb1a162f-e2f",
+      "votes": 30,
+      "median_ms": 2152,
+      "fast_frac": 0.0,
+      "agree_with_others": 0.87
+    },
+    {
+      "rater": "4fead6c5-e5c",
+      "votes": 30,
+      "median_ms": 2367,
+      "fast_frac": 0.0,
+      "agree_with_others": null
+    },
+    {
+      "rater": "e28d853d-a61",
       "votes": 15,
       "median_ms": 6952,
       "fast_frac": 0.0,
-      "agree_with_others": 0.85
+      "agree_with_others": 0.8
     },
     {
-      "rater": "eede75a4",
+      "rater": "eede75a4-149",
       "votes": 1,
       "median_ms": 12985,
       "fast_frac": 0.0,
