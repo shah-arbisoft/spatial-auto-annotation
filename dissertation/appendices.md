@@ -539,7 +539,7 @@ that affects a label is buried in a function. `near_T` is fitted by
 
 ## Appendix D: Ablation derivations
 
-Chapter 4 (§4.9) summarises the nine ablations and their verdicts. This
+Chapter 4 (§4.9) summarises the ten ablations and their verdicts. This
 appendix gives the derivations: how each shipped parameter was calibrated on
 the training annotator groups, what the held-out groups then reported, and
 what the audits of the affected predictions found. The two declined

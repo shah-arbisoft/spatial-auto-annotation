@@ -95,7 +95,8 @@ paper flagged.
 
 - **RQ1 (accuracy).** Can spatial-relationship annotation for robot images
   be automated to a quality comparable to human annotation? Measured per
-  predicate against the ~900 human-labelled images.
+  predicate against the 8,926 human-recorded relationships in the released
+  subset (§4.1 fixes the counts).
 - **RQ2 (utility).** Are the automatic labels good enough to train a
   relation-prediction model as effectively as human labels are? Measured
   with a controlled classifier trained once on each label source.

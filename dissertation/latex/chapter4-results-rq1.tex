@@ -160,7 +160,7 @@ Because the nine groups labelled disjoint batches of unequal difficulty, this da
 
 \section{Answer to RQ1}
 
-The two axes divide the seven predicates differently, and saying so plainly matters more than a single headline. On \textbf{recall}, five reach human-comparable levels at 0.75 to 1.00, mean 0.85 and 0.74 on annotators no threshold ever saw; the exception is the depth pair, at 0.70/0.71 pooled and 0.91 once the two inverted groups are aligned. On \textbf{precision}, a different five audit blind at 0.79--1.00, the two laterals, the two depth predicates and \texttt{near}, each on 24 samples, so the claim they support is comparability; the exception there is support, at 0.535 [0.42, 0.65] on 71 samples of the shipped rule, up from 0.404 before \S{}4.14 traced the shortfall to a threshold fitted on a metric that could not see the error it controls.
+The two axes divide the seven predicates differently, and saying so plainly matters more than a single headline. On \textbf{recall}, five reach human-comparable levels, 0.75 to 1.00 as Table 4.1 reports them, mean 0.85 and 0.74 on annotators no threshold ever saw; the exception is the depth pair, at 0.70/0.71 pooled and 0.91 once the two inverted groups are aligned. On \textbf{precision}, a different five audit blind at 0.79--1.00, the two laterals, the two depth predicates and \texttt{near}, each on 24 samples, so the claim they support is comparability; the exception there is support, at 0.535 [0.42, 0.65] on 71 samples of the shipped rule, up from 0.404 before \S{}4.14 traced the shortfall to a threshold fitted on a metric that could not see the error it controls.
 
 So no predicate is weak on both axes and none is strong on both except the laterals and \texttt{near}. Support recalls well and cannot be trusted where it adds; the depth pair is trustworthy where it commits and commits less often than the annotators did. Section 9.1 answers RQ1 against the criteria of \S{}1.2.2 on that basis.
 
@@ -175,7 +175,7 @@ Nine ablations were run. Seven sweep a shipped parameter over the cached geometr
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
-\begin{longtable}{>{\raggedright\arraybackslash}p{0.031\textwidth}>{\raggedright\arraybackslash}p{0.251\textwidth}>{\raggedright\arraybackslash}p{0.286\textwidth}>{\raggedright\arraybackslash}p{0.369\textwidth}}
+\begin{longtable}{>{\raggedright\arraybackslash}p{0.042\textwidth}>{\raggedright\arraybackslash}p{0.263\textwidth}>{\raggedright\arraybackslash}p{0.279\textwidth}>{\raggedright\arraybackslash}p{0.353\textwidth}}
 \caption[The nine ablations]{The nine ablations: what each tests, the setting that shipped, and the verdict on held-out annotators.}\\
 \hline
 \# & What it tests & Setting & Verdict \\
@@ -194,6 +194,7 @@ A6 & \texttt{near} contact exclusion & on & \textbf{shipped}; costs 2 recalled t
 A7 & ground-plane depth fallback & \texttt{plane\_\allowbreak{}band} 0.005 & \textbf{shipped}; front/behind 0.52/0.55 $\rightarrow$ 0.70/0.71, mean recall 0.79 $\rightarrow$ 0.85 \\
 A8 & larger depth model (Base, 4$\times$ parameters) & n/a & \textbf{declined}; +0.001/-0.002 front/behind, mean recall marginally lower \\
 A9 & multi-frame depth (two-view triangulation) & n/a & \textbf{declined}; 0.706 against the monocular cascade's 0.902, on 9\% of pairs \\
+A10 & geometric drop fraction in place of the class guard & n/a & \textbf{declined}; the resting and held populations overlap, no threshold separates them (D.8) \\
 \hline
 \end{longtable}
 \end{center}

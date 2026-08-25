@@ -17,7 +17,7 @@ GPU, no human deciding any label, the dataset's formats written
 byte-compatibly. **O2** is the specification, with every threshold fitted on
 groups 0 to 5 alone. **O3** is the fidelity study, mean recall 0.85 and 0.74
 on annotators no threshold saw, against three baselines, a vision-language
-model, nine ablations and audited precision. **O4** attributes every one of
+model, ten ablations and audited precision. **O4** attributes every one of
 the 1,689 missed triplets to a cause, leaving roughly 7% genuine tool error
 (§4.10, §7.2). **O5** is the controlled experiment, 0.75 against 0.30 human
 and 0.36 self-trained. **O6** repeats it in the source paper's framework
@@ -34,8 +34,7 @@ verdict against those criteria and its conditions.
 **RQ1 is answered yes on five of seven predicates and qualified on two.** The
 criterion was per-predicate recall on annotator groups no threshold ever saw,
 judged against two references fixed in advance. One of them is met and the
-other turned out to be unavailable. The trivial baselines are beaten by a wide
-margin, 0.85 against 0.14. The second asked how well two human annotators would agree with each other,
+other turned out to be unavailable. The trivial baselines are beaten by a wide margin: 0.74 on the held-out groups the criterion names, 0.85 pooled, against 0.14 for both random and majority. The second asked how well two human annotators would agree with each other,
 and this dataset cannot say: the nine groups labelled disjoint batches, and
 §4.6 reports the Fréchet bound over them as a measurement the data cannot
 support, since the batches differ threefold in object density. That interval

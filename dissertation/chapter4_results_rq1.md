@@ -258,14 +258,15 @@ predicates, which §7.3 draws out.
 
 The two axes divide the seven predicates differently, and saying so plainly
 matters more than a single headline. On **recall**, five reach
-human-comparable levels at 0.75 to 1.00, mean 0.85 and 0.74 on annotators no
-threshold ever saw; the exception is the depth pair, at 0.70/0.71 pooled and
-0.91 once the two inverted groups are aligned. On **precision**, a different
-five audit blind at 0.79–1.00, the two laterals, the two depth predicates
-and `near`, each on 24 samples, so the claim they support is comparability;
-the exception there is support, at 0.535 [0.42, 0.65] on 71 samples of the
-shipped rule, up from 0.404 before §4.14 traced the shortfall to a threshold
-fitted on a metric that could not see the error it controls.
+human-comparable levels, 0.75 to 1.00 as Table 4.1 reports them, mean 0.85
+and 0.74 on annotators no threshold ever saw; the exception is the depth
+pair, at 0.70/0.71 pooled and 0.91 once the two inverted groups are aligned.
+On **precision**, a different five audit blind at 0.79–1.00, the two
+laterals, the two depth predicates and `near`, each on 24 samples, so the
+claim they support is comparability; the exception there is support, at
+0.535 [0.42, 0.65] on 71 samples of the shipped rule, up from 0.404 before
+§4.14 traced the shortfall to a threshold fitted on a metric that could not
+see the error it controls.
 
 So no predicate is weak on both axes and none is strong on both except the
 laterals and `near`. Support recalls well and cannot be trusted where it
@@ -309,6 +310,7 @@ optimised against.
 | A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.70/0.71, mean recall 0.79 → 0.85 |
 | A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/−0.002 front/behind, mean recall marginally lower |
 | A9 | multi-frame depth (two-view triangulation) | n/a | **declined**; 0.706 against the monocular cascade's 0.902, on 9% of pairs |
+| A10 | geometric drop fraction in place of the class guard | n/a | **declined**; the resting and held populations overlap, no threshold separates them (D.8) |
 
 Three changed the headline table materially, and their order is this
 section's argument. The audit localised a support precision failure; a
