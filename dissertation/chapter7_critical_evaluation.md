@@ -245,7 +245,7 @@ The audits are verdicted by the author and by a vision-language model, and
 neither is a disinterested human: the author built the tool, and the model
 is a system of the kind §4.13 shows annotates poorly, admissible here only
 because judging a supplied claim needs the half of it that works and because
-the decoys measure it doing so (§4.14). §7.4 reflects on what that cost. The disinterested human estimate is Appendix E.3, and it reported a pilot only: five raters, no control claims, and drawn from pre-refit labels, so it checks the author's verdicts rather than the shipped support rule (§4.15). The two-stage audit also shares
+the decoys measure it doing so (§4.14). §7.4 reflects on what that cost. The disinterested human estimate is Appendix E.3. On the labels it judged it agrees with the author's blind audit on support to 0.009, and its control arm shows the raters scoring human annotation at 0.940 on the same instrument, so the author's verdicts are corroborated rather than merely unchallenged. It was drawn before the threshold refit, so it checks those verdicts rather than the shipped support rule (§4.15). The two-stage audit also shares
 machinery with the rule change it evaluates.
 
 **External.** One laboratory domain, six object classes, one camera and

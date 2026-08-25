@@ -89,7 +89,14 @@ def main() -> int:
 
     stale = 0
     for expected, where, what in checks:
-        hits = [f for f in where if expected in files.get(f, "")]
+        # The prose writes thousands with a separator, so 1415 appears as
+        # "1,415". Accept either form rather than reporting a formatting
+        # difference as a stale figure.
+        forms = {expected}
+        if expected.isdigit() and len(expected) > 3:
+            forms.add(f"{int(expected):,}")
+        hits = [f for f in where
+                if any(v in files.get(f, "") for v in forms)]
         if not hits:
             stale += 1
             print(f"  STALE  {what}: no file quotes {expected!r}")

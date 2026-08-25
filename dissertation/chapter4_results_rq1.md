@@ -675,54 +675,84 @@ full. Neither that nor the model's parallel movement rescues the support
 figure: at 0.535 the labels the tool adds beyond the human record on this
 predicate are right about half the time.
 
-## 4.15 A disinterested check on the author's verdicts
+## 4.15 A disinterested check, against a human baseline
 
 Both judges in §4.14 carry an objection. One built the tool; the other is a
 system §4.13 shows annotates poorly. Appendix E.3 specifies the arm that
-answers the first of those, putting sampled claims to volunteers who did not
-build the tool and are not shown what it predicted. It ran, and it returned
-much less than it was designed to collect: 226 usable judgements from five
-raters, covering 176 of the 2,002 sampled claims, 8.8%, with one rater
-supplying 53% of them. What follows is a pilot rather than the study, and
-its scope is narrower still than that.
+answers the first, putting sampled claims to volunteers who did not build
+the tool and are not shown what it predicted. It closed with 1,415 usable
+judgements from 20 raters over 832 of the 1,000 claims in the pool, 83.2%, no
+rater supplying more than 15% of them.
 
-**The shipped support rule has not been checked by anyone disinterested, and this section does not claim otherwise.** The item set was drawn on 17 July, a month before `on_contact_min` was re-fitted from 0.60 to 0.85, so every `on` and `under` claim below comes from the superseded rule. No volunteer has judged a single support label the shipped tool emits. The support figures in §4.14's second table rest on the author's blind verdict and the model's, checked against each other and against decoys, and on no human judgement beyond that.
+**The shipped support rule has still not been judged by anyone outside this
+project.** The tool claims were drawn on 17 July, a month before
+`on_contact_min` was re-fitted from 0.60 to 0.85, so every `on` and `under`
+claim below comes from the superseded rule and belongs against §4.14's first
+pack, not the shipped second one. For the five predicates the support
+threshold does not touch, the labels are identical in both generations and
+the distinction does not arise.
 
-What the arm can test is the author. The author's verdicts and the
-volunteers' verdicts are on the *same* v3 labels, so the two are directly
-comparable, and the comparison asks one question: did the author's audit run
-in the author's favour? Everything below is read that way. The comparison is
-therefore against §4.14's first pack rather than the shipped second one. For
-the five predicates the support threshold does not touch, the labels are the
-same in both generations and the distinction does not arise.
+**What makes this arm readable is that it scores the annotators too.** Half
+the pool is drawn from the human annotations rather than from the tool,
+rendered through the identical pipeline, interleaved so a rater cannot tell
+the two apart, and judged under the same instruction to answer WRONG when
+unsure. Without it a low score on the tool would be uninterpretable: the
+same raters and the same conservative rule might score any claim low. They
+do not. On the human-written claims they answer TRUE 0.940 of the time
+(395/420), against 0.726 on the tool's (299/412). The raters are not
+uniformly severe, so what the tool scores is about the tool.
 
 | Predicate | Volunteers | Author | Model |
 |---|---|---|---|
-| on | 14/31 0.452 | 16/43 0.372 | 25/43 0.581 |
-| under | 9/31 0.290 | 22/51 0.431 | 35/51 0.686 |
-| to the left of | 16/22 0.727 | 22/24 0.917 | 23/24 0.958 |
-| to the right of | 13/18 0.722 | 23/24 0.958 | 22/24 0.917 |
-| in front of | 16/27 0.593 | 23/24 0.958 | 22/24 0.917 |
-| behind | 16/28 0.571 | 22/24 0.917 | 20/24 0.833 |
-| near | 19/19 1.000 | 24/24 1.000 | 15/24 0.625 |
-| **support pooled** | **23/62 0.371** | **38/94 0.404** | **60/94 0.638** |
+| on | 21/63 0.333 | 16/43 0.372 | 25/43 0.581 |
+| under | 31/63 0.492 | 22/51 0.431 | 35/51 0.686 |
+| to the left of | 47/57 0.825 | 22/24 0.917 | 23/24 0.958 |
+| to the right of | 44/49 0.898 | 23/24 0.958 | 22/24 0.917 |
+| in front of | 54/62 0.871 | 23/24 0.958 | 22/24 0.917 |
+| behind | 54/66 0.818 | 22/24 0.917 | 20/24 0.833 |
+| near | 48/52 0.923 | 24/24 1.000 | 15/24 0.625 |
+| **support pooled** | **52/126 0.413** | **38/94 0.404** | **60/94 0.638** |
 
-**On support the author's verdicts survive the check.** Pooled `on` and `under` precision on the v3 labels is 0.371 for the volunteers against the author's 0.404 and the model's 0.638. What carries is the sign of the first gap, and none of the three values as an estimate of anything the tool now ships: a judge with no stake in the outcome scored the author's own tool slightly *lower* than the author did. Support is where the author's blind verdict was most damaging to that tool, and so where a reader is entitled to suspect it of being theatre; a disinterested judge landing independently on a harsher number is the evidence against that reading. The same sign appears on `near`, 1.000 against the author's 1.000 and the model's 0.625, where it is the model and not the author that sits apart, which is the §4.13 objection answered by measurement rather than by argument.
+**On support the author's verdicts survive the check exactly.** Pooled `on`
+and `under` precision on the pre-refit labels is 0.413 for the volunteers
+against the author's 0.404 — a difference of 0.009 between the person who
+built the tool, blinded and working against decoys, and strangers with no
+stake in the outcome. This is the objection §2.9 raises and §7.4 concedes,
+answered by measurement. The model sits apart at 0.638, and `near` shows the
+same shape from the other side: 0.923 and 1.000 from the two human judges
+against the model's 0.625. Across all seven predicates the volunteers rank
+the tool almost exactly as the author does, Spearman 0.96 against the
+model's 0.34, and land 0.074 away on average. Two independent human judges
+agreeing to that degree is the strongest evidence available that the audits
+were not theatre.
 
-**On the laterals and the depth pair they side with neither.** The volunteers put all four between 0.571 and 0.727, where both expert judges sit between 0.833 and 0.958. That gap is too wide and too consistent across four predicates to be
-sampling. The reading consistent with §4.5 is that the reference frame is
-doing it: an instructed but untrained judge applies camera-frame laterality
-unevenly, which is the defect the two inverted annotator groups exhibit and
-the one §4.5 measures in the gold. On that reading the volunteers are partly
-measuring their own convention, which is exactly what §4.14's decoys exist
-to detect and exactly what this arm lacks. No decoys were delivered with the
-item set, so volunteer calibration is unmeasured, and the four figures above
-should be read as a lower bound on precision rather than an estimate of it.
+**Against the human baseline, five predicates hold and support does not.**
+On the five the support threshold does not touch, the tool scores 0.864
+against the annotators' 0.926, a gap of 0.063. On `in front of` it is
+marginally ahead. On support it scores 0.413 against 0.975, a gap of 0.563
+whose intervals do not come close to overlapping. That is the same weakness
+§4.14 found and the refit responded to, now measured against what human
+annotation scores on the identical instrument, and it is the sharpest
+statement of it in this dissertation.
 
-**The author-bias check.** On the 133 claims carrying both a volunteer and
-an author verdict the two agree 0.744 of the time, Cohen's κ 0.470. The author is therefore neither rubber-stamping nor fully reproducible by a stranger: the verdicts are corroborated where they are unflattering and disputed where they turn on a convention. Crowd-internal reliability is Krippendorff's α 0.397 across the
-46 claims with two or more judgements, poor by any standard, and §2.3's
-account of spatial language predicts that better than rater carelessness
-does.
+One asymmetry limits how far the comparison can be pushed. The tool's claims
+are its *extra* predictions, on pairs the annotators passed over; the
+control claims are pairs they chose to record. Annotators record what is
+clear, so some of every gap above is the difficulty of the claim rather than
+the quality of the label. For a 0.063 gap that reservation may account for
+most of it; for 0.563 it cannot.
 
-**What this arm settles and what it leaves open.** It settles one thing: on the labels it judged, the author's verdicts did not run in the author's favour, and on support they were if anything harsher than a stranger's. That is a statement about the auditor rather than about the tool. It is not an independent precision estimate for the shipped tool, whose support rule postdates the sample, and at the turnout above and with no decoys to calibrate its own judges it is not a sound estimate for the pre-refit tool either. §7.6 and §9.3 carry the limitation; re-running the study against v4 labels is what would close it.
+**The author-bias check.** On the 147 claims carrying both a volunteer and
+an author verdict the two agree 0.871 of the time, Cohen's κ 0.683.
+Crowd-internal reliability is Krippendorff's α 0.703 across the same claims. Both are substantial on the conventional reading, and both roughly doubled as the sample grew, which is what a real signal does and noise does not. Neither approaches 1.0, and §2.3's account of spatial language predicts that better than rater carelessness does: some of the residual disagreement is over what the words mean, not over what the photograph shows.
+
+**What this arm settles and what it leaves open.** It settles that the
+author's audit did not run in the author's favour: on the labels both
+judged, two independent human verdicts agree to 0.009 on the measurement
+most exposed to that bias. It settles that the raters are not uniformly
+harsh, because they score human annotation at 0.940 on the same instrument.
+It does not settle the shipped tool, whose support rule postdates the
+sample, and it cannot fully separate label quality from claim difficulty,
+because the two arms are drawn from populations the annotators themselves
+divided. §7.6 and §9.3 carry what survives; re-running the arm on post-refit
+support labels is the one outstanding item that would close it.

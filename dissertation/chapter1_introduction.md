@@ -221,12 +221,7 @@ and stating them makes several later choices legible. All perception runs on
 a **single 6 GB consumer GPU**, which rules out the largest segmentation and
 depth checkpoints and makes Chapter 3's small-model choices obligatory;
 ablation A8 asks what that costs and finds almost nothing on the predicate
-it was expected to hurt. There was **no budget for paid annotation**, so the
-independent re-estimate of precision is an unpaid volunteer study (Appendix
-E.3), which returned five raters where it was built for thirty; §4.15
-reports what that supports and what it does not, and the audits around it
-remain the author's own, with the circularity §2.9 states as an objection
-before any result is reported. The project uses **one dataset**, the one
+it was expected to hurt. There was **no budget for paid annotation**, so the independent re-estimate of precision is an unpaid volunteer study (Appendix E.3). It closed at 20 raters and carries a control arm of human-written claims, so §4.15 can report what the tool scores against what the annotators score on the same instrument; the audits around it remain the author's own, with the circularity §2.9 states as an objection before any result is reported. The project uses **one dataset**, the one
 whose bottleneck the work exists to address, and the price is that
 generalisation rests on argument. And the benchmark runs use **free hosted
 GPU sessions**, which caps the affordable seeds and rules out a

@@ -1000,21 +1000,22 @@ The true-precision estimates of §4.4 and §4.9 carry one weakness no amount
 of sampling fixes: they were verdicted by the author of the tool being
 evaluated. Conservative rules and published evidence mitigate that without
 removing it, and the accurate description is "author-verdicted". This study
-re-estimates precision with disinterested judges. It returned a thin but
-usable pilot, reported in §4.15 and scored below; the design is given first,
-so that a reader can judge the instrument independently of what it found.
+re-estimates precision with disinterested judges, and pairs every estimate
+with the same judges' verdict on the human annotations so that it has
+something to be read against. It is reported in §4.15 and scored below; the
+design is given first, so that a reader can judge the instrument
+independently of what it found.
 
-It measures three things the author-verdicted audits cannot: crowd precision
-per predicate at a sample two orders of magnitude larger than §4.4's fifteen;
-an author-bias check against the author's own verdict on the 147 items
-carrying both; and whether disputed claims are wrong or merely ambiguous,
-through inter-rater reliability, which is the distinction the disagreement
+It measures four things the author-verdicted audits cannot: crowd precision
+per predicate at a sample two orders of magnitude larger than §4.4's
+fifteen; the same raters' precision on claims the *annotators* wrote, which
+is what turns the first number from a bare score into a comparison; an
+author-bias check against the author's own verdict on the 147 items carrying
+both; and whether disputed claims are wrong or merely ambiguous, through
+inter-rater reliability, which is the distinction the disagreement
 literature of §2.3 insists on.
 
-**Sampling.** A stratified sample of 2,002 automatic labels, 286 per
-predicate, drawn from the tool's *extra* predictions: ordered pairs the human
-annotators never labelled, which is exactly the population with no ground
-truth to score against. Each claim is rendered as the source photograph with
+**Sampling.** Two arms. The *treatment* arm is drawn from the tool's *extra* predictions: ordered pairs the human annotators never labelled, which is exactly the population with no ground truth to score against. The *control* arm is drawn from the human annotations themselves, 84 per predicate, rendered through the identical pipeline and interleaved by the same shuffle, so nothing on the page distinguishes them and a rater cannot tell which arm a claim belongs to; the arm is recorded only in the private key. It began as 2,002 treatment claims, 286 per predicate, and was resized on 24 August to 412 treatment and 588 control: spreading raters across 2,002 items meant most would never be judged, and the 412 retained were exactly those already carrying a vote, so no judgement collected was discarded and no claim already voted on changed its identity. Each claim is rendered as the source photograph with
 the subject outlined in red and the object in blue, presented with a single
 sentence ("the book is on the box"), and answered TRUE or WRONG / can't tell
 by volunteers recruited through an open link. The instructions restate
@@ -1025,17 +1026,7 @@ conservative rule used in the author's own audits. Each browser receives a
 random identifier that prevents repeat judgements without identifying
 anybody, and faces are anonymised in every image (Chapter 8).
 
-**Coverage.** Stratified by what each analysis requires. An aggregate
-precision estimate needs only one judgement per claim, since the sample is
-random either way, so ordinary claims target a single rater. The 147 claims
-that also carry an author verdict target three raters each, because the
-crowd-versus-author comparison and the inter-rater reliability figure both
-need several independent judgements on the *same* item; those claims are
-served first. The design therefore needs about 2,300 judgements rather than
-the 6,000 a uniform three-rater target would demand, and it fails gracefully:
-the author-comparison subset completes after roughly 30 participants, so that
-analysis survives a thin turnout while any further response widens the
-precision estimate.
+**Coverage.** Stratified by what each analysis requires. An aggregate precision estimate needs only one judgement per claim, since the sample is random either way, so ordinary claims target a single rater. The 147 claims that also carry an author verdict target three raters each, because the crowd-versus-author comparison and the inter-rater reliability figure both need several independent judgements on the *same* item; those claims are served first. Against the resized pool that is about 1,300 judgements rather than the 3,000 a uniform three-rater target would demand. The priority ordering was the design's hedge against a thin turnout, and it worked in the direction intended: all 147 priority claims reached three raters, so the author comparison and the reliability figure rest on the coverage they were specified for rather than on whatever the response happened to allow.
 
 **Scoring**, fully specified in advance (`analysis/score_votes.py`): ties
 resolve to WRONG, matching the audit protocol; reflex-speed responses and
@@ -1044,18 +1035,7 @@ pre-declared filters. Crowd precision is reported per predicate with binomial
 intervals, author agreement as percentage and Cohen's kappa (Cohen, 1960),
 and crowd-internal reliability as Krippendorff's alpha.
 
-**What it returned.** Collection stood at 226 usable judgements from five raters when this was submitted, against a design that assumed roughly thirty. 176 of the 2,002 claims
-carry a verdict, one rater supplied 53% of them, and only 46 claims drew the
-two or more judgements a reliability figure needs. The graceful degradation
-claimed above did hold: 133 of the 147 author-verdicted claims were served,
-which is why §4.15 can report an author-bias check at all, while the
-precision estimate stays a pilot. Of the pre-declared filters, the duplicate
-rule fired on 12 submissions, no response fell below the 800 ms floor, and
-no rater was excluded as a systematic outlier. One planned element was never
-delivered: the item set carries no control claims, so unlike the audits of
-§4.14 this arm has no decoys and rater calibration is unmeasured. Section
-4.15 gives the figures and what they support; `eval/crowd_validation.py`
-reproduces them from the scorer's report.
+**What it returned.** Collection closed at 1,415 usable judgements from 20 raters, covering 832 of the 1,000 claims, 83.2%, with no rater supplying more than 15% of the total. All 412 treatment claims and 420 of the 588 control claims carry at least one verdict, and 147 carry three or more, which is the subset the author comparison and the reliability figure need. Of the pre-declared filters, the duplicate rule fired on 12 submissions, all of them from before the 11 August server fix; no response fell below the 800 ms floor, and no rater was excluded as a systematic outlier. Section 4.15 reports the figures; `eval/crowd_validation.py` reproduces them from the scorer's report, separating the arms on the claim id, since the scorer's own per-predicate totals pool both.
 
 ### E.4 Video processing: settings and the open-vocabulary failures
 

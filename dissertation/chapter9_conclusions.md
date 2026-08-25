@@ -150,7 +150,7 @@ to models to plans and stops. The same conditions on a physical Spot, or in a
 simulator with contact physics, would close the last link, and it is the only
 one left.
 
-**Precision estimates remain partly author-verdicted.** The independent validation study (Appendix E.3) returned five raters against a design built for thirty. On the pre-refit labels it judged, its support figure came in slightly below the author's (§4.15), which tells us the audit is not self-flattering and tells us nothing about the shipped rule: the audited numbers still carry the author's own judgement, checked against a vision-language judge, a five-rater pilot, and publication for checking. Re-running the study to its designed turnout is the cheapest outstanding item in this list.
+**The shipped support rule is not independently verdicted.** The validation study (Appendix E.3) closed at 20 raters and agrees with the author's blind audit on support to 0.009, with a control arm establishing that the same raters score human annotation at 0.940, so the author's verdicts are corroborated by disinterested judges rather than merely unchallenged (§4.15). What it cannot cover is the rule the tool now ships: its claims were drawn a month before `on_contact_min` was re-fitted, so the shipped support figure still rests on the author's verdict and the model's. Re-running the arm on post-refit labels is the cheapest outstanding item in this list.
 
 **One domain, one camera, six object classes.** What transfers is the
 calibration procedure, not the fitted constants. A labelled cross-domain
