@@ -52,6 +52,44 @@ def key(rows) -> str:
     return " | ".join(norm(c) for c in rows[0])
 
 
+# Tables in outputs/tables/ are written by generators that read stored
+# results. If a result is re-measured and its generator is not re-run, the
+# table keeps numbers the data no longer supports, and anything the
+# dissertation copied out of it goes stale silently. That is how the Gemini
+# comparison in E.1 came to carry pre-refit pipeline columns for a fortnight.
+# A table with no entry here is not age-checked.
+SOURCES = {
+    "vlm_models.md": ["outputs/vlm_pilot/scores.json",
+                      "outputs/vlm_pilot/scores_pro.json"],
+    "rq2.md": ["outputs/rq2_report.json"],
+    "rq2_vlm.md": ["outputs/rq2_report_vlm.json"],
+    "rq1_tables.md": ["outputs/fidelity_report.json"],
+    "uncertainty.md": ["outputs/uncertainty.json"],
+    "annotator_agreement.md": ["outputs/annotator_agreement.json"],
+    "depth_ablation.md": ["outputs/depth_ablation.json"],
+    "crowd_validation.md": ["outputs/crowd_validation.json"],
+    "seed_replication.md": ["outputs/sgg_benchmark/seed_replication.json"],
+}
+
+
+def check_ages() -> int:
+    """Report generated tables older than the results they are built from."""
+    stale = 0
+    for name, srcs in sorted(SOURCES.items()):
+        tbl = GEN / name
+        if not tbl.exists():
+            continue
+        for s in srcs:
+            sp = ROOT / s
+            if sp.exists() and sp.stat().st_mtime > tbl.stat().st_mtime:
+                stale += 1
+                print(f"  STALE {name} is older than {s}; re-run its "
+                      "generator before trusting anything copied from it")
+    print(f"  {len(SOURCES)} generated table(s) age-checked, "
+          f"{stale} older than their source data")
+    return stale
+
+
 def main() -> int:
     generated = {}
     for f in sorted(GEN.glob("*.md")):
@@ -85,6 +123,7 @@ def main() -> int:
                         print(f"  DRIFT {f.name} :: {label} col {i}: "
                               f"text {a!r} vs {src} {b!r}")
 
+    aged = check_ages()
     print(f"\n  {checked} table(s) checked against outputs/tables/, "
           f"{drift} cell(s) drifted")
     if unchecked:
@@ -92,7 +131,7 @@ def main() -> int:
               "and were not checked:")
         for name, k in unchecked[:8]:
             print(f"     {name}: {k}")
-    return 1 if drift else 0
+    return 1 if (drift or aged) else 0
 
 
 if __name__ == "__main__":
