@@ -880,19 +880,23 @@ built for.
 
 | Predicate | Flash P | Pro P | Pipeline P | Flash F1 | Pro F1 | Pipeline F1 |
 |---|---|---|---|---|---|---|
-| on | **0.950** | 0.840 | 0.897 | 0.784 | 0.785 | **0.904** |
-| under | 0.886 | 0.837 | **0.909** | 0.756 | 0.800 | **0.879** |
+| on | 0.950 | 0.840 | **0.961** | 0.784 | 0.785 | **0.907** |
+| under | 0.886 | 0.837 | **0.974** | 0.756 | 0.800 | **0.884** |
 | to the left of | 0.408 | **0.489** | 0.385 | 0.408 | 0.479 | **0.542** |
 | to the right of | 0.381 | **0.396** | 0.387 | 0.352 | 0.392 | **0.548** |
-| in front of | **0.484** | 0.475 | 0.356 | 0.270 | 0.317 | **0.447** |
-| behind | **0.478** | 0.281 | 0.308 | 0.250 | 0.186 | **0.410** |
-| near | 0.105 | 0.084 | **0.128** | 0.165 | 0.138 | **0.227** |
-| **micro** | **0.419** | 0.389 | 0.351 | 0.397 | 0.405 | **0.488** |
+| in front of | **0.484** | 0.475 | 0.364 | 0.270 | 0.317 | **0.466** |
+| behind | **0.478** | 0.281 | 0.309 | 0.250 | 0.186 | **0.422** |
+| near | 0.105 | 0.084 | **0.123** | 0.165 | 0.138 | **0.219** |
+| **micro** | **0.419** | 0.389 | 0.347 | 0.397 | 0.405 | **0.485** |
 
 
-The pipeline makes 868 assertions on the 374 judged pairs against the models'
+The pipeline makes 885 assertions on the 374 judged pairs against the models'
 344 and 414, which is why recall alone would be an unfair verdict and why
-§4.13 reports the restricted comparison beside it.
+§4.13 reports the restricted comparison beside it. The models' precision
+advantage is pooled rather than uniform: it comes from the four predicates
+where the pipeline asserts most freely, and on `on`, `under` and `near` the
+pipeline is the more precise of the three. Its F1 is nonetheless the highest
+in every row, which is the shape of the trade the whole comparison is about.
 
 One asymmetry must be stated or the precision comparison will be read as
 stronger than it is. The pipeline's apparent false positives were audited
@@ -938,7 +942,7 @@ larger model might simply have closed the gap. Running the identical battery
 on a reasoning model an order of magnitude larger tests that directly, and
 the answer is that capacity moves the numbers without moving the verdict.
 Mean recall rises from 0.400 to 0.445 against the pipeline's 0.834, pooled
-F1 from 0.397 to 0.405 against 0.488, and the larger model buys its extra
+F1 from 0.397 to 0.405 against 0.485, and the larger model buys its extra
 recall by asserting more, which costs it precision, 0.389 against 0.419. It
 is better in the way a more willing annotator is better, not in the way a
 more accurate instrument is. What remains untested on this axis is prompting

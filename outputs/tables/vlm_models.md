@@ -6,12 +6,12 @@ Both runs: 30 images, the same numbered boxes, the same written predicate defini
 
 | predicate | gold | gemini-flash-latest | gemini-3.1-pro-preview | pipeline |
 |---|---|---|---|---|
-| on | 57 | 0.667 | 0.737 | 0.912 |
-| under | 47 | 0.660 | 0.766 | 0.851 |
+| on | 57 | 0.667 | 0.737 | 0.860 |
+| under | 47 | 0.660 | 0.766 | 0.809 |
 | to the left of | 49 | 0.408 | 0.469 | 0.918 |
 | to the right of | 49 | 0.327 | 0.388 | 0.939 |
-| in front of | 80 | 0.188 | 0.237 | 0.600 |
-| behind | 65 | 0.169 | 0.138 | 0.615 |
+| in front of | 80 | 0.188 | 0.237 | 0.650 |
+| behind | 65 | 0.169 | 0.138 | 0.662 |
 | near | 34 | 0.382 | 0.382 | 1.000 |
 | **mean** | 381 | **0.400** | **0.445** | **0.834** |
 
@@ -19,10 +19,10 @@ Both runs: 30 images, the same numbered boxes, the same written predicate defini
 
 | metric | gemini-flash-latest | gemini-3.1-pro-preview | pipeline |
 |---|---|---|---|
-| precision (micro) | 0.419 | 0.389 | 0.351 |
-| recall (micro) | 0.378 | 0.423 | 0.801 |
-| F1 (micro) | 0.397 | 0.405 | 0.488 |
-| assertions | 344 | 414 | 868 |
+| precision (micro) | 0.419 | 0.389 | 0.347 |
+| recall (micro) | 0.378 | 0.423 | 0.806 |
+| F1 (micro) | 0.397 | 0.405 | 0.485 |
+| assertions | 344 | 414 | 885 |
 
 ## Self-consistency: one direction of a symmetric pair without the other
 

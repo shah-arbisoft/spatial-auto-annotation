@@ -292,10 +292,11 @@ queue (§4.7), against labels 20× denser than the human set.
 
 ## 4.9 Shipped from the ablations
 
-Nine ablations were run. Seven sweep a shipped parameter over the cached
+Ten ablations were run. Seven sweep a shipped parameter over the cached
 geometry and are re-runnable offline in about twenty seconds
 (`eval/ablations.py`); two test whether a heavier perception stack would do
-better, and both say no. Every parameter was selected on the training
+better and one whether geometry can replace the class guard, and all three
+say no. Every parameter was selected on the training
 annotator groups alone, with the held-out column reported and never
 optimised against.
 
@@ -320,9 +321,9 @@ perception upgrade (mask-bottom contact) fixed most of the rest while
 once; and the ground-plane fallback then recovered most of the front/behind
 abstention band without depth at all.
 
-The two declined ablations bound where engineering can help: neither a
+The two declined perception ablations bound where engineering can help: neither a
 four-times-larger depth model nor two-view triangulation over the raw
-capture improves the depth pair, and the second is 0.17 *worse* where it
+capture improves the depth pair, and the second is 0.20 *worse* where it
 answers at all. The limit is monocular ambiguity in the scenes, not model
 capacity, and multi-view geometry inherits it instead of removing it; §7.2
 takes up what follows.
@@ -476,11 +477,11 @@ geometric method's known weak point. Scaling the model does not scale the
 ability being measured.
 
 Recall alone would be an unfair verdict, because it rewards whoever asserts
-more: on the 374 judged pairs the pipeline makes 868 assertions against 344
+more: on the 374 judged pairs the pipeline makes 885 assertions against 344
 and 414. Restricted to those pairs, where precision is defined, the column
 reverses, and **both models are more precise than the pipeline**, 0.419 and
-0.389 against 0.351. They buy it with silence, and the price is steep enough
-that both lose F1 on every predicate, 0.397 and 0.405 against 0.488 pooled
+0.389 against 0.347. They buy it with silence, and the price is steep enough
+that both lose F1 on every predicate, 0.397 and 0.405 against 0.485 pooled
 (Appendix E.1).
 
 Most of that recall gap is silence, and the comparison has to say so. The
@@ -542,7 +543,7 @@ one a vote. The two tasks differ in the half that failed. What §4.13
 measures is *coverage* — the model never addressed 171 of 381 gold triplets,
 44.9%, and its headline recall is mostly that silence — while on the pairs
 it did judge it was the *more precise* of the two, 0.419 against the
-pipeline's 0.351. Judging a claim that is handed to it asks only for the
+pipeline's 0.347. Judging a claim that is handed to it asks only for the
 half that measured sound, since the item is supplied and nothing has to be
 enumerated.
 
