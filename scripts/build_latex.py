@@ -598,8 +598,24 @@ def convert(md: str, figures: list[tuple[str, str, str]],
                 close_lists()
                 out.append(r"\begin{" + want + "}")
                 list_stack.append(want)
-            out.append(r"\item " + inline((mb or mn).group(3)))
+            # Gather the item's wrapped continuation lines before converting,
+            # for the same reason the paragraph branch below does it: an
+            # italic or bold span that straddles a newline never matches when
+            # each line is converted on its own, and the markers reach the
+            # page as literal asterisks. Continuations are indented and are
+            # not themselves list markers, so a nested list still ends up in
+            # its own \item.
+            item = [(mb or mn).group(3)]
             i += 1
+            while i < len(lines):
+                nxt = lines[i]
+                if not nxt.strip() or not nxt[:1].isspace():
+                    break
+                if re.match(r"^\s*([-*]|\d+\.)\s+", nxt):
+                    break
+                item.append(nxt.strip())
+                i += 1
+            out.append(r"\item " + inline(" ".join(item)))
             continue
 
         if not line.strip():

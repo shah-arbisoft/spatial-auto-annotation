@@ -134,12 +134,9 @@ Figure~\ref{fig:front-behind-decomposition} plots the same decomposition, where 
 
 
 \begin{enumerate}
-\item \textbf{Direction agreement is near-perfect where the tool commits}, 0.95--1.00
-for six of the eight groups with meaningful counts. Genuine depth-ordering errors are rare.
-\item \textbf{Two annotator groups used the inverted convention.} Groups 6 and 8
-agree with the committed direction 2--5\% of the time; flipping their labels recovers 0.94/0.82 and aligned overall recall is 0.91 (alignment uses one disclosed bit per group, the majority direction of its own labels). After \texttt{near}, this is a second measured annotation defect, and it is the reference-frame ambiguity RoboSpatial formalises (\S{}2.5) observed in the wild, with no frame declared in the guidance and two teams resolving it oppositely.
-\item \textbf{The remaining gap is abstention, not error.} Groups 2 and 3 agree almost
-perfectly when the tool commits, but their pairs sit inside the \texttt{depth\_\allowbreak{}eps} band \textit{and} beyond the ground-plane fallback's reach, so the tool abstains: emit rates 0.58 and 0.54, roughly doubled by the fallback. The \texttt{depth\_\allowbreak{}eps} and \texttt{plane\_\allowbreak{}band} sweeps trade this against precision.
+\item \textbf{Direction agreement is near-perfect where the tool commits}, 0.95--1.00 for six of the eight groups with meaningful counts. Genuine depth-ordering errors are rare.
+\item \textbf{Two annotator groups used the inverted convention.} Groups 6 and 8 agree with the committed direction 2--5\% of the time; flipping their labels recovers 0.94/0.82 and aligned overall recall is 0.91 (alignment uses one disclosed bit per group, the majority direction of its own labels). After \texttt{near}, this is a second measured annotation defect, and it is the reference-frame ambiguity RoboSpatial formalises (\S{}2.5) observed in the wild, with no frame declared in the guidance and two teams resolving it oppositely.
+\item \textbf{The remaining gap is abstention, not error.} Groups 2 and 3 agree almost perfectly when the tool commits, but their pairs sit inside the \texttt{depth\_\allowbreak{}eps} band \textit{and} beyond the ground-plane fallback's reach, so the tool abstains: emit rates 0.58 and 0.54, roughly doubled by the fallback. The \texttt{depth\_\allowbreak{}eps} and \texttt{plane\_\allowbreak{}band} sweeps trade this against precision.
 \end{enumerate}
 
 \section{The tenth annotator, and what the annotators would score against each other}

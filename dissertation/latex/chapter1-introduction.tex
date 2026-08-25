@@ -28,27 +28,19 @@ The one predicate the authors found unreliable, \textit{near}, is handled by fit
 \subsection{Research questions and objectives}
 
 \begin{itemize}
-\item \textbf{RQ1 (accuracy).} Can spatial-relationship annotation for robot images
-be automated to a quality comparable to human annotation? Measured per predicate against the \textasciitilde{}900 human-labelled images.
-\item \textbf{RQ2 (utility).} Are the automatic labels good enough to train a
-relation-prediction model as effectively as human labels are? Measured with a controlled classifier trained once on each label source.
+\item \textbf{RQ1 (accuracy).} Can spatial-relationship annotation for robot images be automated to a quality comparable to human annotation? Measured per predicate against the \textasciitilde{}900 human-labelled images.
+\item \textbf{RQ2 (utility).} Are the automatic labels good enough to train a relation-prediction model as effectively as human labels are? Measured with a controlled classifier trained once on each label source.
 \end{itemize}
 
 RQ1 asks whether the labels are \textit{accurate}, RQ2 whether they are \textit{useful}. They decompose into six verifiable objectives:
 
 \begin{itemize}
-\item \textbf{O1 (build).} A fully-automatic pipeline (detection, segmentation, depth,
-geometric rules) that annotates the complete dataset in its native formats (VG JSON / YOLO / h5) with no human in the labelling loop. \textit{(Chapter 3)}
-\item \textbf{O2 (specify and calibrate).} An operational geometric definition of all
-seven predicates, with every threshold fitted only on a subset of annotator groups and validated on held-out annotators. \textit{(Chapter 3)}
-\item \textbf{O3 (validate).} Per-predicate fidelity against the human annotations,
-with trivial and box-only baselines, ablations, and manually audited true precision, answering RQ1. \textit{(Chapter 4)}
-\item \textbf{O4 (diagnose).} Every disagreement with the human labels attributed to a
-cause: calibrated abstention, annotator behaviour, or genuine tool error. \textit{(Chapters 4, 7)}
-\item \textbf{O5 (test downstream utility).} A controlled experiment in which the same
-classifier is trained on each label source under identical features, splits and seeds, isolating the label source, answering RQ2. \textit{(Chapter 5)}
-\item \textbf{O6 (test at the level the field measures).} The same comparison repeated
-in the source paper's own scene-graph framework with a shared frozen detector and replicated seeds, and carried one link further to an LLM planner asked for a safe grasp plan under each label source, so that the answer to RQ2 does not rest on one lightweight model. \textit{(Chapters 5, 6)}
+\item \textbf{O1 (build).} A fully-automatic pipeline (detection, segmentation, depth, geometric rules) that annotates the complete dataset in its native formats (VG JSON / YOLO / h5) with no human in the labelling loop. \textit{(Chapter 3)}
+\item \textbf{O2 (specify and calibrate).} An operational geometric definition of all seven predicates, with every threshold fitted only on a subset of annotator groups and validated on held-out annotators. \textit{(Chapter 3)}
+\item \textbf{O3 (validate).} Per-predicate fidelity against the human annotations, with trivial and box-only baselines, ablations, and manually audited true precision, answering RQ1. \textit{(Chapter 4)}
+\item \textbf{O4 (diagnose).} Every disagreement with the human labels attributed to a cause: calibrated abstention, annotator behaviour, or genuine tool error. \textit{(Chapters 4, 7)}
+\item \textbf{O5 (test downstream utility).} A controlled experiment in which the same classifier is trained on each label source under identical features, splits and seeds, isolating the label source, answering RQ2. \textit{(Chapter 5)}
+\item \textbf{O6 (test at the level the field measures).} The same comparison repeated in the source paper's own scene-graph framework with a shared frozen detector and replicated seeds, and carried one link further to an LLM planner asked for a safe grasp plan under each label source, so that the answer to RQ2 does not rest on one lightweight model. \textit{(Chapters 5, 6)}
 \end{itemize}
 
 \subsection{What would count as an answer}

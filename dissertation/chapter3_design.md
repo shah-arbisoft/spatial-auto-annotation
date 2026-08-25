@@ -53,9 +53,12 @@ directly on the released files, drive specific design responses:
 - **Monocular RGB only.** No metric depth exists and estimated depth is
   *relative and per-image* (Yang, L. et al., 2024), so all depth comparisons
   are ordinal and within-image and no rule consumes absolute depth.
-- **Sparse annotation.** Humans labelled ~10% of object pairs *(measured:
-  6,458 of 42,440 unordered pairs)*, so the tool labels every pair, density
-  being the value added, and the protocol treats human labels as a recall target, not an exhaustive gold standard.
+- **Sparse annotation.** Humans labelled a minority of object pairs *(measured:
+  6,458 of 42,440 unordered pairs, 15%; 8,790 of 84,880 ordered, 10%,
+  the two differing because most labelled pairs carry only one direction,
+  §4.5)*, so the tool labels every pair, density being the value added, and
+  the protocol treats human labels as a recall target, not an exhaustive
+  gold standard.
 - **Inconsistent `near`.** Only 3 of 9 annotator groups ever used `near`
   (244/129/93 labels; the rest 0–3), and those three each labelled a different
   fraction of equally-close pairs, so the threshold is fitted and

@@ -12,25 +12,18 @@ CRISP-DM was chosen for two concrete reasons. The motivating problem is an engin
 The task is to produce, from a raw robot-acquired RGB image, the same artefact a human annotator produces with SGDET-Annotate: a scene graph over the six object classes with the seven spatial predicates, exported in Visual Genome JSON, YOLO txt and h5. Four requirements shape the design:
 
 \begin{enumerate}
-\item \textbf{No human decides any label.} The point is to remove the per-image human
-bottleneck; a rule may abstain and flag, but it may not ask.
-\item \textbf{Comparability with the human labels.} RQ1 requires the outputs to align
-with the human annotations pair-for-pair and byte-for-byte in format, or no fair comparison is possible.
-\item \textbf{Modest hardware.} A single 6 GB RTX 2060; anything heavier must be
-optional. (In practice the pipeline peaks at 0.65 GB and annotates the full dataset in about five minutes \textit{(measured)}.)
-\item \textbf{Reproducibility.} Every threshold in one config, every run seeded, and
-rule changes re-evaluable without re-running perception.
+\item \textbf{No human decides any label.} The point is to remove the per-image human bottleneck; a rule may abstain and flag, but it may not ask.
+\item \textbf{Comparability with the human labels.} RQ1 requires the outputs to align with the human annotations pair-for-pair and byte-for-byte in format, or no fair comparison is possible.
+\item \textbf{Modest hardware.} A single 6 GB RTX 2060; anything heavier must be optional. (In practice the pipeline peaks at 0.65 GB and annotates the full dataset in about five minutes \textit{(measured)}.)
+\item \textbf{Reproducibility.} Every threshold in one config, every run seeded, and rule changes re-evaluable without re-running perception.
 \end{enumerate}
 
 Three properties of the dataset, established in Chapter 2 and verified directly on the released files, drive specific design responses:
 
 \begin{itemize}
-\item \textbf{Monocular RGB only.} No metric depth exists and estimated depth is
-\textit{relative and per-image} (Yang, L. et al., 2024), so all depth comparisons are ordinal and within-image and no rule consumes absolute depth.
-\item \textbf{Sparse annotation.} Humans labelled \textasciitilde{}10\% of object pairs *(measured:
-6,458 of 42,440 unordered pairs)*, so the tool labels every pair, density being the value added, and the protocol treats human labels as a recall target, not an exhaustive gold standard.
-\item \textbf{Inconsistent \texttt{near}.} Only 3 of 9 annotator groups ever used \texttt{near}
-(244/129/93 labels; the rest 0--3), and those three each labelled a different fraction of equally-close pairs, so the threshold is fitted and annotator-aware (\S{}3.8) and not matched to a consensus that does not exist.
+\item \textbf{Monocular RGB only.} No metric depth exists and estimated depth is \textit{relative and per-image} (Yang, L. et al., 2024), so all depth comparisons are ordinal and within-image and no rule consumes absolute depth.
+\item \textbf{Sparse annotation.} Humans labelled a minority of object pairs \textit{(measured: 6,458 of 42,440 unordered pairs, 15\%; 8,790 of 84,880 ordered, 10\%, the two differing because most labelled pairs carry only one direction, \S{}4.5)}, so the tool labels every pair, density being the value added, and the protocol treats human labels as a recall target, not an exhaustive gold standard.
+\item \textbf{Inconsistent \texttt{near}.} Only 3 of 9 annotator groups ever used \texttt{near} (244/129/93 labels; the rest 0--3), and those three each labelled a different fraction of equally-close pairs, so the threshold is fitted and annotator-aware (\S{}3.8) and not matched to a consensus that does not exist.
 \end{itemize}
 
 \section{Design principle: compute, don't predict}
@@ -84,21 +77,10 @@ Coordinates are normalised by image size so thresholds transfer across resolutio
 The complete specification is \textbf{Appendix C}: every rule with its thresholds, the shipped values, the evidence behind each one, and the correction and flagging policy. It is also maintained in the repository as \texttt{docs/predicate\_\allowbreak{}spec.md}, which is the copy the code and tests are checked against. The design rationale in brief:
 
 \begin{itemize}
-\item \textbf{on / under} encode \textit{support}: subject above object, near-touching
-(vertical gap within $\pm$0.05), with horizontal extents overlapping ($\geq$0.20 of the narrower), which keeps "floating in front of" from reading as "on". \texttt{under} is the strict inverse, so the pair can never contradict. One edge case, a small object whose box projects entirely inside its support's at shallow viewing angles, is assessed in the ablations and not hand-tuned early.
-\item \textbf{to the left of / to the right of} compare horizontal centres in the
-camera frame, which is the frame the annotators saw on screen and therefore the faithful choice among the three RoboSpatial distinguishes (Song et al., 2025). An ambiguity band (0.02) abstains and flags when centres nearly coincide.
-\item \textbf{in front of / behind} is a two-stage cascade. Depth ordering decides
-first, with an abstention band (0.03), these being the hardest predicates because objects on the same surface often differ by less than the depth model can resolve. Where depth abstains a \textbf{ground-plane fallback} decides from pure projection, ordering two objects on the same floor by which box bottom sits lower in the image: a pixel-precise cue exactly where depth is noisiest. It is guarded by the tool's own support evidence and never fires when either object rests on another (mask contact $\geq$ 0.60), because an elevated object's box bottom says where its \textit{support} is, and it has its own band (0.005). Pairs both stages abstain on are flagged, not guessed (recall 0.70/0.71 \textit{(measured)}, from 0.52/0.55 depth-only).
-\item \textbf{near} is a size-relative proximity test: edge-to-edge box gap divided by
-mean object size, below a fitted threshold, and \textbf{never on contact pairs}, since \texttt{near} co-occurs with on/under on 0 of 469 human pairs, so the annotators used it as "close but no contact relation". Figure~\ref{fig:near-T-sweep} shows the sweep the threshold is read off. A 3D-centroid metric was rejected on evidence: per-image depth normalisation makes centroid distances incomparable across scenes, and every centroid variant transferred to held-out annotators at F1 $\leq$ 0.024 against the relative gap's recall 1.0 (\S{}3.8).
-\begin{figure}[!htbp]
-\centering
-\includegraphics[width=0.80\textwidth]{figures/near-T-sweep.png}
-\caption[Fitting the near threshold]{Fitting the \texttt{near} threshold. Recall against all annotators and against the held-out annotator, with restricted precision. The fitted value is the tightest threshold at the plateau.}
-\label{fig:near-T-sweep}
-\end{figure}
-
+\item \textbf{on / under} encode \textit{support}: subject above object, near-touching (vertical gap within $\pm$0.05), with horizontal extents overlapping ($\geq$0.20 of the narrower), which keeps "floating in front of" from reading as "on". \texttt{under} is the strict inverse, so the pair can never contradict. One edge case, a small object whose box projects entirely inside its support's at shallow viewing angles, is assessed in the ablations and not hand-tuned early.
+\item \textbf{to the left of / to the right of} compare horizontal centres in the camera frame, which is the frame the annotators saw on screen and therefore the faithful choice among the three RoboSpatial distinguishes (Song et al., 2025). An ambiguity band (0.02) abstains and flags when centres nearly coincide.
+\item \textbf{in front of / behind} is a two-stage cascade. Depth ordering decides first, with an abstention band (0.03), these being the hardest predicates because objects on the same surface often differ by less than the depth model can resolve. Where depth abstains a \textbf{ground-plane fallback} decides from pure projection, ordering two objects on the same floor by which box bottom sits lower in the image: a pixel-precise cue exactly where depth is noisiest. It is guarded by the tool's own support evidence and never fires when either object rests on another (mask contact $\geq$ 0.60), because an elevated object's box bottom says where its \textit{support} is, and it has its own band (0.005). Pairs both stages abstain on are flagged, not guessed (recall 0.70/0.71 \textit{(measured)}, from 0.52/0.55 depth-only).
+\item \textbf{near} is a size-relative proximity test: edge-to-edge box gap divided by mean object size, below a fitted threshold, and \textbf{never on contact pairs}, since \texttt{near} co-occurs with on/under on 0 of 469 human pairs, so the annotators used it as "close but no contact relation". Figure~\ref{fig:near-T-sweep} shows the sweep the threshold is read off. A 3D-centroid metric was rejected on evidence: per-image depth normalisation makes centroid distances incomparable across scenes, and every centroid variant transferred to held-out annotators at F1 $\leq$ 0.024 against the relative gap's recall 1.0 (\S{}3.8).
 \end{itemize}
 
 \section{Correction and confidence}
@@ -126,6 +108,13 @@ The naive protocol (fit one threshold to all \texttt{near} labels, test on held-
 The protocol therefore fits on human-\textit{annotated}, non-contact pairs only, since unannotated pairs are not reliable negatives under sparse annotation and contact pairs are never \texttt{near} by the measured convention; it uses only the training-split groups that used the label at all (0 and 4); and it reports agreement on the held-out near-user, group 8, which contributed nothing to the fit.
 
 Results \textit{(measured)}: fitted \textbf{T = 1.372} (gap/mean-size units); held-out recall \textbf{1.000}, meaning every pair the unseen annotator called near lies within the threshold, with per-annotator precision 0.41 / 0.63 / 0.16 at the same T. Since recall is 1.0 for all three annotators simultaneously, the human labels are directionally consistent with a single threshold; what varies (by \textasciitilde{}4$\times$) is how exhaustively each annotator applied the label. The fitted threshold applies one definition uniformly, which is exactly the "spatial thresholds for near" the source paper's future work requests. Whether the tool's extra near pairs (the precision gap) are genuinely near is checked by a manual audit in the evaluation chapter.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.80\textwidth]{figures/near-T-sweep.png}
+\caption[Fitting the near threshold]{Fitting the \texttt{near} threshold. Recall against all annotators and against the held-out annotator, with restricted precision. The fitted value is the tightest threshold at the plateau.}
+\label{fig:near-T-sweep}
+\end{figure}
 
 \section{Modularity: the detector as the replaceable part}
 

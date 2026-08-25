@@ -132,14 +132,11 @@ The seven predicates are exactly those of the source dataset (Wang et al., 2025)
 After detection, segmentation and depth estimation, each object carries:
 
 \begin{itemize}
-\item \texttt{box = (x1, y1, x2, y2)}, the axis-aligned bounding box in image pixels,
-from the detector or from the ground-truth annotation.
+\item \texttt{box = (x1, y1, x2, y2)}, the axis-aligned bounding box in image pixels, from the detector or from the ground-truth annotation.
 \item \texttt{M}, the binary segmentation mask from SAM2.
 \item \texttt{(cx, cy)}, the mask centroid in image coordinates.
-\item \texttt{d}, the per-object relative depth, Depth Anything v2 sampled over \texttt{M} and
-reduced by median.
-\item \texttt{P = (X, Y, Z)}, the lifted 3D position: normalised image coordinates plus
-scaled depth, retained per object for the downstream classifier's features.
+\item \texttt{d}, the per-object relative depth, Depth Anything v2 sampled over \texttt{M} and reduced by median.
+\item \texttt{P = (X, Y, Z)}, the lifted 3D position: normalised image coordinates plus scaled depth, retained per object for the downstream classifier's features.
 \end{itemize}
 
 \textbf{Image coordinate convention.} \texttt{x} increases to the right and \texttt{y} increases downward, the standard image convention. Left and right are expressed in the \textbf{camera frame}, as the camera sees the scene, matching how the human annotators clicked subject then object on screen. This is stated explicitly because it is a design choice that has to be justified against the annotation tool rather than assumed, and \S{}2.9 records that it is a decision and not a fact about the world.
@@ -155,14 +152,10 @@ All predicates are defined for an \textbf{ordered pair (A, B)}, A the subject an
 A is \texttt{on} B when A sits directly above B, the two nearly touch, and they overlap horizontally. Four conditions, all required.
 
 \begin{enumerate}
-\item \textbf{Above.} A is the higher object: \texttt{cy\_\allowbreak{}A < cy\_\allowbreak{}B}, with the bottom edge of A
-near the top of B.
-\item \textbf{Touching.} The normalised vertical gap between the bottom of A and the
-top of B is at most \texttt{on\_\allowbreak{}vertical\_\allowbreak{}gap} (0.05). A small but non-negative gap captures resting contact while tolerating mask noise.
-\item \textbf{Horizontal overlap.} The horizontal extents overlap by at least
-\texttt{on\_\allowbreak{}horizontal\_\allowbreak{}overlap} (0.20) of the \textbf{narrower} box's x-extent. This is a containment fraction rather than an IoU, so a small object sitting fully above a large one scores 1.0, which is the behaviour support requires. Something resting on another object must share its footprint.
-\item \textbf{Depth co-location.} \texttt{|d\_\allowbreak{}A - d\_\allowbreak{}B| <= on\_\allowbreak{}depth\_\allowbreak{}eps} (0.06, calibrated on
-the training annotator groups). On a floor plane "farther" projects as "higher in the image", so an object \textit{behind} another mimics the 2D signature of one stacked \textit{on} it; truly stacked objects share a camera distance. Measured effect: held-out support F1 0.58 to 0.71, removing about half the audited false support labels at a cost of two recalled triplets.
+\item \textbf{Above.} A is the higher object: \texttt{cy\_\allowbreak{}A < cy\_\allowbreak{}B}, with the bottom edge of A near the top of B.
+\item \textbf{Touching.} The normalised vertical gap between the bottom of A and the top of B is at most \texttt{on\_\allowbreak{}vertical\_\allowbreak{}gap} (0.05). A small but non-negative gap captures resting contact while tolerating mask noise.
+\item \textbf{Horizontal overlap.} The horizontal extents overlap by at least \texttt{on\_\allowbreak{}horizontal\_\allowbreak{}overlap} (0.20) of the \textbf{narrower} box's x-extent. This is a containment fraction rather than an IoU, so a small object sitting fully above a large one scores 1.0, which is the behaviour support requires. Something resting on another object must share its footprint.
+\item \textbf{Depth co-location.} \texttt{|d\_\allowbreak{}A - d\_\allowbreak{}B| <= on\_\allowbreak{}depth\_\allowbreak{}eps} (0.06, calibrated on the training annotator groups). On a floor plane "farther" projects as "higher in the image", so an object \textit{behind} another mimics the 2D signature of one stacked \textit{on} it; truly stacked objects share a camera distance. Measured effect: held-out support F1 0.58 to 0.71, removing about half the audited false support labels at a cost of two recalled triplets.
 \end{enumerate}
 
 Encoding support as \textit{above, touching and horizontally overlapping} is what stops a cup floating in front of a shelf from reading as resting on it.

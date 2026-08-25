@@ -95,8 +95,8 @@ weights predicates by how often the annotators used them, harshest of all at
 0.066 against 0.262. Taken at face value the table says the automatic labels
 are the worst supervision of the four. One number shows why they are not.
 Average precision is threshold-free, so no arm improves it by committing to
-more pairs, and the automatic arm still scores **0.040 on *to the left
-of***, the predicate on which §4.4 audited fifteen of its fifteen extra
+more pairs, and the automatic arm still scores **0.040 on `to the left
+of`**, the predicate on which §4.4 audited fifteen of its fifteen extra
 predictions and found every one correct. An arm cannot be both wrong and
 right about laterality. What the column measures is agreement with which
 pairs an annotator chose to write down, so this is the artefact of §4.3

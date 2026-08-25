@@ -180,7 +180,7 @@ apart, against whatever state the upstream framework was in on the day.
 Retraining all nine runs in one session on one clone moved the human arm's
 pooled mR@100 from 0.326 to 0.293 and the vision-language arm by 0.001, with
 no label changed. **A third of the margin this dissertation once reported
-between label sources was an artefact of *when* each arm was trained.**
+between label sources was an artefact of when each arm was trained.**
 Nothing in the original protocol was careless: seeds were fixed, the
 detector frozen, the configuration shared. The confound entered through an
 unpinned dependency, which is the one axis the protocol did not name. A
