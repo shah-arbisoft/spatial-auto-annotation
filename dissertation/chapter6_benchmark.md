@@ -109,8 +109,8 @@ the mean over three seeds with the per-seed range in brackets.
 **On the metric this chapter is organised around, the two label sources are
 indistinguishable.** The pooled mR@100 rows are level and no slice separates them: every row's seed ranges overlap, with the automatic arm's sitting *inside* the human arm's on the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and
 43 (+0.010) and trails at 44 (−0.032), so the pooled difference of 0.001 rests
-on a single run. The correct statement is parity, and it is a statement about this metric and not about the labels: on raw R@100 the human arm keeps a
-real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm
+on a single run. The correct statement is parity, and it is a statement about this metric and not about the labels: on raw R@100, pooled across seeds, the human arm
+keeps a real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm
 leads fivefold, 0.268 against 0.052.
 
 The arms differ far more in stability than in score. Across seeds the

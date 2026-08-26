@@ -176,7 +176,7 @@ Ten ablations were run. Seven sweep a shipped parameter over the cached geometry
 \setlength{\tabcolsep}{3pt}
 \footnotesize
 \begin{longtable}{>{\raggedright\arraybackslash}p{0.042\textwidth}>{\raggedright\arraybackslash}p{0.263\textwidth}>{\raggedright\arraybackslash}p{0.279\textwidth}>{\raggedright\arraybackslash}p{0.353\textwidth}}
-\caption[The nine ablations]{The nine ablations: what each tests, the setting that shipped, and the verdict on held-out annotators.}\\
+\caption[The ten ablations]{The ten ablations: what each tests, the setting that shipped, and the verdict on held-out annotators.}\\
 \hline
 \# & What it tests & Setting & Verdict \\
 \hline
@@ -361,7 +361,7 @@ The cause is a threshold fitted where its error was invisible. Sorted by the con
 
 The repair was fitted, shipped, and then re-audited from scratch. The obvious response, raising the threshold until precision recovers, cannot be evaluated on the sample that suggested it: a cut-off chosen by inspecting these 94 verdicts and then scored against them would be optimistic by an unknown amount, which is the error that produced the 0.9. The cut-off was therefore fitted the way every threshold in Chapter 3 is fitted, on the 63 audited claims from annotator groups 0--5, where precision rises steeply to 0.686 at 0.85 and flattens after; on the 31 claims from groups 6--8 that no part of the fit saw, it predicted \textbf{0.367 $\rightarrow$ 0.667}.
 
-\texttt{on\_\allowbreak{}contact\_\allowbreak{}min} was then set to 0.85 and every experiment in this dissertation re-run against the new labels. That prediction is not what this section reports, because a projection from held-out items selected under the \textit{old} labels is still an extrapolation. A second pack was drawn from the new emissions instead --- 219 items, 191 claims and 28 decoys, same construction, same blinding, same two judges --- and audited independently.
+\texttt{on\_\allowbreak{}contact\_\allowbreak{}min} was then set to 0.85 and every experiment in this dissertation re-run against the new labels. That prediction is not what this section reports, because a projection from held-out items selected under the \textit{old} labels is still an extrapolation. A second pack was drawn from the new emissions instead --- 219 items, 191 claims and 28 decoys, same construction, same blinding, same two judges --- and audited independently. In the table below \textbf{v3} is the pre-refit pack of \S{}4.14, drawn at \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} 0.60, and \textbf{v4} this fresh one, drawn at the shipped 0.85.
 
 \begin{center}
 \setlength{\tabcolsep}{3pt}

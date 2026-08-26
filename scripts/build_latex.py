@@ -263,7 +263,7 @@ TABLES = {
         "Front/behind by annotator group: emission rate, agreement where the "
         "tool commits, and the effect of aligning the direction convention.",
         # 4.9
-        "The nine ablations: what each tests, the setting that shipped, and "
+        "The ten ablations: what each tests, the setting that shipped, and "
         "the verdict on held-out annotators.",
         # 4.14
         "Stability of each predicate across viewpoints of the same scene, "
@@ -297,7 +297,7 @@ TABLES = {
     ],
     "chapter6_benchmark.md": [
         "Benchmark test results (SGDet) for the human-trained and "
-        "auto-trained arms.",
+        "auto-trained arms, at seed 42; Table 6.2 pools all three seeds.",
         "Seed replication: which differences separate across three seeds "
         "per arm.",
     ],

@@ -30,7 +30,7 @@ Both best checkpoints evaluated on the identical test set (210 images, human gol
 \setlength{\tabcolsep}{6pt}
 \small
 \begin{longtable}{lll}
-\caption[Benchmark test results (SGDet) for the human-trained]{Benchmark test results (SGDet) for the human-trained and auto-trained arms.}\\
+\caption[Benchmark test results (SGDet) for the human-trained]{Benchmark test results (SGDet) for the human-trained and auto-trained arms, at seed 42; Table 6.2 pools all three seeds.}\\
 \hline
 metric (test, sgdet) & human-trained & auto-trained \\
 \hline
@@ -83,7 +83,7 @@ aligned & mR@100 & corrected & 0.333 (0.310--0.369) & 0.316 (0.312--0.320) & \te
 
 All nine runs were trained in one session on one clone, one frozen detector and one configuration, so the arms differ in their labels and nothing else. An earlier set of figures, with the human arm at 0.326 pooled, came from runs made weeks apart against different states of the upstream code; \S{}7.4 reports what that cost. The \textbf{aligned} row re-scores the same models against gold with the two inverted annotators corrected (\S{}4.5). Cells give the mean over three seeds with the per-seed range in brackets.
 
-\textbf{On the metric this chapter is organised around, the two label sources are indistinguishable.} The pooled mR@100 rows are level and no slice separates them: every row's seed ranges overlap, with the automatic arm's sitting \textit{inside} the human arm's on the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and 43 (+0.010) and trails at 44 (-0.032), so the pooled difference of 0.001 rests on a single run. The correct statement is parity, and it is a statement about this metric and not about the labels: on raw R@100 the human arm keeps a real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm leads fivefold, 0.268 against 0.052.
+\textbf{On the metric this chapter is organised around, the two label sources are indistinguishable.} The pooled mR@100 rows are level and no slice separates them: every row's seed ranges overlap, with the automatic arm's sitting \textit{inside} the human arm's on the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and 43 (+0.010) and trails at 44 (-0.032), so the pooled difference of 0.001 rests on a single run. The correct statement is parity, and it is a statement about this metric and not about the labels: on raw R@100, pooled across seeds, the human arm keeps a real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm leads fivefold, 0.268 against 0.052.
 
 The arms differ far more in stability than in score. Across seeds the automatic arm's pooled mR@100 spans 0.006 against the human arm's 0.052 and the vision-language arm's 0.044, eight and seven times wider. One definition applied uniformly produces a model that lands in the same place whatever the initialisation, and nine annotators applying nine conventions do not. A margin of 0.001 between arms whose own seeds move by 0.052 is not a result in either direction, which is the reading the spread column exists to force.
 

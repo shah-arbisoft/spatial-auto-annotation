@@ -648,7 +648,9 @@ dissertation re-run against the new labels. That prediction is not what this
 section reports, because a projection from held-out items selected under the
 *old* labels is still an extrapolation. A second pack was drawn from the new
 emissions instead — 219 items, 191 claims and 28 decoys, same construction,
-same blinding, same two judges — and audited independently.
+same blinding, same two judges — and audited independently. In the table
+below **v3** is the pre-refit pack of §4.14, drawn at `on_contact_min`
+0.60, and **v4** this fresh one, drawn at the shipped 0.85.
 
 | Predicate | v3 author | v4 author (shipped) | v4 model |
 |---|---|---|---|
