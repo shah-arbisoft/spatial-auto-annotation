@@ -1,113 +1,108 @@
 # Chapter 9: Conclusions and Future Work
 
 This chapter closes the dissertation: what each objective was met with and
-how the two research questions are answered (§9.1), the contributions (§9.2),
-each limitation paired with the experiment that would settle it (§9.3), and
-a personal reflection on how the project was actually conducted (§9.4).
+how the two research questions are answered (§9.1), the contributions
+(§9.2), each limitation paired with the experiment that would settle it
+(§9.3), and a personal reflection on how the project was actually conducted
+(§9.4).
 
 ## 9.1 Summary of the dissertation
 
 The aim was to determine whether spatial-relationship annotation for
 robot-acquired images can be automated, and whether the resulting labels are
-good enough to replace the human ones. Six objectives carried it, and the
-evidence for each is already reported.
+good enough to replace the human ones. Six objectives carried it. **O1** is
+the pipeline: 836 images annotated in about five minutes on a 6 GB GPU, no
+human deciding any label, the dataset's formats written byte-compatibly.
+**O2** is the specification, with every threshold fitted on groups 0 to 5
+alone. **O3** is the fidelity study, mean recall 0.85 and 0.74 on annotators
+no threshold saw, against three baselines, a vision-language model, ten
+ablations and audited precision. **O4** attributes every one of the 1,650
+missed triplets to a cause, leaving roughly 7% genuine tool error (§4.10,
+§7.2). **O5** is the controlled experiment, 0.75 against 0.30 human and 0.36
+self-trained. **O6** repeats it in the source paper's framework with a
+frozen detector and three seeds per arm, and carries it one link further to
+a planner; it is met in the sense that decides the answer, since the
+heavyweight test does not agree with the lightweight one, the disagreement
+is localised to the annotators whose labels Chapter 4 convicted of measured
+defects, and both readings are reported and not one selected. Section 1.2.2
+fixed what would count as an answer before any result was reported; what
+follows is the verdict against those criteria.
 
-**O1** is the pipeline: 836 images annotated in about five minutes on a 6 GB
-GPU, no human deciding any label, the dataset's formats written
-byte-compatibly. **O2** is the specification, with every threshold fitted on
-groups 0 to 5 alone. **O3** is the fidelity study, mean recall 0.85 and 0.74
-on annotators no threshold saw, against three baselines, a vision-language
-model, ten ablations and audited precision. **O4** attributes every one of
-the 1,650 missed triplets to a cause, leaving roughly 7% genuine tool error
-(§4.10, §7.2). **O5** is the controlled experiment, 0.75 against 0.30 human
-and 0.36 self-trained. **O6** repeats it in the source paper's framework
-with a frozen detector and three seeds per arm, and carries it one link
-further to a planner.
-
-O6 is met in the sense that decides the answer: the heavyweight test does
-not agree with the lightweight one, the disagreement is localised to the
-annotators whose labels Chapter 4 convicted of measured defects, and both
-readings are reported and not one selected. Section 1.2.2 fixed what would
-count as an answer before any result was reported, so what follows is the
-verdict against those criteria and its conditions.
-
-**RQ1 is answered yes on five of seven predicates and qualified on two.** The
-criterion was per-predicate recall on annotator groups no threshold ever saw,
-judged against two references fixed in advance. One of them is met and the
-other turned out to be unavailable. The trivial baselines are beaten by a wide margin: 0.74 on the held-out groups the criterion names, 0.85 pooled, against 0.14 for both random and majority. The second asked how well two human annotators would agree with each other,
-and this dataset cannot say: the nine groups labelled disjoint batches, and
-§4.6 reports the Fréchet bound over them as a measurement the data cannot
-support, since the batches differ threefold in object density. That interval
-carries no weight here, and the assumption-free half of §4.6, a spread of
-0.082, is too narrow to carry any either.
-Comparability rests on the trivial baselines and on the per-predicate audit,
-and the yardstick §1.2.2 hoped for is one this dataset could not supply. The
-second
-condition, that labels beyond the human record survive audit, holds for the
-lateral, proximity and depth-decided predicates at blind-audited precision
-0.79–1.00. **It is not met for support.** At 0.535 [0.42, 0.65] about half the support
-labels the tool adds beyond the human record are wrong. That beats chance and
-falls well short of a standard anything should be built on, and §1.2.2 asked
-for labels that survive audit. Support therefore answers RQ1 on recall and fails it on
-precision, and the per-predicate form of the question exists so that this
-cannot be averaged away. What follows for anything consuming the output is
-that support is a candidate set and not a label set: fit to propose
-relations for a checker, not to be acted on unverified. The contact rule repaired the box rule's failure but kept a threshold fitted
-where a false positive cost nothing; the claim that it reached 0.9 was an
-artefact of auditing unblinded; and refitting lifted a measured 0.404 to a
-measured 0.535, short of the 0.667 predicted. The qualification is
-`in front of` and `behind` at 0.70/0.71 pooled: not a failure of the criterion
-but a disagreement about the words, since §4.12 shows the tool reproducing its
-own verdict across viewpoints 0.958 of the time while two annotator groups
-applied the opposite convention. A per-predicate answer was required precisely
-so this could not hide inside a mean.
+**RQ1 is answered yes on five of seven predicates and qualified on two.**
+The criterion was per-predicate recall on annotator groups no threshold ever
+saw, judged against two references fixed in advance; one is met and the
+other turned out to be unavailable. The trivial baselines are beaten by a
+wide margin: 0.74 on the held-out groups the criterion names, 0.85 pooled,
+against 0.14 for both random and majority. The second reference, how well
+two human annotators would agree with each other, this dataset cannot say:
+the nine groups labelled disjoint batches differing threefold in object
+density, so §4.6 reports the Fréchet bound as a measurement the data cannot
+support, and the assumption-free spread of 0.082 is too narrow to carry
+weight either. Comparability rests on the trivial baselines and the
+per-predicate audit; the yardstick §1.2.2 hoped for is one this dataset
+could not supply. The second condition, that labels beyond the human record
+survive audit, holds for the lateral, proximity and depth-decided predicates
+at blind-audited precision 0.79–1.00. **It is not met for support.** At
+0.535 [0.42, 0.65] about half the support labels the tool adds beyond the
+human record are wrong: that beats chance and falls well short of a standard
+anything should be built on, and §1.2.2 asked for labels that survive audit.
+Support therefore answers RQ1 on recall and fails it on precision, and the
+per-predicate form of the question exists so that this cannot be averaged
+away; what follows for anything consuming the output is that support is a
+candidate set and not a label set — fit to propose relations for a checker,
+not to be acted on unverified. The contact rule repaired the box rule's
+failure but kept a threshold fitted where a false positive cost nothing; the
+claim that it reached 0.9 was an artefact of auditing unblinded; and
+refitting lifted a measured 0.404 to a measured 0.535, short of the 0.667
+predicted. The qualification is `in front of` and `behind` at 0.70/0.71
+pooled: not a failure of the criterion but a disagreement about the words,
+since §4.12 shows the tool reproducing its own verdict across viewpoints
+0.958 of the time while two annotator groups applied the opposite
+convention. A per-predicate answer was required precisely so this could not
+hide inside a mean.
 
 **RQ2 is answered yes at the classifier, not met at the planner by the tool
-alone, and undecided at the benchmark.** The controlled classifier
-gives 0.75 against 0.30 on held-out *human* gold, the rival source's own
-yardstick and the harder direction the criterion specified. The planner is the
-one level where the choice of comparator decides the verdict, and §1.2.2 fixed
+alone, and undecided at the benchmark.** The controlled classifier gives
+0.75 against 0.30 on held-out *human* gold, the rival source's own yardstick
+and the harder direction the criterion specified. The planner is the one
+level where the choice of comparator decides the verdict, and §1.2.2 fixed
 it as the human arm: against that arm's 25 of 25 the tool's relations alone
 clear 19, which falls short. What draws level is the union with the
-vision-language source at 25 of 25. That union is label-free, since no human
-labels anything in it either, but it is not the treatment RQ2 names: the
-question is about this pipeline's labels against human ones, and adding a
-second automatic source answers a different and easier question. So what the
-planner establishes is that human annotation can be matched *without a human
-in the loop*, and not that the tool matches it, which is the weaker of the
-two readings and the one the criterion supports.
-The benchmark neither confirms the margin nor contradicts it. Section 1.2.2
-asked for *at least as well*, which parity satisfies as written, but a null
-result is not a demonstration of equivalence: paired by seed the difference is
--0.0006 with a 95% interval of [-0.070, +0.069], so the honest word for 0.292
-against 0.293 is *undecided* rather than *yes*: the automatic
-arm's point estimate sits 0.001 below the human arm's, which is a difference
-no experiment of this size could resolve in either direction, with overlapping
-seed ranges on every slice. Section 1.2.2 required agreement across all three
-for an unqualified yes, and a tie is not agreement. What Chapter 5 measures as
-a two-and-a-half-fold advantage the ranked metric measures as parity, and
-§1.2.2 committed to reporting that instead of resolving it favourably.
-Chapter 6 does: what
-difference remains sits on the two test annotators carrying measured
-labelling defects and reverses on the one without, on a test gold whose
-front/behind relations are 72% written by those two, while the auto arm
-recovers five times more of the relation types the manual annotation never
-recorded and reproduces itself across seeds more than eight times more tightly.
-A third arm complicates both readings and is reported because it is the
-result that suits the argument least: labels written by a vision-language
-model lead the benchmark at 0.329 against 0.293 and 0.292, and lead the one
-annotator with no measured defect by seed ranges that do not overlap either
-other arm (§6.3.2). Whatever the ranked metric rewards, geometry is not
-uniquely good at supplying it.
+vision-language source at 25 of 25 — label-free, since no human labels
+anything in it either, but not the treatment RQ2 names: adding a second
+automatic source answers a different and easier question. So the planner
+establishes that human annotation can be matched *without a human in the
+loop*, not that the tool matches it, the weaker reading and the one the
+criterion supports. The benchmark neither confirms the margin nor
+contradicts it. Section 1.2.2 asked for *at least as well*, which parity
+satisfies as written, but a null result is not a demonstration of
+equivalence: paired by seed the difference is -0.0006 with a 95% interval of
+[-0.070, +0.069], so the honest word for 0.292 against 0.293 is *undecided*
+rather than *yes*, a difference no experiment of this size could resolve in
+either direction. Section 1.2.2 required agreement across all three for an
+unqualified yes, and a tie is not agreement. What Chapter 5 measures as a
+two-and-a-half-fold advantage the ranked metric measures as parity, and
+Chapter 6 reports that instead of resolving it favourably: what difference
+remains sits on the two test annotators carrying measured labelling defects
+and reverses on the one without, on a test gold whose front/behind relations
+are 72% written by those two, while the auto arm recovers five times more of
+the relation types the manual annotation never recorded and reproduces
+itself across seeds more than eight times more tightly. A third arm
+complicates both readings and is reported because it is the result that
+suits the argument least: labels written by a vision-language model lead the
+benchmark at 0.329 against 0.293 and 0.292, and lead the one annotator with
+no measured defect by seed ranges that do not overlap either other arm
+(§6.3.2). Whatever the ranked metric rewards, geometry is not uniquely good
+at supplying it.
+
 "Good enough to replace" is met at two levels and unrefuted at the third;
 "better", which Chapter 5 and the planner both support, holds where ground
-truth means geometric consistency and not where it means annotation practice.
-
-The evidence carries this conditional: **automatic labels are better
-wherever ground truth means geometric consistency, and do not overtake human labels
-wherever it means annotation practice.** Robot planning needs the first,
-which is why the planner separates the sources decisively and the ranked
-benchmark cannot separate them at all.
+truth means geometric consistency and not where it means annotation
+practice. The evidence carries this conditional: **automatic labels are
+better wherever ground truth means geometric consistency, and do not
+overtake human labels wherever it means annotation practice.** Robot
+planning needs the first, which is why the planner separates the sources
+decisively and the ranked benchmark cannot separate them at all.
 
 ## 9.2 Research contributions
 
@@ -116,34 +111,35 @@ existing images 20 times more densely in five minutes, in the dataset's own
 formats, with the operational definitions the annotation process never had.
 The fitted `near` threshold answers the future-work request in Wang et al.
 (2025) for "spatial thresholds for near", and two annotation defects are
-quantified for the first time: front/behind inverted in two of nine annotator
-groups, and `near` used by only three, with fourfold variation in
+quantified for the first time: front/behind inverted in two of nine
+annotator groups, and `near` used by only three, with fourfold variation in
 exhaustiveness.
 
 **For work on scene-graph benchmarks.** Evidence that ranked recall against
-sparse, guideline-free annotation partly measures agreement with annotator habits as well as spatial correctness. The evidence is a dissociation:
-the model that ranks better memorises which pairs annotators record, and the
+sparse, guideline-free annotation partly measures agreement with annotator
+habits as well as spatial correctness. The evidence is a dissociation: the
+model that ranks better memorises which pairs annotators record, and the
 model that covers the relation types they never recorded is the one trained
 on consistent computed labels. The per-annotator decomposition localises the
-effect precisely, and the seed replication shows which parts of it survive
-training variance.
+effect, and the seed replication shows which parts survive training
+variance.
 
 **For weak supervision.** A controlled three-way comparison, on the same
 features, model, split and seeds, showing that programmatic labels out-teach
 both scarce human labels and the standard remedy for scarce human labels.
-The mechanism is measured, not inferred: self-training contributes
-roughly a thousand confident negative pseudo-labels for every positive one,
+The mechanism is measured, not inferred: self-training contributes roughly a
+thousand confident negative pseudo-labels for every positive one,
 propagating the annotators' silence and not their judgement.
 
-**Methodologically.** Calibration held out by *annotator* and not by image; a
-sparse-gold protocol pairing recall with audited precision; exhaustive loss
-attribution; a way to estimate what annotators would score against one another
-without ever having labelled the same images (§4.6); and a reliability check
-needing no labels at all, from recovering the fact that the dataset was cut
-from a continuous capture (§4.12). The last is
-the one most likely to transfer, since many robotics datasets are sequences
-presented as image sets, and there a predicate's agreement with itself across
-viewpoints separates a rule that is wrong from one that is merely uncertain.
+**Methodologically.** Calibration held out by *annotator* and not by image;
+a sparse-gold protocol pairing recall with audited precision; exhaustive
+loss attribution; a way to estimate what annotators would score against one
+another without ever having labelled the same images (§4.6); and a
+reliability check needing no labels at all, from recovering the fact that
+the dataset was cut from a continuous capture (§4.12). The last is the most
+likely to transfer, since many robotics datasets are sequences presented as
+image sets, and there a predicate's agreement with itself across viewpoints
+separates a rule that is wrong from one that is merely uncertain.
 
 ## 9.3 Limitations, and future research and development
 
@@ -152,39 +148,50 @@ settle it, because that is more useful than an apology.
 
 **The chain reaches the plan, not the robot.** The planner experiment (§5.7)
 closes one of the two remaining links: across 25 held-out scenes an LLM
-planner never clears an occluding object when given objects alone (0/25),
-always clears it when given the human relationships (25/25), and does so on 19
-of 25 with the automatic ones, all six failures traced to a missing support
-relation, not to faulty reasoning. What is missing is execution: no robot moved, so the evidence runs from labels
-to models to plans and stops. The same conditions on a physical Spot, or in a
-simulator with contact physics, would close the last link, and it is the only
-one left.
+planner never clears an occluding object given objects alone (0/25), always
+clears it given the human relationships (25/25), and does so on 19 of 25
+with the automatic ones, all six failures traced to a missing support
+relation, not faulty reasoning. What is missing is execution: no robot
+moved. The same conditions on a physical Spot, or in a simulator with
+contact physics, would close the last link, and it is the only one left.
 
-**The shipped support rule is not independently verdicted.** The validation study (Appendix E.3) closed at 20 raters and agrees with the author's blind audit on support to 0.009, with a control arm establishing that the same raters score human annotation at 0.940, so the author's verdicts are corroborated by disinterested judges rather than merely unchallenged (§4.15). What it cannot cover is the rule the tool now ships: its claims were drawn a month before `on_contact_min` was re-fitted, so the shipped support figure still rests on the author's verdict and the model's. Re-running the arm on post-refit labels is the cheapest outstanding item in this list.
+**The shipped support rule is not independently verdicted.** The validation
+study (Appendix E.3) closed at 20 raters and agrees with the author's blind
+audit on support to 0.009, with a control arm establishing that the same
+raters score human annotation at 0.940, so the author's verdicts are
+corroborated by disinterested judges rather than merely unchallenged
+(§4.15). What it cannot cover is the rule the tool now ships: its claims
+were drawn a month before `on_contact_min` was re-fitted, so the shipped
+support figure still rests on the author's verdict and the model's.
+Re-running the arm on post-refit labels is the cheapest outstanding item in
+this list.
 
-**The benchmark is undecided, and the run that would decide it is
-written.** Three seeds bound the paired difference to [-0.070, +0.069]
-(§6.7), so the chapter reports parity without establishing it; ten per arm
-would tighten that to about ±0.020. `scripts/kaggle/unrun_seed_power_10x.ipynb`
-implements it, pinning the framework commit §7.4 names as uncontrolled and
-ordering runs seed-major so an interrupted session leaves the arms balanced.
-It needs about 45 GPU-hours against a 30-hour weekly allowance, and ships
-unrun.
+**The benchmark is undecided, and the run that would decide it is written.**
+Three seeds bound the paired difference to [-0.070, +0.069] (§6.7), so the
+chapter reports parity without establishing it; ten per arm would tighten
+that to about ±0.020. `scripts/kaggle/unrun_seed_power_10x.ipynb` implements
+it, pinning the framework commit §7.4 names as uncontrolled and ordering
+runs seed-major so an interrupted session leaves the arms balanced. It needs
+about 45 GPU-hours against a 30-hour weekly allowance, and ships unrun.
 
 **One domain, one camera, six object classes.** What transfers is the
 calibration procedure, not the fitted constants. A labelled cross-domain
 sample of a few dozen images would turn Appendix E.4's qualitative evidence
-into a measurement, and is cheap enough that a replication should include one.
+into a measurement, and is cheap enough that a replication should include
+one.
 
 **Front/behind is bounded, but less by depth than the number suggests.**
 Section 4.9 bounds the engineering: neither a larger depth model nor
-multi-frame geometry moves the pair, so the limit is monocular ambiguity in the scenes rather than model capacity. A predicate reproducing its own verdict
-across viewpoints 0.958 of the time while recovering 0.70 of the human labels
-is not mismeasuring the scene but applying a criterion the annotators did not
-share, so the intervention with the best expected return is a written annotation guideline ahead of a better network — an uncomfortable
-conclusion for a computer-vision project and the one the evidence supports.
-The routes that stay open are a calibrated stereo pair or an RGB-D capture;
-wider surface detection was built, measured and declined (Appendix D.4).
+multi-frame geometry moves the pair, so the limit is monocular ambiguity in
+the scenes rather than model capacity. A predicate reproducing its own
+verdict across viewpoints 0.958 of the time while recovering 0.70 of the
+human labels is not mismeasuring the scene but applying a criterion the
+annotators did not share, so the intervention with the best expected return
+is a written annotation guideline ahead of a better network — an
+uncomfortable conclusion for a computer-vision project and the one the
+evidence supports. The routes that stay open are a calibrated stereo pair or
+an RGB-D capture; wider surface detection was built, measured and declined
+(Appendix D.4).
 
 **Detection bounds full automation.** End-to-end recall with a zero-shot
 detector is 0.38 against the relation layer's 0.85 conditional on detection.
@@ -192,28 +199,27 @@ The gap is detection, not relations, and the source paper's own trained
 detector (0.93 mAP@50) would close most of it. That check needs only the
 released weights.
 
-**Scale is shown without ground truth.** The supervising group supplied
-the full 2,650-frame capture the released images were cut from, and the
-pipeline was run over the 1,766 frames nobody has annotated: 562 keyframes
-after content-adaptive selection, 58 minutes, 185,242 triplets, a predicate
-distribution 0.032 in total variation from the annotated portion
-(Appendix E.6).
-Capacity and stability on unfamiliar input are therefore measured. Correctness on that portion is not, and cannot be without labels;
-§4.12 substitutes self-agreement for truth and should be read as the weaker
-thing it is. Closing it needs a few hundred labelled triplets from those
-frames, an afternoon of annotation.
+**Scale is shown without ground truth.** The supervising group supplied the
+full 2,650-frame capture, and the pipeline was run over the 1,766 frames
+nobody has annotated: 562 keyframes after content-adaptive selection, 58
+minutes, 185,242 triplets, a predicate distribution 0.032 in total variation
+from the annotated portion (Appendix E.6). Capacity and stability on
+unfamiliar input are therefore measured; correctness on that portion is not,
+and cannot be without labels — §4.12 substitutes self-agreement for truth
+and should be read as the weaker thing it is. Closing it needs a few hundred
+labelled triplets from those frames, an afternoon of annotation.
 
 **The capture is stereo, and only one eye was used.** The supplied folder is
 named `rightimg`, implying a left counterpart held by the supervising group.
-True stereo would attack the front/behind bound directly, supplying disparity
-at every frame from a known baseline, which is what the multi-frame estimators
-of A9 lack: those must recover the camera's motion first, and on small
-low-texture objects they answer for only 9% of pairs and are 0.20 less
-accurate where they do (§4.9, Appendix D.6). A calibrated pair removes both
-problems and is the cheapest experiment left on this predicate. It also keeps
-the method's premise intact, since stereo is available at capture time whereas
-depth recovered from a robot walking twenty frames is not available to a
-single-image annotator.
+True stereo would attack the front/behind bound directly, supplying
+disparity at every frame from a known baseline, which is what the
+multi-frame estimators of A9 lack: those must recover the camera's motion
+first, and on small low-texture objects they answer for only 9% of pairs and
+are 0.20 less accurate where they do (§4.9, Appendix D.6). A calibrated pair
+removes both problems and is the cheapest experiment left on this predicate,
+and it keeps the method's premise intact, since stereo is available at
+capture time whereas depth recovered from a robot walking twenty frames is
+not available to a single-image annotator.
 
 ## 9.4 Personal reflections
 
@@ -221,10 +227,10 @@ The most useful thing this project taught me was to distrust a number until
 I know how it was produced.
 
 That lesson arrived early. My first depth results were poor and every unit
-test passed. The dataset's images are stored rotated 180 degrees behind an
+test passed: the dataset's images are stored rotated 180 degrees behind an
 EXIF flag, so masks and depth were read from an upside-down image while the
-boxes stayed upright, and no automated check could have caught it: every
-component was behaving as written. I found it by rendering an image with its
+boxes stayed upright, and no automated check could have caught it, every
+component behaving as written. I found it by rendering an image with its
 boxes drawn on and looking at it, and have inspected samples after every
 significant change since, which has caught two more.
 
@@ -244,9 +250,8 @@ against the one test annotator with clean conventions, by 0.011 over 73
 images; two more seeds showed them tied and I withdrew it (§6.3.1). I had
 been careful in one place, fitting thresholds on some annotators and
 validating on others, and careless in another, treating one training run as
-a result. The discipline was not new to me; I had simply not applied it to
-training variance, and recording the retraction felt uncomfortable and is, I
-think, right.
+a result. Recording the retraction felt uncomfortable and is, I think,
+right.
 
 Given the time again I would front-load the experiments that answer the
 question the project actually asks. I spent considerable effort proving the
