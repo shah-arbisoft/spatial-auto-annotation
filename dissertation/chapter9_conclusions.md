@@ -151,6 +151,15 @@ one left.
 
 **The shipped support rule is not independently verdicted.** The validation study (Appendix E.3) closed at 20 raters and agrees with the author's blind audit on support to 0.009, with a control arm establishing that the same raters score human annotation at 0.940, so the author's verdicts are corroborated by disinterested judges rather than merely unchallenged (§4.15). What it cannot cover is the rule the tool now ships: its claims were drawn a month before `on_contact_min` was re-fitted, so the shipped support figure still rests on the author's verdict and the model's. Re-running the arm on post-refit labels is the cheapest outstanding item in this list.
 
+**The benchmark is undecided, and the run that would decide it is
+written.** Three seeds bound the paired difference to [-0.070, +0.069]
+(§6.7), so the chapter reports parity without establishing it; ten per arm
+would tighten that to about ±0.020. `scripts/kaggle/7_seed_power_10x.ipynb`
+implements it, pinning the framework commit §7.4 names as uncontrolled and
+ordering runs seed-major so an interrupted session leaves the arms balanced.
+It needs about 45 GPU-hours against a 30-hour weekly allowance, and ships
+unrun.
+
 **One domain, one camera, six object classes.** What transfers is the
 calibration procedure, not the fitted constants. A labelled cross-domain
 sample of a few dozen images would turn Appendix E.4's qualitative evidence
