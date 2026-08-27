@@ -207,6 +207,9 @@ for real photographs must recover geometry from pixels before any rule can
 fire. The works below take up that half, and each outputs something other than
 a scene-graph annotation for these seven predicates.
 
+The four assessments below are this project's, made against the requirements
+of §2.10 rather than reported from the literature.
+
 - **SpatialVLM** (Chen et al., 2024) is the foundational geometry-to-label
   method. It lifts internet images to metric 3D via monocular depth and
   segmentation, then emits up to ~2B spatial question-answer pairs from ~10M

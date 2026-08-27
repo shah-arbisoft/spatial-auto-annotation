@@ -50,6 +50,8 @@ None of this is left as argument. Chapter 5 implements the rival directly as a t
 
 A line of work \textit{computes} spatial facts from perceived geometry instead of predicting them from learned patterns. The idea predates its current instantiations: CLEVR (Johnson et al., 2017) emitted the spatial relations of hundreds of thousands of scenes \textit{from the renderer}, exact by construction, and became the standard diagnostic for compositional reasoning because programmatic labels carry no annotator noise to memorise. It sidesteps the hard half, since its geometry is known only because the scenes are synthetic, while an annotator for real photographs must recover geometry from pixels before any rule can fire. The works below take up that half, and each outputs something other than a scene-graph annotation for these seven predicates.
 
+The four assessments below are this project's, made against the requirements of \S{}2.10 rather than reported from the literature.
+
 \begin{itemize}
 \item \textbf{SpatialVLM} (Chen et al., 2024) is the foundational geometry-to-label method. It lifts internet images to metric 3D via monocular depth and segmentation, then emits up to \textasciitilde{}2B spatial question-answer pairs from \textasciitilde{}10M images, establishing the premise this project adopts: spatial relations can be \textit{derived from measured geometry without human relational labels}. But its output is \textbf{free-form VQA text} over internet images, against no fixed predicate set.
 \end{itemize}

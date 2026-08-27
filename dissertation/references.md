@@ -86,7 +86,7 @@ vision-language models? Investigating their struggle with spatial reasoning',
 Processing (EMNLP)*, pp. 9161-9175.
 
 Kirillov, A. et al. (2023) 'Segment Anything', *Proceedings of the IEEE/CVF
-International Conference on Computer Vision (ICCV)*, pp. 3992-4003.
+International Conference on Computer Vision (ICCV)*, pp. 4015-4026.
 
 Krishna, R. et al. (2017) 'Visual Genome: connecting language and vision using
 crowdsourced dense image annotations', *International Journal of Computer

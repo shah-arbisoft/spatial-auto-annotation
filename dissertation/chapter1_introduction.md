@@ -161,7 +161,8 @@ where that obligation falls due.
 
 ### 1.2.3 Contributions
 
-The deliverable is the first fully-automatic spatial-relationship annotator
+On the literature search of Chapter 2, which found no such system, the
+deliverable is the first fully-automatic spatial-relationship annotator
 for this dataset and its seven predicates, with a geometric specification of
 each, a correction step that rejects impossible labels, confidence flags over
 the ambiguous ones, and a fitted `near` threshold answering a limitation the

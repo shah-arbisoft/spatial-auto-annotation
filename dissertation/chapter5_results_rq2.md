@@ -248,8 +248,8 @@ The two automatic sources fail on different scenes, and the union closes the
 gap. D scores 20 of 25 against the tool's 19, so alone the vision-language
 source is marginally the stronger. The structure underneath matters more: C
 fails on 1, 4, 16, 19, 24 and 25, D on 3, 5, 6, 13 and 14, and **the two
-sets do not intersect**. Every failure in both arms is a support relation
-the source did not supply, never a plan reasoning badly from what it was
+sets do not intersect**. Every failure observed in this sample, in both arms, is a support relation
+the source did not supply rather than a plan reasoning badly from what it was
 given, so a union supplying more support relations repairs exactly those
 cases and cannot break the ones already working. It does: E clears the
 occluder in all 25, gaining six scenes over C and losing none. This is the
