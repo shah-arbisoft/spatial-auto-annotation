@@ -11,6 +11,17 @@ stretch scarce labels instead of replacing them (§2.4), and it ends on the
 two sections that argue against itself: what the field's metrics miss (§2.8)
 and the strongest case against a rule-based annotator (§2.9).
 
+**How this chapter was searched.** Google Scholar, ACM DL, IEEE Xplore,
+OpenReview and arXiv were queried between June and August 2026 on
+combinations of *scene graph*, *spatial relation*, *automatic annotation*,
+*pseudo-label*, *robot perception* and the seven predicate names, with
+forward and backward snowballing from the source paper and from SpatialVLM.
+Preprints and public code were included, since the systems nearest this one
+are released that way; the novelty claim of §1.2.3 is bounded by that search
+and by nothing stronger. Work was kept where it produces or evaluates
+spatial relation labels, and excluded where relations are internal to a
+model with no label artefact.
+
 ## 2.1 Scene graphs and spatial relationships in robotics
 
 The seven spatial predicates this project computes (*on*, *under*,

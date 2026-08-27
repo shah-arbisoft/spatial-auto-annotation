@@ -54,6 +54,6 @@ planner clears it in 0 of 25 given objects alone, 25 of 25 given human
 relationships, 19 of 25 given automatic ones and 25 of 25 given the union of
 the automatic and vision-language sources, identically on two planners
 of very different capability. Automatic labels are at least the equal of human
-ones where ground truth means annotation practice and better where it means
-geometry, and robot planning needs the second. The bottleneck removed was
+ones where the criterion is annotation practice and better where it is
+geometric consistency, and robot planning needs the second. The bottleneck removed was
 limiting not only the dataset's size but what it could teach.

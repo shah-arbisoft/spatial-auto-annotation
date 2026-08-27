@@ -64,7 +64,7 @@ and Methods of Spatio-Temporal Reasoning in Geographic Space*. Berlin:
 Springer, pp. 162-178.
 
 Goyal, A., Yang, K., Yang, D. and Deng, J. (2020) 'Rel3D: a minimally
-contextualized benchmark for grounding spatial relations in 3D', *Advances
+contrastive benchmark for grounding spatial relations in 3D', *Advances
 in Neural Information Processing Systems (NeurIPS)*.
 
 Gu, Q. et al. (2024) 'ConceptGraphs: open-vocabulary 3D scene graphs for

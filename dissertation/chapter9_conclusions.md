@@ -93,12 +93,18 @@ labelling defects and reverses on the one without, on a test gold whose
 front/behind relations are 72% written by those two, while the auto arm
 recovers five times more of the relation types the manual annotation never
 recorded and reproduces itself across seeds more than eight times more tightly.
+A third arm complicates both readings and is reported because it is the
+result that suits the argument least: labels written by a vision-language
+model lead the benchmark at 0.329 against 0.293 and 0.292, and lead the one
+annotator with no measured defect by seed ranges that do not overlap either
+other arm (§6.3.2). Whatever the ranked metric rewards, geometry is not
+uniquely good at supplying it.
 "Good enough to replace" is met at two levels and unrefuted at the third;
 "better", which Chapter 5 and the planner both support, holds where ground
-truth means geometry and not where it means annotation practice.
+truth means geometric consistency and not where it means annotation practice.
 
 The evidence carries this conditional: **automatic labels are better
-wherever ground truth means geometry, and do not overtake human labels
+wherever ground truth means geometric consistency, and do not overtake human labels
 wherever it means annotation practice.** Robot planning needs the first,
 which is why the planner separates the sources decisively and the ranked
 benchmark cannot separate them at all.

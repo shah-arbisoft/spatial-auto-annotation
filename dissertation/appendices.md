@@ -1027,8 +1027,8 @@ design is given first, so that a reader can judge the instrument
 independently of what it found.
 
 It measures four things the author-verdicted audits cannot: crowd precision
-per predicate at a sample two orders of magnitude larger than §4.4's
-fifteen; the same raters' precision on claims the *annotators* wrote, which
+per predicate on 412 tool claims against §4.4's fifteen per predicate, some
+twenty-seven times the sample; the same raters' precision on claims the *annotators* wrote, which
 is what turns the first number from a bare score into a comparison; an
 author-bias check against the author's own verdict on the 147 items carrying
 both; and whether disputed claims are wrong or merely ambiguous, through
