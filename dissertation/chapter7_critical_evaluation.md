@@ -50,7 +50,9 @@ thousand confident *negative* pseudo-labels for every positive one,
 propagating the annotators' silence and not their judgement, and on `near`
 it drives recall below the human baseline it started from. The comparison is
 therefore not against doing nothing, but against the obvious alternative,
-under identical conditions.
+under identical conditions. The six objectives of §1.2.1 are audited against
+their evidence in §9.1; this chapter is concerned with what the results
+*mean*.
 
 ## 7.2 What the remaining failures are made of
 
