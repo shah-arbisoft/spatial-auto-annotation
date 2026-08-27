@@ -334,8 +334,11 @@ The two declined perception ablations bound where engineering can help: neither 
 four-times-larger depth model nor two-view triangulation over the raw
 capture improves the depth pair, and the second is 0.20 *worse* where it
 answers at all. The limit is monocular ambiguity in the scenes, not model
-capacity, and multi-view geometry inherits it instead of removing it; §7.2
-takes up what follows.
+capacity, and the multi-view route tested here inherits it instead of
+removing it. That route is two views with an assumed focal length, so what
+is declined is a lightweight uncalibrated estimator and not multi-view
+geometry in general; a calibrated stereo pair is the open route §9.3 keeps
+and §7.2 takes up what follows.
 
 Full derivations, calibration evidence, audit samples and the failure
 structure of each refinement are given in **Appendix D**.

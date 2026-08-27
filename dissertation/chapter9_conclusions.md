@@ -62,17 +62,20 @@ own verdict across viewpoints 0.958 of the time while two annotator groups
 applied the opposite convention. A per-predicate answer was required precisely
 so this could not hide inside a mean.
 
-**RQ2 is answered yes at the classifier, met at the planner by the automatic
-sources together, and undecided at the benchmark.** The controlled classifier
+**RQ2 is answered yes at the classifier, not met at the planner by the tool
+alone, and undecided at the benchmark.** The controlled classifier
 gives 0.75 against 0.30 on held-out *human* gold, the rival source's own
 yardstick and the harder direction the criterion specified. The planner is the
 one level where the choice of comparator decides the verdict, and §1.2.2 fixed
 it as the human arm: against that arm's 25 of 25 the tool's relations alone
 clear 19, which falls short. What draws level is the union with the
-vision-language source at 25 of 25, and the union is admissible here because
-no human labels anything in it either. The level is therefore carried by the
-automatic sources together and lost by the shipped tool on its own, and the
-answer has to contain both halves of that.
+vision-language source at 25 of 25. That union is label-free, since no human
+labels anything in it either, but it is not the treatment RQ2 names: the
+question is about this pipeline's labels against human ones, and adding a
+second automatic source answers a different and easier question. So what the
+planner establishes is that human annotation can be matched *without a human
+in the loop*, and not that the tool matches it, which is the weaker of the
+two readings and the one the criterion supports.
 The benchmark neither confirms the margin nor contradicts it. Section 1.2.2
 asked for *at least as well*, which parity satisfies as written, but a null
 result is not a demonstration of equivalence: paired by seed the difference is
