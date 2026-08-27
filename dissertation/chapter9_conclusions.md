@@ -50,7 +50,9 @@ labels the tool adds beyond the human record are wrong. That beats chance and
 falls well short of a standard anything should be built on, and §1.2.2 asked
 for labels that survive audit. Support therefore answers RQ1 on recall and fails it on
 precision, and the per-predicate form of the question exists so that this
-cannot be averaged away. The contact rule repaired the box rule's failure but kept a threshold fitted
+cannot be averaged away. What follows for anything consuming the output is
+that support is a candidate set and not a label set: fit to propose
+relations for a checker, not to be acted on unverified. The contact rule repaired the box rule's failure but kept a threshold fitted
 where a false positive cost nothing; the claim that it reached 0.9 was an
 artefact of auditing unblinded; and refitting lifted a measured 0.404 to a
 measured 0.535, short of the 0.667 predicted. The qualification is

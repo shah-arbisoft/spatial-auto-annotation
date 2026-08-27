@@ -335,11 +335,13 @@ compared with the variation of the procedure that produced it.
 
 ## 6.7 Answer, at the level the source paper measures
 
-At the source paper's level of robot-readiness, automatic labels train a
-model that trains longer, covers five times more of the relation types the
-manual annotation never recorded, reproduces across seeds more than eight
-times more tightly, ranks level overall, and ranks slightly ahead on the one
-test annotator with no measured defect. The evidence supports a conditional
+At the source paper's level of robot-readiness, automatic labels do not beat
+human ones on the headline metric: 0.292 against 0.293, a difference no
+experiment this size could call either way. What they do is train a model
+that trains longer, covers five times more of the relation types the manual
+annotation never recorded, reproduces across seeds more than eight times more
+tightly, and ranks slightly ahead on the one test annotator with no measured
+defect. The evidence supports a conditional
 claim: **automatic labels are the better training material wherever ground
 truth means geometry, and do not overtake human labels wherever it means
 annotation habits.** The first condition is the operative one for a robot,
