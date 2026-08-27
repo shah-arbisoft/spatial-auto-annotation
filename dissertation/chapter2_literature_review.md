@@ -459,11 +459,10 @@ annotation cannot adjudicate a dispute about the annotation.
 
 ## 2.9 The case against a rule-based annotator
 
-An honest review states the strongest version of the opposing argument, and
-never one chosen because it is answerable. Four objections stand against the
-method this project uses and a fifth against its premise, and they are set
-out here, before any result, so that later chapters can be read as attempts
-on them.
+The objections below are the strongest ones against this method, not the
+ones easiest to answer. Four stand against the method this project uses and
+a fifth against its premise, and they are set out here, before any result,
+so that later chapters can be read as attempts on them.
 
 **Rules do not scale with the vocabulary.** Each predicate here is an
 explicitly authored geometric test with fitted thresholds. Seven are
