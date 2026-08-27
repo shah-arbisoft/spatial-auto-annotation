@@ -80,17 +80,11 @@ component decides a relationship.
 
 The alternative was to keep the human labels and stretch them, by
 semi-supervised pseudo-labelling or active learning. Section 2.4 sets out
-that rival and the three properties of this dataset that argue against it:
-the seed is internally inconsistent, it is not a random sample of what it
-would extend, and it is weakest exactly where the task is hardest, the
-teacher such a loop would start from reaching 0.08–0.25 recall on the
-sparsely-labelled predicates. A geometric labelling function inherits none
-of those, because it does not derive from the seed at all: it is fitted on a
-handful of thresholds, validated on held-out annotators, and exactly as
-consistent on the unlabelled 90% as on the labelled 10%. None of this is
-left as argument — §5.3 runs the self-training loop as a third arm of the
-same controlled experiment, so the two routes meet on the humans' own
-held-out annotations.
+that rival and the three measured properties of this dataset that argue
+against it; a geometric labelling function inherits none of them, because it
+does not derive from the seed at all, and §5.3 runs the self-training loop
+as a third arm of the same controlled experiment so the two routes meet on
+the humans' own held-out annotations.
 
 **Evaluation setting.** The relation stage is evaluated with ground-truth
 boxes and classes (the SGG literature's *PredCls* setting, §2.7). This
@@ -128,64 +122,57 @@ upright before any box, mask or depth is read.
 
 ## 3.5 The seven rules
 
-The complete specification is **Appendix C**: every rule with its
-thresholds, the shipped values, the evidence behind each one, and the
-correction and flagging policy. It is also maintained in the repository as
-`docs/predicate_spec.md`, the copy the code and tests are checked against.
-In brief:
-
-- **on / under** encode *support*: subject above object, near-touching
-  (vertical gap within ±0.05), horizontal extents overlapping (≥0.20 of the
-  narrower), which keeps "floating in front of" from reading as "on".
-  `under` is the strict inverse, so the pair can never contradict.
-- **to the left of / to the right of** compare horizontal centres in the
-  camera frame — the frame the annotators saw on screen, the faithful choice
-  among the three RoboSpatial distinguishes (Song et al., 2025) — with an
-  ambiguity band (0.02) that abstains when centres nearly coincide.
-- **in front of / behind** is a two-stage cascade. Depth ordering decides
-  first, with an abstention band (0.03), these being the hardest predicates
-  because objects on the same surface often differ by less than the depth
-  model can resolve. Where depth abstains a **ground-plane fallback**
-  decides from pure projection, ordering two objects on the same floor by
-  which box bottom sits lower in the image — a pixel-precise cue exactly
-  where depth is noisiest. It is guarded by the tool's own support evidence,
-  never firing when either object rests on another (mask contact ≥ 0.60),
-  and has its own band (0.005). Pairs both stages abstain on are flagged,
-  not guessed (recall 0.70/0.71 *(measured)*, from 0.52/0.55 depth-only).
-- **near** is a size-relative proximity test: edge-to-edge box gap divided
-  by mean object size, below a fitted threshold, and **never on contact
-  pairs**, since `near` co-occurs with on/under on 0 of 469 human pairs.
-  {{fig:near-T-sweep}} shows the sweep the threshold is read off. A
-  3D-centroid metric was rejected on evidence: per-image depth normalisation
-  makes centroid distances incomparable across scenes, and every centroid
-  variant transferred to held-out annotators at F1 ≤ 0.024 against the
-  relative gap's recall 1.0 (§3.8).
+The complete specification is **Appendix C** — every rule, threshold and
+shipped value with the evidence behind it, plus the correction and flagging
+policy — maintained in the repository as `docs/predicate_spec.md`, the copy
+the code and tests are checked against. The design rationale in one pass:
+**on / under** encode *support* — subject above object, near-touching, with
+horizontal extents overlapping, which keeps "floating in front of" from
+reading as "on"; `under` is the strict inverse, so the pair can never
+contradict. **to the left of / to the right of** compare horizontal centres
+in the camera frame — the frame the annotators saw on screen, the faithful
+choice among the three RoboSpatial distinguishes (Song et al., 2025) — with
+an ambiguity band that abstains when centres nearly coincide. **in front of
+/ behind** is a two-stage cascade: depth ordering decides first with an
+abstention band, these being the hardest predicates because objects on the
+same surface often differ by less than the depth model can resolve, and
+where depth abstains a **ground-plane fallback** decides from pure
+projection, ordering two objects on the same floor by which box bottom sits
+lower in the image — a pixel-precise cue exactly where depth is noisiest,
+guarded by the tool's own support evidence so it never fires when either
+object rests on another. Pairs both stages abstain on are flagged, not
+guessed (recall 0.70/0.71 *(measured)*, from 0.52/0.55 depth-only). **near**
+is a size-relative proximity test — edge-to-edge box gap over mean object
+size, below a fitted threshold, and **never on contact pairs**, since `near`
+co-occurs with on/under on 0 of 469 human pairs. {{fig:near-T-sweep}} shows
+the sweep the threshold is read off; a 3D-centroid metric was rejected on
+evidence, every centroid variant transferring to held-out annotators at
+F1 ≤ 0.024 against the relative gap's recall 1.0 (§3.8).
 
 ## 3.6 Correction and confidence
 
 Three predicate families are mutually exclusive: on/under, left/right and
-front/behind. Two of them cannot contradict, because the rule branches, so
+front/behind. Two cannot contradict, because the rule branches, so
 exclusivity is a property of the control flow. Support is different: `on`
 and `under` are independent tests over *different* contact evidence, so
 noise in either can make both fire on the same pair. That case is demoted to
 an `on_under_conflict` flag and neither label is emitted. Demoting instead
-of resolving is the deliberate part: picking the stronger of two
-contradictory signals would produce a label the evidence does not support
-while looking exactly like one it does, and an annotator that fabricates
-under uncertainty cannot be audited. Emitting everything for the consumer to
-sort out (§3.4) was rejected because RQ2's consumer is a model, which has no
-way to sort it out.
+of resolving is deliberate: picking the stronger of two contradictory
+signals would produce a label the evidence does not support while looking
+exactly like one it does, and an annotator that fabricates under uncertainty
+cannot be audited. Emitting everything for the consumer to sort out (§3.4)
+was rejected because RQ2's consumer is a model, which cannot.
 
 One further correction is class-aware, not geometric. Support is not
-evaluated at all when either object is a person: the annotators never
-recorded one, on **0 of 2,466 gold support triplets**, and mask contact
-cannot distinguish an object *resting on* someone from one being *held* by
-them. A rule that cannot represent the distinction its evidence turns on
-should decline the pair instead of guessing; the guard is a configuration
-entry (`no_support_classes`), not a special case buried in code. It is still
-a class list standing in for geometry, and it would not cover a manipulator
-or an animal holding something; ablation A10 tests whether contact height
-can replace it and finds it cannot, at a cost of half the support recall
+evaluated when either object is a person: the annotators never recorded one,
+on **0 of 2,466 gold support triplets**, and mask contact cannot distinguish
+an object *resting on* someone from one being *held* by them. A rule that
+cannot represent the distinction its evidence turns on should decline the
+pair instead of guessing; the guard is a configuration entry
+(`no_support_classes`), not a special case buried in code. It is still a
+class list standing in for geometry, and it would not cover a manipulator or
+an animal holding something; ablation A10 tests whether contact height can
+replace it and finds it cannot, at a cost of half the support recall
 (Appendix D.8).
 
 Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
@@ -202,18 +189,16 @@ quietly.
 ## 3.7 Output compatibility
 
 Byte-compatibility is a requirement of the research design: RQ2 compares two
-label sources by training the same model on each, and if the automatic
-labels arrived in a different container, every downstream difference would
-confound the labels with the loader. Three formats are written for three
-consumers: Visual Genome JSON, which a replication would diff against; YOLO
-txt, which trains the detector the deployment mode and the benchmark share;
-and the h5 layout Chapter 6's framework ingests. The writers reproduce the
-SGDET-Annotate structure exactly — centre-form `boxes_1024`/`boxes_512`,
-index-aligned `labels` and `attribute` arrays, `relationships` as
-subject–object index pairs with a parallel `predicates` ID array, the same
-six-dataset h5 layout with int64 attributes. The alternative, an internal
-schema plus a converter (§3.4), would have left every comparison one
-translation away from the thing it claims to measure. Compatibility is
+label sources by training the same model on each, and different containers
+would confound the labels with the loader. Three formats are written for
+three consumers — Visual Genome JSON, which a replication would diff
+against; YOLO txt, which trains the detector the deployment mode and the
+benchmark share; and the h5 layout Chapter 6's framework ingests — each
+reproducing the SGDET-Annotate structure exactly, down to centre-form
+`boxes_1024`/`boxes_512`, index-aligned `labels` and `attribute` arrays, and
+the six-dataset h5 layout with int64 attributes. The alternative, an
+internal schema plus a converter (§3.4), would have left every comparison
+one translation away from the thing it claims to measure. Compatibility is
 verified by test: a load→write round trip reproduces `boxes_1024` and
 `labels` with zero error, and the h5 matches a real export key-for-key and
 dtype-for-dtype *(measured)*, both checks in the suite so a later writer
@@ -246,48 +231,40 @@ genuinely near is checked by manual audit in the evaluation chapter.
 The claim that the rules are detector-agnostic (§4.11) rests on the
 architecture: the rule layer (`src/predicates.py`) imports nothing but
 `numpy` and never receives an image, and the entry point takes boxes as an
-argument, so no detector is wired in. Holding the boxes fixed, the relation
-layer scores the same whether they came from a detector or ground truth, so
-detector quality and relation quality are separately attributable. The
-contract is explicit (`src/detectors.py`): one method returning pixel boxes,
-class names and scores, with three implementations — open-vocabulary
-prompting, an adapter for any ultralytics checkpoint including the source
-paper's YOLOv10m weights, and a reader for external detections. Twelve unit
-tests pin it, one driving the rule layer from a detector written against the
-documentation alone. Two coupling points are documented: the support guard
-keys on the literal class name `human`, and the fitted thresholds assume
-boxes of roughly the tightness the annotators drew, so a detector with
-systematically different boxes should re-run §3.8's calibration (twenty
-seconds offline from the cache). A worked example is in
-`docs/CUSTOM_DETECTOR.md`.
+argument, so no detector is wired in and detector quality and relation
+quality are separately attributable. The contract is explicit
+(`src/detectors.py`) — one method returning pixel boxes, class names and
+scores — with three implementations: open-vocabulary prompting, an adapter
+for any ultralytics checkpoint including the source paper's YOLOv10m
+weights, and a reader for external detections. Twelve unit tests pin it, one
+driving the rule layer from a detector written against the documentation
+alone. Two coupling points are documented: the support guard keys on the
+literal class name `human`, and the fitted thresholds assume boxes of
+roughly the tightness the annotators drew, so a detector with systematically
+different boxes should re-run §3.8's calibration (twenty seconds offline
+from the cache). A worked example is in `docs/CUSTOM_DETECTOR.md`.
 
 ## 3.10 Selecting frames by content
 
-The images this project annotates are consecutive frames of a continuous
-robot capture, and the sequence oversamples the scene severely: across its
-2,650 frames the mean optical flow between neighbours is 0.08 px, with 0.9%
-of pixels moving more than one pixel, so a per-frame pipeline spends a full
-perception pass recomputing relations that have not moved. The remedy is to
-annotate one frame per *viewpoint*, which requires deciding where one
-viewpoint ends and the next begins.
-
-The standard tool does not apply. Shot-boundary detection thresholds the
-difference between consecutive frames, which presumes cuts, and a robot
-walking through a room produces none: 0.08 px per frame never exceeds the
-noise at any single step, while the same motion over forty frames displaces
-the image by 13 px, so only accumulated drift carries the signal.
-`segment_sequence` (`src/keyframes.py`) therefore measures drift from the
-*anchor* of the current segment, not the preceding frame, opening a new
-segment when drift exceeds τ, so gradual motion accumulates while a genuine
-cut still crosses in one step. Distances are mean absolute differences over
-64×48 mean-subtracted greyscale thumbnails, the subtraction discarding the
-exposure shifts of an auto-exposing camera. Each segment nominates the frame
-closest to its mean signature, which on a moving camera beats taking the
-first. A single parameter spans two uses — small τ isolates near-duplicates,
-large τ groups several viewpoints of one arrangement, which is what §4.12's
-cross-viewpoint measurement consumes — and the threshold is chosen by sweep,
-§4.12 reporting what the segmentation recovers and what skipping frames
-costs.
+The images are consecutive frames of a continuous robot capture, and the
+sequence oversamples the scene severely: across its 2,650 frames the mean
+optical flow between neighbours is 0.08 px, with 0.9% of pixels moving more
+than one pixel, so a per-frame pipeline spends a full perception pass
+recomputing relations that have not moved. The remedy is to annotate one
+frame per *viewpoint*. Shot-boundary detection does not apply — it
+thresholds consecutive-frame differences, which presumes cuts, and 0.08 px
+per frame never exceeds the noise at any single step, while the same motion
+over forty frames displaces the image by 13 px, so only accumulated drift
+carries the signal. `segment_sequence` (`src/keyframes.py`) therefore
+measures drift from the *anchor* of the current segment, opening a new
+segment when drift exceeds τ, over 64×48 mean-subtracted greyscale
+thumbnails (the subtraction discarding an auto-exposing camera's exposure
+shifts), and each segment nominates the frame closest to its mean signature,
+which on a moving camera beats taking the first. One parameter spans two
+uses — small τ isolates near-duplicates, large τ groups viewpoints of one
+arrangement, which §4.12's cross-viewpoint measurement consumes — and the
+threshold is chosen by sweep, §4.12 reporting what the segmentation recovers
+and what skipping frames costs.
 
 ## 3.11 Reproducibility by construction
 
@@ -298,12 +275,11 @@ reader can re-run the arm it removes.
 
 **Configuration and caching.** Every threshold, seed and model identifier
 lives in `configs/default.yaml`, and the runner caches each object's lifted
-geometry after the single GPU pass. That separates the expensive stage from
-the cheap one: any rule or threshold change re-evaluates the whole dataset
-offline in about 20 seconds with no GPU (`scripts/reannotate_from_cache.py`)
-against roughly five minutes for a full perception run — what made the
-audit-driven rule repairs of Chapter 4 affordable and let the ablation
-battery run as a sweep.
+geometry after the single GPU pass. Any rule or threshold change then
+re-evaluates the whole dataset offline in about 20 seconds with no GPU
+(`scripts/reannotate_from_cache.py`) against roughly five minutes for a full
+perception run — what made the audit-driven rule repairs of Chapter 4
+affordable and let the ablation battery run as a sweep.
 
 **Test strategy.** The suite is 66 tests running in about a second,
 deliberately: a suite slow enough to skip constrains nothing. Worked
@@ -333,12 +309,10 @@ Appendix F.3 tabulates all eleven with the alternative each displaced.
 
 The decisions also carry the design's answer to the four objections §2.9
 directs at the method, none added afterwards to fit. Predicates live in
-configuration rather than code (§3.9), so the vocabulary extends without
-touching the engine; the rules abstain and flag instead of guessing (§3.6),
-so an unreliable case becomes a countable review item; randomised invariant
-testing over synthetic scenes (§3.11) asserts the structural guarantees
-without the author's judgement; and the camera frame is committed to
-explicitly (§3.5), so a disagreement is locatable as a convention
+configuration rather than code (§3.9); the rules abstain and flag instead of
+guessing (§3.6); randomised invariant testing (§3.11) asserts the structural
+guarantees without the author's judgement; and the camera frame is committed
+to explicitly (§3.5), so a disagreement is locatable as a convention
 difference. Section 7.7 returns to all four with the evidence, which is
 where they are settled or conceded. Three are mitigations, not refutations;
 the fourth the design could not settle alone, because invariant testing pins
