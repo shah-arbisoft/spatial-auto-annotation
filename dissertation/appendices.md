@@ -1442,4 +1442,12 @@ rather than frames, which the released per-image outputs support.
 | to the right of | 0.985 | 0.974–0.996 |
 | in front of | 0.199 | 0.148–0.257 |
 | behind | 0.369 | 0.300–0.443 |
-| near | 1.000 | 1.000–1.000 |
+| near | 1.000 | 1.000–1.000 (see note) |
+
+The `near` row is a boundary artefact and not extraordinary precision. The
+held-out groups carry 93 `near` gold triplets and the tool misses none, so
+every resample returns the same value and the bootstrap has no spread to
+report. The number to quote is the exact one-sided bound for zero failures
+in 93 draws, **0.968**, and even that is a statement about recovering the
+*recorded* `near` labels: §4.8 sets out why this predicate's recall says
+least about the labels the tool adds beyond them.

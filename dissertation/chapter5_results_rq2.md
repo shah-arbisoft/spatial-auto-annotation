@@ -343,7 +343,7 @@ predicate moved this number and moved nothing else in the chapter.
 
 ## 5.8 Answer to RQ2
 
-Yes, with more than was asked. At this dataset's scale of human annotation
+Yes at this level of test, and with more than was asked of it. At this dataset's scale of human annotation
 the automatic labels are not merely "good enough" but **substantially better
 training material than the human labels themselves**, because density and
 consistency dominate raw human authority when supervision is sparse. The

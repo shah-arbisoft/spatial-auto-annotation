@@ -302,8 +302,10 @@ construction, so this is the predicate where the recall figure most
 overstates what is known.
 
 Section 4.5 decomposes the depth pair's shortfall into calibrated abstention
-and a convention the annotators did not share, in measured proportions, and
-neither component is depth error. The residual human cost is an 8.5% review
+and a convention the annotators did not share, in measured proportions.
+Genuine depth error is the remainder rather than absent, and Appendix D.7
+measures it at 1% of `in front of` misses and 6% of `behind`: the dominant
+terms are not depth error, which is a weaker claim than none of it being. The residual human cost is an 8.5% review
 queue (§4.7), against labels 20× denser than the human set.
 
 ## 4.9 Shipped from the ablations
@@ -457,9 +459,14 @@ converges with A8, where a four-times-larger depth model changed nothing, and
 with §4.5, where two groups labelled the pair oppositely. §7.2 develops what
 follows.
 
-**Limits.** The figures are an upper bound: only pairs matched between
-keyframe and frame contribute, and those are the ones whose objects moved
-least. Coverage also thins as segments grow, so aggressive compression leaves pairs uncovered instead of mislabelled, which Appendix E.2 traces to box
+**Limits.** Consistency is not correctness, and nothing here should be read
+as evidence that the tool's front/behind calls are right: a systematically
+wrong rule is perfectly stable too. What 0.958 rules out is the specific
+explanation this section was written to test, that the misses are depth
+noise near the boundary; the case that the criterion is unshared rather
+than wrong rests on §4.5's measured inversion, not on this figure. The
+figures are also an upper bound: only pairs matched between keyframe and
+frame contribute, and those are the ones whose objects moved least. Coverage also thins as segments grow, so aggressive compression leaves pairs uncovered instead of mislabelled, which Appendix E.2 traces to box
 drift and not absent annotation, making a tracker the straightforward
 remedy.
 
