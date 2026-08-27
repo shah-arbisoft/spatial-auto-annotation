@@ -3,7 +3,7 @@
 Pasting cells out of a markdown runbook invites copying the ``` fences with
 them, which fails immediately with a SyntaxError. Uploading a notebook file
 removes that whole class of mistake, so this script writes the cells straight
-into seed_replication.ipynb.
+into template_seed_replication.ipynb.
 
     python scripts/kaggle/make_seeds_notebook.py
 
@@ -17,7 +17,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-OUT = Path(__file__).with_name("seed_replication.ipynb")
+OUT = Path(__file__).with_name("template_seed_replication.ipynb")
 
 MD_INTRO = """\
 # Benchmark seed replication (seeds 43 and 44, both arms)

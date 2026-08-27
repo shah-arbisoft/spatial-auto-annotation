@@ -151,8 +151,8 @@ Runs on Kaggle rather than locally, since REACT++ training needs more than
 6 GB. Upload `datasets/spatial_sgg_upload.zip` (built by
 `scripts/export_sgg_benchmark.py` and `scripts/export_yolo_det.py`), then
 commit the notebooks in `scripts/kaggle/` in order — training in
-`notebook_cells.md`, seed replication in `seed_replication.ipynb`,
-re-evaluation in `reeval_seeds_and_groups.ipynb` — on a T4 x2 accelerator.
+`notebook_cells.md`, seed replication in `template_seed_replication.ipynb`,
+re-evaluation in `template_reeval_group_slices.ipynb` — on a T4 x2 accelerator.
 Download each committed version's outputs into `outputs/sgg_benchmark/` and
 run `python eval/seed_stats.py`.
 

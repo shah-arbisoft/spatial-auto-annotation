@@ -150,13 +150,13 @@ Chapter 6. They ran on Kaggle (T4) in this order:
 | `executed_3_vlm_arm.ipynb` | the third arm, trained on `_annotations.vlm.coco.json` at seeds 42/43/44 | `vlm_results.zip` |
 | `executed_4_reeval_group_slices.ipynb` | re-evaluates every checkpoint against the corrected zero-shot reference and the per-group slices, all three arms | `reeval_results.json`, superseded by 5 and 6 |
 | `executed_5_auto085_refit.ipynb` | the auto arm retrained and re-evaluated after `on_contact_min` moved 0.60 to 0.85 (§4.14), three seeds, four slices; the human and vision-language arms were not retrained because the threshold does not touch their labels | `reeval_auto_085.json` |
-| `executed_6_all_arms_085.ipynb` | all three arms retrained and re-evaluated in one session on one clone, so the arms differ in labels and nothing else; this is the run Chapter 6 reports. The clone is unpinned, which is the residual variable §7.4 names and `7_seed_power_10x.ipynb` fixes | `reeval_all_arms_085.json` |
-| `eval_notebook.ipynb` | the first run's evaluation pass | `test_results.json` |
+| `executed_6_all_arms_085.ipynb` | all three arms retrained and re-evaluated in one session on one clone, so the arms differ in labels and nothing else; this is the run Chapter 6 reports. The clone is unpinned, which is the residual variable §7.4 names and `unrun_seed_power_10x.ipynb` fixes | `reeval_all_arms_085.json` |
+| `executed_1b_eval_seed42.ipynb` | the first run's evaluation pass | `test_results.json` |
 
 Run them in that order: 2 and 3 need the detector 1 freezes, and 4 needs the
 checkpoints 1 to 3 produce.
 
-**Written but not run.** `7_seed_power_10x.ipynb` trains ten seeds per arm to
+**Written but not run.** `unrun_seed_power_10x.ipynb` trains ten seeds per arm to
 tighten the paired human-auto difference that three seeds leave at
 [-0.070, +0.069]; §9.3 cites it as the experiment that would settle the
 benchmark. It pins the framework commit rather than cloning HEAD, which is

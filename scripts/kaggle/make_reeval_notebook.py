@@ -24,7 +24,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-OUT = Path(__file__).with_name("reeval_seeds_and_groups.ipynb")
+OUT = Path(__file__).with_name("template_reeval_group_slices.ipynb")
 
 MD_INTRO = """\
 # Re-evaluation: correct zero-shot reference + per-group slices

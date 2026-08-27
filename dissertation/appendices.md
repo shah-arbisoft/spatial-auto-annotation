@@ -77,9 +77,9 @@ and D, so neither condition sees a filter the others did not.
 The Chapter 6 experiment is reproducible from `scripts/kaggle/`: the dataset
 converters (`export_sgg_benchmark.py`, `export_yolo_det.py`), the adapted
 REACT++ configuration, the run recipes (`README.md`, `notebook_cells.md`,
-`seed_replication.ipynb` for the seed replication and `notebook_cells_vlm.md`
+`template_seed_replication.ipynb` for the seed replication and `notebook_cells_vlm.md`
 for the vision-language arm), and
-the executed evaluation notebook with its outputs (`eval_notebook.ipynb`),
+the executed evaluation notebook with its outputs (`executed_1b_eval_seed42.ipynb`),
 which is the recorded provenance of every number in Chapter 6's tables.
 Training logs and parsed results: `outputs/sgg_benchmark/`.
 

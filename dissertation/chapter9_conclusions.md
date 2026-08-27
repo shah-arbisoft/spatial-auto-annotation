@@ -154,7 +154,7 @@ one left.
 **The benchmark is undecided, and the run that would decide it is
 written.** Three seeds bound the paired difference to [-0.070, +0.069]
 (§6.7), so the chapter reports parity without establishing it; ten per arm
-would tighten that to about ±0.020. `scripts/kaggle/7_seed_power_10x.ipynb`
+would tighten that to about ±0.020. `scripts/kaggle/unrun_seed_power_10x.ipynb`
 implements it, pinning the framework commit §7.4 names as uncontrolled and
 ordering runs seed-major so an interrupted session leaves the arms balanced.
 It needs about 45 GPU-hours against a 30-hour weekly allowance, and ships
