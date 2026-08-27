@@ -538,7 +538,11 @@ assertion, so an auditor who simply agreed scored 100% and looked calibrated,
 where here that auditor scores zero. Sampling, the class guard and the
 separation of sheet from key are in Appendix E.7. The same 242 images, with the same definitions and the same instruction to
 answer wrong when unsure, were put to `gemini-3.6-flash` as a second judge
-independent of the author (`scripts/judge_audit_vlm.py`).
+independent of the author (`scripts/judge_audit_vlm.py`). That is a later
+model than either of the two §4.13 puts through the annotation battery,
+so it is not literally the instrument that section finds wanting, but the
+argument below does not rest on the distinction and would have to hold
+for the same model.
 
 Why a model may judge what §4.13 shows it cannot annotate. One objection
 arrives immediately: §4.13 spends a section establishing that a
