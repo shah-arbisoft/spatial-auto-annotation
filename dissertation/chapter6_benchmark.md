@@ -16,8 +16,7 @@ identical held-out test set. The isolation mirrors RQ2 exactly:
 
 - **Shared detector.** A YOLOv8m backbone is trained once on the ground-truth
   boxes of the training split and frozen for both arms (test-time detection
-  mAP is bit-identical between arms: 0.654). Boxes and classes never differ;
-  only the relation labels do.
+  mAP is bit-identical between arms: 0.654). Only the relation labels differ.
 - **Split** follows the calibration protocol: train = groups 0–4 (500 images;
   5,421 human vs 119,020 automatic relations; the 22× density difference is
   the treatment), validation = group 5, test = groups 6–8 (human gold in both
@@ -28,17 +27,15 @@ identical held-out test set. The isolation mirrors RQ2 exactly:
 
 ## 6.2 Training dynamics: prediction 1 confirmed
 
-The human arm **peaks at epoch 4 of 25** and never improves again, oscillating
-between 0.101 and 0.123 for the remaining twenty-one, mild overfitting on
-5,421 sparse triplets. That replicates the source paper's central observation
-("all predictors reached their peak mR@100 well before the final epoch") on
-its own dataset with a current model, and adds the cause: sparse supervision
-is exhausted early. The auto arm is still climbing at epoch 8, does not reach
-95% of its best until **epoch 14** and peaks at **epoch 22**, and sees 213
-distinct triplet types in training against the human arm's 94. Where one arm
-has learned everything its labels contain in four epochs, the other is still
-finding structure at twenty-two.
-{{fig:sgg-training-curves}} plots both: each validation
+The human arm **peaks at epoch 4 of 25** and never improves again,
+oscillating between 0.101 and 0.123 for the remaining twenty-one — mild
+overfitting on 5,421 sparse triplets. That replicates the source paper's
+central observation ("all predictors reached their peak mR@100 well before
+the final epoch") on its own dataset with a current model, and adds the
+cause: sparse supervision is exhausted early. The auto arm is still climbing
+at epoch 8, does not reach 95% of its best until **epoch 14**, peaks at
+**epoch 22**, and sees 213 distinct triplet types in training against the
+human arm's 94. {{fig:sgg-training-curves}} plots both; each validation
 series uses its own arm's labels, so only the *shapes* compare, never the
 heights.
 
@@ -54,37 +51,33 @@ human gold, groups 6–8), at seed 42:
 | F1@100 | **0.275** | 0.274 |
 | zR@100, recall on types the shared reference omits (§6.4) | 0.073 | **0.309** |
 
-At this seed the automatic arm leads the mean-recall metric, 0.291 against
-0.270, while the human arm keeps raw recall and the two are level on F1. The
-ordering inverts predicate by predicate: the human arm is ahead on five of
-the seven and the automatic arm on the support pair, by 0.077 on `on` and
-0.284 on `under`. For `near` both arms sit far below the source paper's
-0.22–0.25 floor, 0.117 and 0.108, so prediction 3 is refuted as stated and
-the automatic arm's dense, fitted `near` does not survive the trip through a
-learned model. Appendix F.1 carries the per-predicate breakdown. The
-sharpest separation is on triplet *types never seen in training*, where the
-automatic arm recalls 0.309 against the human arm's 0.073, a fourfold gap at
-this seed and fivefold over three (§6.3.1). What that column measures here
-is set out in §6.4, and it is coverage of the relation types the manual
+At this seed the automatic arm leads mean recall, 0.291 against 0.270, the
+human arm keeps raw recall, and the two are level on F1. The ordering
+inverts predicate by predicate: the human arm is ahead on five of the seven,
+the automatic arm on the support pair, by 0.077 on `on` and 0.284 on
+`under`. For `near` both arms sit far below the source paper's 0.22–0.25
+floor, 0.117 and 0.108, so prediction 3 is refuted as stated: the automatic
+arm's dense, fitted `near` does not survive the trip through a learned
+model. Appendix F.1 carries the per-predicate breakdown. The sharpest
+separation is on triplet *types never seen in training*, 0.309 against
+0.073, fourfold at this seed and fivefold over three (§6.3.1); §6.4 sets out
+what that column measures here — coverage of relation types the manual
 annotation never recorded, not compositional generalisation.
 
 Prediction 2 is the one a single run cannot carry, in either direction: the
-margin above is well inside the human arm's own seed spread, which is why
-§6.3.1 exists and why the heading calls it unresolved and not confirmed.
-Re-scoring the same checkpoints on individual test slices decomposes the
-headline, and the seed replication below repeats that decomposition as a
-spread, so the single-run slice figures are in Appendix F.1. Aligning the
-front/behind convention of groups 6 and 8, one disclosed bit per group as in
-§4.5, lifts both arms and leaves them level, 0.310 against 0.312.
+margin is well inside the human arm's own seed spread, which is why §6.3.1
+exists and why the heading says unresolved. The single-run slice figures are
+in Appendix F.1; aligning the front/behind convention of groups 6 and 8, one
+disclosed bit per group as in §4.5, lifts both arms and leaves them level,
+0.310 against 0.312.
 
 ### 6.3.1 Replication across seeds, and one claim withdrawn
 
-Every number above comes from one run per arm, and two of the margins are
-too small for one run to separate from training noise. Both arms were
-retrained at seeds 43 and 44 and all six checkpoints re-scored on every
-slice (`scripts/kaggle/`, aggregated by `eval/seed_stats.py`), against the
-same frozen detector, so the spread below is the relation model's own
-variance.
+Two of the margins above are too small for one run to separate from
+training noise. Both arms were retrained at seeds 43 and 44 and all six
+checkpoints re-scored on every slice (`scripts/kaggle/`, aggregated by
+`eval/seed_stats.py`), against the same frozen detector, so the spread below
+is the relation model's own variance.
 
 | slice | metric | conv. | human-trained | auto-trained | vision-language |
 |---|---|---|---|---|---|
@@ -103,210 +96,189 @@ and one configuration, so the arms differ in their labels and nothing else.
 An earlier set of figures, with the human arm at 0.326 pooled, came from
 runs made weeks apart against different states of the upstream code; §7.4
 reports what that cost. The **aligned** row re-scores the same models
-against gold with the two inverted annotators corrected (§4.5). The
-`zR@100` rows are recall on triplet types absent from one shared
-reference, not from each arm's own training set, so they measure coverage
-of omitted types and not compositional generalisation; §6.4 gives the
-reasoning and this dissertation makes no zero-shot claim on them. Cells give
+against gold with the two inverted annotators corrected (§4.5); the
+`zR@100` rows measure coverage of types omitted from one shared reference
+(§6.4), and this dissertation makes no zero-shot claim on them. Cells give
 the mean over three seeds with the per-seed range in brackets.
 
 **On the metric this chapter is organised around, the two label sources are
-indistinguishable.** The pooled mR@100 rows are level and no slice separates them: every row's seed ranges overlap, with the automatic arm's sitting *inside* the human arm's on the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and
-43 (+0.010) and trails at 44 (−0.032), so the pooled difference of 0.001 rests
-on a single run. The correct statement is parity, and it is a statement about this metric and not about the labels: on raw R@100, pooled across seeds, the human arm
-keeps a real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm
-leads fivefold, 0.268 against 0.052.
+indistinguishable.** The pooled mR@100 rows are level and no slice separates
+them: every row's seed ranges overlap, the automatic arm's sitting *inside*
+the human arm's on the full test set. Paired by seed the automatic arm leads
+at 42 (+0.021) and 43 (+0.010) and trails at 44 (−0.032), so the pooled
+difference of 0.001 rests on a single run. The correct statement is parity,
+and it is about this metric, not the labels: on raw R@100 the human arm
+keeps a real margin pooled, 0.295 against 0.255, and on zero-shot recall the
+automatic arm leads fivefold, 0.268 against 0.052. The arms differ far more
+in stability than in score: across seeds the automatic arm's pooled mR@100
+spans 0.006 against the human arm's 0.052 and the vision-language arm's
+0.044, eight and seven times wider. One definition applied uniformly
+produces a model that lands in the same place whatever the initialisation;
+nine annotators applying nine conventions do not. A margin of 0.001 between
+arms whose own seeds move by 0.052 is not a result in either direction,
+which is the reading the spread column exists to force.
 
-The arms differ far more in stability than in score. Across seeds the
-automatic arm's pooled mR@100 spans 0.006 against the human arm's 0.052 and
-the vision-language arm's 0.044, eight and seven times wider. One definition
-applied uniformly produces a model that lands in the same place whatever the
-initialisation, and nine annotators applying nine conventions do not. A margin
-of 0.001 between arms whose own seeds move by 0.052 is not a result in either
-direction, which is the reading the spread column exists to force.
-
-Where the arms do differ, they differ by annotator. The human arm is
-ahead on the two annotators §4.5 convicts of inverting the front/behind
-convention, by 0.022 on group 6 and 0.027 on group 8, and *behind* on group 7,
-the one annotator this dissertation convicts of nothing, by 0.011. The
-ordering runs with annotation quality and not with geometry, and the sign
-change on the clean annotator is the part worth noting: whatever advantage
-human labels carry here does not survive contact with an annotator who
-followed the stated convention. None of these three differences is separable
-across seeds, so the ordering is offered as a consistent direction and not as
-three measured effects.
+Where the arms do differ, they differ by annotator. The human arm is ahead
+on the two annotators §4.5 convicts of inverting the front/behind convention
+(by 0.022 on group 6 and 0.027 on group 8) and *behind* on group 7, the one
+annotator convicted of nothing, by 0.011. The ordering runs with annotation
+quality and not with geometry, and the sign change on the clean annotator is
+the part worth noting: whatever advantage human labels carry here does not
+survive contact with an annotator who followed the stated convention. None
+of the three differences is separable across seeds, so the ordering is
+offered as a consistent direction, not three measured effects.
 
 The size of that contamination can be measured. Of the 2,818 relations in
 the test gold, **1,189 (42%) are front/behind, and 859 of those (72%) come
 from the two inverted annotators** — so **30% of the entire yardstick is a
 predicate labelled in the opposite direction to the convention every
 training group used**. Both arms train on groups 0–5, where no inversion is
-measured, so neither can score those relations and the penalty falls on them
-equally. The inversion therefore sets a *ceiling* on what either arm can
-score, and how far it bites depends on how the metric aggregates. R@100
-counts instances, so the cap applies to 30% of them directly. mR@100
-averages over the seven predicates, so front and behind carry two sevenths
-of it however many instances they hold; what the 72% figure sets is a
-ceiling near 0.28 on those two components rather than a 30% reduction in
-the mean. Both metrics are depressed and every absolute figure in this
-chapter is a lower bound on both sides, but the 30% is a share of the gold
-and not a share of mR@100.
-
-What difference remains is a separate effect, and §6.4 localises it to
-annotator *selection* rather than annotator convention: it appears on the
-lateral predicates too, which have no direction to invert. The two defects
-co-occur in the same annotators without one causing the other.
+measured, so the penalty falls on them equally and sets a *ceiling* on what
+either can score. How far it bites depends on aggregation: R@100 counts
+instances, so the cap applies to 30% of them directly; mR@100 averages over
+the seven predicates, so the 72% figure sets a ceiling near 0.28 on the two
+depth components rather than a 30% reduction in the mean. Every absolute
+figure in this chapter is a lower bound on both sides, but the 30% is a
+share of the gold and not a share of mR@100. What difference remains is a
+separate effect, and §6.4 localises it to annotator *selection* rather than
+convention: it appears on the lateral predicates too, which have no
+direction to invert.
 
 Two labelling rules support this, not one. The figures above are the shipped
 `on_contact_min` of 0.85 (§4.14); the same experiment at the earlier 0.60
 gave 0.278, 0.286, 0.307 and 0.109 across the same four slices. Raising the
 threshold improved three slices and cost the fourth, and the ordering by
-annotator defect held under both. A pattern that survives changing the
-labelling rule is a property of the test annotation rather than of one
+annotator defect held under both — a pattern that survives changing the
+labelling rule is a property of the test annotation, not of one
 configuration of the tool.
 
 Second, **the zero-shot result is robust and larger than first reported.**
 Pooled zR@100 is 0.268 against 0.052, roughly fivefold, with disjoint
-ranges. It is not an artefact of pooling: the auto arm leads on *every*
+ranges, and it is not an artefact of pooling: the auto arm leads on *every*
 annotator separately (0.449 against 0.000 on group 6, 0.273 against 0.098 on
-group 7, 0.041 against 0.007 on group 8), and the human arm recalls nothing
-at all outside its training combinations on one of the three and almost
-nothing on another. Unlike the ranking
-metrics this gap is not near-run at any seed or slice, and it points the same
-way on defective and clean annotators alike, which is what distinguishes a
-property of the labels from a property of the gold. §6.5 sets out what the
-column establishes: which relation types each source covers, not
-compositional generalisation, because both arms score against one shared
-reference.
+group 7, 0.041 against 0.007 on group 8). Unlike the ranking metrics this
+gap is not near-run at any seed or slice, and it points the same way on
+defective and clean annotators alike, which is what distinguishes a property
+of the labels from a property of the gold.
 
 ### 6.3.2 A third label source
 
 Chapter 5's vision-language labels were put through the same benchmark as a
-third arm, three seeds, same frozen detector, same human test gold, trained in
-the same session as the other two. Pooled it leads both at 0.329, against
-0.293 human and 0.292 auto, and it is the only arm whose lead over the human
-one is consistent across every slice. That is what §6.4's argument predicts:
-§4.13 measures this model annotating sparsely and human-like, so a metric
-rewarding resemblance to the manual pass should reward it, and it does — more
-than the manual pass rewards itself.
-
-The sharpest form of that result is on group 7, the one test annotator with no
-measured defect and therefore the cleanest gold, where the vision-language arm
-reaches **0.362 against 0.278 human and 0.289 auto**, with a per-seed range
-(0.357–0.364) touching neither. A win on the cleanest annotator cannot be
-attributed to matching a defect, and it is the one result in this chapter that
-no argument here explains away. Appendix F.4 gives the per-slice table and
-the three readings the experiment cannot separate.
-
+third arm: three seeds, same frozen detector, same human test gold, trained
+in the same session. Pooled it leads both at 0.329, against 0.293 human and
+0.292 auto, and it is the only arm whose lead over the human one is
+consistent across every slice. That is what §6.4's argument predicts: §4.13
+measures this model annotating sparsely and human-like, so a metric
+rewarding resemblance to the manual pass should reward it — more than the
+manual pass rewards itself. The sharpest form is on group 7, the one test
+annotator with no measured defect and therefore the cleanest gold, where the
+vision-language arm reaches **0.362 against 0.278 human and 0.289 auto**,
+its per-seed range (0.357–0.364) touching neither. A win on the cleanest
+annotator cannot be attributed to matching a defect, and it is the one
+result in this chapter that no argument here explains away. Appendix F.4
+gives the per-slice table and the three readings the experiment cannot
+separate.
 
 ## 6.4 Why the advantage disappears between Chapter 5 and this chapter
 
-The same labels, the same held-out human gold, two very different verdicts.
-Per-pair recall says the automatic labels teach two and a half times better,
+The same labels, the same held-out human gold, two very different verdicts:
+per-pair recall says the automatic labels teach two and a half times better,
 0.748 against 0.297; ranked evaluation against sparse gold says they are
 level. Neither the labels nor the gold differ between the experiments, so an
 advantage that size can only have evaporated into the **structure of the
-metric**, and decomposing it yields the chapter's real findings.
-
-An earlier version of this chapter had a stronger claim to explain: the human
-arm ahead at 0.326 against 0.278. That comparison drew its arms from training
-runs made weeks apart against different states of the upstream framework, and
-retraining all nine runs in one session removed the gap almost entirely, with
-the human arm falling 0.033 while the vision-language arm moved 0.001 (§7.4).
-The mechanisms below explained a reversal; they now explain the erasure of a
-2.5× advantage, which is the same phenomenon at a different magnitude and a
-claim the evidence supports more comfortably.
+metric**. (An earlier version of this chapter had a stronger claim to
+explain — the human arm ahead at 0.326 against 0.278 — but that comparison
+drew its arms from training runs made weeks apart against different states
+of the upstream framework, and retraining all nine runs in one session
+removed the gap almost entirely, the human arm falling 0.033 while the
+vision-language arm moved 0.001 (§7.4). The mechanisms below explained a
+reversal; they now explain the erasure of a 2.5× advantage, a claim the
+evidence supports more comfortably.)
 
 **(i) Ranking dilution by true-but-unlabelled predictions.** R@K is a
-per-image ranking budget: only the top-K predictions count, and any prediction
-absent from the gold consumes budget as a miss. The auto-trained model behaves
-like its supervision and predicts densely, and Chapter 4's audits established
-that such extras are overwhelmingly *true*. Against gold annotating ~10% of
-pairs those true predictions rank above the annotated ones and are scored as
-errors, which is the restricted-precision artefact of §4.3 reproduced at
-benchmark level. The human-trained arm learned the annotators' *labelling
-prior* instead, which is exactly what a ranking metric against human-selected
-gold rewards.
+per-image ranking budget: any prediction absent from the gold consumes
+budget as a miss. The auto-trained model behaves like its supervision and
+predicts densely, and Chapter 4's audits established that such extras are
+overwhelmingly *true*. Against gold annotating ~10% of pairs those true
+predictions outrank the annotated ones and are scored as errors — the
+restricted-precision artefact of §4.3 reproduced at benchmark level. The
+human-trained arm learned the annotators' *labelling prior* instead, which
+is exactly what a ranking metric against human-selected gold rewards.
 
-**(ii) Convention mismatch is a shared penalty, not, as first
-hypothesised, a differential one.** Both arms were trained on
-consistent-convention front/behind (the tool's by construction; groups
-0–4's by measurement), while groups 6 and 8, two thirds of the test gold,
-invert it (§4.5). Re-scoring against aligned gold lifts both arms almost equally (+0.041 human, +0.035 auto; the human arm's *in front
-of* recall jumps 0.124 → 0.386, the auto arm's 0.101 → 0.248): both models
-learned the consistent convention, both pay the same tax on inverted gold,
-and the gap between them barely moves. The initial hypothesis that the
-denser arm is punished *harder* for its confidence is refuted by this
-measurement and withdrawn.
-
-That measurement replicates at the shipped threshold. Re-scoring the
-retrained auto arm of §4.14 against the same convention-aligned gold moves it
-from 0.292 to **0.316** mR@100 and from 0.255 to **0.292** R@100, a gain of
-+0.025 against the +0.035 recorded at the earlier threshold. The size of the
-correction is therefore a property of the test annotation rather than of the
-labelling rule: two different label sets, produced by two different values of
-`on_contact_min`, pay a tax of the same order for the same annotator defect.
-Roughly a tenth of the absolute mR@100 reported anywhere in this chapter is
-an artefact of that defect, on both sides of the comparison.
+**(ii) Convention mismatch is a shared penalty, not, as first hypothesised,
+a differential one.** Both arms were trained on consistent-convention
+front/behind (the tool's by construction; groups 0–4's by measurement),
+while groups 6 and 8, two thirds of the test gold, invert it (§4.5).
+Re-scoring against aligned gold lifts both arms almost equally (+0.041
+human, +0.035 auto; the human arm's *in front of* recall jumps 0.124 →
+0.386, the auto arm's 0.101 → 0.248): both models learned the consistent
+convention, both pay the same tax, and the gap barely moves. The initial
+hypothesis that the denser arm is punished *harder* for its confidence is
+refuted by this measurement and withdrawn. The measurement also replicates
+at the shipped threshold: re-scoring the retrained auto arm of §4.14 against
+the same aligned gold moves it from 0.292 to **0.316** mR@100 and from 0.255
+to **0.292** R@100, +0.025 against the +0.035 recorded at the earlier
+threshold. Two label sets from two values of `on_contact_min` pay a tax of
+the same order for the same annotator defect, so roughly a tenth of the
+absolute mR@100 reported anywhere in this chapter is an artefact of that
+defect, on both sides of the comparison.
 
 **(ii′) Where the gap actually lives: the two defective test groups.** The
 per-group figures of §6.3.1 localise the human arm's lead to the two
-annotators already convicted of convention inversion, where it is four times
-what it is on the clean one, and 30% of the test gold is front/behind written
-by those two. Group 6 shows the clearest fingerprint: its *lateral* gold,
-geometrically unambiguous relations both models predict freely, is recalled at
-0.49/0.69 by the human arm against 0.12/0.21 by the auto arm. Laterals have no
-convention to invert, so what differs is *which* pairs the annotator selected,
-and the human-trained model ranks exactly those highly because it learned human
-selection habits, not because it knows more geometry.
+annotators convicted of convention inversion, where it is four times what it
+is on the clean one. Group 6 shows the fingerprint: its *lateral* gold,
+geometrically unambiguous relations both models predict freely, is recalled
+at 0.49/0.69 by the human arm against 0.12/0.21 by the auto arm. Laterals
+have no convention to invert, so what differs is *which* pairs the annotator
+selected, and the human-trained model ranks exactly those highly because it
+learned human selection habits, not because it knows more geometry.
 
 **(iii) `near` gold is a single idiosyncratic annotator.** All 93 test
 `near` labels come from group 8, whose usage is sparse and non-exhaustive
 (§3.8). Neither arm can rank exactly those pairs highly; prediction 3
 underestimated not the labels but the gold.
 
-The zero-shot column does not measure what its name implies here. zR@100
-is recall on triplet types absent from a model's *own* training data, but both
-arms are scored against one shared reference, the human training annotation,
-since that is the only way their numbers sit in one column. Of the 25 test
-triplet types the human annotation omits, the human arm saw none in training
-and the auto arm saw 24, so its 0.172 against 0.003 records that its labels
-*cover* relation types the manual pass never recorded. That is the property
-the annotation bottleneck predicts, and it is not compositional
-generalisation; this dissertation does not claim it as such.
+The zero-shot column does not measure what its name implies here. zR@100 is
+recall on triplet types absent from a model's *own* training data, but both
+arms are scored against one shared reference, the human training annotation.
+Of the 25 test triplet types that annotation omits, the human arm saw none
+in training and the auto arm saw 24, so its 0.172 against 0.003 records that
+its labels *cover* relation types the manual pass never recorded — the
+property the annotation bottleneck predicts, not compositional
+generalisation, and this dissertation does not claim it as such.
 
 ## 6.5 What survives, read both ways
 
 Two interpretations survive and neither is available without the other. The
-benchmark result is real: a consumer *evaluated against human-annotated scene
-graphs* is better supervised by human labels, which carry the annotation prior
-the evaluation shares. The interpretation is equally real: the ranking metric
-inherits every defect measured in the gold, and the advantage is concentrated
-exactly where the annotation is defective and absent where it is not, which is
-what annotation-prior agreement would look like.
+benchmark result is real: a consumer *evaluated against human-annotated
+scene graphs* is better supervised by human labels, which carry the
+annotation prior the evaluation shares. The interpretation is equally real:
+the ranking metric inherits every defect measured in the gold, and the
+advantage is concentrated exactly where the annotation is defective and
+absent where it is not, which is what annotation-prior agreement would look
+like.
 
 Section 1.2.2 set a non-inferiority criterion, and the arithmetic of that
-belongs here. Section 1.2.2 asked whether a model trained on automatic
-labels performs *at least as well* as one trained on human labels, not
-whether it wins, so parity is the shape a pass takes and not an advantage
-evaporating. That reframing is worth only as much as the numbers behind it,
-and the numbers refuse a strong claim in either direction. Paired by seed
-the automatic arm leads at 42 and 43 and trails at 44; the mean difference
-is -0.0006 with a 95% interval of [-0.070, +0.069]. Three seeds bound the
-gap to about a quarter of the metric's own value, and a margin of ±0.01
-would need roughly forty runs per arm. The experiment therefore establishes
-neither superiority nor equivalence, and a reader entitled to say the
-automatic labels did not beat the human ones is equally entitled to say this
-design could not have shown it if they had.
+belongs here. It asked whether a model trained on automatic labels performs
+*at least as well* as one trained on human labels, not whether it wins, so
+parity is the shape a pass takes. That reframing is worth only as much as
+the numbers behind it, and they refuse a strong claim in either direction:
+paired by seed the automatic arm leads at 42 and 43 and trails at 44, the
+mean difference is -0.0006 with a 95% interval of [-0.070, +0.069], three
+seeds bound the gap to about a quarter of the metric's own value, and a
+margin of ±0.01 would need roughly forty runs per arm. The experiment
+establishes neither superiority nor equivalence, and a reader entitled to
+say the automatic labels did not beat the human ones is equally entitled to
+say this design could not have shown it if they had.
 
-**What the same three seeds do resolve** is the part that is not a null.
-Zero-shot recall separates with disjoint ranges, 0.225-0.309 against
-0.004-0.079, and so does reproducibility, a 0.006 spread against 0.052.
-Those are the comparisons this sample size can make and both run the
-automatic arm's way. Set against the cost of obtaining them, nine annotators
-against five minutes on one consumer GPU, indistinguishability on the
-ranking metric is close to the result the project set out to obtain: RQ1 and
-RQ2 ask whether the human can be removed, not whether the machine wins.
+**What the same three seeds do resolve** is the part that is not a null:
+zero-shot recall separates with disjoint ranges, 0.225–0.309 against
+0.004–0.079, and so does reproducibility, a 0.006 spread against 0.052.
+Both run the automatic arm's way. Set against the cost of obtaining them —
+nine annotators against five minutes on one consumer GPU —
+indistinguishability on the ranking metric is close to the result the
+project set out to obtain: RQ1 and RQ2 ask whether the human can be removed,
+not whether the machine wins.
 
 The critical reading is not novel to this project, which is what makes it
 credible. Neural Motifs (Zellers et al., 2018) established that a frequency
@@ -321,7 +293,6 @@ annotation practice, not inferred. The one remaining instrument is a manual
 audit of the auto arm's top-ranked "false positives", the analogue of §4.4,
 left as designed follow-up.
 
-
 ## 6.6 What Chapter 5's predictions got right and wrong
 
 Registered before the run, judged after: prediction 1 (early human-arm
@@ -329,19 +300,15 @@ saturation) is **confirmed** and replicates the source paper. Prediction 2
 (higher plateau) is **unresolved on mR@100**, and the word matters: an
 earlier version of this chapter recorded it as refuted on the strength of a
 0.048 gap that the retrained arms of §6.3.1 reduce to 0.001, which no
-experiment of this size can call in either direction. Where the plateau *is*
-higher is the zero-shot component the prediction did not name, 0.268 against
-0.052. Prediction 3 (`near` recovery) is **refuted**: it wrongly assumed the
-test gold could reward dense `near` prediction. The value of
-pre-registration is that these verdicts are checkable, and that one of them
-had to be revised when the measurement improved is a point in its favour and
-not against it.
-
-The replication adds a fourth verdict, on a claim made *after* the run, not
-before: §6.3.1 withdraws the single-seed group-7 result on the record. The
-lesson is the one already applied to the pre-registered predictions and not
-to that one, that a difference is worth naming only once its size is
-compared with the variation of the procedure that produced it.
+experiment of this size can call either way; where the plateau *is* higher
+is the zero-shot component the prediction did not name, 0.268 against 0.052.
+Prediction 3 (`near` recovery) is **refuted**: it wrongly assumed the test
+gold could reward dense `near` prediction. The value of pre-registration is
+that these verdicts are checkable, and that one had to be revised when the
+measurement improved is a point in its favour. The replication adds a fourth
+verdict, on a claim made *after* the run: §6.3.1 withdraws the single-seed
+group-7 result on the record, a difference being worth naming only once its
+size is compared with the variation of the procedure that produced it.
 
 ## 6.7 Answer, at the level the source paper measures
 
@@ -349,11 +316,11 @@ At the source paper's level of robot-readiness, automatic labels do not beat
 human ones on the headline metric: 0.292 against 0.293, a difference no
 experiment this size could call either way. What they do is train a model
 that trains longer, covers five times more of the relation types the manual
-annotation never recorded, reproduces across seeds more than eight times more
-tightly, and ranks slightly ahead on the one test annotator with no measured
-defect. The evidence supports a conditional
-claim: **automatic labels are the better training material wherever ground
-truth means geometric consistency, and do not overtake human labels wherever it means
+annotation never recorded, reproduces across seeds more than eight times
+more tightly, and ranks slightly ahead on the one test annotator with no
+measured defect. The evidence supports a conditional claim: **automatic
+labels are the better training material wherever ground truth means
+geometric consistency, and do not overtake human labels wherever it means
 annotation habits.** The first condition is the operative one for a robot,
 which needs relations that are *correct* before they are *human-like*, and
 §5.7 tests that one link further down, where it survives.
