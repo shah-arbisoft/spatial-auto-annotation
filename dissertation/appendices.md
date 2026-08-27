@@ -36,8 +36,12 @@ and carries no foreseeable risk beyond that of everyday life, it falls
 within the self-assessment route rather than requiring full committee
 review.
 
-*The completed self-assessment form is attached at the end of this
-appendix.*
+Because the released dataset is secondary data, the module's Secondary
+Data Checklist applies in addition, completed and countersigned by the
+supervisor before any analysis began.
+
+*Both documents — the completed ethics self-assessment and the signed
+Secondary Data Checklist — are attached at the end of this appendix.*
 
 **Demonstration footage.** The two video clips of E.4 are royalty-free
 stock footage from Pexels, used under the Pexels licence (free use, no

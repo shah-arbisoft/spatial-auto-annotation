@@ -1205,6 +1205,11 @@ will be penalised.
 % record, later appendices are supplementary material.
 \appendix
 \renewcommand{\chaptertitlename}{Appendix}
+% The contents-page prefix is set once for the chapters; the appendices
+% are still \chapter internally, so without this they list as
+% CHAPTER A: Ethical Approval.
+\addtocontents{toc}{\protect\renewcommand{\protect\cftchappresnum}{APPENDIX~}}
+\addtocontents{toc}{\protect\settowidth{\protect\cftchapnumwidth}{\protect\bfseries APPENDIX~F:\protect\hspace{0.75em}}}
 % Appendix subsections carry their own labels (C.1, D.1, E.1 ...) inside the
 % heading text, so LaTeX must not number them a second time; without this a
 % heading reads "C.0.1 C.1 Notation ...". secnumdepth 0 keeps the chapter
