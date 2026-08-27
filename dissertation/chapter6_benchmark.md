@@ -245,7 +245,8 @@ Of the 25 test triplet types that annotation omits, the human arm saw none
 in training and the auto arm saw 24, so its 0.172 against 0.003 records that
 its labels *cover* relation types the manual pass never recorded — the
 property the annotation bottleneck predicts, not compositional
-generalisation, and this dissertation does not claim it as such.
+generalisation, and this dissertation does not claim it as such; §6.5 weighs
+what the column does establish.
 
 ## 6.5 What survives, read both ways
 
