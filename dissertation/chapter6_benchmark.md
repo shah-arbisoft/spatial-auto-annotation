@@ -166,11 +166,12 @@ labelling rule is a property of the test annotation rather than of one
 configuration of the tool.
 
 Second, **the zero-shot result is robust and larger than first reported.**
-Pooled zR@100 is 0.172 against 0.003, roughly sixty-fold, with disjoint
+Pooled zR@100 is 0.268 against 0.052, roughly fivefold, with disjoint
 ranges. It is not an artefact of pooling: the auto arm leads on *every*
-annotator separately (0.428 against 0.000 on group 6, 0.286 against 0.005 on
-group 7, 0.033 against 0.000 on group 8), and the human arm recalls nothing
-outside its training combinations on two of the three. Unlike the ranking
+annotator separately (0.449 against 0.000 on group 6, 0.273 against 0.098 on
+group 7, 0.041 against 0.007 on group 8), and the human arm recalls nothing
+at all outside its training combinations on one of the three and almost
+nothing on another. Unlike the ranking
 metrics this gap is not near-run at any seed or slice, and it points the same
 way on defective and clean annotators alike, which is what distinguishes a
 property of the labels from a property of the gold. §6.5 sets out what the

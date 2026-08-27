@@ -580,14 +580,13 @@ half that measured sound, since the item is supplied and nothing has to be
 enumerated.
 
 That would still be only an argument if the audit did not test it, and the
-decoys test it. The model rejected 26 of 28 relations the tool never
-emitted, against the author's 27 of 28, so on this pack it is a strict judge
-and not one that agrees with whatever it is shown; the two reach Cohen's κ
+decoys test it. The model rejected 24 of 28 relations the tool never
+emitted, against the author's 19 of 28, so on this pack it is the stricter of
+the two and not a judge that agrees with whatever it is shown; the two reach Cohen's κ
 0.601 over all items and 0.425 over the claims alone, moderate agreement
 rather than an echo. What the model is not is a human. Two judges who
 disagree at κ 0.601 are better evidence than one, and neither is the
-independent human estimate Appendix E.3 was built to supply and has not yet
-returned.
+independent human estimate Appendix E.3 supplies, which §4.15 reports.
 
 | Predicate | Author | Model |
 |---|---|---|
@@ -749,6 +748,13 @@ uniformly severe, so what the tool scores is about the tool.
 | behind | 54/66 0.818 | 22/24 0.917 | 20/24 0.833 |
 | near | 48/52 0.923 | 24/24 1.000 | 15/24 0.625 |
 | **support pooled** | **52/126 0.413** | **38/94 0.404** | **60/94 0.638** |
+
+The denominators differ because the judges saw different draws from the same
+pre-refit generation, not because items were dropped: the volunteers were
+shown 126 support claims from the study pool and the two blind judges 94 from
+the audit pack of §4.14, with 147 items carrying both. The columns are
+therefore three estimates of one quantity and not three verdicts on one
+sheet, which is what makes their agreement worth reporting.
 
 **On support the author's verdicts survive the check exactly.** Pooled `on`
 and `under` precision on the pre-refit labels is 0.413 for the volunteers

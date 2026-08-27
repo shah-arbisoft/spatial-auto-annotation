@@ -317,7 +317,7 @@ Every precision figure so far rests on the author verdicting the author's tool, 
 
 Why a model may judge what \S{}4.13 shows it cannot annotate. One objection arrives immediately: \S{}4.13 spends a section establishing that a vision-language model makes a poor annotator, and this section then gives one a vote. The two tasks differ in the half that failed. What \S{}4.13 measures is \textit{coverage} --- the model never addressed 171 of 381 gold triplets, 44.9\%, and its headline recall is mostly that silence --- while on the pairs it did judge it was the \textit{more precise} of the two, 0.419 against the pipeline's 0.347. Judging a claim that is handed to it asks only for the half that measured sound, since the item is supplied and nothing has to be enumerated.
 
-That would still be only an argument if the audit did not test it, and the decoys test it. The model rejected 26 of 28 relations the tool never emitted, against the author's 27 of 28, so on this pack it is a strict judge and not one that agrees with whatever it is shown; the two reach Cohen's $\kappa$ 0.601 over all items and 0.425 over the claims alone, moderate agreement rather than an echo. What the model is not is a human. Two judges who disagree at $\kappa$ 0.601 are better evidence than one, and neither is the independent human estimate Appendix E.3 was built to supply and has not yet returned.
+That would still be only an argument if the audit did not test it, and the decoys test it. The model rejected 24 of 28 relations the tool never emitted, against the author's 19 of 28, so on this pack it is the stricter of the two and not a judge that agrees with whatever it is shown; the two reach Cohen's $\kappa$ 0.601 over all items and 0.425 over the claims alone, moderate agreement rather than an echo. What the model is not is a human. Two judges who disagree at $\kappa$ 0.601 are better evidence than one, and neither is the independent human estimate Appendix E.3 supplies, which \S{}4.15 reports.
 
 \begin{center}
 \setlength{\tabcolsep}{6pt}
@@ -427,6 +427,8 @@ near & 48/52 0.923 & 24/24 1.000 & 15/24 0.625 \\
 \hline
 \end{longtable}
 \end{center}
+
+The denominators differ because the judges saw different draws from the same pre-refit generation, not because items were dropped: the volunteers were shown 126 support claims from the study pool and the two blind judges 94 from the audit pack of \S{}4.14, with 147 items carrying both. The columns are therefore three estimates of one quantity and not three verdicts on one sheet, which is what makes their agreement worth reporting.
 
 \textbf{On support the author's verdicts survive the check exactly.} Pooled \texttt{on} and \texttt{under} precision on the pre-refit labels is 0.413 for the volunteers against the author's 0.404 --- a difference of 0.009 between the person who built the tool, blinded and working against decoys, and strangers with no stake in the outcome. This is the objection \S{}2.9 raises and \S{}7.4 concedes, answered by measurement. The model sits apart at 0.638, and \texttt{near} shows the same shape from the other side: 0.923 and 1.000 from the two human judges against the model's 0.625. Across all seven predicates the volunteers rank the tool almost exactly as the author does, Spearman 0.96 against the model's 0.34, and land 0.074 away on average. Two independent human judges agreeing to that degree is the strongest evidence available that the audits were not theatre.
 
