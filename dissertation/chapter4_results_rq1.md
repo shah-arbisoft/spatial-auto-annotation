@@ -81,9 +81,15 @@ is the right number for a per-predicate question and the wrong one for this
 comparison: guessing `in front of` everywhere recovers 2,013 of 8,926
 triplets because that predicate is a quarter of the gold. Both figures are
 reported so neither reading can flatter the tool by itself. **(ii)**
-Box-only matches the full pipeline on every box-computable predicate, so
-masks contribute almost nothing to on/under/left/right/near recall and the
-pipeline's advantage is confined to the depth pair (0.70/0.71 against 0.00).
+On recall alone box-only is level with the full pipeline on the lateral pair
+and slightly ahead on support, 0.84 and 0.77 against 0.81 and 0.75, while
+falling 0.13 behind on `near`. Recall is the wrong axis to read that on: the
+mask rule was adopted because it lifts support *precision* and recall
+together, held-out support F1 0.71 to 0.87 (A5, §4.9), and a looser box rule
+buys its extra recall with the false fires §4.4 audits. What the column does
+show is that masks earn their place on support quality and on `near`, not on
+lateral recall, and that the pipeline's unshared advantage is the depth pair
+(0.70/0.71 against 0.00).
 Even there the ground-plane fallback, a pure box cue, needs masks to fire,
 because its elevation guard is mask-contact evidence (§4.9). **(iii)**
 Held-out beats pooled on on/under/near and falls far below it on
@@ -251,7 +257,8 @@ dataset cannot support is part of describing it.
 
 ## 4.7 Flags: what review actually costs
 
-31.5% of ordered pairs carry a flag: depth-ambiguous 19.3% (down from 29.5%
+31.5% of ordered pairs carry at least one flag; the kinds below overlap, so
+they sum past that (Appendix C.9). Depth-ambiguous 19.3% (down from 29.5%
 before the ground-plane fallback, which resolved a third of the depth
 abstentions) and lateral-ambiguous 10.0% are *abstentions* (no label
 emitted; nothing to review), while the borderline-near band, 8.5% of pairs,
@@ -370,13 +377,15 @@ trial), then runs the identical SAM2 → depth → rules stack
 greedy IoU ≥ 0.5).
 
 End-to-end triplet recall over 836 images is **0.38** against the PredCls
-headline, and the decomposition attributes the gap exactly. Zero-shot
+headline, and the decomposition attributes most of that gap. Zero-shot
 detection recall spans 0.40 (cube) to 0.95 (human), and a triplet needs
 *both* endpoints. **Conditioned on both being detected the relation layer
 scores 0.85 mean, matching PredCls** (lateral 0.96/0.98, near 1.00, support
 0.83/0.77; front/behind 0.69/0.70, computed before the ground-plane fallback
 shipped, so those are a floor, and detectable pairs skew towards
-well-separated objects). Detection accounts for the gap, and the rules
+well-separated objects). Detection is therefore the dominant term rather than a complete
+accounting, since missed objects also change which pairs are presented and
+what the masks look like, and the rules
 themselves are detector-agnostic.
 
 Two caveats. Zero-shot open-vocabulary detection is the worst-case

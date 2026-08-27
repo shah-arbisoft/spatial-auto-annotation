@@ -36,8 +36,8 @@ every label.
 That cost is structural and grows faster than the data. Objects relate
 pairwise, so an image holding *n* annotated objects presents *n(n−1)*
 ordered pairs a conscientious annotator must consider. This dataset averages
-101 per image, so an exhaustive pass means a hundred judgements per
-photograph. Relationship annotation is therefore never exhaustive in
+101 such pairs per image, from about ten annotated objects, so an exhaustive
+pass means a hundred judgements per photograph. Relationship annotation is therefore never exhaustive in
 practice: Visual Genome, the reference corpus, records about eighteen
 relationships per image over scenes of roughly twenty objects (Krishna et
 al., 2017), and here humans labelled about 10% of ordered pairs. That
