@@ -73,7 +73,12 @@ data and sit downstream of annotation. This pipeline *computes* relations from
 measured geometry with deterministic rules, so it runs before any learned
 model and supplies what those models consume. That works only because the
 seven predicates are spatial: each is decidable from positions, extents and
-depth order. SAM2 and Depth Anything only *measure* where things are; no
+depth order, with one exception the design concedes rather than hides.
+Support turns on whether a thing is resting or held, which the geometry
+cannot represent, so a class guard stands in for it (§3.6); ablation A10
+tests whether geometry can take that job back and finds it cannot
+(Appendix D.8). The principle holds for six predicates outright and for
+support up to one semantic list. SAM2 and Depth Anything only *measure* where things are; no
 learned component decides a relationship.
 
 The alternative was to keep the human labels and stretch them, by
