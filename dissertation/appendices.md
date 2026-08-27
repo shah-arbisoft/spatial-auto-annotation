@@ -580,8 +580,9 @@ error directions at once, exactly as the failure gallery and audit
 predicted. Knock-on: `near` recall reaches **0.997 pooled (715/717; the two
 residual misses are contact-boundary cases, §4.10) and 1.00 held-out** as
 the last contact-boundary suppressions disappear; headline mean recall 0.79
-→ **0.81**. The A4 sweep confirms the fitted threshold sits exactly at the
-recall plateau's knee: recall is flat from T = 1.372 upward while emissions
+→ **0.81**. The A4 sweep confirms that `near_T`, the proximity threshold and not
+the contact one under discussion here, sits exactly at its recall
+plateau's knee: recall is flat from T = 1.372 upward while emissions
 keep growing, so the fitted value is the least-permissive point achieving
 maximal agreement. A 30-sample re-audit of the new support extras appeared
 to confirm the precision claim: extras correct rise from 1/15 and 3/15 (box
