@@ -384,17 +384,19 @@ This guarantees consistency by construction: a pair can never be both
 ### C.4 `left of(A, B)`: A's centre is left of B's
 
 ```
-left_of(A, B)  ==  (cx_A < cx_B)    in camera-frame image coordinates
+left_of(A, B)  ==  (cx_B - cx_A) > lateral_center_eps
+                   in camera-frame image coordinates, cx normalised by width
 ```
 
-The magnitude `|cx_A - cx_B|`, normalised by width, gives the confidence. Below
-`lateral_center_eps` (0.02) the centres nearly coincide, and the pair is
+As with depth, the band is inside the rule: `lateral_center_eps` is 0.02, so a
+pair whose centres are closer than that is not labelled either way. The
+magnitude `|cx_A - cx_B|` gives the confidence, and pairs below the band are
 flagged ambiguous rather than silently labelled.
 
 ### C.5 `right of(A, B)`: A's centre is right of B's
 
 ```
-right_of(A, B)  ==  (cx_A > cx_B)
+right_of(A, B)  ==  (cx_A - cx_B) > lateral_center_eps
 ```
 
 The strict mirror of `left of`. Exactly one of the two holds outside the
@@ -406,12 +408,15 @@ ambiguity band; inside it neither is emitted and the pair is flagged.
 A two-stage cascade. Stage one is depth ordering:
 
 ```
-in_front_of(A, B)  ==  (d_A < d_B)      (smaller depth = nearer)
-behind(A, B)       ==  (d_A > d_B)
+in_front_of(A, B)  ==  (d_B - d_A) >  depth_eps     (smaller depth = nearer)
+behind(A, B)       ==  (d_A - d_B) >  depth_eps
+otherwise            stage one abstains and defers to stage two
 ```
 
-with `|d_A - d_B|` below `depth_eps` (0.03) meaning the depths are too close
-to separate, which defers to stage two.
+The band is part of the test and not a separate check: `depth_eps` is 0.03,
+so a pair whose depths differ by less than that is not ordered by stage one
+at all. This is `src/predicates.py` verbatim, where the two rules are
+`(b.depth - a.depth) > depth_eps` and its mirror.
 
 Stage two is the **ground-plane fallback**, which fires only where stage one
 abstained. Two objects standing on the same floor are depth-ordered by

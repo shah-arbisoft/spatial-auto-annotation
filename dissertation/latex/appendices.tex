@@ -177,15 +177,16 @@ This guarantees consistency by construction: a pair can never be both \texttt{on
 \subsection{C.4 \texttt{left of(A, B)}: A's centre is left of B's}
 
 \begingroup\small\begin{verbatim}
-left_of(A, B)  ==  (cx_A < cx_B)    in camera-frame image coordinates
+left_of(A, B)  ==  (cx_B - cx_A) > lateral_center_eps
+                   in camera-frame image coordinates, cx normalised by width
 \end{verbatim}\endgroup
 
-The magnitude \texttt{|cx\_\allowbreak{}A - cx\_\allowbreak{}B|}, normalised by width, gives the confidence. Below \texttt{lateral\_\allowbreak{}center\_\allowbreak{}eps} (0.02) the centres nearly coincide, and the pair is flagged ambiguous rather than silently labelled.
+As with depth, the band is inside the rule: \texttt{lateral\_\allowbreak{}center\_\allowbreak{}eps} is 0.02, so a pair whose centres are closer than that is not labelled either way. The magnitude \texttt{|cx\_\allowbreak{}A - cx\_\allowbreak{}B|} gives the confidence, and pairs below the band are flagged ambiguous rather than silently labelled.
 
 \subsection{C.5 \texttt{right of(A, B)}: A's centre is right of B's}
 
 \begingroup\small\begin{verbatim}
-right_of(A, B)  ==  (cx_A > cx_B)
+right_of(A, B)  ==  (cx_A - cx_B) > lateral_center_eps
 \end{verbatim}\endgroup
 
 The strict mirror of \texttt{left of}. Exactly one of the two holds outside the ambiguity band; inside it neither is emitted and the pair is flagged. \texttt{right\_\allowbreak{}of(A,B) == left\_\allowbreak{}of(B,A)}.
@@ -195,11 +196,12 @@ The strict mirror of \texttt{left of}. Exactly one of the two holds outside the 
 A two-stage cascade. Stage one is depth ordering:
 
 \begingroup\small\begin{verbatim}
-in_front_of(A, B)  ==  (d_A < d_B)      (smaller depth = nearer)
-behind(A, B)       ==  (d_A > d_B)
+in_front_of(A, B)  ==  (d_B - d_A) >  depth_eps     (smaller depth = nearer)
+behind(A, B)       ==  (d_A - d_B) >  depth_eps
+otherwise            stage one abstains and defers to stage two
 \end{verbatim}\endgroup
 
-with \texttt{|d\_\allowbreak{}A - d\_\allowbreak{}B|} below \texttt{depth\_\allowbreak{}eps} (0.03) meaning the depths are too close to separate, which defers to stage two.
+The band is part of the test and not a separate check: \texttt{depth\_\allowbreak{}eps} is 0.03, so a pair whose depths differ by less than that is not ordered by stage one at all. This is \texttt{src/predicates.py} verbatim, where the two rules are \texttt{(b.depth - a.depth) > depth\_\allowbreak{}eps} and its mirror.
 
 Stage two is the \textbf{ground-plane fallback}, which fires only where stage one abstained. Two objects standing on the same floor are depth-ordered by projection: the nearer object's box bottom sits lower in the image.
 

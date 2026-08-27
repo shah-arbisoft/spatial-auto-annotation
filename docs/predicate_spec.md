@@ -121,7 +121,8 @@ guarantees consistency: the pair can never be both `on(A,B)` and `under(A,B)`
 ## 3. `left of(A, B)` — A's centre is left of B's
 
 ```
-left_of(A, B)  ==  (cx_A < cx_B)   in camera-frame image coordinates
+left_of(A, B)  ==  (cx_B - cx_A) > lateral_center_eps
+                   in camera-frame image coordinates, cx normalised by width
 ```
 
 with the magnitude `|cx_A - cx_B|` (normalised by width) used for confidence: if
@@ -131,7 +132,7 @@ the case is **flagged ambiguous** rather than silently labelled.
 ## 4. `right of(A, B)` — A's centre is right of B's
 
 ```
-right_of(A, B)  ==  (cx_A > cx_B)
+right_of(A, B)  ==  (cx_A - cx_B) > lateral_center_eps
 ```
 
 The strict mirror of `left of`. Exactly one of `left of` / `right of` holds away
@@ -143,10 +144,11 @@ flagged. `right_of(A,B) == left_of(B,A)`.
 Two-stage cascade. Stage 1 — depth ordering:
 
 ```
-in_front_of(A, B)  ==  (d_A < d_B)    (smaller depth = nearer)
+in_front_of(A, B)  ==  (d_B - d_A) > depth_eps    (smaller depth = nearer)
 ```
 
-`|d_A - d_B|` below `depth_eps` (default 0.03) ⇒ depths nearly equal ⇒ stage 2.
+The band is inside the rule: with `depth_eps` at 0.03 a pair whose depths
+differ by less than that is not ordered here at all ⇒ stage 2.
 
 Stage 2 — **ground-plane fallback** (only where stage 1 abstained): two
 objects standing on the same floor are depth-ordered by projection — the
@@ -172,7 +174,7 @@ either object elevated ⇒ flagged.
 ## 6. `behind(A, B)` — A is farther from the camera than B
 
 ```
-behind(A, B)  ==  (d_A > d_B)
+behind(A, B)  ==  (d_A - d_B) > depth_eps
 ```
 
 The inverse of `in front of`: `behind(A,B) == in_front_of(B,A)`. The same
@@ -273,10 +275,10 @@ costed on the review-queue flags, not the abstentions.
 |---|---|---|---|
 | `on` | mask contact below + depth co-location + centroid order (box test is the no-mask fallback) | `on_contact_min` 0.60, `on_depth_eps` 0.06, `on_vertical_gap` 0.05, `on_horizontal_overlap` 0.20 | `on(A,B)=under(B,A)` |
 | `under` | inverse of `on` | (same as `on`) | `under(A,B)=on(B,A)` |
-| `left of` | `cx_A < cx_B` | `lateral_center_eps` 0.02 | `left(A,B)=right(B,A)` |
-| `right of` | `cx_A > cx_B` | `lateral_center_eps` 0.02 | `right(A,B)=left(B,A)` |
-| `in front of` | `d_A < d_B`, then guarded ground-plane fallback | `depth_eps` 0.03, `plane_band` 0.005 | `front(A,B)=behind(B,A)` |
-| `behind` | `d_A > d_B`, then guarded ground-plane fallback | `depth_eps` 0.03, `plane_band` 0.005 | `behind(A,B)=front(B,A)` |
+| `left of` | `(cx_B - cx_A) > eps` | `lateral_center_eps` 0.02 | `left(A,B)=right(B,A)` |
+| `right of` | `(cx_A - cx_B) > eps` | `lateral_center_eps` 0.02 | `right(A,B)=left(B,A)` |
+| `in front of` | `(d_B - d_A) > eps`, then guarded ground-plane fallback | `depth_eps` 0.03, `plane_band` 0.005 | `front(A,B)=behind(B,A)` |
+| `behind` | `(d_A - d_B) > eps`, then guarded ground-plane fallback | `depth_eps` 0.03, `plane_band` 0.005 | `behind(A,B)=front(B,A)` |
 | `near` | `box_gap_rel <= near_T`, no contact | `near_T` 1.372 (fitted), `flag_near_band` 0.15 | symmetric |
 
 All thresholds are declared in `configs/default.yaml`; `near_T` is fitted in
