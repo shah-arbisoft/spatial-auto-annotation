@@ -290,7 +290,9 @@ occluder, so the result speaks to that situation and not to task planning at
 large. The vision-language model's assertions were never audited as the
 tool's were (§4.4), so the union's gain is measured on the planning task
 alone. Condition B is handed the exact fact the task tests, so what is being
-compared is the label sources and not the planners. And no robot moved, so
+compared is the label sources and not the planners. Both planners are Gemini, so the invariance holds across model
+size and reasoning mode but not across vendors, and the source paper's own
+motivating example used a different family. And no robot moved, so
 this measures plans, not executions, and closes the gap between labels and
 robot behaviour by one link rather than entirely.
 

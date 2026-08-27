@@ -177,7 +177,11 @@ half.) The pooled 0.70 decomposes into three distinct causes:
    `near`, this is a second measured annotation defect, and it is the
    reference-frame ambiguity RoboSpatial formalises (§2.5) observed in the
    wild, with no frame declared in the guidance and two teams resolving it
-   oppositely.
+   oppositely. What rules out simple subjectivity is the shape of the
+   distribution: a genuinely contested judgement would scatter agreement
+   around chance, whereas these two groups sit at 0.02–0.05 while the other
+   six sit at 0.95–1.00. Agreement that far *below* chance is a sign flip,
+   not a difference of opinion, and neither convention is the wrong one.
 3. **The remaining gap is abstention, not error.** Groups 2 and 3 agree almost
    perfectly when the tool commits, but their pairs sit inside the `depth_eps`
    band *and* beyond the ground-plane fallback's reach, so the tool abstains:
