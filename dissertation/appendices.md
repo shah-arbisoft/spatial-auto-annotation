@@ -1187,7 +1187,13 @@ In seven of those plans the planner names the occluding object, but only ever
 as something to steer around: "maintaining a clear path above cube0, book2,
 book3", or "lift box0 to a safe height to clear book1".
 
-**The six scenes condition C fails on.** On the shipped labels these are scenes 1, 4, 16, 19, 24 and 25 (§5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together — scene 4 offered "box6 is in front of book7" and "box6 is near book7", scene 24 added "to the left of" — but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored `clear_step` is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
+**The six scenes condition C fails on.** On the shipped labels the support
+relation the task depends on is present in 18 of the 25 prompts, absent from
+scenes 1, 4, 7, 16, 19, 24 and 25 (on the pre-refit labels it was absent
+from 4, 16 and 24 alone); scene 7's plan is nonetheless recovered from the
+surrounding description, so absence of the relation is nearly but not quite
+sufficient for failure. The six failing scenes are 1, 4, 16, 19, 24 and 25
+(§5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together — scene 4 offered "box6 is in front of book7" and "box6 is near book7", scene 24 added "to the left of" — but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored `clear_step` is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
 
 **The scoring defect that manual checking caught.** Models frequently open
 with a preamble restating the task ("To pick up box0 safely, follow these
