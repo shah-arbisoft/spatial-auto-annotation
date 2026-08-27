@@ -56,13 +56,13 @@ each objective was discharged.
 
 ## 7.2 What the remaining failures are made of
 
-The failure gallery diagnoses every one of the 1,689 missed human triplets by
+The failure gallery diagnoses every one of the 1,650 missed human triplets by
 re-checking rule conditions, so the failure analysis is exhaustive and not
 anecdotal. Three observations matter most.
 
 First, **genuine tool error is rare**. Section 4.10 decomposes the misses:
 avoidable error is roughly 7% of them, and the bulk of the mass is
-calibrated abstention, 52–61% of front/behind misses sitting in the depth
+calibrated abstention, 43–54% of front/behind misses sitting in the depth
 ambiguity band, with measured annotator defects taking most of the rest.
 That shapes what is left to do. A tool whose misses are mostly abstention
 improves by deciding more often rather than by deciding better, and one

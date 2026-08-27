@@ -336,15 +336,15 @@ structure of each refinement are given in **Appendix D**.
 Each missed human triplet is diagnosed automatically by re-checking the rule's
 individual conditions against the cached geometry and mask-contact maps
 (`scripts/make_failure_gallery.py`; rendered examples in
-`outputs/failure_gallery/`). Appendix D.7 breaks the 1,689 misses of the
+`outputs/failure_gallery/`). Appendix D.7 breaks the 1,650 misses of the
 shipped rule set down by predicate and cause.
 
-Genuine depth-ordering errors remain 1–5% of front/behind misses, the
+Genuine depth-ordering errors remain 1–6% of front/behind misses, the
 support misses are threshold trades on real contact evidence, which box
 geometry does not explain, and `near` misses have all but vanished. The
-convention-inverted *share* grew to 38–42% not because those misses
+convention-inverted *share* grew to 45–51% not because those misses
 increased but because the ground-plane fallback shrank the abstention share
-around them, total misses falling from 2,107 to 1,689. Misses attributable
+around them, total misses falling from 2,107 to 1,650. Misses attributable
 to avoidable tool error across all seven predicates: ~7%.
 
 

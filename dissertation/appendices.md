@@ -773,16 +773,16 @@ the failure mode directly:
 
 | Gold predicate | Missed | Most frequent co-emissions on missed pairs |
 |---|---|---|
-| on | 177/1465 | near (177), behind (155): support demoted to proximity/depth |
-| under | 187/1001 | in front of (167), near (166) |
+| on | 275/1465 | near (275), behind (248): support demoted to proximity/depth |
+| under | 253/1001 | in front of (234), near (232) |
 | to the left of | 34/972 | near (33), to the right of (24): flips at the centre band |
 | to the right of | 18/1174 | to the left of (16) |
-| in front of | 725/2013 | near (572), behind (422), to the left of (261) |
-| behind | 546/1584 | near (421), in front of (353) |
+| in front of | 611/2013 | near (548), behind (460), to the left of (256) |
+| behind | 457/1584 | near (419), in front of (368) |
 | near | 2/717 | on (2): the contact-exclusion boundary |
 
 Two structural signatures stand out. Missed front/behind pairs carrying the
-*opposite* direction (422 + 353) are almost entirely the convention-inverted
+*opposite* direction (460 + 368) are almost entirely the convention-inverted
 groups of §4.5, and their count *rose* with the ground-plane fallback,
 because pairs the tool used to abstain on are now committed in the direction
 those groups invert. And the two remaining missed `near` pairs carry
@@ -794,10 +794,10 @@ geometry and mask-contact maps, attributing every miss to a cause.
 
 | Predicate | Dominant causes (share of that predicate's misses) |
 |---|---|
-| in front of | abstained in ambiguity band 61% · convention-inverted annotators 38% · **genuine depth error 1%** |
-| behind | abstained 52% · convention-inverted 42% · **genuine depth error 5%** |
-| on | mask contact below threshold 58% · depth-gate suppressed 40% |
-| under | contact below threshold 50% · depth-gate suppressed 33% · no contact measured (occlusion) 17% |
+| in front of | abstained in ambiguity band 54% · convention-inverted annotators 45% · **genuine depth error 1%** |
+| behind | convention-inverted 51% · abstained 43% · **genuine depth error 6%** |
+| on | mask contact below threshold 80% · depth-gate suppressed 18% |
+| under | contact below threshold 70% · depth-gate suppressed 18% · no contact measured (occlusion) 12% |
 | near | 2 remaining misses (contact boundary) |
 | to the left/right of | centre flip 71–89% · abstained 11–29% (52 cases total) |
 

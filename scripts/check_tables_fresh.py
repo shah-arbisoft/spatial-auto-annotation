@@ -18,6 +18,7 @@ coverage than it has.
 """
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -69,7 +70,40 @@ SOURCES = {
     "depth_ablation.md": ["outputs/depth_ablation.json"],
     "crowd_validation.md": ["outputs/crowd_validation.json"],
     "seed_replication.md": ["outputs/sgg_benchmark/seed_replication.json"],
+    # the gallery and the recall table describe the same run, so the
+    # gallery must not predate the fidelity report
+    "failure_gallery.md": ["outputs/fidelity_report.json"],
 }
+
+
+def check_recall_reconciles() -> int:
+    """Table D.3's misses must equal gold x (1 - recall) from the fidelity run.
+
+    A stale failure gallery is invisible to both the cell check and the age
+    check if someone edits the Markdown by hand, but it cannot survive this:
+    the two tables are derived from one run and must agree by arithmetic.
+    """
+    rep = ROOT / "outputs" / "fidelity_report.json"
+    app = DISS / "appendices.md"
+    if not (rep.exists() and app.exists()):
+        return 0
+    rec = json.loads(rep.read_text(encoding="utf-8"))["recall"]["ours"]
+    txt = app.read_text(encoding="utf-8")
+    bad = 0
+    seen = 0
+    for m in re.finditer(r"^\| ([a-z ]+?) \| (\d+)/(\d+) \|", txt, re.M):
+        pred, miss, gold = m.group(1), int(m.group(2)), int(m.group(3))
+        if pred not in rec:
+            continue
+        seen += 1
+        want = round(rec[pred]["gold"] * (1 - rec[pred]["recall"]))
+        if gold != rec[pred]["gold"] or abs(miss - want) > 1:
+            bad += 1
+            print(f"  MISMATCH {pred}: appendix says {miss}/{gold}, the "
+                  f"fidelity run implies {want}/{rec[pred]['gold']}")
+    print(f"  {seen} miss/gold row(s) checked against the recall table, "
+          f"{bad} disagree")
+    return bad
 
 
 def check_ages() -> int:
@@ -124,6 +158,7 @@ def main() -> int:
                               f"text {a!r} vs {src} {b!r}")
 
     aged = check_ages()
+    aged += check_recall_reconciles()
     print(f"\n  {checked} table(s) checked against outputs/tables/, "
           f"{drift} cell(s) drifted")
     if unchecked:
