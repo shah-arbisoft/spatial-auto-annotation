@@ -606,7 +606,10 @@ rule) to **11/15 and 12/15**, pooled 0.13 → 0.77. That re-audit was
 unblinded, and §4.14 shows the figure does not survive blinding; the
 threshold below was fitted on train F1 against gold covering a tenth of
 ordered pairs, so a false positive outside the gold cost the fit nothing,
-and the plateau called uncritical here is flat for that reason. The seven
+and the plateau called uncritical here is flat for that reason. A second
+independent signal for any future refit is the supporting object's size:
+`on(A, B)` requires B to be able to hold A up, and a 20-pixel cube is not a
+surface. The seven
 remaining wrong/uncertain extras have structure: a person *holding* a remote
 fires contact (holding ≠ resting), one occluded bottle-behind-bottle pair,
 and three distant clusters too small to verdict confidently. The
@@ -1089,6 +1092,23 @@ and crowd-internal reliability as Krippendorff's alpha.
 
 **What it returned.** Collection closed at 1,415 usable judgements from 20 raters, covering 832 of the 1,000 claims, 83.2%, with no rater supplying more than 15% of the total. All 412 treatment claims and 420 of the 588 control claims carry at least one verdict, and 147 carry three or more, which is the subset the author comparison and the reliability figure need. Of the pre-declared filters, the duplicate rule fired on 12 submissions, all of them from before the 11 August server fix; no response fell below the 800 ms floor, and no rater was excluded as a systematic outlier. Section 4.15 reports the figures; `eval/crowd_validation.py` reproduces them from the scorer's report, separating the arms on the claim id, since the scorer's own per-predicate totals pool both.
 
+**Reading the three-judge comparison.** One asymmetry bounds how far §4.15's
+comparison can be pushed: the tool's claims are its *extra* predictions, on
+pairs the annotators passed over, while the control claims are pairs they
+chose to record. Annotators record what is clear, so some of every gap
+between the two arms is the difficulty of the claim rather than the quality
+of the label — for the 0.063 gap on the five untouched predicates that
+reservation may account for most of it; for the 0.563 support gap it cannot.
+The agreement figures also read as real signal rather than noise: both the
+crowd–author agreement (0.871, κ 0.683) and crowd-internal reliability
+(α 0.703) roughly doubled as the sample grew, which is what signal does and
+noise does not, and neither approaches 1.0 — §2.3's account of spatial
+language predicts that residue better than rater carelessness does, some
+disagreement being over what the words mean rather than what the photograph
+shows. The comparison also cannot fully separate label quality from claim
+difficulty, because the two arms are drawn from populations the annotators
+themselves divided.
+
 ### E.4 Video processing: settings and the open-vocabulary failures
 
 This records how the clips were processed and what went wrong, both of which
@@ -1280,6 +1300,20 @@ per-predicate verdicts, with Wilson 95% intervals, are these:
 | near | 24/24 1.000 [0.86, 1.00] | 15/24 0.625 [0.43, 0.79] |
 | **support pooled** | **38/94 0.404 [0.31, 0.51]** | **60/94 0.638 [0.54, 0.73]** |
 | decoys rejected | 19/28 0.679 [0.49, 0.82] | 24/28 0.857 [0.69, 0.94] |
+
+**What the direction of the restricted-versus-audited gap says about the
+human record.** For five predicates restricted precision badly understates
+audited precision, and for support it overstates it, and the direction is
+diagnostic of what the gold *is*. A lateral relation holds for nearly every
+ordered pair and the annotators wrote down a handful, so their labels are a
+small sample of a large truth and the tool's extras are mostly further
+instances of it. Support is rare and salient: a thing resting on a thing was
+worth recording and was recorded, so the human labels are close to the
+complete set of easy cases and what the tool adds beyond them is mostly not
+there. Restricted precision therefore understates a predicate whose gold is
+a sample and overstates one whose gold is nearly exhaustive, and no single
+reading of §4.3 is correct for both — which is why the protocol pairs it
+with an audit instead of reporting either alone.
 
 **Judge drift between the two packs.** Nine of 28 decoys were accepted in v3
 and one in v4, so the second sheet is the work of a stricter judge than the
