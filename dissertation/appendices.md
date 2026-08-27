@@ -22,18 +22,23 @@ above applies to them unchanged.
 
 The independent validation of the automatic labels (Chapter 4) collects
 anonymous true/false judgements from adult volunteers through a purpose-built
-web quiz. No names, email addresses, IP addresses or any other personal data
-are recorded; each browser receives a random identifier used only to spread
-item coverage and remove duplicate answers. Participation is voluntary,
+web quiz. No names, email addresses or IP addresses are
+recorded. Each browser receives a random identifier, stored with its answers
+and used only to spread item coverage and remove duplicates; because UK GDPR
+treats an online identifier as personal data where it can single out someone,
+the study is described as pseudonymous rather than anonymous (§8.3). The
+identifier is generated in the browser, derives from nothing about the device
+or network, and is joined to no other dataset. Participation is voluntary,
 takes about three minutes, and can be abandoned at any point; an information
 panel on the first screen states the purpose, the data collected, and a
 contact address. Faces in all quiz images are pixelated before publication,
 and items where anonymisation would obscure the object under judgement were
 removed rather than shown. The collection is covered by the University's
 ethics self-assessment process, completed and submitted on 19 July 2026.
-Because the study collects no personal data, involves no vulnerable groups
-and carries no foreseeable risk beyond that of everyday life, it falls
-within the self-assessment route rather than requiring full committee
+Because the only identifier is one the browser generates for itself, no
+directly identifying data is collected, no vulnerable groups are involved
+and there is no foreseeable risk beyond that of everyday life, the study
+falls within the self-assessment route rather than requiring full committee
 review.
 
 Because the released dataset is secondary data, the module's Secondary
