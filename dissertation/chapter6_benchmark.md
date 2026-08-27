@@ -52,7 +52,7 @@ human gold, groups 6–8), at seed 42:
 | R@100 | **0.280** | 0.259 |
 | mR@100 | 0.270 | **0.291** |
 | F1@100 | **0.275** | 0.274 |
-| zero-shot recall zR@100 | 0.073 | **0.309** |
+| zR@100, recall on types the shared reference omits (§6.4) | 0.073 | **0.309** |
 
 At this seed the automatic arm leads the mean-recall metric, 0.291 against
 0.270, while the human arm keeps raw recall and the two are level on F1. The
@@ -103,7 +103,11 @@ and one configuration, so the arms differ in their labels and nothing else.
 An earlier set of figures, with the human arm at 0.326 pooled, came from
 runs made weeks apart against different states of the upstream code; §7.4
 reports what that cost. The **aligned** row re-scores the same models
-against gold with the two inverted annotators corrected (§4.5). Cells give
+against gold with the two inverted annotators corrected (§4.5). The
+`zR@100` rows are recall on triplet types absent from one shared
+reference, not from each arm's own training set, so they measure coverage
+of omitted types and not compositional generalisation; §6.4 gives the
+reasoning and this dissertation makes no zero-shot claim on them. Cells give
 the mean over three seeds with the per-seed range in brackets.
 
 **On the metric this chapter is organised around, the two label sources are
@@ -139,9 +143,14 @@ predicate labelled in the opposite direction to the convention every
 training group used**. Both arms train on groups 0–5, where no inversion is
 measured, so neither can score those relations and the penalty falls on them
 equally. The inversion therefore sets a *ceiling* on what either arm can
-score. It caps what any model trained on this data can reach on 30% of the
-test gold, which compresses the range the two arms can differ across and
-makes every absolute mR@100 in this chapter a lower bound on both sides.
+score, and how far it bites depends on how the metric aggregates. R@100
+counts instances, so the cap applies to 30% of them directly. mR@100
+averages over the seven predicates, so front and behind carry two sevenths
+of it however many instances they hold; what the 72% figure sets is a
+ceiling near 0.28 on those two components rather than a 30% reduction in
+the mean. Both metrics are depressed and every absolute figure in this
+chapter is a lower bound on both sides, but the 30% is a share of the gold
+and not a share of mR@100.
 
 What difference remains is a separate effect, and §6.4 localises it to
 annotator *selection* rather than annotator convention: it appears on the

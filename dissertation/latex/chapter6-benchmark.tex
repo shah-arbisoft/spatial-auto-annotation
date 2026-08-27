@@ -27,8 +27,8 @@ The human arm \textbf{peaks at epoch 4 of 25} and never improves again, oscillat
 Both best checkpoints evaluated on the identical test set (210 images, human gold, groups 6--8), at seed 42:
 
 \begin{center}
-\setlength{\tabcolsep}{6pt}
-\small
+\setlength{\tabcolsep}{3pt}
+\footnotesize
 \begin{longtable}{lll}
 \caption[Benchmark test results (SGDet) for the human-trained]{Benchmark test results (SGDet) for the human-trained and auto-trained arms, at seed 42; Table 6.2 pools all three seeds.}\\
 \hline
@@ -42,7 +42,7 @@ metric (test, sgdet) & human-trained & auto-trained \\
 R@100 & \textbf{0.280} & 0.259 \\
 mR@100 & 0.270 & \textbf{0.291} \\
 F1@100 & \textbf{0.275} & 0.274 \\
-zero-shot recall zR@100 & 0.073 & \textbf{0.309} \\
+zR@100, recall on types the shared reference omits (\S{}6.4) & 0.073 & \textbf{0.309} \\
 \hline
 \end{longtable}
 \end{center}
@@ -81,7 +81,7 @@ aligned & mR@100 & corrected & 0.333 (0.310--0.369) & 0.316 (0.312--0.320) & \te
 \end{longtable}
 \end{center}
 
-All nine runs were trained in one session on one clone, one frozen detector and one configuration, so the arms differ in their labels and nothing else. An earlier set of figures, with the human arm at 0.326 pooled, came from runs made weeks apart against different states of the upstream code; \S{}7.4 reports what that cost. The \textbf{aligned} row re-scores the same models against gold with the two inverted annotators corrected (\S{}4.5). Cells give the mean over three seeds with the per-seed range in brackets.
+All nine runs were trained in one session on one clone, one frozen detector and one configuration, so the arms differ in their labels and nothing else. An earlier set of figures, with the human arm at 0.326 pooled, came from runs made weeks apart against different states of the upstream code; \S{}7.4 reports what that cost. The \textbf{aligned} row re-scores the same models against gold with the two inverted annotators corrected (\S{}4.5). The \texttt{zR@100} rows are recall on triplet types absent from one shared reference, not from each arm's own training set, so they measure coverage of omitted types and not compositional generalisation; \S{}6.4 gives the reasoning and this dissertation makes no zero-shot claim on them. Cells give the mean over three seeds with the per-seed range in brackets.
 
 \textbf{On the metric this chapter is organised around, the two label sources are indistinguishable.} The pooled mR@100 rows are level and no slice separates them: every row's seed ranges overlap, with the automatic arm's sitting \textit{inside} the human arm's on the full test set. Paired by seed the automatic arm leads at 42 (+0.021) and 43 (+0.010) and trails at 44 (-0.032), so the pooled difference of 0.001 rests on a single run. The correct statement is parity, and it is a statement about this metric and not about the labels: on raw R@100, pooled across seeds, the human arm keeps a real margin, 0.295 against 0.255, and on zero-shot recall the automatic arm leads fivefold, 0.268 against 0.052.
 
@@ -89,7 +89,7 @@ The arms differ far more in stability than in score. Across seeds the automatic 
 
 Where the arms do differ, they differ by annotator. The human arm is ahead on the two annotators \S{}4.5 convicts of inverting the front/behind convention, by 0.022 on group 6 and 0.027 on group 8, and \textit{behind} on group 7, the one annotator this dissertation convicts of nothing, by 0.011. The ordering runs with annotation quality and not with geometry, and the sign change on the clean annotator is the part worth noting: whatever advantage human labels carry here does not survive contact with an annotator who followed the stated convention. None of these three differences is separable across seeds, so the ordering is offered as a consistent direction and not as three measured effects.
 
-The size of that contamination can be measured. Of the 2,818 relations in the test gold, \textbf{1,189 (42\%) are front/behind, and 859 of those (72\%) come from the two inverted annotators} --- so \textbf{30\% of the entire yardstick is a predicate labelled in the opposite direction to the convention every training group used}. Both arms train on groups 0--5, where no inversion is measured, so neither can score those relations and the penalty falls on them equally. The inversion therefore sets a \textit{ceiling} on what either arm can score. It caps what any model trained on this data can reach on 30\% of the test gold, which compresses the range the two arms can differ across and makes every absolute mR@100 in this chapter a lower bound on both sides.
+The size of that contamination can be measured. Of the 2,818 relations in the test gold, \textbf{1,189 (42\%) are front/behind, and 859 of those (72\%) come from the two inverted annotators} --- so \textbf{30\% of the entire yardstick is a predicate labelled in the opposite direction to the convention every training group used}. Both arms train on groups 0--5, where no inversion is measured, so neither can score those relations and the penalty falls on them equally. The inversion therefore sets a \textit{ceiling} on what either arm can score, and how far it bites depends on how the metric aggregates. R@100 counts instances, so the cap applies to 30\% of them directly. mR@100 averages over the seven predicates, so front and behind carry two sevenths of it however many instances they hold; what the 72\% figure sets is a ceiling near 0.28 on those two components rather than a 30\% reduction in the mean. Both metrics are depressed and every absolute figure in this chapter is a lower bound on both sides, but the 30\% is a share of the gold and not a share of mR@100.
 
 What difference remains is a separate effect, and \S{}6.4 localises it to annotator \textit{selection} rather than annotator convention: it appears on the lateral predicates too, which have no direction to invert. The two defects co-occur in the same annotators without one causing the other.
 
