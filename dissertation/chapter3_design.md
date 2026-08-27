@@ -60,7 +60,8 @@ directly on the released files, drive specific design responses:
   the protocol treats human labels as a recall target, not an exhaustive
   gold standard.
 - **Inconsistent `near`.** Only 3 of 9 annotator groups ever used `near`
-  (244/129/93 labels; the rest 0–3), and those three each labelled a different
+  (461/160/93 labels of the 717 total, one further group supplying 3 and the
+  rest none), and those three each labelled a different
   fraction of equally-close pairs, so the threshold is fitted and
   annotator-aware (§3.8) and not matched to a consensus that does not
   exist.

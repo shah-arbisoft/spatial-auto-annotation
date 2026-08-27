@@ -483,8 +483,9 @@ every 3D-centroid variant transferred to held-out annotators at F1 at or below
 0.024, while the size-relative gap transfers with recall 1.0.
 
 **Fitting protocol, annotator-aware.** Only three of the nine annotator groups
-ever used `near` (group_0: 244 labels, group_4: 129, group_8: 93; the rest
-between 0 and 3). `near_T` is therefore fitted on the near-using groups inside
+ever used `near` (group_0: 461 labels, group_4: 160, group_8: 93, summing to
+714 of the 717 in Table 4.1; group_2 supplies the remaining 3 and the other
+five groups none). `near_T` is therefore fitted on the near-using groups inside
 the training split (groups 0 and 4), on human-annotated non-contact pairs
 only, and evaluated on the held-out near-using annotator (group_8). The fitted
 value is **T = 1.372**, with held-out recall **1.000**: every pair that unseen

@@ -752,7 +752,8 @@ uniformly severe, so what the tool scores is about the tool.
 The denominators differ because the judges saw different draws from the same
 pre-refit generation, not because items were dropped: the volunteers were
 shown 126 support claims from the study pool and the two blind judges 94 from
-the audit pack of §4.14, with 147 items carrying both. The columns are
+the audit pack of §4.14; across all seven predicates 147 items carry both a
+volunteer and an author verdict, which is the subset §4.15 compares. The columns are
 therefore three estimates of one quantity and not three verdicts on one
 sheet, which is what makes their agreement worth reporting.
 

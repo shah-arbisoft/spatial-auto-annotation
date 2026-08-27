@@ -23,7 +23,7 @@ Three properties of the dataset, established in Chapter 2 and verified directly 
 \begin{itemize}
 \item \textbf{Monocular RGB only.} No metric depth exists and estimated depth is \textit{relative and per-image} (Yang, L. et al., 2024), so all depth comparisons are ordinal and within-image and no rule consumes absolute depth.
 \item \textbf{Sparse annotation.} Humans labelled a minority of object pairs \textit{(measured: 6,458 of 42,440 unordered pairs, 15\%; 8,790 of 84,880 ordered, 10\%, the two differing because most labelled pairs carry only one direction, \S{}4.5)}, so the tool labels every pair, density being the value added, and the protocol treats human labels as a recall target, not an exhaustive gold standard.
-\item \textbf{Inconsistent \texttt{near}.} Only 3 of 9 annotator groups ever used \texttt{near} (244/129/93 labels; the rest 0--3), and those three each labelled a different fraction of equally-close pairs, so the threshold is fitted and annotator-aware (\S{}3.8) and not matched to a consensus that does not exist.
+\item \textbf{Inconsistent \texttt{near}.} Only 3 of 9 annotator groups ever used \texttt{near} (461/160/93 labels of the 717 total, one further group supplying 3 and the rest none), and those three each labelled a different fraction of equally-close pairs, so the threshold is fitted and annotator-aware (\S{}3.8) and not matched to a consensus that does not exist.
 \end{itemize}
 
 \section{Design principle: compute, don't predict}
