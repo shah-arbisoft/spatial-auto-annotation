@@ -111,7 +111,7 @@ Four commands have a trap or an option worth knowing, and they are the ones a re
 
 \texttt{keyframe\_\allowbreak{}propagation.py} rewrites its whole output file, so the sweep must include the coarse settings: the 89$\times$ compression figure \S{}4.12 and \S{}7.2 rely on comes from $\tau$ = 45, and a narrower sweep removes it silently. \texttt{score\_\allowbreak{}planner.py} and \texttt{run\_\allowbreak{}planner\_\allowbreak{}llm.py} both take \texttt{--replies}, which is how the second planner was run and scored without touching the first, and \texttt{--sample N} prints plans beside their verdicts for manual checking. \texttt{run\_\allowbreak{}vlm\_\allowbreak{}pilot.py} needs \texttt{--max-output-tokens} above the 8192 default for a reasoning model, which spends most of its budget deliberating, and a truncated reply is indistinguishable from a malformed one. \texttt{python scripts/vlm\_\allowbreak{}manual\_\allowbreak{}check.py} writes a pack that lets \S{}4.13 be redone by hand in a browser, showing the image the model saw, the prompt verbatim and the human, pipeline and model answers side by side, so the scoring script can be checked rather than trusted.
 
-The independent validation study is scored by \texttt{python analysis/score\_\allowbreak{}votes.py votes.csv}, which lives with that study's own repository (B.5) rather than this one.
+The independent validation study is scored by \texttt{python analysis/score\_\allowbreak{}votes.py votes.csv}, which lives with that study's own repository rather than this one; E.3 records the instrument and \S{}4.15 the result.
 
 The two GPU extras: \texttt{python scripts/run\_\allowbreak{}sgdet.py --threshold 0.25} for the deployment-mode pass (\textasciitilde{}47 min) and \texttt{python scripts/run\_\allowbreak{}annotator.py --config configs/depth\_\allowbreak{}base.yaml --out outputs\_\allowbreak{}base} for A8's Base-model pass (\textasciitilde{}7 min).
 
@@ -459,7 +459,7 @@ What the ablation does settle is the guard's blast radius. Fifty-one pairs in 83
 
 Six studies sit here. Three support a result reported in a chapter and carry the detail behind it: the vision-language baseline of \S{}4.13, whose diagnostics make its failure interpretable rather than merely worse (E.1); the viewpoint-stability measurement of \S{}4.12, whose segmentation evidence and coverage limits qualify how far the stability figures reach (E.2); and the planner experiment of \S{}5.7, whose relation filter and blind scorer are what the comparison rests on (E.5).
 
-The other three are reported here in full, because none of them has a result to put in a chapter. The independent precision study is built but not yet collected (E.3); the video processing is qualitative, over two clips with no ground truth (E.4); and the scale run has no labels to be correct against (E.6). Each is work done and is recorded as such, with what it does and does not establish stated in its own section.
+The other three are reported here in full, because their instruments need more room than a chapter allows. The independent precision study needs its design read independently of what it found (E.3); the video processing is qualitative, over two clips with no ground truth (E.4); and the scale run has no labels to be correct against (E.6). Each is work done and is recorded as such, with what it does and does not establish stated in its own section.
 
 \subsection{E.1 The vision-language baseline: diagnostics and limits}
 
@@ -788,6 +788,8 @@ That presumption is doubtful, and the dataset can say so. The batches differ sub
 \subsection{F.8 Held-out cluster-bootstrap intervals}
 
 Section 4.6 quotes the two depth predicates and states that the other five sit at 0.82 or better. The full set is below, from the same 2,000-resample cluster bootstrap over images described in \S{}4.2, computed on the held-out annotator groups only.
+
+One caveat belongs with every interval here, and it follows from a finding made later than the procedure. Clustering on the image is the right unit for the dependence \textit{inside} a scene, which is what \S{}4.2 argues, but it resamples images as though they were independent draws. They are not: \S{}4.12 establishes that these 836 images are consecutive frames of one robot trajectory, with the pipeline's own labels persisting across neighbouring frames at 0.90--0.92. Adjacent frames therefore carry much less than one image of independent information each, the effective sample is smaller than 836, and these intervals are narrower than a block-resampling scheme over contiguous runs of frames would give. They should be read as a lower bound on the width, not as calibrated coverage; the point estimates are unaffected, since they are the population value for these images. A replication should resample trajectory segments rather than frames, which the released per-image outputs support.
 
 \begin{center}
 \setlength{\tabcolsep}{6pt}

@@ -245,7 +245,8 @@ can be checked rather than trusted.
 
 The independent validation study is scored by
 `python analysis/score_votes.py votes.csv`, which lives with that study's
-own repository (B.5) rather than this one.
+own repository rather than this one; E.3 records the instrument and §4.15
+the result.
 
 The two GPU extras: `python scripts/run_sgdet.py --threshold 0.25` for the
 deployment-mode pass (~47 min) and `python scripts/run_annotator.py
@@ -863,11 +864,11 @@ coverage limits qualify how far the stability figures reach (E.2); and the
 planner experiment of §5.7, whose relation filter and blind scorer are what
 the comparison rests on (E.5).
 
-The other three are reported here in full, because none of them has a result
-to put in a chapter. The independent precision study is built but not yet
-collected (E.3); the video processing is qualitative, over two clips with no
-ground truth (E.4); and the scale run has no labels to be correct against
-(E.6). Each is work done and is recorded as such, with what it does and does
+The other three are reported here in full, because their instruments need
+more room than a chapter allows. The independent precision study needs its
+design read independently of what it found (E.3); the video processing is
+qualitative, over two clips with no ground truth (E.4); and the scale run
+has no labels to be correct against (E.6). Each is work done and is recorded as such, with what it does and does
 not establish stated in its own section.
 
 ### E.1 The vision-language baseline: diagnostics and limits
@@ -1412,6 +1413,21 @@ Section 4.6 quotes the two depth predicates and states that the other five sit
 at 0.82 or better. The full set is below, from the same 2,000-resample
 cluster bootstrap over images described in §4.2, computed on the held-out
 annotator groups only.
+
+One caveat belongs with every interval here, and it follows from a finding
+made later than the procedure. Clustering on the image is the right unit
+for the dependence *inside* a scene, which is what §4.2 argues, but it
+resamples images as though they were independent draws. They are not:
+§4.12 establishes that these 836 images are consecutive frames of one
+robot trajectory, with the pipeline's own labels persisting across
+neighbouring frames at 0.90–0.92. Adjacent frames therefore carry much
+less than one image of independent information each, the effective sample
+is smaller than 836, and these intervals are narrower than a
+block-resampling scheme over contiguous runs of frames would give. They
+should be read as a lower bound on the width, not as calibrated coverage;
+the point estimates are unaffected, since they are the population value
+for these images. A replication should resample trajectory segments
+rather than frames, which the released per-image outputs support.
 
 | Predicate | Recall (held-out) | 95% interval |
 |---|---|---|

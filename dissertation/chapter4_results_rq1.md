@@ -212,10 +212,15 @@ construction. Two things can nevertheless be recovered by treating the
 automatic annotator as a fixed common reference
 (`eval/annotator_agreement.py`).
 
-Annotator heterogeneity, measured without assumptions. The tool is
+Annotator heterogeneity, bounded rather than measured. The tool is
 deterministic: it is literally the same labeller for every group, applying
-one definition. Any variation in its agreement across annotators is
-therefore variation in the *annotators*. Across the seven consistent groups
+one definition, so none of the variation in its agreement comes from the
+tool. What that variation does contain is two things and not one. The nine
+groups labelled disjoint batches which differ threefold in object density,
+the same non-exchangeability that defeats the Fréchet bound below, so the
+spread carries batch difficulty as well as annotator behaviour and the two
+cannot be separated without overlapping assignments. It is an upper bound
+on annotator heterogeneity, not a measurement of it. Across the seven consistent groups
 that variation spans 0.851 to 0.933 about a mean of 0.892, a spread of 0.082
 (sd 0.028). That is a modest number and it is reported as one: on the
 shipped labels the consistent annotators are much closer to interchangeable
