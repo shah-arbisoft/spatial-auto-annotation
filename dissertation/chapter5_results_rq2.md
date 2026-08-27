@@ -196,8 +196,8 @@ every model saturating by epoch 2–6 and `near` stuck at 0.22–0.25 (§2.2).
 Each symptom has a measured cause and a built remedy.
 Saturation within six epochs is what training on the 8,926 sparse triplets of
 §4.2 looks like, and the automatic labels give 20× the supervision on the same
-images. The universal `near` failure is what an undefined, three-annotator
-label looks like, and the fitted-threshold labels are perfectly learnable
+images. The universal `near` failure is what a three-annotator label with no
+operational definition looks like, and the fitted-threshold labels are perfectly learnable
 (this chapter's proxy reaches 1.00). The depth predicates were being taught
 two opposite conventions; the automatic labels apply one. Three predictions
 follow, registered here before the direct test that judges them in Chapter 6:

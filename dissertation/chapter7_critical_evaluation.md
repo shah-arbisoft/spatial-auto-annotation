@@ -121,9 +121,22 @@ labels sit inside one fitted threshold (held-out recall 1.0): consistent
 **inverted direction convention** for in front of / behind (2–5% agreement
 where the tool commits; flipping recovers 0.94/0.82). 3. Support pairs were
 often labelled in **one direction only** (one group all-`on`, another
-all-`under`). 4. The official guidance, confirmed at the annotation tool's
-repository, is **vocabulary lists with no definitions** (§4.7), which is
-what makes every defect above predictable.
+all-`under`). 4. **No operational definition of the
+predicates survives in the released materials**: the annotation tool's
+repository carries vocabulary lists only (§4.7).
+
+That fourth point needs stating precisely, because the obvious version of
+it is weaker than the evidence. Wang et al. (2025) report that annotators
+were trained on the tool and given predicate definitions to keep them
+consistent. The claim here is therefore not that nothing was said. It is
+that whatever was said did not survive contact with nine annotators, and
+the three defects above are measured in the labels themselves rather than
+inferred from an absence. That is the harder finding and the more useful
+one: prose definitions given at training time were not sufficient, which
+is an argument for definitions of a different kind rather than for more
+of the same. A threshold that a program applies cannot be applied two
+ways by two annotators, which is what Chapter 3's specification supplies
+and what makes it a contribution rather than documentation.
 
 This reframes the evaluation itself: for several predicates there is no human
 consensus to agree with, only per-annotator behaviours. The dissertation's

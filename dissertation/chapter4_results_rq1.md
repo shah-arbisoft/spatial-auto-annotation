@@ -253,9 +253,9 @@ emitted; nothing to review), while the borderline-near band, 8.5% of pairs,
 is the genuine review queue. At a conservative 3 seconds per queued pair
 this is ≈6 hours of review for the full dataset against the original
 nine-annotator manual pass, and it is optional for the fidelity reported
-above. The guidance the annotators worked from is vocabulary lists only, so
-Chapter 3's specification is the first operational definition of these
-predicates, which §7.3 draws out.
+above. The guidance that survives in the released materials is vocabulary lists
+only, so Chapter 3's specification is the first *executable* definition of
+these predicates, which §7.3 draws out.
 
 
 ## 4.8 Answer to RQ1

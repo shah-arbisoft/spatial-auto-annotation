@@ -47,8 +47,11 @@ rewarded for reproducing which pairs annotators happened to record as much
 as which relationships hold, and Chapter 6 measures that.
 
 A second cost is consistency. Nine annotators working independently in
-batches, with no written definition of what "near" or "in front of" means,
-produce nine slightly different labelling conventions. The source paper
+batches produce nine slightly different labelling conventions. Wang et al.
+(2025) report that annotators were trained on the tool and given predicate
+definitions; no such definition survives in the released materials, and what
+Chapter 4 measures is the stronger point either way, that the *application*
+diverged whatever was said at annotation time. The source paper
 identifies this for one predicate; Chapter 4 measures it for three, including
 two annotator groups that recorded *in front of* and *behind* in opposite
 directions from everyone else. Neither cost is solved by hiring more
