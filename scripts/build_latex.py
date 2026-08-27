@@ -255,30 +255,10 @@ TABLES = {
         "annotators, against three baselines. *the majority baseline emits "
         "“in front of” everywhere, trivially recalling that class "
         "and nothing else; †near rounds 715/717 = 0.997 (§4.9).",
-        # 4.4
-        "Manual audit of a stratified sample of extra predictions against the "
-        "pre-gate box rule, with Wilson intervals. Superseded by the blind "
-        "re-audit of Section 4.14; reported because it motivated the repair.",
-        # 4.5
-        "Front/behind by annotator group: emission rate, agreement where the "
-        "tool commits, and the effect of aligning the direction convention.",
         # 4.9
         "The ten ablations: what each tests, the setting that shipped, and "
         "the verdict on held-out annotators.",
-        # 4.14
-        "Stability of each predicate across viewpoints of the same scene, "
-        "with recall under keyframe propagation against per-frame "
-        "computation.",
-        # 4.13
-        "A vision-language model against the geometric pipeline on the same "
-        "30 images, the same pairs and the same human gold: recall.",
-        # 4.14 (the blind re-audit; last table in the chapter)
-        "Blind, decoy-controlled audit of 242 sampled items, verdicted "
-        "independently by the author and by a vision-language model, with "
-        "Wilson intervals. The final row is the decoy control: relations the "
-        "tool did not emit, which a judge who agreed with everything would "
-        "reject none of.",
-        # 4.14, second table: the re-audit after the threshold was re-fitted
+        # 4.14: the re-audit after the threshold was re-fitted
         "Per-predicate precision of the shipped tool: the re-fitted "
         "threshold audited on a fresh draw, beside the superseded v3 column, "
         "so the comparison is between two independent "
@@ -326,10 +306,23 @@ TABLES = {
         "Drop fraction is where the subject's bottom edge falls inside the "
         "object's vertical extent, 0 being the object's top surface. No "
         "threshold both keeps the gold resting pairs and blocks the held ones.",
+        # E.1 (recall table, moved from §4.13)
+        "A vision-language model against the geometric pipeline on the same "
+        "30 images, the same pairs and the same human gold: recall.",
         # E.1
         "The vision-language comparison of §4.13 restricted to the pairs "
         "carrying a human label, where precision is defined. The model is the "
         "more precise labeller and loses F1 on every predicate.",
+        # E.2 (moved from §4.12 with its study's detail)
+        "Stability of each predicate across viewpoints of the same scene, "
+        "with recall under keyframe propagation against per-frame "
+        "computation.",
+        # E.7 (the pre-refit blind audit, moved from §4.14)
+        "Blind, decoy-controlled audit of 242 sampled items, verdicted "
+        "independently by the author and by a vision-language model, with "
+        "Wilson intervals. The final row is the decoy control: relations the "
+        "tool did not emit, which a judge who agreed with everything would "
+        "reject none of.",
         # F.1
         "Benchmark per-predicate mean recall at 100 for both arms, seed 42.",
         # F.1
@@ -354,6 +347,9 @@ TABLES = {
         # F.8
         "Per-predicate recall on the held-out annotator groups with 95% "
         "cluster-bootstrap intervals over images.",
+        # F.9 (moved from §4.5)
+        "Front/behind by annotator group: emission rate, agreement where the "
+        "tool commits, and the effect of aligning the direction convention.",
     ],
 }
 

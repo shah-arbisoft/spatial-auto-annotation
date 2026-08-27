@@ -887,13 +887,26 @@ markedly worse at 0.281 precision against 0.478. It is closest to the
 pipeline on support, 0.74 against 0.91, and `behind` recall actually falls
 with scale, 0.169 to 0.138.
 
-Section 4.13 reports the headline comparison over two models and carries the
-recall table: they recover 0.40 and 0.45 of the human triplets against the
-pipeline's 0.83, and are the more precise labellers on the judged pairs, 0.42
-and 0.39 against 0.35, while losing F1 on every predicate. The per-predicate
-form of that second comparison is below, and the diagnostics after it are the
-smaller model's unless stated, since it is the one the manual-check pack was
-built for.
+Section 4.13 reports the headline comparison over two models: they recover
+0.40 and 0.45 of the human triplets against the pipeline's 0.83, and are the
+more precise labellers on the judged pairs, 0.42 and 0.39 against 0.35,
+while losing F1 on every predicate. The per-predicate recall underneath that
+verdict is this:
+
+| Predicate | Gold | Flash | Pro | Pipeline |
+|---|---|---|---|---|
+| on | 57 | 0.667 | 0.737 | 0.860 |
+| under | 47 | 0.660 | 0.766 | 0.809 |
+| to the left of | 49 | 0.408 | 0.469 | 0.918 |
+| to the right of | 49 | 0.327 | 0.388 | 0.939 |
+| in front of | 80 | 0.188 | 0.237 | 0.650 |
+| behind | 65 | 0.169 | 0.138 | 0.662 |
+| near | 34 | 0.382 | 0.382 | 1.000 |
+| **Mean** | **381** | **0.400** | **0.445** | **0.834** |
+
+The per-predicate form of the precision comparison is below, and the
+diagnostics after it are the smaller model's unless stated, since it is the
+one the manual-check pack was built for.
 
 | Predicate | Flash P | Pro P | Pipeline P | Flash F1 | Pro F1 | Pipeline F1 |
 |---|---|---|---|---|---|---|
@@ -989,6 +1002,24 @@ different subsets of the scene from frame to frame: `group_0` alone contains
 overlap rather than by index. Compression over the 802 pair-bearing frames
 (§4.1) is lower than the 2.7× below because those frames are a subset, so
 consecutive members sit further apart in the original capture.
+
+*The per-predicate result.* At τ = 10 over the 802 pair-bearing frames (568
+keyframes, 234 propagated frames, 11,352 comparable object pairs):
+
+| Predicate | Stability | Recall (propagated) | Recall (per frame) |
+|---|---|---|---|
+| on | 0.878 | 0.798 | 0.798 |
+| under | 0.878 | 0.760 | 0.740 |
+| to the left of | 0.989 | 0.959 | 0.966 |
+| to the right of | 0.989 | 0.989 | 0.989 |
+| in front of | 0.958 | 0.682 | 0.648 |
+| behind | 0.958 | 0.636 | 0.659 |
+| near | 0.972 | 1.000 | 1.000 |
+| **Mean** | **0.946** | **0.832** | **0.829** |
+
+Propagated recall's small advantage over per-frame (0.832 against 0.829) is
+likely an artefact of the selection rule, the segment representative being
+the frame nearest the segment mean.
 
 *Segmentation.* At τ = 10 the full 2,650-frame sequence collapses to 892
 segments, a 3.0× reduction; over the 884 released frames it gives 331, 2.7×.
@@ -1228,6 +1259,22 @@ suggests.
 nothing is audited that the tool would no longer emit. Without it the audit
 would measure a rule set the project does not distribute.
 
+**The pre-refit (v3) pack in full.** Section 4.14 quotes this pack's support
+rows and carries its author column beside the v4 re-audit; the complete
+per-predicate verdicts, with Wilson 95% intervals, are these:
+
+| Predicate | Author | Model |
+|---|---|---|
+| on | 16/43 0.372 [0.24, 0.52] | 25/43 0.581 [0.43, 0.72] |
+| under | 22/51 0.431 [0.31, 0.57] | 35/51 0.686 [0.55, 0.80] |
+| to the left of | 22/24 0.917 [0.74, 0.98] | 23/24 0.958 [0.80, 0.99] |
+| to the right of | 23/24 0.958 [0.80, 0.99] | 22/24 0.917 [0.74, 0.98] |
+| in front of | 23/24 0.958 [0.80, 0.99] | 22/24 0.917 [0.74, 0.98] |
+| behind | 22/24 0.917 [0.74, 0.98] | 20/24 0.833 [0.64, 0.93] |
+| near | 24/24 1.000 [0.86, 1.00] | 15/24 0.625 [0.43, 0.79] |
+| **support pooled** | **38/94 0.404 [0.31, 0.51]** | **60/94 0.638 [0.54, 0.73]** |
+| decoys rejected | 19/28 0.679 [0.49, 0.82] | 24/28 0.857 [0.69, 0.94] |
+
 **Judge drift between the two packs.** Nine of 28 decoys were accepted in v3
 and one in v4, so the second sheet is the work of a stricter judge than the
 first. The model's decoy rejection rose over the same interval, 0.857 to
@@ -1452,3 +1499,23 @@ report. The number to quote is the exact one-sided bound for zero failures
 in 93 draws, **0.968**, and even that is a statement about recovering the
 *recorded* `near` labels: §4.8 sets out why this predicate's recall says
 least about the labels the tool adds beyond them.
+
+### F.9 The front/behind decomposition by annotator group
+
+Section 4.5 reports the finding and its figure plots the decomposition; the
+per-group figures underneath it are these, for the shipped cascade (depth
+ordering plus the ground-plane fallback of §4.9):
+
+| Group | Gold | Emit rate | Agreement when committed | Convention | Raw recall | Aligned recall |
+|---|---|---|---|---|---|---|
+| group_0 | 724 | 0.94 | 0.95 | same | 0.89 | 0.89 |
+| group_1 | 639 | 1.00 | 1.00 | same | 1.00 | 1.00 |
+| group_2 | 351 | 0.85 | 1.00 | same | 0.85 | 0.85 |
+| group_3 | 258 | 0.82 | 0.99 | same | 0.81 | 0.81 |
+| group_4 | 65 | 1.00 | 0.57 | same | 0.57 | 0.57 |
+| group_5 | 371 | 1.00 | 0.99 | same | 0.98 | 0.98 |
+| group_6 | 415 | 0.99 | **0.05** | **inverted** | 0.05 | 0.94 |
+| group_7 | 330 | 0.94 | 1.00 | same | 0.94 | 0.94 |
+| group_8 | 444 | 0.84 | **0.02** | **inverted** | 0.02 | 0.82 |
+| **overall** | 3597 | | | | **0.70** | **0.91** |
+
