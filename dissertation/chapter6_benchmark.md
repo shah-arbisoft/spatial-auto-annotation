@@ -212,37 +212,24 @@ scene graphs* is better supervised by human labels, which carry the
 annotation prior the evaluation shares. The interpretation is equally real:
 the ranking metric inherits every defect measured in the gold, and the
 advantage is concentrated exactly where the annotation is defective and
-absent where it is not, which is what annotation-prior agreement looks like.
+absent where it is not.
 
 Section 1.2.2 set a non-inferiority criterion — *at least as well*, not a
-win — so parity is the shape a pass takes; but the numbers refuse a strong
-claim in either direction. The paired mean difference is -0.0006 with a 95%
-interval of [-0.070, +0.069], three seeds bound the gap to about a quarter
-of the metric's own value, and a margin of ±0.01 would need roughly forty
+win — so parity is the shape a pass takes, but the numbers refuse a strong
+claim in either direction: the paired mean difference is -0.0006 with a 95%
+interval of [-0.070, +0.069], and a margin of ±0.01 would need roughly forty
 runs per arm. The experiment establishes neither superiority nor
 equivalence, and a reader entitled to say the automatic labels did not beat
 the human ones is equally entitled to say this design could not have shown
 it if they had. **What the same three seeds do resolve** is the part that is
 not a null: zero-shot recall separates with disjoint ranges, 0.225–0.309
 against 0.004–0.079, as does reproducibility, a 0.006 spread against 0.052,
-both running the automatic arm's way. Against the cost of obtaining them —
-nine annotators against five minutes on one consumer GPU —
-indistinguishability on the ranking metric is close to the result the
-project set out to obtain: RQ1 and RQ2 ask whether the human can be removed,
-not whether the machine wins.
-
-The critical reading is not novel to this project, which is what makes it
-credible: Neural Motifs (Zellers et al., 2018) established that a frequency
-baseline ignoring the image is hard to beat, Unbiased SGG (Tang et al.,
-2020) formalised how thoroughly such models absorb the annotation
-distribution, and Northcutt, Athalye and Mueller (2021) showed erroneous
-test labels reorder rankings across ten benchmarks. What this chapter adds
-is a case where the confound is *isolated by construction* — the arms differ
-only in label source, share a frozen detector, and the per-annotator defects
-were measured beforehand — so the advantage is attributed to annotation
-practice, not inferred. The one remaining instrument is a manual audit of
-the auto arm's top-ranked "false positives", the analogue of §4.4, left as
-designed follow-up.
+both running the automatic arm's way. Appendix F.12 gives both readings in
+full, together with why this critical reading is credible rather than
+convenient — it is the problem Neural Motifs, Unbiased SGG and Northcutt et
+al. each identified, here with the confound isolated by construction — and
+names the one instrument still missing, a manual audit of the auto arm's
+top-ranked false positives.
 
 ## 6.6 What Chapter 5's predictions got right and wrong
 

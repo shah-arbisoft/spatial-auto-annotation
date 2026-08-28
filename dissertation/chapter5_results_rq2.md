@@ -250,20 +250,15 @@ and moved nothing else in the chapter.
 Yes at this level of test, and with more than was asked of it. At this
 dataset's scale of human annotation the automatic labels are not merely
 "good enough" but **substantially better training material than the human
-labels themselves**, because density and consistency dominate raw human
-authority when supervision is sparse. The self-trained arm rules out the
-cheap alternative: the standard semi-supervised remedy recovers only 15% of
-the gap, because it propagates the annotators' silence, not their knowledge.
-That is the dissertation's core claim — removing the bottleneck can *grow*
-dataset utility instead of approximating it — demonstrated on the dataset's
-own held-out annotators and against the obvious rival.
+labels themselves**, 0.75 against 0.30 on the annotators' own held-out gold,
+and the self-trained arm rules out the cheap alternative by recovering only
+15% of the gap. Appendix F.12 sets out why that is the dissertation's core
+claim and what bounds it.
 
-The scope of that answer is set by what follows it. Chapter 6 repeats the
+The scope of the answer is set by what follows. Chapter 6 repeats the
 comparison inside a full scene-graph model and returns parity, 0.292 against
 0.293, which no experiment of that size can separate. So the advantage
 established here is an advantage on the controlled classifier, where
 features are held identical, and it does not carry to the benchmark's ranked
-metric. Section 6.4 measures why the two disagree, and the answer to RQ2
-should be read as that pair of results and not as this one alone. Chapter 6
-is that heavyweight repeat, in the source paper's own framework with a
-shared frozen detector and three seeds per arm.
+metric; §6.4 measures why the two disagree, and the answer to RQ2 should be
+read as that pair of results and not as this one alone.

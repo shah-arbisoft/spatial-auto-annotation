@@ -181,29 +181,21 @@ matters more than a single headline. On **recall**, five reach
 human-comparable levels, 0.75 to 1.00 as Table 4.1 reports them, mean 0.85
 and 0.74 on annotators no threshold ever saw; the exception is the depth
 pair, at 0.70/0.71 pooled and 0.91 once the two inverted groups are aligned.
-On **precision**, a different five audit blind at 0.79–1.00, the two
-laterals, the two depth predicates and `near`, each on 24 samples, so the
+On **precision**, a different five audit blind at 0.79–1.00 — the two
+laterals, the two depth predicates and `near`, each on 24 samples — so the
 claim they support is comparability; the exception there is support, at
-0.535 [0.42, 0.65] on 71 samples of the shipped rule, up from 0.404 before
-§4.14 traced the shortfall to a threshold fitted on a metric that could not
-see the error it controls.
+**0.535 [0.42, 0.65]** on 71 samples of the shipped rule, up from 0.404
+before §4.14 traced the shortfall to a threshold fitted on a metric that
+could not see the error it controls.
 
 So no predicate is weak on both axes and none is strong on both except the
 laterals and `near`. Support recalls well and cannot be trusted where it
 adds; the depth pair is trustworthy where it commits and commits less often
-than the annotators did. Section 9.1 answers RQ1 against the criteria of
-§1.2.2 on that basis.
-
-`near` appears in both fives, and Appendix F.11 sets out why its 0.997
-pooled recall is the figure in this chapter that most overstates what is
-known: a rule firing on sixty times more pairs than the annotators labelled
-recovers their labels almost by construction, and its audited precision,
-0.792, is the weakest of the five. Section 4.5 decomposes the depth pair's
-shortfall into calibrated abstention and an unshared convention in measured
-proportions, with genuine depth error the remainder rather than absent —
-Appendix D.7 puts it at 1% of `in front of` misses and 6% of `behind`. The
-residual human cost is an 8.5% review queue (§4.7), against labels 20×
-denser than the human set.
+than the annotators did. Appendix F.12 sets out why that structure is what
+makes a per-predicate answer necessary, and F.11 why `near`'s 0.997 is the
+figure here that most overstates what is known. Section 9.1 answers RQ1
+against the criteria of §1.2.2 on this basis, and the residual human cost is
+an 8.5% review queue (§4.7) against labels 20× denser than the human set.
 
 ## 4.9 Shipped from the ablations
 
