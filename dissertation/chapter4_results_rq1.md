@@ -63,26 +63,15 @@ where the tool is strong and materially wider on the depth pair; the
 bootstrap ran on the labels of §4.9, its widths rather than its centres
 carry the argument, and held-out intervals appear in §4.6.
 
-Three observations. **(i)** The tool recovers 81% of all human triplets
-(7,276 of 8,926; mean 0.845, and 0.74 on annotators no threshold ever saw)
-against 14% for random and 23% for majority on the same triplet-weighted
-basis; the mean row's 0.14 for majority is the per-predicate reading, and
-both are reported — guessing `in front of` everywhere recovers 2,013 of
-8,926 triplets — so neither reading can flatter the tool. **(ii)** Box-only
-recall is level with the pipeline on the laterals and slightly ahead on
-support (0.84 and 0.77 against 0.81 and 0.75) while 0.13 behind on `near`;
-but the mask rule was adopted because it lifts support *precision* and
-recall together (held-out F1 0.71 to 0.87; A5, §4.9), a looser box rule
-buying its recall with the false fires §4.4 audits, and the pipeline's
-unshared advantage is the depth pair (0.70/0.71 against 0.00), where even
-the ground-plane fallback needs masks, its elevation guard being
-mask-contact evidence (§4.9). **(iii)** Held-out beats pooled on
-on/under/near and collapses on front/behind — both annotator signatures:
-convention inversion (§4.5), and direction-usage asymmetry for support
-(group_2 records 188 *on* and no *under*; group_8 only *under*), the
-held-out groups' support labels being canonical stackings the rules recover
-at 0.95–1.00. Gold totals 8,926, not 8,928: two stray annotation files
-without matching images are excluded (Chapter 3).
+Three readings sit underneath the table and are given in Appendix F.11: the
+tool recovers **81% of all human triplets** (7,276 of 8,926) against 14% for
+random and 23% for majority on the same triplet-weighted basis; box-only
+geometry matches it on the laterals but not on support quality or `near`,
+and cannot compute the depth pair at all; and held-out beats pooled on
+on/under/near while collapsing on front/behind, both being annotator
+signatures rather than properties of the geometry. Gold totals 8,926, not
+8,928, because two stray annotation files without matching images are
+excluded (Chapter 3).
 
 ## 4.3 Precision on the annotated pairs
 
@@ -164,19 +153,17 @@ two *human* annotators would agree. The groups labelled disjoint batches, so
 it cannot be measured directly — itself a finding about the dataset's
 construction. Treating the deterministic tool as a fixed common reference
 (`eval/annotator_agreement.py`) bounds it: across the seven consistent
-groups its agreement spans 0.851 to 0.933 about a mean of 0.892 (spread
-0.082, sd 0.028), so on the shipped labels those annotators are much closer
-to interchangeable than the pre-refit spread of 0.216 suggested. That is an
-**upper bound on heterogeneity, not a measurement of it**, because the nine
-batches differ threefold in object density and the spread therefore carries
-batch difficulty as well as annotator behaviour. The same
-non-exchangeability defeats the Fréchet route to a tighter bound, a sparse
-batch being an easier batch; Appendix F.7 gives the derivation, the interval
-it produces and the density figures, so the objection can be checked rather
-than taken on trust. This dataset cannot yield an inter-annotator agreement
-figure even by bounding — a replication that wants one has to collect
-overlapping assignments — so RQ1's comparability claim rests on the trivial
-baselines and the per-predicate audit (§4.8).
+groups its agreement spans **0.851 to 0.933** about a mean of 0.892. That is
+an **upper bound on annotator heterogeneity, not a measurement of it**,
+because the nine batches differ threefold in object density and the spread
+therefore carries batch difficulty as well as annotator behaviour. The same
+non-exchangeability defeats the Fréchet route to a tighter bound; Appendix
+F.7 gives the derivation, the interval it produces, the density figures and
+why the presumption behind it is false here rather than merely unverified.
+This dataset cannot yield an inter-annotator agreement figure even by
+bounding — a replication that wants one has to collect overlapping
+assignments — so RQ1's comparability claim rests on the trivial baselines
+and the per-predicate audit (§4.8).
 
 ## 4.7 Flags: what review actually costs
 
@@ -211,22 +198,15 @@ adds; the depth pair is trustworthy where it commits and commits less often
 than the annotators did. Section 9.1 answers RQ1 against the criteria of
 §1.2.2 on that basis.
 
-`near` appears in both fives and deserves its own note. It is recovered
-completely once its inconsistent usage is accounted for (0.997 pooled, 1.00
-held-out), which answers the predicate the source paper reports as failing
-for every model it benchmarks (§2.2). That is a claim about recall; on the
-precision side `near` is the weakest of the five, 0.792 audited, the widest
-disagreement between the two judges, and two of its four decoys accepted by
-the author (§4.14). A rule that fires on sixty times more pairs than the
-annotators labelled will recover their labels almost by construction, so
-this is the predicate where the recall figure most overstates what is known.
-
-Section 4.5 decomposes the depth pair's shortfall into calibrated abstention
-and a convention the annotators did not share, in measured proportions.
-Genuine depth error is the remainder rather than absent — Appendix D.7
-measures it at 1% of `in front of` misses and 6% of `behind` — so the
-dominant terms are not depth error, a weaker claim than none of it being.
-The residual human cost is an 8.5% review queue (§4.7), against labels 20×
+`near` appears in both fives, and Appendix F.11 sets out why its 0.997
+pooled recall is the figure in this chapter that most overstates what is
+known: a rule firing on sixty times more pairs than the annotators labelled
+recovers their labels almost by construction, and its audited precision,
+0.792, is the weakest of the five. Section 4.5 decomposes the depth pair's
+shortfall into calibrated abstention and an unshared convention in measured
+proportions, with genuine depth error the remainder rather than absent —
+Appendix D.7 puts it at 1% of `in front of` misses and 6% of `behind`. The
+residual human cost is an 8.5% review queue (§4.7), against labels 20×
 denser than the human set.
 
 ## 4.9 Shipped from the ablations
@@ -365,29 +345,26 @@ once.
 **Design.** 242 items: 214 claims the tool emitted and **28 decoys**,
 relations it did *not* emit and no annotator labelled, mixed in unmarked.
 The decoys are the instrument: an auditor who simply agreed with every item
-scored 100% on the earlier sheets and scores zero here. Sampling, the class
-guard, key handling and the pack's full per-predicate table are in Appendix
-E.7; its author column reappears as **v3** below. The same 242 images, same
-definitions, same instruction to answer wrong when unsure, were put to
-`gemini-3.6-flash` as a second judge independent of the author
-(`scripts/judge_audit_vlm.py`). A model may judge what §4.13 shows it cannot
-annotate because the half that failed there was *coverage*, and judging a
-handed claim asks only for the precise half — an argument E.7 sets out and
-the decoys test rather than assume. The model rejected 24 of 28 relations
-the tool never emitted against the author's 19 of 28, the stricter judge and
-not one that agrees with whatever it is shown, and the two reach Cohen's κ
-0.601 over all items, 0.425 over the claims alone: moderate agreement, not
-an echo. Neither is a human; the independent human estimate is §4.15's.
+scored 100% on the earlier sheets and scores zero here. The same 242 images
+went to `gemini-3.6-flash` as a second judge independent of the author
+(`scripts/judge_audit_vlm.py`), which rejected 24 of 28 decoys against the
+author's 19 of 28 — the stricter of the two, not a judge that agrees with
+whatever it is shown — the pair reaching Cohen's κ 0.601 over all items and
+0.425 over the claims alone: moderate agreement, not an echo. Appendix E.7
+carries the sampling, the class guard, the key handling, the pack's full
+per-predicate table, the argument for letting a model judge what §4.13 shows
+it cannot annotate, and what the decoys measure about each judge. Neither is
+a human; the independent human estimate is §4.15's.
 
-Section 4.3 measured precision on the pairs a human labelled; this audit
-measures it on the pairs a human did not, and the two point in opposite
-directions in a diagnostic way. For five predicates the first badly
-understates the second (`near` 0.11 against 1.000, the laterals 0.35 and
-0.42 against 0.917 and 0.958), the sparse-gold artefact §4.1 anticipated;
-for support it inverts sharply, 0.95 and 0.93 on annotated pairs against
-0.372 and 0.431 off them. E.7 reads what that direction says about the human
-record, and why it is the reason the protocol pairs restricted precision
-with an audit rather than reporting either alone.
+**The two precision measurements point in opposite directions, and which way
+is diagnostic.** Section 4.3 measured precision on the pairs a human
+labelled, this audit on the pairs a human did not. For five predicates the
+first badly understates the second (`near` 0.11 against 1.000, the laterals
+0.35 and 0.42 against 0.917 and 0.958), the sparse-gold artefact §4.1
+anticipated; for support it inverts sharply, 0.95 and 0.93 on annotated
+pairs against 0.372 and 0.431 off them. E.7 reads what that direction says
+about the human record, and why it is the reason the protocol pairs
+restricted precision with an audit rather than reporting either alone.
 
 The lateral, depth and proximity claims survive; support does not. At 0.404
 it is less than half what §4.9 reported and outside any interval this
@@ -396,32 +373,20 @@ against 0.638, and agree emphatically on its direction, both far below 0.9
 (raw agreement 0.814, κ 0.576). Most of the drop is the blinding, not the
 sample: the same rules on the same data scored 0.77 unblinded (§4.9) and
 0.404 blind, because every row of the earlier sheet was known to be a tool
-emission, a prior the decoys remove.
+emission, a prior the decoys remove. **`near` is the least supported number
+in the audit and carries the most labels**: the judges diverge on it by
+**0.375**, 1.000 against 0.625 on the same 24 images, under a predicate the
+tool emits on 43,388 ordered pairs against 717 in the human record.
 
-**`near` is the least supported number in the audit, and carries the most
-labels.** The judges agree on the laterals and the depth pair to within
-0.042 and 0.083 and diverge on `near` by **0.375** (1.000 against 0.625 on
-the same 24 images), and the author accepted two of its four decoys against
-the model's one — part of a measured author generosity E.7 sets out, along
-with the eight support decoys both judges rejected, which is what rules out
-reading 0.404 as an auditor being harsh. The predicate under that
-combination is the tool's most freely emitted, 43,388 ordered pairs against
-717 human; the threshold generalised to a held-out annotator at recall 1.00
-(§3.8), so the *notion* is calibrated, but the most the 1.000 supports is
-that no counter-example appeared in 24 draws of a rule firing sixty times
-more often than the annotators did.
-
-The cause is a threshold fitted where its error was invisible: the shipped
+The cause is a threshold fitted where its error was invisible — the shipped
 `on_contact_min` 0.60 came from Appendix D.2's fit on train F1 against gold
-covering ~10% of ordered pairs, where a false positive outside the gold cost
-the fit nothing — why D.2's "uncritical" plateau from 0.60 to 0.80 is flat.
-The repair was fitted on annotator groups 0–5 as every threshold in Chapter
-3 is, rather than on the 94 verdicts that suggested it, shipped at
-`on_contact_min` 0.85, and re-audited from scratch on a second pack drawn
-from the new emissions — 219 items, **191 claims** and 28 decoys, same
-construction, same blinding, same two judges; E.7 gives the sequence and the
-held-out projection it declines to quote. Below, **v3** is the pre-refit
-pack drawn at 0.60 and **v4** the fresh one at the shipped 0.85.
+covering ~10% of ordered pairs, so a false positive outside the gold cost
+the fit nothing. The repair was fitted on annotator groups 0–5, shipped at
+0.85, and re-audited from scratch on a second pack drawn from the new
+emissions: 219 items, **191 claims** and 28 decoys, same construction, same
+blinding, same two judges. E.7 gives the sequence and the held-out
+projection it declines to quote. Below, **v3** is the pre-refit pack at 0.60
+and **v4** the fresh one at the shipped 0.85.
 
 | Predicate | v3 author | v4 author (shipped) | v4 model |
 |---|---|---|---|

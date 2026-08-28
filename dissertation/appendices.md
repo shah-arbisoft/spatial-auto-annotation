@@ -1510,6 +1510,11 @@ second pack was drawn from the new emissions instead — 219 items, 191 claims
 and 28 decoys, same construction, same blinding, same two judges — and
 audited independently, which is the v4 column there.
 
+**Where the two judges agree, and where they do not.** Over the v3 pack they
+agree closely on the laterals and the depth pair, to within 0.042 and 0.083
+respectively, which is what makes the `near` divergence of 0.375 that §4.14
+reports stand out rather than read as general disagreement.
+
 **The decoys as a measure of the judges themselves.** The pack's own control
 rows say something about each judge that the claim rows cannot. Both judges
 rejected **all eight** support decoys, so on the predicate that failed
@@ -1717,8 +1722,13 @@ to be false rather than merely unverified, and it should be read as
 indicative only. The assumption-free
 half of §4.6 is the heterogeneity spread, which needs no such presumption:
 the tool is deterministic, so the 0.082 range in its agreement across the
-seven consistent annotators is variation in the annotators and nothing else,
-though a range that narrow carries correspondingly little weight.
+seven consistent annotators (sd 0.028) is variation in the annotators and
+nothing else, though a range that narrow carries correspondingly little
+weight. It is also much narrower than it was: on the pre-refit labels the
+same spread was 0.216, and the support refit of §4.14 closed most of it by
+lifting group 3 from 0.72, which is why the case that the consistent
+annotators differ rests on the two inverted groups and the measured defects
+of §4.5 and §4.9 rather than on this band.
 
 ### F.8 Held-out cluster-bootstrap intervals
 
@@ -1831,3 +1841,55 @@ of the abstention-heavy groups 2 and 3 by about half):
 | group_8 | 444 | 0.84 | **0.02** | **inverted** | 0.02 | 0.82 |
 | **overall** | 3597 | | | | **0.70** | **0.91** |
 
+### F.11 Reading the headline recall table
+
+Section 4.2 carries the table and states the result; these are the three
+readings underneath it, and the qualification that belongs with `near`.
+
+**The baselines, read two ways.** The tool recovers 81% of all human
+triplets, 7,276 of 8,926, against 14% for random and 23% for majority on the
+same triplet-weighted basis. The mean row of Table 4.1 instead puts majority
+at 0.14, which is the right number for a per-predicate question and the
+wrong one for this comparison: guessing `in front of` everywhere recovers
+2,013 of 8,926 triplets, because that predicate is a quarter of the gold.
+Both figures are reported so that neither reading can flatter the tool by
+itself.
+
+**What the box-only column does and does not show.** On recall alone
+box-only geometry is level with the full pipeline on the lateral pair and
+slightly ahead on support, 0.84 and 0.77 against 0.81 and 0.75, while
+falling 0.13 behind on `near`. Recall is the wrong axis to read that on: the
+mask rule was adopted because it lifts support *precision* and recall
+together, held-out support F1 0.71 to 0.87 (A5, §4.9), and a looser box rule
+buys its extra recall with the false fires §4.4 audits. What the column does
+show is that masks earn their place on support quality and on `near` rather
+than on lateral recall, and that the pipeline's unshared advantage is the
+depth pair, 0.70/0.71 against 0.00. Even there the ground-plane fallback, a
+pure box cue, needs masks to fire, because its elevation guard is
+mask-contact evidence (§4.9).
+
+**Why held-out beats pooled on some predicates and collapses on others.**
+Held-out exceeds pooled on on/under/near and falls far below it on
+front/behind, and both are annotator signatures: convention inversion for
+the depth pair (§4.5), and direction-usage asymmetry for support, where
+several groups label one direction only — group_2 records 188 *on* and no
+*under*, group_8 only *under* — while the held-out groups' support labels
+happen to be canonical stackings the rules recover at 0.95–1.00.
+
+**The `near` qualification.** `near` is recovered completely once its
+inconsistent usage is accounted for, 0.997 pooled and 1.00 held-out, which
+answers the predicate the source paper reports as failing for every model it
+benchmarks (§2.2). That is a claim about recall. On the precision side
+`near` is the weakest of the five audited predicates: 0.792 audited, the
+widest disagreement between the two judges, and two of its four decoys
+accepted by the author (§4.14). A rule that fires on sixty times more pairs
+than the annotators labelled will recover their labels almost by
+construction, so this is the predicate where the recall figure most
+overstates what is known.
+
+**Where the residual depth error sits.** Section 4.5 decomposes the depth
+pair's shortfall into calibrated abstention and a convention the annotators
+did not share, in measured proportions. Genuine depth error is the remainder
+rather than absent: Appendix D.7 measures it at 1% of `in front of` misses
+and 6% of `behind`, so the dominant terms are not depth error, which is a
+weaker claim than none of it being.
