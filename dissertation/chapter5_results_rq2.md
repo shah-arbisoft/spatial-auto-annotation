@@ -82,18 +82,18 @@ answer does not flatter the tool: **on every indicator except recall the
 automatic arm comes last** — macro precision 0.136 against the human arm's
 0.252, F1 0.194 against 0.267, average precision 0.164 against 0.230, micro
 F1 0.066 against 0.262. One number shows why that is not a verdict on label
-quality: average precision is threshold-free, no arm improving it by
+quality: average precision is threshold-free, so no arm improves it by
 committing to more pairs, yet the automatic arm scores **0.040 on `to the
 left of`**, the predicate §4.4 audited at fifteen of fifteen extra
-predictions correct. An arm cannot be both wrong and right about laterality:
-the column measures agreement with which pairs an annotator chose to write
-down, §4.3's artefact one level down the chain — though it cannot be argued
-away in the tool's favour either, §4.4 having audited the rule layer's
-extras and not the classifier's, which Appendix F.5 concedes with the full
-table. The indicators establish that the automatic arm dominates at teaching
-a model to recover the relations humans recorded and loses at imitating
-which relations humans chose to record; no metric computed against this gold
-separates the two.
+predictions correct. An arm cannot be both wrong and right about laterality,
+so what the column measures is agreement with which pairs an annotator chose
+to write down — §4.3's artefact one level down the chain. Appendix F.5 gives
+the full table, and concedes what it cannot settle: §4.4 audited the rule
+layer's extras, not the classifier's, so these precision figures are
+uninterpretable rather than favourable. The automatic arm dominates at
+teaching a model to recover the relations humans recorded and loses at
+imitating which relations humans chose to record, and no metric computed
+against this gold separates the two.
 
 ## 5.3 Why self-training does not rescue the human labels
 

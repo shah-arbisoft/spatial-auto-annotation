@@ -67,7 +67,7 @@ The audit splits the predicates in two. For lateral, depth and proximity, \textb
 
 \section{The front/behind decomposition: a second measured annotation defect}
 
-Figure~\ref{fig:front-behind-decomposition} decomposes front/behind by annotator group --- agreement where the tool commits, deliberate abstention, and the two convention-inverted groups sitting alone near zero. The per-group table is in Appendix F.10; it reports the shipped cascade of \S{}4.9, whose ground-plane fallback roughly doubled the emit rates of the abstention-heavy groups 2 and
+Figure~\ref{fig:front-behind-decomposition} decomposes front/behind by annotator group, and the two convention-inverted groups sit alone near zero. The per-group table and the full decomposition are in Appendix F.10; the pooled 0.70 resolves into three causes, in measured proportions. \textbf{Direction agreement is near-perfect where the tool commits}, 0.95--1.00 for six of the eight groups with meaningful counts, so genuine depth-ordering errors are rare. \textbf{Two annotator groups used the inverted convention}, agreeing with the committed direction 2--5\% of the time; flipping their labels recovers 0.94/0.82 and aligned overall recall is 0.91. And \textbf{the remaining gap is abstention, not error}: groups 2 and 3 agree almost perfectly when the tool commits, but their pairs sit inside the \texttt{depth\_\allowbreak{}eps} band and beyond the ground-plane fallback's reach, so the tool declines to answer.
 \begin{figure}[!htbp]
 \centering
 \includegraphics[width=0.80\textwidth]{figures/front-behind-decomposition.png}
@@ -75,15 +75,8 @@ Figure~\ref{fig:front-behind-decomposition} decomposes front/behind by annotator
 \label{fig:front-behind-decomposition}
 \end{figure}
 
-\begin{enumerate}
-\item The pooled 0.70 decomposes into three causes:
-\end{enumerate}
 
-\begin{enumerate}
-\item \textbf{Direction agreement is near-perfect where the tool commits}, 0.95--1.00 for six of the eight groups with meaningful counts. Genuine depth-ordering errors are rare.
-\item \textbf{Two annotator groups used the inverted convention.} Groups 6 and 8 agree with the committed direction 2--5\% of the time; flipping their labels recovers 0.94/0.82, and aligned overall recall is 0.91 (alignment uses one disclosed bit per group, the majority direction of its own labels). After \texttt{near}, this is a second measured annotation defect --- the reference-frame ambiguity RoboSpatial formalises (\S{}2.5) observed in the wild. The distribution's shape rules out simple subjectivity: a contested judgement would scatter agreement around chance, whereas these two groups sit at 0.02--0.05 and the other six at 0.95--1.00, and agreement that far \textit{below} chance is a sign flip, not a difference of opinion. Neither convention is the wrong one.
-\item \textbf{The remaining gap is abstention, not error.} Groups 2 and 3 agree almost perfectly when the tool commits, but their pairs sit inside the \texttt{depth\_\allowbreak{}eps} band and beyond the fallback's reach, so the tool abstains: emit rates 0.58 and 0.54. The \texttt{depth\_\allowbreak{}eps} and \texttt{plane\_\allowbreak{}band} sweeps trade this against precision.
-\end{enumerate}
+After \texttt{near}, the inversion is a second measured annotation defect --- the reference-frame ambiguity RoboSpatial formalises (\S{}2.5) observed in the wild, no frame declared in the guidance and two teams resolving it oppositely. The shape of the distribution rules out simple subjectivity: a genuinely contested judgement would scatter agreement around chance, whereas these two groups sit at 0.02--0.05 while the other six sit at 0.95--1.00, and agreement that far \textit{below} chance is a sign flip rather than a difference of opinion. Neither convention is the wrong one.
 
 \section{The tenth annotator, and what the annotators would score against each other}
 
@@ -150,7 +143,7 @@ The lateral, depth and proximity claims survive; support does not. At 0.404 it i
 
 \textbf{\texttt{near} is the least supported number in the audit, and carries the most labels.} The judges agree on the laterals and the depth pair to within 0.042 and 0.083 and diverge on \texttt{near} by \textbf{0.375} (1.000 against 0.625 on the same 24 images); the author also accepted two of its four decoys against the model's one, part of a measured generosity confined to the family \S{}4.5 shows the annotators used inconsistently (three of four \texttt{behind} decoys, two of four \texttt{in front of}; both judges rejected \textbf{all eight} support decoys, so neither is simply harsh). The predicate under that combination is the tool's most freely emitted, 43,388 ordered pairs against 717 human; the threshold generalised to a held-out annotator at recall 1.00 (\S{}3.8), so the \textit{notion} is calibrated, but the most the 1.000 supports is that no counter-example appeared in 24 draws of a rule firing sixty times more often than the annotators did.
 
-The cause is a threshold fitted where its error was invisible: the shipped \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} 0.60 came from Appendix D.2's fit on train F1 against gold covering \textasciitilde{}10\% of ordered pairs, where a false positive outside the gold cost the fit nothing --- why D.2's "uncritical" plateau from 0.60 to 0.80 is flat. The repair was fitted on annotator groups 0--5 as every threshold in Chapter 3 is, rather than on the 94 verdicts that suggested it, shipped at \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} 0.85, and re-audited from scratch on a second pack drawn from the new emissions; E.7 gives the sequence and the held-out projection it declines to quote. Below, \textbf{v3} is the pre-refit pack drawn at 0.60 and \textbf{v4} the fresh one at the shipped 0.85.
+The cause is a threshold fitted where its error was invisible: the shipped \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} 0.60 came from Appendix D.2's fit on train F1 against gold covering \textasciitilde{}10\% of ordered pairs, where a false positive outside the gold cost the fit nothing --- why D.2's "uncritical" plateau from 0.60 to 0.80 is flat. The repair was fitted on annotator groups 0--5 as every threshold in Chapter 3 is, rather than on the 94 verdicts that suggested it, shipped at \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} 0.85, and re-audited from scratch on a second pack drawn from the new emissions --- 219 items, \textbf{191 claims} and 28 decoys, same construction, same blinding, same two judges; E.7 gives the sequence and the held-out projection it declines to quote. Below, \textbf{v3} is the pre-refit pack drawn at 0.60 and \textbf{v4} the fresh one at the shipped 0.85.
 
 \needspace{14.8\baselineskip}
 \begin{center}

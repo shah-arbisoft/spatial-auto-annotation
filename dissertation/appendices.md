@@ -1769,7 +1769,9 @@ of one configuration of the tool.
 
 Section 4.5 reports the finding and its figure plots the decomposition; the
 per-group figures underneath it are these, for the shipped cascade (depth
-ordering plus the ground-plane fallback of §4.9):
+ordering plus the ground-plane fallback of §4.9, which lifted the emit rates
+of the abstention-heavy groups 2 and 3 by about half):
+
 
 | Group | Gold | Emit rate | Agreement when committed | Convention | Raw recall | Aligned recall |
 |---|---|---|---|---|---|---|

@@ -124,31 +124,26 @@ objects were occasionally marginal (noted in the sheet).
 ## 4.5 The front/behind decomposition: a second measured annotation defect
 
 {{fig:front-behind-decomposition}} decomposes front/behind by annotator
-group — agreement where the tool commits, deliberate abstention, and the two
-convention-inverted groups sitting alone near zero. The per-group table is
-in Appendix F.10; it reports the shipped cascade of §4.9, whose ground-plane
-fallback roughly doubled the emit rates of the abstention-heavy groups 2 and
-3. The pooled 0.70 decomposes into three causes:
+group, and the two convention-inverted groups sit alone near zero. The
+per-group table and the full decomposition are in Appendix F.10; the pooled
+0.70 resolves into three causes, in measured proportions. **Direction
+agreement is near-perfect where the tool commits**, 0.95–1.00 for six of the
+eight groups with meaningful counts, so genuine depth-ordering errors are
+rare. **Two annotator groups used the inverted convention**, agreeing with
+the committed direction 2–5% of the time; flipping their labels recovers
+0.94/0.82 and aligned overall recall is 0.91. And **the remaining gap is
+abstention, not error**: groups 2 and 3 agree almost perfectly when the tool
+commits, but their pairs sit inside the `depth_eps` band and beyond the
+ground-plane fallback's reach, so the tool declines to answer.
 
-1. **Direction agreement is near-perfect where the tool commits**, 0.95–1.00
-   for six of the eight groups with meaningful counts. Genuine depth-ordering
-   errors are rare.
-2. **Two annotator groups used the inverted convention.** Groups 6 and 8
-   agree with the committed direction 2–5% of the time; flipping their labels
-   recovers 0.94/0.82, and aligned overall recall is 0.91 (alignment uses one
-   disclosed bit per group, the majority direction of its own labels). After
-   `near`, this is a second measured annotation defect — the reference-frame
-   ambiguity RoboSpatial formalises (§2.5) observed in the wild. The
-   distribution's shape rules out simple subjectivity: a contested judgement
-   would scatter agreement around chance, whereas these two groups sit at
-   0.02–0.05 and the other six at 0.95–1.00, and agreement that far *below*
-   chance is a sign flip, not a difference of opinion. Neither convention is
-   the wrong one.
-3. **The remaining gap is abstention, not error.** Groups 2 and 3 agree
-   almost perfectly when the tool commits, but their pairs sit inside the
-   `depth_eps` band and beyond the fallback's reach, so the tool abstains:
-   emit rates 0.58 and 0.54. The `depth_eps` and `plane_band` sweeps trade
-   this against precision.
+After `near`, the inversion is a second measured annotation defect — the
+reference-frame ambiguity RoboSpatial formalises (§2.5) observed in the
+wild, no frame declared in the guidance and two teams resolving it
+oppositely. The shape of the distribution rules out simple subjectivity: a
+genuinely contested judgement would scatter agreement around chance, whereas
+these two groups sit at 0.02–0.05 while the other six sit at 0.95–1.00, and
+agreement that far *below* chance is a sign flip rather than a difference of
+opinion. Neither convention is the wrong one.
 
 ## 4.6 The tenth annotator, and what the annotators would score against each other
 
@@ -426,9 +421,10 @@ the fit nothing — why D.2's "uncritical" plateau from 0.60 to 0.80 is flat.
 The repair was fitted on annotator groups 0–5 as every threshold in Chapter
 3 is, rather than on the 94 verdicts that suggested it, shipped at
 `on_contact_min` 0.85, and re-audited from scratch on a second pack drawn
-from the new emissions; E.7 gives the sequence and the held-out projection
-it declines to quote. Below, **v3** is the pre-refit pack drawn at 0.60 and
-**v4** the fresh one at the shipped 0.85.
+from the new emissions — 219 items, **191 claims** and 28 decoys, same
+construction, same blinding, same two judges; E.7 gives the sequence and the
+held-out projection it declines to quote. Below, **v3** is the pre-refit
+pack drawn at 0.60 and **v4** the fresh one at the shipped 0.85.
 
 | Predicate | v3 author | v4 author (shipped) | v4 model |
 |---|---|---|---|
