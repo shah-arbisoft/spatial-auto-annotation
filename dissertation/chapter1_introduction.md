@@ -14,7 +14,7 @@ Learning to predict such relationships requires training data in which they
 are already labelled. Wang et al. (2025) introduced a spatial relationship
 aware dataset captured by a Boston Dynamics Spot robot: nearly a thousand
 indoor images (approximately 900 after cleaning; 838 annotated in the
-released subset), annotated with seven spatial predicates — *behind, in
+released subset), annotated with seven spatial predicates: *behind, in
 front of, on, to the left of, to the right of, under, near*. Every
 relationship was labelled by hand: nine trained annotators, working
 independently in batches of 100, drew every bounding box, assigned every
@@ -35,7 +35,7 @@ human still decides every label.
 That cost is structural and grows faster than the data. Objects relate
 pairwise, so an image holding *n* annotated objects presents *n(n−1)*
 ordered pairs; this dataset averages 101 such pairs per image, so
-relationship annotation is never exhaustive in practice — Visual Genome
+relationship annotation is never exhaustive in practice. Visual Genome
 records about eighteen relationships per image over scenes of roughly twenty
 objects (Krishna et al., 2017), and here humans labelled about 10% of
 ordered pairs. That sparsity is arithmetic and implies no inattention, and
@@ -48,9 +48,9 @@ A second cost is consistency, since nine annotators working independently
 produce nine slightly different conventions. Wang et al. (2025) report that
 annotators were trained on the tool and given predicate definitions; no such
 definition survives in the released materials, and Chapter 4 measures the
-stronger point either way, that the *application* diverged whatever was said
-— for three predicates, including two groups that recorded *in front of* and
-*behind* in opposite directions from everyone else. Neither cost is solved
+stronger point either way, that the *application* diverged whatever was
+said, across three predicates, including two groups that recorded *in front
+of* and *behind* in opposite directions from everyone else. Neither cost is solved
 by hiring more annotators, because both scale with the number of humans
 involved.
 
@@ -143,12 +143,12 @@ can conceal one that fails outright.
 RQ2 is answered **yes** if a model trained on the automatic labels performs
 at least as well as the same model trained on the human labels, under
 identical features, splits and seeds, judged against held-out *human*
-annotation — deliberately the harder direction, the yardstick being the
+annotation, deliberately the harder direction, the yardstick being the
 rival source's own product. Since a single lightweight model could produce
 such a result by accident, the question is put three times at increasing
-cost — a controlled classifier, the source paper's own benchmark framework,
-and a planner acting on the relations — with the standard semi-supervised
-remedy as a third arm in the controlled experiment. Agreement across all
+cost, through a controlled classifier, the source paper's own benchmark
+framework, and a planner acting on the relations, with the standard
+semi-supervised remedy as a third arm in the controlled experiment. Agreement across all
 three would be required for an unqualified yes; where they disagree, the
 disagreement is reported and explained and not resolved in the project's
 favour, and Chapter 6 is where that obligation falls due.
@@ -214,7 +214,7 @@ is a documented iteration between Evaluation and Modelling.
 Four constraints shaped the design as much as the research questions did: a
 single 6 GB consumer GPU, no budget for paid annotation, one dataset, and
 free hosted GPU sessions for the benchmark runs. Each ruled something out
-and each is answered somewhere in the evidence — the GPU budget by ablation
+and each is answered somewhere in the evidence: the GPU budget by ablation
 A8, the annotation budget by the volunteer study of Appendix E.3, the single
 dataset by an argument rather than a second domain, and the GPU-hour cap by
 a three-seed replication whose width is reported rather than smoothed over.

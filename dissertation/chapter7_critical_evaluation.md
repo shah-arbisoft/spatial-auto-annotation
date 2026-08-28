@@ -18,7 +18,7 @@ upgrades lifted recall, but blind-audited precision stops the claim at about
 half the labels the tool adds beyond the human record. For the depth pair
 the shortfall is calibrated abstention plus an inverted direction convention
 rather than error, and where the tool commits it agrees at 0.95–1.00 with
-six of the seven same-convention annotators — "comparable to human quality"
+six of the seven same-convention annotators. "Comparable to human quality"
 understates that case, since on front/behind the tool is more consistent
 than the process it is measured against.
 
@@ -28,8 +28,8 @@ than the question was posed: with identical features, model, seed and split,
 the auto-trained classifier reaches 0.75 mean recall against held-out
 *human* gold versus 0.30 for its human-trained twin. At this dataset's
 annotation scale the automatic labels are better training material than the
-labels they were validated against — density (20× more triplets) and
-consistency (one definition, uniformly applied) — which converts the premise
+labels they were validated against, on density (20× more triplets) and
+consistency (one definition, uniformly applied), which converts the premise
 from "removing the bottleneck loses little" to "removing the bottleneck
 gains". Chapter 6 scopes that claim without confirming it: it cannot
 separate the same two label sources in the source paper's framework, so the
@@ -52,13 +52,13 @@ the results *mean*.)
 ## 7.2 What the remaining failures are made of
 
 The failure gallery diagnoses every one of the 1,650 missed human triplets
-by re-checking rule conditions, so the analysis is exhaustive rather than
+by re-checking rule conditions, so the analysis is exhaustive instead of
 anecdotal. Three observations matter most.
 
 First, **genuine tool error is rare**: §4.10 puts avoidable error at roughly
 7%, the bulk of the mass being calibrated abstention (43–54% of front/behind
 misses sit in the depth ambiguity band) with measured annotator defects
-taking most of the rest. That shapes what is left to do — a tool whose
+taking most of the rest. That shapes what is left to do: a tool whose
 misses are mostly abstention improves by deciding more often rather than
 better, and one whose misses are mostly the annotators' own conventions does
 not improve by changing the tool at all.
@@ -82,9 +82,9 @@ ordered by relative monocular depth (the `depth_eps` sweep bounds the trade:
 recall up to ~0.71 at ε=0 for ~0.26–0.36 precision), but the ground-plane
 fallback recovers most of the abstention band *without* depth, once the
 tool's own contact evidence guards against elevated objects. What is left is
-narrower and equally well characterised — objects resting on supports the
-detector has no box for, and pairs whose bottom edges tie within the band —
-and both operating points are documented, revisable decisions, not hidden
+narrower and equally well characterised: objects resting on supports the
+detector has no box for, and pairs whose bottom edges tie within the band.
+Both operating points are documented, revisable decisions and not hidden
 constants (ablations A2, A7).
 
 Section 4.12 settles what the ablations could not. If the front/behind gap
@@ -97,7 +97,7 @@ quadrupling the depth model changed nothing, and §4.5, where two groups
 labelled the pair oppositely, the weight of the shortfall sits on
 definitional disagreement rather than perception. That does not dissolve
 monocular ambiguity, which genuinely bounds the predicate at equal camera
-distance, but it relocates most of the measured gap away from it — so what
+distance, but it relocates most of the measured gap away from it, so what
 would pay best is a written annotation guideline, a duller prescription than
 a better depth network.
 
@@ -123,17 +123,17 @@ is weaker than the evidence. Wang et al. (2025) report that annotators were
 trained on the tool and given predicate definitions; the claim here is not
 that nothing was said but that whatever was said did not survive contact
 with nine annotators, the three defects above being measured in the labels
-themselves rather than inferred from an absence. Prose definitions given at
-training time were not sufficient — an argument for definitions of a
-different kind rather than more of the same, since a threshold a program
+themselves instead of inferred from an absence. Prose definitions given at
+training time were not sufficient, which is an argument for definitions of a
+different kind instead of more of the same, since a threshold a program
 applies cannot be applied two ways by two annotators, which is what Chapter
-3's specification supplies and what makes it a contribution rather than
+3's specification supplies and what makes it a contribution and not
 documentation. That reframes the evaluation itself: for several predicates
 there is no human consensus to agree with, only per-annotator behaviours,
-and the dissertation's response — per-annotator reporting, annotator-aware
-calibration, operational definitions as the deliverable — is to our
-knowledge the first time this dataset's label semantics have been made
-explicit.
+and the dissertation's response, namely per-annotator reporting,
+annotator-aware calibration and operational definitions as the deliverable,
+is to our knowledge the first time this dataset's label semantics have been
+made explicit.
 
 The "tenth annotator" framing survives contact with the data, and §4.6 puts
 numbers on it: the tool is deterministic, the same labeller for every group,
@@ -143,8 +143,9 @@ rather than a measurement, the batches behind it differing threefold in
 density so that annotator and batch cannot be separated, and the Fréchet
 bound §4.6 attempts on top of it is not claimed here, needing exchangeable
 batches these are not. Without overlapping assignments the quantity cannot
-be measured outright — itself a finding about the dataset's construction,
-one a replication should design away by having two annotators share a batch.
+be measured outright, which is itself a finding about the dataset's
+construction, one a replication should design away by having two annotators
+share a batch.
 
 ## 7.4 Methodological reflection
 
@@ -175,12 +176,12 @@ machinery twice**, leaving the second audit dependent on the first and
 confirming a figure a blind instrument does not support. Blind verdicting
 with decoys should have been the instrument from the first audit, not the
 third; it is cheap, and it is the only step here that changed a headline
-number instead of tightening one. That weakness was acted on rather than
+number instead of tightening one. That weakness was acted on and not
 only recorded, and §4.14 gives the sequence: the support threshold had been
 fitted where a false positive outside the gold was free, so it was re-fitted
 on train annotators, shipped, every experiment re-run, and a second pack
 drawn from the new labels and audited blind. The lesson is the order, not
-the number — a threshold worth changing is worth re-auditing on labels it
+the number: a threshold worth changing is worth re-auditing on labels it
 produced, because the estimate that justifies a change is not evidence for
 it. The SGDet **threshold tuning used one disclosed iteration on a trial
 slice** that over-estimated full-set detection quality, an instructive case
@@ -194,9 +195,9 @@ one session on one clone moved the human arm's pooled mR@100 from 0.326 to
 0.293 and the vision-language arm by 0.001, with no label changed. **A third
 of the margin this dissertation once reported between label sources was an
 artefact of when each arm was trained.** Nothing in the original protocol
-was careless — seeds fixed, detector frozen, configuration shared — the
-confound entered through an unpinned dependency, the one axis the protocol
-did not name. A controlled comparison has to control the code as explicitly
+was careless, with seeds fixed, detector frozen and configuration shared.
+The confound entered through an unpinned dependency, the one axis the
+protocol did not name. A controlled comparison has to control the code as explicitly
 as it controls the data; §6.3 now does, and its figures supersede the
 earlier ones.
 
@@ -211,7 +212,7 @@ with human ground truth, and SpatialRGPT (Cheng et al., 2024) curates region
 representations with depth but validates downstream. Three parts the lineage
 leaves implicit are this project's contribution. **Annotator-aware
 calibration**: fit only on annotators who used a label, and hold out
-annotators rather than merely images. **Contact as the support signature**:
+annotators and not merely images. **Contact as the support signature**:
 mask-bottom adjacency, unused by the box-geometry lineage, which repaired
 both error directions at once and parallels the argument for pixel-accurate
 grounding in panoptic scene-graph generation (Yang, J. et al., 2022). And
@@ -250,7 +251,7 @@ Appendix E.3: on the labels it judged it agrees with the author's blind
 audit on support to 0.009, and its control arm shows the raters scoring
 human annotation at 0.940 on the same instrument, so the author's verdicts
 are corroborated rather than merely unchallenged. It was drawn before the
-threshold refit, so it checks those verdicts rather than the shipped support
+threshold refit, so it checks those verdicts and not the shipped support
 rule (§4.15), and the two-stage audit shares machinery with the rule change
 it evaluates.
 
@@ -289,8 +290,8 @@ attempt on them. Each is answered with the evidence that bears on it,
 including the two the evidence does not settle.
 
 **Vocabulary scale: not answered, and conceded.** Nothing in this
-dissertation bears on predicates beyond the seven, and the objection — that
-a hand-written rule set does not extend by learning — stands in full. The
+dissertation bears on predicates beyond the seven, and the objection, that
+a hand-written rule set does not extend by learning, stands in full. The
 work offers a boundary and no rebuttal: the rules are decidable because the
 predicates are spatial, and §3.3 makes that dependence explicit instead of
 hoping it generalises. Section 9.3 records it as the limitation most likely
@@ -304,10 +305,10 @@ defective. But it also predicts that consistent-but-wrong supervision is
 worse than inconsistent human supervision, and on this dataset that is
 refuted at every level where the question was asked (§5.6, §5.7). The
 reconciliation: systematic error is worse than random error only when it is
-*wrong*, and §4.12's finding — front/behind agreeing with itself across
+*wrong*, and §4.12's finding, front/behind agreeing with itself across
 viewpoints 0.958 of the time while agreeing with the annotators 0.70 of the
-time — is the shape of a consistent rule meeting a different convention, not
-of a consistent mistake.
+time, is the shape of a consistent rule meeting a different convention and
+not of a consistent mistake.
 
 **Circular validation: conceded.** Section 7.4 lists this first among the
 choices a stricter replication should improve, and no result in Chapters 4
@@ -318,7 +319,7 @@ without any verdict at all, nor the downstream findings of Chapters 5 and 6,
 scored against human annotation the author did not produce and in which the
 automatic arm is judged by its rival's yardstick. The designed remedy is the
 study of Appendix E.3, which returned too few raters to carry the weight it
-was built for; what it does return (§4.15) narrows the objection rather than
+was built for; what it does return (§4.15) narrows the objection without
 retiring it, since on the pre-refit labels both judged, disinterested judges
 scored support slightly lower than the author did, so the author's audit is
 not flattering its own tool. The shipped rule remains unexamined by anyone
@@ -352,9 +353,9 @@ was limiting what the dataset could teach.
 
 This chapter read the three iterations together. RQ1 is answered differently
 by predicate, and RQ2's strong classifier result is scoped by a benchmark
-that cannot separate the same two label sources — a disagreement §7.1 states
+that cannot separate the same two label sources, a disagreement §7.1 states
 rather than resolves in the project's favour. The remaining failures are
-mostly calibrated abstention and measured annotator behaviour rather than
+mostly calibrated abstention and measured annotator behaviour, not
 tool error, the support arc shows the method correcting itself twice under
 its own evidence, and what looked like a depth ceiling proved largely a
 rules ceiling. The dataset's own annotation process carries three measured

@@ -32,15 +32,15 @@ follows is the verdict against those criteria.
 The criterion was per-predicate recall on annotator groups no threshold ever
 saw, judged against two references fixed in advance; the trivial baselines
 are beaten by a wide margin, 0.74 held-out and 0.85 pooled against 0.14 for
-both random and majority, and the second reference — how well two human
-annotators would agree — is one this dataset cannot supply, for reasons
+both random and majority, and the second reference, how well two human
+annotators would agree, is one this dataset cannot supply, for reasons
 Appendix F.12 sets out. Comparability therefore rests on the baselines and
 the per-predicate audit. The second condition, that labels beyond the human
 record survive audit, holds for the lateral, proximity and depth-decided
 predicates at blind-audited precision 0.79–1.00. **It is not met for
 support.** At 0.535 [0.42, 0.65] about half the support labels the tool adds
-beyond the human record are wrong — beating chance, short of a standard
-anything should be built on — so support answers RQ1 on recall and fails it
+beyond the human record are wrong, beating chance but short of a standard
+anything should be built on, so support answers RQ1 on recall and fails it
 on precision, and the per-predicate form of the question exists so this
 cannot be averaged away. For anything consuming the output, support is a
 candidate set and not a label set. The qualification is `in front of` and
@@ -55,12 +55,12 @@ alone, and undecided at the benchmark.** The controlled classifier gives
 and the harder direction the criterion specified. At the planner, §1.2.2
 fixed the comparator as the human arm: against that arm's 25 of 25 the
 tool's relations alone clear 19, which falls short, and what draws level is
-the union with the vision-language source at 25 of 25 — label-free, but not
+the union with the vision-language source at 25 of 25, label-free but not
 the treatment RQ2 names. So the planner establishes that human annotation
 can be matched *without a human in the loop*, not that the tool matches it.
 At the benchmark, parity satisfies *at least as well* as written, but a null
-result is not a demonstration of equivalence — the paired difference is
--0.0006 with a 95% interval of [-0.070, +0.069] — so the honest word for
+result is not a demonstration of equivalence, the paired difference being
+-0.0006 with a 95% interval of [-0.070, +0.069], so the honest word for
 0.292 against 0.293 is *undecided*, and since §1.2.2 required agreement
 across all three for an unqualified yes, a tie is not agreement. What
 Chapter 5 measures as a two-and-a-half-fold advantage the ranked metric
@@ -124,7 +124,7 @@ What is missing outright is execution: no robot moved. The dataset ships no
 object meshes, so closing this needs a physics simulator (PyBullet or Isaac
 Sim) with primitive-shape proxies substituted for the detected boxes, then
 replaying the same 25 scenes' plans and scoring collision-free execution
-rather than a text ordering — which would also make the redundant-step cost
+rather than a text ordering. That would also make the redundant-step cost
 of a hallucinated support relation visible instead of merely inferred from
 its precision.
 
@@ -153,8 +153,8 @@ contact alone cannot tell a person *holding* an object from a surface
 way); ablation A10 tested the geometric alternative, a drop-fraction
 threshold, and the two populations do not separate (Appendix D.8). The guard
 is scoped to the classes this dataset labels, so an object held by any
-unguarded class — a robot manipulator, a trolley, an animal — would defeat
-it the same way a person does, which bounds every human-robot interaction
+unguarded class, whether a robot manipulator, a trolley or an animal, would
+defeat it the same way a person does, which bounds every human-robot interaction
 scene this pipeline has not been run on.
 
 **Front/behind is bounded, but less by depth than the number suggests.**
@@ -164,7 +164,7 @@ the scenes rather than model capacity. A predicate reproducing its own
 verdict across viewpoints 0.958 of the time while recovering 0.70 of the
 human labels is applying a criterion the annotators did not share, so the
 intervention with the best expected return is a written annotation guideline
-ahead of a better network — an uncomfortable conclusion for a
+ahead of a better network, an uncomfortable conclusion for a
 computer-vision project and the one the evidence supports. The routes that
 stay open are a calibrated stereo pair or an RGB-D capture; wider surface
 detection was built, measured and declined (Appendix D.4).
@@ -180,8 +180,8 @@ frames nobody has annotated: 562 keyframes after content-adaptive selection,
 58 minutes, 185,242 triplets, a predicate distribution 0.032 in total
 variation from the annotated portion (E.6). Capacity and stability on
 unfamiliar input are therefore measured; correctness on that portion is not,
-and cannot be without labels — §4.12 substitutes self-agreement for truth
-and should be read as the weaker thing it is.
+and cannot be without labels. Section 4.12 substitutes self-agreement for
+truth and should be read as the weaker thing it is.
 
 ## 9.4 Personal reflections
 

@@ -10,13 +10,13 @@ source changes the plan an LLM planner produces (§5.7).
 RQ2 asks whether the automatic labels are good enough to *train* a relation
 model as effectively as human labels. The experiment isolates exactly that
 variable: one lightweight classifier per predicate (a small MLP over pure
-geometric pair features — relative position, depth difference, box geometry,
+geometric pair features: relative position, depth difference, box geometry,
 size-relative gap, mask-contact fractions), trained with **identical
 features, architecture, seeds, positive-oversampling and group split**, then
 evaluated against the **held-out human gold** (annotator groups 6–8, whose
 data influenced no threshold, no calibration, and no training). The only
 difference between the runs is the supervision source, under a fixed
-60-iteration budget for every classifier — some do not fully converge,
+60-iteration budget for every classifier. Some do not fully converge,
 identically for every source, so the comparison is between supervision
 signals under equal compute, not between tuned models.
 
@@ -24,8 +24,8 @@ Three sources are compared in the core experiment, and a fourth arrives with
 the result it produced (§5.2): **human**, the ~10% of ordered pairs the
 annotators chose to label; **automatic**, every pair the tool's rules fire
 on, dense and rule-consistent; and **self-trained**, the rival remedy from
-the semi-supervised literature (§2.4), implemented rather than argued about
-— a teacher trained on the human labels exactly as in the human arm, its
+the semi-supervised literature (§2.4), implemented instead of argued about:
+a teacher trained on the human labels exactly as in the human arm, its
 confident predictions on the *unannotated* training pairs (probability ≥
 0.90 either way) becoming pseudo-labels, and a student retrained on the
 union (Lee, 2013). The third arm answers the question that precedes the
@@ -63,10 +63,10 @@ automatic labels multiplies downstream mean recall by ~2.5 against the human
 annotators' own held-out labels, 0.75 vs 0.30, while self-training lifts the
 mean only to 0.36, closing **15% of the distance**: stretching the existing
 labels helps, and does not substitute for labelling every pair consistently.
-The seed spreads carry a second result — the auto-trained model's recall
+The seed spreads carry a second result. The auto-trained model's recall
 varies by at most 0.02 across seeds on every predicate, the human-trained
-model's by up to 0.19 (`near` spans 0.00–0.19) and the self-trained model
-inherits that instability (`behind` spans 0.17–0.28) — so sparse supervision
+model's by up to 0.19 (`near` spans 0.00–0.19), and the self-trained model
+inherits that instability (`behind` spans 0.17–0.28), so sparse supervision
 is not just weaker but *unstable*, its outcome hostage to sampling noise.
 
 ### 5.2.1 The same experiment on four other indicators
@@ -74,7 +74,7 @@ is not just weaker but *unstable*, its outcome hostage to sampling noise.
 A recall-only table invites the objection that the automatic arm labels
 twenty times more densely, so of course it recovers more. Measured, the
 answer does not flatter the tool: **on every indicator except recall the
-automatic arm comes last** — macro precision 0.136 against the human arm's
+automatic arm comes last**: macro precision 0.136 against the human arm's
 0.252, F1 0.194 against 0.267, average precision 0.164 against 0.230, micro
 F1 0.066 against 0.262. One number shows why that is not a verdict on label
 quality: average precision is threshold-free, so no arm improves it by
@@ -82,7 +82,7 @@ committing to more pairs, yet the automatic arm scores **0.040 on `to the
 left of`**, the predicate §4.4 audited at fifteen of fifteen extra
 predictions correct. An arm cannot be both wrong and right about laterality,
 so what the column measures is agreement with which pairs an annotator chose
-to write down — §4.3's artefact one level down the chain. Appendix F.5 gives
+to write down, which is §4.3's artefact one level down the chain. Appendix F.5 gives
 the full table, and concedes what it cannot settle: §4.4 audited the rule
 layer's extras, not the classifier's, so these precision figures are
 uninterpretable rather than favourable. The automatic arm dominates at
@@ -100,7 +100,7 @@ Trained on annotation in which most pairs carry no label, the teacher has
 learned above all that pairs usually have no relation, and self-training
 feeds that conviction back as though it were evidence: what propagates is
 not the annotators' knowledge but their silence. This is the failure mode
-§2.4 predicted, now measured — pseudo-labelling is well behaved when the
+§2.4 predicted, now measured: pseudo-labelling is well behaved when the
 seed is a representative sample of the pool, and this seed is not. The
 `near` row makes it sharp: human-trained recall is already near collapse at
 0.08, and self-training pushes it *down* to 0.03. Where the seed is
@@ -116,8 +116,8 @@ bottleneck's cost without removing it.
 The human arm shows the mechanism §5.3 traced, directly: where the annotation is thinnest
 and least consistent (§4.5, §4.7), recall collapses (`near` 0.08, lateral
 0.22–0.25); trained on dense rule-consistent labels the same model learns
-the geometry (near 1.00, lateral 0.95–0.99, support 0.85–0.88) — §2.3's
-weak-supervision prediction confirmed under controlled conditions. Two
+the geometry (near 1.00, lateral 0.95–0.99, support 0.85–0.88), which is
+§2.3's weak-supervision prediction confirmed under controlled conditions. Two
 checks argue the result is real: the auto-trained model's profile almost
 exactly reproduces the rule layer's own held-out performance (mean 0.75
 against the rules' 0.74; front/behind 0.19/0.37 against the rules'
@@ -142,8 +142,8 @@ One structural caveat needs stating plainly. The classifier's features are
 geometric and the automatic labels come from rules over closely related
 geometry, so the auto-trained arm is partly re-learning its own generator.
 Read alone, this chapter shows the automatic labels are *learnable* and the
-human labels are not — not that they win under any featurisation. Three
-things keep that meaningful: every arm gets identical features; being
+human labels are not; it does not show they win under any featurisation.
+Three things keep that meaningful: every arm gets identical features; being
 learnable is itself the property RQ2 asks about, since a downstream consumer
 must extract a consistent signal; and Chapter 6 removes the circularity by
 repeating the comparison in a full scene-graph model with visual features.
@@ -152,7 +152,7 @@ repeating the comparison in a full scene-graph model with visual features.
 
 The source paper's end goal is explicit: spatial understanding exists so
 that robots can plan, and its own evaluation of that chain stops at SGG
-quality — six models benchmarked on the human labels, topping out at
+quality: six models benchmarked on the human labels, topping out at
 mR@100 = 0.49 (VCTree), every model saturating by epoch 2–6 and `near` stuck
 at 0.22–0.25 (§2.2). Each symptom has a measured cause and a built remedy:
 saturation within six epochs is what training on the 8,926 sparse triplets
@@ -196,23 +196,23 @@ them, each set out with its evidence in Appendix E.5. **The two planners
 agree exactly**, failing on the same six scenes, so the result is a property
 of the prompt and not of the engine reading it. **Every failure in both
 automatic arms is a missing support relation**, never a plan reasoning badly
-from what it was given — six misses in twenty-five is 24%, against support
+from what it was given. Six misses in twenty-five is 24%, against support
 recall of 0.81/0.75 in §4.2, so the planner result is the fidelity result
 one level higher in the chain, and it moves when that fidelity does. **The
 two automatic sources fail on disjoint scenes**: D scores 20 of 25 and its
 failures do not intersect C's, so their union clears the occluder in all 25,
-gaining six scenes over C and losing none — the only measurement here on
-which automatic labels *match* human annotation on a robot-relevant task,
+gaining six scenes over C and losing none. That is the only measurement here
+on which automatic labels *match* human annotation on a robot-relevant task,
 with no human in the labelling loop. Throughout, `grasps_target` and
 `no_invented` remain 1.00, so no plan failed for any other reason.
 
 Twenty-five scenes is small, and the pairing is what makes it enough: exact
 McNemar tests over the discordant scenes (`eval/planner_paired_tests.py`,
 reported in full with the scene-level forensics in E.5) settle the
-comparisons the argument rests on — relations against none at p < 10^-5, and
+comparisons the argument rests on: relations against none at p < 10^-5, and
 the union's 6-to-0 gain over the tool alone at p = 0.031, as is the human
-arm's lead over the tool, the comparison that runs against this project —
-and name what 25 scenes cannot settle, the tool against the vision-language
+arm's lead over the tool, the comparison that runs against this project.
+They also name what 25 scenes cannot settle, the tool against the vision-language
 source being 6 discordant to 5 at p = 1.00, so that two-scene margin is not
 read here. The tests are sharp exactly where the absolute rates are not, C's
 own rate being 19 of 25 with a 95% interval of [0.55, 0.91].
@@ -237,7 +237,7 @@ task, against 0% for no labels at all, and combined with the
 vision-language model's they carry all of it. The residual gap is not a
 property of computed labels in general but of one predicate whose recall is
 measured, whose precision was refitted, and whose failure modes §4.9 and
-§4.14 diagnose — which is why tightening that predicate moved this number
+§4.14 diagnose, which is why tightening that predicate moved this number
 and moved nothing else in the chapter.
 
 ## 5.8 Answer to RQ2

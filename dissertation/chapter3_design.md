@@ -88,9 +88,9 @@ controlled experiment so the two routes meet on the humans' own held-out
 annotations rather than on plausibility.
 
 **Evaluation setting.** The relation stage is evaluated with ground-truth
-boxes and classes (*PredCls*, §2.7), which isolates the contribution — the
-paper already establishes detection at 0.93 mAP@50 with YOLOv10m — and makes
-object indices line up one-to-one with the human relationship records.
+boxes and classes (*PredCls*, §2.7). That isolates the contribution, since
+the paper already establishes detection at 0.93 mAP@50 with YOLOv10m, and it
+makes object indices line up one-to-one with the human relationship records.
 Detector-in-the-loop operation is retained as an ablation and as the
 deployment mode for new images.
 
@@ -121,28 +121,30 @@ cost front/behind ~26% agreement until it was found.
 
 ## 3.5 The seven rules
 
-The complete specification is **Appendix C** — every rule, threshold and
+The complete specification is **Appendix C**: every rule, threshold and
 shipped value with the evidence behind it, plus the correction and flagging
-policy — maintained in the repository as `docs/predicate_spec.md`, the copy
-the code and tests are checked against. The design rationale in one pass:
-**on / under** encode *support* — subject above object, near-touching, with
-horizontal extents overlapping, which keeps "floating in front of" from
-reading as "on"; `under` is the strict inverse, so the pair can never
-contradict. **to the left of / to the right of** compare horizontal centres
-in the camera frame — the frame the annotators saw on screen, the faithful
-choice among the three RoboSpatial distinguishes (Song et al., 2025) — with
-an ambiguity band that abstains when centres nearly coincide. **in front of
+policy. It is maintained in the repository as `docs/predicate_spec.md`, the
+copy the code and tests are checked against. The design rationale in one
+pass: **on / under** encode *support*, meaning subject above object,
+near-touching, with horizontal extents overlapping, which keeps "floating in
+front of" from reading as "on"; `under` is the strict inverse, so the pair
+can never contradict. **to the left of / to the right of** compare
+horizontal centres in the camera frame, the frame the annotators saw on
+screen and the faithful choice among the three RoboSpatial distinguishes
+(Song et al., 2025), with an ambiguity band that abstains when centres
+nearly coincide. **in front of
 / behind** is a two-stage cascade: depth ordering decides first with an
 abstention band, these being the hardest predicates because objects on the
 same surface often differ by less than the depth model can resolve, and
 where depth abstains a **ground-plane fallback** decides from pure
 projection, ordering two objects on the same floor by which box bottom sits
-lower in the image — a pixel-precise cue exactly where depth is noisiest,
-guarded by the tool's own support evidence so it never fires when either
-object rests on another. Pairs both stages abstain on are flagged, not
-guessed (recall 0.70/0.71 *(measured)*, from 0.52/0.55 depth-only). **near**
-is a size-relative proximity test — edge-to-edge box gap over mean object
-size, below a fitted threshold, and **never on contact pairs**, since `near`
+lower in the image. That is a pixel-precise cue exactly where depth is
+noisiest, and the tool's own support evidence guards it so it never fires
+when either object rests on another. Pairs both stages abstain on are
+flagged, not guessed (recall 0.70/0.71 *(measured)*, from 0.52/0.55
+depth-only). **near** is a size-relative proximity test: edge-to-edge box gap
+over mean object size, below a fitted threshold, and **never on contact
+pairs**, since `near`
 co-occurs with on/under on 0 of 469 human pairs. {{fig:near-T-sweep}} shows
 the sweep the threshold is read off; a 3D-centroid metric was rejected on
 evidence, every centroid variant transferring to held-out annotators at
@@ -154,18 +156,18 @@ Three predicate families are mutually exclusive: on/under, left/right and
 front/behind. Two cannot contradict, because the rule branches; support is
 different, since `on` and `under` are independent tests over *different*
 contact evidence, so noise in either can make both fire on one pair. That
-case is demoted to an `on_under_conflict` flag and neither label is emitted
-— demoting rather than resolving, because an annotator that fabricates under
-uncertainty cannot be audited. One further correction is class-aware rather
-than geometric: support is not evaluated when either object is a person, the
+case is demoted to an `on_under_conflict` flag and neither label is emitted.
+The tool demotes instead of resolving, because an annotator that fabricates
+under uncertainty cannot be audited. One further correction is class-aware
+instead of geometric: support is not evaluated when either object is a person, the
 annotators having never recorded one on **0 of 2,466 gold support
 triplets**, and ablation A10 finds geometry cannot take that job back
 (Appendix D.8). Appendix C.11 gives both arguments in full.
 
 Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
 near-threshold edge, and the resolved contradiction above. They are the
-design's honesty mechanism — the tool is offered as a human-in-the-loop
-accelerator with a *measurable* residual cost, not as an oracle — and about
+design's honesty mechanism, since the tool is offered as a human-in-the-loop
+accelerator with a *measurable* residual cost and not as an oracle. About
 a third of ordered pairs carry one, which §4.7 decomposes into silent
 abstention and a much smaller genuine review queue. The structural
 guarantees this section promises are asserted in a randomised invariant test
@@ -178,10 +180,10 @@ quietly.
 Byte-compatibility is a requirement of the research design, not a
 convenience: RQ2 compares two label sources by training the same model on
 each, so different containers would confound the labels with the loader.
-Three formats are written for three consumers — Visual Genome JSON, which a
-replication would diff against; YOLO txt, which trains the detector the
-deployment mode and the benchmark share; and the h5 layout Chapter 6's
-framework ingests — each reproducing the SGDET-Annotate structure exactly.
+The writers cover three consumers: Visual Genome JSON, which a replication
+would diff against; YOLO txt, which trains the detector the deployment mode
+and the benchmark share; and the h5 layout Chapter 6's framework ingests.
+Each reproduces the SGDET-Annotate structure exactly.
 The alternative, an internal schema plus a converter (§3.4), would have left
 every comparison one translation away from the thing it claims to measure.
 Appendix B lists the fields and the round-trip tests that verify them, so
@@ -203,7 +205,7 @@ Results *(measured)*: fitted **T = 1.372** (gap/mean-size units); held-out
 recall **1.000**, every pair the unseen annotator called near lying within
 the threshold. Since recall is 1.0 for all three near-using annotators
 simultaneously, their labels are directionally consistent with a single
-threshold, and what varies — by about fourfold — is how exhaustively each
+threshold, and what varies, by about fourfold, is how exhaustively each
 applied it. The fitted threshold applies one definition uniformly, which is
 exactly the "spatial thresholds for near" the source paper's future work
 requests; whether the tool's extra near pairs are genuinely near is checked
@@ -214,7 +216,7 @@ by manual audit in the evaluation chapter.
 The claim that the rules are detector-agnostic (§4.11) rests on the
 architecture: the rule layer (`src/predicates.py`) imports nothing but
 `numpy` and never receives an image, and the entry point takes boxes as an
-argument, so no detector is wired in — one simply supplies that argument.
+argument, so no detector is wired in; one simply supplies that argument.
 That is what makes §4.11's conditional measurement meaningful, since holding
 the boxes fixed lets detector quality and relation quality be attributed
 separately, and a better detector improves the system without a line of rule
@@ -237,10 +239,10 @@ carries the signal. `segment_sequence` (`src/keyframes.py`) therefore
 measures drift from the *anchor* of the current segment rather than the
 preceding frame, so gradual motion accumulates while a genuine cut still
 crosses in one step, and each segment nominates the frame closest to its
-mean signature. One parameter spans two uses — small τ isolates
-near-duplicates, large τ groups viewpoints of one arrangement, which §4.12's
-measurement consumes — and Appendix E.2 gives the thumbnail distance, the
-sweep and what the segmentation recovers.
+mean signature. One parameter spans two uses: small τ isolates
+near-duplicates, while large τ groups viewpoints of one arrangement, which is
+what §4.12's measurement consumes. Appendix E.2 gives the thumbnail distance,
+the sweep and what the segmentation recovers.
 
 ## 3.11 Reproducibility by construction
 
@@ -252,23 +254,23 @@ Appendix B gives each in full with the walk-through. Every threshold, seed
 and model identifier lives in `configs/default.yaml`, and the runner caches
 each object's lifted geometry after the single GPU pass, so any rule change
 re-evaluates the whole dataset offline in about 20 seconds against roughly
-five minutes for a full perception run — which is what made the
-audit-driven rule repairs of Chapter 4 affordable and let the ablation
-battery run as a sweep. The test suite is 66 tests running in about a
+five minutes for a full perception run. That is what made the audit-driven
+rule repairs of Chapter 4 affordable and let the ablation battery run as a
+sweep. The test suite is 66 tests running in about a
 second, deliberately, since a suite slow enough to skip constrains nothing;
 it encodes the predicate specification's worked examples as unit tests and
 fuzzes two thousand synthetic scenes against the structural guarantees §3.6
-promises. And the environment is pinned, with the one step that can fail
-silently — a SAM2 install replacing the CUDA build of torch, which costs an
-order of magnitude in speed and reports nothing — documented in Appendix B
-rather than left to be rediscovered. The repository is public.
+promises. And the environment is pinned. The one step that can fail silently,
+a SAM2 install replacing the CUDA build of torch, costs an order of magnitude
+in speed and reports nothing, so Appendix B documents it instead of leaving
+it to be rediscovered. The repository is public.
 
 ## 3.12 Summary of design decisions
 
 Every decision above shares one shape: an alternative was available and was
 rejected for a stated reason. Four were settled by evidence that arrived
 *after* the decision and could have overturned it, which is the test of
-whether a justification is real — the Small depth model, the relative-gap
+whether a justification is real: the Small depth model, the relative-gap
 `near` metric, masks over box-only geometry, and the ground-plane fallback.
 Appendix F.3 tabulates all eleven with the alternative each displaced.
 
@@ -280,7 +282,7 @@ guarantees without the author's judgement; and the camera frame is committed
 to explicitly (§3.5), so a disagreement is locatable as a convention
 difference. Three are mitigations rather than refutations, and the fourth
 the design could not settle alone, because invariant testing pins rule
-*consistency* and says nothing about rule *truth* — that took §4.14's
+*consistency* and says nothing about rule *truth*. That took §4.14's
 instrument, built to attack the author's own verdicts, and it overturned
 one. Section 7.7 returns to all four with the evidence.
 

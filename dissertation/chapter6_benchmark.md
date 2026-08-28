@@ -28,8 +28,8 @@ identical held-out test set. The isolation mirrors RQ2 exactly:
 ## 6.2 Training dynamics: prediction 1 confirmed
 
 The human arm **peaks at epoch 4 of 25** and never improves again,
-oscillating between 0.101 and 0.123 for the remaining twenty-one — mild
-overfitting on 5,421 sparse triplets. That replicates the source paper's
+oscillating between 0.101 and 0.123 for the remaining twenty-one, which is
+mild overfitting on 5,421 sparse triplets. That replicates the source paper's
 central observation ("all predictors reached their peak mR@100 well before
 the final epoch") with a current model, and adds the cause: sparse
 supervision is exhausted early. The auto arm is still climbing at epoch 8,
@@ -59,7 +59,7 @@ floor, 0.117 and 0.108, so prediction 3 is refuted as stated: the automatic
 arm's dense, fitted `near` does not survive the trip through a learned
 model. The sharpest separation is on triplet *types never seen in training*,
 0.309 against 0.073, fourfold at this seed and fivefold over three (§6.3.1);
-§6.4 sets out what that column measures here — coverage of relation types
+§6.4 sets out what that column measures here: coverage of relation types
 the manual annotation never recorded, not compositional generalisation.
 Prediction 2 is the one a single run cannot carry in either direction, the
 margin sitting well inside the human arm's own seed spread, which is why
@@ -104,8 +104,8 @@ automatic arm leads at 42 (+0.021) and 43 (+0.010) and trails at 44
 about this metric and not the labels: on raw R@100 the human arm keeps a
 real margin pooled, 0.295 against 0.255, and on zero-shot recall the
 automatic arm leads fivefold, 0.268 against 0.052. The arms differ far more
-in stability than in score — the automatic arm's pooled mR@100 spans 0.006
-across seeds against the human arm's 0.052 — so one definition applied
+in stability than in score, the automatic arm's pooled mR@100 spanning 0.006
+across seeds against the human arm's 0.052, so one definition applied
 uniformly lands in the same place whatever the initialisation, and nine
 annotators applying nine conventions do not.
 
@@ -113,9 +113,9 @@ Where the arms do differ, they differ by annotator: the human arm leads on
 the two §4.5 convicts of inverting the convention and *trails* on group 7,
 the one convicted of nothing, so the ordering runs with annotation quality
 rather than geometry. Appendix F.9 gives the three margins, none separable
-across seeds, the contamination behind them — **30% of the entire yardstick
+across seeds, the contamination behind them (**30% of the entire yardstick
 is front/behind written by the two inverted annotators**, a shared ceiling
-rather than a differential — and the replication at the earlier
+rather than a differential), and the replication at the earlier
 `on_contact_min` 0.60 under which the same ordering holds. Every absolute
 figure in this chapter is therefore a lower bound on both sides.
 
@@ -124,8 +124,8 @@ Pooled zR@100 is 0.268 against 0.052, roughly fivefold, with disjoint
 ranges, and not an artefact of pooling: the auto arm leads on *every*
 annotator separately (0.449 against 0.000 on group 6, 0.273 against 0.098 on
 group 7, 0.041 against 0.007 on group 8), pointing the same way on defective
-and clean annotators alike — what distinguishes a property of the labels
-from a property of the gold.
+and clean annotators alike, which is what distinguishes a property of the
+labels from a property of the gold.
 
 ### 6.3.2 A third label source
 
@@ -133,7 +133,7 @@ Chapter 5's vision-language labels went through the same benchmark as a
 third arm: three seeds, same frozen detector, same human test gold, same
 session. Pooled it leads both at 0.329 against 0.293 human and 0.292 auto,
 and it is the only arm whose lead over the human one is consistent across
-every slice — what §6.4's argument predicts, since §4.13 measures this model
+every slice, which is what §6.4's argument predicts, since §4.13 measures this model
 annotating sparsely and human-like, so a metric rewarding resemblance to the
 manual pass should reward it more than the manual pass rewards itself. The
 sharpest form is on group 7, the one test annotator with no measured defect
@@ -151,11 +151,11 @@ per-pair recall says the automatic labels teach two and a half times better,
 0.748 against 0.297; ranked evaluation against sparse gold says they are
 level. Neither the labels nor the gold differ between the experiments, and
 the evidence below points to the **structure of the metric** and the sparse
-test gold accounting for most of that gap — not the only factor a change of
-framework could carry, since the architecture changes with it too, but the
-one the mechanisms below can be checked against. (An earlier version of
-this chapter had a stronger claim to
-explain — the human arm ahead at 0.326 against 0.278 — but those arms came
+test gold accounting for most of that gap. That is not the only factor a
+change of framework could carry, since the architecture changes with it too,
+but it is the one the mechanisms below can be checked against. (An earlier
+version of this chapter had a stronger claim to explain, the human arm being
+ahead at 0.326 against 0.278, but those arms came
 from runs made weeks apart against different states of the upstream
 framework, and retraining all nine in one session removed the gap almost
 entirely, the human arm falling 0.033 while the vision-language arm moved
@@ -166,7 +166,7 @@ comfortably.)
 **(i) Ranking dilution, and (ii) a convention penalty both arms pay.** R@K
 is a per-image ranking budget, so the auto arm's dense but largely *true*
 extras (Chapter 4's audits) outrank the annotated pairs and are scored as
-errors, while the human arm learned the annotators' labelling prior — which
+errors, while the human arm learned the annotators' labelling prior, which
 is what a ranking metric against human-selected gold rewards. And both arms
 were trained on consistent-convention front/behind while groups 6 and 8, two
 thirds of the test gold, invert it (§4.5): re-scoring against aligned gold
@@ -196,8 +196,8 @@ recall on triplet types absent from a model's *own* training data, but both
 arms are scored against one shared reference, the human training annotation.
 Of the 25 test triplet types that annotation omits, the human arm saw none
 in training and the auto arm saw 24, so its 0.268 against 0.052 records that
-its labels *cover* relation types the manual pass never recorded — the
-property the annotation bottleneck predicts, not compositional
+its labels *cover* relation types the manual pass never recorded, which is
+the property the annotation bottleneck predicts, not compositional
 generalisation, and this dissertation does not claim it as such; §6.5 weighs
 what the column does establish.
 
@@ -211,8 +211,8 @@ the ranking metric inherits every defect measured in the gold, and the
 advantage is concentrated exactly where the annotation is defective and
 absent where it is not.
 
-Section 1.2.2 set a non-inferiority criterion — *at least as well*, not a
-win — so parity is the shape a pass takes, but the numbers refuse a strong
+Section 1.2.2 set a non-inferiority criterion, *at least as well* and not a
+win, so parity is the shape a pass takes, but the numbers refuse a strong
 claim in either direction: the paired mean difference is -0.0006 with a 95%
 interval of [-0.070, +0.069], and a margin of ±0.01 would need roughly forty
 runs per arm. The experiment establishes neither superiority nor
@@ -223,8 +223,8 @@ not a null: zero-shot recall separates with disjoint ranges, 0.225–0.309
 against 0.004–0.079, as does reproducibility, a 0.006 spread against 0.052,
 both running the automatic arm's way. Appendix F.12 gives both readings in
 full, together with why this critical reading is credible rather than
-convenient — it is the problem Neural Motifs, Unbiased SGG and Northcutt et
-al. each identified, here with the confound isolated by construction — and
+convenient, it being the problem Neural Motifs, Unbiased SGG and Northcutt et
+al. each identified, here with the confound isolated by construction. It also
 names the one instrument still missing, a manual audit of the auto arm's
 top-ranked false positives.
 

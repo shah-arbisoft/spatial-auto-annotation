@@ -17,17 +17,17 @@ Four counts recur below. The released subset holds **884** frames; **838**
 carry a non-empty annotation; the pipeline runs on **836**, two annotation
 files having no matching image (§4.2); and **802** of those yield at least
 one ordered pair, the remaining 34 holding a single object. Two properties
-of the gold shape the protocol: it is **sparse** — 8,790 of 84,880 ordered
+of the gold shape the protocol. It is **sparse**: 8,790 of 84,880 ordered
 pairs (~10%) carry a human label, so a label absent from the gold is
-unexamined, not wrong, and raw precision undercounts — and annotator
+unexamined, not wrong, and raw precision undercounts. And annotator
 behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second case), so
 agreement is reported per annotator group as well as pooled.
 
 The metrics: per-predicate **recall of the human triplets**, the primary one
 and the source paper's convention; **restricted precision, recall and F1**
 on annotated pairs; a **manual audit** of a stratified sample of the extra
-predictions; per-type **flag rates**; and three baselines — random, majority
-and **box-only geometry**. Boxes and classes are ground truth throughout
+predictions; per-type **flag rates**; and three baselines, namely random,
+majority and **box-only geometry**. Boxes and classes are ground truth throughout
 (PredCls), so box IoU does not apply. Thresholds were fitted on annotator
 groups 0–5 only, with 6–8 held out; each group is also a contiguous block of
 the capture, so the split holds out an unseen arrangement as well as an
@@ -86,18 +86,18 @@ rendered with subject/object boxes and manually verdicted, any case not
 clearly true marked wrong (`outputs/audit/audit_sheet.csv`). The audit ran
 against the *pre-gate box rule* and is reported as found because it
 motivated the support-rule repairs; §4.9 re-audits the shipped rules and
-§4.14 audits them again under blinding, and they disagree — pooled support
+§4.14 audits them again under blinding, and they disagree. Pooled support
 precision moves 0.13 → 0.77 unblinded, back to 0.40 judged blind against
 decoys, and to 0.54 once the threshold causing the over-emission is refitted
-and audited again — so the support figures here describe a fixed failure,
+and audited again, so the support figures here describe a fixed failure and
 not the final tool.
 
 The audit splits the predicates in two. For lateral, depth and proximity,
 **every sampled extra prediction was correct** (15/15 each, Wilson 95%
 [0.80, 1.00]): §4.3's low restricted precision is the sparse-gold artefact
-the protocol anticipated. For support it inverts — `on` 1/15 (0.07, [0.01,
-0.30]), `under` 3/15 (0.20, [0.07, 0.45]) — mostly **false fires** of box
-adjacency on objects that merely project next to each other, and with §4.2's
+the protocol anticipated. For support it inverts, `on` scoring 1/15 (0.07,
+[0.01, 0.30]) and `under` 3/15 (0.20, [0.07, 0.45]), mostly **false fires** of
+box adjacency on objects that merely project next to each other; with §4.2's
 containment misses both error directions point to one repair, a mask-contact
 test, which the ablations evaluate. Two caveats: 15 per predicate gives wide
 intervals, and depth verdicts on near-coincident objects were occasionally
@@ -117,8 +117,8 @@ so flipping their labels recovers 0.94/0.82 and aligned overall recall is
 agreeing almost perfectly when the tool commits but sitting inside the
 `depth_eps` band and beyond the fallback's reach.
 
-After `near`, the inversion is a second measured annotation defect — the
-reference-frame ambiguity RoboSpatial formalises (§2.5) observed in the
+After `near`, the inversion is a second measured annotation defect: the
+reference-frame ambiguity RoboSpatial formalises (§2.5), observed in the
 wild. The shape of the distribution rules out simple subjectivity: a
 contested judgement would scatter agreement around chance, whereas these two
 groups sit at 0.02–0.05 and the other six at 0.95–1.00, and agreement that
@@ -135,13 +135,13 @@ almost entirely the two convention-inverted groups: the tool agrees with the
 tightened by lifting group 3 from 0.72. On the held-out annotators the
 cluster-bootstrap intervals of §4.2 put five of the seven predicates at 0.82
 or better and the depth pair far below, at 0.199 (0.148–0.257) and 0.369
-(0.300–0.443), a gap far wider than the sampling uncertainty — what makes
-§4.5's convention explanation a claim about the labels, not about noise (all
-seven intervals in Appendix F.8).
+(0.300–0.443), a gap far wider than the sampling uncertainty. That is what
+makes §4.5's convention explanation a claim about the labels and not about
+noise (all seven intervals in Appendix F.8).
 
 A quality verdict needs a yardstick the dataset does not supply: how well
 two *human* annotators would agree. The groups labelled disjoint batches, so
-it cannot be measured directly — itself a finding about the dataset's
+it cannot be measured directly, which is itself a finding about the dataset's
 construction. Treating the deterministic tool as a fixed common reference
 (`eval/annotator_agreement.py`) bounds it: across the seven consistent
 groups its agreement spans **0.851 to 0.933** about a mean of 0.892. That is
@@ -152,16 +152,16 @@ non-exchangeability defeats the Fréchet route to a tighter bound; Appendix
 F.7 gives the derivation, the interval it produces, the density figures and
 why the presumption behind it is false here rather than merely unverified.
 This dataset cannot yield an inter-annotator agreement figure even by
-bounding — a replication that wants one has to collect overlapping
-assignments — so RQ1's comparability claim rests on the trivial baselines
-and the per-predicate audit (§4.8).
+bounding, since a replication that wants one has to collect overlapping
+assignments. RQ1's comparability claim therefore rests on the trivial
+baselines and the per-predicate audit (§4.8).
 
 ## 4.7 Flags: what review actually costs
 
 31.5% of ordered pairs carry at least one flag; the kinds overlap, so they
 sum past that (Appendix C.9). Depth-ambiguous 19.3% (down from 29.5% before
 the ground-plane fallback resolved a third of the depth abstentions) and
-lateral-ambiguous 10.0% are *abstentions* — nothing to review — while the
+lateral-ambiguous 10.0% are *abstentions*, with nothing to review, while the
 borderline-near band, 8.5% of pairs, is the genuine review queue: at a
 conservative 3 seconds per queued pair, ≈6 hours for the full dataset
 against the original nine-annotator manual pass, and optional for the
@@ -176,9 +176,9 @@ matters more than a single headline. On **recall**, five reach
 human-comparable levels, 0.75 to 1.00 as Table 4.1 reports them, mean 0.85
 and 0.74 on annotators no threshold ever saw; the exception is the depth
 pair, at 0.70/0.71 pooled and 0.91 once the two inverted groups are aligned.
-On **precision**, a different five audit blind at 0.79–1.00 — the two
-laterals, the two depth predicates and `near`, each on 24 samples — so the
-claim they support is comparability; the exception there is support, at
+On **precision**, a different five audit blind at 0.79–1.00: the two
+laterals, the two depth predicates and `near`, each on 24 samples, so the
+claim they support is comparability. The exception there is support, at
 **0.535 [0.42, 0.65]** on 71 samples of the shipped rule, up from 0.404
 before §4.14 traced the shortfall to a threshold fitted on a metric that
 could not see the error it controls.
@@ -253,9 +253,9 @@ detection failure (Appendix E.4).
 
 The 884 released images are one continuous walk, each annotator group a
 contiguous 100-frame block, so §4.1's held-out split is held out by scene as
-well as by annotator. The annotator reading survives — an inverted
+well as by annotator. The annotator reading survives, since an inverted
 convention (§4.5) and a `near` label used by three groups in nine (§3.2) are
-behaviours no arrangement of furniture can produce — and the confound runs
+behaviours no arrangement of furniture can produce, and the confound runs
 favourably: 0.74 on held-out groups is generalisation to an unseen annotator
 *and* an unseen arrangement. The sequence also lets the verdicts be checked
 against themselves with no human labels, which Appendix E.2 carries in full.
@@ -268,10 +268,10 @@ if its errors were depth noise near the boundary, agrees with itself
 0.911 at 89× compression. A predicate recalling 0.648 of the human labels
 while agreeing with itself at 0.958 is making the same call repeatedly and
 disagreeing systematically, which converges with A8 and §4.5; §7.2 develops
-what follows. **Limits:** consistency is not correctness — a systematically
-wrong rule is perfectly stable too, so 0.958 rules out only the depth-noise
-explanation this section was written to test — and the figures are an upper
-bound, only matched pairs contributing (E.2).
+what follows. **Limits:** consistency is not correctness, since a
+systematically wrong rule is perfectly stable too, so 0.958 rules out only
+the depth-noise explanation this section was written to test. The figures are
+also an upper bound, only matched pairs contributing (E.2).
 
 ## 4.13 Would a vision-language model do this instead?
 
@@ -294,7 +294,7 @@ exists to supply, so the fair statement is that **the pipeline beats it on
 coverage and matches it on judgement**. The shape of the failure decides the
 reading: neither model contradicts itself or inverts the convention; they
 fall silent and supply one direction of a symmetric pair without the other
-in a third of cases — the two defects §4.5 measures in the *human*
+in a third of cases, which are the two defects §4.5 measures in the *human*
 annotation. Asked to annotate, a capable vision-language model reproduces
 the characteristic failure of the human process, not a geometric one. Its
 precision where it speaks still begins a case for it as an adjudicator on
@@ -312,13 +312,13 @@ once.
 relations it did *not* emit and no annotator labelled, mixed in unmarked.
 The decoys are the instrument: an auditor who simply agreed with every item
 scored 100% on the earlier sheets and scores zero here. The same 242 images
-went to `gemini-3.6-flash` — the concrete snapshot the `gemini-flash-latest`
-alias resolved to for this call, captured per item rather than assumed
-because that alias moved during the project (Appendix B) — as a second
-judge independent of the author, which rejected 24 of 28 decoys against the
-author's 19 of 28 — the stricter
-of the two — the pair reaching Cohen's κ 0.601 over all items and 0.425 over
-the claims alone: moderate agreement, not an echo. Appendix E.7 carries the
+went to `gemini-3.6-flash` as a second judge independent of the author. That
+name is the concrete snapshot the `gemini-flash-latest` alias resolved to for
+this call, captured per item instead of assumed, because the alias moved
+during the project (Appendix B). The model rejected 24 of 28 decoys against
+the author's 19 of 28, making it the stricter of the two, and the pair reach
+Cohen's κ 0.601 over all items and 0.425 over the claims alone: moderate
+agreement, not an echo. Appendix E.7 carries the
 sampling, the class guard, the key handling, the pack's per-predicate table,
 the argument for letting a model judge what §4.13 shows it cannot annotate,
 and what the decoys measure about each judge.
@@ -342,7 +342,7 @@ number in the audit and carries the most labels**: the judges diverge on it
 by **0.375**, 1.000 against 0.625 on the same 24 images, under a predicate
 the tool emits on 43,388 ordered pairs against 717 in the human record.
 
-The cause is a threshold fitted where its error was invisible — the shipped
+The cause is a threshold fitted where its error was invisible. The shipped
 `on_contact_min` 0.60 came from Appendix D.2's fit on train F1 against gold covering
 ~10% of ordered pairs, so a false positive outside the gold cost the fit
 nothing. The repair was fitted on annotator groups 0–5, shipped at 0.85, and
@@ -405,12 +405,12 @@ tool's score readable rather than merely low.
 **On support the author's verdicts survive the check exactly**: 0.413 from
 the volunteers against the author's 0.404, a difference of 0.009 between the
 person who built the tool, blinded and working against decoys, and strangers
-with no stake in the outcome — the objection §2.9 raises and §7.4 concedes,
-answered by measurement, with the model apart at 0.638. **Against the human
+with no stake in the outcome. That is the objection §2.9 raises and §7.4
+concedes, answered by measurement, with the model apart at 0.638. **Against the human
 baseline, five predicates hold and support does not**, 0.864 against 0.926
-and 0.413 against 0.975 (118/121). Across all seven predicates in the broader E.3
-pool — not the support-only counts above — **147** claims carry both a
-volunteer and an author verdict; on those the two agree **0.871** of the
+and 0.413 against 0.975 (118/121). Across all seven predicates in the broader
+E.3 pool, which is a wider set than the support-only counts above, **147**
+claims carry both a volunteer and an author verdict; on those the two agree **0.871** of the
 time (Cohen's κ **0.683**), and crowd-internal reliability is
 Krippendorff's α **0.703**. Appendix E.3 carries the rest:
 the control arm's 0.940 against the tool's 0.726, why the denominators
@@ -429,9 +429,9 @@ groups no threshold ever saw, five predicates at human-comparable levels and
 the depth pair short of them for reasons §4.5 decomposes into calibrated
 abstention and an unshared convention. Precision on the labels the tool adds
 beyond the human record went through three instruments of increasing
-severity — an author audit, a blind decoy-controlled re-audit with a second
-judge, and a volunteer study — which agree that five predicates hold at
-0.79–1.00 and that support does not, at 0.535. Every remaining disagreement
+severity, an author audit followed by a blind decoy-controlled re-audit with
+a second judge and then a volunteer study. All three agree that five
+predicates hold at 0.79–1.00 and that support does not, at 0.535. Every remaining disagreement
 is attributed to a cause, leaving about 7% as avoidable tool error, and two
 checks needing no gold at all bound what the gold itself can settle.
 

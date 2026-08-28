@@ -18,7 +18,7 @@ of the capture, used in §4.12 and §9.3, is **not** covered by that licence:
 it is used only to measure behaviour on unlabelled input, is not
 redistributed, and no figure reproduces a frame from it. The independent
 validation of Chapter 4 collects **pseudonymous** true/false judgements from
-adult volunteers — no names, email addresses or IP addresses, only a
+adult volunteers, with no names, email addresses or IP addresses, only a
 per-browser random identifier used to spread coverage and drop duplicates,
 which UK GDPR treats as personal data, which is why the study is described
 as pseudonymous rather than anonymous here and in §1.3 and §8.3. Because no
@@ -42,7 +42,7 @@ identifiers are pinned in `configs/default.yaml`.
 
 **The vision-language arms.** A fourth label source appears in §5.2, a fifth
 condition in §5.7 and a third arm in §6.3.2, all derived from one model's
-labels rather than from the pipeline's. They are reproduced separately here
+labels and not from the pipeline's. They are reproduced separately here
 because each begins with an API pass that costs money and cannot be repeated
 byte-for-byte: the model behind `gemini-flash-latest` moved during the
 project (§4.13), so a rerun answers as whatever that alias resolves to on the
@@ -96,7 +96,7 @@ promises; and the rest cover the format writers, the detector adapters of
 **The format writers, verified.** Section 3.7 gives the reason
 byte-compatibility is a requirement of the research design; these are the
 fields it comes down to. The writers reproduce the
-SGDET-Annotate structure exactly — centre-form `boxes_1024`/`boxes_512` in
+SGDET-Annotate structure exactly: centre-form `boxes_1024`/`boxes_512` in
 the resized frames, index-aligned `labels` and `attribute` arrays,
 `relationships` as subject–object index pairs with a parallel `predicates`
 ID array, and the same six-dataset h5 layout with int64 attributes. A
@@ -109,7 +109,7 @@ cannot pass unnoticed.
 nothing but `numpy` and never receives an image, and the entry point takes
 boxes as an argument, so no detector is wired into the pipeline. The
 contract is explicit (`src/detectors.py`): one method returning pixel boxes,
-class names and scores, with three implementations — open-vocabulary
+class names and scores, with three implementations: open-vocabulary
 prompting where no trained model exists, an adapter for any ultralytics
 checkpoint including the source paper's YOLOv10m weights, and a reader for
 externally computed detections. Twelve unit tests pin it, one driving the
@@ -153,7 +153,7 @@ it is reproducible from.
 environment; the README gives both recipes and `requirements.txt` the three
 notes they depend on. One pitfall is worth naming because it fails silently:
 installing SAM2 can replace CUDA torch with a CPU wheel, so the smoke test
-reports peak memory (~0.65 GB) and CUDA availability rather than merely
+reports peak memory (~0.65 GB) and CUDA availability instead of merely
 importing.
 
 The `Dockerfile` at the repository root pins Python 3.11, torch 2.5.1 +
@@ -173,7 +173,7 @@ final stage runs the project's test suite *inside the container* and reports
 environment that cannot import the rule layer cannot produce an image at
 all.
 
-The image is checked as an artefact rather than trusted on the strength of
+The image is checked as an artefact and not trusted on the strength of
 its log, and the reason is worth recording as method. Two builds of this
 image have failed from a full disk: one during the export stage, one during
 unpacking, and the second wrote the tag before it died, so `docker images`
@@ -294,7 +294,7 @@ deployment-mode pass (~47 min) and `python scripts/run_annotator.py
 --config configs/depth_base.yaml --out outputs_base` for A8's Base-model
 pass (~7 min).
 
-**4. The benchmark (Chapter 6)** runs on Kaggle rather than locally,
+**4. The benchmark (Chapter 6)** runs on Kaggle and not locally,
 since REACT++ training needs more than 6 GB; the README gives the upload and
 notebook order. Two framework traps cost real runs and are documented in the
 notebooks themselves, because either one silently produces a plausible wrong
@@ -325,7 +325,7 @@ the annotators score on the same instrument, while the audits around it
 remain the author's own, with the circularity §2.9 states as an objection
 before any result is reported. The project uses **one dataset**, the one
 whose bottleneck the work exists to address, and the price is that
-generalisation rests on argument rather than on a second domain. And the
+generalisation rests on argument and not on a second domain. And the
 benchmark runs use **free hosted GPU sessions**, which caps the affordable
 seeds and rules out a hyper-parameter search: Chapter 6's three-seed
 replication is what that budget allows, and its width is reported rather
@@ -380,7 +380,7 @@ not available to a single-image annotator.
 1,766 frames nobody has annotated (E.6). Capacity and stability on
 unfamiliar input are therefore measured; correctness on that portion is not,
 and cannot be without labels. A few hundred labelled triplets from those
-frames — an afternoon of annotation — would close it.
+frames, an afternoon of annotation, would close it.
 
 ## Appendix C: Predicate specification
 
@@ -447,7 +447,7 @@ overlap horizontally. Four conditions, all required.
    captures resting contact while tolerating mask noise.
 3. **Horizontal overlap.** The horizontal extents overlap by at least
    `on_horizontal_overlap` (0.20) of the **narrower** box's x-extent. This is a
-   containment fraction rather than an IoU, so a small object sitting fully
+   containment fraction instead of an IoU, so a small object sitting fully
    above a large one scores 1.0, which is the behaviour support requires.
    Something resting on another object must share its footprint.
 4. **Depth co-location.** `|d_A - d_B| <= on_depth_eps` (0.06, calibrated on
@@ -475,7 +475,7 @@ held-out support F1 0.71 to 0.87, and re-audited extra-label precision 0.07 to
 
 **Class guard.** Classes listed in `no_support_classes` (shipped value:
 `human`) are excluded from `on` and `under` in either role. The justification
-is measured rather than assumed: the annotators never recorded a person as
+is measured and not assumed: the annotators never recorded a person as
 supporting or being supported, on 0 of 2,466 gold support triplets, and mask
 contact alone cannot distinguish a person *holding* an object from a surface
 *supporting* one. The guard is a configuration entry rather than a hard-coded name, so a
@@ -508,7 +508,7 @@ left_of(A, B)  ==  (cx_B - cx_A) > lateral_center_eps
 As with depth, the band is inside the rule: `lateral_center_eps` is 0.02, so a
 pair whose centres are closer than that is not labelled either way. The
 magnitude `|cx_A - cx_B|` gives the confidence, and pairs below the band are
-flagged ambiguous rather than silently labelled.
+flagged ambiguous and not silently labelled.
 
 ### C.5 `right of(A, B)`: A's centre is right of B's
 
@@ -688,15 +688,15 @@ rejected because RQ2's consumer is a model, which has no way to sort it out.
 person: the annotators never recorded one, on **0 of 2,466 gold support
 triplets**, and mask contact cannot distinguish an object *resting on*
 someone from one being *held* by them. A rule that cannot represent the
-distinction its evidence turns on should decline the pair rather than guess,
+distinction its evidence turns on should decline the pair and not guess,
 and the guard is a configuration entry (`no_support_classes`) rather than a
 special case buried in code. It is still a class list standing in for
 geometry and would not cover a manipulator or an animal holding something;
 ablation A10 tests whether contact height can replace it and finds it
 cannot, at a cost of half the support recall (D.8).
 
-**The `near` fitting protocol.** The naive protocol — fit one threshold to
-all `near` labels, test on held-out images — fails informatively: fitting on
+**The `near` fitting protocol.** The naive protocol, fitting one threshold to
+all `near` labels and testing on held-out images, fails informatively: fitting on
 groups 0–5 and testing on 6–8 yields held-out F1 = 0.009, because the label
 was applied by only three of nine groups with very different exhaustiveness.
 The protocol therefore fits on human-*annotated*, non-contact pairs only,
@@ -880,7 +880,7 @@ moves however close it is.
 The second recovers the camera pose properly, estimating the essential matrix
 from whole-image correspondences, decomposing it into rotation and
 translation, and triangulating the points inside each object's box. Focal
-length is **assumed rather than calibrated**, and that assumption is a real
+length is **assumed and not calibrated**, and that assumption is a real
 limitation of this ablation rather than a tolerable simplification. A wrong
 intrinsic matrix does not merely scale the reconstruction: the essential
 matrix decomposed from it is wrong too, so the triangulated points sit in a
@@ -895,7 +895,7 @@ fourfold range of assumed focal lengths, 0.5 to 2.0 image widths, moves
 ordering accuracy between 0.678 and 0.739 while the monocular cascade on the
 same pairs holds at 0.888 to 0.900. Two things follow. The shipped
 assumption of 0.9 widths is the worst of the six tested, so the objection
-that the intrinsic was picked rather than measured is correct, and moving to
+that the intrinsic was picked instead of measured is correct, and moving to
 the best of them buys 0.061. And that is not enough to matter: at its
 narrowest the gap to the monocular cascade is 0.148, and no focal assumption
 in the range closes it. The projective distortion is real, and it is not
@@ -1010,7 +1010,7 @@ The two populations overlap too much to separate. Across 836 images, the
 1,190 gold-confirmed resting pairs above the contact threshold have a median
 drop of 0.19 and a 10th-to-90th percentile range of -0.04 to 0.50; the 51
 pairs the guard blocks have a median of 0.38 and a range of 0.33 to 0.41,
-which sits inside the resting distribution rather than beside it.
+which sits inside the resting distribution and not beside it.
 
 | drop threshold | gold resting pairs kept | person pairs blocked |
 |---|---|---|
@@ -1089,7 +1089,7 @@ the pipeline makes 885 assertions on the 374 judged pairs against 344 and
 reverses and both models are the more precise, 0.419 and 0.389 against
 0.347; they buy it with silence, at a price steep enough that both lose F1
 on every predicate, 0.397 and 0.405 against 0.485 pooled. On the pairs it
-did judge the smaller model's recall is **0.686** rather than 0.378, and on
+did judge the smaller model's recall is **0.686** and not 0.378, and on
 the predicates where the tool's advantage looks largest the gap closes
 entirely: `to the left of` 0.909 against 0.918, and `on` 0.864 against
 0.860, where the model is marginally the better of the two. A headline
@@ -1167,7 +1167,7 @@ is the same defect §4.5 measures in the human annotation, where one group
 recorded 188 instances of *on* and no instances of *under*.
 
 Section 4.13 draws the conclusion these diagnostics support. One point
-belongs here rather than there, because it is a property of the pipeline
+belongs here and not there, because it is a property of the pipeline
 rather than of the model: what the pipeline has over it is not fluency and
 not per-assertion agreement, but exhaustiveness and the guaranteed
 anti-symmetry of §3.6.
@@ -1205,7 +1205,7 @@ inverse by construction.
 Object indices are not stable across frames, the annotators having recorded
 different subsets of the scene from frame to frame: `group_0` alone contains
 43 distinct object orderings, which is why matching is by class and box
-overlap rather than by index. Compression over the 802 pair-bearing frames
+overlap instead of by index. Compression over the 802 pair-bearing frames
 (§4.1) is lower than the 2.7× below because those frames are a subset, so
 consecutive members sit further apart in the original capture.
 
@@ -1273,7 +1273,7 @@ than missing annotation: at τ = 20, 65% of skipped frames carry an identical
 object count to their keyframe, and relaxing the overlap criterion from 0.5
 to 0.1 cuts unmatched objects from 5.6 to 2.2 per frame. Carrying object
 identity with a tracker, as `scripts/run_video.py` already does for video,
-rather than with per-frame overlap, is the straightforward extension that
+and not with per-frame overlap, is the straightforward extension that
 would recover it.
 
 ### E.3 The independent validation study: design and scoring
@@ -1304,7 +1304,7 @@ random draw from the 2,002: they are the claims the collection process
 happened to reach, and items were served to raters in sequential batches, so
 retention is correlated with serving order rather than independent of it. Two
 properties bound what that can do. The batches are predicate-mixed rather than
-predicate-blocked — every early batch contains all seven predicates — and
+predicate-blocked, since every early batch contains all seven predicates, and
 retention is even across predicates to within sampling error: 412 of 2,002
 overall, 20.6%, with per-predicate rates from 17.1% to 23.1%, which a
 chi-square test cannot distinguish from uniform (χ² = 5.20 on 6 df, p = 0.52).
@@ -1323,7 +1323,7 @@ conservative rule used in the author's own audits. Each browser receives a
 random identifier that prevents repeat judgements without identifying
 anybody, and faces are anonymised in every image (Chapter 8).
 
-**Coverage.** Stratified by what each analysis requires. An aggregate precision estimate needs only one judgement per claim, the estimate being over claims rather than over raters, so ordinary claims target a single rater. The 147 claims that also carry an author verdict target three raters each, because the crowd-versus-author comparison and the inter-rater reliability figure both need several independent judgements on the *same* item; those claims are served first. Against the resized pool that is about 1,300 judgements rather than the 3,000 a uniform three-rater target would demand. The priority ordering was the design's hedge against a thin turnout, and it worked in the direction intended: all 147 priority claims reached three raters, so the author comparison and the reliability figure rest on the coverage they were specified for rather than on whatever the response happened to allow.
+**Coverage.** Stratified by what each analysis requires. An aggregate precision estimate needs only one judgement per claim, the estimate being over claims rather than over raters, so ordinary claims target a single rater. The 147 claims that also carry an author verdict target three raters each, because the crowd-versus-author comparison and the inter-rater reliability figure both need several independent judgements on the *same* item; those claims are served first. Against the resized pool that is about 1,300 judgements rather than the 3,000 a uniform three-rater target would demand. The priority ordering was the design's hedge against a thin turnout, and it worked in the direction intended: all 147 priority claims reached three raters, so the author comparison and the reliability figure rest on the coverage they were specified for and not on whatever the response happened to allow.
 
 **Scoring**, fully specified in advance (`analysis/score_votes.py`): ties
 resolve to WRONG, matching the audit protocol; reflex-speed responses and
@@ -1364,20 +1364,20 @@ against the model's 0.625.
 does not touch, the tool scores 0.864 against the annotators' 0.926, a gap
 of 0.063, and on `in front of` it is marginally ahead. On support it scores
 0.413 against 0.975 (118/121), a gap of 0.563 whose intervals do not come close to
-overlapping — the same weakness §4.14 found and the refit responded to, now
+overlapping, the same weakness §4.14 found and the refit responded to, now
 measured against what human annotation scores on the identical instrument.
 
 **Reading the three-judge comparison.** One asymmetry bounds how far §4.15's
 comparison can be pushed: the tool's claims are its *extra* predictions, on
 pairs the annotators passed over, while the control claims are pairs they
 chose to record. Annotators record what is clear, so some of every gap
-between the two arms is the difficulty of the claim rather than the quality
-of the label — for the 0.063 gap on the five untouched predicates that
+between the two arms is the difficulty of the claim and not the quality
+of the label. For the 0.063 gap on the five untouched predicates that
 reservation may account for most of it; for the 0.563 support gap it cannot.
 The agreement figures also read as real signal rather than noise: both the
 crowd–author agreement (0.871, κ 0.683) and crowd-internal reliability
 (α 0.703) roughly doubled as the sample grew, which is what signal does and
-noise does not, and neither approaches 1.0 — §2.3's account of spatial
+noise does not, and neither approaches 1.0, which is §2.3's account of spatial
 language predicts that residue better than rater carelessness does, some
 disagreement being over what the words mean rather than what the photograph
 shows. The comparison also cannot fully separate label quality from claim
@@ -1406,7 +1406,7 @@ between frames by greedy IoU tracking, and each pair's predicates are
 smoothed by a plus-or-minus-two-frame temporal majority vote
 (`scripts/run_video.py`; overlays and per-frame records in
 `outputs/video/`). The vote is the only component with no counterpart in the
-still-image pipeline, and its effect is measured rather than assumed:
+still-image pipeline, and its effect is measured instead of assumed:
 {{fig:video-stability}} plots frame-to-frame agreement before and after it,
 lifting persistence from 0.763 to 0.774 on the static clip and from 0.928 to
 0.964 where the hands make detection churn, which is the behaviour a
@@ -1488,13 +1488,13 @@ scenes 1, 4, 7, 16, 19, 24 and 25 (on the pre-refit labels it was absent
 from 4, 16 and 24 alone); scene 7's plan is nonetheless recovered from the
 surrounding description, so absence of the relation is nearly but not quite
 sufficient for failure. The six failing scenes are 1, 4, 16, 19, 24 and 25
-(§5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together — scene 4 offered "box6 is in front of book7" and "box6 is near book7", scene 24 added "to the left of" — but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored `clear_step` is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
+(§5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together (scene 4 offered "box6 is in front of book7" and "box6 is near book7", and scene 24 added "to the left of"), but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored `clear_step` is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
 
 **How the three findings were established.** Section 5.7 states them; the
 detail is here. *The two planners agree exactly.* Condition C fails on the
 same six scenes under both `gemini-flash-latest` and the reasoning model
 `gemini-3.1-pro-preview`, which is what makes the result a property of the
-prompt rather than of the engine reading it, and it disposes of the
+prompt and not of the engine reading it, and it disposes of the
 objection that a more capable planner would infer support from the object
 list: it does not, in twenty-five scenes of twenty-five, twice. *Every
 failure is a missing support relation.* In all six C failures the relation
@@ -1629,8 +1629,8 @@ per-predicate verdicts, with Wilson 95% intervals, are these:
 arrives immediately: §4.13 spends a section establishing that a
 vision-language model makes a poor annotator, and §4.14 then gives one a
 vote. The two tasks differ in the half that failed. What §4.13 measures is
-*coverage* — the model never addressed 171 of 381 gold triplets, 44.9%, and
-its headline recall is mostly that silence — while on the pairs it did judge
+*coverage*, the model never having addressed 171 of 381 gold triplets, 44.9%,
+so its headline recall is mostly that silence, while on the pairs it did judge
 it was the *more precise* of the two, 0.419 against the pipeline's 0.347.
 Judging a claim that is handed to it asks only for the half that measured
 sound, since the item is supplied and nothing has to be enumerated. That
@@ -1654,8 +1654,8 @@ the fit saw, it predicted **0.367 → 0.667**. `on_contact_min` was then set
 to 0.85 and every experiment in this dissertation re-run against the new
 labels. That prediction is not what §4.14 reports, because a projection from
 held-out items selected under the *old* labels is still an extrapolation: a
-second pack was drawn from the new emissions instead — 219 items, 191 claims
-and 28 decoys, same construction, same blinding, same two judges — and
+second pack was drawn from the new emissions instead, at 219 items, 191 claims
+and 28 decoys, same construction, same blinding, same two judges, and
 audited independently, which is the v4 column there.
 
 **Where the two judges agree, and where they do not.** Over the v3 pack they
@@ -1685,7 +1685,7 @@ worth recording and was recorded, so the human labels are close to the
 complete set of easy cases and what the tool adds beyond them is mostly not
 there. Restricted precision therefore understates a predicate whose gold is
 a sample and overstates one whose gold is nearly exhaustive, and no single
-reading of §4.3 is correct for both — which is why the protocol pairs it
+reading of §4.3 is correct for both, which is why the protocol pairs it
 with an audit instead of reporting either alone.
 
 **Judge drift between the two packs.** Nine of 28 decoys were accepted in v3
@@ -1750,7 +1750,7 @@ per-seed spread.
 ### F.2 Downstream recall by label source
 
 Section 5.2 carries the per-predicate figures and the seed spreads. The chart
-below is the same experiment drawn rather than tabulated, which makes the
+below is the same experiment drawn instead of tabulated, which makes the
 ordering easier to take in at once.
 
 
@@ -1823,7 +1823,7 @@ dissertation.
 
 ### F.6 Restricted precision on the annotated pairs
 
-Section 4.3 quotes these figures and states why they are a floor rather than
+Section 4.3 quotes these figures and states why they are a floor and not
 an error rate. Recall and F1 are restricted to the same 8,790 annotated pairs.
 
 | Predicate | P | R | F1 | support |
@@ -1866,7 +1866,7 @@ Fréchet inequalities themselves hold for any joint distribution and are not
 affected; what the batch heterogeneity undermines is the step *before* them,
 which treats p_A and p_B as though they described the same task. The interval
 is therefore an estimate resting on an assumption this dissertation can show
-to be false rather than merely unverified, and it should be read as
+to be false and not merely unverified, and it should be read as
 indicative only. The assumption-free
 half of §4.6 is the heterogeneity spread, which needs no such presumption:
 the tool is deterministic, so the 0.082 range in its agreement across the
@@ -1926,11 +1926,11 @@ it bounds every absolute figure in that chapter.
 **How much of the yardstick is affected.** Of the 2,818 relations in the
 benchmark test gold, **1,189 (42%) are front/behind, and 859 of those (72%)
 were written by the two annotators §4.5 convicts of inverting the
-convention** — so **30% of the entire yardstick is a predicate labelled in
+convention**, so **30% of the entire yardstick is a predicate labelled in
 the opposite direction to the convention every training group used**. Both
 arms train on groups 0–5, where no inversion is measured, so neither can
 score those relations and the penalty falls on them equally: the inversion
-sets a *ceiling* rather than a differential.
+sets a *ceiling* instead of a differential.
 
 **How far it bites depends on how the metric aggregates.** R@100 counts
 instances, so the cap applies to 30% of them directly. mR@100 averages over
@@ -1973,13 +1973,13 @@ advantage the human labels carry does not survive contact with an annotator
 who followed the stated convention.
 
 Group 6 also shows the fingerprint §6.4 attributes to annotator *selection*
-rather than convention. Its *lateral* gold — geometrically unambiguous
-relations that both models predict freely — is recalled at 0.48/0.68 by the
+rather than convention. Its *lateral* gold, geometrically unambiguous
+relations that both models predict freely, is recalled at 0.48/0.68 by the
 human arm against 0.31/0.24 by the auto arm, over three seeds with disjoint
 ranges. Laterals have no convention to invert, so what differs there is
 which pairs the annotator chose to record, and the human-trained model
 ranks exactly those highly because it learned human selection habits rather
-than more geometry — a smaller gap than the pooled group-6 lead this
+than more geometry, a smaller gap than the pooled group-6 lead this
 section opens with, because a shared-convention predicate has nothing else
 inflating it.
 
@@ -2048,8 +2048,8 @@ mask-contact evidence (§4.9).
 Held-out exceeds pooled on on/under/near and falls far below it on
 front/behind, and both are annotator signatures: convention inversion for
 the depth pair (§4.5), and direction-usage asymmetry for support, where
-several groups label one direction only — group_2 records 188 *on* and no
-*under*, group_8 only *under* — while the held-out groups' support labels
+several groups label one direction only, group_2 recording 188 *on* and no
+*under* and group_8 only *under*, while the held-out groups' support labels
 happen to be canonical stackings the rules recover at 0.95–1.00.
 
 **The `near` qualification.** `near` is recovered completely once its
@@ -2066,7 +2066,7 @@ overstates what is known.
 **Where the residual depth error sits.** Section 4.5 decomposes the depth
 pair's shortfall into calibrated abstention and a convention the annotators
 did not share, in measured proportions. Genuine depth error is the remainder
-rather than absent: Appendix D.7 measures it at 1% of `in front of` misses
+and not absent: Appendix D.7 measures it at 1% of `in front of` misses
 and 6% of `behind`, so the dominant terms are not depth error, which is a
 weaker claim than none of it being.
 
@@ -2091,8 +2091,8 @@ enough but substantially better training material, because density and
 consistency dominate raw human authority when supervision is sparse; the
 self-trained arm rules out the cheap alternative, recovering only 15% of the
 gap because it propagates the annotators' silence rather than their
-knowledge. That is the dissertation's core claim — removing the bottleneck
-can *grow* dataset utility rather than approximate it — demonstrated on the
+knowledge. That is the dissertation's core claim, that removing the bottleneck
+can *grow* dataset utility rather than approximate it, demonstrated on the
 dataset's own held-out annotators and against the obvious rival. Its scope
 is set by what follows it: Chapter 6 returns parity, so the advantage is an
 advantage on the controlled classifier where features are held identical,
@@ -2113,8 +2113,8 @@ metric's own value, and a margin of ±0.01 needing roughly forty runs per
 arm. What the same three seeds *do* resolve is the part that is not a null:
 zero-shot recall separates with disjoint ranges, 0.225–0.309 against
 0.004–0.079, as does reproducibility, a 0.006 spread against 0.052, both
-running the automatic arm's way. Set against the cost of obtaining them —
-nine annotators against five minutes on one consumer GPU —
+running the automatic arm's way. Set against the cost of obtaining them,
+nine annotators against five minutes on one consumer GPU,
 indistinguishability on the ranking metric is close to the result the
 project set out to obtain, since RQ1 and RQ2 ask whether the human can be
 removed and not whether the machine wins.
@@ -2125,10 +2125,10 @@ ignoring the image is hard to beat; Unbiased SGG (Tang et al., 2020)
 formalised how thoroughly such models absorb the annotation distribution;
 and Northcutt, Athalye and Mueller (2021) showed erroneous test labels
 reorder rankings across ten benchmarks. What Chapter 6 adds is a case where
-the confound is *isolated by construction* — the arms differ only in label
+the confound is *isolated by construction*, since the arms differ only in label
 source, share a frozen detector, and the per-annotator defects were measured
-beforehand in Chapter 4 — so the advantage is attributed to annotation
-practice rather than inferred. The one remaining instrument is a manual
+beforehand in Chapter 4, so the advantage is attributed to annotation
+practice and not inferred. The one remaining instrument is a manual
 audit of the auto arm's top-ranked false positives, the analogue of §4.4,
 left as designed follow-up.
 
@@ -2140,5 +2140,5 @@ differing threefold in object density, so §4.6 reports the Fréchet bound as
 a measurement the data cannot support, and the assumption-free spread of
 0.082 is too narrow to carry weight either. Comparability therefore rests on
 the trivial baselines and the per-predicate audit, and the yardstick §1.2.2
-hoped for is one this dataset could not supply — which is itself a finding
+hoped for is one this dataset could not supply, which is itself a finding
 about the dataset's construction rather than a gap in the evaluation.

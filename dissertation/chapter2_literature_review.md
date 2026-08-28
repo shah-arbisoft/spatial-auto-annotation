@@ -31,8 +31,8 @@ can, and §5.7 turns that into a measurement. Language-driven robot planners
 ground their instructions in exactly such a structured account of scene
 state (Ahn et al., 2022), and 3D scene graphs were proposed as its unifying
 form (Armeni et al., 2019). Robotics has pushed that form towards real-time
-perception — Kimera builds such graphs from SLAM (Rosinol et al., 2021),
-3DSSG from reconstructed indoor scans (Wald et al., 2020) — but both take
+perception, Kimera building such graphs from SLAM (Rosinol et al., 2021) and
+3DSSG from reconstructed indoor scans (Wald et al., 2020). Both take
 geometry as given and infer the edges, the inverse of the problem here,
 where geometry must be recovered from monocular images first.
 
@@ -81,7 +81,7 @@ relations while enforcing clear annotation guidelines (e.g., spatial
 thresholds for 'near')."
 
 The common cause is the **manual annotation bottleneck**: SGDET-Annotate
-only *accelerates* labelling — a human still decides every edge — so the
+only *accelerates* labelling, since a human still decides every edge, so the
 dataset cannot grow cheaply, diversity stays low, and inter-annotator
 disagreement is baked in. **No automatic annotator exists for this
 dataset.** This is the gap the project fills, and the fitted `near`
@@ -90,15 +90,15 @@ for near."
 
 ## 2.3 Label quality: weak supervision and annotator disagreement
 
-The premise — replacing scarce human labels with dense computed ones — has
+The premise, replacing scarce human labels with dense computed ones, has
 an established name: **weak supervision**. **Snorkel** (Ratner et al., 2017)
 formalised *data programming*: experts write labelling functions instead of
 labelling examples, their noisy overlapping votes combined into training
 labels, trading per-label authority for coverage and consistency; its
 deployments repeatedly matched or beat hand-labelled baselines wherever the
 labelled set, not the model, was the bottleneck. This project's geometric
-rules are labelling functions in that sense — deterministic, auditable,
-dense — with two departures. Measured geometry gives near-exact votes for
+rules are labelling functions in that sense, being deterministic, auditable
+and dense, with two departures. Measured geometry gives near-exact votes for
 five predicates (blind-audited 0.79–1.00) and demonstrably noisy ones for
 the support pair (§4.14 puts precision at 0.40): the five need no
 probabilistic aggregation, and on the two, the objection Snorkel answers by
@@ -110,14 +110,14 @@ The complementary literature dismantles the premise that human annotation is
 a single reliable gold standard. Plank (2022) puts the sharp form: variation
 between annotators is frequently not error but legitimate difference, and
 treating it as noise discards signal and produces evaluation that flatters
-whichever convention the majority held — the reading Chapter 4 reaches
-independently for `near` and front/behind. **Uma et al.'s (2021) survey of
+whichever convention the majority held, which is the reading Chapter 4
+reaches independently for `near` and front/behind. **Uma et al.'s (2021) survey of
 learning from disagreement** documents systematic annotator disagreement
 across vision and language, driven by ambiguous guidelines, subjective
 boundaries and annotator-specific conventions. The frame fits: Chapter 4
-measures three annotator behaviours — selective `near` usage, an inverted
-front/behind convention in two groups, one-directional support labelling —
-which make "agreement with the humans" a per-annotator quantity. Two design
+measures three annotator behaviours, namely selective `near` usage, an
+inverted front/behind convention in two groups and one-directional support
+labelling, which make "agreement with the humans" a per-annotator quantity. Two design
 decisions follow: evaluation is reported per annotator group, never only
 pooled, and thresholds are calibrated only on annotators who used a label,
 with the rest held out.
@@ -144,8 +144,8 @@ contrastive pairs, having found 2D datasets let models score well without
 using spatial information at all. Both respond to the fact this dissertation
 measures in its own dataset: what a benchmark appears to test and what its
 annotation rewards can diverge until someone measures the labels. Chapter 6
-shows the consequence here, and Northcutt et al.'s conclusion — rankings
-flip when gold is corrected — is the shape of that result.
+shows the consequence here, and Northcutt et al.'s conclusion, that rankings
+flip when gold is corrected, is the shape of that result.
 
 ## 2.4 The rival family: semi-supervised and active learning
 
@@ -164,9 +164,9 @@ labelled, pseudo-label the remaining 90%, retrain. Three measured properties
 of this dataset argue against it. Self-training *amplifies its seed*, and
 this seed is sparse and internally inconsistent (selective `near`, two
 inverted front/behind conventions, one-directional support; §2.2, Chapter
-4). The seed is *selectively* small — annotators labelled what they found
-salient, so the labelled 10% is not an unbiased sample of the 90%, the
-assumption pseudo-labelling needs. And Chapter 5's human-trained classifier
+4). The seed is *selectively* small, because annotators labelled what they
+found salient, so the labelled 10% is not an unbiased sample of the 90%,
+which is the assumption pseudo-labelling needs. And Chapter 5's human-trained classifier
 is exactly the seed such a loop would start from: it collapses on the
 sparsely-labelled predicates (recall 0.08–0.25) and is unstable across
 seeds, leaving little reliable to amplify. Active learning fails
@@ -177,7 +177,7 @@ The geometric route sidesteps all three failure modes because its labelling
 function does not derive from the flawed seed at all: the rules are fitted
 to a handful of thresholds (the fit validated on held-out annotators) and
 are exactly as consistent on the 90% as on the 10%. None of this is left as
-argument — Chapter 5 implements the rival as a third arm of the controlled
+argument: Chapter 5 implements the rival as a third arm of the controlled
 experiment, the standard teacher-student loop over the same features, model,
 split and seeds, so pseudo-labelling and programmatic labelling meet head to
 head on the humans' own held-out annotations, a comparison the
@@ -192,7 +192,7 @@ instantiations: CLEVR (Johnson et al., 2017) emitted the spatial relations
 of hundreds of thousands of scenes *from the renderer*, exact by
 construction, and became the standard diagnostic for compositional reasoning
 because programmatic labels carry no annotator noise to memorise. It
-sidesteps the hard half — its geometry is known because the scenes are
+sidesteps the hard half, its geometry being known because the scenes are
 synthetic, while an annotator for real photographs must recover geometry
 from pixels first. The works below take up that half, and each outputs
 something other than a scene-graph annotation for these seven predicates;
@@ -221,7 +221,7 @@ the assessments are this project's, made against the requirements of §2.10.
   cited by the source paper, teaches spatial understanding to 2D/3D VLMs
   from real indoor scans and formalises **reference frames**: ego-centric,
   world-centric and object-centric readings of one phrase. That ambiguity is
-  a documented property of spatial language, not an engineering nuisance —
+  a documented property of spatial language and not an engineering nuisance:
   Landau and Jackendoff (1993) showed language encodes location through
   frame-dependent primitives, so "the cup is left of the box" is true in one
   frame and false in another, and an annotator must pin the frame before any
@@ -230,23 +230,23 @@ the assessments are this project's, made against the requirements of §2.10.
   is spatial QA over three frames.
 
 This raises the obvious alternative: ask a capable vision-language model to
-name the relations. There is reason to doubt it before testing — Visual
+name the relations. There is reason to doubt it before testing. Visual
 Spatial Reasoning finds a wide model-human gap on relations a person reads
 off instantly (Liu, Emerson and Collier, 2023), and Kamath, Hessel and Chang
 (2023) show the failure survives scale and prompting. Section 4.13 tests it:
 both models recover under half the human triplets the pipeline does and lose
 F1 on every predicate, while being *more precise* where they speak. What
-settles it is the shape of the output — silence on most pairs, a symmetric
-relation asserted in one direction only about a third of the time, the
-behaviours §4.5 measures in the *human* annotation. A vision-language model
+settles it is the shape of the output: silence on most pairs, and a symmetric
+relation asserted in one direction only about a third of the time, which are
+the behaviours §4.5 measures in the *human* annotation. A vision-language model
 asked to annotate reproduces the failure mode this project set out to
 replace.
 
 One adjacent family needs separating, because from a robotics standpoint it
 looks closest. Online 3D scene-graph *mapping* systems build a
-spatial-semantic graph as a robot moves — Hydra from depth-equipped SLAM in
+spatial-semantic graph as a robot moves: Hydra from depth-equipped SLAM in
 real time (Hughes, Chang and Carlone, 2022), ConceptGraphs by fusing
-foundation-model features into an RGB-D map (Gu et al., 2024) — but they
+foundation-model features into an RGB-D map (Gu et al., 2024). But they
 consume depth sensors, emit no dataset-format annotation for existing
 monocular images, and are not validated against human annotators. They
 strengthen the case for automatic annotation: the training data their
@@ -262,8 +262,8 @@ rules declare impossible). Both share a blind spot: a model trained on
 computed labels and tested on questions from the same computation scores
 well on any convention applied consistently, including a wrong one, and an
 internal consistency check is satisfied by any coherent convention. Neither
-detects systematic disagreement with how humans use the words — the failure
-mode Chapter 4 measures in tool and annotators alike — and only comparison
+detects systematic disagreement with how humans use the words, which is the
+failure mode Chapter 4 measures in tool and annotators alike. Only comparison
 against an independently produced human record can, which none of these
 works performs and which is what RQ1 is. It also explains why Chapter 6's
 less favourable result does not contradict Chapter 5's: judged against
@@ -329,11 +329,11 @@ models passed messages between object and relationship nodes until the two
 agreed (Xu et al., 2017); and the field's shape was set by **Visual Genome**
 (Krishna et al., 2017), 108k images of crowdsourced triplets whose JSON
 format this dataset inherits. Chang et al. (2023) survey the lineage and
-name annotation cost and label bias as its two persistent constraints — this
-project's premise from the consumer's side. **Neural Motifs** (Zellers et
+name annotation cost and label bias as its two persistent constraints, which
+is this project's premise from the consumer's side. **Neural Motifs** (Zellers et
 al., 2018) showed that context and label statistics dominate: their
 frequency baseline, predicting the commonest predicate while ignoring the
-image, proved hard to beat — a warning that relation "accuracy" can measure
+image, proved hard to beat, a warning that relation "accuracy" can measure
 memorised co-occurrence. **VCTree** (Tang et al., 2019) composes dynamic
 tree structures and is the best model in the source paper's own benchmark
 (mR@100 = 0.49). **Unbiased SGG** (Tang et al., 2020) showed formally that
@@ -341,7 +341,7 @@ such models absorb the *annotation distribution*, and proposed
 counterfactual debiasing. The field's corrective direction is telling:
 panoptic scene graph generation (Yang, J. et al., 2022) replaced box
 grounding with pixel-accurate masks after showing boxes systematically
-mislocalise the objects whose relations are being learned — the reasoning
+mislocalise the objects whose relations are being learned, the reasoning
 that puts SAM2 masks at the centre of this project's support rule.
 
 The lineage also fixes the evaluation vocabulary of Chapters 4 and 7. SGG
@@ -366,8 +366,8 @@ backbone, reportedly ~20% faster and ~10% more accurate on relation
 prediction than its predecessor, small enough to run onboard a robot,
 shipped in the open **SGG-Benchmark** framework. The essential point: such
 models **require labelled training data and sit downstream of an
-annotator**. This project computes labels and runs *before* any SGG model —
-the **supplier**, with REACT++ a natural **consumer** — and training
+annotator**. This project computes labels and runs *before* any SGG model,
+making it the **supplier** with REACT++ a natural **consumer**, and training
 REACT++ on the auto-labels versus the human labels is the heavyweight
 version of RQ2, executed in Chapter 6.
 
@@ -403,10 +403,10 @@ decomposition is therefore not optional garnish; without it a mean recall is
 uninterpretable, which is why Chapters 4 and 6 report both.
 
 **Zero-shot recall measures something relative, and what it is relative to
-must be stated.** zR@K scores only combinations absent from *training* — it
+must be stated.** zR@K scores only combinations absent from *training*. It
 comes from visual relationship detection (Lu et al., 2016) and was first
-reported on Visual Genome by Tang et al. (2020) — well posed when one model
-is compared against itself, ambiguous the moment two
+reported on Visual Genome by Tang et al. (2020), and it is well posed when
+one model is compared against itself, ambiguous the moment two
 differently-supervised models share a column, because the exclusion set is
 then drawn from one shared reference. The column then reports how far each
 label source covers combinations the reference omits: a real property, for
@@ -420,7 +420,7 @@ the two are frequently quoted side by side and are not comparable. Beneath
 both sits the assumption that the gold is correct, which Northcutt, Athalye
 and Mueller (2021) showed is false often enough to reorder published
 rankings (§2.3); for spatial relations the annotation may also be
-*consistently* wrong in the way that matters here — where annotators applied
+*consistently* wrong in the way that matters here. Where annotators applied
 a different reference frame, a system agreeing with them scores well and a
 correct system scores badly, and no recall metric tells the two apart.
 
