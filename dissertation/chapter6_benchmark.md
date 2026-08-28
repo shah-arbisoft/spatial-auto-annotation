@@ -114,15 +114,12 @@ whatever the initialisation, nine annotators applying nine conventions do
 not — and a margin of 0.001 between arms whose own seeds move by 0.052 is
 not a result in either direction.
 
-Where the arms do differ, they differ by annotator. The human arm is ahead
-on the two annotators §4.5 convicts of inverting the front/behind convention
-(by 0.022 on group 6 and 0.027 on group 8) and *behind* on group 7, the one
-annotator convicted of nothing, by 0.011: the ordering runs with annotation
-quality and not with geometry, and whatever advantage human labels carry
-does not survive contact with an annotator who followed the stated
-convention. None of the three differences is separable across seeds, so the
-ordering is a consistent direction, not three measured effects. That
-contamination is large and measurable — **30% of the entire yardstick is
+Where the arms do differ, they differ by annotator: the human arm leads on
+the two annotators §4.5 convicts of inverting the front/behind convention
+and *trails* on group 7, the one convicted of nothing. The ordering runs
+with annotation quality and not with geometry, and Appendix F.9 gives the
+three margins, none of them separable across seeds. That contamination is
+large and measurable — **30% of the entire yardstick is
 front/behind written by the two inverted annotators** — but it is a shared
 ceiling rather than a differential, since both arms train where no inversion
 is measured; Appendix F.9 gives the counts, what the ceiling does to each
@@ -204,12 +201,10 @@ both sides.
 **(ii′) Where the gap actually lives: the two defective test groups.** The
 per-group figures of §6.3.1 localise the human arm's lead to the two
 annotators convicted of convention inversion, where it is four times what it
-is on the clean one. Group 6 shows the fingerprint: its *lateral* gold,
-geometrically unambiguous relations both models predict freely, is recalled
-at 0.49/0.69 by the human arm against 0.12/0.21 by the auto arm. Laterals
-have no convention to invert, so what differs is *which* pairs the annotator
-selected, and the human-trained model ranks exactly those highly because it
-learned human selection habits, not more geometry.
+is on the clean one, and Appendix F.9 carries the fingerprint that separates
+selection from convention: on group 6's *lateral* gold, which has no
+direction to invert, the human arm recalls 0.49/0.69 against the auto arm's
+0.12/0.21, because it learned which pairs that annotator chose to record.
 
 **(iii) `near` gold is a single idiosyncratic annotator.** All 93 test
 `near` labels come from group 8, whose usage is sparse and non-exhaustive

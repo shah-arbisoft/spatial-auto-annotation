@@ -385,11 +385,9 @@ directions in a diagnostic way. For five predicates the first badly
 understates the second (`near` 0.11 against 1.000, the laterals 0.35 and
 0.42 against 0.917 and 0.958), the sparse-gold artefact §4.1 anticipated;
 for support it inverts sharply, 0.95 and 0.93 on annotated pairs against
-0.372 and 0.431 off them under the pre-refit labels these audits used.
-Appendix E.7 sets out what the direction says about the human record —
-lateral gold is a small sample of a large truth, support gold close to the
-complete set of easy cases, so restricted precision understates the one and
-overstates the other — which is why the protocol pairs it with an audit.
+0.372 and 0.431 off them. E.7 reads what that direction says about the human
+record, and why it is the reason the protocol pairs restricted precision
+with an audit rather than reporting either alone.
 
 The lateral, depth and proximity claims survive; support does not. At 0.404
 it is less than half what §4.9 reported and outside any interval this
@@ -403,16 +401,15 @@ emission, a prior the decoys remove.
 **`near` is the least supported number in the audit, and carries the most
 labels.** The judges agree on the laterals and the depth pair to within
 0.042 and 0.083 and diverge on `near` by **0.375** (1.000 against 0.625 on
-the same 24 images); the author also accepted two of its four decoys against
-the model's one, part of a measured generosity confined to the family §4.5
-shows the annotators used inconsistently (three of four `behind` decoys, two
-of four `in front of`; both judges rejected **all eight** support decoys, so
-neither is simply harsh). The predicate under that combination is the tool's
-most freely emitted, 43,388 ordered pairs against 717 human; the threshold
-generalised to a held-out annotator at recall 1.00 (§3.8), so the *notion*
-is calibrated, but the most the 1.000 supports is that no counter-example
-appeared in 24 draws of a rule firing sixty times more often than the
-annotators did.
+the same 24 images), and the author accepted two of its four decoys against
+the model's one — part of a measured author generosity E.7 sets out, along
+with the eight support decoys both judges rejected, which is what rules out
+reading 0.404 as an auditor being harsh. The predicate under that
+combination is the tool's most freely emitted, 43,388 ordered pairs against
+717 human; the threshold generalised to a held-out annotator at recall 1.00
+(§3.8), so the *notion* is calibrated, but the most the 1.000 supports is
+that no counter-example appeared in 24 draws of a rule firing sixty times
+more often than the annotators did.
 
 The cause is a threshold fitted where its error was invisible: the shipped
 `on_contact_min` 0.60 came from Appendix D.2's fit on train F1 against gold

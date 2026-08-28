@@ -1510,6 +1510,17 @@ second pack was drawn from the new emissions instead — 219 items, 191 claims
 and 28 decoys, same construction, same blinding, same two judges — and
 audited independently, which is the v4 column there.
 
+**The decoys as a measure of the judges themselves.** The pack's own control
+rows say something about each judge that the claim rows cannot. Both judges
+rejected **all eight** support decoys, so on the predicate that failed
+neither is disposed to agree with the tool for the sake of it, which is what
+rules out reading 0.404 as an auditor being harsh. Elsewhere the author is
+the more generous of the two, and consistently so: three of four `behind`
+decoys accepted against the model's one, and two of four for `in front of`
+and for `near`. That is a measured author bias, confined to the family §4.5
+shows the annotators themselves used inconsistently, and it is reported
+rather than corrected because the same instruction governed both judges.
+
 **What the direction of the restricted-versus-audited gap says about the
 human record.** For five predicates restricted precision badly understates
 audited precision, and for support it overstates it, and the direction is
@@ -1771,6 +1782,25 @@ many instances they hold, and what the 72% figure sets is a ceiling near
 metrics are depressed and every absolute figure in Chapter 6 is a lower
 bound on both sides, but the 30% is a share of the gold and not a share of
 mR@100.
+
+**Where the difference between the arms actually sits.** Section 6.3.1
+reports the ordering; the per-annotator detail is this. The human arm leads
+on the two annotators §4.5 convicts of inverting the convention, by 0.022 on
+group 6 and 0.027 on group 8, and *trails* on group 7, the one annotator
+this dissertation convicts of nothing, by 0.011. None of the three
+differences is separable across seeds, so the ordering is offered as a
+consistent direction and not as three measured effects; what makes it worth
+reporting is the sign change on the clean annotator, since whatever
+advantage the human labels carry does not survive contact with an annotator
+who followed the stated convention.
+
+Group 6 also shows the fingerprint §6.4 attributes to annotator *selection*
+rather than convention. Its *lateral* gold — geometrically unambiguous
+relations that both models predict freely — is recalled at 0.49/0.69 by the
+human arm against 0.12/0.21 by the auto arm. Laterals have no convention to
+invert, so what differs there is which pairs the annotator chose to record,
+and the human-trained model ranks exactly those highly because it learned
+human selection habits rather than more geometry.
 
 **Two labelling rules support the ordering, not one.** The figures in §6.3.1
 are the shipped `on_contact_min` of 0.85 (§4.14); the same experiment at the
