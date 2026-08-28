@@ -34,26 +34,25 @@ human still decides every label.
 
 That cost is structural and grows faster than the data. Objects relate
 pairwise, so an image holding *n* annotated objects presents *n(n−1)*
-ordered pairs a conscientious annotator must consider; this dataset averages
-101 such pairs per image, from about ten annotated objects, so relationship
-annotation is never exhaustive in practice — Visual Genome, the reference
-corpus, records about eighteen relationships per image over scenes of
-roughly twenty objects (Krishna et al., 2017), and here humans labelled
-about 10% of ordered pairs. That sparsity is arithmetic and implies no
-inattention, and its consequence is one the field absorbs without comment: a
-model evaluated against such labels is rewarded for reproducing which pairs
-annotators happened to record as much as which relationships hold, which
-Chapter 6 measures.
+ordered pairs; this dataset averages 101 such pairs per image, so
+relationship annotation is never exhaustive in practice — Visual Genome
+records about eighteen relationships per image over scenes of roughly twenty
+objects (Krishna et al., 2017), and here humans labelled about 10% of
+ordered pairs. That sparsity is arithmetic and implies no inattention, and
+its consequence is one the field absorbs without comment: a model evaluated
+against such labels is rewarded for reproducing which pairs annotators
+happened to record as much as which relationships hold, which Chapter 6
+measures.
 
 A second cost is consistency, since nine annotators working independently
 produce nine slightly different conventions. Wang et al. (2025) report that
 annotators were trained on the tool and given predicate definitions; no such
 definition survives in the released materials, and Chapter 4 measures the
 stronger point either way, that the *application* diverged whatever was said
-— for three predicates, including two annotator groups that recorded *in
-front of* and *behind* in opposite directions from everyone else. Neither
-cost is solved by hiring more annotators, because both scale with the number
-of humans involved.
+— for three predicates, including two groups that recorded *in front of* and
+*behind* in opposite directions from everyone else. Neither cost is solved
+by hiring more annotators, because both scale with the number of humans
+involved.
 
 ### 1.1.2 Why the existing remedies do not remove it
 
@@ -175,15 +174,14 @@ In scope: the automatic annotator; the fidelity study with baselines and
 ablations; the controlled downstream classifier; the direct benchmark test
 in the source paper's own SGG framework (Chapter 6); the planner experiment
 carrying the comparison one link further towards robot behaviour (§5.7); the
-vision-language baseline on the same images under the same definitions
-(§4.13); and a critical evaluation chapter. Two items entered scope during
-the project and are marked as such where reported: scaling to robot captures
-beyond the annotated release, once the supervising group supplied the full
-capture (Appendix E.6), and the vision-language comparison, brought forward
-once it became clear a reader would treat it as the obvious alternative to
-the whole approach. Deferred to future work: copy-paste augmentation of
-under-represented relations, and any revision of the dataset's own predicate
-definitions.
+vision-language baseline (§4.13); and a critical evaluation chapter. Two
+items entered scope during the project and are marked as such where
+reported: scaling to robot captures beyond the annotated release, once the
+supervising group supplied the full capture (Appendix E.6), and the
+vision-language comparison, brought forward once it became clear a reader
+would treat it as the obvious alternative. Deferred to future work:
+copy-paste augmentation of under-represented relations, and any revision of
+the dataset's own predicate definitions.
 
 **Delimitations and assumptions.** Five, each a deliberate decision argued
 in §7.6 with the threat it carries. The work covers **one indoor environment
@@ -192,9 +190,9 @@ numbers that is claimed to transfer. Relations are computed in the **camera
 frame**, a choice among the reference frames Chapter 2 sets out and no fact
 about the world; §4.5 measures what it costs where an annotator chose
 differently. Depth is **monocular and relative**. Fidelity is measured in
-the **PredCls setting**, so detection error is held out of the comparison
-and reported separately (§4.11). And the **seven predicates are taken as
-given**; improving their definitions would be a different project.
+the **PredCls setting**, so detection error is held out and reported
+separately (§4.11). And the **seven predicates are taken as given**;
+improving their definitions would be a different project.
 
 ## 1.3 Research approach
 

@@ -70,31 +70,29 @@ Learned scene-graph generators (REACT++ and predecessors; Neau and Falomir,
 training data and sit downstream of annotation. This pipeline *computes*
 relations from measured geometry with deterministic rules, so it runs before
 any learned model and supplies what those models consume. That works only
-because the seven predicates are spatial: each is decidable from positions,
+because the seven predicates are spatial, each decidable from positions,
 extents and depth order, with one exception the design concedes rather than
-hides. Support turns on whether a thing is resting or held, which geometry
-cannot represent, so a class guard stands in for it (§3.6); ablation A10
-tests whether geometry can take that job back and finds it cannot (Appendix
-D.8). The principle therefore holds for six predicates outright and for
-support only up to one semantic list, which is the honest scope of the
-claim. SAM2 and Depth Anything only *measure* where things are; no learned
-component decides a relationship.
+hides: support turns on whether a thing is resting or held, which geometry
+cannot represent, so a class guard stands in for it (§3.6) and ablation A10
+finds geometry cannot take that job back (Appendix D.8). The principle
+therefore holds for six predicates outright and for support only up to one
+semantic list, which is the honest scope of the claim. SAM2 and Depth
+Anything only *measure* where things are; no learned component decides a
+relationship.
 
 The alternative was to keep the human labels and stretch them, by
-semi-supervised pseudo-labelling or active learning. Section 2.4 sets out
-that rival and the three measured properties of this dataset that argue
-against it; a geometric labelling function inherits none of them, because it
-does not derive from the seed at all, and §5.3 runs the self-training loop
-as a third arm of the same controlled experiment so the two routes meet on
-the humans' own held-out annotations.
+semi-supervised pseudo-labelling or active learning; §2.4 sets out that
+rival and the three measured properties of this dataset that argue against
+it, and §5.3 runs the self-training loop as a third arm of the same
+controlled experiment so the two routes meet on the humans' own held-out
+annotations rather than on plausibility.
 
 **Evaluation setting.** The relation stage is evaluated with ground-truth
-boxes and classes (the SGG literature's *PredCls* setting, §2.7). This
-isolates the contribution — the paper already establishes detection at 0.93
-mAP@50 with YOLOv10m — and makes object indices line up one-to-one with the
-human relationship records, so no fragile box-matching stage sits inside the
-RQ1 comparison. Detector-in-the-loop operation (YOLOv10m vs. Grounding DINO)
-is retained as an ablation and as the deployment mode for new images.
+boxes and classes (*PredCls*, §2.7), which isolates the contribution — the
+paper already establishes detection at 0.93 mAP@50 with YOLOv10m — and makes
+object indices line up one-to-one with the human relationship records.
+Detector-in-the-loop operation is retained as an ablation and as the
+deployment mode for new images.
 
 ## 3.4 Pipeline architecture
 
@@ -116,11 +114,10 @@ image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
 | Confidence | flag ambiguity bands for optional review | silent guesses | human-in-the-loop accelerator claim needs an explicit abstention mechanism |
 | Writers | byte-compatible VG JSON / YOLO / h5 | own schema + converter | drop-in comparability (requirement 2); verified against real exports |
 
-Coordinates are normalised so thresholds transfer across resolutions, depth
-is inverted and normalised per image, and an EXIF-aware loader makes the
-180°-rotated captures upright before anything is read from them; Appendix
-C.11 gives both, with the sign error that cost front/behind ~26% agreement
-until it was found.
+Coordinates are normalised, depth is inverted and normalised per image, and
+an EXIF-aware loader makes the 180°-rotated captures upright before anything
+is read from them; Appendix C.11 gives all three, with the sign error that
+cost front/behind ~26% agreement until it was found.
 
 ## 3.5 The seven rules
 
@@ -275,21 +272,22 @@ rather than left to be rediscovered. The repository is public.
 Every decision above shares one shape: an alternative was available and was
 rejected for a stated reason. Four were settled by evidence that arrived
 *after* the decision and could have overturned it, which is the test of
-whether a justification is real: the Small depth model, the relative-gap
+whether a justification is real — the Small depth model, the relative-gap
 `near` metric, masks over box-only geometry, and the ground-plane fallback.
 Appendix F.3 tabulates all eleven with the alternative each displaced.
 
 The decisions also carry the design's answer to the four objections §2.9
-directs at the method, none added afterwards to fit. Predicates live in
+directs at the method, none added afterwards to fit: predicates live in
 configuration rather than code (§3.9); the rules abstain and flag instead of
 guessing (§3.6); randomised invariant testing (§3.11) asserts the structural
 guarantees without the author's judgement; and the camera frame is committed
 to explicitly (§3.5), so a disagreement is locatable as a convention
-difference. Section 7.7 returns to all four with the evidence, which is
-where they are settled or conceded. Three are mitigations, not refutations;
-the fourth the design could not settle alone, because invariant testing pins
-rule *consistency* and says nothing about rule *truth* — that took §4.14's
+difference. Three are mitigations rather than refutations, and the fourth
+the design could not settle alone, because invariant testing pins rule
+*consistency* and says nothing about rule *truth* — that took §4.14's
 instrument, built to attack the author's own verdicts, and it overturned
-one. Chapter 4 puts the annotator those decisions produce against the human
+one. Section 7.7 returns to all four with the evidence.
+
+Chapter 4 puts the annotator those decisions produce against the human
 annotations, which is the first of the three iterations that answer the two
 research questions.

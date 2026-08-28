@@ -54,22 +54,19 @@ baselines.
 The held-out front/behind cells (0.20/0.37) are dominated by two held-out
 groups that labelled the pair under the *opposite direction convention*;
 §4.5 decomposes this, and convention-aligned depth recall is 0.84. These are
-population values, every human triplet scored; whether another batch would
-agree is answered by a cluster bootstrap over images (`eval/uncertainty.py`,
-2,000 resamples, whole images resampled), whose 95% intervals are narrow
-where the tool is strong and materially wider on the depth pair; the
-bootstrap ran on the labels of §4.9, its widths rather than its centres
-carry the argument, and held-out intervals appear in §4.6.
+population values, every human triplet being scored; whether another batch
+would agree is answered by a cluster bootstrap over images
+(`eval/uncertainty.py`), whose widths rather than centres carry the argument
+and whose held-out intervals appear in §4.6.
 
 Three readings sit underneath the table and are given in Appendix F.11: the
 tool recovers **81% of all human triplets** (7,276 of 8,926) against 14% for
 random and 23% for majority on the same triplet-weighted basis; box-only
 geometry matches it on the laterals but not on support quality or `near`,
 and cannot compute the depth pair at all; and held-out beats pooled on
-on/under/near while collapsing on front/behind, both being annotator
-signatures rather than properties of the geometry. Gold totals 8,926, not
-8,928, because two stray annotation files without matching images are
-excluded (Chapter 3).
+on/under/near while collapsing on front/behind, both annotator signatures
+rather than properties of the geometry. Gold totals 8,926, not 8,928,
+because two stray annotation files without matching images are excluded.
 
 ## 4.3 Precision on the annotated pairs
 

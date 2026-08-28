@@ -82,31 +82,28 @@ them at all.
 
 **For the source dataset and its authors.** An annotator that labels the
 existing images 20 times more densely in five minutes, in the dataset's own
-formats, with the operational definitions the annotation process never had;
-the fitted `near` threshold answers Wang et al.'s (2025) future-work request
+formats, with the operational definitions the annotation process never had.
+The fitted `near` threshold answers Wang et al.'s (2025) future-work request
 for "spatial thresholds for near", and two annotation defects are quantified
-for the first time — front/behind inverted in two of nine annotator groups,
-and `near` used by only three, with fourfold variation in exhaustiveness.
+for the first time: front/behind inverted in two of nine groups, and `near`
+used by only three, with fourfold variation in exhaustiveness.
 
 **For work on scene-graph benchmarks.** Evidence, by dissociation, that
 ranked recall against sparse, guideline-free annotation partly measures
 agreement with annotator habits: the model that ranks better memorises which
 pairs annotators record, and the model that covers the relation types they
-never recorded is the one trained on consistent computed labels. The
-per-annotator decomposition localises the effect, and the seed replication
-shows which parts survive training variance.
+never recorded is the one trained on consistent computed labels.
 
 **For weak supervision.** A controlled three-way comparison, on the same
 features, model, split and seeds, showing that programmatic labels out-teach
-both scarce human labels and the standard remedy for scarce human labels.
-The mechanism is measured, not inferred: self-training contributes roughly a
-thousand confident negative pseudo-labels for every positive one,
-propagating the annotators' silence and not their judgement.
+both scarce human labels and the standard remedy for them. The mechanism is
+measured, not inferred: self-training contributes roughly a thousand
+confident negative pseudo-labels for every positive one.
 
 **Methodologically.** Calibration held out by *annotator* and not by image;
 a sparse-gold protocol pairing recall with audited precision; exhaustive
-loss attribution; a way to estimate what annotators would score against one
-another without ever having labelled the same images (§4.6); and a
+loss attribution; a way to bound what annotators would score against one
+another without their ever having labelled the same images (§4.6); and a
 reliability check needing no labels at all, from recovering the fact that
 the dataset was cut from a continuous capture (§4.12). The last is the most
 likely to transfer, since many robotics datasets are sequences presented as
