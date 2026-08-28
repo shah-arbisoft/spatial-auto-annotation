@@ -304,16 +304,16 @@ most likely to matter to anyone reusing the method.
 
 **Systematic error: partly confirmed, partly refuted, and the split is
 informative.** The objection predicts that a downstream model absorbs the
-rule's blind spot as though it were fact, and Chapter 6 is that prediction
-coming true: the gap on the field's own metric is concentrated where the
-annotation itself is defective. But the objection also predicts that
-consistent-but-wrong supervision is worse than inconsistent human
-supervision, and on this dataset that is refuted at every level where the
-question was asked (§5.6, §5.7). The reconciliation is that systematic error
-is worse than random error only when it is *wrong*; §4.12's finding that
-front/behind agrees with itself across viewpoints 0.958 of the time while
-agreeing with the annotators 0.70 of the time is the shape of a consistent
-rule meeting a different convention, not of a consistent mistake.
+rule's blind spot as fact, and Chapter 6 is that prediction coming true: the
+gap on the field's own metric is concentrated where the annotation itself is
+defective. But it also predicts that consistent-but-wrong supervision is
+worse than inconsistent human supervision, and on this dataset that is
+refuted at every level where the question was asked (§5.6, §5.7). The
+reconciliation: systematic error is worse than random error only when it is
+*wrong*, and §4.12's finding — front/behind agreeing with itself across
+viewpoints 0.958 of the time while agreeing with the annotators 0.70 of the
+time — is the shape of a consistent rule meeting a different convention, not
+of a consistent mistake.
 
 **Circular validation: conceded.** Section 7.4 lists this first among the
 choices a stricter replication should improve, and no result in Chapters 4

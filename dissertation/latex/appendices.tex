@@ -291,7 +291,7 @@ The audit's support-precision failure has a geometric cause: on a floor plane, "
 
 \subsection{D.2 The mask-contact rule (ablation A5)}
 
-The support signature that boxes cannot see, masks can: A rests on B iff the pixels directly below A's mask-bottom boundary belong to B (\texttt{src/contact.py}), which captures both stacking and the containment case, and rejects side-by-side neighbours. Calibrated on the train groups (\texttt{on\_\allowbreak{}contact\_\allowbreak{}min} = 0.60 here; the train-F1 plateau is flat from 0.60--0.80, so the choice looked uncritical, and \S{}4.14 later shows why that plateau was the wrong thing to read), ablation A5: support F1 on held-out annotators rises again, 0.71 $\rightarrow$ \textbf{0.87}, with \texttt{on} recall 0.82 $\rightarrow$ 0.88 and restricted precision 0.73 $\rightarrow$ 0.88 simultaneously, the rare change that improves both error directions at once, exactly as the failure gallery and audit predicted. Knock-on: \texttt{near} recall reaches \textbf{0.997 pooled (715/717; the two residual misses are contact-boundary cases, \S{}4.10) and 1.00 held-out} as the last contact-boundary suppressions disappear; headline mean recall 0.79 $\rightarrow$ \textbf{0.81}. The A4 sweep confirms that \texttt{near\_\allowbreak{}T}, the proximity threshold and not the contact one under discussion here, sits exactly at its recall plateau's knee: recall is flat from T = 1.372 upward while emissions keep growing, so the fitted value is the least-permissive point achieving maximal agreement. A 30-sample re-audit of the new support extras appeared to confirm the precision claim: extras correct rise from 1/15 and 3/15 (box rule) to \textbf{11/15 and 12/15}, pooled 0.13 $\rightarrow$ 0.77. That re-audit was unblinded, and \S{}4.14 shows the figure does not survive blinding; the threshold below was fitted on train F1 against gold covering a tenth of ordered pairs, so a false positive outside the gold cost the fit nothing, and the plateau called uncritical here is flat for that reason. The seven remaining wrong/uncertain extras have structure: a person \textit{holding} a remote fires contact (holding $\neq$ resting), one occluded bottle-behind-bottle pair, and three distant clusters too small to verdict confidently. The person-holding mode is closed by a \textbf{class-aware guard}: annotators never label person-support (0 of 2,466 gold support triplets involve a person on either side), so \texttt{on}/\texttt{under} are simply not evaluated for that class, removing \textasciitilde{}130 false emissions at no recall cost, since the person side carried no gold to recover.
+The support signature that boxes cannot see, masks can: A rests on B iff the pixels directly below A's mask-bottom boundary belong to B (\texttt{src/contact.py}), which captures both stacking and the containment case, and rejects side-by-side neighbours. Calibrated on the train groups (\texttt{on\_\allowbreak{}contact\_\allowbreak{}min} = 0.60 here; the train-F1 plateau is flat from 0.60--0.80, so the choice looked uncritical, and \S{}4.14 later shows why that plateau was the wrong thing to read), ablation A5: support F1 on held-out annotators rises again, 0.71 $\rightarrow$ \textbf{0.87}, with \texttt{on} recall 0.82 $\rightarrow$ 0.88 and restricted precision 0.73 $\rightarrow$ 0.88 simultaneously, the rare change that improves both error directions at once, exactly as the failure gallery and audit predicted. Knock-on: \texttt{near} recall reaches \textbf{0.997 pooled (715/717; the two residual misses are contact-boundary cases, \S{}4.10) and 1.00 held-out} as the last contact-boundary suppressions disappear; headline mean recall 0.79 $\rightarrow$ \textbf{0.81}. The A4 sweep confirms that \texttt{near\_\allowbreak{}T}, the proximity threshold and not the contact one under discussion here, sits exactly at its recall plateau's knee: recall is flat from T = 1.372 upward while emissions keep growing, so the fitted value is the least-permissive point achieving maximal agreement. A 30-sample re-audit of the new support extras appeared to confirm the precision claim: extras correct rise from 1/15 and 3/15 (box rule) to \textbf{11/15 and 12/15}, pooled 0.13 $\rightarrow$ 0.77. That re-audit was unblinded, and \S{}4.14 shows the figure does not survive blinding; the threshold below was fitted on train F1 against gold covering a tenth of ordered pairs, so a false positive outside the gold cost the fit nothing, and the plateau called uncritical here is flat for that reason. A second independent signal for any future refit is the supporting object's size: \texttt{on(A, B)} requires B to be able to hold A up, and a 20-pixel cube is not a surface. The seven remaining wrong/uncertain extras have structure: a person \textit{holding} a remote fires contact (holding $\neq$ resting), one occluded bottle-behind-bottle pair, and three distant clusters too small to verdict confidently. The person-holding mode is closed by a \textbf{class-aware guard}: annotators never label person-support (0 of 2,466 gold support triplets involve a person on either side), so \texttt{on}/\texttt{under} are simply not evaluated for that class, removing \textasciitilde{}130 false emissions at no recall cost, since the person side carried no gold to recover.
 
 \subsection{D.3 The ground-plane fallback (ablation A7)}
 
@@ -465,7 +465,34 @@ The other three are reported here in full, because their instruments need more r
 
 The larger model redistributes the picture rather than resolving it. It asserts more (414 judged-pair assertions against 344), lifting recall and costing precision, so its F1 lands within 0.008 of the smaller model's, and where the smaller model looked most interesting, \texttt{behind}, the larger is markedly worse at 0.281 precision against 0.478. It is closest to the pipeline on support, 0.74 against 0.91, and \texttt{behind} recall actually falls with scale, 0.169 to 0.138.
 
-Section 4.13 reports the headline comparison over two models and carries the recall table: they recover 0.40 and 0.45 of the human triplets against the pipeline's 0.83, and are the more precise labellers on the judged pairs, 0.42 and 0.39 against 0.35, while losing F1 on every predicate. The per-predicate form of that second comparison is below, and the diagnostics after it are the smaller model's unless stated, since it is the one the manual-check pack was built for.
+Section 4.13 reports the headline comparison over two models: they recover 0.40 and 0.45 of the human triplets against the pipeline's 0.83, and are the more precise labellers on the judged pairs, 0.42 and 0.39 against 0.35, while losing F1 on every predicate. The per-predicate recall underneath that verdict is this:
+
+\begin{center}
+\setlength{\tabcolsep}{6pt}
+\small
+\begin{longtable}{lrrrr}
+\caption[A vision-language model against the geometric pipeline]{A vision-language model against the geometric pipeline on the same 30 images, the same pairs and the same human gold: recall.}\\
+\hline
+Predicate & Gold & Flash & Pro & Pipeline \\
+\hline
+\endfirsthead
+\hline
+Predicate & Gold & Flash & Pro & Pipeline \\
+\hline
+\endhead
+on & 57 & 0.667 & 0.737 & 0.860 \\
+under & 47 & 0.660 & 0.766 & 0.809 \\
+to the left of & 49 & 0.408 & 0.469 & 0.918 \\
+to the right of & 49 & 0.327 & 0.388 & 0.939 \\
+in front of & 80 & 0.188 & 0.237 & 0.650 \\
+behind & 65 & 0.169 & 0.138 & 0.662 \\
+near & 34 & 0.382 & 0.382 & 1.000 \\
+\textbf{Mean} & \textbf{381} & \textbf{0.400} & \textbf{0.445} & \textbf{0.834} \\
+\hline
+\end{longtable}
+\end{center}
+
+The per-predicate form of the precision comparison is below, and the diagnostics after it are the smaller model's unless stated, since it is the one the manual-check pack was built for.
 
 \begin{center}
 \setlength{\tabcolsep}{6pt}
@@ -517,6 +544,35 @@ One diagnostic does improve with scale, and it is the one that matters for the a
 
 Object indices are not stable across frames, the annotators having recorded different subsets of the scene from frame to frame: \texttt{group\_\allowbreak{}0} alone contains 43 distinct object orderings, which is why matching is by class and box overlap rather than by index. Compression over the 802 pair-bearing frames (\S{}4.1) is lower than the 2.7$\times$ below because those frames are a subset, so consecutive members sit further apart in the original capture.
 
+\textit{The per-predicate result.} Each segment's predicates are propagated from its keyframe to the rest (\texttt{eval/keyframe\_\allowbreak{}propagation.py}), on the premise that a relation fixed by geometry should survive the camera moving while one decided by a coin toss at a threshold should not. At $\tau$ = 10 over the 802 pair-bearing frames (568 keyframes, 234 propagated frames, 11,352 comparable object pairs):
+
+\begin{center}
+\setlength{\tabcolsep}{6pt}
+\small
+\begin{longtable}{lrrr}
+\caption[Stability of each predicate across viewpoints]{Stability of each predicate across viewpoints of the same scene, with recall under keyframe propagation against per-frame computation.}\\
+\hline
+Predicate & Stability & Recall (propagated) & Recall (per frame) \\
+\hline
+\endfirsthead
+\hline
+Predicate & Stability & Recall (propagated) & Recall (per frame) \\
+\hline
+\endhead
+on & 0.878 & 0.798 & 0.798 \\
+under & 0.878 & 0.760 & 0.740 \\
+to the left of & 0.989 & 0.959 & 0.966 \\
+to the right of & 0.989 & 0.989 & 0.989 \\
+in front of & 0.958 & 0.682 & 0.648 \\
+behind & 0.958 & 0.636 & 0.659 \\
+near & 0.972 & 1.000 & 1.000 \\
+\textbf{Mean} & \textbf{0.946} & \textbf{0.832} & \textbf{0.829} \\
+\hline
+\end{longtable}
+\end{center}
+
+Propagated recall's small advantage over per-frame (0.832 against 0.829) is likely an artefact of the selection rule, the segment representative being the frame nearest the segment mean.
+
 \textit{Segmentation.} At $\tau$ = 10 the full 2,650-frame sequence collapses to 892 segments, a 3.0$\times$ reduction; over the 884 released frames it gives 331, 2.7$\times$. Scored on the released portion, where the eight layout changes are known, every one is recovered within five frames (boundary recall 1.00). Precision against those eight is low by construction and not a defect: viewpoint changes within a block are genuine content changes, merely finer-grained. The standard alternative has no usable operating point at all on this material, for the reason \S{}3.10 gives: thresholding consecutive-frame differences at 15 grey levels fires 13 times and finds none of the eight, and at 5 it finds all eight among 604 firings, a precision of 0.013.
 
 \textbf{Limits.} Two, both restricting scope rather than direction. Stability is computed only on pairs that could be matched between keyframe and frame, and those are the pairs whose objects moved least in the image, plausibly the easier population, so the figures are an upper bound. And matched coverage falls as segments grow, from 88.7\% of pairs at $\tau$ = 5 to 58.5\% at $\tau$ = 10 and 26.5\% at $\tau$ = 20, so aggressive compression leaves most pairs uncovered rather than mislabelled. The cause is box drift under camera motion rather than missing annotation: at $\tau$ = 20, 65\% of skipped frames carry an identical object count to their keyframe, and relaxing the overlap criterion from 0.5 to 0.1 cuts unmatched objects from 5.6 to 2.2 per frame. Carrying object identity with a tracker, as \texttt{scripts/run\_\allowbreak{}video.py} already does for video, rather than with per-frame overlap, is the straightforward extension that would recover it.
@@ -534,6 +590,8 @@ It measures four things the author-verdicted audits cannot: crowd precision per 
 \textbf{Scoring}, fully specified in advance (\texttt{analysis/score\_\allowbreak{}votes.py}): ties resolve to WRONG, matching the audit protocol; reflex-speed responses and raters who disagree systematically with everyone else can be excluded by pre-declared filters. Crowd precision is reported per predicate with binomial intervals, author agreement as percentage and Cohen's kappa (Cohen, 1960), and crowd-internal reliability as Krippendorff's alpha.
 
 \textbf{What it returned.} Collection closed at 1,415 usable judgements from 20 raters, covering 832 of the 1,000 claims, 83.2\%, with no rater supplying more than 15\% of the total. All 412 treatment claims and 420 of the 588 control claims carry at least one verdict, and 147 carry three or more, which is the subset the author comparison and the reliability figure need. Of the pre-declared filters, the duplicate rule fired on 12 submissions, all of them from before the 11 August server fix; no response fell below the 800 ms floor, and no rater was excluded as a systematic outlier. Section 4.15 reports the figures; \texttt{eval/crowd\_\allowbreak{}validation.py} reproduces them from the scorer's report, separating the arms on the claim id, since the scorer's own per-predicate totals pool both.
+
+\textbf{Reading the three-judge comparison.} One asymmetry bounds how far \S{}4.15's comparison can be pushed: the tool's claims are its \textit{extra} predictions, on pairs the annotators passed over, while the control claims are pairs they chose to record. Annotators record what is clear, so some of every gap between the two arms is the difficulty of the claim rather than the quality of the label --- for the 0.063 gap on the five untouched predicates that reservation may account for most of it; for the 0.563 support gap it cannot. The agreement figures also read as real signal rather than noise: both the crowd--author agreement (0.871, $\kappa$ 0.683) and crowd-internal reliability ($\alpha$ 0.703) roughly doubled as the sample grew, which is what signal does and noise does not, and neither approaches 1.0 --- \S{}2.3's account of spatial language predicts that residue better than rater carelessness does, some disagreement being over what the words mean rather than what the photograph shows. The comparison also cannot fully separate label quality from claim difficulty, because the two arms are drawn from populations the annotators themselves divided.
 
 \subsection{E.4 Video processing: settings and the open-vocabulary failures}
 \begin{figure}[!htbp]
@@ -568,7 +626,7 @@ Section 5.7 reports the design in outline and the result. Two components need re
 
 \textbf{The failure with no relations at all.} Condition A never clears the occluder, in twenty-five scenes out of twenty-five and under both planners. In seven of those plans the planner names the occluding object, but only ever as something to steer around: "maintaining a clear path above cube0, book2, book3", or "lift box0 to a safe height to clear book1".
 
-\textbf{The six scenes condition C fails on.} On the shipped labels these are scenes 1, 4, 16, 19, 24 and 25 (\S{}5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together --- scene 4 offered "box6 is in front of book7" and "box6 is near book7", scene 24 added "to the left of" --- but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored \texttt{clear\_\allowbreak{}step} is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
+\textbf{The six scenes condition C fails on.} On the shipped labels the support relation the task depends on is present in 18 of the 25 prompts, absent from scenes 1, 4, 7, 16, 19, 24 and 25 (on the pre-refit labels it was absent from 4, 16 and 24 alone); scene 7's plan is nonetheless recovered from the surrounding description, so absence of the relation is nearly but not quite sufficient for failure. The six failing scenes are 1, 4, 16, 19, 24 and 25 (\S{}5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together --- scene 4 offered "box6 is in front of book7" and "box6 is near book7", scene 24 added "to the left of" --- but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored \texttt{clear\_\allowbreak{}step} is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
 
 \textbf{The scoring defect that manual checking caught.} Models frequently open with a preamble restating the task ("To pick up box0 safely, follow these steps:"), and counting that preamble as a step made every such plan appear to grasp the target before clearing anything. Before the fix condition C scored 0.64; after it, 0.88, and the post-fix number is the correct one. Both were measured on the pre-refit labels, where C stood at 22 of 25; on the shipped labels of \S{}4.14 the same corrected scorer gives 19 of 25 (\S{}5.7). The episode is recorded because it is the only evidence that the blind scorer measures what it claims to: a rule-based judge inherits whatever its author failed to anticipate, and the hand-read sample is what exposed this one.
 
@@ -592,6 +650,36 @@ Section 4.14 reports the instrument and the result. The construction rules are h
 \textbf{Sampling independence.} At most one claim is drawn per (annotator group, subject class, object class). Section 4.12 establishes that each group is one continuous walk holding a single physical arrangement, so two claims sharing a group and a class pair can otherwise be the same physical relation seen from two viewpoints, which would make the sample narrower than its item count suggests.
 
 \textbf{Class guard.} The shipped class guard is applied before sampling, so nothing is audited that the tool would no longer emit. Without it the audit would measure a rule set the project does not distribute.
+
+\textbf{The pre-refit (v3) pack in full.} Section 4.14 quotes this pack's support rows and carries its author column beside the v4 re-audit; the complete per-predicate verdicts, with Wilson 95\% intervals, are these:
+
+\begin{center}
+\setlength{\tabcolsep}{6pt}
+\small
+\begin{longtable}{lll}
+\caption[Blind, decoy-controlled audit of 242 sampled items, verdicted]{Blind, decoy-controlled audit of 242 sampled items, verdicted independently by the author and by a vision-language model, with Wilson intervals. The final row is the decoy control: relations the tool did not emit, which a judge who agreed with everything would reject none of.}\\
+\hline
+Predicate & Author & Model \\
+\hline
+\endfirsthead
+\hline
+Predicate & Author & Model \\
+\hline
+\endhead
+on & 16/43 0.372 [0.24, 0.52] & 25/43 0.581 [0.43, 0.72] \\
+under & 22/51 0.431 [0.31, 0.57] & 35/51 0.686 [0.55, 0.80] \\
+to the left of & 22/24 0.917 [0.74, 0.98] & 23/24 0.958 [0.80, 0.99] \\
+to the right of & 23/24 0.958 [0.80, 0.99] & 22/24 0.917 [0.74, 0.98] \\
+in front of & 23/24 0.958 [0.80, 0.99] & 22/24 0.917 [0.74, 0.98] \\
+behind & 22/24 0.917 [0.74, 0.98] & 20/24 0.833 [0.64, 0.93] \\
+near & 24/24 1.000 [0.86, 1.00] & 15/24 0.625 [0.43, 0.79] \\
+\textbf{support pooled} & \textbf{38/94 0.404 [0.31, 0.51]} & \textbf{60/94 0.638 [0.54, 0.73]} \\
+decoys rejected & 19/28 0.679 [0.49, 0.82] & 24/28 0.857 [0.69, 0.94] \\
+\hline
+\end{longtable}
+\end{center}
+
+\textbf{What the direction of the restricted-versus-audited gap says about the human record.} For five predicates restricted precision badly understates audited precision, and for support it overstates it, and the direction is diagnostic of what the gold \textit{is}. A lateral relation holds for nearly every ordered pair and the annotators wrote down a handful, so their labels are a small sample of a large truth and the tool's extras are mostly further instances of it. Support is rare and salient: a thing resting on a thing was worth recording and was recorded, so the human labels are close to the complete set of easy cases and what the tool adds beyond them is mostly not there. Restricted precision therefore understates a predicate whose gold is a sample and overstates one whose gold is nearly exhaustive, and no single reading of \S{}4.3 is correct for both --- which is why the protocol pairs it with an audit instead of reporting either alone.
 
 \textbf{Judge drift between the two packs.} Nine of 28 decoys were accepted in v3 and one in v4, so the second sheet is the work of a stricter judge than the first. The model's decoy rejection rose over the same interval, 0.857 to 0.929, which suggests the v4 pack is also the easier of the two to judge. Neither movement accounts for the size of the support change, but both are reasons to read the v3 and v4 columns of \S{}4.14 as two measurements rather than one series.
 
@@ -816,3 +904,34 @@ near & 1.000 & 1.000--1.000 (see note) \\
 \end{center}
 
 The \texttt{near} row is a boundary artefact and not extraordinary precision. The held-out groups carry 93 \texttt{near} gold triplets and the tool misses none, so every resample returns the same value and the bootstrap has no spread to report. The number to quote is the exact one-sided bound for zero failures in 93 draws, \textbf{0.968}, and even that is a statement about recovering the \textit{recorded} \texttt{near} labels: \S{}4.8 sets out why this predicate's recall says least about the labels the tool adds beyond them.
+
+\subsection{F.9 The front/behind decomposition by annotator group}
+
+Section 4.5 reports the finding and its figure plots the decomposition; the per-group figures underneath it are these, for the shipped cascade (depth ordering plus the ground-plane fallback of \S{}4.9):
+
+\begin{center}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\begin{longtable}{lrrrlrr}
+\caption[Front/behind by annotator group]{Front/behind by annotator group: emission rate, agreement where the tool commits, and the effect of aligning the direction convention.}\\
+\hline
+Group & Gold & Emit rate & Agreement when committed & Convention & Raw recall & Aligned recall \\
+\hline
+\endfirsthead
+\hline
+Group & Gold & Emit rate & Agreement when committed & Convention & Raw recall & Aligned recall \\
+\hline
+\endhead
+group\_\allowbreak{}0 & 724 & 0.94 & 0.95 & same & 0.89 & 0.89 \\
+group\_\allowbreak{}1 & 639 & 1.00 & 1.00 & same & 1.00 & 1.00 \\
+group\_\allowbreak{}2 & 351 & 0.85 & 1.00 & same & 0.85 & 0.85 \\
+group\_\allowbreak{}3 & 258 & 0.82 & 0.99 & same & 0.81 & 0.81 \\
+group\_\allowbreak{}4 & 65 & 1.00 & 0.57 & same & 0.57 & 0.57 \\
+group\_\allowbreak{}5 & 371 & 1.00 & 0.99 & same & 0.98 & 0.98 \\
+group\_\allowbreak{}6 & 415 & 0.99 & \textbf{0.05} & \textbf{inverted} & 0.05 & 0.94 \\
+group\_\allowbreak{}7 & 330 & 0.94 & 1.00 & same & 0.94 & 0.94 \\
+group\_\allowbreak{}8 & 444 & 0.84 & \textbf{0.02} & \textbf{inverted} & 0.02 & 0.82 \\
+\textbf{overall} & 3597 &  &  &  & \textbf{0.70} & \textbf{0.91} \\
+\hline
+\end{longtable}
+\end{center}

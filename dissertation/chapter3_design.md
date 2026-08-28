@@ -152,16 +152,16 @@ F1 ≤ 0.024 against the relative gap's recall 1.0 (§3.8).
 ## 3.6 Correction and confidence
 
 Three predicate families are mutually exclusive: on/under, left/right and
-front/behind. Two cannot contradict, because the rule branches, so
-exclusivity is a property of the control flow. Support is different: `on`
-and `under` are independent tests over *different* contact evidence, so
-noise in either can make both fire on the same pair. That case is demoted to
-an `on_under_conflict` flag and neither label is emitted. Demoting instead
-of resolving is deliberate: picking the stronger of two contradictory
-signals would produce a label the evidence does not support while looking
-exactly like one it does, and an annotator that fabricates under uncertainty
-cannot be audited. Emitting everything for the consumer to sort out (§3.4)
-was rejected because RQ2's consumer is a model, which cannot.
+front/behind. Two cannot contradict, because the rule branches; support is
+different — `on` and `under` are independent tests over *different* contact
+evidence, so noise in either can make both fire on the same pair, and that
+case is demoted to an `on_under_conflict` flag with neither label emitted.
+Demoting instead of resolving is deliberate: picking the stronger of two
+contradictory signals would produce a label the evidence does not support
+while looking exactly like one it does, and an annotator that fabricates
+under uncertainty cannot be audited. Emitting everything for the consumer to
+sort out (§3.4) was rejected because RQ2's consumer is a model, which
+cannot.
 
 One further correction is class-aware, not geometric. Support is not
 evaluated when either object is a person: the annotators never recorded one,

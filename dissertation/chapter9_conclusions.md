@@ -102,21 +102,19 @@ decisively and the ranked benchmark cannot separate them at all.
 
 **For the source dataset and its authors.** An annotator that labels the
 existing images 20 times more densely in five minutes, in the dataset's own
-formats, with the operational definitions the annotation process never had.
-The fitted `near` threshold answers the future-work request in Wang et al.
-(2025) for "spatial thresholds for near", and two annotation defects are
-quantified for the first time: front/behind inverted in two of nine
-annotator groups, and `near` used by only three, with fourfold variation in
-exhaustiveness.
+formats, with the operational definitions the annotation process never had;
+the fitted `near` threshold answers Wang et al.'s (2025) future-work request
+for "spatial thresholds for near", and two annotation defects are quantified
+for the first time — front/behind inverted in two of nine annotator groups,
+and `near` used by only three, with fourfold variation in exhaustiveness.
 
-**For work on scene-graph benchmarks.** Evidence that ranked recall against
-sparse, guideline-free annotation partly measures agreement with annotator
-habits as well as spatial correctness. The evidence is a dissociation: the
-model that ranks better memorises which pairs annotators record, and the
-model that covers the relation types they never recorded is the one trained
-on consistent computed labels. The per-annotator decomposition localises the
-effect, and the seed replication shows which parts survive training
-variance.
+**For work on scene-graph benchmarks.** Evidence, by dissociation, that
+ranked recall against sparse, guideline-free annotation partly measures
+agreement with annotator habits: the model that ranks better memorises which
+pairs annotators record, and the model that covers the relation types they
+never recorded is the one trained on consistent computed labels. The
+per-annotator decomposition localises the effect, and the seed replication
+shows which parts survive training variance.
 
 **For weak supervision.** A controlled three-way comparison, on the same
 features, model, split and seeds, showing that programmatic labels out-teach

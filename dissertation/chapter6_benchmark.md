@@ -31,13 +31,12 @@ The human arm **peaks at epoch 4 of 25** and never improves again,
 oscillating between 0.101 and 0.123 for the remaining twenty-one — mild
 overfitting on 5,421 sparse triplets. That replicates the source paper's
 central observation ("all predictors reached their peak mR@100 well before
-the final epoch") on its own dataset with a current model, and adds the
-cause: sparse supervision is exhausted early. The auto arm is still climbing
-at epoch 8, does not reach 95% of its best until **epoch 14**, peaks at
-**epoch 22**, and sees 213 distinct triplet types in training against the
-human arm's 94. {{fig:sgg-training-curves}} plots both; each validation
-series uses its own arm's labels, so only the *shapes* compare, never the
-heights.
+the final epoch") with a current model, and adds the cause: sparse
+supervision is exhausted early. The auto arm is still climbing at epoch 8,
+does not reach 95% of its best until **epoch 14**, peaks at **epoch 22**,
+and sees 213 distinct triplet types in training against the human arm's 94.
+{{fig:sgg-training-curves}} plots both; each validation series uses its own
+arm's labels, so only the *shapes* compare.
 
 ## 6.3 Test results: prediction 2 unresolved, prediction 3 refuted
 
@@ -204,17 +203,15 @@ front/behind (the tool's by construction; groups 0–4's by measurement),
 while groups 6 and 8, two thirds of the test gold, invert it (§4.5).
 Re-scoring against aligned gold lifts both arms almost equally (+0.041
 human, +0.035 auto; the human arm's *in front of* recall jumps 0.124 →
-0.386, the auto arm's 0.101 → 0.248): both models learned the consistent
-convention, both pay the same tax, and the gap barely moves. The initial
-hypothesis that the denser arm is punished *harder* for its confidence is
-refuted by this measurement and withdrawn. The measurement also replicates
-at the shipped threshold: re-scoring the retrained auto arm of §4.14 against
-the same aligned gold moves it from 0.292 to **0.316** mR@100 and from 0.255
-to **0.292** R@100, +0.025 against the +0.035 recorded at the earlier
-threshold. Two label sets from two values of `on_contact_min` pay a tax of
-the same order for the same annotator defect, so roughly a tenth of the
-absolute mR@100 reported anywhere in this chapter is an artefact of that
-defect, on both sides of the comparison.
+0.386, the auto arm's 0.101 → 0.248): both pay the same tax and the gap
+barely moves, so the initial hypothesis that the denser arm is punished
+*harder* for its confidence is refuted by this measurement and withdrawn.
+The measurement replicates at the shipped threshold — the retrained auto arm
+of §4.14 moves from 0.292 to **0.316** mR@100 and 0.255 to **0.292** R@100
+against aligned gold, +0.025 against the earlier +0.035 — so two label sets
+from two values of `on_contact_min` pay a tax of the same order for the same
+annotator defect, and roughly a tenth of the absolute mR@100 reported
+anywhere in this chapter is an artefact of it, on both sides.
 
 **(ii′) Where the gap actually lives: the two defective test groups.** The
 per-group figures of §6.3.1 localise the human arm's lead to the two
