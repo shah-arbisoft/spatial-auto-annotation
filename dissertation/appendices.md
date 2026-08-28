@@ -893,8 +893,37 @@ with scale, 0.169 to 0.138.
 Section 4.13 reports the headline comparison over two models: they recover
 0.40 and 0.45 of the human triplets against the pipeline's 0.83, and are the
 more precise labellers on the judged pairs, 0.42 and 0.39 against 0.35,
-while losing F1 on every predicate. The per-predicate recall underneath that
-verdict is this:
+while losing F1 on every predicate.
+
+**The setting.** Thirty images, stratified across all nine annotator groups,
+go to the model with the ground-truth boxes drawn on and numbered, and it
+answers by index (`scripts/run_vlm_pilot.py`). That is the PredCls setting
+the pipeline is evaluated in, so neither is scored on detection, and the
+prompt carries Chapter 3's definitions verbatim, without which the run would
+measure §2.5's reference-frame ambiguity rather than accuracy. Two models
+were run, because the objection to one is that a larger model would close
+the gap: `gemini-flash-latest` is small and non-reasoning,
+`gemini-3.1-pro-preview` a reasoning model an order of magnitude larger.
+Scaling moves mean recall from 0.400 to 0.445 against the pipeline's 0.834,
+and on the depth pair 0.24 against 0.65 puts the model below the geometric
+method's known weak point: scaling the model does not scale the ability
+being measured.
+
+**Why recall alone would be unfair.** It rewards whoever asserts more, and
+the pipeline makes 885 assertions on the 374 judged pairs against 344 and
+414. Restricted to those pairs, where precision is defined, the column
+reverses and both models are the more precise, 0.419 and 0.389 against
+0.347; they buy it with silence, at a price steep enough that both lose F1
+on every predicate, 0.397 and 0.405 against 0.485 pooled. On the pairs it
+did judge the smaller model's recall is **0.686** rather than 0.378, and on
+the predicates where the tool's advantage looks largest the gap closes
+entirely: `to the left of` 0.909 against 0.918, and `on` 0.864 against
+0.860, where the model is marginally the better of the two. A headline
+recall of 0.40 therefore measures two things at once, how often the model is
+wrong and how often it declines, and only the first is a claim about spatial
+competence.
+
+The per-predicate recall underneath that verdict is this:
 
 | Predicate | Gold | Flash | Pro | Pipeline |
 |---|---|---|---|---|
@@ -1006,10 +1035,26 @@ overlap rather than by index. Compression over the 802 pair-bearing frames
 (§4.1) is lower than the 2.7× below because those frames are a subset, so
 consecutive members sit further apart in the original capture.
 
-*The per-predicate result.* Each segment's predicates are propagated from
-its keyframe to the rest (`eval/keyframe_propagation.py`), on the premise
-that a relation fixed by geometry should survive the camera moving while one
-decided by a coin toss at a threshold should not. At τ = 10 over the 802
+*What the released images are.* Pixel-matching them against the 2,650-frame
+raw capture the supervising group later supplied identifies them exactly:
+they are frames 000000–000883 of one continuous walk, and each annotator
+group is a contiguous 100-frame block (`group_0` = frames 0–99, and so on).
+That has one consequence for §4.1's split, which §4.12 states: a group is
+simultaneously an annotator identity *and* a temporal block holding one
+arrangement, so the split is held out by scene as well as by annotator. The
+annotator reading survives, since an inverted front/behind convention (§4.5)
+and a `near` label used by three groups in nine (§3.2) are labelling
+behaviours no arrangement of furniture can produce, and the confound runs
+favourably: 0.74 on held-out groups is generalisation to an unseen annotator
+*and* an unseen arrangement.
+
+*The per-predicate result.* Consecutive frames show a scene from different
+viewpoints, so the pipeline's verdicts can be checked against themselves
+with no human labels: a relation fixed by geometry should survive the camera
+moving, and one decided by a coin toss at a threshold should not. Frames
+were segmented by content drift (§3.10) and each segment's predicates
+propagated from its keyframe to the rest
+(`eval/keyframe_propagation.py`). At τ = 10 over the 802
 pair-bearing frames (568 keyframes, 234 propagated frames, 11,352 comparable
 object pairs):
 
@@ -1305,6 +1350,39 @@ per-predicate verdicts, with Wilson 95% intervals, are these:
 | **support pooled** | **38/94 0.404 [0.31, 0.51]** | **60/94 0.638 [0.54, 0.73]** |
 | decoys rejected | 19/28 0.679 [0.49, 0.82] | 24/28 0.857 [0.69, 0.94] |
 
+**Why a model may judge what §4.13 shows it cannot annotate.** One objection
+arrives immediately: §4.13 spends a section establishing that a
+vision-language model makes a poor annotator, and §4.14 then gives one a
+vote. The two tasks differ in the half that failed. What §4.13 measures is
+*coverage* — the model never addressed 171 of 381 gold triplets, 44.9%, and
+its headline recall is mostly that silence — while on the pairs it did judge
+it was the *more precise* of the two, 0.419 against the pipeline's 0.347.
+Judging a claim that is handed to it asks only for the half that measured
+sound, since the item is supplied and nothing has to be enumerated. That
+would still be only an argument if the audit did not test it, and the decoys
+test it: the model rejected 24 of 28 relations the tool never emitted,
+against the author's 19 of 28, so on this pack it is the stricter of the two
+and not a judge that agrees with whatever it is shown.
+
+**The threshold repair, in sequence.** The cause §4.14 identifies is a
+threshold fitted where its error was invisible: sorted by the contact
+fraction the rule fires on, audited claims below 0.85 are correct 1 time in
+11 (4/44) and above it 2 times in 3 (34/50). The obvious response, raising
+the threshold until precision recovers, cannot be evaluated on the sample
+that suggested it: a cut-off chosen by inspecting those 94 verdicts and then
+scored against them would be optimistic by an unknown amount, which is the
+error that produced the 0.9 in the first place. The cut-off was therefore
+fitted the way every threshold in Chapter 3 is fitted, on the 63 audited
+claims from annotator groups 0–5, where precision rises steeply to 0.686 at
+0.85 and flattens after; on the 31 claims from groups 6–8 that no part of
+the fit saw, it predicted **0.367 → 0.667**. `on_contact_min` was then set
+to 0.85 and every experiment in this dissertation re-run against the new
+labels. That prediction is not what §4.14 reports, because a projection from
+held-out items selected under the *old* labels is still an extrapolation: a
+second pack was drawn from the new emissions instead — 219 items, 191 claims
+and 28 decoys, same construction, same blinding, same two judges — and
+audited independently, which is the v4 column there.
+
 **What the direction of the restricted-versus-audited gap says about the
 human record.** For five predicates restricted precision badly understates
 audited precision, and for support it overstates it, and the direction is
@@ -1544,7 +1622,38 @@ in 93 draws, **0.968**, and even that is a statement about recovering the
 *recorded* `near` labels: §4.8 sets out why this predicate's recall says
 least about the labels the tool adds beyond them.
 
-### F.9 The front/behind decomposition by annotator group
+### F.9 The test gold's convention contamination, and the second labelling rule
+
+Section 6.3.1 states the finding; the arithmetic behind it is here, because
+it bounds every absolute figure in that chapter.
+
+**How much of the yardstick is affected.** Of the 2,818 relations in the
+benchmark test gold, **1,189 (42%) are front/behind, and 859 of those (72%)
+were written by the two annotators §4.5 convicts of inverting the
+convention** — so **30% of the entire yardstick is a predicate labelled in
+the opposite direction to the convention every training group used**. Both
+arms train on groups 0–5, where no inversion is measured, so neither can
+score those relations and the penalty falls on them equally: the inversion
+sets a *ceiling* rather than a differential.
+
+**How far it bites depends on how the metric aggregates.** R@100 counts
+instances, so the cap applies to 30% of them directly. mR@100 averages over
+the seven predicates, so front and behind carry two sevenths of it however
+many instances they hold, and what the 72% figure sets is a ceiling near
+0.28 on those two components rather than a 30% reduction in the mean. Both
+metrics are depressed and every absolute figure in Chapter 6 is a lower
+bound on both sides, but the 30% is a share of the gold and not a share of
+mR@100.
+
+**Two labelling rules support the ordering, not one.** The figures in §6.3.1
+are the shipped `on_contact_min` of 0.85 (§4.14); the same experiment at the
+earlier 0.60 gave 0.278, 0.286, 0.307 and 0.109 across the same four slices.
+Raising the threshold improved three slices and cost the fourth, and the
+ordering by annotator defect held under both. A pattern that survives
+changing the labelling rule is a property of the test annotation rather than
+of one configuration of the tool.
+
+### F.10 The front/behind decomposition by annotator group
 
 Section 4.5 reports the finding and its figure plots the decomposition; the
 per-group figures underneath it are these, for the shipped cascade (depth

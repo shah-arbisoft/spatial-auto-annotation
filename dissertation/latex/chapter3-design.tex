@@ -42,6 +42,7 @@ image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
         writers (VG JSON / YOLO / h5) <-- flags <-- correction <-- 7 rules
 \end{verbatim}\endgroup
 
+\needspace{31.2\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
@@ -83,7 +84,7 @@ The complete specification is \textbf{Appendix C} --- every rule, threshold and 
 
 \section{Correction and confidence}
 
-Three predicate families are mutually exclusive: on/under, left/right and front/behind. Two cannot contradict, because the rule branches, so exclusivity is a property of the control flow. Support is different: \texttt{on} and \texttt{under} are independent tests over \textit{different} contact evidence, so noise in either can make both fire on the same pair. That case is demoted to an \texttt{on\_\allowbreak{}under\_\allowbreak{}conflict} flag and neither label is emitted. Demoting instead of resolving is deliberate: picking the stronger of two contradictory signals would produce a label the evidence does not support while looking exactly like one it does, and an annotator that fabricates under uncertainty cannot be audited. Emitting everything for the consumer to sort out (\S{}3.4) was rejected because RQ2's consumer is a model, which cannot.
+Three predicate families are mutually exclusive: on/under, left/right and front/behind. Two cannot contradict, because the rule branches; support is different --- \texttt{on} and \texttt{under} are independent tests over \textit{different} contact evidence, so noise in either can make both fire on the same pair, and that case is demoted to an \texttt{on\_\allowbreak{}under\_\allowbreak{}conflict} flag with neither label emitted. Demoting instead of resolving is deliberate: picking the stronger of two contradictory signals would produce a label the evidence does not support while looking exactly like one it does, and an annotator that fabricates under uncertainty cannot be audited. Emitting everything for the consumer to sort out (\S{}3.4) was rejected because RQ2's consumer is a model, which cannot.
 
 One further correction is class-aware, not geometric. Support is not evaluated when either object is a person: the annotators never recorded one, on \textbf{0 of 2,466 gold support triplets}, and mask contact cannot distinguish an object \textit{resting on} someone from one being \textit{held} by them. A rule that cannot represent the distinction its evidence turns on should decline the pair instead of guessing; the guard is a configuration entry (\texttt{no\_\allowbreak{}support\_\allowbreak{}classes}), not a special case buried in code. It is still a class list standing in for geometry, and it would not cover a manipulator or an animal holding something; ablation A10 tests whether contact height can replace it and finds it cannot, at a cost of half the support recall (Appendix D.8).
 

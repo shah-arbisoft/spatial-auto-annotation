@@ -253,6 +253,7 @@ The flag types serve different purposes and are reported separately, which is wh
 
 \subsection{C.10 Summary}
 
+\needspace{20.5\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
@@ -318,6 +319,7 @@ The second recovers the camera pose properly, estimating the essential matrix fr
 
 This is the correct construction and it does much better than the first, but not well enough:
 
+\needspace{8.2\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -341,6 +343,7 @@ Both numbers fall on the same pairs, so the comparison is like for like. The mul
 
 Splitting those pairs by how far apart the two triangulated depths actually are says more than the aggregate does, and it is the check that separates a weak estimator from a broken one. The split is computed by the ablation script itself, so the four rows sum to the 337 pairs above:
 
+\needspace{10.1\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -370,6 +373,7 @@ The scope of this result is that it rules out the cheap version of the idea rath
 
 Section 4.3 and \S{}4.10 state what the diagnosis establishes. Two tables reach it from opposite sides. The first records, for each human triplet the tool failed to recover, the labels it \textit{did} emit on that pair, which identifies the failure mode directly:
 
+\needspace{11.2\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
@@ -398,6 +402,7 @@ Two structural signatures stand out. Missed front/behind pairs carrying the \tex
 
 The second re-checks each rule's individual conditions against the cached geometry and mask-contact maps, attributing every miss to a cause.
 
+\needspace{12.0\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
@@ -427,6 +432,7 @@ A class list is a semantic patch on a geometric rule, so the natural question is
 
 The two populations overlap too much to separate. Across 836 images, the 1,190 gold-confirmed resting pairs above the contact threshold have a median drop of 0.19 and a 10th-to-90th percentile range of -0.04 to 0.50; the 51 pairs the guard blocks have a median of 0.38 and a range of 0.33 to 0.41, which sits inside the resting distribution rather than beside it.
 
+\needspace{12.0\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -467,6 +473,7 @@ The larger model redistributes the picture rather than resolving it. It asserts 
 
 Section 4.13 reports the headline comparison over two models: they recover 0.40 and 0.45 of the human triplets against the pipeline's 0.83, and are the more precise labellers on the judged pairs, 0.42 and 0.39 against 0.35, while losing F1 on every predicate. The per-predicate recall underneath that verdict is this:
 
+\needspace{13.8\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -494,6 +501,7 @@ near & 34 & 0.382 & 0.382 & 1.000 \\
 
 The per-predicate form of the precision comparison is below, and the diagnostics after it are the smaller model's unless stated, since it is the one the manual-check pack was built for.
 
+\needspace{14.8\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -546,6 +554,7 @@ Object indices are not stable across frames, the annotators having recorded diff
 
 \textit{The per-predicate result.} Each segment's predicates are propagated from its keyframe to the rest (\texttt{eval/keyframe\_\allowbreak{}propagation.py}), on the premise that a relation fixed by geometry should survive the camera moving while one decided by a coin toss at a threshold should not. At $\tau$ = 10 over the 802 pair-bearing frames (568 keyframes, 234 propagated frames, 11,352 comparable object pairs):
 
+\needspace{13.8\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -653,6 +662,7 @@ Section 4.14 reports the instrument and the result. The construction rules are h
 
 \textbf{The pre-refit (v3) pack in full.} Section 4.14 quotes this pack's support rows and carries its author column beside the v4 re-audit; the complete per-predicate verdicts, with Wilson 95\% intervals, are these:
 
+\needspace{16.7\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -679,6 +689,10 @@ decoys rejected & 19/28 0.679 [0.49, 0.82] & 24/28 0.857 [0.69, 0.94] \\
 \end{longtable}
 \end{center}
 
+\textbf{Why a model may judge what \S{}4.13 shows it cannot annotate.} One objection arrives immediately: \S{}4.13 spends a section establishing that a vision-language model makes a poor annotator, and \S{}4.14 then gives one a vote. The two tasks differ in the half that failed. What \S{}4.13 measures is \textit{coverage} --- the model never addressed 171 of 381 gold triplets, 44.9\%, and its headline recall is mostly that silence --- while on the pairs it did judge it was the \textit{more precise} of the two, 0.419 against the pipeline's 0.347. Judging a claim that is handed to it asks only for the half that measured sound, since the item is supplied and nothing has to be enumerated. That would still be only an argument if the audit did not test it, and the decoys test it: the model rejected 24 of 28 relations the tool never emitted, against the author's 19 of 28, so on this pack it is the stricter of the two and not a judge that agrees with whatever it is shown.
+
+\textbf{The threshold repair, in sequence.} The cause \S{}4.14 identifies is a threshold fitted where its error was invisible: sorted by the contact fraction the rule fires on, audited claims below 0.85 are correct 1 time in 11 (4/44) and above it 2 times in 3 (34/50). The obvious response, raising the threshold until precision recovers, cannot be evaluated on the sample that suggested it: a cut-off chosen by inspecting those 94 verdicts and then scored against them would be optimistic by an unknown amount, which is the error that produced the 0.9 in the first place. The cut-off was therefore fitted the way every threshold in Chapter 3 is fitted, on the 63 audited claims from annotator groups 0--5, where precision rises steeply to 0.686 at 0.85 and flattens after; on the 31 claims from groups 6--8 that no part of the fit saw, it predicted \textbf{0.367 $\rightarrow$ 0.667}. \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} was then set to 0.85 and every experiment in this dissertation re-run against the new labels. That prediction is not what \S{}4.14 reports, because a projection from held-out items selected under the \textit{old} labels is still an extrapolation: a second pack was drawn from the new emissions instead --- 219 items, 191 claims and 28 decoys, same construction, same blinding, same two judges --- and audited independently, which is the v4 column there.
+
 \textbf{What the direction of the restricted-versus-audited gap says about the human record.} For five predicates restricted precision badly understates audited precision, and for support it overstates it, and the direction is diagnostic of what the gold \textit{is}. A lateral relation holds for nearly every ordered pair and the annotators wrote down a handful, so their labels are a small sample of a large truth and the tool's extras are mostly further instances of it. Support is rare and salient: a thing resting on a thing was worth recording and was recorded, so the human labels are close to the complete set of easy cases and what the tool adds beyond them is mostly not there. Restricted precision therefore understates a predicate whose gold is a sample and overstates one whose gold is nearly exhaustive, and no single reading of \S{}4.3 is correct for both --- which is why the protocol pairs it with an audit instead of reporting either alone.
 
 \textbf{Judge drift between the two packs.} Nine of 28 decoys were accepted in v3 and one in v4, so the second sheet is the work of a stricter judge than the first. The model's decoy rejection rose over the same interval, 0.857 to 0.929, which suggests the v4 pack is also the easier of the two to judge. Neither movement accounts for the size of the support change, but both are reasons to read the v3 and v4 columns of \S{}4.14 as two measurements rather than one series.
@@ -693,6 +707,7 @@ decoys rejected & 19/28 0.679 [0.49, 0.82] & 24/28 0.857 [0.69, 0.94] \\
 
 Section 6.3 reports the headline benchmark result and Appendix F.1 the two decompositions it draws on. Both come from the same pair of best checkpoints scored on the same 210-image test set, at seed 42 only, and from the same single training session as every other figure in Chapter 6; \S{}6.3.1 replicates the slice decomposition across three seeds, and where the two disagree the three-seed figures are the ones any claim rests on. They do disagree here: at this seed the automatic arm leads on group 6, where the three-seed mean puts the human arm ahead, which is the disagreement the replication exists to expose. Per-predicate figures are parsed from the evaluation log of the all-arms run (\texttt{scripts/kaggle/executed\_\allowbreak{}6\_\allowbreak{}all\_\allowbreak{}arms\_\allowbreak{}085.ipynb}, collected in \texttt{outputs/sgg\_\allowbreak{}benchmark/per\_\allowbreak{}predicate\_\allowbreak{}085.json}).
 
+\needspace{11.8\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -717,6 +732,7 @@ near & \textbf{0.117} & 0.108 \\
 \end{longtable}
 \end{center}
 
+\needspace{11.0\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -752,6 +768,7 @@ Section 5.2 carries the per-predicate figures and the seed spreads. The chart be
 
 Section 3.12 states what the decisions have in common and names the four that later evidence could have overturned. The full table is here.
 
+\needspace{28.7\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
@@ -784,6 +801,7 @@ Config + geometry cache & ad-hoc constants, full re-runs & reproducibility; 20 s
 
 Section 6.3.2 reports what this arm establishes and the one result that does not fit. Mean mR@100 over three seeds, per-seed range in brackets.
 
+\needspace{11.0\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -812,6 +830,7 @@ Three readings of the group-7 result remain open and this experiment does not se
 
 Section 5.2.1 states the finding and why the columns cannot be read as an error rate. The full table is below, macro-averaged over predicates except where marked.
 
+\needspace{11.1\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -839,6 +858,7 @@ Two things follow from it, the second a concession. The result strengthens rathe
 
 Section 4.3 quotes these figures and states why they are a floor rather than an error rate. Recall and F1 are restricted to the same 8,790 annotated pairs.
 
+\needspace{12.8\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -879,6 +899,7 @@ Section 4.6 quotes the two depth predicates and states that the other five sit a
 
 One caveat belongs with every interval here, and it follows from a finding made later than the procedure. Clustering on the image is the right unit for the dependence \textit{inside} a scene, which is what \S{}4.2 argues, but it resamples images as though they were independent draws. They are not: \S{}4.12 establishes that these 836 images are consecutive frames of one robot trajectory, with the pipeline's own labels persisting across neighbouring frames at 0.90--0.92. Adjacent frames therefore carry much less than one image of independent information each, the effective sample is smaller than 836, and these intervals are narrower than a block-resampling scheme over contiguous runs of frames would give. They should be read as a lower bound on the width, not as calibrated coverage; the point estimates are unaffected, since they are the population value for these images. A replication should resample trajectory segments rather than frames, which the released per-image outputs support.
 
+\needspace{12.8\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{6pt}
 \small
@@ -905,10 +926,21 @@ near & 1.000 & 1.000--1.000 (see note) \\
 
 The \texttt{near} row is a boundary artefact and not extraordinary precision. The held-out groups carry 93 \texttt{near} gold triplets and the tool misses none, so every resample returns the same value and the bootstrap has no spread to report. The number to quote is the exact one-sided bound for zero failures in 93 draws, \textbf{0.968}, and even that is a statement about recovering the \textit{recorded} \texttt{near} labels: \S{}4.8 sets out why this predicate's recall says least about the labels the tool adds beyond them.
 
-\subsection{F.9 The front/behind decomposition by annotator group}
+\subsection{F.9 The test gold's convention contamination, and the second labelling rule}
+
+Section 6.3.1 states the finding; the arithmetic behind it is here, because it bounds every absolute figure in that chapter.
+
+\textbf{How much of the yardstick is affected.} Of the 2,818 relations in the benchmark test gold, \textbf{1,189 (42\%) are front/behind, and 859 of those (72\%) were written by the two annotators \S{}4.5 convicts of inverting the convention} --- so \textbf{30\% of the entire yardstick is a predicate labelled in the opposite direction to the convention every training group used}. Both arms train on groups 0--5, where no inversion is measured, so neither can score those relations and the penalty falls on them equally: the inversion sets a \textit{ceiling} rather than a differential.
+
+\textbf{How far it bites depends on how the metric aggregates.} R@100 counts instances, so the cap applies to 30\% of them directly. mR@100 averages over the seven predicates, so front and behind carry two sevenths of it however many instances they hold, and what the 72\% figure sets is a ceiling near 0.28 on those two components rather than a 30\% reduction in the mean. Both metrics are depressed and every absolute figure in Chapter 6 is a lower bound on both sides, but the 30\% is a share of the gold and not a share of mR@100.
+
+\textbf{Two labelling rules support the ordering, not one.} The figures in \S{}6.3.1 are the shipped \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} of 0.85 (\S{}4.14); the same experiment at the earlier 0.60 gave 0.278, 0.286, 0.307 and 0.109 across the same four slices. Raising the threshold improved three slices and cost the fourth, and the ordering by annotator defect held under both. A pattern that survives changing the labelling rule is a property of the test annotation rather than of one configuration of the tool.
+
+\subsection{F.10 The front/behind decomposition by annotator group}
 
 Section 4.5 reports the finding and its figure plots the decomposition; the per-group figures underneath it are these, for the shipped cascade (depth ordering plus the ground-plane fallback of \S{}4.9):
 
+\needspace{14.7\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize

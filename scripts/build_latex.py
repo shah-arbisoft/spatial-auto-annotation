@@ -348,7 +348,7 @@ TABLES = {
         # F.8
         "Per-predicate recall on the held-out annotator groups with 95% "
         "cluster-bootstrap intervals over images.",
-        # F.9 (moved from §4.5)
+        # F.10 (moved from §4.5)
         "Front/behind by annotator group: emission rate, agreement where the "
         "tool commits, and the effect of aligning the direction convention.",
     ],
