@@ -35,25 +35,25 @@ accelerates manual labelling; a human still decides every label.
 That cost is structural and grows faster than the data. Objects relate
 pairwise, so an image holding *n* annotated objects presents *n(n−1)*
 ordered pairs a conscientious annotator must consider; this dataset averages
-101 such pairs per image, from about ten annotated objects. Relationship
-annotation is therefore never exhaustive in practice — Visual Genome, the
-reference corpus, records about eighteen relationships per image over scenes
-of roughly twenty objects (Krishna et al., 2017), and here humans labelled
+101 such pairs per image, from about ten annotated objects, so relationship
+annotation is never exhaustive in practice — Visual Genome, the reference
+corpus, records about eighteen relationships per image over scenes of
+roughly twenty objects (Krishna et al., 2017), and here humans labelled
 about 10% of ordered pairs. That sparsity is arithmetic and implies no
-inattention, and it has a consequence the field absorbs without comment: a
+inattention, and its consequence is one the field absorbs without comment: a
 model evaluated against such labels is rewarded for reproducing which pairs
 annotators happened to record as much as which relationships hold, and
 Chapter 6 measures that.
 
-A second cost is consistency. Nine annotators working independently produce
+A second cost is consistency: nine annotators working independently produce
 nine slightly different labelling conventions. Wang et al. (2025) report
 that annotators were trained on the tool and given predicate definitions; no
 such definition survives in the released materials, and Chapter 4 measures
 the stronger point either way, that the *application* diverged whatever was
-said at annotation time — for three predicates, including two annotator
-groups that recorded *in front of* and *behind* in opposite directions from
-everyone else. Neither cost is solved by hiring more annotators, because
-both scale with the number of humans involved.
+said — for three predicates, including two annotator groups that recorded
+*in front of* and *behind* in opposite directions from everyone else.
+Neither cost is solved by hiring more annotators, because both scale with
+the number of humans involved.
 
 ### 1.1.2 Why the existing remedies do not remove it
 
@@ -145,16 +145,16 @@ can conceal one that fails outright.
 
 RQ2 is answered **yes** if a model trained on the automatic labels performs
 at least as well as the same model trained on the human labels, under
-identical features, splits and seeds, and judged against held-out *human*
-annotation — deliberately the harder direction, because the yardstick is the
+identical features, splits and seeds, judged against held-out *human*
+annotation — deliberately the harder direction, the yardstick being the
 rival source's own product. Since a single lightweight model could produce
 such a result by accident, the question is put three times at increasing
-cost: to a controlled classifier, to the source paper's own benchmark
-framework, and to a planner acting on the relations, with the standard
-semi-supervised remedy included as a third arm in the controlled experiment.
-Agreement across all three would be required for an unqualified yes; where
-they disagree, the disagreement is reported and explained and not resolved
-in the project's favour, and Chapter 6 is where that obligation falls due.
+cost — a controlled classifier, the source paper's own benchmark framework,
+and a planner acting on the relations — with the standard semi-supervised
+remedy as a third arm in the controlled experiment. Agreement across all
+three would be required for an unqualified yes; where they disagree, the
+disagreement is reported and explained and not resolved in the project's
+favour, and Chapter 6 is where that obligation falls due.
 
 ### 1.2.3 Contributions
 
