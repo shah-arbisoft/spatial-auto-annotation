@@ -411,18 +411,14 @@ record on this predicate are right about half the time.
 Both judges in §4.14 carry an objection: one built the tool, the other is a
 system §4.13 shows annotates poorly. Appendix E.3 specifies the arm that
 answers the first, putting sampled claims to volunteers who did not build
-the tool and are not shown what it predicted. It closed with 1,415 usable
-judgements from 20 raters over 832 of the 1,000 claims in the pool, 83.2%,
-no rater supplying more than 15% of them. Two facts govern the reading. The
-tool claims were drawn on 17 July, a month before `on_contact_min` was
-re-fitted from 0.60 to 0.85, so **the shipped support rule has still not
-been judged by anyone outside this project**; for the five predicates the
-threshold does not touch, the labels are identical in both generations. And
-half the pool is drawn from the *human* annotations, rendered through the
-identical pipeline and interleaved so a rater cannot tell the two apart: on
-those the raters answer TRUE 0.940 of the time (395/420), against 0.726 on
-the tool's (299/412), so they are not uniformly severe and what the tool
-scores is about the tool.
+the tool and are not shown what it predicted. It closed with **1,415** usable
+judgements from **20 raters** over **832** of the 1,000 claims in the pool,
+**83.2%**, no rater supplying more than **15%** of them. Two facts govern the
+reading. The claims were drawn a month before `on_contact_min` was re-fitted,
+so **the shipped support rule has still not been judged by anyone outside
+this project**; and half the pool is drawn from the *human* annotations,
+interleaved so a rater cannot tell the arms apart, which is what makes the
+tool's score readable rather than merely low.
 
 | Predicate | Volunteers | Author | Model |
 |---|---|---|---|
@@ -435,32 +431,28 @@ scores is about the tool.
 | near | 48/52 0.923 | 24/24 1.000 | 15/24 0.625 |
 | **support pooled** | **52/126 0.413** | **38/94 0.404** | **60/94 0.638** |
 
-The denominators differ because the judges saw different draws from the same
-pre-refit generation (the volunteers 126 support claims, the two blind
-judges 94; 147 items carry both a volunteer and an author verdict): three
-estimates of one quantity, not three verdicts on one sheet. **On support the
-author's verdicts survive the check exactly** — 0.413 against 0.404, a
-difference of 0.009 between the person who built the tool, blinded and
-working against decoys, and strangers with no stake in the outcome, the
-objection §2.9 raises and §7.4 concedes, answered by measurement; the model
-sits apart at 0.638, `near` shows the same shape from the other side (0.923
-and 1.000 from the two human judges against the model's 0.625), and across
-all seven predicates the volunteers rank the tool almost exactly as the
-author does, Spearman 0.96 against the model's 0.34, landing 0.074 away on
-average. **Against the human baseline, five predicates hold and support does
-not**: 0.864 against the annotators' 0.926 on the five the threshold does
-not touch, a gap of 0.063 (marginally ahead on `in front of`), and 0.413
-against 0.975 on support, a gap of 0.563 whose intervals do not come close
-to overlapping. On the 147 claims carrying both verdicts the two agree 0.871
-of the time (Cohen's κ 0.683), and crowd-internal reliability is
-Krippendorff's α 0.703; Appendix E.3 reads the comparison in full, with the
-asymmetry that bounds it — part of every gap is claim difficulty rather than
-label quality: most, perhaps, of 0.063, and little of 0.563. The arm settles
-that the author's audit did not run in the author's favour and that the
-raters are not uniformly harsh; it does not settle the shipped tool, whose
-support rule postdates the sample. §7.6 and §9.3 carry what survives;
-re-running the arm on post-refit support labels is the one outstanding item
-that would close it.
+**On support the author's verdicts survive the check exactly**: 0.413 from
+the volunteers against the author's 0.404, a difference of 0.009 between the
+person who built the tool, blinded and working against decoys, and strangers
+with no stake in the outcome. That is the objection §2.9 raises and §7.4
+concedes, answered by measurement; the model sits apart at 0.638. **Against
+the human baseline, five predicates hold and support does not**, at 0.864
+against 0.926 and 0.413 against 0.975 respectively. On the **147** claims
+carrying both a volunteer and an author verdict the two agree **0.871** of
+the time (Cohen's κ **0.683**), and crowd-internal reliability is
+Krippendorff's α **0.703** — both substantial, both roughly doubled as the
+sample grew, and neither approaching 1.0, which §2.3's account of spatial
+language predicts better than rater carelessness does.
+
+Appendix E.3 carries the rest: the control arm's 0.940 against the tool's
+0.726, why the denominators differ, the Spearman 0.96 ranking agreement, and
+the asymmetry that bounds the comparison, since the tool's claims are its
+*extra* predictions on pairs the annotators passed over while the control
+claims are pairs they chose to record. The arm settles that the author's
+audit did not run in the author's favour and that the raters are not
+uniformly harsh; it does not settle the shipped tool, whose support rule
+postdates the sample. §7.6 and §9.3 carry what survives, and re-running the
+arm on post-refit labels is the one outstanding item that would close it.
 
 ## 4.16 Summary
 

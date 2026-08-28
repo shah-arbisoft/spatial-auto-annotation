@@ -20,20 +20,18 @@ difference between the runs is the supervision source, under a fixed
 identically for every source, so the comparison is between supervision
 signals under equal compute, not between tuned models.
 
-Three sources are compared in the core experiment (a fourth arrives with the
-result it produced, §5.2): **human**, the ~10% of ordered pairs the
+Three sources are compared in the core experiment, and a fourth arrives with
+the result it produced (§5.2): **human**, the ~10% of ordered pairs the
 annotators chose to label; **automatic**, every pair the tool's rules fire
-on, dense and rule-consistent; and **self-trained (pseudo-labelled)**, the
-rival remedy from the semi-supervised literature (§2.4), implemented rather
-than argued about — a teacher trained on the human labels exactly as in the
-human arm, its confident predictions on the *unannotated* training pairs
-(probability ≥ 0.90 either way) becoming pseudo-labels, and a student
-retrained on the union (Lee, 2013), a pair the annotators touched at all
-counting as labelled since their silence on its other predicates is
-informative. The third arm answers the question that precedes the project's
-premise: if the human labels are too sparse, why not simply stretch them?
-Each source labels the same pairs its own way, and each model inherits its
-source's character; that contrast is the experiment.
+on, dense and rule-consistent; and **self-trained**, the rival remedy from
+the semi-supervised literature (§2.4), implemented rather than argued about
+— a teacher trained on the human labels exactly as in the human arm, its
+confident predictions on the *unannotated* training pairs (probability ≥
+0.90 either way) becoming pseudo-labels, and a student retrained on the
+union (Lee, 2013). The third arm answers the question that precedes the
+project's premise: if the human labels are too sparse, why not simply
+stretch them? Each source labels the same pairs its own way, and each model
+inherits its source's character; that contrast is the experiment.
 
 ## 5.2 Result
 
@@ -108,14 +106,13 @@ not the annotators' knowledge but their silence. This is the failure mode
 §2.4 predicted, now measured — pseudo-labelling is well behaved when the
 seed is a representative sample of the pool, and this seed is not. The
 `near` row makes it sharp: human-trained recall is already near collapse at
-0.08, and self-training pushes it *down* to 0.03, confident pseudo-labels
-from a weak, idiosyncratic notion burying what little positive signal
-existed. Where the seed is defective, self-training amplifies the defect;
-the comparison is therefore not "programmatic labels beat doing nothing" but
-"programmatic labels beat the standard remedy, under identical conditions,
-closing more than six times as much of the available gap". Active learning
-is not tested because it fails for a simpler reason (§2.4): it still buys
-human labels, lowering the bottleneck's cost without removing it.
+0.08, and self-training pushes it *down* to 0.03. Where the seed is
+defective, self-training amplifies the defect, so the comparison is not
+"programmatic labels beat doing nothing" but "programmatic labels beat the
+standard remedy, under identical conditions, closing more than six times as
+much of the available gap". Active learning is not tested because it fails
+for a simpler reason (§2.4): it still buys human labels, lowering the
+bottleneck's cost without removing it.
 
 ## 5.4 Why the automatic labels win, and two consistency checks
 

@@ -1356,6 +1356,39 @@ and crowd-internal reliability as Krippendorff's alpha.
 
 **What it returned.** Collection closed at 1,415 usable judgements from 20 raters, covering 832 of the 1,000 claims, 83.2%, with no rater supplying more than 15% of the total. All 412 treatment claims and 420 of the 588 control claims carry at least one verdict, and 147 carry three or more, which is the subset the author comparison and the reliability figure need. Of the pre-declared filters, the duplicate rule fired on 12 submissions, all of them from before the 11 August server fix; no response fell below the 800 ms floor, and no rater was excluded as a systematic outlier. Section 4.15 reports the figures; `eval/crowd_validation.py` reproduces them from the scorer's report, separating the arms on the claim id, since the scorer's own per-predicate totals pool both.
 
+**What the arm establishes, in full.** Section 4.15 gives the verdicts; the
+reasoning behind each is here.
+
+*The control arm is what makes the treatment arm readable.* Half the pool is
+drawn from the human annotations rather than the tool, rendered through the
+identical pipeline and interleaved by the same shuffle, so nothing on the
+page distinguishes them and a rater cannot tell which arm a claim belongs
+to. Without it a low score on the tool would be uninterpretable, since the
+same raters under the same conservative instruction might score any claim
+low. They do not: on the human-written claims they answer TRUE 0.940 of the
+time (395/420) against 0.726 on the tool's (299/412), so the raters are not
+uniformly severe and what the tool scores is about the tool.
+
+*Why the denominators differ.* The judges saw different draws from the same
+pre-refit generation rather than a common sheet: the volunteers were shown
+126 support claims from the study pool and the two blind judges 94 from the
+audit pack of §4.14. The three columns are therefore three estimates of one
+quantity, not three verdicts on one sheet, which is what makes their
+agreement worth reporting at all.
+
+*The ranking agreement.* Across all seven predicates the volunteers rank the
+tool almost exactly as the author does, Spearman 0.96 against the model's
+0.34, landing 0.074 away on average. `near` shows the same shape from the
+other side as support does: 0.923 and 1.000 from the two human judges
+against the model's 0.625.
+
+*Against the human baseline.* On the five predicates the support threshold
+does not touch, the tool scores 0.864 against the annotators' 0.926, a gap
+of 0.063, and on `in front of` it is marginally ahead. On support it scores
+0.413 against 0.975, a gap of 0.563 whose intervals do not come close to
+overlapping — the same weakness §4.14 found and the refit responded to, now
+measured against what human annotation scores on the identical instrument.
+
 **Reading the three-judge comparison.** One asymmetry bounds how far §4.15's
 comparison can be pushed: the tool's claims are its *extra* predictions, on
 pairs the annotators passed over, while the control claims are pairs they
