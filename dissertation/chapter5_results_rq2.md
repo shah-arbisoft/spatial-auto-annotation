@@ -139,7 +139,7 @@ error rate here. The human-trained model's weakness is partly a property of
 but producing them is the bottleneck this project removes, and the
 self-trained arm shows the shortfall cannot be computed away instead. The
 front/behind rows are depressed for every arm by the held-out groups'
-inverted convention (Chapter 4), so the penalty is shared.
+inverted convention, so the penalty is shared.
 
 One structural caveat needs stating plainly. The classifier's features are
 geometric and the automatic labels come from rules over closely related
@@ -154,21 +154,18 @@ repeating the comparison in a full scene-graph model with visual features.
 ## 5.6 From labels to robots: where this sits in the source paper's chain
 
 The source paper's end goal is explicit: spatial understanding exists so
-that robots can plan. Its motivating example shows an LLM planner failing to
-remove a cube before grasping the book beneath it until SGG-derived
-relations are supplied; its own evaluation of that chain stops at SGG
-quality, six models benchmarked on the human labels, topping out at
-mR@100 = 0.49 (VCTree), every model saturating by epoch 2–6 and `near`
-stuck at 0.22–0.25 (§2.2). Each symptom has a measured cause and a built
-remedy: saturation within six epochs is what training on the 8,926 sparse
-triplets of §4.2 looks like, and the automatic labels give 20× the
-supervision on the same images; the universal `near` failure is what a
-three-annotator label with no operational definition looks like, and the
-fitted-threshold labels are perfectly learnable (this chapter's proxy
-reaches 1.00); the depth predicates were being taught two opposite
-conventions, and the automatic labels apply one. Three predictions follow,
-registered before the direct test that judges them in Chapter 6: later
-saturation, a higher plateau, and the recovery of `near`.
+that robots can plan, and its own evaluation of that chain stops at SGG
+quality — six models benchmarked on the human labels, topping out at
+mR@100 = 0.49 (VCTree), every model saturating by epoch 2–6 and `near` stuck
+at 0.22–0.25 (§2.2). Each symptom has a measured cause and a built remedy:
+saturation within six epochs is what training on the 8,926 sparse triplets
+of §4.2 looks like, and the automatic labels give 20× the supervision on the
+same images; the universal `near` failure is what a three-annotator label
+with no operational definition looks like, and the fitted-threshold labels
+are perfectly learnable; and the depth predicates were being taught two
+opposite conventions where the automatic labels apply one. Three predictions
+follow, registered before the direct test that judges them in Chapter 6:
+later saturation, a higher plateau, and the recovery of `near`.
 
 ## 5.7 The planner experiment: does the label source change what a robot would do?
 

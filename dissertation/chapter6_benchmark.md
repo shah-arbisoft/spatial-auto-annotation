@@ -93,46 +93,39 @@ and one configuration, so the arms differ in their labels and nothing else.
 An earlier set of figures, with the human arm at 0.326 pooled, came from
 runs made weeks apart against different states of the upstream code; §7.4
 reports what that cost. The **aligned** row re-scores the same models
-against gold with the two inverted annotators corrected (§4.5); the
-`zR@100` rows measure coverage of types omitted from one shared reference
-(§6.4), and this dissertation makes no zero-shot claim on them. Cells give
-the mean over three seeds with the per-seed range in brackets.
+against gold with the two inverted annotators corrected (§4.5); the `zR@100`
+rows measure coverage of types omitted from one shared reference (§6.4), and
+this dissertation makes no zero-shot claim on them.
 
 **On the metric this chapter is organised around, the two label sources are
-indistinguishable.** Every row's seed ranges overlap, the automatic arm's
-sitting *inside* the human arm's on the full test set, and paired by seed
-the automatic arm leads at 42 (+0.021) and 43 (+0.010) and trails at 44
-(−0.032), so the pooled difference of 0.001 rests on a single run. The
-correct statement is parity, and it is about this metric and not the labels:
-on raw R@100 the human arm keeps a real margin pooled, 0.295 against 0.255,
-and on zero-shot recall the automatic arm leads fivefold, 0.268 against
-0.052. The arms differ far more in stability than in score — across seeds
-the automatic arm's pooled mR@100 spans 0.006 against the human arm's 0.052
-and the vision-language arm's 0.044 — so one definition applied uniformly
-lands in the same place whatever the initialisation, and nine annotators
-applying nine conventions do not. A margin of 0.001 between arms whose own
-seeds move by 0.052 is not a result in either direction.
+indistinguishable.** Every row's seed ranges overlap, and paired by seed the
+automatic arm leads at 42 (+0.021) and 43 (+0.010) and trails at 44
+(−0.032), so the pooled difference of 0.001 rests on a single run. The correct statement is parity, and it is
+about this metric and not the labels: on raw R@100 the human arm keeps a
+real margin pooled, 0.295 against 0.255, and on zero-shot recall the
+automatic arm leads fivefold, 0.268 against 0.052. The arms differ far more
+in stability than in score — the automatic arm's pooled mR@100 spans 0.006
+across seeds against the human arm's 0.052 — so one definition applied
+uniformly lands in the same place whatever the initialisation, and nine
+annotators applying nine conventions do not.
 
 Where the arms do differ, they differ by annotator: the human arm leads on
-the two annotators §4.5 convicts of inverting the convention and *trails* on
-group 7, the one convicted of nothing, so the ordering runs with annotation
-quality rather than geometry. Appendix F.9 gives the three margins, none
-separable across seeds, together with the contamination behind them —
-**30% of the entire yardstick is front/behind written by the two inverted
-annotators** — which is a shared ceiling rather than a differential, since
-both arms train where no inversion is measured. Every absolute figure in
-this chapter is therefore a lower bound on both sides, and F.9 also carries
-the replication at the earlier `on_contact_min` 0.60 under which the same
-ordering holds, making the pattern a property of the test annotation and not
-of one configuration of the tool.
+the two §4.5 convicts of inverting the convention and *trails* on group 7,
+the one convicted of nothing, so the ordering runs with annotation quality
+rather than geometry. Appendix F.9 gives the three margins, none separable
+across seeds, the contamination behind them — **30% of the entire yardstick
+is front/behind written by the two inverted annotators**, a shared ceiling
+rather than a differential — and the replication at the earlier
+`on_contact_min` 0.60 under which the same ordering holds. Every absolute
+figure in this chapter is therefore a lower bound on both sides.
 
 Second, **the zero-shot result is robust and larger than first reported.**
 Pooled zR@100 is 0.268 against 0.052, roughly fivefold, with disjoint
 ranges, and not an artefact of pooling: the auto arm leads on *every*
 annotator separately (0.449 against 0.000 on group 6, 0.273 against 0.098 on
-group 7, 0.041 against 0.007 on group 8), and the gap points the same way on
-defective and clean annotators alike — what distinguishes a property of the
-labels from a property of the gold.
+group 7, 0.041 against 0.007 on group 8), pointing the same way on defective
+and clean annotators alike — what distinguishes a property of the labels
+from a property of the gold.
 
 ### 6.3.2 A third label source
 
