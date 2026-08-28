@@ -172,31 +172,19 @@ entirely, the human arm falling 0.033 while the vision-language arm moved
 the erasure of a 2.5× advantage, which the evidence supports more
 comfortably.)
 
-**(i) Ranking dilution by true-but-unlabelled predictions.** R@K is a
-per-image ranking budget: any prediction absent from the gold consumes
-budget as a miss. The auto-trained model predicts densely, like its
-supervision, and Chapter 4's audits established that such extras are
-overwhelmingly *true*, so against gold annotating ~10% of pairs they outrank
-the annotated ones and are scored as errors — §4.3's restricted-precision
-artefact reproduced at benchmark level. The human-trained arm learned the
-annotators' *labelling prior* instead, which is what a ranking metric
-against human-selected gold rewards.
-
-**(ii) Convention mismatch is a shared penalty, not, as first hypothesised,
-a differential one.** Both arms were trained on consistent-convention
-front/behind (the tool's by construction; groups 0–4's by measurement),
-while groups 6 and 8, two thirds of the test gold, invert it (§4.5).
-Re-scoring against aligned gold lifts both arms almost equally (+0.041
-human, +0.035 auto; the human arm's *in front of* recall jumps 0.124 →
-0.386, the auto arm's 0.101 → 0.248), so both pay the same tax, the gap
-barely moves, and the initial hypothesis that the denser arm is punished
-*harder* for its confidence is refuted and withdrawn. It replicates at the
-shipped threshold — the retrained auto arm of §4.14 moves from 0.292 to
-**0.316** mR@100 and 0.255 to **0.292** R@100 against aligned gold, +0.025
-against the earlier +0.035 — so two label sets from two values of
-`on_contact_min` pay a tax of the same order, and roughly a tenth of the
-absolute mR@100 anywhere in this chapter is an artefact of that defect, on
-both sides.
+**(i) Ranking dilution, and (ii) a convention penalty both arms pay.** R@K
+is a per-image ranking budget, so the auto arm's dense but largely *true*
+extras (Chapter 4's audits) outrank the annotated pairs and are scored as
+errors, while the human arm learned the annotators' labelling prior — which
+is what a ranking metric against human-selected gold rewards. And both arms
+were trained on consistent-convention front/behind while groups 6 and 8, two
+thirds of the test gold, invert it (§4.5): re-scoring against aligned gold
+lifts both almost equally, so the initial hypothesis that the denser arm is
+punished *harder* for its confidence is **refuted by that measurement and
+withdrawn**. Appendix F.9 gives both mechanisms with their figures, and the
+replication at the shipped threshold showing roughly a tenth of the absolute
+mR@100 in this chapter is an artefact of that annotator defect, on both
+sides.
 
 **(ii′) Where the gap actually lives: the two defective test groups.** The
 per-group figures of §6.3.1 localise the human arm's lead to the two

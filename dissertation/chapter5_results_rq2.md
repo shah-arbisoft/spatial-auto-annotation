@@ -201,28 +201,19 @@ larger planner only: **D**, the vision-language model's relations from
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
 {{fig:planner-sources}} shows the five conditions, and three findings sit in
-them. **The two planners agree exactly**, and not only in the totals: C
-fails on the same six scenes under both. A finding that survives replacing
-the reasoning engine, down to which scenes fail, is a property of the prompt
-and not of the model reading it — the claim the experiment exists to make —
-and it disposes of the objection that a more capable planner would infer
-support from the object list, which it does not, in twenty-five scenes of
-twenty-five, twice. **Every failure in both automatic arms is a missing
-support relation**, never a plan reasoning badly from what it was given: in
-no scene was the relation present and ignored. Six misses in twenty-five is
-24%, against support recall of 0.81/0.75 in §4.2, so the planner result is
-the fidelity result one level higher in the chain — and it moves when that
-fidelity does, the refit of §4.14 having cost C three scenes (22 of 25 on
-the pre-refit labels) while costing E none. **The two automatic sources fail
-on disjoint scenes.** D scores 20 of 25, marginally the stronger single
-source, and its five failures do not intersect C's six, so a union supplying
-more support relations repairs exactly the failing cases and cannot break
-the working ones. It does: E clears the occluder in all 25, gaining six
-scenes over C and losing none, and the disjointness survives the threshold
-refit that widened C's own gap — the only measurement here on which
-automatic labels *match* human annotation on a robot-relevant task, with no
-human in the labelling loop. Throughout, `grasps_target` and `no_invented`
-remain 1.00, so no plan failed for any other reason.
+them, each set out with its evidence in Appendix E.5. **The two planners
+agree exactly**, failing on the same six scenes, so the result is a property
+of the prompt and not of the engine reading it. **Every failure in both
+automatic arms is a missing support relation**, never a plan reasoning badly
+from what it was given — six misses in twenty-five is 24%, against support
+recall of 0.81/0.75 in §4.2, so the planner result is the fidelity result
+one level higher in the chain, and it moves when that fidelity does. **The
+two automatic sources fail on disjoint scenes**: D scores 20 of 25 and its
+failures do not intersect C's, so their union clears the occluder in all 25,
+gaining six scenes over C and losing none — the only measurement here on
+which automatic labels *match* human annotation on a robot-relevant task,
+with no human in the labelling loop. Throughout, `grasps_target` and
+`no_invented` remain 1.00, so no plan failed for any other reason.
 
 Twenty-five scenes is small, and the pairing is what makes it enough: exact
 McNemar tests over the discordant scenes (`eval/planner_paired_tests.py`,

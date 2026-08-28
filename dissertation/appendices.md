@@ -1360,6 +1360,24 @@ surrounding description, so absence of the relation is nearly but not quite
 sufficient for failure. The six failing scenes are 1, 4, 16, 19, 24 and 25
 (§5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together — scene 4 offered "box6 is in front of book7" and "box6 is near book7", scene 24 added "to the left of" — but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored `clear_step` is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
 
+**How the three findings were established.** Section 5.7 states them; the
+detail is here. *The two planners agree exactly.* Condition C fails on the
+same six scenes under both `gemini-flash-latest` and the reasoning model
+`gemini-3.1-pro-preview`, which is what makes the result a property of the
+prompt rather than of the engine reading it, and it disposes of the
+objection that a more capable planner would infer support from the object
+list: it does not, in twenty-five scenes of twenty-five, twice. *Every
+failure is a missing support relation.* In all six C failures the relation
+list lacked the load-bearing support relation, and in no scene was the
+relation present and ignored; six misses in twenty-five is 24%, against the
+support recall of 0.81/0.75 in §4.2, so the planner result is the fidelity
+result one level higher in the chain. *The two automatic sources fail on
+disjoint scenes.* D scores 20 of 25 and its five failures do not intersect
+C's six, so a union supplying more support relations repairs exactly the
+failing cases and cannot break the working ones -- E clears the occluder in
+all 25, gaining six scenes over C and losing none, and the disjointness
+survives the threshold refit that widened C's own gap.
+
 **Five limits on the planner result.** The scenes were selected to contain
 an occluder, so the result speaks to that situation and not to task planning
 at large. The vision-language model's assertions were never audited as the
@@ -1792,6 +1810,26 @@ many instances they hold, and what the 72% figure sets is a ceiling near
 metrics are depressed and every absolute figure in Chapter 6 is a lower
 bound on both sides, but the 30% is a share of the gold and not a share of
 mR@100.
+
+**The two mechanisms that erase Chapter 5's advantage.** Section 6.4 names
+four; two need their evidence set out. *Ranking dilution.* R@K is a
+per-image ranking budget, so any prediction absent from the gold consumes
+budget as a miss. The auto-trained model predicts densely, like its
+supervision, and Chapter 4's audits established that such extras are
+overwhelmingly true, so against gold annotating ~10% of pairs they outrank
+the annotated ones and are scored as errors -- §4.3's restricted-precision
+artefact reproduced at benchmark level. The human-trained arm learned the
+annotators' labelling prior instead, which is what a ranking metric against
+human-selected gold rewards. *Convention mismatch is a shared penalty.*
+Re-scoring against aligned gold lifts both arms almost equally, +0.041 human
+and +0.035 auto, the human arm's *in front of* recall jumping 0.124 to 0.386
+and the auto arm's 0.101 to 0.248, so both pay the same tax and the gap
+barely moves; the initial hypothesis that the denser arm is punished harder
+for its confidence is refuted by that measurement and withdrawn. It
+replicates at the shipped threshold, the retrained auto arm moving from
+0.292 to 0.316 mR@100 and 0.255 to 0.292 R@100 against aligned gold, +0.025
+against the earlier +0.035, so roughly a tenth of the absolute mR@100
+anywhere in Chapter 6 is an artefact of that defect, on both sides.
 
 **Where the difference between the arms actually sits.** Section 6.3.1
 reports the ordering; the per-annotator detail is this. The human arm leads
