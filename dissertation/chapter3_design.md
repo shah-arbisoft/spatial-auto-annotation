@@ -116,11 +116,11 @@ image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
 | Confidence | flag ambiguity bands for optional review | silent guesses | human-in-the-loop accelerator claim needs an explicit abstention mechanism |
 | Writers | byte-compatible VG JSON / YOLO / h5 | own schema + converter | drop-in comparability (requirement 2); verified against real exports |
 
-Coordinates are normalised by image size so thresholds transfer across
-resolutions, and depth is inverted to "smaller is nearer" and min-max
-normalised per image; the sign was fixed after front/behind agreement rose
-from ~26% to ~74%. An EXIF-aware loader makes the 180°-rotated captures
-upright before any box, mask or depth is read.
+Coordinates are normalised so thresholds transfer across resolutions, depth
+is inverted and normalised per image, and an EXIF-aware loader makes the
+180°-rotated captures upright before anything is read from them; Appendix
+C.11 gives both, with the sign error that cost front/behind ~26% agreement
+until it was found.
 
 ## 3.5 The seven rules
 
@@ -155,33 +155,21 @@ F1 ≤ 0.024 against the relative gap's recall 1.0 (§3.8).
 
 Three predicate families are mutually exclusive: on/under, left/right and
 front/behind. Two cannot contradict, because the rule branches; support is
-different — `on` and `under` are independent tests over *different* contact
-evidence, so noise in either can make both fire on the same pair, and that
-case is demoted to an `on_under_conflict` flag with neither label emitted.
-Demoting instead of resolving is deliberate: picking the stronger of two
-contradictory signals would produce a label the evidence does not support
-while looking exactly like one it does, and an annotator that fabricates
-under uncertainty cannot be audited. Emitting everything for the consumer to
-sort out (§3.4) was rejected because RQ2's consumer is a model, which
-cannot.
-
-One further correction is class-aware, not geometric. Support is not
-evaluated when either object is a person: the annotators never recorded one,
-on **0 of 2,466 gold support triplets**, and mask contact cannot distinguish
-an object *resting on* someone from one being *held* by them. A rule that
-cannot represent the distinction its evidence turns on should decline the
-pair instead of guessing; the guard is a configuration entry
-(`no_support_classes`), not a special case buried in code. It is still a
-class list standing in for geometry, and it would not cover a manipulator or
-an animal holding something; ablation A10 tests whether contact height can
-replace it and finds it cannot, at a cost of half the support recall
-(Appendix D.8).
+different, since `on` and `under` are independent tests over *different*
+contact evidence, so noise in either can make both fire on one pair. That
+case is demoted to an `on_under_conflict` flag and neither label is emitted
+— demoting rather than resolving, because an annotator that fabricates under
+uncertainty cannot be audited. One further correction is class-aware rather
+than geometric: support is not evaluated when either object is a person, the
+annotators having never recorded one on **0 of 2,466 gold support
+triplets**, and ablation A10 finds geometry cannot take that job back
+(Appendix D.8). Appendix C.11 gives both arguments in full.
 
 Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
 near-threshold edge, and the resolved contradiction above. They are the
-design's honesty mechanism: the tool is offered as a human-in-the-loop
-accelerator with a *measurable* residual cost, not as an oracle, and about a
-third of ordered pairs carry a flag, which §4.7 decomposes into silent
+design's honesty mechanism — the tool is offered as a human-in-the-loop
+accelerator with a *measurable* residual cost, not as an oracle — and about
+a third of ordered pairs carry one, which §4.7 decomposes into silent
 abstention and a much smaller genuine review queue. The structural
 guarantees this section promises are asserted in a randomised invariant test
 over two thousand synthetic scenes (§3.11), because they hold by
@@ -205,25 +193,24 @@ RQ2 depends on.
 
 ## 3.8 Calibrating `near`: an annotator-aware protocol
 
-The naive protocol (fit one threshold to all `near` labels, test on held-out
-images) fails informatively: fitting on annotator groups 0–5 and testing on
-6–8 yields held-out F1 = 0.009, because the label was applied by only three
-of nine groups with very different exhaustiveness. The protocol therefore
-fits on human-*annotated*, non-contact pairs only, since unannotated pairs
-are not reliable negatives under sparse annotation and contact pairs are
-never `near` by the measured convention; it uses only the training-split
-groups that used the label at all (0 and 4); and it reports agreement on the
-held-out near-user, group 8, which contributed nothing to the fit.
+Fitting one threshold to all `near` labels and testing on held-out images
+fails, and the failure is informative: held-out F1 comes out at 0.009,
+because the label was applied by only three of nine groups with very
+different exhaustiveness. The protocol therefore fits on human-*annotated*,
+non-contact pairs from the training-split groups that used the label at all,
+and reports agreement on the held-out near-user who contributed nothing to
+the fit; Appendix C.11 gives the reasoning behind each of those three
+choices.
 
 Results *(measured)*: fitted **T = 1.372** (gap/mean-size units); held-out
 recall **1.000**, every pair the unseen annotator called near lying within
-the threshold, with per-annotator precision 0.41 / 0.63 / 0.16 at the same
-T. Since recall is 1.0 for all three annotators simultaneously, the human
-labels are directionally consistent with a single threshold; what varies (by
-~4×) is how exhaustively each applied it. The fitted threshold applies one
-definition uniformly, which is exactly the "spatial thresholds for near" the
-source paper's future work requests; whether the tool's extra near pairs are
-genuinely near is checked by manual audit in the evaluation chapter.
+the threshold. Since recall is 1.0 for all three near-using annotators
+simultaneously, their labels are directionally consistent with a single
+threshold, and what varies — by about fourfold — is how exhaustively each
+applied it. The fitted threshold applies one definition uniformly, which is
+exactly the "spatial thresholds for near" the source paper's future work
+requests; whether the tool's extra near pairs are genuinely near is checked
+by manual audit in the evaluation chapter.
 
 ## 3.9 Modularity: the detector as the replaceable part
 

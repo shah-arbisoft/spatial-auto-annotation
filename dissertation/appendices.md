@@ -611,6 +611,54 @@ Every threshold above is declared in `configs/default.yaml`, so no constant
 that affects a label is buried in a function. `near_T` is fitted by
 `eval/fit_near.py` under the protocol of C.7 and frozen there.
 
+### C.11 Design detail behind Chapter 3
+
+Section 3.4 gives the pipeline table and §3.6 the correction policy; these
+are the parts that did not need to sit in the chapter.
+
+**Normalisation and orientation.** Coordinates are normalised by image size
+so thresholds transfer across resolutions, and depth is inverted to "smaller
+is nearer" and min-max normalised per image. The sign was fixed after
+front/behind agreement rose from ~26% to ~74%, which is the kind of error
+that looks like a modelling failure and is not. An EXIF-aware loader makes
+the 180-degree-rotated captures upright before any box, mask or depth is
+read; the dataset stores that rotation behind a flag, and reading it wrongly
+produced correct-looking unit tests over an upside-down image (§9.4).
+
+**Why support is demoted rather than resolved.** `on` and `under` are
+independent tests over *different* contact evidence, the mask-contact
+fraction measured each way round, so noise in either can make both fire on
+one pair; that case becomes an `on_under_conflict` flag and neither label is
+emitted. Picking the stronger of two contradictory signals would produce a
+label the evidence does not support while looking exactly like one it does,
+and an annotator that fabricates under uncertainty cannot be audited. The
+alternative of emitting everything and letting the consumer sort it out was
+rejected because RQ2's consumer is a model, which has no way to sort it out.
+
+**The class-aware guard.** Support is not evaluated when either object is a
+person: the annotators never recorded one, on **0 of 2,466 gold support
+triplets**, and mask contact cannot distinguish an object *resting on*
+someone from one being *held* by them. A rule that cannot represent the
+distinction its evidence turns on should decline the pair rather than guess,
+and the guard is a configuration entry (`no_support_classes`) rather than a
+special case buried in code. It is still a class list standing in for
+geometry and would not cover a manipulator or an animal holding something;
+ablation A10 tests whether contact height can replace it and finds it
+cannot, at a cost of half the support recall (D.8).
+
+**The `near` fitting protocol.** The naive protocol — fit one threshold to
+all `near` labels, test on held-out images — fails informatively: fitting on
+groups 0–5 and testing on 6–8 yields held-out F1 = 0.009, because the label
+was applied by only three of nine groups with very different exhaustiveness.
+The protocol therefore fits on human-*annotated*, non-contact pairs only,
+since unannotated pairs are not reliable negatives under sparse annotation
+and contact pairs are never `near` by the measured convention; it uses only
+the training-split groups that used the label at all (0 and 4); and it
+reports agreement on the held-out near-user, group 8, which contributed
+nothing to the fit. Per-annotator precision at the fitted T is 0.41 / 0.63 /
+0.16, so what varies across annotators by about fourfold is how exhaustively
+each applied the label, not where they placed it.
+
 ## Appendix D: Ablation derivations
 
 Chapter 4 (§4.9) summarises the ten ablations and their verdicts. This
