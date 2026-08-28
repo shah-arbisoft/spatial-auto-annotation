@@ -149,9 +149,12 @@ cannot separate.
 The same labels, the same held-out human gold, two very different verdicts:
 per-pair recall says the automatic labels teach two and a half times better,
 0.748 against 0.297; ranked evaluation against sparse gold says they are
-level. Neither the labels nor the gold differ between the experiments, so an
-advantage that size can only have evaporated into the **structure of the
-metric**. (An earlier version of this chapter had a stronger claim to
+level. Neither the labels nor the gold differ between the experiments, and
+the evidence below points to the **structure of the metric** and the sparse
+test gold accounting for most of that gap — not the only factor a change of
+framework could carry, since the architecture changes with it too, but the
+one the mechanisms below can be checked against. (An earlier version of
+this chapter had a stronger claim to
 explain — the human arm ahead at 0.326 against 0.278 — but those arms came
 from runs made weeks apart against different states of the upstream
 framework, and retraining all nine in one session removed the gap almost
