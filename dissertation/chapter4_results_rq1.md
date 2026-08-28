@@ -303,29 +303,25 @@ vision-language model, and if it annotates this dataset as well as the
 geometric pipeline does, the pipeline is unnecessary. Two were run on thirty
 images under Chapter 3's own definitions, in the same PredCls setting, one
 small and non-reasoning and one a reasoning model an order of magnitude
-larger; {{fig:rq1-with-vlm}} plots both against the pipeline and Appendix
-E.1 carries the setting, the per-predicate tables, the diagnostics and the
-limits of a thirty-image pilot.
-
-Both lose on recall everywhere, 0.400 and 0.445 against the pipeline's
-0.834, and scaling the model does not scale the ability being measured. But
-recall rewards whoever asserts more, and restricted to the pairs both judged
-**both models are more precise than the pipeline**, 0.419 and 0.389 against
-0.347, while losing F1 on every predicate. Most of the recall gap is
-silence: the model never addressed **171 of the 381 gold triplets**, 44.9%,
-and on the pairs it did judge its recall is 0.686 rather than 0.378. What it
-is bad at is *exhaustiveness*, the property this project exists to supply,
-so the fair statement — the one this dissertation should be held to — is
-that **the pipeline beats it on coverage and matches it on judgement**. The
-shape of the failure decides the reading: neither model contradicts itself
-or inverts the convention; they fall silent, and supply one direction of a
-symmetric pair without the other in a third of cases, which are the two
-defects §4.5 measures in the *human* annotation. Asked to annotate, a
-capable vision-language model reproduces the characteristic failure of the
-human process, not a geometric one. Its precision where it speaks still
-begins a case for it as an adjudicator on the depth pair (§7.6); §4.14 asks
-the same family to judge claims it is handed, only the half measured sound
-here.
+larger; {{fig:rq1-with-vlm}} plots both against the pipeline; the setting, the
+per-predicate tables, the diagnostics and the limits of a thirty-image pilot
+are in Appendix E.1. Both lose on recall everywhere, 0.400 and 0.445 against
+the pipeline's 0.834, so scaling the model does not scale the ability being
+measured. But recall rewards whoever asserts more, and restricted to the
+pairs both judged **both models are more precise than the pipeline**, 0.419
+and 0.389 against 0.347, while losing F1 on every predicate. Most of the
+recall gap is silence: the model never addressed **171 of the 381 gold
+triplets**, 44.9%, and on the pairs it did judge its recall is 0.686 rather
+than 0.378. What it is bad at is *exhaustiveness*, the property this project
+exists to supply, so the fair statement is that **the pipeline beats it on
+coverage and matches it on judgement**. The shape of the failure decides the
+reading: neither model contradicts itself or inverts the convention; they
+fall silent and supply one direction of a symmetric pair without the other
+in a third of cases — the two defects §4.5 measures in the *human*
+annotation. Asked to annotate, a capable vision-language model reproduces
+the characteristic failure of the human process, not a geometric one. Its
+precision where it speaks still begins a case for it as an adjudicator on
+the depth pair (§7.6).
 
 ## 4.14 Auditing the audit: blinding, decoys, and a second judge
 
@@ -339,25 +335,21 @@ once.
 relations it did *not* emit and no annotator labelled, mixed in unmarked.
 The decoys are the instrument: an auditor who simply agreed with every item
 scored 100% on the earlier sheets and scores zero here. The same 242 images
-went to `gemini-3.6-flash` as a second judge independent of the author
-(`scripts/judge_audit_vlm.py`), which rejected 24 of 28 decoys against the
-author's 19 of 28 — the stricter of the two, not a judge that agrees with
-whatever it is shown — the pair reaching Cohen's κ 0.601 over all items and
-0.425 over the claims alone: moderate agreement, not an echo. Appendix E.7
-carries the sampling, the class guard, the key handling, the pack's full
-per-predicate table, the argument for letting a model judge what §4.13 shows
-it cannot annotate, and what the decoys measure about each judge. Neither is
-a human; the independent human estimate is §4.15's.
+went to `gemini-3.6-flash` as a second judge independent of the author,
+which rejected 24 of 28 decoys against the author's 19 of 28 — the stricter
+of the two — the pair reaching Cohen's κ 0.601 over all items and 0.425 over
+the claims alone: moderate agreement, not an echo. Appendix E.7 carries the
+sampling, the class guard, the key handling, the pack's per-predicate table,
+the argument for letting a model judge what §4.13 shows it cannot annotate,
+and what the decoys measure about each judge.
 
 **The two precision measurements point in opposite directions, and which way
 is diagnostic.** Section 4.3 measured precision on the pairs a human
 labelled, this audit on the pairs a human did not. For five predicates the
-first badly understates the second (`near` 0.11 against 1.000, the laterals
-0.35 and 0.42 against 0.917 and 0.958), the sparse-gold artefact §4.1
-anticipated; for support it inverts sharply, 0.95 and 0.93 on annotated
-pairs against 0.372 and 0.431 off them. E.7 reads what that direction says
-about the human record, and why it is the reason the protocol pairs
-restricted precision with an audit rather than reporting either alone.
+first badly understates the second; for support it inverts sharply, 0.95 and
+0.93 on annotated pairs against 0.372 and 0.431 off them. E.7 reads what
+that says about the human record, and why the protocol pairs restricted
+precision with an audit rather than reporting either alone.
 
 The lateral, depth and proximity claims survive; support does not. At 0.404
 it is less than half what §4.9 reported and outside any interval this
@@ -365,21 +357,20 @@ dissertation previously stated. The judges disagree on its level, 0.404
 against 0.638, and agree emphatically on its direction, both far below 0.9
 (raw agreement 0.814, κ 0.576). Most of the drop is the blinding, not the
 sample: the same rules on the same data scored 0.77 unblinded (§4.9) and
-0.404 blind, because every row of the earlier sheet was known to be a tool
-emission, a prior the decoys remove. **`near` is the least supported number
-in the audit and carries the most labels**: the judges diverge on it by
-**0.375**, 1.000 against 0.625 on the same 24 images, under a predicate the
-tool emits on 43,388 ordered pairs against 717 in the human record.
+0.404 blind, a prior the decoys remove. **`near` is the least supported
+number in the audit and carries the most labels**: the judges diverge on it
+by **0.375**, 1.000 against 0.625 on the same 24 images, under a predicate
+the tool emits on 43,388 ordered pairs against 717 in the human record.
 
 The cause is a threshold fitted where its error was invisible — the shipped
-`on_contact_min` 0.60 came from Appendix D.2's fit on train F1 against gold
-covering ~10% of ordered pairs, so a false positive outside the gold cost
-the fit nothing. The repair was fitted on annotator groups 0–5, shipped at
-0.85, and re-audited from scratch on a second pack drawn from the new
-emissions: 219 items, **191 claims** and 28 decoys, same construction, same
-blinding, same two judges. E.7 gives the sequence and the held-out
-projection it declines to quote. Below, **v3** is the pre-refit pack at 0.60
-and **v4** the fresh one at the shipped 0.85.
+`on_contact_min` 0.60 came from Appendix D.2's fit on train F1 against gold covering
+~10% of ordered pairs, so a false positive outside the gold cost the fit
+nothing. The repair was fitted on annotator groups 0–5, shipped at 0.85, and
+re-audited from scratch on a second pack drawn from the new emissions: 219
+items, **191 claims** and 28 decoys, same construction, same blinding, same
+two judges. E.7 gives the sequence and the held-out projection it declines
+to quote. Below, **v3** is the pre-refit pack at 0.60 and **v4** the fresh
+one at the shipped 0.85.
 
 | Predicate | v3 author | v4 author (shipped) | v4 model |
 |---|---|---|---|
