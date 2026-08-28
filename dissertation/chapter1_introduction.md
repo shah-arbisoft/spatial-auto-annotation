@@ -235,9 +235,12 @@ work is a secondary analysis of a published, openly licensed dataset (CC-BY
 4.0) collected by the supervising research group; no new personal data were
 gathered for the annotation study. Some dataset frames contain identifiable
 people, so faces are anonymised in every published figure. The independent
-human validation of the automatic labels (Chapter 4) collects anonymous
-true/false judgements only, with no names, contact details, or IP addresses,
-under the University's ethics self-assessment process.
+human validation of the automatic labels (Chapter 4) collects true/false
+judgements only, with no names, contact details or IP addresses; because
+each browser is given a random identifier so that coverage can be spread and
+duplicates dropped, the accurate word for those judgements is *pseudonymous*
+rather than anonymous, which §8.3 sets out. The collection runs under the
+University's ethics self-assessment process.
 
 ## 1.4 Dissertation outline
 

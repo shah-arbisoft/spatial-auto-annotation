@@ -139,10 +139,12 @@ Each limitation below is stated with the specific experiment that would
 settle it, because that is more useful than an apology.
 
 **The chain reaches the plan, not the robot.** The planner experiment (§5.7)
-closes one of the two remaining links; what is missing is execution, since
-no robot moved. The same conditions on a physical Spot, or in a simulator
-with contact physics, would close the last link, and it is the only one
-left.
+carries the chain one link further, from labels to the plan a robot would act
+on, but on 25 occluder-selected scenes and under a scorer that cannot see a
+false positive it is supporting evidence rather than a closed link. What is
+missing outright is execution, since no robot moved. The same conditions on a
+physical Spot, or in a simulator with contact physics, would close the last
+link, and it is the only one left.
 
 **The shipped support rule is not independently verdicted.** The validation
 study (Appendix E.3) closed at 20 raters and agrees with the author's blind

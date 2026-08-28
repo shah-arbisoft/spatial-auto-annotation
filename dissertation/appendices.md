@@ -21,12 +21,13 @@ and the same people as the released portion, and the face-anonymisation rule
 above applies to them unchanged.
 
 The independent validation of the automatic labels (Chapter 4) collects
-anonymous true/false judgements from adult volunteers through a purpose-built
-web quiz. No names, email addresses or IP addresses are
+pseudonymous true/false judgements from adult volunteers through a
+purpose-built web quiz. No names, email addresses or IP addresses are
 recorded. Each browser receives a random identifier, stored with its answers
 and used only to spread item coverage and remove duplicates; because UK GDPR
 treats an online identifier as personal data where it can single out someone,
-the study is described as pseudonymous rather than anonymous (§8.3). The
+the study is described as pseudonymous rather than anonymous throughout, here
+and in §1.3 and §8.3. The
 identifier is generated in the browser, derives from nothing about the device
 or network, and is joined to no other dataset. Participation is voluntary,
 takes about three minutes, and can be abandoned at any point; an information
@@ -325,7 +326,7 @@ number: class index 0 is reserved, patched idempotently in a cell, and
 `inference()` directly rather than trusting the flag.
 
 **5. The validation study** lives in its own public repository
-(`robot-factcheck`), which regenerates its claim set from this repository's
+(`audit-game`), which regenerates its claim set from this repository's
 caches and scores the exported votes. The private answer key never enters
 either repository, so the study can stay open while its answers stay
 closed.
@@ -1200,7 +1201,22 @@ both; and whether disputed claims are wrong or merely ambiguous, through
 inter-rater reliability, which is the distinction the disagreement
 literature of §2.3 insists on.
 
-**Sampling.** Two arms. The *treatment* arm is drawn from the tool's *extra* predictions: ordered pairs the human annotators never labelled, which is exactly the population with no ground truth to score against. The *control* arm is drawn from the human annotations themselves, 84 per predicate, rendered through the identical pipeline and interleaved by the same shuffle, so nothing on the page distinguishes them and a rater cannot tell which arm a claim belongs to; the arm is recorded only in the private key. It began as 2,002 treatment claims, 286 per predicate, and was resized on 24 August to 412 treatment and 588 control: spreading raters across 2,002 items meant most would never be judged, and the 412 retained were exactly those already carrying a vote, so no judgement collected was discarded and no claim already voted on changed its identity. Each claim is rendered as the source photograph with
+**Sampling.** Two arms. The *treatment* arm is drawn from the tool's *extra* predictions: ordered pairs the human annotators never labelled, which is exactly the population with no ground truth to score against. The *control* arm is drawn from the human annotations themselves, 84 per predicate, rendered through the identical pipeline and interleaved by the same shuffle, so nothing on the page distinguishes them and a rater cannot tell which arm a claim belongs to; the arm is recorded only in the private key. It began as 2,002 treatment claims, 286 per predicate, and was resized on 24 August to 412 treatment and 588 control: spreading raters across 2,002 items meant most would never be judged, and the 412 retained were exactly those already carrying a vote, so no judgement collected was discarded and no claim already voted on changed its identity.
+
+That resize needs stating precisely, because the retained 412 are not a fresh
+random draw from the 2,002: they are the claims the collection process
+happened to reach, and items were served to raters in sequential batches, so
+retention is correlated with serving order rather than independent of it. Two
+properties bound what that can do. The batches are predicate-mixed rather than
+predicate-blocked — every early batch contains all seven predicates — and
+retention is even across predicates to within sampling error: 412 of 2,002
+overall, 20.6%, with per-predicate rates from 17.1% to 23.1%, which a
+chi-square test cannot distinguish from uniform (χ² = 5.20 on 6 df, p = 0.52).
+So the mechanism demonstrably does not skew the sample by predicate, which is
+the axis the per-predicate estimates rest on. It cannot be shown to be
+ignorable for anything else that correlates with serving order, and the
+accurate description is a sample selected by response rather than a
+randomised one. Each claim is rendered as the source photograph with
 the subject outlined in red and the object in blue, presented with a single
 sentence ("the book is on the box"), and answered TRUE or WRONG / can't tell
 by volunteers recruited through an open link. The instructions restate
@@ -1211,7 +1227,7 @@ conservative rule used in the author's own audits. Each browser receives a
 random identifier that prevents repeat judgements without identifying
 anybody, and faces are anonymised in every image (Chapter 8).
 
-**Coverage.** Stratified by what each analysis requires. An aggregate precision estimate needs only one judgement per claim, since the sample is random either way, so ordinary claims target a single rater. The 147 claims that also carry an author verdict target three raters each, because the crowd-versus-author comparison and the inter-rater reliability figure both need several independent judgements on the *same* item; those claims are served first. Against the resized pool that is about 1,300 judgements rather than the 3,000 a uniform three-rater target would demand. The priority ordering was the design's hedge against a thin turnout, and it worked in the direction intended: all 147 priority claims reached three raters, so the author comparison and the reliability figure rest on the coverage they were specified for rather than on whatever the response happened to allow.
+**Coverage.** Stratified by what each analysis requires. An aggregate precision estimate needs only one judgement per claim, the estimate being over claims rather than over raters, so ordinary claims target a single rater. The 147 claims that also carry an author verdict target three raters each, because the crowd-versus-author comparison and the inter-rater reliability figure both need several independent judgements on the *same* item; those claims are served first. Against the resized pool that is about 1,300 judgements rather than the 3,000 a uniform three-rater target would demand. The priority ordering was the design's hedge against a thin turnout, and it worked in the direction intended: all 147 priority claims reached three raters, so the author comparison and the reliability figure rest on the coverage they were specified for rather than on whatever the response happened to allow.
 
 **Scoring**, fully specified in advance (`analysis/score_votes.py`): ties
 resolve to WRONG, matching the audit protocol; reflex-speed responses and

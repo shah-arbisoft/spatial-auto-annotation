@@ -158,7 +158,7 @@ run `python eval/seed_stats.py`.
 
 ### The validation study
 
-Lives in its own public repository (`robot-factcheck`).
+Lives in its own public repository (`audit-game`).
 `tools/build_validation_set.py` regenerates the claim set and site images
 from this repository's caches; `analysis/score_votes.py` scores the exported
 votes sheet. The private answer key never enters the public repository.
