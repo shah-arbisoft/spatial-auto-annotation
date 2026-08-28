@@ -145,13 +145,12 @@ Section 4.9 bounds the engineering: neither a larger depth model nor
 multi-frame geometry moves the pair, so the limit is monocular ambiguity in
 the scenes rather than model capacity. A predicate reproducing its own
 verdict across viewpoints 0.958 of the time while recovering 0.70 of the
-human labels is not mismeasuring the scene but applying a criterion the
-annotators did not share, so the intervention with the best expected return
-is a written annotation guideline ahead of a better network — an
-uncomfortable conclusion for a computer-vision project and the one the
-evidence supports. The routes that stay open are a calibrated stereo pair or
-an RGB-D capture; wider surface detection was built, measured and declined
-(D.4).
+human labels is applying a criterion the annotators did not share, so the
+intervention with the best expected return is a written annotation guideline
+ahead of a better network — an uncomfortable conclusion for a
+computer-vision project and the one the evidence supports. The routes that
+stay open are a calibrated stereo pair or an RGB-D capture; wider surface
+detection was built, measured and declined (Appendix D.4).
 
 **Detection bounds full automation.** End-to-end recall with a zero-shot
 detector is 0.38 against the relation layer's 0.85 conditional on detection.

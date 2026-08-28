@@ -229,17 +229,17 @@ top-ranked false positives.
 Registered before the run, judged after: prediction 1 (early human-arm
 saturation) is **confirmed** and replicates the source paper. Prediction 2
 (higher plateau) is **unresolved on mR@100**, and the word matters: an
-earlier version of this chapter recorded it as refuted on the strength of a
-0.048 gap that the retrained arms of §6.3.1 reduce to 0.001, which no
-experiment of this size can call either way; where the plateau *is* higher
-is the zero-shot component the prediction did not name, 0.268 against 0.052.
-Prediction 3 (`near` recovery) is **refuted**: it wrongly assumed the test
-gold could reward dense `near` prediction. The value of pre-registration is
-that these verdicts are checkable, and that one had to be revised when the
-measurement improved is a point in its favour. The replication adds a fourth
-verdict, on a claim made *after* the run: §6.3.1 withdraws the single-seed
-group-7 result on the record, a difference being worth naming only once its
-size is compared with the variation of the procedure that produced it.
+earlier version recorded it as refuted on a 0.048 gap that the retrained
+arms of §6.3.1 reduce to 0.001, which no experiment of this size can call
+either way, while the plateau *is* higher on the zero-shot component the
+prediction did not name, 0.268 against 0.052. Prediction 3 (`near`
+recovery) is **refuted**: it wrongly assumed the test gold could reward
+dense `near` prediction. The value of pre-registration is that these
+verdicts are checkable, and that one had to be revised when the measurement
+improved is a point in its favour. The replication adds a fourth verdict on
+a claim made *after* the run: §6.3.1 withdraws the single-seed group-7
+result on the record, a difference being worth naming only once its size is
+compared with the variation of the procedure that produced it.
 
 ## 6.7 Answer, at the level the source paper measures
 

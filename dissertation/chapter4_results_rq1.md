@@ -402,41 +402,33 @@ tool's score readable rather than merely low.
 **On support the author's verdicts survive the check exactly**: 0.413 from
 the volunteers against the author's 0.404, a difference of 0.009 between the
 person who built the tool, blinded and working against decoys, and strangers
-with no stake in the outcome. That is the objection §2.9 raises and §7.4
-concedes, answered by measurement; the model sits apart at 0.638. **Against
-the human baseline, five predicates hold and support does not**, at 0.864
-against 0.926 and 0.413 against 0.975 respectively. On the **147** claims
-carrying both a volunteer and an author verdict the two agree **0.871** of
-the time (Cohen's κ **0.683**), and crowd-internal reliability is
-Krippendorff's α **0.703** — both substantial, both roughly doubled as the
-sample grew, and neither approaching 1.0, which §2.3's account of spatial
-language predicts better than rater carelessness does.
-
-Appendix E.3 carries the rest: the control arm's 0.940 against the tool's
-0.726, why the denominators differ, the Spearman 0.96 ranking agreement, and
-the asymmetry that bounds the comparison, since the tool's claims are its
-*extra* predictions on pairs the annotators passed over while the control
-claims are pairs they chose to record. The arm settles that the author's
-audit did not run in the author's favour and that the raters are not
-uniformly harsh; it does not settle the shipped tool, whose support rule
-postdates the sample. §7.6 and §9.3 carry what survives, and re-running the
-arm on post-refit labels is the one outstanding item that would close it.
+with no stake in the outcome — the objection §2.9 raises and §7.4 concedes,
+answered by measurement, with the model apart at 0.638. **Against the human
+baseline, five predicates hold and support does not**, 0.864 against 0.926
+and 0.413 against 0.975. On the **147** claims carrying both verdicts the
+two agree **0.871** of the time (Cohen's κ **0.683**), and crowd-internal
+reliability is Krippendorff's α **0.703**. Appendix E.3 carries the rest:
+the control arm's 0.940 against the tool's 0.726, why the denominators
+differ, the Spearman 0.96 ranking agreement, and the asymmetry that bounds
+the comparison. The arm settles that the author's audit did not run in the
+author's favour and that the raters are not uniformly harsh; it does not
+settle the shipped tool, whose support rule postdates the sample, and
+re-running it on post-refit labels is the one outstanding item that would
+close it.
 
 ## 4.16 Summary
 
 This chapter measured the automatic labels against the 8,926 relationships
 the annotators recorded. Recall reaches 0.85 pooled and 0.74 on annotator
-groups no threshold ever saw, with five predicates at human-comparable
-levels and the depth pair short of them for reasons §4.5 decomposes into
-calibrated abstention and a convention two groups did not share. Precision
-on the labels the tool adds beyond the human record was put through three
-instruments of increasing severity — an author audit, a blind
-decoy-controlled re-audit with a second judge, and a volunteer study — which
-agree that five predicates hold at 0.79–1.00 and that support does not, at
-0.535. Every remaining disagreement is attributed to a cause, leaving about
-7% as avoidable tool error, and two checks that need no gold at all, the
-viewpoint-stability measurement and the vision-language comparison, bound
-what the gold itself can settle.
+groups no threshold ever saw, five predicates at human-comparable levels and
+the depth pair short of them for reasons §4.5 decomposes into calibrated
+abstention and an unshared convention. Precision on the labels the tool adds
+beyond the human record went through three instruments of increasing
+severity — an author audit, a blind decoy-controlled re-audit with a second
+judge, and a volunteer study — which agree that five predicates hold at
+0.79–1.00 and that support does not, at 0.535. Every remaining disagreement
+is attributed to a cause, leaving about 7% as avoidable tool error, and two
+checks needing no gold at all bound what the gold itself can settle.
 
 Chapter 5 turns from whether the labels are accurate to whether they are
 useful, training the same relation model once on each label source.

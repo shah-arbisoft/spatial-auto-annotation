@@ -227,24 +227,20 @@ re-run §3.8's calibration.
 
 The images are consecutive frames of a continuous robot capture, and the
 sequence oversamples the scene severely: across its 2,650 frames the mean
-optical flow between neighbours is 0.08 px, with 0.9% of pixels moving more
-than one pixel, so a per-frame pipeline spends a full perception pass
-recomputing relations that have not moved. The remedy is to annotate one
-frame per *viewpoint*, which requires deciding where one viewpoint ends.
-Shot-boundary detection does not apply: it thresholds consecutive-frame
-differences, which presumes cuts, and 0.08 px per frame never exceeds the
-noise at any single step, while the same motion over forty frames displaces
-the image by 13 px, so only accumulated drift carries the signal.
-`segment_sequence` (`src/keyframes.py`) therefore measures drift from the
-*anchor* of the current segment rather than the preceding frame, opening a
-new segment when drift exceeds τ, so gradual motion accumulates instead of
-being rounded away while a genuine cut still crosses in one step; each
-segment nominates the frame closest to its mean signature, which on a moving
-camera beats taking the first. One parameter spans two uses — small τ
-isolates near-duplicates, large τ groups viewpoints of one arrangement,
-which §4.12's cross-viewpoint measurement consumes — and Appendix E.2 gives
-the thumbnail distance, the sweep the threshold is read off, and what the
-segmentation recovers.
+optical flow between neighbours is 0.08 px, so a per-frame pipeline spends a
+full perception pass recomputing relations that have not moved. The remedy
+is to annotate one frame per *viewpoint*, and shot-boundary detection does
+not supply it: thresholding consecutive-frame differences presumes cuts, and
+0.08 px never exceeds the noise at any single step while the same motion
+over forty frames displaces the image by 13 px, so only accumulated drift
+carries the signal. `segment_sequence` (`src/keyframes.py`) therefore
+measures drift from the *anchor* of the current segment rather than the
+preceding frame, so gradual motion accumulates while a genuine cut still
+crosses in one step, and each segment nominates the frame closest to its
+mean signature. One parameter spans two uses — small τ isolates
+near-duplicates, large τ groups viewpoints of one arrangement, which §4.12's
+measurement consumes — and Appendix E.2 gives the thumbnail distance, the
+sweep and what the segmentation recovers.
 
 ## 3.11 Reproducibility by construction
 

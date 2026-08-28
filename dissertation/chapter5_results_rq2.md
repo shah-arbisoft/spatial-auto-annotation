@@ -51,26 +51,23 @@ Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 The fourth arm answers what §4.13 raises but cannot settle: if a
 vision-language model is not a good enough *annotator*, is it a good enough
 *teacher*? The same model labelled all 600 training images, used exactly as
-the other sources are; every arm trains on precisely the pairs it covers,
-and the other three columns are unchanged from the three-arm experiment to
-the last decimal, which checks that this is an addition to the same
-experiment. It does, with a qualification: at 0.38 the vision-language
-labels teach better than the sparse human labels they would replace and
-about as well as the standard remedy for scarce labels, while remaining
-half as useful as computed geometry.
+the other sources are, and the other three columns are unchanged from the
+three-arm experiment to the last decimal, which checks that this is an
+addition to the same experiment. At 0.38 its labels teach better than the
+sparse human labels they would replace and about as well as the standard
+remedy for scarce labels, while remaining half as useful as computed
+geometry.
 
 {{fig:rq2-with-vlm}} draws the four arms per predicate. Training on the
 automatic labels multiplies downstream mean recall by ~2.5 against the human
-annotators' own held-out labels: 0.75 vs 0.30. Self-training improves the
-human baseline on six of seven predicates but lifts the mean only to 0.36,
-closing **15% of the distance** to the automatic arm: stretching the
-existing labels helps, and does not substitute for labelling every pair
-consistently. The seed spreads carry a second result: the auto-trained
-model's recall varies by at most 0.02 across seeds on every predicate, while
-the human-trained model's varies by up to 0.19 (`near` spans 0.00–0.19) and
-the self-trained model inherits the instability (`behind` spans 0.17–0.28).
-Sparse supervision is not just weaker, it is *unstable*, its outcome hostage
-to sampling noise, and self-training passes that on to its student.
+annotators' own held-out labels, 0.75 vs 0.30, while self-training lifts the
+mean only to 0.36, closing **15% of the distance**: stretching the existing
+labels helps, and does not substitute for labelling every pair consistently.
+The seed spreads carry a second result — the auto-trained model's recall
+varies by at most 0.02 across seeds on every predicate, the human-trained
+model's by up to 0.19 (`near` spans 0.00–0.19) and the self-trained model
+inherits that instability (`behind` spans 0.17–0.28) — so sparse supervision
+is not just weaker but *unstable*, its outcome hostage to sampling noise.
 
 ### 5.2.1 The same experiment on four other indicators
 
