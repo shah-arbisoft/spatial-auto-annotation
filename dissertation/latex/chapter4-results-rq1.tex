@@ -8,7 +8,7 @@ Four counts recur below. The released subset holds \textbf{884} frames; \textbf{
 The metrics: per-predicate \textbf{recall of the human triplets}, the primary one, following the source paper's convention; \textbf{restricted precision, recall and F1} on annotated pairs; a \textbf{manual audit} of a stratified sample of the extra predictions, for an unbiased true-precision estimate; per-type \textbf{flag rates}; and three baselines --- random, majority, and \textbf{box-only geometry} (box centres, no masks, no depth). Boxes and classes are ground truth throughout (PredCls), so box IoU does not apply; detector-in-the-loop results sit with the ablations. Thresholds were fitted on annotator groups 0--5 only, with 6--8 held out; each group is also a contiguous block of the capture, so the split holds out an unseen arrangement as well as an unseen annotator (\S{}4.12). Figure~\ref{fig:qualitative-examples} shows what the tool emits on two frames, one from a calibration group and one held out.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.80\textwidth]{figures/qualitative-examples.png}
+\includegraphics[width=0.80\textwidth,height=0.78\textheight,keepaspectratio]{figures/qualitative-examples.png}
 \caption[Two scenes as the pipeline labels them, with the detected]{Two scenes as the pipeline labels them, with the detected boxes and class instances drawn. Left, a calibration group on which every emitted relation is correct. Right, a held-out group whose annotators recorded front and behind under the opposite convention, which is the failure Section 4.5 decomposes. Faces are pixelated from the dataset's own human boxes, as Section 8.1 requires of anything republished.}
 \label{fig:qualitative-examples}
 \end{figure}
@@ -19,7 +19,7 @@ The metrics: per-predicate \textbf{recall of the human triplets}, the primary on
 Figure~\ref{fig:rq1-recall} plots the per-predicate result; the table adds the baselines.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.80\textwidth]{figures/rq1-recall.png}
+\includegraphics[width=0.80\textwidth,height=0.78\textheight,keepaspectratio]{figures/rq1-recall.png}
 \caption[Recall of the human triplets per predicate]{Recall of the human triplets per predicate: the full pipeline against a box-only ablation and a random baseline. Front and behind have no box-only bar because that ablation cannot compute depth.}
 \label{fig:rq1-recall}
 \end{figure}
@@ -70,7 +70,7 @@ The audit splits the predicates in two. For lateral, depth and proximity, \textb
 Figure~\ref{fig:front-behind-decomposition} decomposes front/behind by annotator group, and the two convention-inverted groups sit alone near zero. The per-group table and the full decomposition are in Appendix F.10; the pooled 0.70 resolves into three causes, in measured proportions. \textbf{Direction agreement is near-perfect where the tool commits}, 0.95--1.00 for six of the eight groups with meaningful counts, so genuine depth-ordering errors are rare. \textbf{Two annotator groups used the inverted convention}, agreeing with the committed direction 2--5\% of the time; flipping their labels recovers 0.94/0.82 and aligned overall recall is 0.91. And \textbf{the remaining gap is abstention, not error}: groups 2 and 3 agree almost perfectly when the tool commits, but their pairs sit inside the \texttt{depth\_\allowbreak{}eps} band and beyond the ground-plane fallback's reach, so the tool declines to answer.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.80\textwidth]{figures/front-behind-decomposition.png}
+\includegraphics[width=0.80\textwidth,height=0.78\textheight,keepaspectratio]{figures/front-behind-decomposition.png}
 \caption[Front/behind decomposed per annotator group]{Front/behind decomposed per annotator group: agreement where the tool commits, deliberate abstention, and the two groups that used the inverted direction convention.}
 \label{fig:front-behind-decomposition}
 \end{figure}
@@ -121,7 +121,7 @@ Two results. Skipping frames costs nothing measurable --- mean recall 0.832 prop
 \section{Would a vision-language model do this instead?}
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.80\textwidth]{figures/rq1-with-vlm.png}
+\includegraphics[width=0.80\textwidth,height=0.78\textheight,keepaspectratio]{figures/rq1-with-vlm.png}
 \caption[Recall of the human triplets per predicate: the geometric]{Recall of the human triplets per predicate: the geometric pipeline against both vision-language models on the same 30 images, the same numbered boxes and the same written definitions. The dotted lines are the two means. Scaling the model lifts every predicate a little and closes none of the gap.}
 \label{fig:rq1-with-vlm}
 \end{figure}

@@ -70,8 +70,9 @@ criterion is annotation practice and better where it is geometric consistency, a
 needs the second. The bottleneck removed was limiting not only the dataset's size but what it
 could teach.
 
-                                                        i
+i  6949963
                                           HIGHLIGHTS
+
 · First fully-automatic annotator for this dataset's seven spatial predicates
 · Recovers 85% of human triplets, and 74% on annotators no threshold ever saw
 · Blind decoy-controlled audit: 0.79-1.00 precision on five of seven predicates
@@ -79,7 +80,7 @@ could teach.
 · Benchmark parity at mR@100 0.292 vs 0.293, with five times the zero-shot coverage
 · A planner clears the occluder in 0 of 25 scenes without relations, 25 of 25 with
 
-                                                   ii
+ii  6949963
                                        ACKNOWLEDGEMENTS
 
 I thank my supervisor, Dr Peng Wang, for the dataset this project is built on, for the pointers to
@@ -108,7 +109,7 @@ Signature:                          Date:
 
 Total Number of Words: 28,735
 
-                               iii
+                               iii         6949963
 Contents
 
 Abstract                                    i
@@ -185,7 +186,7 @@ CHAPTER 3: Research Methodology and Design  15
 
 3.9 Modularity: the detector as the replaceable part . . . . . . . . . . . . . . . . . 19
 
-                              iv
+                              iv            6949963
                                 A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 3.10 Selecting frames by content . . . . . . . . . . . . . . . . . . . . . . . . . . . . 19
@@ -280,7 +281,7 @@ CHAPTER 7: Critical Evaluation                           45
 
 7.6 Limitations and threats to validity . . . . . . . . . . . . . . . . . . . . . . . . 48
 
-                                      v
+                                      v                  6949963
                               A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 7.7 The objections of §2.9, answered . . . . . . . . . . . . . . . . . . . . . . . . . 49
@@ -374,7 +375,7 @@ E.4 Video processing: settings and the open-vocabulary failures . . . . . . . . 
 
 E.5 The planner experiment: prompt construction and scoring rules . . . . . . . 85
 
-                                     vi
+                                     vi                            6949963
 E.6 The scale run: timing and the distribution check . . . . . . . . . . . . . . . 86
 E.7 The blind audit: sampling, guards and key handling . . . . . . . . . . . . . 86
 
@@ -402,38 +403,38 @@ F.10 The front/behind decomposition by annotator group . . . . . . . . . . . . 9
 
 List of Tables
 
-    1.1 Mapping of the CRISP-DM phases onto the chapters . . . . . . . . . . . . . . 4
+1.1 Mapping of the CRISP-DM phases onto the chapters . . . . . . . . . . . . . . 4
 
-    2.1 Related work assessed against the requirements . . . . . . . . . . . . . . . . . 14
+2.1 Related work assessed against the requirements . . . . . . . . . . . . . . . . . 14
 
-    3.1 Pipeline stages, the alternative rejected at each stage . . . . . . . . . . . . . . . 17
+3.1 Pipeline stages, the alternative rejected at each stage . . . . . . . . . . . . . . . 17
 
-    4.1 Per-predicate recall of the human triplets, pooled . . . . . . . . . . . . . . . . 23
-    4.2 Per-predicate precision of the shipped tool . . . . . . . . . . . . . . . . . . . . 30
-    4.3 Precision on the same pre-refit label generation . . . . . . . . . . . . . . . . . 31
+4.1 Per-predicate recall of the human triplets, pooled . . . . . . . . . . . . . . . . 23
+4.2 Per-predicate precision of the shipped tool . . . . . . . . . . . . . . . . . . . . 30
+4.3 Precision on the same pre-refit label generation . . . . . . . . . . . . . . . . . 31
 
-    5.1 Downstream recall against held-out human gold . . . . . . . . . . . . . . . . . 33
-    5.2 Planner experiment . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+5.1 Downstream recall against held-out human gold . . . . . . . . . . . . . . . . . 33
+5.2 Planner experiment . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
 
-    6.1 Benchmark test results (SGDet) for the human-trained . . . . . . . . . . . . . . 40
-    6.2 Seed replication . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
+6.1 Benchmark test results (SGDet) for the human-trained . . . . . . . . . . . . . . 40
+6.2 Seed replication . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 41
 
-    B.1 Commands reproducing every experiment from the cached . . . . . . . . . . . 65
+B.1 Commands reproducing every experiment from the cached . . . . . . . . . . . 65
 
-    C.1 The seven predicates . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 71
+C.1 The seven predicates . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 71
 
-    D.1 The ten ablations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 72
-    D.2 Ablation A9 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 75
-    D.3 Ablation A9 by depth separation . . . . . . . . . . . . . . . . . . . . . . . . . 75
-    D.4 For each missed human triplet, the predicates the tool . . . . . . . . . . . . . . 76
-    D.5 Diagnosed cause of every missed human triplet, by predicate. . . . . . . . . . . 77
-    D.6 Ablation A10: whether contact height can replace the class . . . . . . . . . . . 77
+D.1 The ten ablations . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 72
+D.2 Ablation A9 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 75
+D.3 Ablation A9 by depth separation . . . . . . . . . . . . . . . . . . . . . . . . . 75
+D.4 For each missed human triplet, the predicates the tool . . . . . . . . . . . . . . 76
+D.5 Diagnosed cause of every missed human triplet, by predicate. . . . . . . . . . . 77
+D.6 Ablation A10: whether contact height can replace the class . . . . . . . . . . . 77
 
-    E.1 A vision-language model against the geometric pipeline . . . . . . . . . . . . . 79
-    E.2 The vision-language comparison of §4.13 restricted . . . . . . . . . . . . . . . 79
-    E.3 Stability of each predicate across viewpoints . . . . . . . . . . . . . . . . . . . 81
+E.1 A vision-language model against the geometric pipeline . . . . . . . . . . . . . 79
+E.2 The vision-language comparison of §4.13 restricted . . . . . . . . . . . . . . . 79
+E.3 Stability of each predicate across viewpoints . . . . . . . . . . . . . . . . . . . 81
 
-                                                       vii
+                vii                           6949963
     E.4 Blind, decoy-controlled audit of 242 sampled items, verdicted . . . . . . . . . . 87
     F.1 Benchmark per-predicate mean recall at 100 for both arms, seed 42. . . . . . . 89
     F.2 Benchmark mean recall at 100 by test slice for both arms . . . . . . . . . . . . 89
@@ -456,7 +457,7 @@ List of Figures
     6.1 Validation curves for both benchmark arms . . . . . . . . . . . . . . . . . . . 40
     E.1 Frame-to-frame stability of the emitted triplets . . . . . . . . . . . . . . . . . . 83
 
-                                                       viii
+viii  6949963
          LIST OF ABBREVIATIONS
 
 CRISP-DM Cross-Industry Standard Process for Data Mining
@@ -500,7 +501,7 @@ YOLO     You Only Look Once (single-stage object detector family)
 
 zR@K     zero-shot Recall at K, over triplet types unseen in training
 
-                                    ix
+                                    ix                                         6949963
                                                 CHAPTER 1
 
                                              INTRODUCTION
@@ -556,8 +557,8 @@ Three families of method already exist for a shortage of labels, each reviewed i
 tested here rather than dismissed on paper. Learned scene-graph generators predict relations
 from visual patterns, but they train on labelled triplets and so sit downstream of an annotator
 
-                                                        1
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+1  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 instead of replacing one. Semi-supervised methods stretch the labels that exist, which pre-
 supposes a consistent seed; this one is 10% dense and internally contradictory, and Chapter 5
@@ -615,8 +616,8 @@ into six verifiable objectives:
        trained on each label source under identical features, splits and seeds, isolating the label
        source, answering RQ2. (Chapter 5)
 
-                                                        2
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+2  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     · O6 (test at the level the field measures). The same comparison repeated in the source
        paper's own scene-graph framework with a shared frozen detector and replicated seeds,
@@ -673,7 +674,7 @@ the supervising group supplied the full capture (Appendix E.6), and the vision-l
 parison, brought forward once it became clear a reader would treat it as the obvious alternative
 to the whole approach. Deferred to future work: copy-paste augmentation of under-represented
 
-                                                        3
+3  6949963
                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 relations, and any revision of the dataset's own predicate definitions.
@@ -740,7 +741,7 @@ ing research group; no new personal data were gathered for the annotation study.
 frames contain identifiable people, so faces are anonymised in every published figure. The in-
 dependent human validation of the automatic labels (Chapter 4) collects true/false judgements
 
-                                                        4
+                                           4                                                    6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 only, with no names, contact details or IP addresses; because each browser is given a random
@@ -759,10 +760,9 @@ the source paper's own framework and disagrees. Chapter 7 ties all three to caus
 prior work, Chapter 8 to the legal, social, ethical and professional dimensions of automating
 annotation, and Chapter 9 to the objectives, the contributions and what is left undone.
 
-                                                        5
-                                                CHAPTER 2
-
-                                        LITERATURE REVIEW
+5  6949963
+        CHAPTER 2
+LITERATURE REVIEW
 
 This chapter reviews the work this project builds on and the work it must be distinguished
 from. Its organising question is label quality: not whether spatial relations can be computed,
@@ -814,8 +814,8 @@ Boston Dynamics Spot robot. Verified specifics:
 
     · Scale: "nearly 1,000 robot-acquired indoor images" collected; "approximately 900" sur-
 
-                                                        6
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+6                  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
        vive quality control. (The released GitHub subset used here contains 884 images / 838
        annotated; see DATASET_NOTES.md.)
@@ -871,7 +871,7 @@ ment with the humans" a per-annotator quantity. Two design decisions follow: eva
 reported per annotator group, never only pooled, and thresholds are calibrated only on annota-
 tors who used a label, with the rest held out.
 
-                                                        7
+7  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     Where human judgements must themselves be evaluated, the measurement tradition sup-
@@ -925,8 +925,8 @@ pseudo-labelling and programmatic labelling meet head to head on the humans' own
 annotations, a comparison the weak-supervision and semi-supervised literatures each motivate
 but rarely run against one another.
 
-                                                        8
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+8  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 2.5 Geometry-to-label pipelines (the lineage we build on)
 
@@ -979,8 +979,8 @@ and Kamath, Hessel and Chang (2023) show the failure survives scale and promptin
 on every predicate, while being more precise where they speak. What settles it is the shape of
 the output -- silence on most pairs, a symmetric relation asserted in one direction only about
 
-                                                        9
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+9  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 a third of the time, the behaviours §4.5 measures in the human annotation. A vision-language
 model asked to annotate reproduces the failure mode this project set out to replace.
@@ -1037,8 +1037,8 @@ against alternatives. The design space, also the basis of the detector-swap abla
 
     · Monocular depth. Depth Anything v2 (Yang, L. et al., 2024) emits a relative map,
 
-                                                       10
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+10  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
        ordering pixels without a unit, and that property fixes the rule design: every depth com-
        parison is ordinal and within-image. The scale ambiguity is inherent to the zero-shot
@@ -1094,8 +1094,8 @@ dom/majority baselines.
     REACT++ (Neau and Falomir, 2026) is a real-time SGG model with a YOLO backbone,
 reportedly ~20% faster and ~10% more accurate on relation prediction than its predecessor,
 
-                                                       11
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+11  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 small enough to run onboard a robot, shipped in the open SGG-Benchmark framework. The
 essential point: such models require labelled training data and sit downstream of an an-
@@ -1152,7 +1152,7 @@ dited estimate of true precision on pairs the gold never covers (§4.4). Every ag
 posed per predicate and per annotator group. And the decisive test of the labels is deliberately
 moved off these metrics altogether, to whether a downstream consumer trained on them per-
 
-                                                       12
+12  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 forms the task (Chapters 5 and 6), because a metric that rewards agreement with the annotation
@@ -1212,7 +1212,7 @@ works outside this dataset, or predicts instead of computing relations. None pro
 automatic annotator for this dataset's seven predicates, validated against its human la-
 bels.
 
-                                                       13
+13  6949963
                                                A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Table 2.1: Related work assessed against the requirements of a fully-automatic spatial-
@@ -1259,7 +1259,7 @@ case against the approach is stated in advance (§2.9), so the results can be rea
 on it, with §7.7 the reckoning. Chapter 3 turns the gap this chapter identifies into a design: the
 methodology that structures the work, and the geometric rule for each of the seven predicates.
 
-                                                      14
+                                                      14                                         6949963
                                                 CHAPTER 3
                           RESEARCH METHODOLOGY AND DESIGN
 
@@ -1312,7 +1312,7 @@ files, drive specific design responses:
        image (Yang, L. et al., 2024), so all depth comparisons are ordinal and within-image and
        no rule consumes absolute depth.
 
-                                                       15
+15  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     · Sparse annotation. Humans labelled a minority of object pairs (measured: 6,458 of
@@ -1354,12 +1354,13 @@ the RQ1 comparison. Detector-in-the-loop operation (YOLOv10m vs. Grounding DINO)
 retained as an ablation and as the deployment mode for new images.
 
 3.4 Pipeline architecture
-image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
 
+image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
                                                                                                |
+
             writers (VG JSON / YOLO / h5) <-- flags <-- correction <-- 7 rules
 
-                                                       16
+16  6949963
                                            A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Table 3.1: Pipeline stages, the alternative rejected at each stage, and the justification.
@@ -1444,7 +1445,7 @@ depth abstains a ground-plane fallback decides from pure projection, ordering tw
 on the same floor by which box bottom sits lower in the image -- a pixel-precise cue exactly
 where depth is noisiest, guarded by the tool's own support evidence so it never fires when either
 
-                                                       17
+                                           17                                              6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 object rests on another. Pairs both stages abstain on are flagged, not guessed (recall 0.70/0.71
@@ -1483,8 +1484,8 @@ is offered as a human-in-the-loop accelerator with a measurable residual cost, n
 and about a third of ordered pairs carry a flag, which §4.7 decomposes into silent abstention
 and a much smaller genuine review queue. The structural guarantees this section promises are
 
-                                                       18
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+18  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 asserted in a randomised invariant test over two thousand synthetic scenes (§3.11), because
 they hold by construction and would otherwise be easy for a later rule edit to break quietly.
@@ -1541,7 +1542,7 @@ frame per viewpoint, which requires deciding where one viewpoint ends. Shot-boun
 tection does not apply: it thresholds consecutive-frame differences, which presumes cuts, and
 0.08 px per frame never exceeds the noise at any single step, while the same motion over forty
 
-                                                       19
+19  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 frames displaces the image by 13 px, so only accumulated drift carries the signal. segment_
@@ -1592,8 +1593,9 @@ to attack the author's own verdicts, and it overturned one. Chapter 4 puts the a
 decisions produce against the human annotations, which is the first of the three iterations that
 answer the two research questions.
 
-                                                       20
+20  6949963
                                                 CHAPTER 4
+
                  FIDELITY AGAINST THE HUMAN ANNOTATIONS (RQ1)
 
 This chapter answers RQ1: the protocol (§4.1), headline recall (§4.2), audited precision (§4.3­
@@ -1630,14 +1632,16 @@ out.
 
 Figure 4.2 plots the per-predicate result; the table adds the baselines.
 
-                                                       21
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+21  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Figure 4.1: Two scenes as the pipeline labels them, with the detected boxes and class instances
 drawn. Left, a calibration group on which every emitted relation is correct. Right, a held-out
-group whose annotators recorded front and beh2i2nd under the opposite convention, which is the
+group whose annotators recorded front and behind under the opposite convention, which is the
 failure Section 4.5 decomposes. Faces are pixelated from the dataset's own human boxes, as
 Section 8.1 requires of anything republished.
+
+22  6949963
                                A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Figure 4.2: Recall of the human triplets per predicate: the full pipeline against a box-only
@@ -1675,8 +1679,8 @@ reading, and both are reported -- guessing in front of everywhere recovers 2,013
 triplets -- so neither reading can flatter the tool. (ii) Box-only recall is level with the pipeline
 on the laterals and slightly ahead on support (0.84 and 0.77 against 0.81 and 0.75) while 0.13
 
-                                                       23
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+                               23                                                  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 behind on near; but the mask rule was adopted because it lifts support precision and recall to-
 gether (held-out F1 0.71 to 0.87; A5, §4.9), a looser box rule buying its recall with the false fires
@@ -1732,8 +1736,8 @@ abstention, not error: groups 2 and 3 agree almost perfectly when the tool commi
 pairs sit inside the depth_eps band and beyond the ground-plane fallback's reach, so the tool
 declines to answer.
 
-                                                       24
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+24  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Figure 4.3: Front/behind decomposed per annotator group: agreement where the tool commits,
 deliberate abstention, and the two groups that used the inverted direction convention.
@@ -1772,8 +1776,8 @@ derivation, the interval it produces and the density figures, so the objection c
 rather than taken on trust. This dataset cannot yield an inter-annotator agreement figure even
 by bounding -- a replication that wants one has to collect overlapping assignments -- so RQ1's
 
-                                                       25
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+25  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 comparability claim rests on the trivial baselines and the per-predicate audit (§4.8).
 
@@ -1832,8 +1836,8 @@ its shipped setting and its verdict, and D.1­D.8 give the derivations.
 audit localised a support precision failure; a geometric insight (stacked objects share a camera
 distance) fixed half, the depth co-location gate lifting held-out support F1 0.58  0.71 (A1); a
 
-                                                       26
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+26  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 perception upgrade, mask-bottom contact, fixed most of the rest while raising recall, 0.71 
 0.87 (A5), the rare change that improves both error directions at once; and the ground-plane
@@ -1889,7 +1893,7 @@ and each segment's predicates propagated from its keyframe.
 
     Two results. Skipping frames costs nothing measurable -- mean recall 0.832 propagated
 
-                                                       27
+27  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 against 0.829 per frame, at every threshold tested -- and the stability column holds a finding
@@ -1927,8 +1931,8 @@ the pairs it did judge its recall is 0.686 rather than 0.378. What it is bad at 
 property this project exists to supply, so the fair statement, the one this dissertation should be
 held to, is that the pipeline beats it on coverage and matches it on judgement. The failure's
 
-                                                       28
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+28  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 shape decides the reading: neither model contradicts itself or inverts the convention; they fall
 silent, and supply one direction of a symmetric pair without the other in a third of cases --
@@ -1984,7 +1988,7 @@ annotators used inconsistently (three of four behind decoys, two of four in fron
 judges rejected all eight support decoys, so neither is simply harsh). The predicate under that
 combination is the tool's most freely emitted, 43,388 ordered pairs against 717 human; the
 
-                                                       29
+29  6949963
                  A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 threshold generalised to a held-out annotator at recall 1.00 (§3.8), so the notion is calibrated,
@@ -2047,7 +2051,7 @@ drawn on 17 July, a month before on_contact_min was re-fitted from 0.60 to 0.85,
 shipped support rule has still not been judged by anyone outside this project; for the five
 predicates the threshold does not touch, the labels are identical in both generations. And half
 
-                                                       30
+                 30                                                            6949963
                  A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 the pool is drawn from the human annotations, rendered through the identical pipeline and
@@ -2099,7 +2103,7 @@ the labels the tool adds beyond the human record was put through three instrumen
 ing severity -- an author audit, a blind decoy-controlled re-audit with a second judge, and a
 volunteer study -- which agree that five predicates hold at 0.79­1.00 and that support does not,
 
-                                                       31
+                 31                                       6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 at 0.535. Every remaining disagreement is attributed to a cause, leaving about 7% as avoidable
@@ -2109,7 +2113,7 @@ vision-language comparison, bound what the gold itself can settle.
     Chapter 5 turns from whether the labels are accurate to whether they are useful, training the
 same relation model once on each label source.
 
-                                                       32
+32  6949963
                         CHAPTER 5
            DOWNSTREAM UTILITY (RQ2)
 
@@ -2171,7 +2175,7 @@ is not a good enough annotator, is it a good enough teacher? The same model labe
 600 training images, used exactly as the other sources are; every arm trains on precisely the
 pairs it covers, and the other three columns are unchanged from the three-arm experiment to
 
-                                                       33
+                          33                                                              6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 the last decimal, which checks that this is an addition to the same experiment. It does, with a
@@ -2209,7 +2213,7 @@ artefact one level down the chain. Appendix F.5 gives the full table, and conced
 not settle: §4.4 audited the rule layer's extras, not the classifier's, so these precision figures are
 uninterpretable rather than favourable. The automatic arm dominates at teaching a model to
 
-                                                       34
+34  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 recover the relations humans recorded and loses at imitating which relations humans chose to
@@ -2265,7 +2269,7 @@ property RQ2 asks about, since a downstream consumer must extract a consistent s
 Chapter 6 removes the circularity by repeating the comparison in a full scene-graph model with
 visual features.
 
-                                                       35
+35  6949963
                          A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 5.6 From labels to robots: where this sits in the source paper's chain
@@ -2301,15 +2305,15 @@ vision-language model's relations from §4.13, and E, the union of C and D.
 Table 5.2: Planner experiment: whether the plan clears the occluding object before grasping
 the target, over 25 held-out scenes under each label source.
 
-Condition Prompt states           Safe plans (flash) Safe plans (pro)
+Condition Prompt states               Safe plans (flash) Safe plans (pro)
 
-A  objects only                   0 / 25           0 / 25
+A  objects only                       0 / 25       0 / 25
 
-B  human relationships            25 / 25          25 / 25
+B  human relationships                25 / 25      25 / 25
 
-C  automatic relationships        19 / 25          19 / 25
+C  automatic relationships            19 / 25      19 / 25
 
-D  vision-language relationships  not run          20 / 25
+D  vision-language relationships      not run      20 / 25
 
 E  automatic and vision-language combined not run  25 / 25
 
@@ -2323,7 +2327,7 @@ arms is a missing support relation, never a plan reasoning badly from what it wa
 scene was the relation present and ignored. Six misses in twenty-five is 24%, against support
 recall of 0.81/0.75 in §4.2, so the planner result is the fidelity result one level higher in the
 
-                                                       36
+                                  36                                       6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 chain -- and it moves when that fidelity does, the refit of §4.14 having cost C three scenes
@@ -2359,7 +2363,7 @@ relation the tool asserts wrongly costs an unnecessary step and never a failed p
 testing whether the labels carry enough and not whether they carry too much. A task penalising
 wasted motion, or one where moving the wrong object is unsafe rather than merely inefficient,
 
-                                                       37
+37  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 would rank these label sources differently, and nothing here predicts how.
@@ -2390,7 +2394,7 @@ metric. Section 6.4 measures why the two disagree, and the answer to RQ2 should 
 that pair of results and not as this one alone. Chapter 6 is that heavyweight repeat, in the source
 paper's own framework with a shared frozen detector and three seeds per arm.
 
-                                                       38
+38  6949963
                                                 CHAPTER 6
                                 THE DIRECT BENCHMARK TEST
 
@@ -2435,7 +2439,7 @@ shapes compare.
 Both best checkpoints evaluated on the identical test set (210 images, human gold, groups 6­8),
 at seed 42:
 
-                                                       39
+39  6949963
                       A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Figure 6.1: Validation curves for both benchmark arms, each against its own training-source
@@ -2476,7 +2480,7 @@ arms were retrained at seeds 43 and 44 and all six checkpoints re-scored on ever
 (scripts/kaggle/, aggregated by eval/seed_stats.py) against the same frozen detector,
 so the spread below is the relation model's own variance.
 
-                      40
+                      40                                                6949963
                      A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Table 6.2: Seed replication: which differences separate across three seeds per arm.
@@ -2541,8 +2545,8 @@ too, which have no direction to invert.
     Second, the zero-shot result is robust and larger than first reported. Pooled zR@100
 is 0.268 against 0.052, roughly fivefold, with disjoint ranges, and not an artefact of pooling:
 
-                                                       41
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+                     41                                                               6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 the auto arm leads on every annotator separately (0.449 against 0.000 on group 6, 0.273 against
 0.098 on group 7, 0.041 against 0.007 on group 8), and the gap points the same way on defective
@@ -2599,8 +2603,8 @@ mR@100 anywhere in this chapter is an artefact of that defect, on both sides.
     (ii') Where the gap actually lives: the two defective test groups. The per-group figures
 of §6.3.1 localise the human arm's lead to the two annotators convicted of convention inversion,
 
-                                                       42
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+42  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 where it is four times what it is on the clean one. Group 6 shows the fingerprint: its lateral gold,
 geometrically unambiguous relations both models predict freely, is recalled at 0.49/0.69 by the
@@ -2658,7 +2662,7 @@ Registered before the run, judged after: prediction 1 (early human-arm saturatio
 and replicates the source paper. Prediction 2 (higher plateau) is unresolved on mR@100, and
 the word matters: an earlier version of this chapter recorded it as refuted on the strength of a
 
-                                                       43
+43  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 0.048 gap that the retrained arms of §6.3.1 reduce to 0.001, which no experiment of this size
@@ -2685,7 +2689,7 @@ together and asks what they mean: what the remaining failures are made of, what 
 the dataset's own annotation process, and how far the objections raised in advance survive the
 evidence.
 
-                                                       44
+44  6949963
                                                 CHAPTER 7
 
                                        CRITICAL EVALUATION
@@ -2740,8 +2744,8 @@ the mass being calibrated abstention (43­54% of front/behind misses sit in the d
 band) with measured annotator defects taking most of the rest. That shapes what is left to
 do -- a tool whose misses are mostly abstention improves by deciding more often rather than
 
-                                                       45
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+45  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 better, and one whose misses are mostly the annotators' own conventions does not improve by
 changing the tool at all.
@@ -2797,8 +2801,8 @@ predicate definitions; the claim here is not that nothing was said but that what
 did not survive contact with nine annotators, the three defects above being measured in the
 labels themselves rather than inferred from an absence. Prose definitions given at training
 
-                                                       46
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+46  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 time were not sufficient -- an argument for definitions of a different kind rather than more of
 the same, since a threshold a program applies cannot be applied two ways by two annotators,
@@ -2854,8 +2858,8 @@ truth, which only the audits address.
     One finding belongs here and not in Chapter 6, because it is about method. The benchmark
 arms were originally trained weeks apart, against whatever state the upstream framework was
 
-                                                       47
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+47  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 in on the day; retraining all nine runs in one session on one clone moved the human arm's
 pooled mR@100 from 0.326 to 0.293 and the vision-language arm by 0.001, with no label
@@ -2910,8 +2914,8 @@ the raters scoring human annotation at 0.940 on the same instrument, so the auth
 are corroborated rather than merely unchallenged. It was drawn before the threshold refit, so
 it checks those verdicts rather than the shipped support rule (§4.15), and the two-stage audit
 
-                                                       48
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+48  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 shares machinery with the rule change it evaluates.
     External. One laboratory domain, six object classes, one camera and mounting; the fitted
@@ -2969,7 +2973,7 @@ yardstick. The designed remedy is the study of Appendix E.3, which returned too 
 carry the weight it was built for; what it does return (§4.15) narrows the objection rather than
 retiring it, since on the pre-refit labels both judged, disinterested judges scored support slightly
 
-                                                       49
+49  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 lower than the author did, so the author's audit is not flattering its own tool. The shipped rule
@@ -3010,7 +3014,7 @@ addressed at all.
     Chapter 8 turns from the evidence to the legal, social, ethical and professional dimensions
 of automating annotation work.
 
-                                                       50
+50  6949963
                                                 CHAPTER 8
 
        LEGAL, SOCIAL, ETHICAL AND PROFESSIONAL CONSIDERATIONS
@@ -3066,7 +3070,7 @@ supplies, not assumed.
 from positions and extents. The perception stack, however, is learned, and detection qual-
 ity for the human class cannot be assumed uniform across people; published detectors have
 
-                                                       51
+51  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 documented performance disparities. In this dataset the people are members of the collecting
@@ -3118,10 +3122,9 @@ Conduct in its claims and in its engineering practice.
     Chapter 9 closes the dissertation against its objectives and research questions, states the
 contributions, and sets out what is left undone.
 
-                                                       52
-                                                CHAPTER 9
-
-                              CONCLUSIONS AND FUTURE WORK
+52  6949963
+                  CHAPTER 9
+CONCLUSIONS AND FUTURE WORK
 
 This chapter closes the dissertation: what each objective was met with and how the two re-
 search questions are answered (§9.1), the contributions (§9.2), each limitation paired with the
@@ -3170,8 +3173,8 @@ about the words, §4.12 showing the tool reproducing its own verdict across viewp
 of the time while two annotator groups applied the opposite convention. A per-predicate answer
 was required precisely so this could not hide inside a mean.
 
-                                                       53
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+53                           6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     RQ2 is answered yes at the classifier, not met at the planner by the tool alone, and
 undecided at the benchmark. The controlled classifier gives 0.75 against 0.30 on held-out
@@ -3226,8 +3229,8 @@ survive training variance.
 split and seeds, showing that programmatic labels out-teach both scarce human labels and the
 standard remedy for scarce human labels. The mechanism is measured, not inferred: self-
 
-                                                       54
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+54  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 training contributes roughly a thousand confident negative pseudo-labels for every positive one,
 propagating the annotators' silence and not their judgement.
@@ -3286,8 +3289,8 @@ capture; wider surface detection was built, measured and declined (Appendix D.4)
     Detection bounds full automation. End-to-end recall with a zero-shot detector is 0.38
 against the relation layer's 0.85 conditional on detection. The gap is detection, not relations,
 
-                                                       55
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+55  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 and the source paper's own trained detector (0.93 mAP@50) would close most of it. That check
 needs only the released weights.
@@ -3345,12 +3348,12 @@ the inter-annotator agreement figure I could only estimate indirectly. What I am
 with is not the accuracy figure but the two refinements I built, measured and declined: both
 were plausible and took real work, the data said neither helped, and reporting that is where this
 
-                                                       56
+56  6949963
                                 A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 started feeling like research.
 
-                                57
+                                57  6949963
                                              REFERENCES
 
 Ahn, M. et al. (2022) 'Do as I can, not as I say: grounding language in robotic affordances', Proceed-
@@ -3415,8 +3418,8 @@ Gu, Q. et al. (2024) 'ConceptGraphs: open-vocabulary 3D scene graphs for percept
 Hughes, N., Chang, Y. and Carlone, L. (2022) 'Hydra: a real-time spatial perception system for 3D
     scene graph construction and optimization', Robotics: Science and Systems (RSS).
 
-                                                      58
-                                                 A Fully-Automatic Spatial-Relationship Annotation Pipeline
+58  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Johnson, J., Hariharan, B., van der Maaten, L., Fei-Fei, L., Zitnick, C.L. and Girshick, R. (2017)
     'CLEVR: a diagnostic dataset for compositional language and elementary visual reasoning', Pro-
@@ -3489,7 +3492,7 @@ Settles, B. (2009) Active learning literature survey. Computer Sciences Technica
 Song, C.H., Blukis, V., Tremblay, J., Tyree, S., Su, Y. and Birchfield, S. (2025) 'RoboSpatial: teach-
     ing spatial understanding to 2D and 3D vision-language models for robotics', Proceedings of the
 
-                                                      59
+59  6949963
                                                  A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), oral presentation, pp.
@@ -3540,8 +3543,9 @@ Zhang, W. et al. (2025) 'Open3D-VQA: a benchmark for embodied spatial concept re
     multimodal large language model in open space', Proceedings of the 33rd ACM International Con-
     ference on Multimedia (MM '25), pp. 12784-12791. doi:10.1145/3746027.3758219
 
-                                                      60
+60  6949963
                                                APPENDIX A
+
                                          ETHICAL APPROVAL
 
 This project performs secondary analysis of an existing, published research dataset (Wang et
@@ -3588,10 +3592,9 @@ moving camera) https://www.pexels.com/video/6558513/ and clip 2 (overhead desk, 
 ing hands) https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-
 using-a-modern-camera-3250234/.
 
-                                                       61
-                                               APPENDIX B
-
-                                          REPRODUCIBILITY
+61  6949963
+     APPENDIX B
+REPRODUCIBILITY
 
 Environment: Windows 11, Python 3.11.9 (virtual environment), PyTorch 2.5.1 (CUDA 12.1),
 single NVIDIA RTX 2060 (6 GB). All thresholds, seeds and model identifiers are pinned in
@@ -3644,7 +3647,7 @@ randomised invariant test fuzzes two thousand synthetic scenes against the struc
 tees §3.6 promises; and the rest cover the format writers, the detector adapters of §3.9, frame
 selection and the reply parsers.
 
-                                                       62
+62               6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     The format writers, verified. Byte-compatibility is a requirement of the research design
@@ -3704,7 +3707,7 @@ the four-arm table of §5.2 from outputs/rq2_report_vlm.json; the planner scores 
 outputs/planner_scores.json, with conditions D and E in outputs/planner_scores_
 abcde.json.
 
-                                                       63
+63  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     Chapter 6. Numbers generated on Kaggle (T4 GPU) with SGG-Benchmark; train-
@@ -3765,7 +3768,7 @@ Dockerfile header are reachable rather than aspirational.
 
     The end-to-end check is the one that matters for reproducibility. Mounting the dataset and
 
-                                                       64
+64  6949963
 A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 the geometry cache read-only into the container and running scripts/reannotate_from_
@@ -3824,7 +3827,7 @@ python eval/parallax_ablation.py      D.6's focal-length sensitivity check, para
 ­method triangulate ­gap 20           focal_sweep.json
 ­focal-sweep 0.5,0.7,0.9,1.2,1.6,2.0
 
-                                      65
+                                      65                                                6949963
 A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 command                               produces                                      time
@@ -3900,8 +3903,9 @@ closed.
     Every reported number traces to one of the JSON/markdown artefacts these commands
 write; no figure or table in this dissertation is produced by hand.
 
-                                                       66
+                                      66                                            6949963
                                                APPENDIX C
+
                                     PREDICATE SPECIFICATION
 
 This is the complete geometric specification of the seven predicates: the per-object measure-
@@ -3953,31 +3957,31 @@ box gap rather than the lifted position (C.7).
     All predicates are defined for an ordered pair (A, B), A the subject and B the object,
 matching the dataset's subject-predicate-object triplet format.
 
-                                                       67
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+67  6949963
+                         A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 C.2 on(A, B): A rests on B
 
 A is on B when A sits directly above B, the two nearly touch, and they overlap horizontally.
 Four conditions, all required.
 
-   1. Above. A is the higher object: cy_A < cy_B, with the bottom edge of A near the top of
-       B.
+1. Above. A is the higher object: cy_A < cy_B, with the bottom edge of A near the top of
+   B.
 
-   2. Touching. The normalised vertical gap between the bottom of A and the top of B is at
-       most on_vertical_gap (0.05). A small but non-negative gap captures resting contact
-       while tolerating mask noise.
+2. Touching. The normalised vertical gap between the bottom of A and the top of B is at
+   most on_vertical_gap (0.05). A small but non-negative gap captures resting contact
+   while tolerating mask noise.
 
-   3. Horizontal overlap. The horizontal extents overlap by at least on_horizontal_
-       overlap (0.20) of the narrower box's x-extent. This is a containment fraction rather
-       than an IoU, so a small object sitting fully above a large one scores 1.0, which is the
-       behaviour support requires. Something resting on another object must share its footprint.
+3. Horizontal overlap. The horizontal extents overlap by at least on_horizontal_
+   overlap (0.20) of the narrower box's x-extent. This is a containment fraction rather
+   than an IoU, so a small object sitting fully above a large one scores 1.0, which is the
+   behaviour support requires. Something resting on another object must share its footprint.
 
-   4. Depth co-location. |d_A - d_B| <= on_depth_eps (0.06, calibrated on the training
-       annotator groups). On a floor plane "farther" projects as "higher in the image", so an
-       object behind another mimics the 2D signature of one stacked on it; truly stacked objects
-       share a camera distance. Measured effect: held-out support F1 0.58 to 0.71, removing
-       about half the audited false support labels at a cost of two recalled triplets.
+4. Depth co-location. |d_A - d_B| <= on_depth_eps (0.06, calibrated on the training
+   annotator groups). On a floor plane "farther" projects as "higher in the image", so an
+   object behind another mimics the 2D signature of one stacked on it; truly stacked objects
+   share a camera distance. Measured effect: held-out support F1 0.58 to 0.71, removing
+   about half the audited false support labels at a cost of two recalled triplets.
 
     Encoding support as above, touching and horizontally overlapping is what stops a cup
 floating in front of a shelf from reading as resting on it.
@@ -4011,7 +4015,7 @@ swapped:
 
 under(A, B) == on(B, A)
 
-                                                       68
+                         68  6949963
               A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     This guarantees consistency by construction: a pair can never be both on(A,B) and
@@ -4074,8 +4078,8 @@ near(A, B) == box_gap_rel(A, B) <= near_T
     box_gap_rel is the edge-to-edge gap between the two normalised boxes divided by the
 mean object size, the square root of box area. Proximity therefore scales with the objects: a
 
-              69
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+              69                                              6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 small gap between two books reads as near, while the same absolute gap between a person
 and a cube may not. The gap is zero when boxes touch or overlap, and near is symmetric,
@@ -4136,7 +4140,7 @@ within plane_band.
 share was 29.5% before the ground-plane fallback shipped, which resolved about a third of the
 depth abstentions.
 
-                                                       70
+70  6949963
                                           A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     The flag types serve different purposes and are reported separately, which is what makes the
@@ -4187,7 +4191,7 @@ near       box_gap_rel <= near_T,         near_T 1.372 (fitted), flag_near_band 
 a label is buried in a function. near_T is fitted by eval/fit_near.py under the protocol of
 C.7 and frozen there.
 
-                                                71
+                                                71                                  6949963
                                                APPENDIX D
                                       ABLATION DERIVATIONS
 
@@ -4243,7 +4247,7 @@ from Open3D-VQA (Zhang et al., 2025; §2.5), calibrated on the train groups (on_d
 = 0.06) and validated held-out (ablation A1): support F1 on never-seen annotators rises 0.58
  0.71. Downstream effects on the headline table: support recall -2/-3 points, on restricted
 
-                                                       72
+                                            72           6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 precision 0.57  0.73, 44% fewer support emissions (of the 26 audited false positives, the gate
@@ -4296,8 +4300,8 @@ unannotated case; a stacked-book pair whose contact fell below threshold), i.e. 
 guard cannot see. That residual mode is documented, bounded, and exactly the undetected-
 support refinement the support audit already motivates.
 
-                                                       73
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+73  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 D.4 Follow-up refinements: one shipped, two declined
 
@@ -4355,7 +4359,7 @@ barely moves however close it is.
 
     The second recovers the camera pose properly, estimating the essential matrix from whole-
 
-                                                       74
+74  6949963
                                A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 image correspondences, decomposing it into rotation and translation, and triangulating the
@@ -4412,7 +4416,7 @@ the two objects sit at nearly equal camera distance.
 
            0.117 and above                  85  0.718
 
-                               75
+                               75                                             6949963
         A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     The estimator is real. Given objects at moderately different depths it reaches 0.893, within
@@ -4471,7 +4475,7 @@ identifies from the precision side.
     The second re-checks each rule's individual conditions against the cached geometry and
 mask-contact maps, attributing every miss to a cause.
 
-        76
+        76                                                                       6949963
                                       A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Table D.5: Diagnosed cause of every missed human triplet, by predicate.
@@ -4526,10 +4530,9 @@ reach the contact threshold with a person on either side, so the class list chan
 out of the 42,440 the tool makes. It is a narrow patch over a real gap, and the gap is a limit of
 monocular geometry rather than of the rule set.
 
-                                                       77
-                                               APPENDIX E
-
-                                EXTENDED VALIDATION STUDIES
+                                      77                                                6949963
+               APPENDIX E
+EXTENDED VALIDATION STUDIES
 
 Six studies sit here. Three support a result reported in a chapter and carry the detail behind it:
 the vision-language baseline of §4.13, whose diagnostics make its failure interpretable rather
@@ -4582,7 +4585,7 @@ makes 885 assertions on the 374 judged pairs against 344 and
 
     The per-predicate recall underneath that verdict is this:
 
-                                                       78
+78                           6949963
                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Table E.1: A vision-language model against the geometric pipeline on the same 30 images, the
@@ -4633,7 +4636,7 @@ comparable as agreement with the human record, and are not comparable as truthfu
     How it fails is the interesting part, and it is not the way a badly-calibrated model fails.
 Three diagnostics separate wrong answers from absent ones.
 
-                                                       79
+                                         79                                    6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     It does not contradict itself: across 1,187 emitted relations there is not one case of a pair
@@ -4693,7 +4696,7 @@ continuous walk, and each annotator group is a contiguous 100-frame block (group
 0­99, and so on). That has one consequence for §4.1's split, which §4.12 states: a group is
 simultaneously an annotator identity and a temporal block holding one arrangement, so the split
 
-                                                       80
+80  6949963
                             A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 is held out by scene as well as by annotator. The annotator reading survives, since an inverted
@@ -4748,8 +4751,8 @@ overlap criterion from 0.5 to 0.1 cuts unmatched objects from 5.6 to 2.2 per fra
 object identity with a tracker, as scripts/run_video.py already does for video, rather than
 with per-frame overlap, is the straightforward extension that would recover it.
 
-                                                       81
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+                            81                                            6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 E.3 The independent validation study: design and scoring
 
@@ -4805,7 +4808,7 @@ only one judgement per claim, the estimate being over claims rather than over ra
 nary claims target a single rater. The 147 claims that also carry an author verdict target three
 raters each, because the crowd-versus-author comparison and the inter-rater reliability figure
 
-                                                       82
+82  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 both need several independent judgements on the same item; those claims are served first.
@@ -4852,7 +4855,7 @@ before and after temporal smoothing.
 
     This records how the clips were processed and what went wrong, both of which qualify the
 
-                                                       83
+83  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 reading above.
@@ -4909,8 +4912,8 @@ that transfer is not blocked by the object vocabulary, because every failure vis
 a detection failure rather than a relation failure, which is the attribution §4.11 makes for the
 dataset itself.
 
-                                                       84
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+84  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 E.5 The planner experiment: prompt construction and scoring rules
 
@@ -4967,8 +4970,8 @@ rates from supplying none, 25 discordant scenes for the human labels and 19 for 
 in one direction, p < 10-5. The union's gain over the tool alone is 6 scenes to 0, p = 0.031, as is
 the human arm's lead over the tool alone, the comparison that runs against this project. What
 
-                                                       85
-                                                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
+85  6949963
+A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 25 scenes cannot settle is named too: the tool against the vision-language source is 6 discordant
 scenes to 5, p = 1.00, so the two-scene margin means nothing and §5.7 declines to read it, and
@@ -5027,7 +5030,7 @@ E.7 The blind audit: sampling, guards and key handling
 Section 4.14 reports the instrument and the result. The construction rules are here, because a
 blind audit is only as good as the independence of the items in it.
 
-                                                       86
+86  6949963
                  A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     Sampling independence. At most one claim is drawn per (annotator group, subject class,
@@ -5081,7 +5084,7 @@ The cut-off was therefore fitted the way every threshold in Chapter 3 is fitted,
 claims from annotator groups 0­5, where precision rises steeply to 0.686 at 0.85 and flattens
 after; on the 31 claims from groups 6­8 that no part of the fit saw, it predicted 0.367  0.667.
 
-                                                       87
+                 87                                                  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 on_contact_min was then set to 0.85 and every experiment in this dissertation re-run against
@@ -5111,7 +5114,7 @@ reasons to read the v3 and v4 columns of §4.14 as two measurements rather than o
 separate file that the judging interface never reads. The key is not distributed with the repository,
 since publishing it would make any later re-audit unblindable.
 
-                                                       88
+88  6949963
                                                 APPENDIX F
 
                           SUPPLEMENTARY TABLES AND FIGURES
@@ -5157,7 +5160,7 @@ the pooled human mR@100 by 0.001 and the group-8 figures, drawn from the smalles
 result. The figures reported are those of the re-evaluation committed with this repository, and
 no claim in Chapter 6 turns on a difference smaller than the per-seed spread.
 
-                                                       89
+                      89                                                  6949963
                                       A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 F.2 Downstream recall by label source
@@ -5214,7 +5217,7 @@ automatic and vision-language arms.
           group 8 (defect)  0.147 (0.130­0.164)       0.120 (0.108­0.131)    0.164 (0.146­0.183)
           aligned gold      0.333 (0.310­0.369)       0.316 (0.312­0.320)    0.369 (0.354­0.390)
 
-                                                      90
+                                                      90                                          6949963
                            A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
     Three readings of the group-7 result remain open and this experiment does not separate
@@ -5274,7 +5277,7 @@ behind                     0.35 0.71 0.47 1584
 
 near                       0.11 1.00 0.20 717
 
-                           91
+                           91                                          6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 F.7 Bounding annotator agreement without overlapping assignments
@@ -5326,7 +5329,7 @@ on the width, not as calibrated coverage; the point estimates are unaffected, si
 population value for these images. A replication should resample trajectory segments rather
 than frames, which the released per-image outputs support.
 
-                                                       92
+92  6949963
                  A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Table F.7: Per-predicate recall on the held-out annotator groups with 95% cluster-bootstrap
@@ -5380,7 +5383,7 @@ Section 4.5 reports the finding and its figure plots the decomposition; the per-
 underneath it are these, for the shipped cascade (depth ordering plus the ground-plane fallback
 of §4.9, which lifted the emit rates of the abstention-heavy groups 2 and 3 by about half):
 
-                 93
+                 93                                            6949963
                   A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 Table F.8: Front/behind by annotator group: emission rate, agreement where the tool commits,
@@ -5408,5 +5411,5 @@ group_8 444 0.84      0.02 inverted  0.02  0.82
 
 overall 3597                         0.70  0.91
 
-                  94
+                  94                       6949963
 

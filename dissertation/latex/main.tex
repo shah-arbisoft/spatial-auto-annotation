@@ -49,7 +49,7 @@
 \DeclareUnicodeCharacter{2026}{\dots}
 \usepackage[hidelinks]{hyperref}
 % Identifies which build a given PDF is, from Document Properties.
-\hypersetup{pdfsubject={build 6857a25 2026-08-28 02:50}}
+\hypersetup{pdfsubject={build 9ae24f2+dirty 2026-08-28 02:57}}
 
 % The supplied Word template (COMM070 Data Science - Template.docx) sets its
 % body text single-spaced in 12pt Times: 75 of its paragraphs carry
@@ -125,7 +125,20 @@
 \fancyhf{}
 \rhead{\small A Fully-Automatic Spatial-Relationship Annotation Pipeline}
 \cfoot{\thepage}
+% The template's footer carries the student ID against the right margin: its
+% Footer style sets a right tab stop at 8305tw, which is the full width of
+% the text block, and footer1.xml tabs to it.
+\rfoot{\small 6949963}
 \renewcommand{\headrulewidth}{0.4pt}
+% A chapter's opening page uses the plain style, which would otherwise drop
+% both the page number and the ID. Redefine it so the footer is the same on
+% every page of the document.
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \cfoot{\thepage}%
+  \rfoot{\small 6949963}%
+  \renewcommand{\headrulewidth}{0pt}%
+}
 
 \begin{document}
 

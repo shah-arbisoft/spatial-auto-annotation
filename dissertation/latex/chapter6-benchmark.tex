@@ -16,7 +16,7 @@ Chapter 5's controlled experiment used a deliberately small classifier; this cha
 The human arm \textbf{peaks at epoch 4 of 25} and never improves again, oscillating between 0.101 and 0.123 for the remaining twenty-one --- mild overfitting on 5,421 sparse triplets. That replicates the source paper's central observation ("all predictors reached their peak mR@100 well before the final epoch") with a current model, and adds the cause: sparse supervision is exhausted early. The auto arm is still climbing at epoch 8, does not reach 95\% of its best until \textbf{epoch 14}, peaks at \textbf{epoch 22}, and sees 213 distinct triplet types in training against the human arm's 94. Figure~\ref{fig:sgg-training-curves} plots both; each validation series uses its own arm's labels, so only the \textit{shapes} compare.
 \begin{figure}[!htbp]
 \centering
-\includegraphics[width=0.80\textwidth]{figures/sgg-training-curves.png}
+\includegraphics[width=0.80\textwidth,height=0.78\textheight,keepaspectratio]{figures/sgg-training-curves.png}
 \caption[Validation curves for both benchmark arms]{Validation curves for both benchmark arms, each against its own training-source labels, so only the shapes are comparable. The human arm peaks early and declines; the automatic arm does not.}
 \label{fig:sgg-training-curves}
 \end{figure}
