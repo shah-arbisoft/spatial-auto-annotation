@@ -213,22 +213,14 @@ is a documented iteration between Evaluation and Modelling.
 | Evaluation | fidelity protocol (baselines, ablations, audits), controlled label-source comparison, exhaustive failure attribution | Ch. 4–6 |
 | Deployment | detector-in-the-loop mode, runtime/VRAM footprint, reproducibility package | Ch. 4, appendices |
 
-Four constraints shaped the design as much as the research questions did.
-All perception runs on a **single 6 GB consumer GPU**, which rules out the
-largest segmentation and depth checkpoints and makes Chapter 3's small-model
-choices obligatory; ablation A8 asks what that costs and finds almost
-nothing on the predicate it was expected to hurt. There was **no budget for
-paid annotation**, so the independent re-estimate of precision is an unpaid
-volunteer study (Appendix E.3); it closed at 20 raters and carries a control
-arm of human-written claims, so §4.15 can report what the tool scores
-against what the annotators score on the same instrument, while the audits
-around it remain the author's own, with the circularity §2.9 states as an
-objection before any result is reported. The project uses **one dataset**,
-the one whose bottleneck the work exists to address, and the price is that
-generalisation rests on argument. And the benchmark runs use **free hosted
-GPU sessions**, which caps the affordable seeds and rules out a
-hyper-parameter search; Chapter 6's replication is what that budget allows,
-and its width is reported and not smoothed over.
+Four constraints shaped the design as much as the research questions did: a
+single 6 GB consumer GPU, no budget for paid annotation, one dataset, and
+free hosted GPU sessions for the benchmark runs. Each ruled something out
+and each is answered somewhere in the evidence — the GPU budget by ablation
+A8, the annotation budget by the volunteer study of Appendix E.3, the single
+dataset by an argument rather than a second domain, and the GPU-hour cap by
+a three-seed replication whose width is reported rather than smoothed over.
+Appendix B sets out what each constraint excluded.
 
 Ethical considerations are summarised here and detailed in Appendix A. The
 work is a secondary analysis of a published, openly licensed dataset (CC-BY

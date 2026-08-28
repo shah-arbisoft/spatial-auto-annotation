@@ -133,41 +133,33 @@ separates a rule that is wrong from one that is merely uncertain.
 
 ## 9.3 Limitations, and future research and development
 
-Each limitation below is stated with the specific experiment that would
-settle it, because that is more useful than an apology.
+Each limitation below is stated with the experiment that would settle it,
+because that is more useful than an apology; Appendix B specifies each of
+those experiments.
 
 **The chain reaches the plan, not the robot.** The planner experiment (§5.7)
-carries the chain one link further, from labels to the plan a robot would act
-on, but on 25 occluder-selected scenes and under a scorer that cannot see a
-false positive it is supporting evidence rather than a closed link. What is
-missing outright is execution, since no robot moved. The same conditions on a
-physical Spot, or in a simulator with contact physics, would close the last
-link, and it is the only one left.
+carries the chain one link further, from labels to the plan a robot would
+act on, but on 25 occluder-selected scenes and under a scorer that cannot
+see a false positive it is supporting evidence rather than a closed link.
+What is missing outright is execution: no robot moved.
 
-**The shipped support rule is not independently verdicted.** The validation
-study (Appendix E.3) closed at 20 raters and agrees with the author's blind
-audit on support to 0.009, with a control arm establishing that the same
-raters score human annotation at 0.940, so the author's verdicts are
-corroborated by disinterested judges rather than merely unchallenged
-(§4.15). What it cannot cover is the rule the tool now ships: its claims
-were drawn a month before `on_contact_min` was re-fitted, so the shipped
-support figure still rests on the author's verdict and the model's.
-Re-running the arm on post-refit labels is the cheapest outstanding item in
-this list.
+**The shipped support rule is not independently verdicted.** The volunteer
+study agrees with the author's blind audit on support to 0.009 and shows the
+same raters scoring human annotation at 0.940, so the author's verdicts are
+corroborated rather than merely unchallenged (§4.15). What it cannot cover
+is the rule the tool now ships, its claims having been drawn a month before
+`on_contact_min` was re-fitted, so the shipped support figure still rests on
+the author's verdict and the model's.
 
 **The benchmark is undecided, and the run that would decide it is written.**
-Three seeds bound the paired difference to [-0.070, +0.069] (§6.7), so the
-chapter reports parity without establishing it; ten per arm would tighten
-that to about ±0.020. `scripts/kaggle/unrun_seed_power_10x.ipynb` implements
-it, pinning the framework commit §7.4 names as uncontrolled and ordering
-runs seed-major so an interrupted session leaves the arms balanced. It needs
-about 45 GPU-hours against a 30-hour weekly allowance, and ships unrun.
+Three seeds bound the paired difference to [-0.070, +0.069], so §6.7 reports
+parity without establishing it; ten per arm would tighten that to
+about ±0.020, and the notebook that would do it ships unrun for want of
+GPU-hours.
 
 **One domain, one camera, six object classes.** What transfers is the
-calibration procedure, not the fitted constants. A labelled cross-domain
-sample of a few dozen images would turn Appendix E.4's qualitative evidence
-into a measurement, and is cheap enough that a replication should include
-one.
+calibration procedure, not the fitted constants, and the only out-of-domain
+evidence is qualitative (E.4).
 
 **Front/behind is bounded, but less by depth than the number suggests.**
 Section 4.9 bounds the engineering: neither a larger depth model nor
@@ -180,35 +172,21 @@ is a written annotation guideline ahead of a better network — an
 uncomfortable conclusion for a computer-vision project and the one the
 evidence supports. The routes that stay open are a calibrated stereo pair or
 an RGB-D capture; wider surface detection was built, measured and declined
-(Appendix D.4).
+(D.4).
 
 **Detection bounds full automation.** End-to-end recall with a zero-shot
 detector is 0.38 against the relation layer's 0.85 conditional on detection.
 The gap is detection, not relations, and the source paper's own trained
-detector (0.93 mAP@50) would close most of it. That check needs only the
+detector (0.93 mAP@50) would close most of it; that check needs only the
 released weights.
 
-**Scale is shown without ground truth.** The supervising group supplied the
-full 2,650-frame capture, and the pipeline was run over the 1,766 frames
-nobody has annotated: 562 keyframes after content-adaptive selection, 58
-minutes, 185,242 triplets, a predicate distribution 0.032 in total variation
-from the annotated portion (Appendix E.6). Capacity and stability on
+**Scale is shown without ground truth.** The pipeline was run over the 1,766
+frames nobody has annotated: 562 keyframes after content-adaptive selection,
+58 minutes, 185,242 triplets, a predicate distribution 0.032 in total
+variation from the annotated portion (E.6). Capacity and stability on
 unfamiliar input are therefore measured; correctness on that portion is not,
 and cannot be without labels — §4.12 substitutes self-agreement for truth
-and should be read as the weaker thing it is. Closing it needs a few hundred
-labelled triplets from those frames, an afternoon of annotation.
-
-**The capture is stereo, and only one eye was used.** The supplied folder is
-named `rightimg`, implying a left counterpart held by the supervising group.
-True stereo would attack the front/behind bound directly, supplying
-disparity at every frame from a known baseline, which is what the
-multi-frame estimators of A9 lack: those must recover the camera's motion
-first, and on small low-texture objects they answer for only 9% of pairs and
-are 0.20 less accurate where they do (§4.9, Appendix D.6). A calibrated pair
-removes both problems and is the cheapest experiment left on this predicate,
-and it keeps the method's premise intact, since stereo is available at
-capture time whereas depth recovered from a robot walking twenty frames is
-not available to a single-image annotator.
+and should be read as the weaker thing it is.
 
 ## 9.4 Personal reflections
 

@@ -333,6 +333,77 @@ closed.
 Every reported number traces to one of the JSON/markdown artefacts these
 commands write; no figure or table in this dissertation is produced by hand.
 
+### The four constraints that shaped the design
+
+Section 1.3 names them; this is what each ruled out. All perception runs on
+a **single 6 GB consumer GPU**, which excludes the largest segmentation and
+depth checkpoints and makes Chapter 3's small-model choices obligatory
+rather than preferences; ablation A8 asks what that costs and finds almost
+nothing on the predicate it was expected to hurt. There was **no budget for
+paid annotation**, so the independent re-estimate of precision is an unpaid
+volunteer study (E.3); it closed at 20 raters with a control arm of
+human-written claims, so §4.15 can report what the tool scores against what
+the annotators score on the same instrument, while the audits around it
+remain the author's own, with the circularity §2.9 states as an objection
+before any result is reported. The project uses **one dataset**, the one
+whose bottleneck the work exists to address, and the price is that
+generalisation rests on argument rather than on a second domain. And the
+benchmark runs use **free hosted GPU sessions**, which caps the affordable
+seeds and rules out a hyper-parameter search: Chapter 6's three-seed
+replication is what that budget allows, and its width is reported rather
+than smoothed over.
+
+### What each limitation would take to settle
+
+Section 9.3 states each limitation with the experiment that would settle it;
+these are the specifications.
+
+**Execution, not just planning.** The planner experiment closes one of the
+two remaining links but no robot moved. The same five conditions on a
+physical Spot, or in a simulator with contact physics, would close the last
+one, and it is the only link left between labels and behaviour.
+
+**An independent verdict on the shipped support rule.** The volunteer study
+closed at 1,415 usable judgements from 20 raters and agrees with the
+author's blind audit on support to 0.009, with a control arm establishing
+that the same raters score human annotation at 0.940 on the same instrument.
+Its claims were drawn on 17 July, a month before `on_contact_min` was
+re-fitted from 0.60 to 0.85, so every `on` and `under` claim in it comes
+from the superseded rule. Re-running that arm on post-refit labels is the
+cheapest outstanding item in the list: the instrument exists, the rendering
+pipeline exists, and only a fresh draw and a fresh round of volunteers is
+needed.
+
+**Ten seeds per arm, and the notebook that would run them.** Three seeds
+bound the paired benchmark difference to [-0.070, +0.069], so Chapter 6
+reports parity without establishing it; ten per arm would tighten that to
+about ±0.020. `scripts/kaggle/unrun_seed_power_10x.ipynb` implements it,
+pinning the framework commit §7.4 names as uncontrolled and ordering runs
+seed-major so an interrupted session leaves the arms balanced. It needs
+about 45 GPU-hours against a 30-hour weekly allowance, and ships unrun.
+
+**A labelled cross-domain sample.** What transfers is the calibration
+procedure, not the fitted constants. A few dozen labelled images from a
+second domain would turn E.4's qualitative evidence into a measurement, and
+it is cheap enough that a replication should simply include one.
+
+**Stereo, or a calibrated RGB-D capture.** The supplied folder is named
+`rightimg`, implying a left counterpart held by the supervising group. True
+stereo would attack the front/behind bound directly, supplying disparity at
+every frame from a known baseline, which is what the multi-frame estimators
+of A9 lack: those must recover the camera's motion first, and on small
+low-texture objects they answer for only 9% of pairs and are 0.20 less
+accurate where they do (§4.9, Appendix D.6). A calibrated pair removes both problems,
+and it keeps the method's premise intact, since stereo is available at
+capture time whereas depth recovered from a robot walking twenty frames is
+not available to a single-image annotator.
+
+**Ground truth for the unlabelled portion.** The pipeline was run over the
+1,766 frames nobody has annotated (E.6). Capacity and stability on
+unfamiliar input are therefore measured; correctness on that portion is not,
+and cannot be without labels. A few hundred labelled triplets from those
+frames — an afternoon of annotation — would close it.
+
 ## Appendix C: Predicate specification
 
 This is the complete geometric specification of the seven predicates: the
