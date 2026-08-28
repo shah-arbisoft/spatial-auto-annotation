@@ -59,7 +59,7 @@ would agree is answered by a cluster bootstrap over images
 (`eval/uncertainty.py`), whose widths rather than centres carry the argument
 and whose held-out intervals appear in §4.6.
 
-Three readings sit underneath the table and are given in Appendix F.11: the
+Underneath the table sit three readings, given in Appendix F.11: the
 tool recovers **81% of all human triplets** (7,276 of 8,926) against 14% for
 random and 23% for majority on the same triplet-weighted basis; box-only
 geometry matches it on the laterals but not on support quality or `near`,
@@ -203,7 +203,7 @@ column reported and never optimised against; Appendix D.0 tabulates each
 ablation, its shipped setting and its verdict, and D.1–D.8 give the
 derivations.
 
-Three changed the headline table materially, in this order: the audit
+The headline table moved materially on three of them, in this order: the audit
 localised a support precision failure; a geometric insight, that stacked
 objects share a camera distance, fixed half (A1, held-out support F1 0.58 →
 0.71); mask-bottom contact fixed most of the rest while *raising* recall,
@@ -402,10 +402,14 @@ tool's score readable rather than merely low.
 | near | 48/52 0.923 | 24/24 1.000 | 15/24 0.625 |
 | **support pooled** | **52/126 0.413** | **38/94 0.404** | **60/94 0.638** |
 
-**On support the author's verdicts survive the check exactly**: 0.413 from
-the volunteers against the author's 0.404, a difference of 0.009 between the
+**On support the two independent estimates land together**: 0.413 from the
+volunteers against the author's 0.404, a difference of 0.009 between the
 person who built the tool, blinded and working against decoys, and strangers
-with no stake in the outcome. That is the objection §2.9 raises and §7.4
+with no stake in the outcome. They are two draws from the same pre-refit
+generation and not two verdicts on one sheet, 126 support claims against 94
+(E.3), so the agreement is corroboration between separate estimates and not
+a paired test; what a paired test would need is the overlapping subset, and
+that comparison is reported below across all seven predicates. That is the objection §2.9 raises and §7.4
 concedes, answered by measurement, with the model apart at 0.638. **Against the human
 baseline, five predicates hold and support does not**, 0.864 against 0.926
 and 0.413 against 0.975 (118/121). Across all seven predicates in the broader

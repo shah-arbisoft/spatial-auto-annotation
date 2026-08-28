@@ -16,8 +16,10 @@ All 836 images are annotated in five minutes on a consumer GPU, at 20 times
 the manual pass's label density.
 
 Against 8,926 human relationships the automatic labels recover five of the
-seven predicates at 0.82 or better (0.85 mean recall, 0.74 on held-out
-annotators); the nine annotators labelled disjoint batches, so how well two
+seven predicates at 0.82 or better (0.85 unweighted mean recall, the field's
+per-predicate convention, and 0.74 on held-out annotators; weighting every
+triplet equally instead gives 81%, 7,276 of 8,926); the nine annotators
+labelled disjoint batches, so how well two
 of them would have agreed cannot be measured here and no human ceiling is
 claimed. A blinded, decoy-controlled audit of 191 sampled claims puts
 precision at 0.79–1.00 for the lateral, depth and proximity predicates, on

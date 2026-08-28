@@ -1039,8 +1039,8 @@ rather than of the rule set.
 
 ## Appendix E: Extended validation studies
 
-Six studies sit here. Three support a result reported in a chapter and
-carry the detail behind it: the vision-language baseline of §4.13, whose
+Six studies sit here. Half of them support a result reported in a chapter
+and carry the detail behind it: the vision-language baseline of §4.13, whose
 diagnostics make its failure interpretable rather than merely worse (E.1);
 the viewpoint-stability measurement of §4.12, whose segmentation evidence and
 coverage limits qualify how far the stability figures reach (E.2); and the
@@ -1172,7 +1172,7 @@ rather than of the model: what the pipeline has over it is not fluency and
 not per-assertion agreement, but exhaustiveness and the guaranteed
 anti-symmetry of §3.6.
 
-Three limits on this result, one of them now partly settled. The pilot is
+The result carries three limits, one of them now partly settled. The pilot is
 thirty images at one prompt, and model capacity was the obvious confound: a
 larger model might simply have closed the gap. Running the identical battery
 on a reasoning model an order of magnitude larger tests that directly, and
@@ -1786,7 +1786,7 @@ not fit. Mean mR@100 over three seeds, per-seed range in brackets.
 | group 8 (defect) | 0.147 (0.130–0.164) | 0.120 (0.108–0.131) | **0.164** (0.146–0.183) |
 | aligned gold | 0.333 (0.310–0.369) | 0.316 (0.312–0.320) | **0.369** (0.354–0.390) |
 
-Three readings of the group-7 result remain open and this experiment does not
+The group-7 result admits three readings and this experiment does not
 separate them. The arm trains on 14,626 relations against the human arm's
 5,421, so the gain may be density rather than the source. Group 7 is 73
 images, small enough that a 0.07 margin over three seeds is suggestive rather

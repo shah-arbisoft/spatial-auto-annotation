@@ -56,8 +56,8 @@ involved.
 
 ### 1.1.2 Why the existing remedies do not remove it
 
-Three families of method already exist for a shortage of labels, each
-reviewed in Chapter 2 and tested here rather than dismissed on paper.
+A shortage of labels already has three families of remedy, each reviewed in
+Chapter 2 and tested here rather than dismissed on paper.
 Learned scene-graph generators predict relations from visual patterns, but
 they train on labelled triplets and so sit *downstream* of an annotator
 instead of replacing one. Semi-supervised methods stretch the labels that

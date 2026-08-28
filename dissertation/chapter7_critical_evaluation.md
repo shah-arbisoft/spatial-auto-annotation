@@ -53,7 +53,7 @@ the results *mean*.)
 
 The failure gallery diagnoses every one of the 1,650 missed human triplets
 by re-checking rule conditions, so the analysis is exhaustive instead of
-anecdotal. Three observations matter most.
+anecdotal. What it establishes comes to three observations.
 
 First, **genuine tool error is rare**: §4.10 puts avoidable error at roughly
 7%, the bulk of the mass being calibrated abstention (43–54% of front/behind
@@ -149,7 +149,7 @@ share a batch.
 
 ## 7.4 Methodological reflection
 
-Three choices proved right. The **PredCls isolation**: without it every rule
+Some choices proved right. The **PredCls isolation**: without it every rule
 result would be confounded by detection, and the SGDet decomposition shows
 the relation layer at 0.85 conditional mean, invisible inside the 0.38
 end-to-end number. The **sparse-gold protocol**, recall-primary plus
@@ -209,8 +209,8 @@ the recovery of geometry from real photographs, where this project's
 difficulty sits. SpatialVLM and VQASynth (Remyx AI, 2024) generate *training
 text* at internet scale without confronting a fixed predicate vocabulary
 with human ground truth, and SpatialRGPT (Cheng et al., 2024) curates region
-representations with depth but validates downstream. Three parts the lineage
-leaves implicit are this project's contribution. **Annotator-aware
+representations with depth but validates downstream. What the lineage leaves
+implicit is where this project's contribution sits. **Annotator-aware
 calibration**: fit only on annotators who used a label, and hold out
 annotators and not merely images. **Contact as the support signature**:
 mask-bottom adjacency, unused by the box-geometry lineage, which repaired

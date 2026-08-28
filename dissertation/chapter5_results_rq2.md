@@ -20,7 +20,7 @@ difference between the runs is the supervision source, under a fixed
 identically for every source, so the comparison is between supervision
 signals under equal compute, not between tuned models.
 
-Three sources are compared in the core experiment, and a fourth arrives with
+The core experiment compares three sources, and a fourth arrives with
 the result it produced (§5.2): **human**, the ~10% of ordered pairs the
 annotators chose to label; **automatic**, every pair the tool's rules fire
 on, dense and rule-consistent; and **self-trained**, the rival remedy from
@@ -143,7 +143,7 @@ geometric and the automatic labels come from rules over closely related
 geometry, so the auto-trained arm is partly re-learning its own generator.
 Read alone, this chapter shows the automatic labels are *learnable* and the
 human labels are not; it does not show they win under any featurisation.
-Three things keep that meaningful: every arm gets identical features; being
+It stays meaningful for three reasons: every arm gets identical features; being
 learnable is itself the property RQ2 asks about, since a downstream consumer
 must extract a consistent signal; and Chapter 6 removes the circularity by
 repeating the comparison in a full scene-graph model with visual features.
@@ -160,8 +160,8 @@ of §4.2 looks like, and the automatic labels give 20× the supervision on the
 same images; the universal `near` failure is what a three-annotator label
 with no operational definition looks like, and the fitted-threshold labels
 are perfectly learnable; and the depth predicates were being taught two
-opposite conventions where the automatic labels apply one. Three predictions
-follow, registered before the direct test that judges them in Chapter 6:
+opposite conventions where the automatic labels apply one. That yields three
+predictions, registered before the direct test that judges them in Chapter 6:
 later saturation, a higher plateau, and the recovery of `near`.
 
 ## 5.7 The planner experiment: does the label source change what a robot would do?

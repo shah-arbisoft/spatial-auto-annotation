@@ -7,7 +7,7 @@ built the way it is: the methodology (§3.1), the problem and its constraints
 
 ## 3.1 Research methodology
 
-Three process models dominate data-science practice. **KDD** (Fayyad,
+Data-science practice is dominated by three process models. **KDD** (Fayyad,
 Piatetsky-Shapiro and Smyth, 1996) frames the work as a nine-step pipeline
 for discovering patterns in existing databases, and **SEMMA** compresses
 that into five tool-centred stages; **CRISP-DM** (Wirth and Hipp, 2000) adds
@@ -45,8 +45,8 @@ Genome JSON, YOLO txt and h5. Four requirements shape the design:
 4. **Reproducibility.** Every threshold in one config, every run seeded, and
    rule changes re-evaluable without re-running perception.
 
-Three properties of the dataset, established in Chapter 2 and verified
-directly on the released files, drive specific design responses:
+The dataset has three properties, established in Chapter 2 and verified
+directly on the released files, and each drives a specific design response:
 
 - **Monocular RGB only.** No metric depth exists and estimated depth is
   *relative and per-image* (Yang, L. et al., 2024), so all depth comparisons
@@ -152,8 +152,8 @@ F1 ≤ 0.024 against the relative gap's recall 1.0 (§3.8).
 
 ## 3.6 Correction and confidence
 
-Three predicate families are mutually exclusive: on/under, left/right and
-front/behind. Two cannot contradict, because the rule branches; support is
+The predicate families on/under, left/right and front/behind are each
+mutually exclusive. Two cannot contradict, because the rule branches; support is
 different, since `on` and `under` are independent tests over *different*
 contact evidence, so noise in either can make both fire on one pair. That
 case is demoted to an `on_under_conflict` flag and neither label is emitted.
@@ -249,8 +249,8 @@ the sweep and what the segmentation recovers.
 Reproducibility is a design property, because three of the four requirements
 in §3.2 are unverifiable without it: a threshold is not fitted on groups 0–5
 if nobody else can refit it, and an ablation is an assertion unless the
-reader can re-run the arm it removes. Three mechanisms deliver it, and
-Appendix B gives each in full with the walk-through. Every threshold, seed
+reader can re-run the arm it removes. It is delivered by three mechanisms,
+each given in full with the walk-through in Appendix B. Every threshold, seed
 and model identifier lives in `configs/default.yaml`, and the runner caches
 each object's lifted geometry after the single GPU pass, so any rule change
 re-evaluates the whole dataset offline in about 20 seconds against roughly
@@ -280,7 +280,7 @@ configuration rather than code (§3.9); the rules abstain and flag instead of
 guessing (§3.6); randomised invariant testing (§3.11) asserts the structural
 guarantees without the author's judgement; and the camera frame is committed
 to explicitly (§3.5), so a disagreement is locatable as a convention
-difference. Three are mitigations rather than refutations, and the fourth
+difference. The first three are mitigations rather than refutations, and the fourth
 the design could not settle alone, because invariant testing pins rule
 *consistency* and says nothing about rule *truth*. That took §4.14's
 instrument, built to attack the author's own verdicts, and it overturned

@@ -42,8 +42,8 @@ vocabulary of relations and reasons over it with composition tables: Allen's
 interval algebra (Allen, 1983) fixes the thirteen ways two intervals can lie
 on a line, RCC-8 does the same for connection and containment (Randell, Cui
 and Cohn, 1992), orientation calculi add direction from a viewpoint (Freksa,
-1992), and Cohn and Renz (2008) survey the family. Three of its properties
-bear here: its relations are *defined*, so annotators cannot disagree about
+1992), and Cohn and Renz (2008) survey the family. What bears here are its
+properties: its relations are *defined*, so annotators cannot disagree about
 what a label means, the defect §2.2 finds; its calculi are *decidable*, the
 underdetermined case being where abstention comes from; and its vocabularies
 are finite and hand-authored, the limitation §2.9 raises and this
@@ -71,7 +71,7 @@ Robotics*, captured by a Boston Dynamics Spot robot. Verified specifics:
 - **Detector baseline:** a YOLOv10m backbone (Wang, A. et al., 2024) reaches
   ≈0.92 precision, 0.90 recall and **0.93 mAP@50** (mAP@50-95 ≈0.68).
 
-Three limitations the authors themselves flag motivate this project:
+The authors flag limitations of their own that motivate this project:
 **early saturation** ("all predictors reached their peak mR@100 well before
 the final epoch", attributed to "the dataset's limited diversity"); an
 unreliable **`near`** ("inconsistencies, particularly with the 'near'
@@ -160,8 +160,8 @@ retraining, and its strongest modern form is noisy self-training (Xie et
 al., 2020).
 
 Applied here the recipe would be: train on the ~10% of pairs the annotators
-labelled, pseudo-label the remaining 90%, retrain. Three measured properties
-of this dataset argue against it. Self-training *amplifies its seed*, and
+labelled, pseudo-label the remaining 90%, retrain. Measured properties of
+this dataset argue against it on three counts. Self-training *amplifies its seed*, and
 this seed is sparse and internally inconsistent (selective `near`, two
 inverted front/behind conventions, one-directional support; §2.2, Chapter
 4). The seed is *selectively* small, because annotators labelled what they
@@ -424,7 +424,7 @@ rankings (§2.3); for spatial relations the annotation may also be
 a different reference frame, a system agreeing with them scores well and a
 correct system scores badly, and no recall metric tells the two apart.
 
-Three commitments follow. Recall against the human triplets is reported
+The commitments that follow are these. Recall against the human triplets is reported
 alongside an audited estimate of true precision on pairs the gold never
 covers (§4.4). Every aggregate is decomposed per predicate and per annotator
 group. And the decisive test of the labels is deliberately moved *off* these
