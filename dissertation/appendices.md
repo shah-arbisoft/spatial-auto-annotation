@@ -1974,16 +1974,19 @@ who followed the stated convention.
 
 Group 6 also shows the fingerprint §6.4 attributes to annotator *selection*
 rather than convention. Its *lateral* gold — geometrically unambiguous
-relations that both models predict freely — is recalled at 0.49/0.69 by the
-human arm against 0.12/0.21 by the auto arm. Laterals have no convention to
-invert, so what differs there is which pairs the annotator chose to record,
-and the human-trained model ranks exactly those highly because it learned
-human selection habits rather than more geometry.
+relations that both models predict freely — is recalled at 0.48/0.68 by the
+human arm against 0.31/0.24 by the auto arm, over three seeds with disjoint
+ranges. Laterals have no convention to invert, so what differs there is
+which pairs the annotator chose to record, and the human-trained model
+ranks exactly those highly because it learned human selection habits rather
+than more geometry — a smaller gap than the pooled group-6 lead this
+section opens with, because a shared-convention predicate has nothing else
+inflating it.
 
 | Predicate | Human-trained recall | Auto-trained recall |
 |---|---|---|
-| to the left of | 0.49 | 0.12 |
-| to the right of | 0.69 | 0.21 |
+| to the left of | 0.48 (0.47–0.49) | 0.31 (0.24–0.37) |
+| to the right of | 0.68 (0.61–0.72) | 0.24 (0.21–0.26)|
 
 **Two labelling rules support the ordering, not one.** The figures in §6.3.1
 are the shipped `on_contact_min` of 0.85 (§4.14); the same experiment at the

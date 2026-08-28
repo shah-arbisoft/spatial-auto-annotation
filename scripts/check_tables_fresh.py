@@ -191,6 +191,113 @@ def check_benchmark() -> int:
     return bad
 
 
+PER_PRED = ROOT / "outputs" / "sgg_benchmark" / "per_predicate_085.json"
+
+
+F4_SLICES = {"full test": "full", "group 6 (defect)": "group_6",
+             "group 7 (clean)": "group_7", "group 8 (defect)": "group_8",
+             "aligned gold": "full_aligned"}
+F4_ARMS = {"human": "human", "automatic": "auto", "vision-language": "vlm"}
+
+
+def check_f4_vlm_slices() -> int:
+    """Appendix F.4's VLM-by-slice table -- same source as check_benchmark,
+    but a different header shape, in a different file, so nothing checked it."""
+    app = DISS / "appendices.md"
+    if not (BENCH.exists() and app.exists()):
+        return 0
+    run = json.loads(BENCH.read_text(encoding="utf-8"))
+
+    def vals(arm, sl):
+        out = []
+        for s in BENCH_SEEDS:
+            row = run.get(f"react_{arm}_s{s}|{sl}")
+            if row and "mR@100" in row:
+                out.append(row["mR@100"])
+        return out
+
+    bad = seen = 0
+    for rows in tables(app.read_text(encoding="utf-8")):
+        head = [norm(c) for c in rows[0]]
+        if head[:1] != ["slice"] or "vision-language" not in head:
+            continue
+        cols = [F4_ARMS.get(h) for h in head]
+        for r in rows[1:]:
+            sl = F4_SLICES.get(norm(r[0]))
+            if not sl:
+                continue
+            for i, arm in enumerate(cols):
+                if not arm or i >= len(r):
+                    continue
+                cell = norm(r[i]).replace("–", "-")
+                m = re.match(r"([0-9.]+)\s*\(([0-9.]+)-([0-9.]+)\)", cell)
+                v = vals(arm, sl)
+                if not m or len(v) != 3:
+                    continue
+                seen += 1
+                want = (sum(v) / 3, min(v), max(v))
+                got = tuple(float(x) for x in m.groups())
+                if any(abs(g - w) > 0.0006 for g, w in zip(got, want)):
+                    bad += 1
+                    print(f"  MISMATCH F.4 {sl} {arm}: text {got}, run "
+                          f"({want[0]:.4f}, {want[1]:.4f}, {want[2]:.4f})")
+    print(f"  {seen} F.4 VLM-slice cell(s) checked against "
+          f"{BENCH.name}, {bad} disagree")
+    return bad
+
+
+def check_group6_lateral() -> int:
+    """Appendix F.9's group-6 lateral table against the shipped 3-seed run.
+
+    outputs/sgg_benchmark/test_results.json is executed_1b_eval_seed42.ipynb's
+    single-seed output, superseded when all nine arms were retrained; its
+    sharpeners.g6 block still carries the old figures. This table must be
+    read from per_predicate_085.json instead, which the check_benchmark
+    cross-check above confirms matches reeval_all_arms_085.json exactly.
+    """
+    app = DISS / "appendices.md"
+    if not (PER_PRED.exists() and app.exists()):
+        return 0
+    pp = json.loads(PER_PRED.read_text(encoding="utf-8"))
+
+    def vals(arm, pred):
+        out = []
+        for s in BENCH_SEEDS:
+            row = pp.get(f"react_{arm}_s{s}|group_6")
+            if row and pred in row:
+                out.append(row[pred])
+        return out
+
+    arms = {"Human-trained recall": "human", "Auto-trained recall": "auto"}
+    bad = seen = 0
+    for rows in tables(app.read_text(encoding="utf-8")):
+        head = [norm(c) for c in rows[0]]
+        if head[:1] != ["Predicate"] or "Human-trained recall" not in head:
+            continue
+        cols = [arms.get(h) for h in head]
+        for r in rows[1:]:
+            pred = norm(r[0])
+            for i, arm in enumerate(cols):
+                if not arm or i >= len(r):
+                    continue
+                cell = norm(r[i]).replace("–", "-")
+                m = re.match(r"([0-9.]+)\s*\(([0-9.]+)-([0-9.]+)\)", cell)
+                v = vals(arm, pred)
+                if not m or len(v) != 3:
+                    continue
+                seen += 1
+                want = (sum(v) / 3, min(v), max(v))
+                got = tuple(float(x) for x in m.groups())
+                if any(abs(g - w) > 0.006 for g, w in zip(got, want)):
+                    bad += 1
+                    print(f"  MISMATCH F.9 group_6 {pred} {arm}: "
+                          f"text {got}, run "
+                          f"({want[0]:.4f}, {want[1]:.4f}, {want[2]:.4f})")
+    print(f"  {seen} group-6 lateral cell(s) checked against "
+          f"{PER_PRED.name}, {bad} disagree")
+    return bad
+
+
 def check_ages() -> int:
     """Report generated tables older than the results they are built from."""
     stale = 0
@@ -245,6 +352,8 @@ def main() -> int:
     aged = check_ages()
     aged += check_recall_reconciles()
     aged += check_benchmark()
+    aged += check_f4_vlm_slices()
+    aged += check_group6_lateral()
     print(f"\n  {checked} table(s) checked against outputs/tables/, "
           f"{drift} cell(s) drifted")
     if unchecked:

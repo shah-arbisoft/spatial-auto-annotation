@@ -182,8 +182,9 @@ per-group figures of §6.3.1 localise the human arm's lead to the two
 annotators convicted of convention inversion, where it is four times what it
 is on the clean one, and Appendix F.9 carries the fingerprint that separates
 selection from convention: on group 6's *lateral* gold, which has no
-direction to invert, the human arm recalls 0.49/0.69 against the auto arm's
-0.12/0.21, because it learned which pairs that annotator chose to record.
+direction to invert, the human arm recalls 0.48/0.68 against the auto arm's
+0.31/0.24 over three seeds with disjoint ranges, because it learned which
+pairs that annotator chose to record.
 
 **(iii) `near` gold is a single idiosyncratic annotator.** All 93 test
 `near` labels come from group 8, whose usage is sparse and non-exhaustive
