@@ -38,28 +38,25 @@ two human annotators would agree with each other, this dataset cannot say:
 the nine groups labelled disjoint batches differing threefold in object
 density, so §4.6 reports the Fréchet bound as a measurement the data cannot
 support, and the assumption-free spread of 0.082 is too narrow to carry
-weight either. Comparability rests on the trivial baselines and the
-per-predicate audit; the yardstick §1.2.2 hoped for is one this dataset
-could not supply. The second condition, that labels beyond the human record
-survive audit, holds for the lateral, proximity and depth-decided predicates
-at blind-audited precision 0.79–1.00. **It is not met for support.** At
-0.535 [0.42, 0.65] about half the support labels the tool adds beyond the
-human record are wrong: that beats chance and falls well short of a standard
-anything should be built on, and §1.2.2 asked for labels that survive audit.
-Support therefore answers RQ1 on recall and fails it on precision, and the
-per-predicate form of the question exists so that this cannot be averaged
-away; what follows for anything consuming the output is that support is a
-candidate set and not a label set — fit to propose relations for a checker,
-not to be acted on unverified. The contact rule repaired the box rule's
+weight either — comparability rests on the trivial baselines and the
+per-predicate audit. The second condition, that labels beyond the human
+record survive audit, holds for the lateral, proximity and depth-decided
+predicates at blind-audited precision 0.79–1.00. **It is not met for
+support.** At 0.535 [0.42, 0.65] about half the support labels the tool adds
+beyond the human record are wrong — beating chance, short of a standard
+anything should be built on — so support answers RQ1 on recall and fails it
+on precision, and the per-predicate form of the question exists so that this
+cannot be averaged away. For anything consuming the output, support is a
+candidate set and not a label set: fit to propose relations for a checker,
+not to be acted on unverified. (The contact rule repaired the box rule's
 failure but kept a threshold fitted where a false positive cost nothing; the
-claim that it reached 0.9 was an artefact of auditing unblinded; and
-refitting lifted a measured 0.404 to a measured 0.535, short of the 0.667
-predicted. The qualification is `in front of` and `behind` at 0.70/0.71
-pooled: not a failure of the criterion but a disagreement about the words,
-since §4.12 shows the tool reproducing its own verdict across viewpoints
-0.958 of the time while two annotator groups applied the opposite
-convention. A per-predicate answer was required precisely so this could not
-hide inside a mean.
+claim that it reached 0.9 was an artefact of auditing unblinded; refitting
+lifted a measured 0.404 to a measured 0.535, short of the 0.667 predicted.)
+The qualification is `in front of` and `behind` at 0.70/0.71 pooled: not a
+failure of the criterion but a disagreement about the words, §4.12 showing
+the tool reproducing its own verdict across viewpoints 0.958 of the time
+while two annotator groups applied the opposite convention. A per-predicate
+answer was required precisely so this could not hide inside a mean.
 
 **RQ2 is answered yes at the classifier, not met at the planner by the tool
 alone, and undecided at the benchmark.** The controlled classifier gives
@@ -69,31 +66,28 @@ level where the choice of comparator decides the verdict, and §1.2.2 fixed
 it as the human arm: against that arm's 25 of 25 the tool's relations alone
 clear 19, which falls short. What draws level is the union with the
 vision-language source at 25 of 25 — label-free, since no human labels
-anything in it either, but not the treatment RQ2 names: adding a second
-automatic source answers a different and easier question. So the planner
+anything in it either, but not the treatment RQ2 names — so the planner
 establishes that human annotation can be matched *without a human in the
 loop*, not that the tool matches it, the weaker reading and the one the
 criterion supports. The benchmark neither confirms the margin nor
-contradicts it. Section 1.2.2 asked for *at least as well*, which parity
-satisfies as written, but a null result is not a demonstration of
-equivalence: paired by seed the difference is -0.0006 with a 95% interval of
-[-0.070, +0.069], so the honest word for 0.292 against 0.293 is *undecided*
-rather than *yes*, a difference no experiment of this size could resolve in
-either direction. Section 1.2.2 required agreement across all three for an
-unqualified yes, and a tie is not agreement. What Chapter 5 measures as a
-two-and-a-half-fold advantage the ranked metric measures as parity, and
-Chapter 6 reports that instead of resolving it favourably: what difference
-remains sits on the two test annotators carrying measured labelling defects
-and reverses on the one without, on a test gold whose front/behind relations
-are 72% written by those two, while the auto arm recovers five times more of
-the relation types the manual annotation never recorded and reproduces
-itself across seeds more than eight times more tightly. A third arm
-complicates both readings and is reported because it is the result that
-suits the argument least: labels written by a vision-language model lead the
-benchmark at 0.329 against 0.293 and 0.292, and lead the one annotator with
-no measured defect by seed ranges that do not overlap either other arm
-(§6.3.2). Whatever the ranked metric rewards, geometry is not uniquely good
-at supplying it.
+contradicts it: §1.2.2 asked for *at least as well*, which parity satisfies
+as written, but a null result is not a demonstration of equivalence — paired
+by seed the difference is -0.0006 with a 95% interval of [-0.070, +0.069] —
+so the honest word for 0.292 against 0.293 is *undecided* rather than *yes*,
+and since §1.2.2 required agreement across all three for an unqualified yes,
+a tie is not agreement. What Chapter 5 measures as a two-and-a-half-fold
+advantage the ranked metric measures as parity, and Chapter 6 reports that
+instead of resolving it favourably: what difference remains sits on the two
+test annotators carrying measured labelling defects and reverses on the one
+without, on a test gold whose front/behind relations are 72% written by
+those two, while the auto arm recovers five times more of the relation types
+the manual annotation never recorded and reproduces itself across seeds more
+than eight times more tightly. A third arm complicates both readings and is
+reported because it is the result that suits the argument least: labels
+written by a vision-language model lead the benchmark at 0.329 against 0.293
+and 0.292, and lead the one annotator with no measured defect by seed ranges
+that do not overlap either other arm (§6.3.2). Whatever the ranked metric
+rewards, geometry is not uniquely good at supplying it.
 
 "Good enough to replace" is met at two levels and unrefuted at the third;
 "better", which Chapter 5 and the planner both support, holds where ground
@@ -147,13 +141,10 @@ Each limitation below is stated with the specific experiment that would
 settle it, because that is more useful than an apology.
 
 **The chain reaches the plan, not the robot.** The planner experiment (§5.7)
-closes one of the two remaining links: across 25 held-out scenes an LLM
-planner never clears an occluding object given objects alone (0/25), always
-clears it given the human relationships (25/25), and does so on 19 of 25
-with the automatic ones, all six failures traced to a missing support
-relation, not faulty reasoning. What is missing is execution: no robot
-moved. The same conditions on a physical Spot, or in a simulator with
-contact physics, would close the last link, and it is the only one left.
+closes one of the two remaining links; what is missing is execution, since
+no robot moved. The same conditions on a physical Spot, or in a simulator
+with contact physics, would close the last link, and it is the only one
+left.
 
 **The shipped support rule is not independently verdicted.** The validation
 study (Appendix E.3) closed at 20 raters and agrees with the author's blind
@@ -236,12 +227,10 @@ significant change since, which has caught two more.
 
 The second lesson was that "agreement with the humans" is not one target. I
 began by treating the human labels as ground truth and my disagreements as
-errors. Measuring them properly showed that only three of nine annotator
-groups used `near`, that two labelled front and behind in opposite
-directions, and that some labelled support one way only. That reframed the
-project: the question stopped being "how close can I get to the humans" and
-became "what do the humans mean, and where do they disagree". Almost every
-later design decision, including calibrating on some annotators and
+errors; measuring them properly showed the three annotator behaviours
+Chapter 4 reports, and reframed the question from "how close can I get to
+the humans" to "what do the humans mean, and where do they disagree". Almost
+every later design decision, including calibrating on some annotators and
 validating on others, follows from that shift.
 
 The third lesson was about my own claims, and the one I would most like to
