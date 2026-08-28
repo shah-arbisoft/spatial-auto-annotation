@@ -23,17 +23,15 @@ unexamined, not wrong, and raw precision undercounts — and annotator
 behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second case), so
 agreement is reported per annotator group as well as pooled.
 
-The metrics: per-predicate **recall of the human triplets**, the primary
-one, following the source paper's convention; **restricted precision,
-recall and F1** on annotated pairs; a **manual audit** of a stratified
-sample of the extra predictions, for an unbiased true-precision estimate;
-per-type **flag rates**; and three baselines — random, majority, and
-**box-only geometry** (box centres, no masks, no depth). Boxes and classes
-are ground truth throughout (PredCls), so box IoU does not apply;
-detector-in-the-loop results sit with the ablations. Thresholds were fitted
-on annotator groups 0–5 only, with 6–8 held out; each group is also a
-contiguous block of the capture, so the split holds out an unseen
-arrangement as well as an unseen annotator (§4.12).
+The metrics: per-predicate **recall of the human triplets**, the primary one
+and the source paper's convention; **restricted precision, recall and F1**
+on annotated pairs; a **manual audit** of a stratified sample of the extra
+predictions; per-type **flag rates**; and three baselines — random, majority
+and **box-only geometry**. Boxes and classes are ground truth throughout
+(PredCls), so box IoU does not apply. Thresholds were fitted on annotator
+groups 0–5 only, with 6–8 held out; each group is also a contiguous block of
+the capture, so the split holds out an unseen arrangement as well as an
+unseen annotator (§4.12).
 {{fig:qualitative-examples}} shows what the tool emits on two frames, one
 from a calibration group and one held out.
 
@@ -100,15 +98,13 @@ not the final tool.
 The audit splits the predicates in two. For lateral, depth and proximity,
 **every sampled extra prediction was correct** (15/15 each, Wilson 95%
 [0.80, 1.00]): §4.3's low restricted precision is the sparse-gold artefact
-the protocol anticipated, and the dense labels on unannotated pairs are
-trustworthy within the sample's bounds. For support it inverts — `on` 1/15
-(0.07, [0.01, 0.30]), `under` 3/15 (0.20, [0.07, 0.45]), mostly **false
-fires** of box adjacency on objects that merely project next to each other
-(a book *behind* a bottle, a cube on the floor with a remote in front) — and
-with §4.2's containment misses both error directions point to one repair, a
-mask-contact test, which the ablations evaluate. Two caveats: 15 per
-predicate gives wide intervals, and depth verdicts on near-coincident
-objects were occasionally marginal (noted in the sheet).
+the protocol anticipated. For support it inverts — `on` 1/15 (0.07, [0.01,
+0.30]), `under` 3/15 (0.20, [0.07, 0.45]) — mostly **false fires** of box
+adjacency on objects that merely project next to each other, and with §4.2's
+containment misses both error directions point to one repair, a mask-contact
+test, which the ablations evaluate. Two caveats: 15 per predicate gives wide
+intervals, and depth verdicts on near-coincident objects were occasionally
+marginal.
 
 ## 4.5 The front/behind decomposition: a second measured annotation defect
 
@@ -220,22 +216,21 @@ held-out column reported and never optimised against; Appendix D.0 tabulates
 each ablation, its shipped setting and its verdict, and D.1–D.8 give the
 derivations.
 
-Three changed the headline table materially, and their order is this
-section's argument: the audit localised a support precision failure; a
-geometric insight (stacked objects share a camera distance) fixed half, the
-depth co-location gate lifting held-out support F1 0.58 → 0.71 (A1); a
-perception upgrade, mask-bottom contact, fixed most of the rest while
-*raising* recall, 0.71 → 0.87 (A5), the rare change that improves both error
-directions at once; and the ground-plane fallback then recovered most of the
-front/behind abstention band without depth at all, 0.52/0.55 → 0.70/0.71 and
-mean recall 0.79 → 0.85 (A7). The two declined perception ablations bound
-where engineering can help: neither a four-times-larger depth model (A8) nor
-two-view triangulation over the raw capture (A9) improves the depth pair,
-and the second is 0.20 *worse* where it answers at all, on 9% of pairs. The
-limit is monocular ambiguity in the scenes, not model capacity — and what is
-declined is a lightweight uncalibrated estimator, two views with an assumed
-focal length, rather than multi-view geometry in general, so a calibrated
-stereo pair is the open route §9.3 keeps and §7.2 takes up.
+Three changed the headline table materially, in this order: the audit
+localised a support precision failure; a geometric insight, that stacked
+objects share a camera distance, fixed half (A1, held-out support F1 0.58 →
+0.71); mask-bottom contact fixed most of the rest while *raising* recall,
+0.71 → 0.87 (A5), the rare change improving both error directions at once;
+and the ground-plane fallback then recovered most of the front/behind
+abstention band without depth at all, 0.52/0.55 → 0.70/0.71 and mean recall
+0.79 → 0.85 (A7). The two declined perception ablations bound where
+engineering can help: neither a four-times-larger depth model (A8) nor
+two-view triangulation (A9) improves the depth pair, the second being 0.20
+*worse* where it answers at all, on 9% of pairs. The limit is monocular
+ambiguity in the scenes, not model capacity — and what is declined is a
+lightweight uncalibrated estimator rather than multi-view geometry in
+general, so a calibrated stereo pair is the open route §9.3 keeps and §7.2
+takes up.
 
 ## 4.10 Failure gallery: every miss diagnosed
 
@@ -289,19 +284,17 @@ segment's predicates propagated from its keyframe.
 
 Two results. Skipping frames costs nothing measurable — mean recall 0.832
 propagated against 0.829 per frame, at every threshold tested — and the
-stability column holds a finding that is not the expected one. Front/behind,
-the predicted loser if its errors were depth noise near the boundary, agrees
-with itself **0.958** of the time, above `on`/`under` at 0.878 (mean 0.946),
-and still 0.911 at 89× compression. A predicate recalling 0.648 of the human
-labels while agreeing with itself at 0.958 is making the same call
-repeatedly and disagreeing systematically, which converges with A8 and §4.5;
-§7.2 develops what follows. **Limits:** consistency is not correctness — a
-systematically wrong rule is perfectly stable too, so 0.958 rules out only
-the depth-noise explanation this section was written to test, the case that
-the criterion is unshared resting on §4.5's measured inversion — and the
-figures are an upper bound, only matched pairs contributing, with coverage
-thinning as segments grow (E.2 traces this to box drift; a tracker is the
-remedy).
+stability finding is not the expected one. Front/behind, the predicted loser
+if its errors were depth noise near the boundary, agrees with itself
+**0.958** of the time, above `on`/`under` at 0.878 (mean 0.946), and still
+0.911 at 89× compression. A predicate recalling 0.648 of the human labels
+while agreeing with itself at 0.958 is making the same call repeatedly and
+disagreeing systematically, which converges with A8 and §4.5; §7.2 develops
+what follows. **Limits:** consistency is not correctness — a systematically
+wrong rule is perfectly stable too, so 0.958 rules out only the depth-noise
+explanation this section was written to test — and the figures are an upper
+bound, only matched pairs contributing, with coverage thinning as segments
+grow (E.2).
 
 ## 4.13 Would a vision-language model do this instead?
 
@@ -316,23 +309,23 @@ limits of a thirty-image pilot.
 
 Both lose on recall everywhere, 0.400 and 0.445 against the pipeline's
 0.834, and scaling the model does not scale the ability being measured. But
-recall rewards whoever asserts more, and restricted to the pairs both
-judged **both models are more precise than the pipeline**, 0.419 and 0.389
-against 0.347, while losing F1 on every predicate. Most of the recall gap is
-silence: asked for every ordered pair, the model never addressed **171 of
-the 381 gold triplets**, 44.9%, and on the pairs it did judge its recall is
-0.686 rather than 0.378. What it is bad at is *exhaustiveness*, the property
-this project exists to supply, so the fair statement, the one this
-dissertation should be held to, is that **the pipeline beats it on coverage
-and matches it on judgement**. The failure's shape decides the reading:
-neither model contradicts itself or inverts the convention; they fall
-silent, and supply one direction of a symmetric pair without the other in a
-third of cases — the two defects §4.5 measures in the *human* annotation.
-Asked to annotate, a capable vision-language model reproduces the
-characteristic failure of the human process, not a geometric one. Its
-precision where it speaks still begins a case for it as an adjudicator on
-the depth pair (§7.6); §4.14 asks the same family to judge claims it is
-handed, only the half measured sound here.
+recall rewards whoever asserts more, and restricted to the pairs both judged
+**both models are more precise than the pipeline**, 0.419 and 0.389 against
+0.347, while losing F1 on every predicate. Most of the recall gap is
+silence: the model never addressed **171 of the 381 gold triplets**, 44.9%,
+and on the pairs it did judge its recall is 0.686 rather than 0.378. What it
+is bad at is *exhaustiveness*, the property this project exists to supply,
+so the fair statement — the one this dissertation should be held to — is
+that **the pipeline beats it on coverage and matches it on judgement**. The
+shape of the failure decides the reading: neither model contradicts itself
+or inverts the convention; they fall silent, and supply one direction of a
+symmetric pair without the other in a third of cases, which are the two
+defects §4.5 measures in the *human* annotation. Asked to annotate, a
+capable vision-language model reproduces the characteristic failure of the
+human process, not a geometric one. Its precision where it speaks still
+begins a case for it as an adjudicator on the depth pair (§7.6); §4.14 asks
+the same family to judge claims it is handed, only the half measured sound
+here.
 
 ## 4.14 Auditing the audit: blinding, decoys, and a second judge
 
