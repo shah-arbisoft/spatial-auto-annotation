@@ -89,11 +89,11 @@ predictions correct. An arm cannot be both wrong and right about laterality:
 the column measures agreement with which pairs an annotator chose to write
 down, §4.3's artefact one level down the chain — though it cannot be argued
 away in the tool's favour either, §4.4 having audited the rule layer's
-extras and not the classifier's. Appendix F.5 gives the full table and both
-readings. What the indicators establish is that the automatic arm dominates
-at teaching a model to recover the relations humans recorded, and loses at
-imitating which relations humans chose to record; no metric computed against
-this gold separates the two.
+extras and not the classifier's, which Appendix F.5 concedes with the full
+table. The indicators establish that the automatic arm dominates at teaching
+a model to recover the relations humans recorded and loses at imitating
+which relations humans chose to record; no metric computed against this gold
+separates the two.
 
 ## 5.3 Why self-training does not rescue the human labels
 
@@ -223,29 +223,27 @@ annotation on a robot-relevant task, with no human in the labelling loop.
 
 Twenty-five scenes is small, and the pairing is what makes it enough: every
 condition sees the same scenes, so the evidence sits where two conditions
-disagree, and an exact McNemar test over those
-(`eval/planner_paired_tests.py`) says which comparisons the sample settles.
-It settles the ones the argument rests on — relations against none, 25 and
-19 discordant scenes all one direction, p < 10^-5; the union's 6-to-0 gain
-over the tool alone, p = 0.031, as is the human arm's lead over the tool,
-the comparison that runs against this project — and names what it cannot:
-the tool against the vision-language source is 6 discordant to 5, p = 1.00,
-so the two-scene margin is not read here, and the union's 5-to-0 edge over
-that source reaches only p = 0.063. The paired tests are sharp exactly where
-the absolute rates are not (C's own rate is 19 of 25, 95% interval [0.55,
-0.91]): the experiment measures *which source is better on these scenes*,
-not how often any would succeed in general.
+disagree, and exact McNemar tests over those (`eval/planner_paired_tests.py`,
+reported in full in E.5) settle the comparisons the argument rests on —
+relations against none at p < 10^-5, and the union's 6-to-0 gain over the
+tool alone at p = 0.031, as is the human arm's lead over the tool, the
+comparison that runs against this project. They also name what 25 scenes
+cannot settle: the tool against the vision-language source is 6 discordant
+to 5, p = 1.00, so the two-scene margin is not read here. The tests are
+sharp exactly where the absolute rates are not, C's own rate being 19 of 25
+with a 95% interval of [0.55, 0.91], so the experiment measures *which
+source is better on these scenes* rather than how often any would succeed in
+general.
 
 The threshold refit of §4.14 cost C three scenes, and E none. On the
 pre-refit labels (`on_contact_min` 0.60) C recorded 22 of 25; the shipped
-0.85 emits support more sparingly, leaving the load-bearing relation in 18
-of the 25 prompts rather than 22 (E.5 lists the scenes). Re-run, **C scores
-19 of 25 on both planners**, again in exact agreement, and E still scores 25
-of 25: the tool's seven missing scenes and the vision-language model's five
-remain **disjoint**, so tightening the geometric source widened its own gap
-by three scenes and left the union closing every one — a harder test of the
-same claim than the original passed. `grasps_target` and `no_invented`
-remain 1.00 throughout, so no plan failed for any other reason.
+0.85 emits support more sparingly, and re-run on those labels **C scores 19
+of 25 on both planners**, again in exact agreement, while E still scores 25
+of 25. The tool's missing scenes and the vision-language model's five remain
+**disjoint**, so tightening the geometric source widened its own gap and
+left the union closing every one — a harder test of the same claim than the
+original passed. `grasps_target` and `no_invented` remain 1.00 throughout,
+so no plan failed for any other reason.
 
 Five limits. The scenes were selected to contain an occluder, so the result
 speaks to that situation, not task planning at large. The vision-language

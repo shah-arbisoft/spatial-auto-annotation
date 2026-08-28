@@ -188,21 +188,18 @@ quietly.
 
 ## 3.7 Output compatibility
 
-Byte-compatibility is a requirement of the research design: RQ2 compares two
-label sources by training the same model on each, and different containers
-would confound the labels with the loader. Three formats are written for
-three consumers — Visual Genome JSON, which a replication would diff
-against; YOLO txt, which trains the detector the deployment mode and the
-benchmark share; and the h5 layout Chapter 6's framework ingests — each
-reproducing the SGDET-Annotate structure exactly, down to centre-form
-`boxes_1024`/`boxes_512`, index-aligned `labels` and `attribute` arrays, and
-the six-dataset h5 layout with int64 attributes. The alternative, an
-internal schema plus a converter (§3.4), would have left every comparison
-one translation away from the thing it claims to measure. Compatibility is
-verified by test: a load→write round trip reproduces `boxes_1024` and
-`labels` with zero error, and the h5 matches a real export key-for-key and
-dtype-for-dtype *(measured)*, both checks in the suite so a later writer
-change cannot pass unnoticed.
+Byte-compatibility is a requirement of the research design, not a
+convenience: RQ2 compares two label sources by training the same model on
+each, so different containers would confound the labels with the loader.
+Three formats are written for three consumers — Visual Genome JSON, which a
+replication would diff against; YOLO txt, which trains the detector the
+deployment mode and the benchmark share; and the h5 layout Chapter 6's
+framework ingests — each reproducing the SGDET-Annotate structure exactly.
+The alternative, an internal schema plus a converter (§3.4), would have left
+every comparison one translation away from the thing it claims to measure.
+Appendix B lists the fields and the round-trip tests that verify them, so
+auto-labels are drop-in replacements for human ones, which is the property
+RQ2 depends on.
 
 ## 3.8 Calibrating `near`: an annotator-aware protocol
 
@@ -231,18 +228,14 @@ genuinely near is checked by manual audit in the evaluation chapter.
 The claim that the rules are detector-agnostic (§4.11) rests on the
 architecture: the rule layer (`src/predicates.py`) imports nothing but
 `numpy` and never receives an image, and the entry point takes boxes as an
-argument, so no detector is wired in and detector quality and relation
-quality are separately attributable. The contract is explicit
-(`src/detectors.py`) — one method returning pixel boxes, class names and
-scores — with three implementations: open-vocabulary prompting, an adapter
-for any ultralytics checkpoint including the source paper's YOLOv10m
-weights, and a reader for external detections. Twelve unit tests pin it, one
-driving the rule layer from a detector written against the documentation
-alone. Two coupling points are documented: the support guard keys on the
-literal class name `human`, and the fitted thresholds assume boxes of
-roughly the tightness the annotators drew, so a detector with systematically
-different boxes should re-run §3.8's calibration (twenty seconds offline
-from the cache). A worked example is in `docs/CUSTOM_DETECTOR.md`.
+argument, so no detector is wired in — one simply supplies that argument.
+That is what makes §4.11's conditional measurement meaningful, since holding
+the boxes fixed lets detector quality and relation quality be attributed
+separately, and a better detector improves the system without a line of rule
+code changing. Appendix B gives the contract, its three implementations, the
+twelve tests that pin it and the two documented coupling points, one of
+which is that a detector drawing systematically different boxes should
+re-run §3.8's calibration.
 
 ## 3.10 Selecting frames by content
 
@@ -251,52 +244,43 @@ sequence oversamples the scene severely: across its 2,650 frames the mean
 optical flow between neighbours is 0.08 px, with 0.9% of pixels moving more
 than one pixel, so a per-frame pipeline spends a full perception pass
 recomputing relations that have not moved. The remedy is to annotate one
-frame per *viewpoint*. Shot-boundary detection does not apply — it
-thresholds consecutive-frame differences, which presumes cuts, and 0.08 px
-per frame never exceeds the noise at any single step, while the same motion
-over forty frames displaces the image by 13 px, so only accumulated drift
-carries the signal. `segment_sequence` (`src/keyframes.py`) therefore
-measures drift from the *anchor* of the current segment, opening a new
-segment when drift exceeds τ, over 64×48 mean-subtracted greyscale
-thumbnails (the subtraction discarding an auto-exposing camera's exposure
-shifts), and each segment nominates the frame closest to its mean signature,
-which on a moving camera beats taking the first. One parameter spans two
-uses — small τ isolates near-duplicates, large τ groups viewpoints of one
-arrangement, which §4.12's cross-viewpoint measurement consumes — and the
-threshold is chosen by sweep, §4.12 reporting what the segmentation recovers
-and what skipping frames costs.
+frame per *viewpoint*, which requires deciding where one viewpoint ends.
+Shot-boundary detection does not apply: it thresholds consecutive-frame
+differences, which presumes cuts, and 0.08 px per frame never exceeds the
+noise at any single step, while the same motion over forty frames displaces
+the image by 13 px, so only accumulated drift carries the signal.
+`segment_sequence` (`src/keyframes.py`) therefore measures drift from the
+*anchor* of the current segment rather than the preceding frame, opening a
+new segment when drift exceeds τ, so gradual motion accumulates instead of
+being rounded away while a genuine cut still crosses in one step; each
+segment nominates the frame closest to its mean signature, which on a moving
+camera beats taking the first. One parameter spans two uses — small τ
+isolates near-duplicates, large τ groups viewpoints of one arrangement,
+which §4.12's cross-viewpoint measurement consumes — and Appendix E.2 gives
+the thumbnail distance, the sweep the threshold is read off, and what the
+segmentation recovers.
 
 ## 3.11 Reproducibility by construction
 
 Reproducibility is a design property, because three of the four requirements
 in §3.2 are unverifiable without it: a threshold is not fitted on groups 0–5
 if nobody else can refit it, and an ablation is an assertion unless the
-reader can re-run the arm it removes.
-
-**Configuration and caching.** Every threshold, seed and model identifier
-lives in `configs/default.yaml`, and the runner caches each object's lifted
-geometry after the single GPU pass. Any rule or threshold change then
-re-evaluates the whole dataset offline in about 20 seconds with no GPU
-(`scripts/reannotate_from_cache.py`) against roughly five minutes for a full
-perception run — what made the audit-driven rule repairs of Chapter 4
-affordable and let the ablation battery run as a sweep.
-
-**Test strategy.** The suite is 66 tests running in about a second,
-deliberately: a suite slow enough to skip constrains nothing. Worked
-examples from the predicate specification are encoded as unit tests over the
-rule layer so the two cannot drift apart silently, a randomised invariant
-test fuzzes two thousand synthetic scenes against the structural guarantees
-§3.6 promises, and the rest cover the format writers, the detector adapters
-of §3.9, frame selection and the reply parsers.
-
-**Environment.** Python 3.11 with CUDA torch 2.5.1, pinned, and the one
-genuinely awkward step documented: installing SAM2 can silently replace the
-CUDA build of torch with a CPU wheel, so the pipeline still runs, produces
-identical labels and takes an order of magnitude longer — the worst class of
-failure because nothing reports it. A smoke test verifies on first setup
-that both models load, that CUDA is in use, and that peak memory sits inside
-the 6 GB budget. Appendix B gives the walk-through, and the repository is
-public.
+reader can re-run the arm it removes. Three mechanisms deliver it, and
+Appendix B gives each in full with the walk-through. Every threshold, seed
+and model identifier lives in `configs/default.yaml`, and the runner caches
+each object's lifted geometry after the single GPU pass, so any rule change
+re-evaluates the whole dataset offline in about 20 seconds against roughly
+five minutes for a full perception run — which is what made the
+audit-driven rule repairs of Chapter 4 affordable and let the ablation
+battery run as a sweep. The test suite is 66 tests running in about a
+second, deliberately, since a suite slow enough to skip constrains nothing;
+it encodes the predicate specification's worked examples as unit tests and
+fuzzes two thousand synthetic scenes against the structural guarantees §3.6
+promises. And the environment is pinned, with the one genuinely awkward step
+documented rather than left to be rediscovered: installing SAM2 can silently
+replace the CUDA build of torch with a CPU wheel, so the pipeline still runs
+and takes an order of magnitude longer, which is the worst class of failure
+because nothing reports it. The repository is public.
 
 ## 3.12 Summary of design decisions
 

@@ -92,6 +92,64 @@ the executed evaluation notebook with its outputs (`executed_1b_eval_seed42.ipyn
 which is the recorded provenance of every number in Chapter 6's tables.
 Training logs and parsed results: `outputs/sgg_benchmark/`.
 
+### How the repository makes the results re-runnable
+
+Section 3.11 states the principle; the mechanics are here, because three of
+the four requirements in §3.2 are unverifiable without them.
+
+**Configuration and caching.** Every threshold, seed and model identifier
+lives in `configs/default.yaml`, so no constant is buried in a function, and
+the runner caches each object's lifted geometry after the single GPU pass.
+That separates the expensive stage from the cheap one: any rule or threshold
+change re-evaluates the whole dataset offline in about 20 seconds with no
+GPU (`scripts/reannotate_from_cache.py`) against roughly five minutes for a
+full perception run, which is what made the audit-driven rule repairs of
+Chapter 4 affordable and let the ablation battery run as a sweep.
+
+**Test strategy.** The suite is 66 tests running in about a second, which is
+deliberate: a suite slow enough to skip constrains nothing. Worked examples
+from the predicate specification are encoded as unit tests over the rule
+layer so the two cannot drift apart silently; a randomised invariant test
+fuzzes two thousand synthetic scenes against the structural guarantees §3.6
+promises; and the rest cover the format writers, the detector adapters of
+§3.9, frame selection and the reply parsers.
+
+**The format writers, verified.** Byte-compatibility is a requirement of the
+research design rather than a convenience: RQ2 compares two label sources by
+training the same model on each, so labels arriving in a different container
+would confound the labels with the loader. The writers reproduce the
+SGDET-Annotate structure exactly — centre-form `boxes_1024`/`boxes_512` in
+the resized frames, index-aligned `labels` and `attribute` arrays,
+`relationships` as subject–object index pairs with a parallel `predicates`
+ID array, and the same six-dataset h5 layout with int64 attributes. A
+load→write round trip reproduces `boxes_1024` and `labels` with zero error,
+and the h5 matches a real export key-for-key and dtype-for-dtype
+*(measured)*, both checks sitting in the suite so a later change to a writer
+cannot pass unnoticed.
+
+**The detector contract.** The rule layer (`src/predicates.py`) imports
+nothing but `numpy` and never receives an image, and the entry point takes
+boxes as an argument, so no detector is wired into the pipeline. The
+contract is explicit (`src/detectors.py`): one method returning pixel boxes,
+class names and scores, with three implementations — open-vocabulary
+prompting where no trained model exists, an adapter for any ultralytics
+checkpoint including the source paper's YOLOv10m weights, and a reader for
+externally computed detections. Twelve unit tests pin it, one driving the
+rule layer from a detector written against the documentation alone. Two
+coupling points are documented: the support guard keys on the literal class
+name `human`, and the fitted thresholds assume boxes of roughly the
+tightness the annotators drew, so a detector with systematically different
+boxes should re-run §3.8's calibration (twenty seconds offline from the
+cache). A worked example is in `docs/CUSTOM_DETECTOR.md`.
+
+**Environment.** Python 3.11 with CUDA torch 2.5.1, pinned, and the one
+genuinely awkward step documented instead of left to be rediscovered:
+installing SAM2 can silently replace the CUDA build of torch with a CPU
+wheel, so the pipeline still runs, produces identical labels and takes an
+order of magnitude longer, which is the worst class of failure because
+nothing reports it. A smoke test verifies on first setup that both models
+load, that CUDA is in use, and that peak memory sits inside the 6 GB budget.
+
 ### Where each chapter's numbers come from
 
 Every quantitative claim names the script that produced it and the artefact
@@ -1073,8 +1131,12 @@ Propagated recall's small advantage over per-frame (0.832 against 0.829) is
 likely an artefact of the selection rule, the segment representative being
 the frame nearest the segment mean.
 
-*Segmentation.* At τ = 10 the full 2,650-frame sequence collapses to 892
-segments, a 3.0× reduction; over the 884 released frames it gives 331, 2.7×.
+*Segmentation.* Distances are mean absolute differences over 64×48
+mean-subtracted greyscale thumbnails, the subtraction discarding the
+exposure shifts of an auto-exposing camera, which would otherwise fire
+boundaries of their own (§3.10). At τ = 10 the full 2,650-frame sequence
+collapses to 892 segments, a 3.0× reduction; over the 884 released frames it
+gives 331, 2.7×.
 Scored on the released portion, where the eight layout changes are known,
 every one is recovered within five frames (boundary recall 1.00). Precision
 against those eight is low by construction and not a defect: viewpoint
@@ -1263,6 +1325,25 @@ from 4, 16 and 24 alone); scene 7's plan is nonetheless recovered from the
 surrounding description, so absence of the relation is nearly but not quite
 sufficient for failure. The six failing scenes are 1, 4, 16, 19, 24 and 25
 (§5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together — scene 4 offered "box6 is in front of book7" and "box6 is near book7", scene 24 added "to the left of" — but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored `clear_step` is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
+
+**The paired tests, in full.** Twenty-five scenes is small, and the pairing
+is what makes it enough: every condition is put to the same scenes, so the
+evidence sits in the scenes where two conditions disagree, and an exact
+McNemar test over those (`eval/planner_paired_tests.py`) says which
+comparisons this sample can settle. Supplying relations at all separates
+from supplying none, 25 discordant scenes for the human labels and 19 for
+the tool's, all in one direction, p < 10^-5. The union's gain over the tool
+alone is 6 scenes to 0, p = 0.031, as is the human arm's lead over the tool
+alone, the comparison that runs against this project. What 25 scenes cannot
+settle is named too: the tool against the vision-language source is 6
+discordant scenes to 5, p = 1.00, so the two-scene margin means nothing and
+§5.7 declines to read it, and the union's edge over that source alone, 5 to
+0, reaches only p = 0.063. The paired tests are also sharp exactly where the
+absolute rates are not: C's own rate is 19 of 25 with a 95% interval of
+[0.55, 0.91]. The experiment therefore measures *which source is better on
+these scenes* far more precisely than how often any of them would succeed in
+general, and that generalisation is weak because of what the scenes are,
+not how many.
 
 **The scoring defect that manual checking caught.** Models frequently open
 with a preamble restating the task ("To pick up box0 safely, follow these
