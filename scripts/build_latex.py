@@ -256,9 +256,6 @@ TABLES = {
         "annotators, against three baselines. *the majority baseline emits "
         "“in front of” everywhere, trivially recalling that class "
         "and nothing else; †near rounds 715/717 = 0.997 (§4.9).",
-        # 4.9
-        "The ten ablations: what each tests, the setting that shipped, and "
-        "the verdict on held-out annotators.",
         # 4.14: the re-audit after the threshold was re-fitted
         "Per-predicate precision of the shipped tool: the re-fitted "
         "threshold audited on a fresh draw, beside the superseded v3 column, "
@@ -290,6 +287,9 @@ TABLES = {
         # C.10
         "The seven predicates: core geometric test, shipped threshold values "
         "and the symmetry each rule guarantees by construction.",
+        # D.0 (moved from §4.9)
+        "The ten ablations: what each tests, the setting that shipped, and "
+        "the verdict on held-out annotators.",
         # D.6
         "Ablation A9: two-view triangulation against the monocular cascade "
         "on the same front/behind pairs.",

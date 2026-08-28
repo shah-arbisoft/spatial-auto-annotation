@@ -200,17 +200,15 @@ the assessments are this project's, made against the requirements of §2.10.
 
 - **SpatialVLM** (Chen et al., 2024), the foundational geometry-to-label
   method, lifts internet images to metric 3D via monocular depth and
-  segmentation, then emits up to ~2B spatial question-answer pairs from ~10M
-  images — establishing the premise this project adopts, that spatial
-  relations can be *derived from measured geometry without human relational
-  labels*. Its output is **free-form VQA text** over internet images,
-  against no fixed predicate set.
+  segmentation and emits up to ~2B spatial question-answer pairs from ~10M
+  images, establishing the premise this project adopts: spatial relations
+  can be *derived from measured geometry without human relational labels*.
+  Its output is **free-form VQA text**, against no fixed predicate set.
 - **SpatialRGPT** (Cheng et al., 2024) adds a curation pipeline learning
   regional representations from 3D scene graphs and a **depth plugin** for a
   VLM's visual encoder: the cleanest published RGB→depth→relation recipe and
-  the key reference for this project's depth use, but the artefact is a
-  region-reasoning VLM, not a deterministic labeller writing VG-format
-  triplets.
+  the key reference for this project's depth use, but its artefact is a
+  region-reasoning VLM, not a labeller writing VG-format triplets.
 - **VQASynth** (Remyx AI, 2024) reproduces that pipeline openly (SAM2,
   monocular depth, grounded captioning): the most reusable code reference,
   but its output stage produces QA pairs where a triplet writer is needed,
@@ -222,14 +220,14 @@ the assessments are this project's, made against the requirements of §2.10.
 - **RoboSpatial** (Song et al., 2025), the closest robotics-domain match and
   cited by the source paper, teaches spatial understanding to 2D/3D VLMs
   from real indoor scans and formalises **reference frames**: ego-centric,
-  world-centric and object-centric readings of one phrase. The ambiguity is
-  a documented property of spatial language — Landau and Jackendoff (1993)
-  showed that language encodes location through frame-dependent primitives,
-  so "the cup is left of the box" is true in one frame and false in another,
-  and an annotator must pin the frame before any label is well defined. That
-  justifies expressing *left/right* in the **camera frame** (Appendix C),
-  the frame the dataset's annotators saw on screen. Its output is spatial QA
-  over three frames.
+  world-centric and object-centric readings of one phrase. That ambiguity is
+  a documented property of spatial language, not an engineering nuisance —
+  Landau and Jackendoff (1993) showed language encodes location through
+  frame-dependent primitives, so "the cup is left of the box" is true in one
+  frame and false in another, and an annotator must pin the frame before any
+  label is well defined. Hence *left/right* in the **camera frame**
+  (Appendix C), the frame the dataset's annotators saw on screen. Its output
+  is spatial QA over three frames.
 
 This raises the obvious alternative: ask a capable vision-language model to
 name the relations. There is reason to doubt it before testing — Visual
@@ -239,27 +237,29 @@ off instantly (Liu, Emerson and Collier, 2023), and Kamath, Hessel and Chang
 both models recover under half the human triplets the pipeline does and lose
 F1 on every predicate, while being *more precise* where they speak. What
 settles it is the shape of the output — silence on most pairs, a symmetric
-relation asserted in one direction only a third of the time, the behaviours
-§4.5 measures in the *human* annotation. A vision-language model asked to
-annotate reproduces the failure mode this project set out to replace.
+relation asserted in one direction only about a third of the time, the
+behaviours §4.5 measures in the *human* annotation. A vision-language model
+asked to annotate reproduces the failure mode this project set out to
+replace.
 
-One adjacent family needs separating. Online 3D scene-graph *mapping*
-systems build a spatial-semantic graph as a robot moves — Hydra from
-depth-equipped SLAM in real time (Hughes, Chang and Carlone, 2022),
-ConceptGraphs by fusing foundation-model features into an RGB-D map (Gu et
-al., 2024) — but they consume depth sensors, emit no dataset-format
-annotation for existing monocular images, and are not validated against
-human annotators. They strengthen the case for automatic annotation: the
-training data their learned components need is what an annotator supplies.
+One adjacent family needs separating, because from a robotics standpoint it
+looks closest. Online 3D scene-graph *mapping* systems build a
+spatial-semantic graph as a robot moves — Hydra from depth-equipped SLAM in
+real time (Hughes, Chang and Carlone, 2022), ConceptGraphs by fusing
+foundation-model features into an RGB-D map (Gu et al., 2024) — but they
+consume depth sensors, emit no dataset-format annotation for existing
+monocular images, and are not validated against human annotators. They
+strengthen the case for automatic annotation: the training data their
+learned components need is what an annotator supplies.
 
 The lineage rarely asks how anyone knows the computed labels are right, and
 it matters because this project's central claim is a validation claim. Two
-kinds of evidence are offered and neither is what RQ1 requires:
-**downstream benefit** (SpatialVLM fine-tunes a model on its supervision and
-shows better answers; SpatialRGPT judges its representations through the
-model they produce) and **internal consistency** (Open3D-VQA discards what
-its own rules declare impossible). Both share a blind spot: a model trained
-on computed labels and tested on questions from the same computation scores
+kinds of evidence are offered and neither is what RQ1 requires: **downstream
+benefit** (SpatialVLM fine-tunes a model on its supervision and shows better
+answers; SpatialRGPT judges its representations through the model they
+produce) and **internal consistency** (Open3D-VQA discards what its own
+rules declare impossible). Both share a blind spot: a model trained on
+computed labels and tested on questions from the same computation scores
 well on any convention applied consistently, including a wrong one, and an
 internal consistency check is satisfied by any coherent convention. Neither
 detects systematic disagreement with how humans use the words — the failure

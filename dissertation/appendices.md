@@ -620,6 +620,25 @@ what the audits of the affected predictions found. The two declined
 refinements are included in full, because a negative result is only useful
 if the reader can see what was actually tried.
 
+### D.0 The ten ablations at a glance
+
+Section 4.9 gives the verdicts in prose; this is the register they
+summarise. Every parameter was selected on the training annotator groups
+alone, with the held-out column reported and never optimised against.
+
+| # | What it tests | Setting | Verdict |
+|---|---|---|---|
+| A1 | support depth co-location gate | `on_depth_eps` 0.06 | **shipped**; held-out support F1 0.58 → 0.71 |
+| A2 | front/behind abstention band | `depth_eps` 0.03 | **shipped**; bounds the trade (recall 0.71 at ε=0 for 0.26–0.36 precision) |
+| A3 | lateral abstention band | `lateral_center_eps` 0.02 | **shipped**; recall flat to 0.02 while precision rises |
+| A4 | proximity threshold | `near_T` 1.372 | **shipped**; the knee of the recall plateau, held-out recall 1.00 |
+| A5 | mask-contact support rule | `on_contact_min` 0.60, re-fitted to 0.85 (§4.14) | **shipped**; held-out support F1 0.71 → 0.87, both error directions at once |
+| A6 | `near` contact exclusion | on | **shipped**; costs 2 recalled triplets, prevents 4,084 labels contradicting the measured convention |
+| A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.70/0.71, mean recall 0.79 → 0.85 |
+| A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/−0.002 front/behind, mean recall marginally lower |
+| A9 | multi-frame depth (two-view triangulation) | n/a | **declined**; 0.706 against the monocular cascade's 0.902, on 9% of pairs |
+| A10 | geometric drop fraction in place of the class guard | n/a | **declined**; the resting and held populations overlap, no threshold separates them (D.8) |
+
 ### D.1 The support depth co-location gate (ablation A1)
 
 The audit's support-precision failure has a geometric cause: on a floor

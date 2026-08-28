@@ -237,37 +237,30 @@ denser than the human set.
 ## 4.9 Shipped from the ablations
 
 Ten ablations were run: seven sweep a shipped parameter over the cached
-geometry and re-run offline in about twenty seconds (`eval/ablations.py`);
-two test whether a heavier perception stack would do better and one whether
-geometry can replace the class guard, and all three say no. Every parameter
-was selected on the training annotator groups alone, the held-out column
-reported and never optimised against.
+geometry and re-run offline in about twenty seconds (`eval/ablations.py`),
+two test whether a heavier perception stack would do better, and one whether
+geometry can replace the class guard. All three of the latter say no. Every
+parameter was selected on the training annotator groups alone, with the
+held-out column reported and never optimised against; Appendix D.0 tabulates
+each ablation, its shipped setting and its verdict, and D.1–D.8 give the
+derivations.
 
-| # | What it tests | Setting | Verdict |
-|---|---|---|---|
-| A1 | support depth co-location gate | `on_depth_eps` 0.06 | **shipped**; held-out support F1 0.58 → 0.71 |
-| A2 | front/behind abstention band | `depth_eps` 0.03 | **shipped**; bounds the trade (recall 0.71 at ε=0 for 0.26–0.36 precision) |
-| A3 | lateral abstention band | `lateral_center_eps` 0.02 | **shipped**; recall flat to 0.02 while precision rises |
-| A4 | proximity threshold | `near_T` 1.372 | **shipped**; the knee of the recall plateau, held-out recall 1.00 |
-| A5 | mask-contact support rule | `on_contact_min` 0.60, re-fitted to 0.85 (§4.14) | **shipped**; held-out support F1 0.71 → 0.87, both error directions at once |
-| A6 | `near` contact exclusion | on | **shipped**; costs 2 recalled triplets, prevents 4,084 labels contradicting the measured convention |
-| A7 | ground-plane depth fallback | `plane_band` 0.005 | **shipped**; front/behind 0.52/0.55 → 0.70/0.71, mean recall 0.79 → 0.85 |
-| A8 | larger depth model (Base, 4× parameters) | n/a | **declined**; +0.001/−0.002 front/behind, mean recall marginally lower |
-| A9 | multi-frame depth (two-view triangulation) | n/a | **declined**; 0.706 against the monocular cascade's 0.902, on 9% of pairs |
-| A10 | geometric drop fraction in place of the class guard | n/a | **declined**; the resting and held populations overlap, no threshold separates them (D.8) |
-
-Three changed the headline table materially, in this order: the audit
-localised a support precision failure; a geometric insight (stacked objects
-share a camera distance) fixed half; mask-bottom contact fixed most of the
-rest while *raising* recall; and the ground-plane fallback recovered most of
-the front/behind abstention band without depth at all. The declined
-perception ablations bound where engineering can help: the limit is
-monocular ambiguity in the scenes, not model capacity, and what is declined
-is a lightweight uncalibrated estimator (two views, an assumed focal
-length), not multi-view geometry in general — a calibrated stereo pair is
-the open route §9.3 keeps, and §7.2 takes up what follows. Full derivations,
-calibration evidence, audit samples and each refinement's failure structure
-are in **Appendix D**.
+Three changed the headline table materially, and their order is this
+section's argument: the audit localised a support precision failure; a
+geometric insight (stacked objects share a camera distance) fixed half, the
+depth co-location gate lifting held-out support F1 0.58 → 0.71 (A1); a
+perception upgrade, mask-bottom contact, fixed most of the rest while
+*raising* recall, 0.71 → 0.87 (A5), the rare change that improves both error
+directions at once; and the ground-plane fallback then recovered most of the
+front/behind abstention band without depth at all, 0.52/0.55 → 0.70/0.71 and
+mean recall 0.79 → 0.85 (A7). The two declined perception ablations bound
+where engineering can help: neither a four-times-larger depth model (A8) nor
+two-view triangulation over the raw capture (A9) improves the depth pair,
+and the second is 0.20 *worse* where it answers at all, on 9% of pairs. The
+limit is monocular ambiguity in the scenes, not model capacity — and what is
+declined is a lightweight uncalibrated estimator, two views with an assumed
+focal length, rather than multi-view geometry in general, so a calibrated
+stereo pair is the open route §9.3 keeps and §7.2 takes up.
 
 ## 4.10 Failure gallery: every miss diagnosed
 
