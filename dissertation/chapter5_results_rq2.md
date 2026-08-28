@@ -200,64 +200,50 @@ larger planner only: **D**, the vision-language model's relations from
 | D | vision-language relationships | not run | 20 / 25 |
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
-{{fig:planner-sources}} shows the five conditions. The two planners agree
-exactly, and not only in the totals: C fails on scenes 1, 4, 16, 19, 24 and
-25 under *both*. A finding that survives replacing the reasoning engine,
-down to which scenes fail, is a property of the prompt and not of the model
-reading it — the claim the experiment exists to make. It also disposes of
-the objection that a more capable planner would infer support from the
-object list: it does not, in twenty-five scenes of twenty-five, twice
-(E.5). Every failure in both automatic arms is a support relation the
-source did not supply, never a plan reasoning badly from what it was given;
-in no scene was the relation present and ignored (E.5 gives the six scenes
-in full). Six misses in twenty-five is 24%, against support recall of
-0.81/0.75 in §4.2 and the refit of §4.14: the planner result is the
-fidelity result one level higher in the chain, and it moves when that
-fidelity does. D scores 20 of 25, marginally the stronger single automatic
-source, and its five failures (scenes 3, 5, 6, 13 and 14) **do not
-intersect** C's six, so a union supplying more support relations repairs
-exactly the failing cases and cannot break the working ones. It does: E
-clears the occluder in all 25, gaining six scenes over C and losing none —
-the only measurement here on which automatic labels *match* human
-annotation on a robot-relevant task, with no human in the labelling loop.
+{{fig:planner-sources}} shows the five conditions, and three findings sit in
+them. **The two planners agree exactly**, and not only in the totals: C
+fails on the same six scenes under both. A finding that survives replacing
+the reasoning engine, down to which scenes fail, is a property of the prompt
+and not of the model reading it — the claim the experiment exists to make —
+and it disposes of the objection that a more capable planner would infer
+support from the object list, which it does not, in twenty-five scenes of
+twenty-five, twice. **Every failure in both automatic arms is a missing
+support relation**, never a plan reasoning badly from what it was given: in
+no scene was the relation present and ignored. Six misses in twenty-five is
+24%, against support recall of 0.81/0.75 in §4.2, so the planner result is
+the fidelity result one level higher in the chain — and it moves when that
+fidelity does, the refit of §4.14 having cost C three scenes (22 of 25 on
+the pre-refit labels) while costing E none. **The two automatic sources fail
+on disjoint scenes.** D scores 20 of 25, marginally the stronger single
+source, and its five failures do not intersect C's six, so a union supplying
+more support relations repairs exactly the failing cases and cannot break
+the working ones. It does: E clears the occluder in all 25, gaining six
+scenes over C and losing none, and the disjointness survives the threshold
+refit that widened C's own gap — the only measurement here on which
+automatic labels *match* human annotation on a robot-relevant task, with no
+human in the labelling loop. Throughout, `grasps_target` and `no_invented`
+remain 1.00, so no plan failed for any other reason.
 
-Twenty-five scenes is small, and the pairing is what makes it enough: every
-condition sees the same scenes, so the evidence sits where two conditions
-disagree, and exact McNemar tests over those (`eval/planner_paired_tests.py`,
-reported in full in E.5) settle the comparisons the argument rests on —
-relations against none at p < 10^-5, and the union's 6-to-0 gain over the
-tool alone at p = 0.031, as is the human arm's lead over the tool, the
-comparison that runs against this project. They also name what 25 scenes
-cannot settle: the tool against the vision-language source is 6 discordant
-to 5, p = 1.00, so the two-scene margin is not read here. The tests are
-sharp exactly where the absolute rates are not, C's own rate being 19 of 25
-with a 95% interval of [0.55, 0.91], so the experiment measures *which
-source is better on these scenes* rather than how often any would succeed in
-general.
+Twenty-five scenes is small, and the pairing is what makes it enough: exact
+McNemar tests over the discordant scenes (`eval/planner_paired_tests.py`,
+reported in full with the scene-level forensics in E.5) settle the
+comparisons the argument rests on — relations against none at p < 10^-5, and
+the union's 6-to-0 gain over the tool alone at p = 0.031, as is the human
+arm's lead over the tool, the comparison that runs against this project —
+and name what 25 scenes cannot settle, the tool against the vision-language
+source being 6 discordant to 5 at p = 1.00, so that two-scene margin is not
+read here. The tests are sharp exactly where the absolute rates are not, C's
+own rate being 19 of 25 with a 95% interval of [0.55, 0.91].
 
-The threshold refit of §4.14 cost C three scenes, and E none. On the
-pre-refit labels (`on_contact_min` 0.60) C recorded 22 of 25; the shipped
-0.85 emits support more sparingly, and re-run on those labels **C scores 19
-of 25 on both planners**, again in exact agreement, while E still scores 25
-of 25. The tool's missing scenes and the vision-language model's five remain
-**disjoint**, so tightening the geometric source widened its own gap and
-left the union closing every one — a harder test of the same claim than the
-original passed. `grasps_target` and `no_invented` remain 1.00 throughout,
-so no plan failed for any other reason.
-
-Five limits. The scenes were selected to contain an occluder, so the result
-speaks to that situation, not task planning at large. The vision-language
-model's assertions were never audited as the tool's were (§4.4). Condition B
-is handed the exact fact the task tests, so what is compared is the label
-sources, not the planners. Both planners are Gemini, so the invariance holds
-across model size and reasoning mode, not across vendors. And no robot
-moved: this measures plans, not executions, closing the gap between labels
-and robot behaviour by one link rather than entirely. One further limitation
-is structural: **the scoring rule cannot see a false positive.** A support
+Appendix E.5 carries five limits with the design; two belong here because
+they bound what the result can mean. The scenes were selected to contain an
+occluder, so it speaks to that situation and not to task planning at large,
+and no robot moved, so this measures plans rather than executions. And
+structurally, **the scoring rule cannot see a false positive**: a support
 relation the tool asserts wrongly costs an unnecessary step and never a
-failed plan — §4.14 measures those at 0.40 precision, and this experiment is
-insensitive to them by construction, testing whether the labels carry
-*enough*, not whether they carry *too much*. A task penalising wasted
+failed plan, so with §4.14 measuring those at 0.40 precision this experiment
+is insensitive to them by construction, testing whether the labels carry
+*enough* and not whether they carry *too much*. A task penalising wasted
 motion, or one where moving the wrong object is unsafe rather than merely
 inefficient, would rank these label sources differently, and nothing here
 predicts how.

@@ -1326,6 +1326,18 @@ surrounding description, so absence of the relation is nearly but not quite
 sufficient for failure. The six failing scenes are 1, 4, 16, 19, 24 and 25
 (§5.7), and the failure is the same one six times. In each, the prompt does name the occluder and the target together — scene 4 offered "box6 is in front of book7" and "box6 is near book7", scene 24 added "to the left of" — but in none of the six does it say the occluder is resting on the target. No plan therefore moves it: the scored `clear_step` is empty in all six, while every plan grasps the target and none invents an object. Scene 16 shows the mechanism sharply. The prompt lists four objects in front of box7, and the plan grasps box7 and lifts it clear of everything nearby, cube3 named among them, without ever taking cube3 off it, because nothing said cube3 was on it. Each of the six reasoned correctly from incomplete input.
 
+**Five limits on the planner result.** The scenes were selected to contain
+an occluder, so the result speaks to that situation and not to task planning
+at large. The vision-language model's assertions were never audited as the
+tool's were (§4.4), so the union's gain is measured on the planning task
+alone. Condition B is handed the exact fact the task tests, so what is being
+compared is the label sources and not the planners. Both planners are
+Gemini, so the invariance holds across model size and reasoning mode but not
+across vendors, and the source paper's own motivating example used a
+different family. And no robot moved, so this measures plans, not
+executions, and closes the gap between labels and robot behaviour by one
+link rather than entirely.
+
 **The paired tests, in full.** Twenty-five scenes is small, and the pairing
 is what makes it enough: every condition is put to the same scenes, so the
 evidence sits in the scenes where two conditions disagree, and an exact
