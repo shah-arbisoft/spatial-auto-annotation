@@ -15,29 +15,25 @@ size-relative gap, mask-contact fractions), trained with **identical
 features, architecture, seeds, positive-oversampling and group split**, then
 evaluated against the **held-out human gold** (annotator groups 6–8, whose
 data influenced no threshold, no calibration, and no training). The only
-difference between the runs is the supervision source. (Training uses a
-fixed 60-iteration budget for every classifier; some do not fully converge,
-identically for every source; the comparison is between supervision signals
-under equal compute, not between tuned models.)
+difference between the runs is the supervision source, under a fixed
+60-iteration budget for every classifier — some do not fully converge,
+identically for every source, so the comparison is between supervision
+signals under equal compute, not between tuned models.
 
-Three sources are compared in the core experiment; a fourth was added
-afterwards and is introduced with the result it produced (§5.2).
-
-- **Human.** The ~10% of ordered pairs the annotators chose to label.
-- **Automatic.** Every pair the tool's rules fire on: dense and
-  rule-consistent.
-- **Self-trained (pseudo-labelled).** The rival remedy from the
-  semi-supervised literature (§2.4), implemented rather than argued about. A
-  teacher is trained on the human labels exactly as in the human arm, its
-  confident predictions on the *unannotated* training pairs (probability
-  ≥ 0.90 either way) become pseudo-labels, and a student is retrained on the
-  union (Lee, 2013). A pair the annotators touched at all counts as
-  labelled, since their silence on its other predicates is informative. This
-  arm answers the question that precedes the project's premise: if the human
-  labels are too sparse, why not simply stretch them?
-
+Three sources are compared in the core experiment (a fourth arrives with the
+result it produced, §5.2): **human**, the ~10% of ordered pairs the
+annotators chose to label; **automatic**, every pair the tool's rules fire
+on, dense and rule-consistent; and **self-trained (pseudo-labelled)**, the
+rival remedy from the semi-supervised literature (§2.4), implemented rather
+than argued about — a teacher trained on the human labels exactly as in the
+human arm, its confident predictions on the *unannotated* training pairs
+(probability ≥ 0.90 either way) becoming pseudo-labels, and a student
+retrained on the union (Lee, 2013), a pair the annotators touched at all
+counting as labelled since their silence on its other predicates is
+informative. The third arm answers the question that precedes the project's
+premise: if the human labels are too sparse, why not simply stretch them?
 Each source labels the same pairs its own way, and each model inherits its
-source's character. That contrast is the experiment.
+source's character; that contrast is the experiment.
 
 ## 5.2 Result
 
@@ -102,27 +98,24 @@ this gold separates the two.
 ## 5.3 Why self-training does not rescue the human labels
 
 The pseudo-label arm's own bookkeeping explains its ceiling. Of the 60,762
-training pairs the annotators recorded just **6,026**. Filling in the rest,
+training pairs the annotators recorded just **6,026**; filling in the rest,
 the teacher adds roughly **54,000 confident negative** pseudo-labels per
-predicate against only **36 to 67 confident positives**, a ratio of about
-1,000 to 1. Trained on annotation in which most pairs carry no label, the
-teacher has learned above all that pairs usually have no relation, and
-self-training feeds that conviction back to the student as though it were
-evidence: what propagates is not the annotators' knowledge but their
-silence. This is the failure mode §2.4 predicted, now measured —
-pseudo-labelling is well behaved when the seed is a representative sample of
-the pool, and this seed is not, absence of a label conflating "no relation
-holds" with "nobody looked". The `near` row makes it sharp: human-trained
-recall is already near collapse at 0.08, and self-training pushes it *down*
-to 0.03, the teacher's notion of a label only three of nine groups used
-being weak and idiosyncratic, its confident pseudo-labels burying what
-little positive signal existed. Where the seed is defective, self-training
-amplifies the defect. The comparison is therefore not "programmatic labels
-beat doing nothing" but "programmatic labels beat the standard remedy, under
-identical conditions, closing more than six times as much of the available
-gap". Active learning is not tested because it fails for a simpler reason
-(§2.4): it still buys human labels, lowering the bottleneck's cost without
-removing it.
+predicate against only **36 to 67 confident positives**, about 1,000 to 1.
+Trained on annotation in which most pairs carry no label, the teacher has
+learned above all that pairs usually have no relation, and self-training
+feeds that conviction back as though it were evidence: what propagates is
+not the annotators' knowledge but their silence. This is the failure mode
+§2.4 predicted, now measured — pseudo-labelling is well behaved when the
+seed is a representative sample of the pool, and this seed is not. The
+`near` row makes it sharp: human-trained recall is already near collapse at
+0.08, and self-training pushes it *down* to 0.03, confident pseudo-labels
+from a weak, idiosyncratic notion burying what little positive signal
+existed. Where the seed is defective, self-training amplifies the defect;
+the comparison is therefore not "programmatic labels beat doing nothing" but
+"programmatic labels beat the standard remedy, under identical conditions,
+closing more than six times as much of the available gap". Active learning
+is not tested because it fails for a simpler reason (§2.4): it still buys
+human labels, lowering the bottleneck's cost without removing it.
 
 ## 5.4 Why the automatic labels win, and two consistency checks
 
@@ -189,15 +182,15 @@ occluder first. Each goes to an LLM planner in prompts differing only in
 what they state: **A** lists the objects alone, **B** adds the human
 relationships, **C** the automatically computed ones. One filter runs over
 both relation conditions, so neither is offered a relation the other was
-denied; density is not equalised, since matching a sparser source would mean
-discarding true relations. A plan is safe if it moves the occluder before
-grasping the target, judged by published rules (`eval/score_planner.py`),
-blind by construction. Appendix E.5 gives the filter, the prompts, the
-scene-level forensics and a scoring defect hand-reading caught. The
-experiment ran twice, on `gemini-flash-latest` and the reasoning model
-`gemini-3.1-pro-preview`, with two conditions on the larger planner only:
-**D**, the vision-language model's relations from §4.13, and **E**, the
-union of C and D.
+denied (density is not equalised, since matching a sparser source would mean
+discarding true relations), and a plan is safe if it moves the occluder
+before grasping the target, judged by published rules
+(`eval/score_planner.py`), blind by construction; Appendix E.5 gives the
+filter, the prompts, the scene-level forensics and a scoring defect
+hand-reading caught. The experiment ran twice, on `gemini-flash-latest` and
+the reasoning model `gemini-3.1-pro-preview`, with two conditions on the
+larger planner only: **D**, the vision-language model's relations from
+§4.13, and **E**, the union of C and D.
 
 | Condition | Prompt states | Safe plans (flash) | Safe plans (pro) |
 |---|---|---|---|
@@ -255,16 +248,14 @@ same claim than the original passed. `grasps_target` and `no_invented`
 remain 1.00 throughout, so no plan failed for any other reason.
 
 Five limits. The scenes were selected to contain an occluder, so the result
-speaks to that situation and not to task planning at large. The
-vision-language model's assertions were never audited as the tool's were
-(§4.4), so the union's gain is measured on the planning task alone.
-Condition B is handed the exact fact the task tests, so what is compared is
-the label sources and not the planners. Both planners are Gemini, so the
-invariance holds across model size and reasoning mode but not across
-vendors. And no robot moved: this measures plans, not executions, closing
-the gap between labels and robot behaviour by one link rather than
-entirely. One further limitation is structural, because it bounds what the
-result can mean: **the scoring rule cannot see a false positive.** A support
+speaks to that situation, not task planning at large. The vision-language
+model's assertions were never audited as the tool's were (§4.4). Condition B
+is handed the exact fact the task tests, so what is compared is the label
+sources, not the planners. Both planners are Gemini, so the invariance holds
+across model size and reasoning mode, not across vendors. And no robot
+moved: this measures plans, not executions, closing the gap between labels
+and robot behaviour by one link rather than entirely. One further limitation
+is structural: **the scoring rule cannot see a false positive.** A support
 relation the tool asserts wrongly costs an unnecessary step and never a
 failed plan — §4.14 measures those at 0.40 precision, and this experiment is
 insensitive to them by construction, testing whether the labels carry
