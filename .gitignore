@@ -111,3 +111,6 @@ outputs/validation/*
 
 # pdftotext dump used for layout checks; regenerate, do not track
 dissertation/latex/main.txt
+
+# the ethics record is a second compiled document; same rule as main.pdf
+dissertation/latex/ethics_main.pdf

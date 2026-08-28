@@ -8,14 +8,20 @@ chapters in dissertation/ are the source of truth. After editing them:
 
 To compile:
 
-    latexmk -pdf main.tex        (run twice if the ToC looks stale)
+    latexmk -pdf main.tex          the dissertation
+    latexmk -pdf ethics_main.tex   the ethics record, submitted separately
+
+(run either twice if the ToC looks stale)
 
 With no local TeX installation, upload this whole folder to Overleaf
 (New Project > Upload Project) and compile there. It needs only packages
 present in a standard TeX Live.
 
-Before submitting, attach the signed ethics self-assessment to Appendix A
-(the one item this build cannot generate) and sign the declaration page.
+Two documents are submitted. The ethics record is deliberately not bound
+into the dissertation: Appendix A summarises it and points to ethics.pdf,
+which carries the full record. Before submitting, append the two signed
+forms to ethics.pdf (the one item this build cannot generate) and sign the
+dissertation's declaration page.
 
 The student ID is set, the acknowledgements are written, and the
 declaration's word count is computed at build time from the chapter sources
