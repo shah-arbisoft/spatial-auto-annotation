@@ -231,26 +231,23 @@ the humans" to "what do the humans mean, and where do they disagree". Almost
 every later design decision, including calibrating on some annotators and
 validating on others, follows from that shift.
 
-The third lesson was about my own claims, and the one I would most like to
-have learned sooner. On a single benchmark run I reported that my labels won
-against the one test annotator with clean conventions, by 0.011 over 73
-images; two more seeds showed them tied and I withdrew it (§6.3.1). I had
-been careful in one place, fitting thresholds on some annotators and
-validating on others, and careless in another, treating one training run as
-a result. Recording the retraction felt uncomfortable and is, I think,
-right.
+The third lesson was about my own claims. On a single benchmark run I
+reported that my labels won against the one test annotator with clean
+conventions, by 0.011 over 73 images; two more seeds showed them tied and I
+withdrew it (§6.3.1). I had been careful in one place, fitting thresholds on
+some annotators and validating on others, and careless in another, treating
+one training run as a result. Recording the retraction felt uncomfortable
+and is, I think, right.
 
 Given the time again I would front-load the experiments that answer the
 question the project actually asks. I spent considerable effort proving the
 labels are correct and train models well, and little on whether they help a
-robot decide what to do, the entire motivation. The planner experiment ran
-last and was the clearest single result: 0 of 25 against 25 of 25 needs no
-statistics, and run in week five it would have pointed the intervening work
-at supply of the support relation. I would also have had two people annotate
-the same fifty images in week two, since one afternoon would have produced
-outright the inter-annotator agreement figure I estimated indirectly.
-
-What I am most pleased with is not the accuracy figure but the two
-refinements I built, measured and declined. Both were plausible and took
-real work; the data said neither helped, and reporting that is where this
-started feeling like research.
+robot decide what to do, the entire motivation; the planner experiment ran
+last and was the clearest single result, and run in week five it would have
+pointed the intervening work at supply of the support relation. I would also
+have had two people annotate the same fifty images in week two, since one
+afternoon would have produced outright the inter-annotator agreement figure
+I could only estimate indirectly. What I am most pleased with is not the
+accuracy figure but the two refinements I built, measured and declined: both
+were plausible and took real work, the data said neither helped, and
+reporting that is where this started feeling like research.
