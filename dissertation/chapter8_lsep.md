@@ -91,3 +91,20 @@ one configuration file, seeded reproducible runs (Appendix B), and
 licence-compliant use of third-party models and data. The reproducibility
 package is a deliverable with the same status as the results, because a
 validation study that cannot be re-run is an anecdote.
+
+## 8.5 Summary
+
+Automating annotation raises obligations in four registers, and this chapter
+has set out how each is discharged. Legally, the dataset's CC-BY licence
+permits the derivative labels, model licences shaped one design decision,
+and the frames containing identifiable people are personal data handled
+under the research provisions of the Data Protection Act 2018. Socially, the
+realistic effect is a changed human role rather than a displaced profession,
+with the residual review cost measured rather than asserted. Ethically, the
+safeguards are face anonymisation, a pseudonymous validation study run under
+the University's self-assessment process, and an audit trail that records
+superseded results. Professionally, the work follows the BCS Code of Conduct
+in its claims and in its engineering practice.
+
+Chapter 9 closes the dissertation against its objectives and research
+questions, states the contributions, and sets out what is left undone.

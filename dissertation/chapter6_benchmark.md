@@ -296,4 +296,7 @@ wherever ground truth means geometric consistency, and do not overtake human
 labels wherever it means annotation habits.** The first condition is the
 operative one for a robot, which needs relations that are *correct* before
 they are *human-like*, and §5.7 tests that one link further down, where it
-survives.
+survives. Chapter 7 takes the three iterations together and asks what they
+mean: what the remaining failures are made of, what they say about the
+dataset's own annotation process, and how far the objections raised in
+advance survive the evidence.

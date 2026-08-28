@@ -32,11 +32,10 @@ Chang, X., Ren, P., Xu, P., Li, Z., Chen, X. and Hauptmann, A. (2023) 'A
 comprehensive survey of scene graphs: generation and application', *IEEE
 Transactions on Pattern Analysis and Machine Intelligence*, 45(1), pp. 1-26.
 
-Chen, B., Xu, Z., Kirmani, S., Ichter, B., Driess, D., Florence, P., Sadigh,
-D., Guibas, L. and Xia, F. (2024) 'SpatialVLM: endowing vision-language
-models with spatial reasoning capabilities', *Proceedings of the IEEE/CVF
-Conference on Computer Vision and Pattern Recognition (CVPR)*. Available at:
-https://arxiv.org/abs/2401.12168
+Chen, B., Xu, Z., Kirmani, S., Ichter, B., Sadigh, D., Guibas, L. and Xia, F.
+(2024) 'SpatialVLM: endowing vision-language models with spatial reasoning
+capabilities', *Proceedings of the IEEE/CVF Conference on Computer Vision and
+Pattern Recognition (CVPR)*, pp. 14455-14465.
 
 Cheng, A.-C. et al. (2024) 'SpatialRGPT: grounded spatial reasoning in
 vision-language models', *Advances in Neural Information Processing Systems
@@ -68,8 +67,7 @@ contrastive benchmark for grounding spatial relations in 3D', *Advances
 in Neural Information Processing Systems (NeurIPS)*.
 
 Gu, Q. et al. (2024) 'ConceptGraphs: open-vocabulary 3D scene graphs for
-perception and planning', *Proceedings of the IEEE International Conference
-on Robotics and Automation (ICRA)*.
+perception and planning', *Proceedings of the IEEE International Conference on Robotics and Automation (ICRA)*, pp. 5021-5028.
 
 Hughes, N., Chang, Y. and Carlone, L. (2022) 'Hydra: a real-time spatial
 perception system for 3D scene graph construction and optimization',
@@ -104,9 +102,7 @@ Liu, F., Emerson, G. and Collier, N. (2023) 'Visual spatial reasoning',
 pp. 635-651.
 
 Liu, S. et al. (2024) 'Grounding DINO: marrying DINO with grounded
-pre-training for open-set object detection', *Proceedings of the European
-Conference on Computer Vision (ECCV)*. Available at:
-https://arxiv.org/abs/2303.05499
+pre-training for open-set object detection', *Proceedings of the European Conference on Computer Vision (ECCV)*, pp. 38-55.
 
 Lu, C., Krishna, R., Bernstein, M. and Fei-Fei, L. (2016) 'Visual
 relationship detection with language priors', *Proceedings of the European
@@ -157,9 +153,7 @@ Technical Report 1648, University of Wisconsin–Madison.
 
 Song, C.H., Blukis, V., Tremblay, J., Tyree, S., Su, Y. and Birchfield, S.
 (2025) 'RoboSpatial: teaching spatial understanding to 2D and 3D
-vision-language models for robotics', *Proceedings of the IEEE/CVF Conference
-on Computer Vision and Pattern Recognition (CVPR)*, oral presentation.
-Available at: https://arxiv.org/abs/2411.16537
+vision-language models for robotics', *Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)*, oral presentation, pp. 15768-15780.
 
 Tang, K., Zhang, H., Wu, B., Luo, W. and Liu, W. (2019) 'Learning to compose
 dynamic tree structures for visual contexts', *Proceedings of the IEEE/CVF
@@ -186,12 +180,10 @@ Wang, A. et al. (2024) 'YOLOv10: real-time end-to-end object detection',
 https://arxiv.org/abs/2405.14458
 
 Wang, F., Mei, J. and Yuille, A. (2024) 'SCLIP: rethinking self-attention for
-dense vision-language inference', *Proceedings of the European Conference on
-Computer Vision (ECCV)*. Available at: https://arxiv.org/abs/2312.01597
+dense vision-language inference', *Proceedings of the European Conference on Computer Vision (ECCV)*, pp. 315-332.
 
 Wang, P., Pham, M.H., Guo, Z. and Zhou, W. (2025) 'A spatial relationship
-aware dataset for robotics', *Proceedings of the 33rd ACM International
-Conference on Multimedia (MM '25)*. doi:10.1145/3746027.3758293
+aware dataset for robotics', *Proceedings of the 33rd ACM International Conference on Multimedia (MM '25)*, pp. 13332-13338. doi:10.1145/3746027.3758293
 
 Wirth, R. and Hipp, J. (2000) 'CRISP-DM: towards a standard process model for
 data mining', *Proceedings of the 4th International Conference on the
@@ -217,14 +209,11 @@ Yang, L. et al. (2024) 'Depth Anything V2', *Advances in Neural Information
 Processing Systems (NeurIPS)*. Available at: https://arxiv.org/abs/2406.09414
 
 Ye, J. et al. (2025) 'PrimitiveAnything: human-crafted 3D primitive assembly
-generation with auto-regressive transformer', *ACM SIGGRAPH 2025 Conference
-Papers*. Available at: https://arxiv.org/abs/2505.04622
+generation with auto-regressive transformer', *ACM SIGGRAPH 2025 Conference Papers*, article 171, pp. 1-12.
 
 Zellers, R., Yatskar, M., Thomson, S. and Choi, Y. (2018) 'Neural Motifs:
 scene graph parsing with global context', *Proceedings of the IEEE/CVF
 Conference on Computer Vision and Pattern Recognition (CVPR)*.
 
 Zhang, W. et al. (2025) 'Open3D-VQA: a benchmark for embodied spatial concept
-reasoning with multimodal large language model in open space', *Proceedings of
-the 33rd ACM International Conference on Multimedia (MM '25)*.
-doi:10.1145/3746027.3758219
+reasoning with multimodal large language model in open space', *Proceedings of the 33rd ACM International Conference on Multimedia (MM '25)*, pp. 12784-12791. doi:10.1145/3746027.3758219

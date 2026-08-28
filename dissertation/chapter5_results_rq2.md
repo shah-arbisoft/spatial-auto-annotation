@@ -276,4 +276,6 @@ comparison inside a full scene-graph model and returns parity, 0.292 against
 established here is an advantage on the controlled classifier, where
 features are held identical, and it does not carry to the benchmark's ranked
 metric. Section 6.4 measures why the two disagree, and the answer to RQ2
-should be read as that pair of results and not as this one alone.
+should be read as that pair of results and not as this one alone. Chapter 6
+is that heavyweight repeat, in the source paper's own framework with a
+shared frozen detector and three seeds per arm.

@@ -506,3 +506,22 @@ raters are not uniformly harsh; it does not settle the shipped tool, whose
 support rule postdates the sample. §7.6 and §9.3 carry what survives;
 re-running the arm on post-refit support labels is the one outstanding item
 that would close it.
+
+## 4.16 Summary
+
+This chapter measured the automatic labels against the 8,926 relationships
+the annotators recorded. Recall reaches 0.85 pooled and 0.74 on annotator
+groups no threshold ever saw, with five predicates at human-comparable
+levels and the depth pair short of them for reasons §4.5 decomposes into
+calibrated abstention and a convention two groups did not share. Precision
+on the labels the tool adds beyond the human record was put through three
+instruments of increasing severity — an author audit, a blind
+decoy-controlled re-audit with a second judge, and a volunteer study — which
+agree that five predicates hold at 0.79–1.00 and that support does not, at
+0.535. Every remaining disagreement is attributed to a cause, leaving about
+7% as avoidable tool error, and two checks that need no gold at all, the
+viewpoint-stability measurement and the vision-language comparison, bound
+what the gold itself can settle.
+
+Chapter 5 turns from whether the labels are accurate to whether they are
+useful, training the same relation model once on each label source.

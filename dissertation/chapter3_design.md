@@ -304,4 +304,6 @@ where they are settled or conceded. Three are mitigations, not refutations;
 the fourth the design could not settle alone, because invariant testing pins
 rule *consistency* and says nothing about rule *truth* — that took §4.14's
 instrument, built to attack the author's own verdicts, and it overturned
-one.
+one. Chapter 4 puts the annotator those decisions produce against the human
+annotations, which is the first of the three iterations that answer the two
+research questions.

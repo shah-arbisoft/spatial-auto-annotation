@@ -347,3 +347,21 @@ human ones, and found conditions under which they are decisively better,
 those conditions being the sparse, guideline-free annotation this dataset
 occupies. The bottleneck was therefore not only slowing the dataset down, it
 was limiting what the dataset could teach.
+
+## 7.8 Summary
+
+This chapter read the three iterations together. RQ1 is answered differently
+by predicate, and RQ2's strong classifier result is scoped by a benchmark
+that cannot separate the same two label sources — a disagreement §7.1 states
+rather than resolves in the project's favour. The remaining failures are
+mostly calibrated abstention and measured annotator behaviour rather than
+tool error, the support arc shows the method correcting itself twice under
+its own evidence, and what looked like a depth ceiling proved largely a
+rules ceiling. The dataset's own annotation process carries three measured
+defects, which reframes "agreement with the humans" as a per-annotator
+quantity. Of the five objections registered in §2.9 before any result, two
+are answered empirically, one is conceded, one is answered as far as
+measurement can reach, and one is not addressed at all.
+
+Chapter 8 turns from the evidence to the legal, social, ethical and
+professional dimensions of automating annotation work.

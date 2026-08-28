@@ -524,4 +524,6 @@ annotation (§2.8), so no number from them can settle a dispute *about* that
 annotation, and the protocol of Chapters 4 to 6 is built around that
 limitation instead of inside it. And the strongest case against the approach
 is stated in advance (§2.9), so the results can be read as an attempt on it,
-with §7.7 the reckoning.
+with §7.7 the reckoning. Chapter 3 turns the gap this chapter identifies
+into a design: the methodology that structures the work, and the geometric
+rule for each of the seven predicates.
