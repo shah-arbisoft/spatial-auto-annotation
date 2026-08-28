@@ -108,3 +108,6 @@ dissertation/latex/main.pdf
 !outputs/validation/
 outputs/validation/*
 !outputs/validation/report.json
+
+# pdftotext dump used for layout checks; regenerate, do not track
+dissertation/latex/main.txt

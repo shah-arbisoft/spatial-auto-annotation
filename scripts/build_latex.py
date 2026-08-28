@@ -816,6 +816,10 @@ def build_references(md: str) -> str:
 # excluding "*.pdf" once left the submitted title page with no crest.
 BUILD_PRODUCTS = {".aux", ".log", ".out", ".toc", ".lot", ".lof", ".fls",
                   ".fdb_latexmk", ".synctex.gz", ".bbl", ".blg"}
+# Not a suffix rule: README.txt is written for Overleaf and belongs in the
+# zip. main.txt is a pdftotext dump taken when checking the layout, scratch
+# and stale the moment the PDF is rebuilt.
+BUILD_FILES = {"main.pdf", "main.txt"}
 
 
 def write_zip(out: Path) -> None:
@@ -828,7 +832,7 @@ def write_zip(out: Path) -> None:
             continue
         rel = f.relative_to(out)
         if rel.parent == Path(".") and (f.suffix in BUILD_PRODUCTS
-                                        or f.name == "main.pdf"):
+                                        or f.name in BUILD_FILES):
             continue
         files.append((f, rel))
     with zipfile.ZipFile(z_path, "w", zipfile.ZIP_DEFLATED) as z:
