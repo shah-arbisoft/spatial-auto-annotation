@@ -194,7 +194,7 @@ The zero-shot column does not measure what its name implies here. zR@100 is
 recall on triplet types absent from a model's *own* training data, but both
 arms are scored against one shared reference, the human training annotation.
 Of the 25 test triplet types that annotation omits, the human arm saw none
-in training and the auto arm saw 24, so its 0.172 against 0.003 records that
+in training and the auto arm saw 24, so its 0.268 against 0.052 records that
 its labels *cover* relation types the manual pass never recorded — the
 property the annotation bottleneck predicts, not compositional
 generalisation, and this dissertation does not claim it as such; §6.5 weighs

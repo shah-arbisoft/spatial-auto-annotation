@@ -103,7 +103,7 @@ The same labels, the same held-out human gold, two very different verdicts: per-
 
 \textbf{(iii) \texttt{near} gold is a single idiosyncratic annotator.} All 93 test \texttt{near} labels come from group 8, whose usage is sparse and non-exhaustive (\S{}3.8). Neither arm can rank exactly those pairs highly; prediction 3 underestimated not the labels but the gold.
 
-The zero-shot column does not measure what its name implies here. zR@100 is recall on triplet types absent from a model's \textit{own} training data, but both arms are scored against one shared reference, the human training annotation. Of the 25 test triplet types that annotation omits, the human arm saw none in training and the auto arm saw 24, so its 0.172 against 0.003 records that its labels \textit{cover} relation types the manual pass never recorded --- the property the annotation bottleneck predicts, not compositional generalisation, and this dissertation does not claim it as such; \S{}6.5 weighs what the column does establish.
+The zero-shot column does not measure what its name implies here. zR@100 is recall on triplet types absent from a model's \textit{own} training data, but both arms are scored against one shared reference, the human training annotation. Of the 25 test triplet types that annotation omits, the human arm saw none in training and the auto arm saw 24, so its 0.268 against 0.052 records that its labels \textit{cover} relation types the manual pass never recorded --- the property the annotation bottleneck predicts, not compositional generalisation, and this dissertation does not claim it as such; \S{}6.5 weighs what the column does establish.
 
 \section{What survives, read both ways}
 
