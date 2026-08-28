@@ -34,29 +34,25 @@ saw, judged against two references fixed in advance; one is met and the
 other turned out to be unavailable. The trivial baselines are beaten by a
 wide margin: 0.74 on the held-out groups the criterion names, 0.85 pooled,
 against 0.14 for both random and majority. The second reference, how well
-two human annotators would agree with each other, this dataset cannot say:
-the nine groups labelled disjoint batches differing threefold in object
-density, so §4.6 reports the Fréchet bound as a measurement the data cannot
-support, and the assumption-free spread of 0.082 is too narrow to carry
-weight either — comparability rests on the trivial baselines and the
-per-predicate audit. The second condition, that labels beyond the human
-record survive audit, holds for the lateral, proximity and depth-decided
-predicates at blind-audited precision 0.79–1.00. **It is not met for
-support.** At 0.535 [0.42, 0.65] about half the support labels the tool adds
-beyond the human record are wrong — beating chance, short of a standard
-anything should be built on — so support answers RQ1 on recall and fails it
-on precision, and the per-predicate form of the question exists so that this
-cannot be averaged away. For anything consuming the output, support is a
-candidate set and not a label set: fit to propose relations for a checker,
-not to be acted on unverified. (The contact rule repaired the box rule's
-failure but kept a threshold fitted where a false positive cost nothing; the
-claim that it reached 0.9 was an artefact of auditing unblinded; refitting
-lifted a measured 0.404 to a measured 0.535, short of the 0.667 predicted.)
-The qualification is `in front of` and `behind` at 0.70/0.71 pooled: not a
-failure of the criterion but a disagreement about the words, §4.12 showing
-the tool reproducing its own verdict across viewpoints 0.958 of the time
-while two annotator groups applied the opposite convention. A per-predicate
-answer was required precisely so this could not hide inside a mean.
+two human annotators would agree, this dataset cannot supply — the nine
+groups labelled disjoint batches differing threefold in object density, so
+§4.6 reports the Fréchet bound as a measurement the data cannot support and
+the assumption-free spread of 0.082 is too narrow to carry weight either.
+Comparability therefore rests on the trivial baselines and the per-predicate
+audit. The second condition, that labels beyond the human record survive
+audit, holds for the lateral, proximity and depth-decided predicates at
+blind-audited precision 0.79–1.00. **It is not met for support.** At 0.535
+[0.42, 0.65] about half the support labels the tool adds beyond the human
+record are wrong — beating chance, short of a standard anything should be
+built on — so support answers RQ1 on recall and fails it on precision, and
+the per-predicate form of the question exists so this cannot be averaged
+away. For anything consuming the output, support is a candidate set and not
+a label set: fit to propose relations for a checker, not to be acted on
+unverified. The qualification is `in front of` and `behind` at 0.70/0.71
+pooled, which is not a failure of the criterion but a disagreement about the
+words, §4.12 showing the tool reproducing its own verdict across viewpoints
+0.958 of the time while two annotator groups applied the opposite
+convention.
 
 **RQ2 is answered yes at the classifier, not met at the planner by the tool
 alone, and undecided at the benchmark.** The controlled classifier gives
@@ -65,27 +61,24 @@ and the harder direction the criterion specified. The planner is the one
 level where the choice of comparator decides the verdict, and §1.2.2 fixed
 it as the human arm: against that arm's 25 of 25 the tool's relations alone
 clear 19, which falls short. What draws level is the union with the
-vision-language source at 25 of 25 — label-free, since no human labels
-anything in it either, but not the treatment RQ2 names — so the planner
-establishes that human annotation can be matched *without a human in the
-loop*, not that the tool matches it, the weaker reading and the one the
-criterion supports. The benchmark neither confirms the margin nor
-contradicts it: §1.2.2 asked for *at least as well*, which parity satisfies
-as written, but a null result is not a demonstration of equivalence — paired
-by seed the difference is -0.0006 with a 95% interval of [-0.070, +0.069] —
-so the honest word for 0.292 against 0.293 is *undecided* rather than *yes*,
-and since §1.2.2 required agreement across all three for an unqualified yes,
-a tie is not agreement. What Chapter 5 measures as a two-and-a-half-fold
-advantage the ranked metric measures as parity, and §6.3.1 reports that
-without resolving it favourably: the difference that remains sits on the two
-test annotators with measured labelling defects and reverses on the one
-without, while the auto arm recovers five times more of the relation types
-the manual annotation never recorded and reproduces itself across seeds more
-than eight times more tightly. The third arm suits the argument least and is
-reported for that reason: vision-language labels lead the benchmark at 0.329
-against 0.293 and 0.292, and lead the undefective annotator by seed ranges
-overlapping neither other arm (§6.3.2), so whatever the ranked metric
-rewards, geometry is not uniquely good at supplying it.
+vision-language source at 25 of 25 — label-free, but not the treatment RQ2
+names — so the planner establishes that human annotation can be matched
+*without a human in the loop*, not that the tool matches it. The benchmark
+neither confirms the margin nor contradicts it: §1.2.2 asked for *at least
+as well*, which parity satisfies as written, but a null result is not a
+demonstration of equivalence — paired by seed the difference is -0.0006 with
+a 95% interval of [-0.070, +0.069] — so the honest word for 0.292 against
+0.293 is *undecided*, and since §1.2.2 required agreement across all three
+for an unqualified yes, a tie is not agreement. What Chapter 5 measures as a
+two-and-a-half-fold advantage the ranked metric measures as parity, and
+§6.3.1 reports that without resolving it favourably: the difference that
+remains sits on the two test annotators with measured labelling defects and
+reverses on the one without, while the auto arm recovers five times more of
+the relation types the manual annotation never recorded and reproduces
+itself across seeds more than eight times more tightly. The third arm suits
+the argument least and is reported for that reason: vision-language labels
+lead the benchmark at 0.329 against 0.293 and 0.292 (§6.3.2), so whatever
+the ranked metric rewards, geometry is not uniquely good at supplying it.
 
 "Good enough to replace" is met at two levels and unrefuted at the third;
 "better", which Chapter 5 and the planner both support, holds where ground
