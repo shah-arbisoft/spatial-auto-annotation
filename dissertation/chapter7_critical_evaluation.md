@@ -28,31 +28,27 @@ well as human labels. The controlled experiment answered more strongly than
 the question was posed: with identical features, model, seed and split, the
 auto-trained classifier reaches 0.75 mean recall against held-out *human*
 gold versus 0.30 for its human-trained twin. At this dataset's annotation
-scale, the automatic labels are better training material than the labels
-they were validated against, and the mechanism is not mysterious: density
-(20× more triplets) and consistency (one definition, uniformly applied). It
-converts the project's premise from "removing the bottleneck loses little"
-to "removing the bottleneck gains".
-
-That claim is scoped by the third measurement and is not confirmed by it.
-Chapter 6 cannot separate the same two label sources in the source paper's
-own framework, so the advantage the classifier measures does not appear on a
-ranked metric scored against sparse human annotation. Both results are about
-the same labels; what differs is what each yardstick asks for. The
-defensible sentence is that automatic labels *teach better where correctness
-is the criterion and equally well where resemblance to the annotators is*,
-not that they are simply better.
+scale the automatic labels are better training material than the labels they
+were validated against — density (20× more triplets) and consistency (one
+definition, uniformly applied) — which converts the premise from "removing
+the bottleneck loses little" to "removing the bottleneck gains". That claim
+is scoped by the third measurement and not confirmed by it: Chapter 6 cannot
+separate the same two label sources in the source paper's own framework, so
+the advantage does not appear on a ranked metric scored against sparse human
+annotation. The defensible sentence is that automatic labels *teach better
+where correctness is the criterion and equally well where resemblance to the
+annotators is*, not that they are simply better.
 
 The third arm is what makes that claim hard to dismiss. Self-training on the
 human labels, the standard semi-supervised remedy for exactly this problem,
 reaches 0.36 and closes only 15% of the gap: the teacher contributes about a
 thousand confident *negative* pseudo-labels for every positive one,
-propagating the annotators' silence and not their judgement, and on `near`
-it drives recall below the human baseline it started from. The comparison is
-therefore not against doing nothing, but against the obvious alternative,
-under identical conditions. The six objectives of §1.2.1 are audited against
-their evidence in §9.1; this chapter is concerned with what the results
-*mean*.
+propagating the annotators' silence rather than their judgement, and on
+`near` it drives recall below the human baseline it started from. The
+comparison is therefore against the obvious alternative, under identical
+conditions, not against doing nothing. The six objectives of §1.2.1 are
+audited against their evidence in §9.1; this chapter is concerned with what
+the results *mean*.
 
 ## 7.2 What the remaining failures are made of
 
@@ -78,9 +74,9 @@ and the gallery the misses to containment; one geometric insight, that
 stacked objects share a camera distance, fixed half the false fires, and
 mask-bottom contact fixed most of the rest while *raising* recall, each step
 calibrated on train annotators and validated held-out. The residual failure
-mode is precisely characterised too: a person *holding* an object satisfies
-pixel contact (3 of the 7 remaining audited errors), and a class-aware guard
-is the documented next refinement.
+mode is characterised too: a person *holding* an object satisfies pixel
+contact (3 of the 7 remaining audited errors), and a class-aware guard is
+the documented next refinement.
 
 Third, **what looked like a depth-resolution ceiling was mostly a rules
 ceiling, and it moved**. Two objects at similar camera distance cannot be
@@ -94,19 +90,18 @@ edges tie within the band — and both operating points are documented,
 revisable decisions, not hidden constants (ablations A2, A7).
 
 Section 4.12 settles what the ablations could not. If the front/behind gap
-were depth *noise*, moving the camera would flip verdicts, since that is the
-perturbation such noise responds to. It does not: the predicate reproduces
-itself 0.958 of the time, above `on` and `under`, and holds at 0.911 at
-89-fold compression. A predicate recovering 0.70 of the human labels while
-agreeing with itself at that rate is not guessing; it is applying a
-consistent criterion the annotators did not share. With A8, where
+were depth *noise*, moving the camera would flip verdicts; instead the
+predicate reproduces itself 0.958 of the time, above `on` and `under`, and
+holds at 0.911 at 89-fold compression. A predicate recovering 0.70 of the
+human labels while agreeing with itself at that rate is not guessing; it is
+applying a consistent criterion the annotators did not share. With A8, where
 quadrupling the depth model changed nothing, and §4.5, where two groups
 labelled the pair oppositely, the weight of the shortfall sits on
 definitional disagreement and not on perception. That does not dissolve
 monocular ambiguity, which genuinely bounds the predicate at equal camera
 distance, but it relocates most of the measured gap away from it. What would
-pay best here is therefore a written annotation guideline, a duller
-prescription than a better depth network.
+pay best is therefore a written annotation guideline, a duller prescription
+than a better depth network.
 
 ## 7.3 The dataset's annotation process, examined
 
@@ -127,16 +122,15 @@ vocabulary lists only (§4.7).
 
 That fourth point needs stating precisely, because the obvious version of it
 is weaker than the evidence. Wang et al. (2025) report that annotators were
-trained on the tool and given predicate definitions to keep them consistent.
-The claim here is therefore not that nothing was said; it is that whatever
-was said did not survive contact with nine annotators, and the three defects
-above are measured in the labels themselves rather than inferred from an
-absence. That is the harder finding and the more useful one: prose
-definitions given at training time were not sufficient, an argument for
-definitions of a different kind rather than for more of the same. A
-threshold that a program applies cannot be applied two ways by two
-annotators, which is what Chapter 3's specification supplies and what makes
-it a contribution rather than documentation.
+trained on the tool and given predicate definitions; the claim here is not
+that nothing was said but that whatever was said did not survive contact
+with nine annotators, the three defects above being measured in the labels
+themselves rather than inferred from an absence. That is the harder and more
+useful finding: prose definitions given at training time were not
+sufficient, an argument for definitions of a different kind rather than more
+of the same. A threshold that a program applies cannot be applied two ways
+by two annotators, which is what Chapter 3's specification supplies and what
+makes it a contribution rather than documentation.
 
 This reframes the evaluation itself: for several predicates there is no
 human consensus to agree with, only per-annotator behaviours. The
@@ -148,16 +142,14 @@ explicit.
 The "tenth annotator" framing survives contact with the data, and §4.6 puts
 numbers on it. The tool is deterministic, the same labeller for every group,
 so the 0.082 spread in its agreement across the seven consistent annotators
-(0.851 to 0.933) carries no variance of its own. It is still an upper bound
+(0.851 to 0.933) carries no variance of its own; it is still an upper bound
 rather than a measurement, because the batches behind it differ threefold in
-density and annotator and batch cannot be separated (§4.6); on the shipped
-labels that spread is narrow enough to be weak evidence. The Fréchet bound
-§4.6 attempts on top of it is not claimed here: it needs exchangeable
+density and annotator and batch cannot be separated (§4.6). The Fréchet
+bound §4.6 attempts on top of it is not claimed here: it needs exchangeable
 batches, and these are not, so §4.6 reports it as a measurement this dataset
 cannot support. Without overlapping assignments the quantity cannot be
-measured outright, and that absence is itself a finding about the dataset's
-construction, one a replication should design away by having two annotators
-share a batch.
+measured outright — itself a finding about the dataset's construction, one a
+replication should design away by having two annotators share a batch.
 
 ## 7.4 Methodological reflection
 
@@ -174,10 +166,10 @@ thresholds never saw.
 
 One choice proved its worth only afterwards. The withdrawn single-seed claim
 of §6.3.1 shows the discipline applied faithfully to thresholds while
-reaching *model training variance* late. The fix was cheap, four extra runs
+reaching *model training variance* late; the fix was cheap, four extra runs
 on a free GPU tier, and a replication designed from the start would have
-trained every arm at three seeds and reported ranges throughout, which is
-what the final version does.
+trained every arm at three seeds and reported ranges throughout, as the
+final version does.
 
 Choices a stricter replication should improve, the first no longer a
 suspicion but a measurement. The **audits were verdicted by the author**,
@@ -185,31 +177,30 @@ and §4.14 shows what that cost: the same rules on the same data score 0.77
 when the auditor knows every item is a tool assertion and 0.404 when decoys
 are mixed in unmarked. The **support-rule iteration used the same audit
 machinery twice**, leaving the second audit dependent on the first, and it
-confirmed a figure that a blind instrument does not support. Blind
-verdicting with decoys should have been the instrument from the first audit,
-not the third; it is cheap, and it is the only step here that changed a
-headline number instead of tightening one.
+confirmed a figure a blind instrument does not support. Blind verdicting
+with decoys should have been the instrument from the first audit, not the
+third; it is cheap, and it is the only step here that changed a headline
+number instead of tightening one.
 
-One finding belongs here and not in Chapter 6, because it is about method
-and not about labels. The benchmark arms were originally trained weeks
-apart, against whatever state the upstream framework was in on the day.
-Retraining all nine runs in one session on one clone moved the human arm's
-pooled mR@100 from 0.326 to 0.293 and the vision-language arm by 0.001, with
-no label changed. **A third of the margin this dissertation once reported
-between label sources was an artefact of when each arm was trained.**
-Nothing in the original protocol was careless — seeds fixed, detector
-frozen, configuration shared — the confound entered through an unpinned
-dependency, the one axis the protocol did not name. A controlled comparison
-has to control the code as explicitly as it controls the data, by pinning
-versions and training every arm in one session; §6.3 now does, and its
-figures supersede the earlier ones.
+One finding belongs here and not in Chapter 6, because it is about method.
+The benchmark arms were originally trained weeks apart, against whatever
+state the upstream framework was in on the day; retraining all nine runs in
+one session on one clone moved the human arm's pooled mR@100 from 0.326 to
+0.293 and the vision-language arm by 0.001, with no label changed. **A third
+of the margin this dissertation once reported between label sources was an
+artefact of when each arm was trained.** Nothing in the original protocol
+was careless — seeds fixed, detector frozen, configuration shared — the
+confound entered through an unpinned dependency, the one axis the protocol
+did not name. A controlled comparison has to control the code as explicitly
+as it controls the data; §6.3 now does, and its figures supersede the
+earlier ones.
 
 That weakness was acted on, not only recorded, and §4.14 gives the sequence:
 the support threshold had been fitted where a false positive outside the
 gold was free, so it was re-fitted, shipped, every experiment re-run, and a
-second pack drawn from the new labels and audited blind. The lesson is not
-the number but the order — a threshold worth changing is worth re-auditing
-on labels it produced, because the estimate that justifies a change is not
+second pack drawn from the new labels and audited blind. The lesson is the
+order, not the number — a threshold worth changing is worth re-auditing on
+labels it produced, because the estimate that justifies a change is not
 evidence for it. The SGDet **threshold tuning used one disclosed iteration
 on a trial slice** that over-estimated full-set detection quality, an
 instructive case of trial-set optimism; and invariant fuzzing pins rule
