@@ -223,8 +223,9 @@ occluder, so it speaks to that situation and not to task planning at large,
 and no robot moved, so this measures plans rather than executions. And
 structurally, **the scoring rule cannot see a false positive**: a support
 relation the tool asserts wrongly costs an unnecessary step and never a
-failed plan, so with §4.14 measuring those at 0.40 precision this experiment
-is insensitive to them by construction, testing whether the labels carry
+failed plan, so with §4.14 measuring the shipped labels these scenes use at
+0.535 precision this experiment is insensitive to them by construction,
+testing whether the labels carry
 *enough* and not whether they carry *too much*. A task penalising wasted
 motion, or one where moving the wrong object is unsafe rather than merely
 inefficient, would rank these label sources differently, and nothing here

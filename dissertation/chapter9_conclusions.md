@@ -140,6 +140,17 @@ GPU-hours.
 calibration procedure, not the fitted constants, and the only out-of-domain
 evidence is qualitative (E.4).
 
+**A class list stands in for geometry on `on`/`under`, with a known blind
+spot.** The support rule excludes `human` from either role because mask
+contact alone cannot tell a person *holding* an object from a surface
+*supporting* one (0 of 2,466 gold support triplets involve a person either
+way); ablation A10 tested the geometric alternative, a drop-fraction
+threshold, and the two populations do not separate (Appendix D.8). The guard
+is scoped to the classes this dataset labels, so an object held by any
+unguarded class — a robot manipulator, a trolley, an animal — would defeat
+it the same way a person does, which bounds every human-robot interaction
+scene this pipeline has not been run on.
+
 **Front/behind is bounded, but less by depth than the number suggests.**
 Section 4.9 bounds the engineering: neither a larger depth model nor
 multi-frame geometry moves the pair, so the limit is monocular ambiguity in
