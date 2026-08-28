@@ -1006,8 +1006,12 @@ overlap rather than by index. Compression over the 802 pair-bearing frames
 (§4.1) is lower than the 2.7× below because those frames are a subset, so
 consecutive members sit further apart in the original capture.
 
-*The per-predicate result.* At τ = 10 over the 802 pair-bearing frames (568
-keyframes, 234 propagated frames, 11,352 comparable object pairs):
+*The per-predicate result.* Each segment's predicates are propagated from
+its keyframe to the rest (`eval/keyframe_propagation.py`), on the premise
+that a relation fixed by geometry should survive the camera moving while one
+decided by a coin toss at a threshold should not. At τ = 10 over the 802
+pair-bearing frames (568 keyframes, 234 propagated frames, 11,352 comparable
+object pairs):
 
 | Predicate | Stability | Recall (propagated) | Recall (per frame) |
 |---|---|---|---|
