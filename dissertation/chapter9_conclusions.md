@@ -30,64 +30,53 @@ follows is the verdict against those criteria.
 
 **RQ1 is answered yes on five of seven predicates and qualified on two.**
 The criterion was per-predicate recall on annotator groups no threshold ever
-saw, judged against two references fixed in advance; one is met and the
-other turned out to be unavailable. The trivial baselines are beaten by a
-wide margin: 0.74 on the held-out groups the criterion names, 0.85 pooled,
-against 0.14 for both random and majority. The second reference, how well
-two human annotators would agree, this dataset cannot supply — the nine
-groups labelled disjoint batches differing threefold in object density, so
-§4.6 reports the Fréchet bound as a measurement the data cannot support and
-the assumption-free spread of 0.082 is too narrow to carry weight either.
-Comparability therefore rests on the trivial baselines and the per-predicate
-audit. The second condition, that labels beyond the human record survive
-audit, holds for the lateral, proximity and depth-decided predicates at
-blind-audited precision 0.79–1.00. **It is not met for support.** At 0.535
-[0.42, 0.65] about half the support labels the tool adds beyond the human
-record are wrong — beating chance, short of a standard anything should be
-built on — so support answers RQ1 on recall and fails it on precision, and
-the per-predicate form of the question exists so this cannot be averaged
-away. For anything consuming the output, support is a candidate set and not
-a label set: fit to propose relations for a checker, not to be acted on
-unverified. The qualification is `in front of` and `behind` at 0.70/0.71
-pooled, which is not a failure of the criterion but a disagreement about the
-words, §4.12 showing the tool reproducing its own verdict across viewpoints
-0.958 of the time while two annotator groups applied the opposite
-convention.
+saw, judged against two references fixed in advance; the trivial baselines
+are beaten by a wide margin, 0.74 held-out and 0.85 pooled against 0.14 for
+both random and majority, and the second reference — how well two human
+annotators would agree — is one this dataset cannot supply, for reasons
+Appendix F.12 sets out. Comparability therefore rests on the baselines and
+the per-predicate audit. The second condition, that labels beyond the human
+record survive audit, holds for the lateral, proximity and depth-decided
+predicates at blind-audited precision 0.79–1.00. **It is not met for
+support.** At 0.535 [0.42, 0.65] about half the support labels the tool adds
+beyond the human record are wrong — beating chance, short of a standard
+anything should be built on — so support answers RQ1 on recall and fails it
+on precision, and the per-predicate form of the question exists so this
+cannot be averaged away. For anything consuming the output, support is a
+candidate set and not a label set. The qualification is `in front of` and
+`behind` at 0.70/0.71 pooled, which is a disagreement about the words rather
+than a failure of the criterion, §4.12 showing the tool reproducing its own
+verdict across viewpoints 0.958 of the time while two annotator groups
+applied the opposite convention.
 
 **RQ2 is answered yes at the classifier, not met at the planner by the tool
 alone, and undecided at the benchmark.** The controlled classifier gives
 0.75 against 0.30 on held-out *human* gold, the rival source's own yardstick
-and the harder direction the criterion specified. The planner is the one
-level where the choice of comparator decides the verdict, and §1.2.2 fixed
-it as the human arm: against that arm's 25 of 25 the tool's relations alone
-clear 19, which falls short. What draws level is the union with the
-vision-language source at 25 of 25 — label-free, but not the treatment RQ2
-names — so the planner establishes that human annotation can be matched
-*without a human in the loop*, not that the tool matches it. The benchmark
-neither confirms the margin nor contradicts it: §1.2.2 asked for *at least
-as well*, which parity satisfies as written, but a null result is not a
-demonstration of equivalence — paired by seed the difference is -0.0006 with
-a 95% interval of [-0.070, +0.069] — so the honest word for 0.292 against
-0.293 is *undecided*, and since §1.2.2 required agreement across all three
-for an unqualified yes, a tie is not agreement. What Chapter 5 measures as a
-two-and-a-half-fold advantage the ranked metric measures as parity, and
-§6.3.1 reports that without resolving it favourably: the difference that
-remains sits on the two test annotators with measured labelling defects and
-reverses on the one without, while the auto arm recovers five times more of
-the relation types the manual annotation never recorded and reproduces
-itself across seeds more than eight times more tightly. The third arm suits
-the argument least and is reported for that reason: vision-language labels
-lead the benchmark at 0.329 against 0.293 and 0.292 (§6.3.2), so whatever
-the ranked metric rewards, geometry is not uniquely good at supplying it.
+and the harder direction the criterion specified. At the planner, §1.2.2
+fixed the comparator as the human arm: against that arm's 25 of 25 the
+tool's relations alone clear 19, which falls short, and what draws level is
+the union with the vision-language source at 25 of 25 — label-free, but not
+the treatment RQ2 names. So the planner establishes that human annotation
+can be matched *without a human in the loop*, not that the tool matches it.
+At the benchmark, parity satisfies *at least as well* as written, but a null
+result is not a demonstration of equivalence — the paired difference is
+-0.0006 with a 95% interval of [-0.070, +0.069] — so the honest word for
+0.292 against 0.293 is *undecided*, and since §1.2.2 required agreement
+across all three for an unqualified yes, a tie is not agreement. What
+Chapter 5 measures as a two-and-a-half-fold advantage the ranked metric
+measures as parity; §6.3.1 localises the residual difference to the two test
+annotators with measured defects, and the third arm suits the argument least
+and is reported for that reason, vision-language labels leading at 0.329
+against 0.293 and 0.292 (§6.3.2).
 
 "Good enough to replace" is met at two levels and unrefuted at the third;
-"better", which Chapter 5 and the planner both support, holds where ground
-truth means geometric consistency and not where it means annotation
-practice. The evidence carries this conditional: **automatic labels are
-better wherever ground truth means geometric consistency, and do not
-overtake human labels wherever it means annotation practice.** Robot
-planning needs the first, which is why the planner separates the sources
-decisively and the ranked benchmark cannot separate them at all.
+"better" holds where ground truth means geometric consistency and not where
+it means annotation practice. The evidence carries this conditional:
+**automatic labels are better wherever ground truth means geometric
+consistency, and do not overtake human labels wherever it means annotation
+practice.** Robot planning needs the first, which is why the planner
+separates the sources decisively and the ranked benchmark cannot separate
+them at all.
 
 ## 9.2 Research contributions
 

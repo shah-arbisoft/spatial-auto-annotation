@@ -109,26 +109,24 @@ marginal.
 ## 4.5 The front/behind decomposition: a second measured annotation defect
 
 {{fig:front-behind-decomposition}} decomposes front/behind by annotator
-group, and the two convention-inverted groups sit alone near zero. The
-per-group table and the full decomposition are in Appendix F.10; the pooled
-0.70 resolves into three causes, in measured proportions. **Direction
-agreement is near-perfect where the tool commits**, 0.95–1.00 for six of the
-eight groups with meaningful counts, so genuine depth-ordering errors are
-rare. **Two annotator groups used the inverted convention**, agreeing with
-the committed direction 2–5% of the time; flipping their labels recovers
-0.94/0.82 and aligned overall recall is 0.91. And **the remaining gap is
-abstention, not error**: groups 2 and 3 agree almost perfectly when the tool
-commits, but their pairs sit inside the `depth_eps` band and beyond the
-ground-plane fallback's reach, so the tool declines to answer.
+group, the two convention-inverted groups sitting alone near zero, and
+Appendix F.10 carries the per-group table. The pooled 0.70 resolves into
+three causes in measured proportions: **direction agreement is near-perfect
+where the tool commits**, 0.95–1.00 for six of the eight groups with
+meaningful counts, so genuine depth-ordering errors are rare; **two
+annotator groups used the inverted convention**, agreeing 2–5% of the time,
+so flipping their labels recovers 0.94/0.82 and aligned overall recall is
+0.91; and **the remaining gap is abstention, not error**, groups 2 and 3
+agreeing almost perfectly when the tool commits but sitting inside the
+`depth_eps` band and beyond the fallback's reach.
 
 After `near`, the inversion is a second measured annotation defect — the
 reference-frame ambiguity RoboSpatial formalises (§2.5) observed in the
-wild, no frame declared in the guidance and two teams resolving it
-oppositely. The shape of the distribution rules out simple subjectivity: a
-genuinely contested judgement would scatter agreement around chance, whereas
-these two groups sit at 0.02–0.05 while the other six sit at 0.95–1.00, and
-agreement that far *below* chance is a sign flip rather than a difference of
-opinion. Neither convention is the wrong one.
+wild. The shape of the distribution rules out simple subjectivity: a
+contested judgement would scatter agreement around chance, whereas these two
+groups sit at 0.02–0.05 and the other six at 0.95–1.00, and agreement that
+far *below* chance is a sign flip rather than a difference of opinion.
+Neither convention is the wrong one.
 
 ## 4.6 The tenth annotator, and what the annotators would score against each other
 
@@ -201,28 +199,26 @@ an 8.5% review queue (§4.7) against labels 20× denser than the human set.
 
 Ten ablations were run: seven sweep a shipped parameter over the cached
 geometry and re-run offline in about twenty seconds (`eval/ablations.py`),
-two test whether a heavier perception stack would do better, and one whether
-geometry can replace the class guard. All three of the latter say no. Every
-parameter was selected on the training annotator groups alone, with the
-held-out column reported and never optimised against; Appendix D.0 tabulates
-each ablation, its shipped setting and its verdict, and D.1–D.8 give the
+two test whether a heavier perception stack would do better and one whether
+geometry can replace the class guard, and all three say no. Every parameter
+was selected on the training annotator groups alone, with the held-out
+column reported and never optimised against; Appendix D.0 tabulates each
+ablation, its shipped setting and its verdict, and D.1–D.8 give the
 derivations.
 
 Three changed the headline table materially, in this order: the audit
 localised a support precision failure; a geometric insight, that stacked
 objects share a camera distance, fixed half (A1, held-out support F1 0.58 →
 0.71); mask-bottom contact fixed most of the rest while *raising* recall,
-0.71 → 0.87 (A5), the rare change improving both error directions at once;
-and the ground-plane fallback then recovered most of the front/behind
-abstention band without depth at all, 0.52/0.55 → 0.70/0.71 and mean recall
-0.79 → 0.85 (A7). The two declined perception ablations bound where
-engineering can help: neither a four-times-larger depth model (A8) nor
+0.71 → 0.87 (A5); and the ground-plane fallback recovered most of the
+front/behind abstention band without depth at all, 0.52/0.55 → 0.70/0.71 and
+mean recall 0.79 → 0.85 (A7). The two declined perception ablations bound
+where engineering can help: neither a four-times-larger depth model (A8) nor
 two-view triangulation (A9) improves the depth pair, the second being 0.20
 *worse* where it answers at all, on 9% of pairs. The limit is monocular
-ambiguity in the scenes, not model capacity — and what is declined is a
-lightweight uncalibrated estimator rather than multi-view geometry in
-general, so a calibrated stereo pair is the open route §9.3 keeps and §7.2
-takes up.
+ambiguity in the scenes rather than model capacity, and what is declined is
+a lightweight uncalibrated estimator rather than multi-view geometry in
+general, so a calibrated stereo pair is the open route §9.3 keeps.
 
 ## 4.10 Failure gallery: every miss diagnosed
 
@@ -240,43 +236,36 @@ tool error across all seven predicates: ~7%.
 
 ## 4.11 Detector-in-the-loop: full automation, attributed
 
-The deployment mode replaces ground-truth boxes with Grounding DINO
-(Liu et al., 2024) zero-shot detection (short-noun prompts for the six
-classes; threshold 0.25, tuned in one disclosed iteration on a 20-image
-trial), then runs the identical SAM2 → depth → rules stack
-(`scripts/run_sgdet.py`, scored by `eval/sgdet_eval.py`, class-matched
-greedy IoU ≥ 0.5). End-to-end triplet recall over 836 images is **0.38**
-against the PredCls headline, and the decomposition attributes most of the
-gap: zero-shot detection recall spans 0.40 (cube) to 0.95 (human), a triplet
-needs *both* endpoints, and **conditioned on both being detected the
-relation layer scores 0.85 mean, matching PredCls** (lateral 0.96/0.98, near
-1.00, support 0.83/0.77; front/behind 0.69/0.70, computed before the
-fallback shipped, so a floor). Detection is the dominant term rather than a
-complete accounting, since missed objects also change which pairs are
-presented, and the rules are detector-agnostic. Two caveats: zero-shot
-open-vocabulary detection is the worst-case detector, the trade §2.6
-identifies, used because the authors' trained YOLOv10m weights were not
-available; and the 20-image trial over-estimated detection quality, its
-scenes coming from one annotator batch. The same attribution holds on two
-out-of-domain clips, every visible failure again being a detection failure
-(Appendix E.4).
+The deployment mode replaces ground-truth boxes with Grounding DINO (Liu et
+al., 2024) zero-shot detection and runs the identical SAM2 → depth → rules
+stack (`scripts/run_sgdet.py`). End-to-end triplet recall over 836 images is
+**0.38** against the PredCls headline, and the decomposition attributes most
+of that gap: zero-shot detection recall spans 0.40 (cube) to 0.95 (human), a
+triplet needs *both* endpoints, and **conditioned on both being detected the
+relation layer scores 0.85 mean, matching PredCls**. Detection is the
+dominant term rather than a complete accounting, since missed objects also
+change which pairs are presented, and the rules are detector-agnostic. Two
+caveats: zero-shot open-vocabulary detection is the worst-case detector, the
+trade §2.6 identifies, used because the authors' trained YOLOv10m weights
+were not available; and the 20-image tuning trial over-estimated detection
+quality, its scenes coming from one annotator batch. The same attribution
+holds on two out-of-domain clips, every visible failure again being a
+detection failure (Appendix E.4).
 
 ## 4.12 Temporal redundancy and stability under viewpoint change
 
 The 884 released images are one continuous walk, each annotator group a
 contiguous 100-frame block, so §4.1's held-out split is held out by scene as
-well as by annotator; the annotator reading survives, since an inverted
+well as by annotator. The annotator reading survives — an inverted
 convention (§4.5) and a `near` label used by three groups in nine (§3.2) are
-behaviours no arrangement of furniture can produce, and the confound runs
-favourably, 0.74 on held-out groups being generalisation to an unseen
-annotator *and* an unseen arrangement. The sequence also lets the verdicts
-be checked against themselves with no human labels, which Appendix E.2
-carries in full: consecutive frames were segmented by content drift and each
-segment's predicates propagated from its keyframe.
+behaviours no arrangement of furniture can produce — and the confound runs
+favourably: 0.74 on held-out groups is generalisation to an unseen annotator
+*and* an unseen arrangement. The sequence also lets the verdicts be checked
+against themselves with no human labels, which Appendix E.2 carries in full.
 
-Two results. Skipping frames costs nothing measurable — mean recall 0.832
-propagated against 0.829 per frame, at every threshold tested — and the
-stability finding is not the expected one. Front/behind, the predicted loser
+Two results. Skipping frames costs nothing measurable, mean recall 0.832
+propagated against 0.829 per frame at every threshold tested. And the
+stability finding is not the expected one: front/behind, the predicted loser
 if its errors were depth noise near the boundary, agrees with itself
 **0.958** of the time, above `on`/`under` at 0.878 (mean 0.946), and still
 0.911 at 89× compression. A predicate recalling 0.648 of the human labels
@@ -285,8 +274,7 @@ disagreeing systematically, which converges with A8 and §4.5; §7.2 develops
 what follows. **Limits:** consistency is not correctness — a systematically
 wrong rule is perfectly stable too, so 0.958 rules out only the depth-noise
 explanation this section was written to test — and the figures are an upper
-bound, only matched pairs contributing, with coverage thinning as segments
-grow (E.2).
+bound, only matched pairs contributing (E.2).
 
 ## 4.13 Would a vision-language model do this instead?
 
