@@ -408,7 +408,7 @@ person who built the tool, blinded and working against decoys, and strangers
 with no stake in the outcome — the objection §2.9 raises and §7.4 concedes,
 answered by measurement, with the model apart at 0.638. **Against the human
 baseline, five predicates hold and support does not**, 0.864 against 0.926
-and 0.413 against 0.975. Across all seven predicates in the broader E.3
+and 0.413 against 0.975 (118/121). Across all seven predicates in the broader E.3
 pool — not the support-only counts above — **147** claims carry both a
 volunteer and an author verdict; on those the two agree **0.871** of the
 time (Cohen's κ **0.683**), and crowd-internal reliability is

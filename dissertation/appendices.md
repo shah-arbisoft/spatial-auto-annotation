@@ -1363,7 +1363,7 @@ against the model's 0.625.
 *Against the human baseline.* On the five predicates the support threshold
 does not touch, the tool scores 0.864 against the annotators' 0.926, a gap
 of 0.063, and on `in front of` it is marginally ahead. On support it scores
-0.413 against 0.975, a gap of 0.563 whose intervals do not come close to
+0.413 against 0.975 (118/121), a gap of 0.563 whose intervals do not come close to
 overlapping — the same weakness §4.14 found and the refit responded to, now
 measured against what human annotation scores on the identical instrument.
 
