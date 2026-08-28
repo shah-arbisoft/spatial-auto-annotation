@@ -23,7 +23,7 @@ unexamined, not wrong, and raw precision undercounts. And annotator
 behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second case), so
 agreement is reported per annotator group as well as pooled.
 
-The metrics: per-predicate **recall of the human triplets**, the primary one
+The metrics are these. Per-predicate **recall of the human triplets** is the primary one
 and the source paper's convention; **restricted precision, recall and F1**
 on annotated pairs; a **manual audit** of a stratified sample of the extra
 predictions; per-type **flag rates**; and three baselines, namely random,
@@ -158,8 +158,8 @@ baselines and the per-predicate audit (§4.8).
 
 ## 4.7 Flags: what review actually costs
 
-31.5% of ordered pairs carry at least one flag; the kinds overlap, so they
-sum past that (Appendix C.9). Depth-ambiguous 19.3% (down from 29.5% before
+31.5% of ordered pairs carry at least one flag. The kinds overlap, and they
+therefore sum past that (Appendix C.9). Depth-ambiguous 19.3% (down from 29.5% before
 the ground-plane fallback resolved a third of the depth abstentions) and
 lateral-ambiguous 10.0% are *abstentions*, with nothing to review, while the
 borderline-near band, 8.5% of pairs, is the genuine review queue: at a
@@ -177,8 +177,8 @@ human-comparable levels, 0.75 to 1.00 as Table 4.1 reports them, mean 0.85
 and 0.74 on annotators no threshold ever saw; the exception is the depth
 pair, at 0.70/0.71 pooled and 0.91 once the two inverted groups are aligned.
 On **precision**, a different five audit blind at 0.79–1.00: the two
-laterals, the two depth predicates and `near`, each on 24 samples, so the
-claim they support is comparability. The exception there is support, at
+laterals, the two depth predicates and `near`, each on 24 samples. The
+claim they support is therefore comparability. The exception there is support, at
 **0.535 [0.42, 0.65]** on 71 samples of the shipped rule, up from 0.404
 before §4.14 traced the shortfall to a threshold fitted on a metric that
 could not see the error it controls.
@@ -304,8 +304,8 @@ the depth pair (§7.6).
 
 Every precision figure so far rests on the author verdicting the author's
 tool, the objection §2.9 raises and §7.4 concedes; more verdicts of the same
-kind would only narrow an interval around a possibly biased centre, so this
-section re-runs the audit with the three defects of §4.4 and §4.9 removed at
+kind would only narrow an interval around a possibly biased centre. This
+section therefore re-runs the audit with the three defects of §4.4 and §4.9 removed at
 once.
 
 **Design.** 242 items: 214 claims the tool emitted and **28 decoys**,
@@ -388,7 +388,7 @@ judgements from **20 raters** over **832** of the 1,000 claims in the pool,
 reading. The claims were drawn a month before `on_contact_min` was re-fitted,
 so **the shipped support rule has still not been judged by anyone outside
 this project**; and half the pool is drawn from the *human* annotations,
-interleaved so a rater cannot tell the arms apart, which is what makes the
+interleaved so a rater cannot tell the arms apart, and that is what makes the
 tool's score readable rather than merely low.
 
 | Predicate | Volunteers | Author | Model |

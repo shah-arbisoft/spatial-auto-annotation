@@ -16,8 +16,8 @@ lateral and proximity predicates the tool is by every measure available *at
 least* as good as the human process. For support it is not: two evidence
 upgrades lifted recall, but blind-audited precision stops the claim at about
 half the labels the tool adds beyond the human record. For the depth pair
-the shortfall is calibrated abstention plus an inverted direction convention
-rather than error, and where the tool commits it agrees at 0.95–1.00 with
+the shortfall is calibrated abstention plus an inverted direction convention,
+neither of which is error. Where the tool commits it agrees at 0.95–1.00 with
 six of the seven same-convention annotators. "Comparable to human quality"
 understates that case, since on front/behind the tool is more consistent
 than the process it is measured against.
@@ -32,8 +32,8 @@ labels they were validated against, on density (20× more triplets) and
 consistency (one definition, uniformly applied), which converts the premise
 from "removing the bottleneck loses little" to "removing the bottleneck
 gains". Chapter 6 scopes that claim without confirming it: it cannot
-separate the same two label sources in the source paper's framework, so the
-advantage does not appear on a ranked metric scored against sparse human
+separate the same two label sources in the source paper's framework, and the
+advantage therefore does not appear on a ranked metric scored against sparse human
 annotation, and the defensible sentence is that automatic labels *teach
 better where correctness is the criterion and equally well where resemblance
 to the annotators is*.
@@ -45,7 +45,7 @@ thousand confident *negative* pseudo-labels for every positive one,
 propagating the annotators' silence rather than their judgement, and on
 `near` it drives recall below the human baseline it started from. The
 comparison is therefore against the obvious alternative under identical
-conditions, not against doing nothing. (The six objectives of §1.2.1 are
+conditions, and not against doing nothing at all. (The six objectives of §1.2.1 are
 audited against their evidence in §9.1; this chapter is concerned with what
 the results *mean*.)
 
@@ -178,7 +178,7 @@ with decoys should have been the instrument from the first audit, not the
 third; it is cheap, and it is the only step here that changed a headline
 number instead of tightening one. That weakness was acted on and not
 only recorded, and §4.14 gives the sequence: the support threshold had been
-fitted where a false positive outside the gold was free, so it was re-fitted
+fitted where a false positive outside the gold was free. It was re-fitted
 on train annotators, shipped, every experiment re-run, and a second pack
 drawn from the new labels and audited blind. The lesson is the order, not
 the number: a threshold worth changing is worth re-auditing on labels it

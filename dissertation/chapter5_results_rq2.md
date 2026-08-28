@@ -29,7 +29,7 @@ a teacher trained on the human labels exactly as in the human arm, its
 confident predictions on the *unannotated* training pairs (probability ≥
 0.90 either way) becoming pseudo-labels, and a student retrained on the
 union (Lee, 2013). The third arm answers the question that precedes the
-project's premise: if the human labels are too sparse, why not simply
+project's premise. If the human labels are too sparse, why not simply
 stretch them? Each source labels the same pairs its own way, and each model
 inherits its source's character; that contrast is the experiment.
 
@@ -48,7 +48,7 @@ Averaged over three seeds (42/43/44); each cell shows mean (min–max):
 | near | 0.08 (0.00–0.19) | 0.03 (0.00–0.06) | 0.00 (0.00–0.00) | 1.00 (1.00–1.00) | 93 |
 | **mean** | **0.30** | **0.36** | **0.38** | **0.75** | |
 
-The fourth arm answers what §4.13 raises but cannot settle: if a
+The fourth arm answers what §4.13 raises but cannot settle. If a
 vision-language model is not a good enough *annotator*, is it a good enough
 *teacher*? The same model labelled all 600 training images, used exactly as
 the other sources are, and the other three columns are unchanged from the
@@ -61,7 +61,7 @@ geometry.
 {{fig:rq2-with-vlm}} draws the four arms per predicate. Training on the
 automatic labels multiplies downstream mean recall by ~2.5 against the human
 annotators' own held-out labels, 0.75 vs 0.30, while self-training lifts the
-mean only to 0.36, closing **15% of the distance**: stretching the existing
+mean only to 0.36, closing **15% of the distance**. Stretching the existing
 labels helps, and does not substitute for labelling every pair consistently.
 The seed spreads carry a second result. The auto-trained model's recall
 varies by at most 0.02 across seeds on every predicate, the human-trained
@@ -77,13 +77,13 @@ answer does not flatter the tool: **on every indicator except recall the
 automatic arm comes last**: macro precision 0.136 against the human arm's
 0.252, F1 0.194 against 0.267, average precision 0.164 against 0.230, micro
 F1 0.066 against 0.262. One number shows why that is not a verdict on label
-quality: average precision is threshold-free, so no arm improves it by
+quality. Average precision is threshold-free, so no arm improves it by
 committing to more pairs, yet the automatic arm scores **0.040 on `to the
 left of`**, the predicate §4.4 audited at fifteen of fifteen extra
 predictions correct. An arm cannot be both wrong and right about laterality,
 so what the column measures is agreement with which pairs an annotator chose
 to write down, which is §4.3's artefact one level down the chain. Appendix F.5 gives
-the full table, and concedes what it cannot settle: §4.4 audited the rule
+the full table, and concedes what it cannot settle, since §4.4 audited the rule
 layer's extras, not the classifier's, so these precision figures are
 uninterpretable rather than favourable. The automatic arm dominates at
 teaching a model to recover the relations humans recorded and loses at
@@ -98,17 +98,17 @@ the teacher adds roughly **54,000 confident negative** pseudo-labels per
 predicate against only **36 to 67 confident positives**, about 1,000 to 1.
 Trained on annotation in which most pairs carry no label, the teacher has
 learned above all that pairs usually have no relation, and self-training
-feeds that conviction back as though it were evidence: what propagates is
+feeds that conviction back as though it were evidence, so what propagates is
 not the annotators' knowledge but their silence. This is the failure mode
-§2.4 predicted, now measured: pseudo-labelling is well behaved when the
+§2.4 predicted, now measured. Pseudo-labelling is well behaved when the
 seed is a representative sample of the pool, and this seed is not. The
-`near` row makes it sharp: human-trained recall is already near collapse at
+`near` row makes it sharp, human-trained recall being already near collapse at
 0.08, and self-training pushes it *down* to 0.03. Where the seed is
 defective, self-training amplifies the defect, so the comparison is not
 "programmatic labels beat doing nothing" but "programmatic labels beat the
 standard remedy, under identical conditions, closing more than six times as
 much of the available gap". Active learning is not tested because it fails
-for a simpler reason (§2.4): it still buys human labels, lowering the
+for a simpler reason (§2.4), still buying human labels and lowering the
 bottleneck's cost without removing it.
 
 ## 5.4 Why the automatic labels win, and two consistency checks
@@ -118,10 +118,10 @@ and least consistent (§4.5, §4.7), recall collapses (`near` 0.08, lateral
 0.22–0.25); trained on dense rule-consistent labels the same model learns
 the geometry (near 1.00, lateral 0.95–0.99, support 0.85–0.88), which is
 §2.3's weak-supervision prediction confirmed under controlled conditions. Two
-checks argue the result is real: the auto-trained model's profile almost
+checks argue the result is real. The auto-trained model's profile almost
 exactly reproduces the rule layer's own held-out performance (mean 0.75
 against the rules' 0.74; front/behind 0.19/0.37 against the rules'
-0.20/0.37), so the classifier *distilled the annotator*, which is what "the
+0.20/0.37), so the classifier *distilled the annotator*, and that is what "the
 labels are learnable" means; and all three arms face identical features, the
 same oversampling cap and the same held-out gold, including the
 convention-inverted annotators, which penalises every arm's front/behind
@@ -150,7 +150,7 @@ repeating the comparison in a full scene-graph model with visual features.
 
 ## 5.6 From labels to robots: where this sits in the source paper's chain
 
-The source paper's end goal is explicit: spatial understanding exists so
+The source paper's end goal is explicit. Spatial understanding exists so
 that robots can plan, and its own evaluation of that chain stops at SGG
 quality: six models benchmarked on the human labels, topping out at
 mR@100 = 0.49 (VCTree), every model saturating by epoch 2–6 and `near` stuck

@@ -31,7 +31,7 @@ The human arm **peaks at epoch 4 of 25** and never improves again,
 oscillating between 0.101 and 0.123 for the remaining twenty-one, which is
 mild overfitting on 5,421 sparse triplets. That replicates the source paper's
 central observation ("all predictors reached their peak mR@100 well before
-the final epoch") with a current model, and adds the cause: sparse
+the final epoch") with a current model, and adds the cause, that sparse
 supervision is exhausted early. The auto arm is still climbing at epoch 8,
 does not reach 95% of its best until **epoch 14**, peaks at **epoch 22**,
 and sees 213 distinct triplet types in training against the human arm's 94.
@@ -52,17 +52,17 @@ human gold, groups 6–8), at seed 42:
 
 At this seed the automatic arm leads mean recall, 0.291 against 0.270, the
 human arm keeps raw recall, and the two are level on F1. The ordering
-inverts predicate by predicate: the human arm is ahead on five of the seven,
+inverts predicate by predicate. The human arm is ahead on five of the seven,
 the automatic arm on the support pair, by 0.077 on `on` and 0.284 on
 `under`. For `near` both arms sit far below the source paper's 0.22–0.25
-floor, 0.117 and 0.108, so prediction 3 is refuted as stated: the automatic
+floor, 0.117 and 0.108, so prediction 3 is refuted as stated. The automatic
 arm's dense, fitted `near` does not survive the trip through a learned
 model. The sharpest separation is on triplet *types never seen in training*,
 0.309 against 0.073, fourfold at this seed and fivefold over three (§6.3.1);
 §6.4 sets out what that column measures here: coverage of relation types
 the manual annotation never recorded, not compositional generalisation.
 Prediction 2 is the one a single run cannot carry in either direction, the
-margin sitting well inside the human arm's own seed spread, which is why
+margin sitting well inside the human arm's own seed spread. That is why
 §6.3.1 exists. Appendix F.1 carries the per-predicate and per-slice
 breakdown; aligning the front/behind convention of groups 6 and 8, one
 disclosed bit per group as in §4.5, lifts both arms and leaves them level,
@@ -101,7 +101,7 @@ this dissertation makes no zero-shot claim on them.
 indistinguishable.** Every row's seed ranges overlap, and paired by seed the
 automatic arm leads at 42 (+0.021) and 43 (+0.010) and trails at 44
 (−0.032), so the pooled difference of 0.001 rests on a single run. The correct statement is parity, and it is
-about this metric and not the labels: on raw R@100 the human arm keeps a
+about this metric and not the labels, since on raw R@100 the human arm keeps a
 real margin pooled, 0.295 against 0.255, and on zero-shot recall the
 automatic arm leads fivefold, 0.268 against 0.052. The arms differ far more
 in stability than in score, the automatic arm's pooled mR@100 spanning 0.006
@@ -109,7 +109,7 @@ across seeds against the human arm's 0.052, so one definition applied
 uniformly lands in the same place whatever the initialisation, and nine
 annotators applying nine conventions do not.
 
-Where the arms do differ, they differ by annotator: the human arm leads on
+Where the arms do differ, they differ by annotator. The human arm leads on
 the two §4.5 convicts of inverting the convention and *trails* on group 7,
 the one convicted of nothing, so the ordering runs with annotation quality
 rather than geometry. Appendix F.9 gives the three margins, none separable
@@ -121,7 +121,7 @@ figure in this chapter is therefore a lower bound on both sides.
 
 Second, **the zero-shot result is robust and larger than first reported.**
 Pooled zR@100 is 0.268 against 0.052, roughly fivefold, with disjoint
-ranges, and not an artefact of pooling: the auto arm leads on *every*
+ranges, and not an artefact of pooling, since the auto arm leads on *every*
 annotator separately (0.449 against 0.000 on group 6, 0.273 against 0.098 on
 group 7, 0.041 against 0.007 on group 8), pointing the same way on defective
 and clean annotators alike, which is what distinguishes a property of the
@@ -204,7 +204,7 @@ what the column does establish.
 ## 6.5 What survives, read both ways
 
 Two interpretations survive and neither is available without the other. The
-benchmark result is real: a consumer *evaluated against human-annotated
+benchmark result is real, because a consumer *evaluated against human-annotated
 scene graphs* is better supervised by human labels, which carry the
 annotation prior the evaluation shares. The interpretation is equally real:
 the ranking metric inherits every defect measured in the gold, and the
@@ -213,7 +213,7 @@ absent where it is not.
 
 Section 1.2.2 set a non-inferiority criterion, *at least as well* and not a
 win, so parity is the shape a pass takes, but the numbers refuse a strong
-claim in either direction: the paired mean difference is -0.0006 with a 95%
+claim in either direction. The paired mean difference is -0.0006 with a 95%
 interval of [-0.070, +0.069], and a margin of ±0.01 would need roughly forty
 runs per arm. The experiment establishes neither superiority nor
 equivalence, and a reader entitled to say the automatic labels did not beat
@@ -232,12 +232,12 @@ top-ranked false positives.
 
 Registered before the run, judged after: prediction 1 (early human-arm
 saturation) is **confirmed** and replicates the source paper. Prediction 2
-(higher plateau) is **unresolved on mR@100**, and the word matters: an
+(higher plateau) is **unresolved on mR@100**, and the word matters, because an
 earlier version recorded it as refuted on a 0.048 gap that the retrained
 arms of §6.3.1 reduce to 0.001, which no experiment of this size can call
 either way, while the plateau *is* higher on the zero-shot component the
 prediction did not name, 0.268 against 0.052. Prediction 3 (`near`
-recovery) is **refuted**: it wrongly assumed the test gold could reward
+recovery) is **refuted**, having wrongly assumed the test gold could reward
 dense `near` prediction. The value of pre-registration is that these
 verdicts are checkable, and that one had to be revised when the measurement
 improved is a point in its favour. The replication adds a fourth verdict on

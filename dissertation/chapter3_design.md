@@ -42,7 +42,7 @@ Genome JSON, YOLO txt and h5. Four requirements shape the design:
 3. **Modest hardware.** A single 6 GB RTX 2060; anything heavier must be
    optional. (In practice the pipeline peaks at 0.65 GB and annotates the
    full dataset in about five minutes *(measured)*.)
-4. **Reproducibility.** Every threshold in one config, every run seeded, and
+4. **Reproducibility.** Every threshold in one config, every run seeded, with
    rule changes re-evaluable without re-running perception.
 
 The dataset has three properties, established in Chapter 2 and verified
@@ -55,13 +55,13 @@ directly on the released files, and each drives a specific design response:
   *(measured: 6,458 of 42,440 unordered pairs, 15%; 8,790 of 84,880 ordered,
   10%, the two differing because most labelled pairs carry only one
   direction, §4.5)*, so the tool labels every pair, density being the value
-  added, and the protocol treats human labels as a recall target, not an
-  exhaustive gold standard.
+  added, and the protocol treats human labels as a recall target, never as
+  an exhaustive gold standard.
 - **Inconsistent `near`.** Only 3 of 9 annotator groups ever used `near`
   (461/160/93 labels of the 717 total, one further group supplying 3 and the
   rest none), each labelling a different fraction of equally-close pairs, so
-  the threshold is fitted and annotator-aware (§3.8), not matched to a
-  consensus that does not exist.
+  the threshold is fitted and annotator-aware (§3.8); no consensus exists
+  for it to be matched to.
 
 ## 3.3 Design principle: compute, don't predict
 

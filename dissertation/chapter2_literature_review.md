@@ -25,9 +25,9 @@ with no label artefact.
 
 The seven predicates this project computes (*on*, *under*, *left/right of*,
 *in front of / behind*, *near*) are the scene-graph edges that carry the
-geometry an agent must respect to act: a planner told only "cube, book,
-table" cannot decide what to move first, one told "the cube is on the book"
-can, and §5.7 turns that into a measurement. Language-driven robot planners
+geometry an agent must respect to act. A planner told only "cube, book,
+table" cannot decide what to move first, while one told "the cube is on the
+book" can, and §5.7 turns that into a measurement. Language-driven robot planners
 ground their instructions in exactly such a structured account of scene
 state (Ahn et al., 2022), and 3D scene graphs were proposed as its unifying
 form (Armeni et al., 2019). Robotics has pushed that form towards real-time
@@ -42,8 +42,8 @@ vocabulary of relations and reasons over it with composition tables: Allen's
 interval algebra (Allen, 1983) fixes the thirteen ways two intervals can lie
 on a line, RCC-8 does the same for connection and containment (Randell, Cui
 and Cohn, 1992), orientation calculi add direction from a viewpoint (Freksa,
-1992), and Cohn and Renz (2008) survey the family. What bears here are its
-properties: its relations are *defined*, so annotators cannot disagree about
+1992), and Cohn and Renz (2008) survey the family. What bears here are three
+of its properties. Its relations are *defined*, so annotators cannot disagree about
 what a label means, the defect §2.2 finds; its calculi are *decidable*, the
 underdetermined case being where abstention comes from; and its vocabularies
 are finite and hand-authored, the limitation §2.9 raises and this
@@ -91,7 +91,7 @@ for near."
 ## 2.3 Label quality: weak supervision and annotator disagreement
 
 The premise, replacing scarce human labels with dense computed ones, has
-an established name: **weak supervision**. **Snorkel** (Ratner et al., 2017)
+an established name, **weak supervision**. **Snorkel** (Ratner et al., 2017)
 formalised *data programming*: experts write labelling functions instead of
 labelling examples, their noisy overlapping votes combined into training
 labels, trading per-label authority for coverage and consistency; its
@@ -107,20 +107,20 @@ aggregating is answered here by abstaining. And the computed labels are
 comparable.
 
 The complementary literature dismantles the premise that human annotation is
-a single reliable gold standard. Plank (2022) puts the sharp form: variation
-between annotators is frequently not error but legitimate difference, and
+a single reliable gold standard. Plank (2022) puts the sharp form, that
+variation between annotators is frequently not error but legitimate difference, and
 treating it as noise discards signal and produces evaluation that flatters
 whichever convention the majority held, which is the reading Chapter 4
 reaches independently for `near` and front/behind. **Uma et al.'s (2021) survey of
 learning from disagreement** documents systematic annotator disagreement
 across vision and language, driven by ambiguous guidelines, subjective
-boundaries and annotator-specific conventions. The frame fits: Chapter 4
+boundaries and annotator-specific conventions. The frame fits, because Chapter 4
 measures three annotator behaviours, namely selective `near` usage, an
 inverted front/behind convention in two groups and one-directional support
-labelling, which make "agreement with the humans" a per-annotator quantity. Two design
-decisions follow: evaluation is reported per annotator group, never only
-pooled, and thresholds are calibrated only on annotators who used a label,
-with the rest held out.
+labelling, which make "agreement with the humans" a per-annotator quantity.
+Two design decisions follow from that. Evaluation is reported per annotator
+group, never only pooled, and thresholds are calibrated only on annotators
+who used a label, with the rest held out.
 
 Where human judgements must themselves be evaluated, the measurement
 tradition supplies the instruments: **Cohen's kappa** (Cohen, 1960) for
@@ -142,7 +142,7 @@ without that pressure are dominated by guessable co-occurrences, and Rel3D
 (Goyal et al., 2020) rebuilt the task on 3D scenes with minimally
 contrastive pairs, having found 2D datasets let models score well without
 using spatial information at all. Both respond to the fact this dissertation
-measures in its own dataset: what a benchmark appears to test and what its
+measures in its own dataset, that what a benchmark appears to test and what its
 annotation rewards can diverge until someone measures the labels. Chapter 6
 shows the consequence here, and Northcutt et al.'s conclusion, that rankings
 flip when gold is corrected, is the shape of that result.
@@ -159,22 +159,22 @@ where a model trained on the labelled seed labels the rest for its own
 retraining, and its strongest modern form is noisy self-training (Xie et
 al., 2020).
 
-Applied here the recipe would be: train on the ~10% of pairs the annotators
-labelled, pseudo-label the remaining 90%, retrain. Measured properties of
+Applied here the recipe would be to train on the ~10% of pairs the annotators
+labelled, pseudo-label the remaining 90%, and retrain. Measured properties of
 this dataset argue against it on three counts. Self-training *amplifies its seed*, and
 this seed is sparse and internally inconsistent (selective `near`, two
 inverted front/behind conventions, one-directional support; §2.2, Chapter
 4). The seed is *selectively* small, because annotators labelled what they
 found salient, so the labelled 10% is not an unbiased sample of the 90%,
 which is the assumption pseudo-labelling needs. And Chapter 5's human-trained classifier
-is exactly the seed such a loop would start from: it collapses on the
+is exactly the seed such a loop would start from, and it collapses on the
 sparsely-labelled predicates (recall 0.08–0.25) and is unstable across
 seeds, leaving little reliable to amplify. Active learning fails
-differently: it still buys *human* labels, reducing the bottleneck's slope
+differently, since it still buys *human* labels, reducing the bottleneck's slope
 without removing it, and rations inconsistency instead of fixing it.
 
 The geometric route sidesteps all three failure modes because its labelling
-function does not derive from the flawed seed at all: the rules are fitted
+function does not derive from the flawed seed at all. The rules are fitted
 to a handful of thresholds (the fit validated on held-out annotators) and
 are exactly as consistent on the 90% as on the 10%. None of this is left as
 argument: Chapter 5 implements the rival as a third arm of the controlled
