@@ -76,17 +76,15 @@ by seed the difference is -0.0006 with a 95% interval of [-0.070, +0.069] —
 so the honest word for 0.292 against 0.293 is *undecided* rather than *yes*,
 and since §1.2.2 required agreement across all three for an unqualified yes,
 a tie is not agreement. What Chapter 5 measures as a two-and-a-half-fold
-advantage the ranked metric measures as parity, and Chapter 6 reports that
-instead of resolving it favourably: what difference remains sits on the two
-test annotators carrying measured labelling defects and reverses on the one
-without, on a test gold whose front/behind relations are 72% written by
-those two, while the auto arm recovers five times more of the relation types
+advantage the ranked metric measures as parity, and §6.3.1 reports that
+without resolving it favourably: the difference that remains sits on the two
+test annotators with measured labelling defects and reverses on the one
+without, while the auto arm recovers five times more of the relation types
 the manual annotation never recorded and reproduces itself across seeds more
-than eight times more tightly. A third arm complicates both readings and is
-reported because it is the result that suits the argument least: labels
-written by a vision-language model lead the benchmark at 0.329 against 0.293
-and 0.292, and lead the one annotator with no measured defect by seed ranges
-that do not overlap either other arm (§6.3.2). Whatever the ranked metric
+than eight times more tightly. The third arm suits the argument least and is
+reported for that reason: vision-language labels lead the benchmark at 0.329
+against 0.293 and 0.292, and lead the undefective annotator by seed ranges
+overlapping neither other arm (§6.3.2), so whatever the ranked metric
 rewards, geometry is not uniquely good at supplying it.
 
 "Good enough to replace" is met at two levels and unrefuted at the third;
