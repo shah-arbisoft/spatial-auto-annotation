@@ -474,7 +474,7 @@ Two structural signatures stand out. Missed front/behind pairs carrying the \tex
 
 The second re-checks each rule's individual conditions against the cached geometry and mask-contact maps, attributing every miss to a cause.
 
-\needspace{12.0\baselineskip}
+\needspace{12.8\baselineskip}
 \begin{center}
 \setlength{\tabcolsep}{3pt}
 \footnotesize
@@ -490,7 +490,7 @@ Predicate & Dominant causes (share of that predicate's misses) \\
 \endhead
 in front of & abstained in ambiguity band 54\% $\cdot$ convention-inverted annotators 45\% $\cdot$ \textbf{genuine depth error 1\%} \\
 behind & convention-inverted 51\% $\cdot$ abstained 43\% $\cdot$ \textbf{genuine depth error 6\%} \\
-on & mask contact below threshold 80\% $\cdot$ depth-gate suppressed 18\% \\
+on & mask contact below threshold 80\% $\cdot$ depth-gate suppressed 18\% $\cdot$ occlusion or centroid error 2\% \\
 under & contact below threshold 70\% $\cdot$ depth-gate suppressed 18\% $\cdot$ no contact measured (occlusion) 12\% \\
 near & 2 remaining misses (contact boundary) \\
 to the left/right of & centre flip 71--89\% $\cdot$ abstained 11--29\% (52 cases total) \\
@@ -1045,6 +1045,26 @@ Section 6.3.1 states the finding; the arithmetic behind it is here, because it b
 \textbf{Where the difference between the arms actually sits.} Section 6.3.1 reports the ordering; the per-annotator detail is this. The human arm leads on the two annotators \S{}4.5 convicts of inverting the convention, by 0.022 on group 6 and 0.027 on group 8, and \textit{trails} on group 7, the one annotator this dissertation convicts of nothing, by 0.011. None of the three differences is separable across seeds, so the ordering is offered as a consistent direction and not as three measured effects; what makes it worth reporting is the sign change on the clean annotator, since whatever advantage the human labels carry does not survive contact with an annotator who followed the stated convention.
 
 Group 6 also shows the fingerprint \S{}6.4 attributes to annotator \textit{selection} rather than convention. Its \textit{lateral} gold --- geometrically unambiguous relations that both models predict freely --- is recalled at 0.49/0.69 by the human arm against 0.12/0.21 by the auto arm. Laterals have no convention to invert, so what differs there is which pairs the annotator chose to record, and the human-trained model ranks exactly those highly because it learned human selection habits rather than more geometry.
+
+\needspace{8.2\baselineskip}
+\begin{center}
+\setlength{\tabcolsep}{6pt}
+\small
+\begin{longtable}{lrr}
+\caption[Group 6 per-predicate recall, human-trained arm]{Group 6 per-predicate recall, human-trained arm against auto-trained arm, on the lateral gold that carries no convention to invert.}\\
+\hline
+Predicate & Human-trained recall & Auto-trained recall \\
+\hline
+\endfirsthead
+\hline
+Predicate & Human-trained recall & Auto-trained recall \\
+\hline
+\endhead
+to the left of & 0.49 & 0.12 \\
+to the right of & 0.69 & 0.21 \\
+\hline
+\end{longtable}
+\end{center}
 
 \textbf{Two labelling rules support the ordering, not one.} The figures in \S{}6.3.1 are the shipped \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} of 0.85 (\S{}4.14); the same experiment at the earlier 0.60 gave 0.278, 0.286, 0.307 and 0.109 across the same four slices. Raising the threshold improved three slices and cost the fourth, and the ordering by annotator defect held under both. A pattern that survives changing the labelling rule is a property of the test annotation rather than of one configuration of the tool.
 

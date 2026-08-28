@@ -990,7 +990,7 @@ geometry and mask-contact maps, attributing every miss to a cause.
 |---|---|
 | in front of | abstained in ambiguity band 54% · convention-inverted annotators 45% · **genuine depth error 1%** |
 | behind | convention-inverted 51% · abstained 43% · **genuine depth error 6%** |
-| on | mask contact below threshold 80% · depth-gate suppressed 18% |
+| on | mask contact below threshold 80% · depth-gate suppressed 18% · occlusion or centroid error 2% |
 | under | contact below threshold 70% · depth-gate suppressed 18% · no contact measured (occlusion) 12% |
 | near | 2 remaining misses (contact boundary) |
 | to the left/right of | centre flip 71–89% · abstained 11–29% (52 cases total) |
@@ -1979,6 +1979,11 @@ human arm against 0.12/0.21 by the auto arm. Laterals have no convention to
 invert, so what differs there is which pairs the annotator chose to record,
 and the human-trained model ranks exactly those highly because it learned
 human selection habits rather than more geometry.
+
+| Predicate | Human-trained recall | Auto-trained recall |
+|---|---|---|
+| to the left of | 0.49 | 0.12 |
+| to the right of | 0.69 | 0.21 |
 
 **Two labelling rules support the ordering, not one.** The figures in §6.3.1
 are the shipped `on_contact_min` of 0.85 (§4.14); the same experiment at the

@@ -348,6 +348,10 @@ TABLES = {
         # F.8
         "Per-predicate recall on the held-out annotator groups with 95% "
         "cluster-bootstrap intervals over images.",
+        # F.9
+        "Group 6 per-predicate recall, human-trained arm against "
+        "auto-trained arm, on the lateral gold that carries no convention "
+        "to invert.",
         # F.10 (moved from §4.5)
         "Front/behind by annotator group: emission rate, agreement where the "
         "tool commits, and the effect of aligning the direction convention.",

@@ -15,7 +15,7 @@ precision by disinterested judges (E.3, reported in §4.15).
 
 Four counts recur below. The released subset holds **884** frames; **838**
 carry a non-empty annotation; the pipeline runs on **836**, two annotation
-files having no matching image (§4.3); and **802** of those yield at least
+files having no matching image (§4.2); and **802** of those yield at least
 one ordered pair, the remaining 34 holding a single object. Two properties
 of the gold shape the protocol: it is **sparse** — 8,790 of 84,880 ordered
 pairs (~10%) carry a human label, so a label absent from the gold is
@@ -312,8 +312,11 @@ once.
 relations it did *not* emit and no annotator labelled, mixed in unmarked.
 The decoys are the instrument: an auditor who simply agreed with every item
 scored 100% on the earlier sheets and scores zero here. The same 242 images
-went to `gemini-3.6-flash` as a second judge independent of the author,
-which rejected 24 of 28 decoys against the author's 19 of 28 — the stricter
+went to `gemini-3.6-flash` — the concrete snapshot the `gemini-flash-latest`
+alias resolved to for this call, captured per item rather than assumed
+because that alias moved during the project (Appendix B) — as a second
+judge independent of the author, which rejected 24 of 28 decoys against the
+author's 19 of 28 — the stricter
 of the two — the pair reaching Cohen's κ 0.601 over all items and 0.425 over
 the claims alone: moderate agreement, not an echo. Appendix E.7 carries the
 sampling, the class guard, the key handling, the pack's per-predicate table,
@@ -405,9 +408,11 @@ person who built the tool, blinded and working against decoys, and strangers
 with no stake in the outcome — the objection §2.9 raises and §7.4 concedes,
 answered by measurement, with the model apart at 0.638. **Against the human
 baseline, five predicates hold and support does not**, 0.864 against 0.926
-and 0.413 against 0.975. On the **147** claims carrying both verdicts the
-two agree **0.871** of the time (Cohen's κ **0.683**), and crowd-internal
-reliability is Krippendorff's α **0.703**. Appendix E.3 carries the rest:
+and 0.413 against 0.975. Across all seven predicates in the broader E.3
+pool — not the support-only counts above — **147** claims carry both a
+volunteer and an author verdict; on those the two agree **0.871** of the
+time (Cohen's κ **0.683**), and crowd-internal reliability is
+Krippendorff's α **0.703**. Appendix E.3 carries the rest:
 the control arm's 0.940 against the tool's 0.726, why the denominators
 differ, the Spearman 0.96 ranking agreement, and the asymmetry that bounds
 the comparison. The arm settles that the author's audit did not run in the
