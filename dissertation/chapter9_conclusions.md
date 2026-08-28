@@ -120,7 +120,13 @@ those experiments.
 carries the chain one link further, from labels to the plan a robot would
 act on, but on 25 occluder-selected scenes and under a scorer that cannot
 see a false positive it is supporting evidence rather than a closed link.
-What is missing outright is execution: no robot moved.
+What is missing outright is execution: no robot moved. The dataset ships no
+object meshes, so closing this needs a physics simulator (PyBullet or Isaac
+Sim) with primitive-shape proxies substituted for the detected boxes, then
+replaying the same 25 scenes' plans and scoring collision-free execution
+rather than a text ordering — which would also make the redundant-step cost
+of a hallucinated support relation visible instead of merely inferred from
+its precision.
 
 **The shipped support rule is not independently verdicted.** The volunteer
 study agrees with the author's blind audit on support to 0.009 and shows the

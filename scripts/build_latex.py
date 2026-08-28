@@ -255,7 +255,9 @@ TABLES = {
         "Per-predicate recall of the human triplets, pooled and on held-out "
         "annotators, against three baselines. *the majority baseline emits "
         "“in front of” everywhere, trivially recalling that class "
-        "and nothing else; †near rounds 715/717 = 0.997 (§4.9).",
+        "and nothing else; †near rounds 715/717 = 0.997 (§4.9), on a "
+        "predicate whose precision on annotated pairs is 0.11, not "
+        "comparably high (§4.3).",
         # 4.14: the re-audit after the threshold was re-fitted
         "Per-predicate precision of the shipped tool: the re-fitted "
         "threshold audited on a fresh draw, beside the superseded v3 column, "
