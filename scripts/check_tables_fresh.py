@@ -106,6 +106,91 @@ def check_recall_reconciles() -> int:
     return bad
 
 
+BENCH = ROOT / "outputs" / "sgg_benchmark" / "reeval_all_arms_085.json"
+BENCH_SEEDS = (42, 43, 44)
+BENCH_ARMS = {"human-trained": "human", "auto-trained": "auto",
+              "vision-language": "vlm"}
+BENCH_SLICES = {"full test": "full", "group 6": "group_6",
+                "group 7": "group_7", "group 8": "group_8",
+                "aligned": "full_aligned"}
+
+
+def check_benchmark() -> int:
+    """Chapter 6's two tables against the run they are drawn from.
+
+    Neither had a generated counterpart, so the cell check above skipped both
+    and the chapter's central evidence was verified by nothing. That is the
+    gap the whole script exists to close, and it matters more here than
+    elsewhere: outputs/tables/seed_replication.md holds the *superseded*
+    on_contact_min 0.60 figures (Appendix F.9 quotes them deliberately), so
+    the artefact nearest to hand contradicts the chapter by design. These
+    numbers come from the shipped 0.85 re-evaluation instead.
+    """
+    ch6 = DISS / "chapter6_benchmark.md"
+    if not (BENCH.exists() and ch6.exists()):
+        return 0
+    run = json.loads(BENCH.read_text(encoding="utf-8"))
+
+    def vals(arm, sl, met):
+        out = []
+        for s in BENCH_SEEDS:
+            row = run.get(f"react_{arm}_s{s}|{sl}")
+            if row and met in row:
+                out.append(row[met])
+        return out
+
+    def num(cell):
+        m = re.match(r"^([0-9]*\.?[0-9]+)", norm(cell))
+        return float(m.group(1)) if m else None
+
+    bad = seen = 0
+    for rows in tables(ch6.read_text(encoding="utf-8")):
+        head = [norm(c) for c in rows[0]]
+        # Table 6.1: one seed, one slice, metrics down the rows.
+        if head[:1] == ["metric (test, sgdet)"]:
+            cols = [BENCH_ARMS.get(h) for h in head[1:]]
+            for r in rows[1:]:
+                met = norm(r[0]).split(",")[0]
+                for i, arm in enumerate(cols, start=1):
+                    if not arm or i >= len(r):
+                        continue
+                    got, want = num(r[i]), vals(arm, "full", met)
+                    if got is None or len(want) != 3:
+                        continue
+                    seen += 1
+                    if abs(got - want[0]) > 0.0006:   # seed 42 is want[0]
+                        bad += 1
+                        print(f"  MISMATCH 6.1 {met} {arm}: text {got}, "
+                              f"run {want[0]:.4f}")
+        # 6.3.1: slice x metric down the rows, "mean (min-max)" per arm.
+        elif head[:2] == ["slice", "metric"]:
+            cols = [BENCH_ARMS.get(h) for h in head]
+            for r in rows[1:]:
+                sl = BENCH_SLICES.get(norm(r[0]))
+                met = norm(r[1])
+                if not sl:
+                    continue
+                for i, arm in enumerate(cols):
+                    if not arm or i >= len(r):
+                        continue
+                    cell = norm(r[i]).replace("–", "-")
+                    m = re.match(r"([0-9.]+)\s*\(([0-9.]+)-([0-9.]+)\)", cell)
+                    v = vals(arm, sl, met)
+                    if not m or len(v) != 3:
+                        continue
+                    seen += 1
+                    want = (sum(v) / 3, min(v), max(v))
+                    got = tuple(float(x) for x in m.groups())
+                    if any(abs(g - w) > 0.0006 for g, w in zip(got, want)):
+                        bad += 1
+                        print(f"  MISMATCH 6.3.1 {sl} {met} {arm}: "
+                              f"text {got}, run "
+                              f"({want[0]:.4f}, {want[1]:.4f}, {want[2]:.4f})")
+    print(f"  {seen} benchmark cell(s) checked against "
+          f"{BENCH.name}, {bad} disagree")
+    return bad
+
+
 def check_ages() -> int:
     """Report generated tables older than the results they are built from."""
     stale = 0
@@ -159,6 +244,7 @@ def main() -> int:
 
     aged = check_ages()
     aged += check_recall_reconciles()
+    aged += check_benchmark()
     print(f"\n  {checked} table(s) checked against outputs/tables/, "
           f"{drift} cell(s) drifted")
     if unchecked:

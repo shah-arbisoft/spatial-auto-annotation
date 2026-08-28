@@ -208,7 +208,12 @@ centroid distances are not comparable across scenes: in a metric bake-off, every
 size-relative gap metric transfers with recall 1.0 (see DATASET_NOTES).
 
 **Fitting protocol (annotator-aware).** Only 3 of the 9 annotator groups ever
-used `near` (group_0: 244, group_4: 129, group_8: 93 labels; the rest 0–3).
+used `near` (group_0: 244, group_4: 129, group_8: 93 *unordered pairs*, 469
+with group_2's 3; the rest 0–3). The fit works on pairs, so those are the
+counts that matter here. Section 3.2 of the dissertation quotes the same
+annotation as 461 / 160 / 93 plus 3, summing to 717, because it counts
+*ordered triplets*, which is the unit the recall figures use: most `near`
+pairs carry both directions, group_8's carry one each.
 `near_T` is therefore fitted on the near-using groups inside the training split
 (groups 0 and 4), on human-annotated non-contact pairs, and evaluated on the
 held-out near-using annotator (group_8). Fitted **T = 1.372**; held-out

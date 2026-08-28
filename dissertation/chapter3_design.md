@@ -278,11 +278,10 @@ battery run as a sweep. The test suite is 66 tests running in about a
 second, deliberately, since a suite slow enough to skip constrains nothing;
 it encodes the predicate specification's worked examples as unit tests and
 fuzzes two thousand synthetic scenes against the structural guarantees §3.6
-promises. And the environment is pinned, with the one genuinely awkward step
-documented rather than left to be rediscovered: installing SAM2 can silently
-replace the CUDA build of torch with a CPU wheel, so the pipeline still runs
-and takes an order of magnitude longer, which is the worst class of failure
-because nothing reports it. The repository is public.
+promises. And the environment is pinned, with the one step that can fail
+silently — a SAM2 install replacing the CUDA build of torch, which costs an
+order of magnitude in speed and reports nothing — documented in Appendix B
+rather than left to be rediscovered. The repository is public.
 
 ## 3.12 Summary of design decisions
 

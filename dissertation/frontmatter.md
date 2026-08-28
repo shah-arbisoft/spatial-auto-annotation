@@ -1,10 +1,11 @@
 # Front matter
 
-> Assembled per the COMM070 template: title page, abstract (own page,
-> ≤500 words: `abstract.md`), highlights, acknowledgements + declaration +
-> word count, table of contents, list of tables, list of figures. The lists
-> and page numbers are generated at assembly time (LaTeX class
-> `surreydissertation.cls`).
+> Assembled per the COMM070 template: title page, abstract (own page:
+> `abstract.md`), highlights (`highlights.md`, 4-6 bullets of at most 100
+> characters), acknowledgements + declaration + word count, table of
+> contents, list of tables, list of figures. The lists and page numbers are
+> generated at assembly time by `scripts/build_latex.py`, which sets the
+> document from the `report` class rather than a bespoke one.
 
 ## Title page (fields)
 
@@ -27,9 +28,8 @@ supplying the full robot capture from which the released images were cut,
 which made the scale and viewpoint-stability measurements possible.
 
 I thank the volunteers who gave their time to judge sampled predictions in
-the validation study. Turnout was small and their verdicts support a pilot
-rather than the estimate the study was built for, but §4.15 reports what
-they returned and Appendix E.3 records the instrument.
+the validation study, without which the precision estimates would have
+rested on my own verdicts alone.
 
 Finally, I thank my family and friends for their patience and support over
 the course of this work.
@@ -59,6 +59,8 @@ Signature: ................................  Date: ....................
 
 TOTAL NUMBER OF WORDS: computed at assembly by `scripts/build_latex.py` and
 written into the declaration page, so it cannot drift as chapters are
-edited. The count covers the abstract and the nine chapters, excluding the
-editorial notes at the top of each chapter, the front matter, the references
-and the appendices.
+edited. The template defines the figure as "the sum of the words in all the
+chapters only", excluding the title page, abstract, acknowledgements, table
+of contents, references and appendices, so the count covers the nine
+chapters and nothing else; the editorial notes at the top of a chapter go
+with the exclusions.

@@ -115,10 +115,9 @@ fuzzes two thousand synthetic scenes against the structural guarantees §3.6
 promises; and the rest cover the format writers, the detector adapters of
 §3.9, frame selection and the reply parsers.
 
-**The format writers, verified.** Byte-compatibility is a requirement of the
-research design rather than a convenience: RQ2 compares two label sources by
-training the same model on each, so labels arriving in a different container
-would confound the labels with the loader. The writers reproduce the
+**The format writers, verified.** Section 3.7 gives the reason
+byte-compatibility is a requirement of the research design; these are the
+fields it comes down to. The writers reproduce the
 SGDET-Annotate structure exactly — centre-form `boxes_1024`/`boxes_512` in
 the resized frames, index-aligned `labels` and `attribute` arrays,
 `relationships` as subject–object index pairs with a parallel `predicates`

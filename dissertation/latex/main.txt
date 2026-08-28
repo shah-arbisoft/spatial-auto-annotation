@@ -107,7 +107,7 @@ assessed work that has been shown to have been plagiarised will be penalised.
 
 Signature:                          Date:
 
-Total Number of Words: 28,735
+Total Number of Words: 28,725
 
                                iii         6949963
 Contents
@@ -1568,10 +1568,9 @@ the audit-driven rule repairs of Chapter 4 affordable and let the ablation batte
 The test suite is 66 tests running in about a second, deliberately, since a suite slow enough to
 skip constrains nothing; it encodes the predicate specification's worked examples as unit tests
 and fuzzes two thousand synthetic scenes against the structural guarantees §3.6 promises. And
-the environment is pinned, with the one genuinely awkward step documented rather than left
-to be rediscovered: installing SAM2 can silently replace the CUDA build of torch with a CPU
-wheel, so the pipeline still runs and takes an order of magnitude longer, which is the worst class
-of failure because nothing reports it. The repository is public.
+the environment is pinned, with the one step that can fail silently -- a SAM2 install replacing
+the CUDA build of torch, which costs an order of magnitude in speed and reports nothing --
+documented in Appendix B rather than left to be rediscovered. The repository is public.
 
 3.12 Summary of design decisions
 
@@ -3650,15 +3649,14 @@ selection and the reply parsers.
 62               6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
-    The format writers, verified. Byte-compatibility is a requirement of the research design
-rather than a convenience: RQ2 compares two label sources by training the same model on
-each, so labels arriving in a different container would confound the labels with the loader. The
-writers reproduce the SGDET-Annotate structure exactly -- centre-form boxes_1024/boxes_
-512 in the resized frames, index-aligned labels and attribute arrays, relationships as
-subject­object index pairs with a parallel predicates ID array, and the same six-dataset h5
-layout with int64 attributes. A loadwrite round trip reproduces boxes_1024 and labels
-with zero error, and the h5 matches a real export key-for-key and dtype-for-dtype (measured),
-both checks sitting in the suite so a later change to a writer cannot pass unnoticed.
+    The format writers, verified. Section 3.7 gives the reason byte-compatibility is a require-
+ment of the research design; these are the fields it comes down to. The writers reproduce
+the SGDET-Annotate structure exactly -- centre-form boxes_1024/boxes_512 in the resized
+frames, index-aligned labels and attribute arrays, relationships as subject­object in-
+dex pairs with a parallel predicates ID array, and the same six-dataset h5 layout with int64
+attributes. A loadwrite round trip reproduces boxes_1024 and labels with zero error, and
+the h5 matches a real export key-for-key and dtype-for-dtype (measured), both checks sitting
+in the suite so a later change to a writer cannot pass unnoticed.
 
     The detector contract. The rule layer (src/predicates.py) imports nothing but numpy
 and never receives an image, and the entry point takes boxes as an argument, so no detector is
@@ -3707,10 +3705,11 @@ the four-arm table of §5.2 from outputs/rq2_report_vlm.json; the planner scores 
 outputs/planner_scores.json, with conditions D and E in outputs/planner_scores_
 abcde.json.
 
+    Chapter 6. Numbers generated on Kaggle (T4 GPU) with SGG-Benchmark; train-
+
 63  6949963
                                                    A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
-    Chapter 6. Numbers generated on Kaggle (T4 GPU) with SGG-Benchmark; train-
 ing logs and the exact per-epoch series in outputs/sgg_benchmark/; conversion by
 scripts/export_sgg_benchmark.py; run recipe in scripts/kaggle/.
 
@@ -3767,11 +3766,11 @@ integrity scan that catches the half-written image a full disk produces.
 Dockerfile header are reachable rather than aspirational.
 
     The end-to-end check is the one that matters for reproducibility. Mounting the dataset and
+the geometry cache read-only into the container and running scripts/reannotate_from_
 
 64  6949963
 A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
-the geometry cache read-only into the container and running scripts/reannotate_from_
 cache.py re-annotated all 836 images and produced a pairs.csv byte-identical to the one in
 this repository, 84,881 rows sharing its SHA-256, together with the same 2,508 annotation files.
 The container therefore does not merely install; it reproduces the annotations this dissertation
@@ -3817,7 +3816,7 @@ python eval/keyframe_propagation.py   §4.12 frame selection, stability and propa
 ­sweep 5,10,20,30,45,60               cost, keyframe_propagation.json                   ~5 min
 python eval/ablations.py              ablations A1­A7, tables/ablations.md              ~25 min
 python eval/depth_ablation.py         ablation A8; needs the outputs_base pass
-                                      below
+                                      below                                             <1 min
 python eval/support_guard_            ablation A10, whether contact height can replace
 ablation.py                           the class guard, support_guard_
                                       ablation.json
@@ -3826,30 +3825,27 @@ python eval/parallax_ablation.py      ablation A9; needs the raw capture (D.6),
 python eval/parallax_ablation.py      D.6's focal-length sensitivity check, parallax_
 ­method triangulate ­gap 20           focal_sweep.json
 ­focal-sweep 0.5,0.7,0.9,1.2,1.6,2.0
+python eval/video_stability.py ­dir   the E.4 persistence and Jaccard figures, video_
+outputs/video_085                     stability.json; the ­dir is required, since
+                                      the default points at the pre-refit pass
 
                                       65                                                6949963
 A Fully-Automatic Spatial-Relationship Annotation Pipeline
 
 command                               produces                                      time
-python eval/video_stability.py ­dir
-outputs/video_085                     the E.4 persistence and Jaccard figures, video_ <1 min
+python eval/extension_scale.py
+python eval/seed_stats.py             E.6 throughput, density and predicate distribution <1 min
 
-python eval/extension_scale.py        stability.json; the ­dir is required, since
-python eval/seed_stats.py
-                                      the default points at the pre-refit pass
-python eval/downstream.py ­seeds
-42,43,44                              E.6 throughput, density and predicate distribution <1 min
-python eval/score_vlm_pilot.py, then
-python eval/compare_vlm_models.py     the benchmark arms aggregated across seeds, <1 min
-python eval/crowd_validation.py
-                                      tables/seed_replication.md
-python eval/score_planner.py
-python eval/planner_paired_tests.py   RQ2, all arms, rq2_report.json,               ~20 min
+python eval/downstream.py ­seeds      the benchmark arms aggregated across seeds, <1 min
+42,43,44
+python eval/score_vlm_pilot.py, then  tables/seed_replication.md
+python eval/compare_vlm_models.py
+python eval/crowd_validation.py       RQ2, all arms, rq2_report.json,               ~20 min
 
-python scripts/make_figures.py        tables/rq2.md
-
+python eval/score_planner.py          tables/rq2.md
+python eval/planner_paired_tests.py
                                       the §4.13 comparison and tables/vlm_          <1 min
-
+python scripts/make_figures.py
                                       models.md, from the stored replies
 
                                       the §4.15 volunteer comparison, crowd_        <1 min
