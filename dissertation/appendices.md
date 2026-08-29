@@ -3,11 +3,10 @@
 ## Appendix A: Ethical Approval
 
 The full ethics record is submitted as a **separate document, `ethics.pdf`**,
-with the two signed forms attached to it: the University ethics
-self-assessment, completed and submitted on 19 July 2026, and the Secondary
-Data Checklist, countersigned by the supervisor before any analysis began.
-This appendix records what that document establishes, so the dissertation can
-be read without it.
+with the two forms attached to it: the University ethics self-assessment and
+the Secondary Data Checklist, the latter requiring the supervisor's
+signature. This appendix records what that document establishes, so the
+dissertation can be read without it.
 
 The work is a secondary analysis of an existing, published dataset (Wang et
 al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new

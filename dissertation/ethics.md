@@ -1,8 +1,10 @@
 # Ethics Record
 
-> Submitted alongside the dissertation as a separate document. Appendix A of
-> the dissertation summarises this record and points here; this is the full
-> version, with the two signed forms attached at the end.
+> To be submitted alongside the dissertation as a separate document, once the
+> ethics self-assessment is submitted and the Secondary Data Checklist is
+> signed by the supervisor. Appendix A of the dissertation summarises this
+> record and points here; this is the full version, with the two forms
+> attached at the end.
 
 ## A.1 Basis of the work
 
@@ -38,17 +40,17 @@ takes about three minutes, and can be abandoned at any point; an information
 panel on the first screen states the purpose, the data collected, and a
 contact address. Faces in all quiz images are pixelated before publication,
 and items where anonymisation would obscure the object under judgement were
-removed rather than shown. The collection is covered by the University's
-ethics self-assessment process, completed and submitted on 19 July 2026.
+removed rather than shown.
+
 Because the only identifier is one the browser generates for itself, no
 directly identifying data is collected, no vulnerable groups are involved
 and there is no foreseeable risk beyond that of everyday life, the study
-falls within the self-assessment route rather than requiring full committee
-review.
+falls within the University's self-assessment route rather than requiring
+full committee review.
 
 Because the released dataset is secondary data, the module's Secondary
-Data Checklist applies in addition, completed and countersigned by the
-supervisor before any analysis began.
+Data Checklist applies in addition, and requires the supervisor's signature
+before it is submitted.
 
 **Demonstration footage.** The two video clips of E.4 are royalty-free
 stock footage from Pexels, used under the Pexels licence (free use, no
@@ -59,8 +61,7 @@ https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-usi
 
 ## A.2 Documents attached
 
-1. **Ethics self-assessment**, completed and submitted 19 July 2026.
-2. **Secondary Data Checklist**, completed and countersigned by the
-   supervisor before any analysis began.
+1. **Ethics self-assessment**.
+2. **Secondary Data Checklist**, signed by the supervisor.
 
 Both are reproduced in full on the pages that follow.
