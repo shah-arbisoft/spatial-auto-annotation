@@ -1,8 +1,8 @@
 # Highlights
 
 - First fully-automatic annotator for this dataset's seven spatial predicates
-- Recovers 85% of human triplets, and 74% on annotators no threshold ever saw
+- 0.85 mean per-predicate recall, 0.74 held-out; 81% of all human triplets recovered
 - Blind decoy-controlled audit: 0.79-1.00 precision on five of seven predicates
 - Its labels train a classifier to 0.75 mean recall, against 0.30 for human labels
 - Benchmark parity at mR@100 0.292 vs 0.293, with five times the zero-shot coverage
-- A planner clears the occluder in 0 of 25 scenes without relations, 25 of 25 with
+- Planner clears the occluder in 0 of 25 scenes with no relations, 19 of 25 with ours
