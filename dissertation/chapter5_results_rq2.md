@@ -173,11 +173,10 @@ occluder first. Each goes to an LLM planner in prompts differing only in
 what they state: **A** lists the objects alone, **B** adds the human
 relationships, **C** the automatically computed ones. One filter runs over
 both relation conditions, so neither is offered a relation the other was
-denied (density is not equalised, since matching a sparser source would mean
-discarding true relations), and a plan is safe if it moves the occluder
-before grasping the target, judged by published rules
-(`eval/score_planner.py`), blind by construction; Appendix E.5 gives the
-filter, the prompts, the scene-level forensics and a scoring defect
+denied, and a plan is safe if it moves the occluder before grasping the
+target, judged by published rules (`eval/score_planner.py`), blind by
+construction. Appendix E.5 gives the filter and why it does not equalise
+density, the prompts, the scene-level forensics and a scoring defect
 hand-reading caught. The experiment ran twice, on `gemini-flash-latest` and
 the reasoning model `gemini-3.1-pro-preview`, with two conditions on the
 larger planner only: **D**, the vision-language model's relations from
@@ -206,16 +205,15 @@ on which automatic labels *match* human annotation on a robot-relevant task,
 with no human in the labelling loop. Throughout, `grasps_target` and
 `no_invented` remain 1.00, so no plan failed for any other reason.
 
-Twenty-five scenes is small, and the pairing is what makes it enough: exact
-McNemar tests over the discordant scenes (`eval/planner_paired_tests.py`,
-reported in full with the scene-level forensics in E.5) settle the
-comparisons the argument rests on: relations against none at p < 10^-5, and
-the union's 6-to-0 gain over the tool alone at p = 0.031, as is the human
-arm's lead over the tool, the comparison that runs against this project.
-They also name what 25 scenes cannot settle, the tool against the vision-language
-source being 6 discordant to 5 at p = 1.00, so that two-scene margin is not
-read here. The tests are sharp exactly where the absolute rates are not, C's
-own rate being 19 of 25 with a 95% interval of [0.55, 0.91].
+Twenty-five scenes is small, and the pairing is what makes it enough. Exact
+McNemar tests over the discordant scenes (`eval/planner_paired_tests.py`, in
+full in E.5) settle relations against none at p < 10^-5, the union's 6-to-0
+gain over the tool alone at p = 0.031, and the human arm's lead over the
+tool, the comparison that runs against this project. They also name what 25
+scenes cannot settle: the tool against the vision-language source is 6
+discordant to 5 at p = 1.00, so that two-scene margin is not read here. The
+tests are sharp exactly where the absolute rates are not, C's own rate being
+19 of 25 with a 95% interval of [0.55, 0.91].
 
 Appendix E.5 carries five limits with the design; two belong here because
 they bound what the result can mean. The scenes were selected to contain an

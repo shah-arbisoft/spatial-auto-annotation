@@ -153,15 +153,11 @@ level. Neither the labels nor the gold differ between the experiments, and
 the evidence below points to the **structure of the metric** and the sparse
 test gold accounting for most of that gap. That is not the only factor a
 change of framework could carry, since the architecture changes with it too,
-but it is the one the mechanisms below can be checked against. (An earlier
-version of this chapter had a stronger claim to explain, the human arm being
-ahead at 0.326 against 0.278, but those arms came
-from runs made weeks apart against different states of the upstream
-framework, and retraining all nine in one session removed the gap almost
-entirely, the human arm falling 0.033 while the vision-language arm moved
-0.001 (§7.4). The mechanisms below explained a reversal; they now explain
-the erasure of a 2.5× advantage, which the evidence supports more
-comfortably.)
+but it is the one the mechanisms below can be checked against. (An earlier version had a stronger
+claim to explain, the human arm ahead at 0.326 against 0.278; §7.4 reports
+why those arms were not comparable and what retraining all nine in one
+session cost. The mechanisms below explained a reversal and now explain the
+erasure of a 2.5× advantage.)
 
 **(i) Ranking dilution, and (ii) a convention penalty both arms pay.** R@K
 is a per-image ranking budget, so the auto arm's dense but largely *true*
@@ -193,12 +189,11 @@ underestimated not the labels but the gold.
 
 The zero-shot column does not measure what its name implies here. zR@100 is
 recall on triplet types absent from a model's *own* training data, but both
-arms are scored against one shared reference, the human training annotation.
-Of the 25 test triplet types that annotation omits, the human arm saw none
-in training and the auto arm saw 24, so its 0.268 against 0.052 records that
-its labels *cover* relation types the manual pass never recorded, which is
-the property the annotation bottleneck predicts, not compositional
-generalisation, and this dissertation does not claim it as such; §6.5 weighs
+arms are scored against one shared reference, so its 0.268 against 0.052
+records that the automatic labels *cover* relation types the manual pass
+never recorded, which is the property the annotation bottleneck predicts and
+not compositional generalisation; this dissertation does not claim it as
+such. Appendix F.9 gives the type counts that establish it, and §6.5 weighs
 what the column does establish.
 
 ## 6.5 What survives, read both ways

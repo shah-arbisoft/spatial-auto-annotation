@@ -449,6 +449,24 @@ data, a rule set only by being extended by hand, so whatever this project
 demonstrates about seven spatial predicates transfers to functional
 relations not at all.
 
+The boundary is worth locating precisely, because a literature exists on the
+far side of it. *Holding* is a **human-object interaction**, and detecting
+those is a task in its own right with its own benchmarks: Chao et al. (2018)
+frame it as predicting an interaction label over a human-object pair, learned
+from examples rather than decided from geometry. Underneath sits the older
+notion of an **affordance**, what an object offers an agent, which Gibson
+introduced and which Jamone et al. (2018) survey across psychology,
+neuroscience and robotics; the recurring finding there is that what an object
+affords depends on the agent and its intent, so it is not recoverable from
+the object's shape and position alone. That is the same wall this project
+meets from the other side. Section 3.6 cannot separate a person *holding* an
+object from a surface *supporting* one on geometry, and ablation A10 (D.8)
+measures the failure rather than assuming it, so the pipeline excludes the
+`human` class from support by configuration. The literature says such a case
+is decided by learned interaction evidence, not by a better geometric test,
+which is why the exclusion is a boundary of the method and not a defect in
+its implementation.
+
 **Systematic error is worse for training than random error.** Consistency
 guarantees only that mistakes recur, and a rule's mistakes correlate with
 scene geometry rather than scattering at random. Tang et al. (2020)

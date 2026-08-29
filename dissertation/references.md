@@ -37,6 +37,10 @@ Chen, B., Xu, Z., Kirmani, S., Ichter, B., Sadigh, D., Guibas, L. and Xia, F.
 capabilities', *Proceedings of the IEEE/CVF Conference on Computer Vision and
 Pattern Recognition (CVPR)*, pp. 14455-14465.
 
+Chao, Y.-W., Liu, Y., Liu, X., Zeng, H. and Deng, J. (2018) 'Learning to
+detect human-object interactions', *Proceedings of the IEEE Winter Conference
+on Applications of Computer Vision (WACV)*, pp. 381-389.
+
 Cheng, A.-C. et al. (2024) 'SpatialRGPT: grounded spatial reasoning in
 vision-language models', *Advances in Neural Information Processing Systems
 (NeurIPS)*. Available at: https://arxiv.org/abs/2406.01584
@@ -62,6 +66,9 @@ reasoning', in Frank, A.U., Campari, I. and Formentini, U. (eds) *Theories
 and Methods of Spatio-Temporal Reasoning in Geographic Space*. Berlin:
 Springer, pp. 162-178.
 
+Gibson, J.J. (1979) *The Ecological Approach to Visual Perception*. Boston:
+Houghton Mifflin.
+
 Goyal, A., Yang, K., Yang, D. and Deng, J. (2020) 'Rel3D: a minimally
 contrastive benchmark for grounding spatial relations in 3D', *Advances
 in Neural Information Processing Systems (NeurIPS)*.
@@ -72,6 +79,11 @@ perception and planning', *Proceedings of the IEEE International Conference on R
 Hughes, N., Chang, Y. and Carlone, L. (2022) 'Hydra: a real-time spatial
 perception system for 3D scene graph construction and optimization',
 *Robotics: Science and Systems (RSS)*.
+
+Jamone, L., Ugur, E., Cangelosi, A., Fadiga, L., Bernardino, A., Piater, J.
+and Santos-Victor, J. (2018) 'Affordances in psychology, neuroscience, and
+robotics: a survey', *IEEE Transactions on Cognitive and Developmental
+Systems*, 10(1), pp. 4-25. doi: 10.1109/TCDS.2016.2594134
 
 Johnson, J., Hariharan, B., van der Maaten, L., Fei-Fei, L., Zitnick, C.L.
 and Girshick, R. (2017) 'CLEVR: a diagnostic dataset for compositional

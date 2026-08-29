@@ -327,9 +327,8 @@ and what the decoys measure about each judge.
 is diagnostic.** Section 4.3 measured precision on the pairs a human
 labelled, this audit on the pairs a human did not. For five predicates the
 first badly understates the second; for support it inverts sharply, 0.95 and
-0.93 on annotated pairs against 0.372 and 0.431 off them. E.7 reads what
-that says about the human record, and why the protocol pairs restricted
-precision with an audit rather than reporting either alone.
+0.93 on annotated pairs against 0.372 and 0.431 off them. Appendix E.7 reads
+what that says about the human record.
 
 The lateral, depth and proximity claims survive; support does not. At 0.404
 it is less than half what §4.9 reported and outside any interval this
@@ -343,14 +342,13 @@ by **0.375**, 1.000 against 0.625 on the same 24 images, under a predicate
 the tool emits on 43,388 ordered pairs against 717 in the human record.
 
 The cause is a threshold fitted where its error was invisible. The shipped
-`on_contact_min` 0.60 came from Appendix D.2's fit on train F1 against gold covering
-~10% of ordered pairs, so a false positive outside the gold cost the fit
-nothing. The repair was fitted on annotator groups 0–5, shipped at 0.85, and
-re-audited from scratch on a second pack drawn from the new emissions: 219
-items, **191 claims** and 28 decoys, same construction, same blinding, same
-two judges. E.7 gives the sequence and the held-out projection it declines
-to quote. Below, **v3** is the pre-refit pack at 0.60 and **v4** the fresh
-one at the shipped 0.85.
+`on_contact_min` 0.60 came from Appendix D.2's fit on train F1 against gold
+covering ~10% of ordered pairs, so a false positive outside the gold cost the
+fit nothing. The repair was fitted on annotator groups 0–5, shipped at 0.85,
+and re-audited from scratch on a second pack of **191 claims** drawn from the
+new emissions; Appendix E.7 gives that pack's construction, the sequence, and
+the held-out projection it declines to quote. Below, **v3** is the pre-refit
+pack at 0.60 and **v4** the fresh one at the shipped 0.85.
 
 | Predicate | v3 author | v4 author (shipped) | v4 model |
 |---|---|---|---|
@@ -369,12 +367,10 @@ for the non-support predicates is `near` at its floor and `to the right of`
 at its ceiling. The change is confirmed and the projection was optimistic:
 both judges record a large improvement on an independent draw, and both
 record it below the 0.667 the held-out fit predicted, held-out support
-recall falling from 0.92 to 0.843 in exchange. Fitting on one audit and
-validating on the next is as far as this design can go towards an unbiased
-estimate; the gap between the two numbers is the price of the extrapolation
-the earlier draft quoted. The auditor also improved between the packs, which
-E.7 reads in full; neither that nor the model's parallel movement rescues
-the support figure. At 0.535, the labels the tool adds beyond the human
+recall falling from 0.92 to 0.843 in exchange. Appendix E.7 reads what fitting on one
+audit and validating on the next can and cannot establish, and why neither
+the auditor's own improvement between the packs nor the model's parallel
+movement rescues the support figure. At 0.535, the labels the tool adds beyond the human
 record on this predicate are right about half the time.
 
 ## 4.15 A disinterested check, against a human baseline
@@ -406,20 +402,18 @@ tool's score readable rather than merely low.
 volunteers against the author's 0.404, a difference of 0.009 between the
 person who built the tool, blinded and working against decoys, and strangers
 with no stake in the outcome. They are two draws from the same pre-refit
-generation and not two verdicts on one sheet, 126 support claims against 94
-(E.3), so the agreement is corroboration between separate estimates and not
-a paired test; what a paired test would need is the overlapping subset, and
-that comparison is reported below across all seven predicates. That is the objection §2.9 raises and §7.4
-concedes, answered by measurement, with the model apart at 0.638. **Against the human
-baseline, five predicates hold and support does not**, 0.864 against 0.926
-and 0.413 against 0.975 (118/121). Across all seven predicates in the broader
-E.3 pool, which is a wider set than the support-only counts above, **147**
-claims carry both a volunteer and an author verdict; on those the two agree **0.871** of the
-time (Cohen's κ **0.683**), and crowd-internal reliability is
-Krippendorff's α **0.703**. Appendix E.3 carries the rest:
-the control arm's 0.940 against the tool's 0.726, why the denominators
-differ, the Spearman 0.96 ranking agreement, and the asymmetry that bounds
-the comparison. The arm settles that the author's audit did not run in the
+generation with different denominators, 126 support claims against 94, so
+this is corroboration between independent estimates and not a paired test
+(E.3). That is the objection §2.9 raises and §7.4 concedes, answered by
+measurement, with the model apart at 0.638. **Against the human baseline,
+five predicates hold and support does not**, 0.864 against 0.926 and 0.413
+against 0.975 (118/121). Across all seven predicates in the broader E.3 pool,
+**147** claims carry both a volunteer and an author verdict, and on those the
+two agree **0.871** of the time (Cohen's κ **0.683**), with crowd-internal
+reliability at Krippendorff's α **0.703**. Appendix E.3 carries the rest: the
+control arm's 0.940 against the tool's 0.726, why the denominators differ,
+the Spearman 0.96 ranking agreement, and the asymmetry that bounds the
+comparison. The arm settles that the author's audit did not run in the
 author's favour and that the raters are not uniformly harsh; it does not
 settle the shipped tool, whose support rule postdates the sample, and
 re-running it on post-refit labels is the one outstanding item that would

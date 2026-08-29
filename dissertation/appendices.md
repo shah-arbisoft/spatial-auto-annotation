@@ -1608,6 +1608,26 @@ suggests.
 nothing is audited that the tool would no longer emit. Without it the audit
 would measure a rule set the project does not distribute.
 
+**The v4 pack's construction.** The re-audit after the threshold refit is a
+second pack of 219 items, 191 claims and 28 decoys, drawn afresh from the new
+emissions under the same construction, the same blinding and the same two
+judges as v3. Nothing about the instrument changed between the packs, which
+is what makes the two columns of §4.14's table comparable: they are two
+independent draws on two label generations, not two readings of one draw.
+
+**Why the protocol pairs restricted precision with an audit.** Section 4.3
+measures precision on pairs a human labelled and §4.14 on pairs a human did
+not, and §4.14 records that the two point in opposite directions for support.
+Neither is reportable alone. Restricted precision is bounded below by
+construction, since the human typically recorded one or two relations where
+several hold at once, so a correct extra label is scored as an error. The
+audit has the opposite bias: it samples only what the tool asserts, so it
+cannot see a relation the tool missed. Reporting both, and reading the
+direction of their disagreement, is what separates a sparse-gold artefact
+from a real precision failure. For five predicates the first badly
+understates the second, which is the artefact; for support the two invert,
+which is not.
+
 **The pre-refit (v3) pack in full.** Section 4.14 quotes this pack's support
 rows and carries its author column beside the v4 re-audit; the complete
 per-predicate verdicts, with Wilson 95% intervals, are these:
@@ -1921,6 +1941,20 @@ least about the labels the tool adds beyond them.
 
 Section 6.3.1 states the finding; the arithmetic behind it is here, because
 it bounds every absolute figure in that chapter.
+
+**What the zero-shot column counts.** Section 6.4 states that zR@100 here
+measures label coverage and not compositional generalisation; these are the
+counts behind that. zR@K is defined as recall on triplet types absent from a
+model's *own* training data, but both arms are scored against one shared
+reference, the human training annotation, because that is the only way their
+numbers sit in one column. Of the 25 test triplet types that annotation
+omits, the human arm saw **none** in training and the auto arm saw **24**.
+The column therefore reports how far each label source covers combinations
+the reference omits, which is a real property and the one the annotation
+bottleneck predicts, but it is a statement about coverage rather than about
+generalisation. It would be a generalisation claim only for the arm whose
+labels defined the reference. `eval/zeroshot_reference_check.py` reproduces
+the counts.
 
 **How much of the yardstick is affected.** Of the 2,818 relations in the
 benchmark test gold, **1,189 (42%) are front/behind, and 859 of those (72%)
