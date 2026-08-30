@@ -74,9 +74,9 @@ is not just weaker but *unstable*, its outcome hostage to sampling noise.
 A recall-only table invites the objection that the automatic arm labels
 twenty times more densely, so of course it recovers more. Measured, the
 answer does not flatter the tool: **on every indicator except recall the
-automatic arm comes last**: macro precision 0.136 against the human arm's
-0.252, F1 0.194 against 0.267, average precision 0.164 against 0.230, micro
-F1 0.066 against 0.262. One number shows why that is not a verdict on label
+automatic arm comes last**: macro precision 0.157 against the human arm's
+0.252, F1 0.210 against 0.267, average precision 0.188 against 0.230, micro
+F1 0.064 against 0.262. One number shows why that is not a verdict on label
 quality. Average precision is threshold-free, so no arm improves it by
 committing to more pairs, yet the automatic arm scores **0.040 on `to the
 left of`**, the predicate §4.4 audited at fifteen of fifteen extra

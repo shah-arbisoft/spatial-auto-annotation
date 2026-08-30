@@ -15,9 +15,9 @@ use the dataset's native formats. All 836 images are annotated in five minutes
 on a consumer GPU, at 20 times the manual pass's density.
 
 The automatic labels recover 7,276 of the 8,926 human relationships, 81%
-weighting every triplet equally, and five of the seven predicates at 0.82 or
-better: 0.85 unweighted mean recall (the field's per-predicate convention) and
-0.74 held-out. The nine annotators labelled disjoint batches, so how
+weighting every triplet equally and 0.85 as the unweighted per-predicate mean
+the field reports; on the held-out annotators the mean is 0.74 and five of the
+seven predicates sit at 0.82 or better. The nine annotators labelled disjoint batches, so how
 well two would have agreed cannot be measured and no human ceiling is claimed.
 A blinded, decoy-controlled audit of 191 claims puts precision at 0.79–1.00 for
 the lateral, depth and proximity predicates, on 24 samples each, so with wide

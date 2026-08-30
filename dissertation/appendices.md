@@ -370,16 +370,15 @@ stereo would attack the front/behind bound directly, supplying disparity at
 every frame from a known baseline, which is what the multi-frame estimators
 of A9 lack: those must recover the camera's motion first, and on small
 low-texture objects they answer for only 9% of pairs and are 0.20 less
-accurate where they do (§4.9, Appendix D.6). A calibrated pair removes both problems,
-and it keeps the method's premise intact, since stereo is available at
+accurate where they do (§4.9, Appendix D.6). A calibrated pair removes both
+problems and keeps the method's premise intact, since stereo is available at
 capture time whereas depth recovered from a robot walking twenty frames is
-not available to a single-image annotator.
+not.
 
 **Ground truth for the unlabelled portion.** The pipeline was run over the
-1,766 frames nobody has annotated (E.6). Capacity and stability on
-unfamiliar input are therefore measured; correctness on that portion is not,
-and cannot be without labels. A few hundred labelled triplets from those
-frames, an afternoon of annotation, would close it.
+1,766 unannotated frames (E.6), so capacity and stability on unfamiliar
+input are measured; correctness there is not, and cannot be without labels
+a few hundred triplets would supply.
 
 ## Appendix C: Predicate specification
 
@@ -1824,10 +1823,10 @@ where marked.
 
 | arm | macro R | macro P | macro F1 | macro AP | micro F1 |
 |---|---|---|---|---|---|
-| human-trained | 0.297 | **0.252** | 0.267 | **0.230** | **0.262** |
-| pseudo-labelled | 0.365 | 0.243 | **0.289** | 0.215 | 0.273 |
+| human-trained | 0.297 | **0.252** | 0.267 | **0.230** | 0.262 |
+| pseudo-labelled | 0.365 | 0.243 | **0.289** | 0.215 | **0.273** |
 | vision-language | 0.380 | 0.197 | 0.253 | 0.219 | 0.221 |
-| auto-trained | **0.758** | 0.136 | 0.194 | 0.164 | 0.066 |
+| auto-trained | **0.748** | 0.157 | 0.210 | 0.188 | 0.064 |
 
 Two things follow from it, the second a concession. The result strengthens
 rather than weakens the reading Chapter 6 reaches independently, because it

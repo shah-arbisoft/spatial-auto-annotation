@@ -298,6 +298,55 @@ def check_group6_lateral() -> int:
     return bad
 
 
+def check_downstream_indicators() -> int:
+    """F.5's four macro indicators must match the stored RQ2 report.
+
+    The generated table carries micro R and micro P as well, so its header
+    does not match F.5's and the cell check skips it. That is how the
+    auto-trained row survived the threshold refit with five stale figures
+    while the other three arms were correct.
+    """
+    import statistics as _st
+    rep = ROOT / "outputs" / "rq2_report.json"
+    vlm = ROOT / "outputs" / "rq2_report_vlm.json"
+    app = DISS / "appendices.md"
+    if not (rep.exists() and app.exists()):
+        return 0
+    d = json.loads(rep.read_text(encoding="utf-8"))
+    if vlm.exists():
+        d.update(json.loads(vlm.read_text(encoding="utf-8")))
+    PRED = ["on", "under", "to the left of", "to the right of",
+            "in front of", "behind", "near"]
+    ARMS = {"human-trained": "human-trained", "pseudo-labelled": "pseudo-labelled",
+            "vision-language": "vlm-trained", "auto-trained": "auto-trained"}
+    METRIC = ["recall", "precision_sparse", "f1_sparse", "average_precision"]
+    txt = app.read_text(encoding="utf-8")
+    bad = seen = 0
+    for label, arm in ARMS.items():
+        if arm not in d:
+            continue
+        m = re.search(r"^\| " + re.escape(label) + r" \|(.+)$", txt, re.M)
+        if not m:
+            continue
+        cells = [c.strip().strip("*") for c in m.group(1).split("|")]
+        for i, met in enumerate(METRIC):
+            if i >= len(cells):
+                break
+            try:
+                got = float(cells[i])
+            except ValueError:
+                continue
+            seen += 1
+            want = _st.mean(d[arm][p][met] for p in PRED)
+            if abs(got - want) > 0.0006:
+                bad += 1
+                print(f"  MISMATCH F.5 {label} {met}: appendix {got}, "
+                      f"report {want:.3f}")
+    print(f"  {seen} F.5 indicator cell(s) checked against the RQ2 report, "
+          f"{bad} disagree")
+    return bad
+
+
 def check_ages() -> int:
     """Report generated tables older than the results they are built from."""
     stale = 0
@@ -350,6 +399,7 @@ def main() -> int:
                               f"text {a!r} vs {src} {b!r}")
 
     aged = check_ages()
+    aged += check_downstream_indicators()
     aged += check_recall_reconciles()
     aged += check_benchmark()
     aged += check_f4_vlm_slices()
