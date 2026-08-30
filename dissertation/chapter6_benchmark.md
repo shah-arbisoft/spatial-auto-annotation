@@ -28,7 +28,7 @@ identical held-out test set. The isolation mirrors RQ2 exactly:
 ## 6.2 Training dynamics: prediction 1 confirmed
 
 The human arm **peaks at epoch 4 of 25** and never improves again,
-oscillating between 0.101 and 0.123 for the remaining twenty-one, which is
+oscillating between 0.101 and 0.122 for the remaining twenty-one, which is
 mild overfitting on 5,421 sparse triplets. That replicates the source paper's
 central observation ("all predictors reached their peak mR@100 well before
 the final epoch") with a current model, and adds the cause, that sparse

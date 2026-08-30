@@ -100,7 +100,7 @@ labelled set, not the model, was the bottleneck. This project's geometric
 rules are labelling functions in that sense, being deterministic, auditable
 and dense, with two departures. Measured geometry gives near-exact votes for
 five predicates (blind-audited 0.79–1.00) and demonstrably noisy ones for
-the support pair (§4.14 puts precision at 0.40): the five need no
+the support pair (§4.14 puts the shipped rule at 0.54): the five need no
 probabilistic aggregation, and on the two, the objection Snorkel answers by
 aggregating is answered here by abstaining. And the computed labels are
 *validated against* the human labels they replace (RQ1), not assumed
