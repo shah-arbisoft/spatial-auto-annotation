@@ -1,0 +1,25 @@
+{"scene": 1, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book2.\n2. Put book2 down.\n3. Pick up box1.\n4. Hand box1 to me."}
+{"scene": 2, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book9.\n2. Put book9 on the table.\n3. Pick up box8.\n4. Hand box8 to human10."}
+{"scene": 3, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1.\n2. Put book1 down.\n3. Pick up box0.\n4. Hand box0 to me."}
+{"scene": 4, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube0 and place it on the table.\n2. Pick up book7 and place it on the table.\n3. Pick up box6 and hand it to me."}
+{"scene": 5, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube9.\n2. Place cube9 on the table.\n3. Pick up cube11.\n4. Hand cube11 to you."}
+{"scene": 6, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Put book1 down on the table.\n3. Pick up box0.\n4. Hand box0 to you."}
+{"scene": 7, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up bottle1.\n2. Put bottle1 down on the table.\n3. Pick up cube3.\n4. Put cube3 down on the table.\n5. Pick up book2.\n6. Hand book2 to you."}
+{"scene": 8, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube4.\n2. Put cube4 on the table.\n3. Pick up box3.\n4. Hand box3 to you."}
+{"scene": 9, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book9.\n2. Put book9 down on the table.\n3. Pick up box8.\n4. Hand box8 to human12."}
+{"scene": 10, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1.\n2. Put book1 down on the table.\n3. Pick up box0.\n4. Hand box0 to human2."}
+{"scene": 11, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "To safely pick up book2 without knocking anything over, we must clear the objects that are directly in the way. \n\nBased on the spatial relationships:\n- **cube3** is directly on top of book2.\n- **cube0** is directly in front of book2 (whereas remote4 is to the front-left, and bottle1 is to the front-right, leaving the sides clear).\n\nHere is the minimal numbered list of steps:\n1. Pick up cube3 and place it on the table.\n2. Pick up cube0 and place it on the table out of the way.\n3. Pick up book2 and hand it to me."}
+{"scene": 12, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3 and place it on the table.\n2. Pick up book2 and place it on the table.\n3. Pick up book8 and hand it to you."}
+{"scene": 13, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3.\n2. Put down cube3.\n3. Pick up box7.\n4. Hand box7 to human10."}
+{"scene": 14, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube10.\n2. Place cube10 on the table.\n3. Pick up box5.\n4. Hand box5 to human2."}
+{"scene": 15, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube9.\n2. Put cube9 down on the table.\n3. Pick up box4.\n4. Hand box4 to you."}
+{"scene": 16, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube3.\n2. Put cube3 on the table.\n3. Pick up box7.\n4. Hand box7 to human10."}
+{"scene": 17, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube4.\n2. Put cube4 down.\n3. Pick up box3.\n4. Hand box3 to you."}
+{"scene": 18, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Put book1 down on the table.\n3. Pick up remote7 from box0.\n4. Put remote7 down on the table.\n5. Pick up box0.\n6. Hand box0 to you."}
+{"scene": 19, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book2 from box1.\n2. Place book2 on the table.\n3. Pick up box1.\n4. Hand box1 to human3 (or human4)."}
+{"scene": 20, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book3.\n2. Place book3 on the table.\n3. Pick up box4.\n4. Hand box4 to you."}
+{"scene": 21, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up bottle1.\n2. Place bottle1 on the table.\n3. Pick up cube13.\n4. Place cube13 on the table.\n5. Pick up cube14.\n6. Hand cube14 to human8."}
+{"scene": 22, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book5 from box4.\n2. Put down book5 on the table.\n3. Pick up box4.\n4. Hand box4 to me."}
+{"scene": 23, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book3.\n2. Place book3 on the table.\n3. Pick up box4.\n4. Hand box4 to you."}
+{"scene": 24, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up cube2 from book6.\n2. Place cube2 on the table.\n3. Pick up book6.\n4. Hand book6 to human10."}
+{"scene": 25, "condition": "E", "model": "gemini-3.1-pro-preview", "reply": "1. Pick up book1 from box0.\n2. Put book1 on the table.\n3. Pick up box0.\n4. Hand box0 to human2."}
