@@ -318,9 +318,9 @@ author gave. It does not reach the structural guarantees of §3.6, checkable
 without any verdict at all, nor the downstream findings of Chapters 5 and 6,
 scored against human annotation the author did not produce and in which the
 automatic arm is judged by its rival's yardstick. The designed remedy is the
-study of Appendix E.3, which returned too few raters to carry the weight it
-was built for; what it does return (§4.15) narrows the objection without
-retiring it, since on the pre-refit labels both judged, disinterested judges
+study of Appendix E.3, which met the coverage it specified, all 147 priority
+claims reaching three raters; what it returns (§4.15) narrows the objection
+without retiring it, since on the pre-refit labels both judged, disinterested judges
 scored support slightly lower than the author did, so the author's audit is
 not flattering its own tool. The shipped rule remains unexamined by anyone
 outside this project.
@@ -328,7 +328,7 @@ outside this project.
 **Reference frame: answered as far as it can be, which is not all the way.**
 The dissertation does not assert that the camera frame is correct; it shows
 that the tool applies one frame consistently (§4.12), that two annotator
-groups applied another (§4.5), and that recall rises from 0.70/0.71 to 0.84
+groups applied another (§4.5), and that pooled recall rises from 0.70 to 0.91
 once the convention is aligned. That establishes disagreement rather than
 error, and identifies which party is consistent. It does not establish which
 convention a robot should obey, and no measurement in this dissertation

@@ -53,7 +53,7 @@ baselines.
 
 The held-out front/behind cells (0.20/0.37) are dominated by two held-out
 groups that labelled the pair under the *opposite direction convention*;
-§4.5 decomposes this, and convention-aligned depth recall is 0.84. These are
+§4.5 decomposes this, and convention-aligned depth recall is 0.91 pooled. These are
 population values, every human triplet being scored; whether another batch
 would agree is answered by a cluster bootstrap over images
 (`eval/uncertainty.py`), whose widths rather than centres carry the argument
