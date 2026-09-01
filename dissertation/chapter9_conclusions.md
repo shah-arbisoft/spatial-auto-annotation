@@ -128,13 +128,15 @@ rather than a text ordering. That would also make the redundant-step cost
 of a hallucinated support relation visible instead of merely inferred from
 its precision.
 
-**The shipped support rule is not independently verdicted.** The volunteer
-study agrees with the author's blind audit on support to 0.009 and shows the
-same raters scoring human annotation at 0.940, so the author's verdicts are
-corroborated rather than merely unchallenged (§4.15). What it cannot cover
-is the rule the tool now ships, its claims having been drawn a month before
-`on_contact_min` was re-fitted, so the shipped support figure still rests on
-the author's verdict and the model's.
+**No precision figure is verdicted by a disinterested human.** Every one
+rests on the author's judgement and a vision-language model's. The decoys of
+§4.14 measure both judges rather than assuming them, and the two disagree
+often enough that neither is echoing the other, but two interested judges are
+not independence. Support is where this matters most, since it is also the
+predicate that fails. Settling it needs a panel with no stake in the tool,
+scoring a fresh draw from the shipped labels under the same blind
+instrument; the sampling, rendering and scoring code are all in the
+repository.
 
 **The benchmark is undecided, and the run that would decide it is written.**
 Three seeds bound the paired difference to [-0.070, +0.069], so §6.7 reports
@@ -144,7 +146,7 @@ GPU-hours.
 
 **One domain, one camera, six object classes.** What transfers is the
 calibration procedure, not the fitted constants, and the only out-of-domain
-evidence is qualitative (E.4).
+evidence is qualitative (E.3).
 
 **A class list stands in for geometry on `on`/`under`, with a known blind
 spot.** The support rule excludes `human` from either role because mask
@@ -178,7 +180,7 @@ released weights.
 **Scale is shown without ground truth.** The pipeline was run over the 1,766
 frames nobody has annotated: 562 keyframes after content-adaptive selection,
 58 minutes, 185,242 triplets, a predicate distribution 0.032 in total
-variation from the annotated portion (E.6). Capacity and stability on
+variation from the annotated portion (E.5). Capacity and stability on
 unfamiliar input are therefore measured; correctness on that portion is not,
 and cannot be without labels. Section 4.12 substitutes self-agreement for
 truth and should be read as the weaker thing it is.

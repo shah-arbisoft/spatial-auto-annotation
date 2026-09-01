@@ -246,20 +246,17 @@ The audits are verdicted by the author and by a vision-language model,
 neither a disinterested human: the author built the tool, and the model is a
 system of the kind §4.13 shows annotates poorly, admissible only because
 judging a supplied claim needs the half of it that works and the decoys
-measure it doing so (§4.14, §7.4). The disinterested human estimate is
-Appendix E.3: on the labels it judged it agrees with the author's blind
-audit on support to 0.009, and its control arm shows the raters scoring
-human annotation at 0.940 on the same instrument, so the author's verdicts
-are corroborated rather than merely unchallenged. It was drawn before the
-threshold refit, so it checks those verdicts and not the shipped support
-rule (§4.15), and the two-stage audit shares machinery with the rule change
-it evaluates.
+measure it doing so (§4.14, §7.4). No disinterested human estimate exists,
+which is the sharpest limitation on every precision figure here: the two
+judges disagree with each other often enough to show neither is echoing the
+other, but agreement between two interested parties is not independence. The
+two-stage audit also shares machinery with the rule change it evaluates.
 
 **External.** One laboratory domain, six object classes, one camera and
 mounting; the fitted constants (`near_T`, ε values, contact threshold) are
 dataset-specific by design, and the transferable artefact is the
 *procedure*, fit on some annotators and validate on held-out ones, not the
-numbers. The only out-of-domain evidence is qualitative (Appendix E.4) and
+numbers. The only out-of-domain evidence is qualitative (Appendix E.3) and
 measures nothing, since no labelled out-of-domain gold exists; a modest
 labelled cross-domain sample is the missing experiment, cheap enough that a
 replication should simply include one. Full automation is currently
@@ -317,13 +314,12 @@ circularity bounds the *precision* estimates, which rest on verdicts the
 author gave. It does not reach the structural guarantees of §3.6, checkable
 without any verdict at all, nor the downstream findings of Chapters 5 and 6,
 scored against human annotation the author did not produce and in which the
-automatic arm is judged by its rival's yardstick. The designed remedy is the
-study of Appendix E.3, which met the coverage it specified, all 147 priority
-claims reaching three raters; what it returns (§4.15) narrows the objection
-without retiring it, since on the pre-refit labels both judged, disinterested judges
-scored support slightly lower than the author did, so the author's audit is
-not flattering its own tool. The shipped rule remains unexamined by anyone
-outside this project.
+automatic arm is judged by its rival's yardstick. What would remedy it is a panel of
+judges with no stake in the tool, scoring a fresh draw from the shipped
+labels under the same blind instrument; the sampling, rendering and scoring
+code are in the repository and the panel is what is missing. Until that
+exists the precision figures remain author-verdicted, and the support rule
+in particular is unexamined by anyone outside this project.
 
 **Reference frame: answered as far as it can be, which is not all the way.**
 The dissertation does not assert that the camera frame is correct; it shows

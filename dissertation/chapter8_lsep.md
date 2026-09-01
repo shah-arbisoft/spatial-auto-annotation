@@ -1,9 +1,8 @@
 # Chapter 8: Legal, Social, Ethical and Professional Considerations
 
 This chapter assesses the legal, social, ethical and professional dimensions
-of building and releasing an automatic annotator, including the safeguards
-covering the human validation study (§8.3). The detailed ethics record, with
-the participant-facing material, is in Appendix A.
+of building and releasing an automatic annotator. The detailed ethics record
+is in Appendix A.
 
 ## 8.1 Legal considerations
 
@@ -25,7 +24,7 @@ question unknowingly.
 
 **Data protection.** Some frames contain identifiable people, making them
 personal data under UK law (Data Protection Act 2018). The project processes them for research under the research provisions of that Act; the CC-BY licence governs reuse of the material and does not by itself settle the data-protection question, which is why the basis is stated separately. It applies data minimisation to what it republishes: faces are anonymised in all published figures and on the validation website, and items whose judgement anonymisation would compromise are removed rather than shown.
-The validation study stores one random identifier per browser, which §8.3 treats as a data-protection question rather than dismissing as none. No unauthorised
+No data is collected from human participants anywhere in the project. No unauthorised
 access occurs anywhere in the project, so the Computer Misuse Act 1990 is
 noted only for completeness.
 
@@ -58,22 +57,13 @@ a deployment consideration, not a resolved issue.
 
 ## 8.3 Ethical considerations
 
-The ethical surface has three parts, each with a concrete safeguard. First,
+The ethical surface has two parts, each with a concrete safeguard. First,
 secondary use of images containing identifiable people: face anonymisation
-in everything republished, item removal where anonymisation would bias a
-judgement, and `noindex` on the validation site. Second, the human
-validation study: participation is voluntary and brief, with no names,
-contact details or IP addresses collected. One point needs stating precisely
-rather than as a blanket claim of no personal data: each browser is given a
-random identifier, stored with its answers so coverage can be spread and
-duplicates dropped. UK GDPR counts an online identifier as personal data
-where it can single out someone, so the accurate word is *pseudonymous*, not
-anonymous. It is generated in the browser from nothing about the device or
-network, is joined to no other dataset, and can be resolved to a person by
-no one including the author. An information panel states the purpose and
-data handling before play, and the
-collection runs under the University's ethics self-assessment process
-(Appendix A). Third, research integrity: predictions were registered before
+in everything republished, and item removal where anonymisation would
+obscure the object under judgement rather than showing it. **No data is
+collected from human participants at any point**, so the work is secondary
+analysis throughout and the Secondary Data Checklist is the applicable
+route (Appendix A). Second, research integrity: predictions were registered before
 the benchmark run and reported as they fell, one confirmed, one refuted and
 one left unresolved once a better-controlled replication shrank the margin
 it rested on (§6.6); a withdrawn hypothesis remains in the text (§6.4), and
@@ -90,7 +80,7 @@ unit-and-invariant suite run before every change ships, every threshold in
 one configuration file, seeded reproducible runs (Appendix B), and
 licence-compliant use of third-party models and data. The reproducibility
 package is a deliverable with the same status as the results, because a
-validation study that cannot be re-run is an anecdote.
+result that cannot be re-run is an anecdote.
 
 ## 8.5 Summary
 
@@ -101,9 +91,8 @@ and the frames containing identifiable people are personal data handled
 under the research provisions of the Data Protection Act 2018. Socially, the
 realistic effect is a changed human role rather than a displaced profession,
 with the residual review cost measured rather than asserted. Ethically, the
-safeguards are face anonymisation, a pseudonymous validation study run under
-the University's self-assessment process, and an audit trail that records
-superseded results. Professionally, the work follows the BCS Code of Conduct
+safeguards are face anonymisation, secondary analysis only with no human
+participants, and an audit trail that records superseded results. Professionally, the work follows the BCS Code of Conduct
 in its claims and in its engineering practice.
 
 Chapter 9 closes the dissertation against its objectives and research

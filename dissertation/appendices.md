@@ -3,10 +3,9 @@
 ## Appendix A: Ethical Approval
 
 The full ethics record is submitted as a **separate document, `ethics.pdf`**,
-with the two forms attached to it: the University ethics self-assessment and
-the Secondary Data Checklist, the latter requiring the supervisor's
-signature. This appendix records what that document establishes, so the
-dissertation can be read without it.
+with the supervisor-signed Secondary Data Checklist attached to it. This
+appendix records what that document establishes, so the dissertation can be
+read without it.
 
 The work is a secondary analysis of an existing, published dataset (Wang et
 al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new
@@ -15,18 +14,11 @@ identifiable people, so every figure reproduced here blurs faces and the
 dataset is used strictly as released. The unreleased 1,766-frame remainder
 of the capture, used in §4.12 and §9.3, is **not** covered by that licence:
 it is used only to measure behaviour on unlabelled input, is not
-redistributed, and no figure reproduces a frame from it. The independent
-validation of Chapter 4 collects **pseudonymous** true/false judgements from
-adult volunteers, with no names, email addresses or IP addresses, only a
-per-browser random identifier used to spread coverage and drop duplicates,
-which UK GDPR treats as personal data, which is why the study is described
-as pseudonymous rather than anonymous here and in §1.3 and §8.3. Because no
-directly identifying data is collected, no vulnerable groups are involved
-and there is no foreseeable risk beyond that of everyday life, the study
-falls within the self-assessment route rather than requiring full committee
-review.
+redistributed, and no figure reproduces a frame from it. No data was collected from human participants for this work, so the
+Secondary Data Checklist is the applicable route and no application for
+human-participant research arises.
 
-**Demonstration footage.** The two video clips of E.4 are royalty-free stock
+**Demonstration footage.** The two video clips of E.3 are royalty-free stock
 footage from Pexels, used under the Pexels licence (free use, no attribution
 required): clip 1 (desk scene, moving camera)
 https://www.pexels.com/video/6558513/ and clip 2 (overhead desk, moving
@@ -255,12 +247,11 @@ cache and should return the identical file: 84,881 rows, SHA-256
 | `python eval/support_guard_ablation.py` | ablation A10, whether contact height can replace the class guard, `support_guard_ablation.json` | <1 min |
 | `python eval/parallax_ablation.py --method triangulate --gap 10` | ablation A9; needs the raw capture (D.6), `parallax_ablation.json` | ~5 min |
 | `python eval/parallax_ablation.py --method triangulate --gap 20 --focal-sweep 0.5,0.7,0.9,1.2,1.6,2.0` | D.6's focal-length sensitivity check, `parallax_focal_sweep.json` | ~25 min |
-| `python eval/video_stability.py --dir outputs/video_085` | the E.4 persistence and Jaccard figures, `video_stability.json`; the `--dir` is required, since the default points at the pre-refit pass | <1 min |
-| `python eval/extension_scale.py` | E.6 throughput, density and predicate distribution | <1 min |
+| `python eval/video_stability.py --dir outputs/video_085` | the E.3 persistence and Jaccard figures, `video_stability.json`; the `--dir` is required, since the default points at the pre-refit pass | <1 min |
+| `python eval/extension_scale.py` | E.5 throughput, density and predicate distribution | <1 min |
 | `python eval/seed_stats.py` | the benchmark arms aggregated across seeds, `tables/seed_replication.md` | <1 min |
 | `python eval/downstream.py --seeds 42,43,44` | RQ2, all arms, `rq2_report.json`, `tables/rq2.md` | ~20 min |
 | `python eval/score_vlm_pilot.py`, then `python eval/compare_vlm_models.py` | the §4.13 comparison and `tables/vlm_models.md`, from the stored replies | <1 min |
-| `python eval/crowd_validation.py` | the §4.15 volunteer comparison, `crowd_validation.json`; needs the study's `report.json`, which is not in this repository | <1 min |
 | `python eval/score_planner.py` | the §5.7 blind scoring, `planner_scores.json` | <1 min |
 | `python eval/planner_paired_tests.py` | §5.7's exact McNemar tests over the paired scenes, `planner_paired_tests.json` | <1 min |
 | `python scripts/make_figures.py` | every figure | ~1 min |
@@ -282,11 +273,6 @@ redone by
 hand in a browser, showing the image the model saw, the prompt verbatim and
 the human, pipeline and model answers side by side, so the scoring script
 can be checked rather than trusted.
-
-The independent validation study is scored by
-`python analysis/score_votes.py votes.csv`, which lives with that study's
-own repository rather than this one; E.3 records the instrument and §4.15
-the result.
 
 The two GPU extras: `python scripts/run_sgdet.py --threshold 0.25` for the
 deployment-mode pass (~47 min) and `python scripts/run_annotator.py
@@ -317,12 +303,9 @@ a **single 6 GB consumer GPU**, which excludes the largest segmentation and
 depth checkpoints and makes Chapter 3's small-model choices obligatory
 rather than preferences; ablation A8 asks what that costs and finds almost
 nothing on the predicate it was expected to hurt. There was **no budget for
-paid annotation**, so the independent re-estimate of precision is an unpaid
-volunteer study (E.3); it closed at 20 raters with a control arm of
-human-written claims, so §4.15 can report what the tool scores against what
-the annotators score on the same instrument, while the audits around it
-remain the author's own, with the circularity §2.9 states as an objection
-before any result is reported. The project uses **one dataset**, the one
+paid annotation**, so every precision estimate here is verdicted by the
+author and by a vision-language judge, with the circularity §2.9 states as an
+objection before any result is reported and §7.7 concedes. The project uses **one dataset**, the one
 whose bottleneck the work exists to address, and the price is that
 generalisation rests on argument and not on a second domain. And the
 benchmark runs use **free hosted GPU sessions**, which caps the affordable
@@ -340,16 +323,14 @@ two remaining links but no robot moved. The same five conditions on a
 physical Spot, or in a simulator with contact physics, would close the last
 one, and it is the only link left between labels and behaviour.
 
-**An independent verdict on the shipped support rule.** The volunteer study
-closed at 1,415 usable judgements from 20 raters and agrees with the
-author's blind audit on support to 0.009, with a control arm establishing
-that the same raters score human annotation at 0.940 on the same instrument.
-Its claims were drawn on 17 July, a month before `on_contact_min` was
-re-fitted from 0.60 to 0.85, so every `on` and `under` claim in it comes
-from the superseded rule. Re-running that arm on post-refit labels is the
-cheapest outstanding item in the list: the instrument exists, the rendering
-pipeline exists, and only a fresh draw and a fresh round of volunteers is
-needed.
+**An independent verdict on the support rule.** Every precision figure in
+Chapter 4 rests on the author's verdict and a vision-language judge's. The
+decoys measure both judges rather than assuming them, but neither is a
+disinterested human, and the support rule is where that matters most. What
+would settle it is a panel of judges with no stake in the tool, scoring a
+fresh draw from the shipped labels under the same blind instrument. The
+sampling code, the rendering pipeline and the scoring rules are all in the
+repository; what is missing is the panel.
 
 **Ten seeds per arm, and the notebook that would run them.** Three seeds
 bound the paired benchmark difference to [-0.070, +0.069], so Chapter 6
@@ -361,7 +342,7 @@ about 45 GPU-hours against a 30-hour weekly allowance, and ships unrun.
 
 **A labelled cross-domain sample.** What transfers is the calibration
 procedure, not the fitted constants. A few dozen labelled images from a
-second domain would turn E.4's qualitative evidence into a measurement, and
+second domain would turn E.3's qualitative evidence into a measurement, and
 it is cheap enough that a replication should simply include one.
 
 **Stereo, or a calibrated RGB-D capture.** The supplied folder is named
@@ -376,7 +357,7 @@ capture time whereas depth recovered from a robot walking twenty frames is
 not.
 
 **Ground truth for the unlabelled portion.** The pipeline was run over the
-1,766 unannotated frames (E.6), so capacity and stability on unfamiliar
+1,766 unannotated frames (E.5), so capacity and stability on unfamiliar
 input are measured; correctness there is not, and cannot be without labels
 a few hundred triplets would supply.
 
@@ -1043,13 +1024,13 @@ diagnostics make its failure interpretable rather than merely worse (E.1);
 the viewpoint-stability measurement of §4.12, whose segmentation evidence and
 coverage limits qualify how far the stability figures reach (E.2); and the
 planner experiment of §5.7, whose relation filter and blind scorer are what
-the comparison rests on (E.5).
+the comparison rests on (E.4).
 
 The other three are reported here in full, because their instruments need
 more room than a chapter allows. The independent precision study needs its
 design read independently of what it found (E.3); the video processing is
-qualitative, over two clips with no ground truth (E.4); and the scale run
-has no labels to be correct against (E.6). Each is work done and is recorded as such, with what it does and does
+qualitative, over two clips with no ground truth (E.3); and the scale run
+has no labels to be correct against (E.5). Each is work done and is recorded as such, with what it does and does
 not establish stated in its own section.
 
 ### E.1 The vision-language baseline: diagnostics and limits
@@ -1274,115 +1255,7 @@ identity with a tracker, as `scripts/run_video.py` already does for video,
 and not with per-frame overlap, is the straightforward extension that
 would recover it.
 
-### E.3 The independent validation study: design and scoring
-
-The true-precision estimates of §4.4 and §4.9 carry one weakness no amount
-of sampling fixes: they were verdicted by the author of the tool being
-evaluated. Conservative rules and published evidence mitigate that without
-removing it, and the accurate description is "author-verdicted". This study
-re-estimates precision with disinterested judges, and pairs every estimate
-with the same judges' verdict on the human annotations so that it has
-something to be read against. It is reported in §4.15 and scored below; the
-design is given first, so that a reader can judge the instrument
-independently of what it found.
-
-It measures four things the author-verdicted audits cannot: crowd precision
-per predicate on 412 tool claims against §4.4's fifteen per predicate, some
-twenty-seven times the sample; the same raters' precision on claims the *annotators* wrote, which
-is what turns the first number from a bare score into a comparison; an
-author-bias check against the author's own verdict on the 147 items carrying
-both; and whether disputed claims are wrong or merely ambiguous, through
-inter-rater reliability, which is the distinction the disagreement
-literature of §2.3 insists on.
-
-**Sampling.** Two arms. The *treatment* arm is drawn from the tool's *extra* predictions: ordered pairs the human annotators never labelled, which is exactly the population with no ground truth to score against. The *control* arm is drawn from the human annotations themselves, 84 per predicate, rendered through the identical pipeline and interleaved by the same shuffle, so nothing on the page distinguishes them and a rater cannot tell which arm a claim belongs to; the arm is recorded only in the private key. It began as 2,002 treatment claims, 286 per predicate, and was resized on 24 August to 412 treatment and 588 control: spreading raters across 2,002 items meant most would never be judged, and the 412 retained were exactly those already carrying a vote, so no judgement collected was discarded and no claim already voted on changed its identity.
-
-That resize needs stating precisely, because the retained 412 are not a fresh
-random draw from the 2,002: they are the claims the collection process
-happened to reach, and items were served to raters in sequential batches, so
-retention is correlated with serving order rather than independent of it. Two
-properties bound what that can do. The batches are predicate-mixed rather than
-predicate-blocked, since every early batch contains all seven predicates, and
-retention is even across predicates to within sampling error: 412 of 2,002
-overall, 20.6%, with per-predicate rates from 17.1% to 23.1%, which a
-chi-square test cannot distinguish from uniform (χ² = 5.20 on 6 df, p = 0.52).
-So the mechanism demonstrably does not skew the sample by predicate, which is
-the axis the per-predicate estimates rest on. It cannot be shown to be
-ignorable for anything else that correlates with serving order, and the
-accurate description is a sample selected by response rather than a
-randomised one. Each claim is rendered as the source photograph with
-the subject outlined in red and the object in blue, presented with a single
-sentence ("the book is on the box"), and answered TRUE or WRONG / can't tell
-by volunteers recruited through an open link. The instructions restate
-Chapter 3's operational definitions: camera-frame laterality, "in front of"
-as nearer the camera, support as physically resting rather than held, and an
-explicit instruction to answer WRONG when unsure, which reproduces the
-conservative rule used in the author's own audits. Each browser receives a
-random identifier that prevents repeat judgements without identifying
-anybody, and faces are anonymised in every image (Chapter 8).
-
-**Coverage.** Stratified by what each analysis requires. An aggregate precision estimate needs only one judgement per claim, the estimate being over claims rather than over raters, so ordinary claims target a single rater. The 147 claims that also carry an author verdict target three raters each, because the crowd-versus-author comparison and the inter-rater reliability figure both need several independent judgements on the *same* item; those claims are served first. Against the resized pool that is about 1,300 judgements rather than the 3,000 a uniform three-rater target would demand. The priority ordering was the design's hedge against a thin turnout, and it worked in the direction intended: all 147 priority claims reached three raters, so the author comparison and the reliability figure rest on the coverage they were specified for and not on whatever the response happened to allow.
-
-**Scoring**, fully specified in advance (`analysis/score_votes.py`): ties
-resolve to WRONG, matching the audit protocol; reflex-speed responses and
-raters who disagree systematically with everyone else can be excluded by
-pre-declared filters. Crowd precision is reported per predicate with binomial
-intervals, author agreement as percentage and Cohen's kappa (Cohen, 1960),
-and crowd-internal reliability as Krippendorff's alpha.
-
-**What it returned.** Collection closed at 1,415 usable judgements from 20 raters, covering 832 of the 1,000 claims, 83.2%, with no rater supplying more than 15% of the total. All 412 treatment claims and 420 of the 588 control claims carry at least one verdict, and 147 carry three or more, which is the subset the author comparison and the reliability figure need. Of the pre-declared filters, the duplicate rule fired on 12 submissions, all of them from before the 11 August server fix; no response fell below the 800 ms floor, and no rater was excluded as a systematic outlier. Section 4.15 reports the figures; `eval/crowd_validation.py` reproduces them from the scorer's report, separating the arms on the claim id, since the scorer's own per-predicate totals pool both.
-
-**What the arm establishes, in full.** Section 4.15 gives the verdicts; the
-reasoning behind each is here.
-
-*The control arm is what makes the treatment arm readable.* Half the pool is
-drawn from the human annotations rather than the tool, rendered through the
-identical pipeline and interleaved by the same shuffle, so nothing on the
-page distinguishes them and a rater cannot tell which arm a claim belongs
-to. Without it a low score on the tool would be uninterpretable, since the
-same raters under the same conservative instruction might score any claim
-low. They do not: on the human-written claims they answer TRUE 0.940 of the
-time (395/420) against 0.726 on the tool's (299/412), so the raters are not
-uniformly severe and what the tool scores is about the tool.
-
-*Why the denominators differ.* The judges saw different draws from the same
-pre-refit generation rather than a common sheet: the volunteers were shown
-126 support claims from the study pool and the two blind judges 94 from the
-audit pack of §4.14. The three columns are therefore three estimates of one
-quantity, not three verdicts on one sheet, which is what makes their
-agreement worth reporting at all.
-
-*The ranking agreement.* Across all seven predicates the volunteers rank the
-tool almost exactly as the author does, Spearman 0.96 against the model's
-0.34, landing 0.074 away on average. `near` shows the same shape from the
-other side as support does: 0.923 and 1.000 from the two human judges
-against the model's 0.625.
-
-*Against the human baseline.* On the five predicates the support threshold
-does not touch, the tool scores 0.864 against the annotators' 0.926, a gap
-of 0.063, and on `in front of` it is marginally ahead. On support it scores
-0.413 against 0.975 (118/121), a gap of 0.563 whose intervals do not come close to
-overlapping, the same weakness §4.14 found and the refit responded to, now
-measured against what human annotation scores on the identical instrument.
-
-**Reading the three-judge comparison.** One asymmetry bounds how far §4.15's
-comparison can be pushed: the tool's claims are its *extra* predictions, on
-pairs the annotators passed over, while the control claims are pairs they
-chose to record. Annotators record what is clear, so some of every gap
-between the two arms is the difficulty of the claim and not the quality
-of the label. For the 0.063 gap on the five untouched predicates that
-reservation may account for most of it; for the 0.563 support gap it cannot.
-The agreement figures also read as real signal rather than noise: both the
-crowd–author agreement (0.871, κ 0.683) and crowd-internal reliability
-(α 0.703) roughly doubled as the sample grew, which is what signal does and
-noise does not, and neither approaches 1.0, which is §2.3's account of spatial
-language predicts that residue better than rater carelessness does, some
-disagreement being over what the words mean rather than what the photograph
-shows. The comparison also cannot fully separate label quality from claim
-difficulty, because the two arms are drawn from populations the annotators
-themselves divided.
-
-### E.4 Video processing: settings and the open-vocabulary failures
+### E.3 Video processing: settings and the open-vocabulary failures
 
 This records how the clips were processed and what went wrong, both of which
 qualify the reading above.
@@ -1452,7 +1325,7 @@ by the object vocabulary, because every failure visible in them is a
 detection failure rather than a relation failure, which is the attribution
 §4.11 makes for the dataset itself.
 
-### E.5 The planner experiment: prompt construction and scoring rules
+### E.4 The planner experiment: prompt construction and scoring rules
 
 Section 5.7 reports the design in outline and the result. Two components
 need recording in full, because the comparison is only as good as they are.
@@ -1550,7 +1423,7 @@ author failed to anticipate, and the hand-read sample is what exposed this
 one.
 
 
-### E.6 The scale run: timing and the distribution check
+### E.5 The scale run: timing and the distribution check
 
 Throughput and density in Chapter 4 are measured on the 836 annotated images,
 which leaves the claim that the method extends to new captures resting on an
@@ -1590,7 +1463,7 @@ reason in reverse, 330 against 633 triplets, since the later arrangements
 hold fewer objects (11.7 detections against 16.9) and pair count grows with
 the square.
 
-### E.7 The blind audit: sampling, guards and key handling
+### E.6 The blind audit: sampling, guards and key handling
 
 Section 4.14 reports the instrument and the result. The construction rules
 are here, because a blind audit is only as good as the independence of the

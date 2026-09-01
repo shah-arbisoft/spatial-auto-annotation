@@ -177,7 +177,7 @@ carrying the comparison one link further towards robot behaviour (§5.7); the
 vision-language baseline (§4.13); and a critical evaluation chapter. Two
 items entered scope during the project and are marked as such where
 reported: scaling to robot captures beyond the annotated release, once the
-supervising group supplied the full capture (Appendix E.6), and the
+supervising group supplied the full capture (Appendix E.5), and the
 vision-language comparison, brought forward once it became clear a reader
 would treat it as the obvious alternative. Deferred to future work:
 copy-paste augmentation of under-represented relations, and any revision of
@@ -215,8 +215,8 @@ Four constraints shaped the design as much as the research questions did: a
 single 6 GB consumer GPU, no budget for paid annotation, one dataset, and
 free hosted GPU sessions for the benchmark runs. Each ruled something out
 and each is answered somewhere in the evidence: the GPU budget by ablation
-A8, the annotation budget by the volunteer study of Appendix E.3, the single
-dataset by an argument rather than a second domain, and the GPU-hour cap by
+A8, the annotation budget by auditing samples rather than re-annotating at
+scale, the single dataset by an argument rather than a second domain, and the GPU-hour cap by
 a three-seed replication whose width is reported rather than smoothed over.
 Appendix B sets out what each constraint excluded.
 
@@ -224,13 +224,9 @@ Ethical considerations are summarised here and detailed in Appendix A. The
 work is a secondary analysis of a published, openly licensed dataset (CC-BY
 4.0) collected by the supervising research group; no new personal data were
 gathered for the annotation study. Some dataset frames contain identifiable
-people, so faces are anonymised in every published figure. The independent
-human validation of the automatic labels (Chapter 4) collects true/false
-judgements only, with no names, contact details or IP addresses; because
-each browser is given a random identifier so that coverage can be spread and
-duplicates dropped, the accurate word for those judgements is *pseudonymous*
-rather than anonymous, which §8.3 sets out. The collection runs under the
-University's ethics self-assessment process.
+people, so faces are anonymised in every published figure. No data is collected from human
+participants at any point, so the work is secondary analysis throughout and
+the module's Secondary Data Checklist is the applicable route.
 
 ## 1.4 Dissertation outline
 

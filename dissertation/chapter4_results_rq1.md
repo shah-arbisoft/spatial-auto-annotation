@@ -8,8 +8,7 @@ each measure is bounded by the labels it is scored against, §4.12 and §4.13
 leave the gold behind: whether the labels survive the camera moving, and
 whether a vision-language model would have done the job instead. Three
 further studies carry no gold at all and sit in Appendix E: out-of-domain
-video (E.4), 1,766 unlabelled robot frames (E.6), and the re-estimate of
-precision by disinterested judges (E.3, reported in §4.15).
+video (E.3) and 1,766 unlabelled robot frames (E.5).
 
 ## 4.1 Protocol
 
@@ -247,7 +246,7 @@ trade §2.6 identifies, used because the authors' trained YOLOv10m weights
 were not available; and the 20-image tuning trial over-estimated detection
 quality, its scenes coming from one annotator batch. The same attribution
 holds on two out-of-domain clips, every visible failure again being a
-detection failure (Appendix E.4).
+detection failure (Appendix E.3).
 
 ## 4.12 Temporal redundancy and stability under viewpoint change
 
@@ -318,7 +317,7 @@ this call, captured per item instead of assumed, because the alias moved
 during the project (Appendix B). The model rejected 24 of 28 decoys against
 the author's 19 of 28, making it the stricter of the two, and the pair reach
 Cohen's κ 0.601 over all items and 0.425 over the claims alone: moderate
-agreement, not an echo. Appendix E.7 carries the
+agreement, not an echo. Appendix E.6 carries the
 sampling, the class guard, the key handling, the pack's per-predicate table,
 the argument for letting a model judge what §4.13 shows it cannot annotate,
 and what the decoys measure about each judge.
@@ -327,7 +326,7 @@ and what the decoys measure about each judge.
 is diagnostic.** Section 4.3 measured precision on the pairs a human
 labelled, this audit on the pairs a human did not. For five predicates the
 first badly understates the second; for support it inverts sharply, 0.95 and
-0.93 on annotated pairs against 0.372 and 0.431 off them. Appendix E.7 reads
+0.93 on annotated pairs against 0.372 and 0.431 off them. Appendix E.6 reads
 what that says about the human record.
 
 The lateral, depth and proximity claims survive; support does not. At 0.404
@@ -346,7 +345,7 @@ The cause is a threshold fitted where its error was invisible. The shipped
 covering ~10% of ordered pairs, so a false positive outside the gold cost the
 fit nothing. The repair was fitted on annotator groups 0–5, shipped at 0.85,
 and re-audited from scratch on a second pack of **191 claims** drawn from the
-new emissions; Appendix E.7 gives that pack's construction, the sequence, and
+new emissions; Appendix E.6 gives that pack's construction, the sequence, and
 the held-out projection it declines to quote. Below, **v3** is the pre-refit
 pack at 0.60 and **v4** the fresh one at the shipped 0.85.
 
@@ -367,69 +366,23 @@ for the non-support predicates is `near` at its floor and `to the right of`
 at its ceiling. The change is confirmed and the projection was optimistic:
 both judges record a large improvement on an independent draw, and both
 record it below the 0.667 the held-out fit predicted, held-out support
-recall falling from 0.92 to 0.843 in exchange. Appendix E.7 reads what fitting on one
+recall falling from 0.92 to 0.843 in exchange. Appendix E.6 reads what fitting on one
 audit and validating on the next can and cannot establish, and why neither
 the auditor's own improvement between the packs nor the model's parallel
 movement rescues the support figure. At 0.535, the labels the tool adds beyond the human
 record on this predicate are right about half the time.
 
-## 4.15 A disinterested check, against a human baseline
-
-Both judges in §4.14 carry an objection: one built the tool, the other is a
-system §4.13 shows annotates poorly. Appendix E.3 specifies the arm that
-answers the first, putting sampled claims to volunteers who did not build
-the tool and are not shown what it predicted. It closed with **1,415** usable
-judgements from **20 raters** over **832** of the 1,000 claims in the pool,
-**83.2%**, no rater supplying more than **15%** of them. Two facts govern the
-reading. The claims were drawn a month before `on_contact_min` was re-fitted,
-so **the shipped support rule has still not been judged by anyone outside
-this project**; and half the pool is drawn from the *human* annotations,
-interleaved so a rater cannot tell the arms apart, and that is what makes the
-tool's score readable rather than merely low.
-
-| Predicate | Volunteers | Author | Model |
-|---|---|---|---|
-| on | 21/63 0.333 | 16/43 0.372 | 25/43 0.581 |
-| under | 31/63 0.492 | 22/51 0.431 | 35/51 0.686 |
-| to the left of | 47/57 0.825 | 22/24 0.917 | 23/24 0.958 |
-| to the right of | 44/49 0.898 | 23/24 0.958 | 22/24 0.917 |
-| in front of | 54/62 0.871 | 23/24 0.958 | 22/24 0.917 |
-| behind | 54/66 0.818 | 22/24 0.917 | 20/24 0.833 |
-| near | 48/52 0.923 | 24/24 1.000 | 15/24 0.625 |
-| **support pooled** | **52/126 0.413** | **38/94 0.404** | **60/94 0.638** |
-
-**On support the two independent estimates land together**: 0.413 from the
-volunteers against the author's 0.404, a difference of 0.009 between the
-person who built the tool, blinded and working against decoys, and strangers
-with no stake in the outcome. They are two draws from the same pre-refit
-generation with different denominators, 126 support claims against 94, so
-this is corroboration between independent estimates and not a paired test
-(E.3). That is the objection §2.9 raises and §7.4 concedes, answered by
-measurement, with the model apart at 0.638. **Against the human baseline,
-five predicates hold and support does not**, 0.864 against 0.926 and 0.413
-against 0.975 (118/121). Across all seven predicates in the broader E.3 pool,
-**147** claims carry both a volunteer and an author verdict, and on those the
-two agree **0.871** of the time (Cohen's κ **0.683**), with crowd-internal
-reliability at Krippendorff's α **0.703**. Appendix E.3 carries the rest: the
-control arm's 0.940 against the tool's 0.726, why the denominators differ,
-the Spearman 0.96 ranking agreement, and the asymmetry that bounds the
-comparison. The arm settles that the author's audit did not run in the
-author's favour and that the raters are not uniformly harsh; it does not
-settle the shipped tool, whose support rule postdates the sample, and
-re-running it on post-refit labels is the one outstanding item that would
-close it.
-
-## 4.16 Summary
+## 4.15 Summary
 
 This chapter measured the automatic labels against the 8,926 relationships
 the annotators recorded. Recall reaches 0.85 pooled and 0.74 on annotator
 groups no threshold ever saw, five predicates at human-comparable levels and
 the depth pair short of them for reasons §4.5 decomposes into calibrated
 abstention and an unshared convention. Precision on the labels the tool adds
-beyond the human record went through three instruments of increasing
-severity, an author audit followed by a blind decoy-controlled re-audit with
-a second judge and then a volunteer study. All three agree that five
-predicates hold at 0.79–1.00 and that support does not, at 0.535. Every remaining disagreement
+beyond the human record went through two instruments of increasing severity,
+an author audit followed by a blind decoy-controlled re-audit with a second
+judge. Both agree that five predicates hold at 0.79–1.00 and that support
+does not, at 0.535. Every remaining disagreement
 is attributed to a cause, leaving about 7% as avoidable tool error, and two
 checks needing no gold at all bound what the gold itself can settle.
 

@@ -175,7 +175,7 @@ relationships, **C** the automatically computed ones. One filter runs over
 both relation conditions, so neither is offered a relation the other was
 denied, and a plan is safe if it moves the occluder before grasping the
 target, judged by published rules (`eval/score_planner.py`), blind by
-construction. Appendix E.5 gives the filter and why it does not equalise
+construction. Appendix E.4 gives the filter and why it does not equalise
 density, the prompts, the scene-level forensics and a scoring defect
 hand-reading caught. The experiment ran twice, on `gemini-flash-latest` and
 the reasoning model `gemini-3.1-pro-preview`, with two conditions on the
@@ -191,7 +191,7 @@ larger planner only: **D**, the vision-language model's relations from
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
 {{fig:planner-sources}} shows the five conditions, and three findings sit in
-them, each set out with its evidence in Appendix E.5. **The two planners
+them, each set out with its evidence in Appendix E.4. **The two planners
 agree exactly**, failing on the same six scenes, so the result is a property
 of the prompt and not of the engine reading it. **Every failure in both
 automatic arms is a missing support relation**, never a plan reasoning badly
@@ -207,7 +207,7 @@ with no human in the labelling loop. Throughout, `grasps_target` and
 
 Twenty-five scenes is small, and the pairing is what makes it enough. Exact
 McNemar tests over the discordant scenes (`eval/planner_paired_tests.py`, in
-full in E.5) settle relations against none at p < 10^-5, the union's 6-to-0
+full in E.4) settle relations against none at p < 10^-5, the union's 6-to-0
 gain over the tool alone at p = 0.031, and the human arm's lead over the
 tool, the comparison that runs against this project. They also name what 25
 scenes cannot settle: the tool against the vision-language source is 6
@@ -215,7 +215,7 @@ discordant to 5 at p = 1.00, so that two-scene margin is not read here. The
 tests are sharp exactly where the absolute rates are not, C's own rate being
 19 of 25 with a 95% interval of [0.55, 0.91].
 
-Appendix E.5 carries five limits with the design; two belong here because
+Appendix E.4 carries five limits with the design; two belong here because
 they bound what the result can mean. The scenes were selected to contain an
 occluder, so it speaks to that situation and not to task planning at large,
 and no robot moved, so this measures plans rather than executions. And

@@ -27,9 +27,6 @@ his research group both for collecting and releasing the dataset and for
 supplying the full robot capture from which the released images were cut,
 which made the scale and viewpoint-stability measurements possible.
 
-I thank the volunteers who gave their time to judge sampled predictions in
-the validation study, without which the precision estimates would have
-rested on my own verdicts alone.
 
 Finally, I thank my family and friends for their patience and support over
 the course of this work.

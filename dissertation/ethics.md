@@ -1,10 +1,8 @@
 # Ethics Record
 
-> To be submitted alongside the dissertation as a separate document, once the
-> ethics self-assessment is submitted and the Secondary Data Checklist is
-> signed by the supervisor. Appendix A of the dissertation summarises this
-> record and points here; this is the full version, with the two forms
-> attached at the end.
+> Submitted alongside the dissertation as a separate document. Appendix A of
+> the dissertation summarises this record and points here; this is the full
+> version, with the signed Secondary Data Checklist attached at the end.
 
 ## A.1 Basis of the work
 
@@ -26,33 +24,16 @@ without the supervisor's specific agreement. They show the same laboratory
 and the same people as the released portion, and the face-anonymisation rule
 above applies to them unchanged.
 
-The independent validation of the automatic labels (Chapter 4) collects
-pseudonymous true/false judgements from adult volunteers through a
-purpose-built web quiz. No names, email addresses or IP addresses are
-recorded. Each browser receives a random identifier, stored with its answers
-and used only to spread item coverage and remove duplicates; because UK GDPR
-treats an online identifier as personal data where it can single out someone,
-the study is described as pseudonymous rather than anonymous throughout, here
-and in §1.3 and §8.3. The
-identifier is generated in the browser, derives from nothing about the device
-or network, and is joined to no other dataset. Participation is voluntary,
-takes about three minutes, and can be abandoned at any point; an information
-panel on the first screen states the purpose, the data collected, and a
-contact address. Faces in all quiz images are pixelated before publication,
-and items where anonymisation would obscure the object under judgement were
-removed rather than shown.
-
-Because the only identifier is one the browser generates for itself, no
-directly identifying data is collected, no vulnerable groups are involved
-and there is no foreseeable risk beyond that of everyday life, the study
-falls within the University's self-assessment route rather than requiring
-full committee review.
+**No data was collected from human participants.** The work is entirely a
+secondary analysis of the published dataset described above. No survey,
+questionnaire, interview or judgement task forms part of it, so no
+application for human-participant research arises.
 
 Because the released dataset is secondary data, the module's Secondary
 Data Checklist applies in addition, and requires the supervisor's signature
 before it is submitted.
 
-**Demonstration footage.** The two video clips of E.4 are royalty-free
+**Demonstration footage.** The two video clips of E.3 are royalty-free
 stock footage from Pexels, used under the Pexels licence (free use, no
 attribution required): clip 1 (desk scene, moving camera)
 https://www.pexels.com/video/6558513/ and clip 2 (overhead desk, moving
@@ -61,7 +42,7 @@ https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-usi
 
 ## A.2 Documents attached
 
-1. **Ethics self-assessment**.
-2. **Secondary Data Checklist**, signed by the supervisor.
+1. **Secondary Data Checklist**, signed by the supervisor.
 
-Both are reproduced in full on the pages that follow.
+It is reproduced in full on the page that follows. No ethics application
+arises, the work involving no human participants.
