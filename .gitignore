@@ -120,6 +120,3 @@ dissertation/latex/main.txt
 
 # the ethics record is a second compiled document; same rule as main.pdf
 dissertation/latex/ethics_main.pdf
-
-# the volunteer validation study is not part of this dissertation
-outputs/validation/

@@ -68,6 +68,7 @@ SOURCES = {
     "uncertainty.md": ["outputs/uncertainty.json"],
     "annotator_agreement.md": ["outputs/annotator_agreement.json"],
     "depth_ablation.md": ["outputs/depth_ablation.json"],
+    "crowd_validation.md": ["outputs/crowd_validation.json"],
     "seed_replication.md": ["outputs/sgg_benchmark/seed_replication.json"],
     # the gallery and the recall table describe the same run, so the
     # gallery must not predate the fidelity report
