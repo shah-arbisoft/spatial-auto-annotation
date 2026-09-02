@@ -58,6 +58,6 @@ TOTAL NUMBER OF WORDS: computed at assembly by `scripts/build_latex.py` and
 written into the declaration page, so it cannot drift as chapters are
 edited. The template defines the figure as "the sum of the words in all the
 chapters only", excluding the title page, abstract, acknowledgements, table
-of contents, references and appendices, so the count covers the nine
+of contents, references and supplementary material, so the count covers
 chapters and nothing else; the editorial notes at the top of a chapter go
 with the exclusions.

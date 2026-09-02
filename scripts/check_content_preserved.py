@@ -19,7 +19,7 @@ DISS = ROOT / "dissertation"
 
 NUM = re.compile(r"(?<![\w.])\d+(?:,\d{3})*(?:\.\d+)?(?![\w])")
 CITE = re.compile(r"\b([A-Z][A-Za-z\-']+)(?:\s+et al\.)?,?\s+(\d{4})[a-z]?\)")
-XREF = re.compile(r"§(\d+\.\d+(?:\.\d+)?)|Appendix ([A-F](?:\.\d+)?)")
+XREF = re.compile(r"§(\d+\.\d+(?:\.\d+)?)|Supplementary ([A-F](?:\.\d+)?)")
 
 
 def tokens(text: str):
@@ -36,7 +36,7 @@ def tokens(text: str):
 def main() -> int:
     rev = sys.argv[1] if len(sys.argv) > 1 else "HEAD"
     files = sorted(DISS.glob("chapter*.md")) + [DISS / "abstract.md"]
-    # A token that leaves a chapter for an appendix has been MOVED, which is the
+    # A token that leaves a chapter for a supplement has been MOVED, which is the
     # intended operation when rebalancing against the template's chapter bands.
     # Without this the script called such a token "no longer present anywhere"
     # and every move looked like a loss.
@@ -52,7 +52,7 @@ def main() -> int:
         new = f.read_text(encoding="utf-8")
         on, oc, ox = tokens(old)
         nn, nc, nx = tokens(new)
-        # split what left this chapter into "went to an appendix" and "gone"
+        # split what left this chapter into "went to a supplement" and "gone"
         gone_n, gone_c, gone_x = on - nn, oc - nc, ox - nx
         moved_n, moved_c, moved_x = gone_n & an, gone_c & ac, gone_x & ax
         lost_n, lost_c, lost_x = gone_n - an, gone_c - ac, gone_x - ax
@@ -61,7 +61,7 @@ def main() -> int:
             print(f"  {f.stem}")
             if moved_n or moved_c or moved_x:
                 moved = sorted(moved_c | moved_x | moved_n)
-                print(f"     -> appendix ({len(moved)}): {moved[:24]}")
+                print(f"     -> supplementary ({len(moved)}): {moved[:24]}")
             if lost_c:
                 print(f"     citations gone: {sorted(lost_c)}")
             if lost_x:
@@ -69,7 +69,7 @@ def main() -> int:
             if lost_n:
                 print(f"     numbers gone ({len(lost_n)}): {sorted(lost_n)[:24]}")
         total_lost += len(lost_n) + len(lost_c) + len(lost_x)
-    print(f"\n  moved to an appendix: {total_moved}")
+    print(f"\n  moved to supplementary: {total_moved}")
     print(f"  tokens no longer present anywhere: {total_lost}")
     print("  (a number may legitimately go if the sentence quoting it went too;"
           " a citation or cross-reference going is almost always a mistake)")

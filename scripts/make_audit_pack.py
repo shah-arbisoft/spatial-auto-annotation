@@ -119,7 +119,7 @@ def render(sample_id, image_path, geo, subj, obj, predicate, out_png,
     Anonymisation is on by default and happens before anything is drawn, so the
     saved file never holds an unmasked face even transiently. An audit pack is
     sent to a third-party API and read by a person, which is the same disclosure
-    Chapter 8 covers for the validation website, and 35% of these frames carry
+    Section 3.12 covers for the validation website, and 35% of these frames carry
     an annotated human. The caller is told when a mask lands on a claim object,
     because that item is no longer judgeable and the pack has to account for it.
     """

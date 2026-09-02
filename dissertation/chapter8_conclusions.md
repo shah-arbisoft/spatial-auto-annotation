@@ -1,12 +1,12 @@
-# Chapter 9: Conclusions and Future Work
+# Chapter 8: Conclusions and Future Work
 
 This chapter closes the dissertation: what each objective was met with and
-how the two research questions are answered (§9.1), the contributions
-(§9.2), each limitation paired with the experiment that would settle it
-(§9.3), and a personal reflection on how the project was actually conducted
-(§9.4).
+how the two research questions are answered (§8.1), the contributions
+(§8.2), each limitation paired with the experiment that would settle it
+(§8.3), and a personal reflection on how the project was actually conducted
+(§8.4).
 
-## 9.1 Summary of the dissertation
+## 8.1 Summary of the dissertation
 
 The aim was to determine whether spatial-relationship annotation for
 robot-acquired images can be automated, and whether the resulting labels are
@@ -34,7 +34,7 @@ saw, judged against two references fixed in advance; the trivial baselines
 are beaten by a wide margin, 0.74 held-out and 0.85 pooled against 0.14 for
 both random and majority, and the second reference, how well two human
 annotators would agree, is one this dataset cannot supply, for reasons
-Appendix F.12 sets out. Comparability therefore rests on the baselines and
+Supplementary F.12 sets out. Comparability therefore rests on the baselines and
 the per-predicate audit. The second condition, that labels beyond the human
 record survive audit, holds for the lateral, proximity and depth-decided
 predicates at blind-audited precision 0.79–1.00. **It is not met for
@@ -78,7 +78,7 @@ practice.** Robot planning needs the first, which is why the planner
 separates the sources decisively and the ranked benchmark cannot separate
 them at all.
 
-## 9.2 Research contributions
+## 8.2 Research contributions
 
 **For the source dataset and its authors.** An annotator that labels the
 existing images 20 times more densely in five minutes, in the dataset's own
@@ -110,10 +110,10 @@ likely to transfer, since many robotics datasets are sequences presented as
 image sets, and there a predicate's agreement with itself across viewpoints
 separates a rule that is wrong from one that is merely uncertain.
 
-## 9.3 Limitations, and future research and development
+## 8.3 Limitations, and future research and development
 
 Each limitation below is stated with the experiment that would settle it,
-because that is more useful than an apology; Appendix B specifies each of
+because that is more useful than an apology; Supplementary B specifies each of
 those experiments.
 
 **The chain reaches the plan, not the robot.** The planner experiment (§5.7)
@@ -153,7 +153,7 @@ spot.** The support rule excludes `human` from either role because mask
 contact alone cannot tell a person *holding* an object from a surface
 *supporting* one (0 of 2,466 gold support triplets involve a person either
 way); ablation A10 tested the geometric alternative, a drop-fraction
-threshold, and the two populations do not separate (Appendix D.8). The guard
+threshold, and the two populations do not separate (Supplementary D.8). The guard
 is scoped to the classes this dataset labels, so an object held by any
 unguarded class, whether a robot manipulator, a trolley or an animal, would
 defeat it the same way a person does, which bounds every human-robot interaction
@@ -169,7 +169,7 @@ intervention with the best expected return is a written annotation guideline
 ahead of a better network, an uncomfortable conclusion for a
 computer-vision project and the one the evidence supports. The routes that
 stay open are a calibrated stereo pair or an RGB-D capture; wider surface
-detection was built, measured and declined (Appendix D.4).
+detection was built, measured and declined (Supplementary D.4).
 
 **Detection bounds full automation.** End-to-end recall with a zero-shot
 detector is 0.38 against the relation layer's 0.85 conditional on detection.
@@ -185,7 +185,7 @@ unfamiliar input are therefore measured; correctness on that portion is not,
 and cannot be without labels. Section 4.12 substitutes self-agreement for
 truth and should be read as the weaker thing it is.
 
-## 9.4 Personal reflections
+## 8.4 Personal reflections
 
 The most useful thing this project taught me was to distrust a number until
 I know how it was produced.

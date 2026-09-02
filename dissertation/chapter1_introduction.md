@@ -165,7 +165,7 @@ baselines and ablations (RQ1), a controlled three-arm downstream study
 (RQ2), two measurements of the dataset's own annotation process its authors
 did not have, and a reliability check that needs no labels at all, obtained
 by recovering the fact that the released images are consecutive frames of
-one robot capture. Section 9.2 states each contribution against its evidence
+one robot capture. Section 8.2 states each contribution against its evidence
 and says who can use it.
 
 ### 1.2.4 Scope
@@ -177,7 +177,7 @@ carrying the comparison one link further towards robot behaviour (§5.7); the
 vision-language baseline (§4.13); and a critical evaluation chapter. Two
 items entered scope during the project and are marked as such where
 reported: scaling to robot captures beyond the annotated release, once the
-supervising group supplied the full capture (Appendix E.5), and the
+supervising group supplied the full capture (Supplementary E.5), and the
 vision-language comparison, brought forward once it became clear a reader
 would treat it as the obvious alternative. Deferred to future work:
 copy-paste augmentation of under-represented relations, and any revision of
@@ -209,7 +209,7 @@ is a documented iteration between Evaluation and Modelling.
 | Data preparation | orientation-corrected loading, geometry caching, native-format writers | Ch. 3 |
 | Modelling | perception stack + geometric rule layer; threshold calibration; downstream classifiers | Ch. 3, 5 |
 | Evaluation | fidelity protocol (baselines, ablations, audits), controlled label-source comparison, exhaustive failure attribution | Ch. 4–6 |
-| Deployment | detector-in-the-loop mode, runtime/VRAM footprint, reproducibility package | Ch. 4, appendices |
+| Deployment | detector-in-the-loop mode, runtime/VRAM footprint, reproducibility package | Ch. 4, supplementary |
 
 Four constraints shaped the design as much as the research questions did: a
 single 6 GB consumer GPU, no budget for paid annotation, one dataset, and
@@ -218,9 +218,9 @@ and each is answered somewhere in the evidence: the GPU budget by ablation
 A8, the annotation budget by auditing samples rather than re-annotating at
 scale, the single dataset by an argument rather than a second domain, and the GPU-hour cap by
 a three-seed replication whose width is reported rather than smoothed over.
-Appendix B sets out what each constraint excluded.
+Supplementary B sets out what each constraint excluded.
 
-Ethical considerations are summarised here and detailed in Appendix A. The
+Ethical considerations are summarised here and detailed in Supplementary A. The
 work is a secondary analysis of a published, openly licensed dataset (CC-BY
 4.0) collected by the supervising research group; no new personal data were
 gathered for the annotation study. Some dataset frames contain identifiable
@@ -237,6 +237,10 @@ increasing scope on the same question**, and reading them in order is the
 point: the fidelity study answers RQ1 against the human labels, the
 controlled downstream study answers RQ2 against a lightweight model, and the
 benchmark repeats it in the source paper's own framework and disagrees.
-Chapter 7 ties all three to causes and to prior work, Chapter 8 to the
-legal, social, ethical and professional dimensions of automating annotation,
-and Chapter 9 to the objectives, the contributions and what is left undone.
+Chapter 7 ties all three to causes and to prior work, and reads the result
+for its social and professional consequences, and Chapter 8 closes against
+the objectives, the contributions and what is left undone. The legal and
+ethical constraints on the data and the models are stated where they bore
+on the design, in §3.12. The chapters are self-contained; the
+supplementary material after the references is further information, not
+a part of the argument.

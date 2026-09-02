@@ -1,6 +1,6 @@
 # Ethics Record
 
-> Submitted alongside the dissertation as a separate document. Appendix A of
+> Submitted alongside the dissertation as a separate document. Supplementary A of
 > the dissertation summarises this record and points here; this is the full
 > version, with the signed Secondary Data Checklist attached at the end.
 
@@ -13,7 +13,7 @@ personal data was collected for the annotation study. Scene images in the
 dataset contain identifiable people; all figures reproduced in this
 dissertation blur faces, and the dataset is used strictly as released.
 
-A second body of data is used in §4.12 and §9.3: the complete 2,650-frame
+A second body of data is used in §4.12 and §3.12: the complete 2,650-frame
 capture from which the released images were cut, supplied directly by the
 supervising group. Frames 000000–000883 are the released dataset itself,
 verified by exact pixel match; the remaining 1,766 frames carry no
