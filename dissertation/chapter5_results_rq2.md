@@ -82,7 +82,7 @@ committing to more pairs, yet the automatic arm scores **0.040 on `to the
 left of`**, the predicate §4.4 audited at fifteen of fifteen extra
 predictions correct. An arm cannot be both wrong and right about laterality,
 so what the column measures is agreement with which pairs an annotator chose
-to write down, which is §4.3's artefact one level down the chain. Appendix F.5 gives
+to write down, which is §4.3's artefact one level down the chain. Supplementary F.5 gives
 the full table, and concedes what it cannot settle, since §4.4 audited the rule
 layer's extras, not the classifier's, so these precision figures are
 uninterpretable rather than favourable. The automatic arm dominates at
@@ -175,7 +175,7 @@ relationships, **C** the automatically computed ones. One filter runs over
 both relation conditions, so neither is offered a relation the other was
 denied, and a plan is safe if it moves the occluder before grasping the
 target, judged by published rules (`eval/score_planner.py`), blind by
-construction. Appendix E.5 gives the filter and why it does not equalise
+construction. Supplementary E.5 gives the filter and why it does not equalise
 density, the prompts, the scene-level forensics and a scoring defect
 hand-reading caught. The experiment ran twice, on `gemini-flash-latest` and
 the reasoning model `gemini-3.1-pro-preview`, with two conditions on the
@@ -191,7 +191,7 @@ larger planner only: **D**, the vision-language model's relations from
 | E | automatic and vision-language combined | not run | **25 / 25** |
 
 {{fig:planner-sources}} shows the five conditions, and three findings sit in
-them, each set out with its evidence in Appendix E.5. **The two planners
+them, each set out with its evidence in Supplementary E.5. **The two planners
 agree exactly**, failing on the same six scenes, so the result is a property
 of the prompt and not of the engine reading it. **Every failure in both
 automatic arms is a missing support relation**, never a plan reasoning badly
@@ -215,7 +215,7 @@ discordant to 5 at p = 1.00, so that two-scene margin is not read here. The
 tests are sharp exactly where the absolute rates are not, C's own rate being
 19 of 25 with a 95% interval of [0.55, 0.91].
 
-Appendix E.5 carries five limits with the design; two belong here because
+Supplementary E.5 carries five limits with the design; two belong here because
 they bound what the result can mean. The scenes were selected to contain an
 occluder, so it speaks to that situation and not to task planning at large,
 and no robot moved, so this measures plans rather than executions. And
@@ -245,7 +245,7 @@ dataset's scale of human annotation the automatic labels are not merely
 "good enough" but **substantially better training material than the human
 labels themselves**, 0.75 against 0.30 on the annotators' own held-out gold,
 and the self-trained arm rules out the cheap alternative by recovering only
-15% of the gap. Appendix F.12 sets out why that is the dissertation's core
+15% of the gap. Supplementary F.12 sets out why that is the dissertation's core
 claim and what bounds it.
 
 The scope of the answer is set by what follows. Chapter 6 repeats the

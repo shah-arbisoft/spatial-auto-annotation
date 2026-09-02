@@ -4,13 +4,14 @@ This chapter discusses the results instead of reporting new ones: what the
 project achieved against its two research questions, what the remaining
 failures are made of, what the measurements say about the dataset's own
 annotation process, and, in §7.7, an answer to each of the five objections
-§2.9 raised against the approach before any result was known. The
-objective-by-objective audit belongs with the conclusions and is in §9.1.
+§2.9 raised against the approach before any result was known, and what the
+result means socially and professionally (§7.8). The objective-by-objective
+audit belongs with the conclusions and is in §3.12.
 
 ## 7.1 Achievement against the research questions
 
 **RQ1** asked whether annotation can be automated at a quality comparable to
-human annotation. The answer differs by predicate, and §9.1 states it
+human annotation. The answer differs by predicate, and §8.1 states it
 against the criteria of §1.2.2; what matters here is its shape. For the
 lateral and proximity predicates the tool is by every measure available *at
 least* as good as the human process. For support it is not: two evidence
@@ -46,7 +47,7 @@ propagating the annotators' silence rather than their judgement, and on
 `near` it drives recall below the human baseline it started from. The
 comparison is therefore against the obvious alternative under identical
 conditions, and not against doing nothing at all. (The six objectives of §1.2.1 are
-audited against their evidence in §9.1; this chapter is concerned with what
+audited against their evidence in §8.1; this chapter is concerned with what
 the results *mean*.)
 
 ## 7.2 What the remaining failures are made of
@@ -247,7 +248,7 @@ neither a disinterested human: the author built the tool, and the model is a
 system of the kind §4.13 shows annotates poorly, admissible only because
 judging a supplied claim needs the half of it that works and the decoys
 measure it doing so (§4.14, §7.4). The disinterested human estimate is
-Appendix E.3: on the labels it judged it agrees with the author's blind
+Supplementary E.3: on the labels it judged it agrees with the author's blind
 audit on support to 0.009, and its control arm shows the raters scoring
 human annotation at 0.940 on the same instrument, so the author's verdicts
 are corroborated rather than merely unchallenged. It was drawn before the
@@ -259,7 +260,7 @@ it evaluates.
 mounting; the fitted constants (`near_T`, ε values, contact threshold) are
 dataset-specific by design, and the transferable artefact is the
 *procedure*, fit on some annotators and validate on held-out ones, not the
-numbers. The only out-of-domain evidence is qualitative (Appendix E.4) and
+numbers. The only out-of-domain evidence is qualitative (Supplementary E.4) and
 measures nothing, since no labelled out-of-domain gold exists; a modest
 labelled cross-domain sample is the missing experiment, cheap enough that a
 replication should simply include one. Full automation is currently
@@ -276,7 +277,7 @@ contain.
 
 **Ethics.** Some frames contain identifiable people, so those images are
 personal data under the Data Protection Act 2018 and anonymising them is
-data minimisation, not a courtesy (§8.1). No figure in this dissertation
+data minimisation, not a courtesy (§3.12). No figure in this dissertation
 reproduces a scene photograph. Where images are put in front of people, in
 the audit pack and on the validation site, faces are pixelated automatically
 and any item whose judgement that would compromise is dropped instead of
@@ -294,7 +295,7 @@ dissertation bears on predicates beyond the seven, and the objection, that
 a hand-written rule set does not extend by learning, stands in full. The
 work offers a boundary and no rebuttal: the rules are decidable because the
 predicates are spatial, and §3.3 makes that dependence explicit instead of
-hoping it generalises. Section 9.3 records it as the limitation most likely
+hoping it generalises. Section 8.3 records it as the limitation most likely
 to matter to anyone reusing the method.
 
 **Systematic error: partly confirmed, partly refuted, and the split is
@@ -318,7 +319,7 @@ author gave. It does not reach the structural guarantees of §3.6, checkable
 without any verdict at all, nor the downstream findings of Chapters 5 and 6,
 scored against human annotation the author did not produce and in which the
 automatic arm is judged by its rival's yardstick. The designed remedy is the
-study of Appendix E.3, which met the coverage it specified, all 147 priority
+study of Supplementary E.3, which met the coverage it specified, all 147 priority
 claims reaching three raters; what it returns (§4.15) narrows the objection
 without retiring it, since on the pre-refit labels both judged, disinterested judges
 scored support slightly lower than the author did, so the author's audit is
@@ -349,7 +350,53 @@ those conditions being the sparse, guideline-free annotation this dataset
 occupies. The bottleneck was therefore not only slowing the dataset down, it
 was limiting what the dataset could teach.
 
-## 7.8 Summary
+## 7.8 Social and professional dimensions of the result
+
+The evidence above is about accuracy. What follows is about what the
+accuracy is for, and it is placed here rather than in a chapter of its own
+because each point is a reading of a measurement already reported.
+
+**The human role, not the job.** The project automates paid human work, and
+the framing the measurements support is narrower than displacement: at this
+scale the manual process produced sparse, inconsistent labels at a cost of
+nine annotators, and the realistic effect is a changed role, from labelling
+every pair to reviewing a measurable flagged minority (§4.7). The same shift
+makes dataset construction affordable for groups that could not fund manual
+annotation at all, since the pipeline runs on a consumer 6 GB GPU.
+
+**Downstream consequence.** Annotation quality propagates: a planner
+consuming wrong spatial relations can act wrongly in physical space. That is
+why this evaluation centres on audited precision, on abstention instead of
+guessing, and on per-failure attribution, and why Chapter 6 separates labels
+that are *correct* from labels that are *human-like*. It is also why §7.1
+records support's precision failure as a failure rather than as a caveat.
+Trust in automatic labels should be calibrated by that kind of evidence, not
+assumed from a headline recall figure.
+
+**Bias.** The geometric rules carry no demographic component; they compute
+from positions and extents. The perception stack is learned, and detection
+quality for the `human` class cannot be assumed uniform across people, since
+published detectors have documented disparities. The people in this dataset
+are members of the collecting research group, so the question is not
+testable here, and it is recorded as a deployment consideration rather than
+a resolved issue.
+
+**Research integrity and professional practice.** Predictions were
+registered before the benchmark ran and reported as they fell: one
+confirmed, one refuted, and one left unresolved once a better-controlled
+replication shrank the margin it rested on (§6.6). A withdrawn hypothesis
+remains in the text (§6.4), and two built refinements are reported as
+measured and declined (Supplementary D.4). The work follows the BCS Code of
+Conduct (BCS, 2022) in the privacy safeguards of §3.12, in claims bounded by
+the limitations of §7.6, and in documenting failures so that others can
+build on them as readily as on the successes; and in the engineering, in
+version control with a clean history, a test suite run before every change
+ships, one configuration file holding every threshold, and seeded
+reproducible runs (Supplementary B). A result that cannot be re-run is an
+anecdote, which is why the reproducibility package is a deliverable with the
+same status as the results.
+
+## 7.9 Summary
 
 This chapter read the three iterations together. RQ1 is answered differently
 by predicate, and RQ2's strong classifier result is scoped by a benchmark
@@ -364,5 +411,5 @@ quantity. Of the five objections registered in §2.9 before any result, two
 are answered empirically, one is conceded, one is answered as far as
 measurement can reach, and one is not addressed at all.
 
-Chapter 8 turns from the evidence to the legal, social, ethical and
-professional dimensions of automating annotation work.
+Chapter 8 closes the dissertation against its objectives and research
+questions, states the contributions, and sets out what is left undone.

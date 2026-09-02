@@ -2,7 +2,7 @@
 
 > To be submitted alongside the dissertation as a separate document, once the
 > ethics self-assessment is submitted and the Secondary Data Checklist is
-> signed by the supervisor. Appendix A of the dissertation summarises this
+> signed by the supervisor. Supplementary A of the dissertation summarises this
 > record and points here; this is the full version, with the two forms
 > attached at the end.
 
@@ -15,7 +15,7 @@ personal data was collected for the annotation study. Scene images in the
 dataset contain identifiable people; all figures reproduced in this
 dissertation blur faces, and the dataset is used strictly as released.
 
-A second body of data is used in §4.12 and §9.3: the complete 2,650-frame
+A second body of data is used in §4.12 and §8.3: the complete 2,650-frame
 capture from which the released images were cut, supplied directly by the
 supervising group. Frames 000000–000883 are the released dataset itself,
 verified by exact pixel match; the remaining 1,766 frames carry no
@@ -33,7 +33,7 @@ recorded. Each browser receives a random identifier, stored with its answers
 and used only to spread item coverage and remove duplicates; because UK GDPR
 treats an online identifier as personal data where it can single out someone,
 the study is described as pseudonymous rather than anonymous throughout, here
-and in §1.3 and §8.3. The
+and in §1.3 and §3.12. The
 identifier is generated in the browser, derives from nothing about the device
 or network, and is joined to no other dataset. Participation is voluntary,
 takes about three minutes, and can be abandoned at any point; an information

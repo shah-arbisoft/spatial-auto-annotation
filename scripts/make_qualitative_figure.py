@@ -7,7 +7,7 @@ by `scripts/annotate_image.py`, one from a calibration group and one from a
 held-out group whose front/behind labels §4.5 convicts of an inverted
 convention.
 
-Faces are pixelated first, from the dataset's own `human` boxes, because §8.1
+Faces are pixelated first, from the dataset's own `human` boxes, because §3.12
 commits to data minimisation on everything the project republishes and a figure
 in a submitted document is republication. The regions come from `src.anonymise`,
 so this figure, the audit pack and the validation website all apply one rule.

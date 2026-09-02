@@ -1,11 +1,20 @@
-# Appendices
+# Supplementary Material
 
-## Appendix A: Ethical Approval
+The chapters are self-contained: every claim, table and figure needed to
+follow the argument is in them, and no result is stated here that a chapter
+depends on. What follows is further information for a reader who wants to
+check or repeat something rather than to understand it: the ethics record
+(A), the reproduction instructions (B), the predicate specification the
+rules implement (C), the derivations behind each ablation (D), the extended
+studies too long to sit inside a chapter (E), and the additional tables and
+figures the chapters cite (F).
+
+## Supplementary A: Ethical Approval
 
 The full ethics record is submitted as a **separate document, `ethics.pdf`**,
 with the two forms attached to it: the University ethics self-assessment and
 the Secondary Data Checklist, the latter requiring the supervisor's
-signature. This appendix records what that document establishes, so the
+signature. This supplement records what that document establishes, so the
 dissertation can be read without it.
 
 The work is a secondary analysis of an existing, published dataset (Wang et
@@ -13,14 +22,14 @@ al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new
 personal data was collected for the annotation study. Scene images contain
 identifiable people, so every figure reproduced here blurs faces and the
 dataset is used strictly as released. The unreleased 1,766-frame remainder
-of the capture, used in §4.12 and §9.3, is **not** covered by that licence:
+of the capture, used in §4.12 and §8.3, is **not** covered by that licence:
 it is used only to measure behaviour on unlabelled input, is not
 redistributed, and no figure reproduces a frame from it. The independent
 validation of Chapter 4 collects **pseudonymous** true/false judgements from
 adult volunteers, with no names, email addresses or IP addresses, only a
 per-browser random identifier used to spread coverage and drop duplicates,
 which UK GDPR treats as personal data, which is why the study is described
-as pseudonymous rather than anonymous here and in §1.3 and §8.3. Because no
+as pseudonymous rather than anonymous here and in §1.3 and §3.12. Because no
 directly identifying data is collected, no vulnerable groups are involved
 and there is no foreseeable risk beyond that of everyday life, the study
 falls within the self-assessment route rather than requiring full committee
@@ -33,7 +42,7 @@ https://www.pexels.com/video/6558513/ and clip 2 (overhead desk, moving
 hands)
 https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-using-a-modern-camera-3250234/.
 
-## Appendix B: Reproducibility
+## Supplementary B: Reproducibility
 
 Environment: Windows 11, Python 3.11.9 (virtual environment), PyTorch 2.5.1
 (CUDA 12.1), single NVIDIA RTX 2060 (6 GB). All thresholds, seeds and model
@@ -332,7 +341,7 @@ than smoothed over.
 
 ### What each limitation would take to settle
 
-Section 9.3 states each limitation with the experiment that would settle it;
+Section 8.3 states each limitation with the experiment that would settle it;
 these are the specifications.
 
 **Execution, not just planning.** The planner experiment closes one of the
@@ -370,7 +379,7 @@ stereo would attack the front/behind bound directly, supplying disparity at
 every frame from a known baseline, which is what the multi-frame estimators
 of A9 lack: those must recover the camera's motion first, and on small
 low-texture objects they answer for only 9% of pairs and are 0.20 less
-accurate where they do (§4.9, Appendix D.6). A calibrated pair removes both
+accurate where they do (§4.9, Supplementary D.6). A calibrated pair removes both
 problems and keeps the method's premise intact, since stereo is available at
 capture time whereas depth recovered from a robot walking twenty frames is
 not.
@@ -380,7 +389,7 @@ not.
 input are measured; correctness there is not, and cannot be without labels
 a few hundred triplets would supply.
 
-## Appendix C: Predicate specification
+## Supplementary C: Predicate specification
 
 This is the complete geometric specification of the seven predicates: the
 per-object measurements every rule reads, the rule for each predicate with its
@@ -480,7 +489,7 @@ contact alone cannot distinguish a person *holding* an object from a surface
 deployment with different classes revises it in one line, and it does not
 cover one object held by another unguarded object: a manipulator, a trolley
 or an animal would defeat it. That is a fair objection to a class list
-standing in for geometry, and ablation A10 (Appendix D.8) tests the obvious
+standing in for geometry, and ablation A10 (Supplementary D.8) tests the obvious
 geometric replacement rather than conceding the point in the abstract. It
 does not work, and the measurement says why.
 
@@ -670,7 +679,7 @@ front/behind agreement rose from ~26% to ~74%, which is the kind of error
 that looks like a modelling failure and is not. An EXIF-aware loader makes
 the 180-degree-rotated captures upright before any box, mask or depth is
 read; the dataset stores that rotation behind a flag, and reading it wrongly
-produced correct-looking unit tests over an upside-down image (§9.4).
+produced correct-looking unit tests over an upside-down image (§8.4).
 
 **Why support is demoted rather than resolved.** `on` and `under` are
 independent tests over *different* contact evidence, the mask-contact
@@ -706,10 +715,10 @@ nothing to the fit. Per-annotator precision at the fitted T is 0.41 / 0.63 /
 0.16, so what varies across annotators by about fourfold is how exhaustively
 each applied the label, not where they placed it.
 
-## Appendix D: Ablation derivations
+## Supplementary D: Ablation derivations
 
 Chapter 4 (§4.9) summarises the ten ablations and their verdicts. This
-appendix gives the derivations: how each shipped parameter was calibrated on
+supplement gives the derivations: how each shipped parameter was calibrated on
 the training annotator groups, what the held-out groups then reported, and
 what the audits of the affected predictions found. The two declined
 refinements are included in full, because a negative result is only useful
@@ -794,7 +803,7 @@ carried no gold to recover.
 ### D.3 The ground-plane fallback (ablation A7)
 
 The depth abstention band was the single largest miss cause, and most of it
-turned out to be resolvable without depth at all. Appendix C.6 specifies the
+turned out to be resolvable without depth at all. Supplementary C.6 specifies the
 rule and its two guards; what follows is the evidence that selected it. On the
 train groups the fallback adds 386 committed directions at 0.91 agreement; on
 held-out group 7 it adds 54 and **every one agrees with the annotator**.
@@ -839,7 +848,7 @@ while mean recall *falls* from 0.845 to 0.843, and the front/behind emit
 rate moves by +0.001. Deltas are differences between the rounded figures
 printed here, so the columns add up as read. Both arms are end-to-end runs
 on the shipped rule set, so the comparison isolates the depth model alone.
-An earlier version of this appendix reported the same ablation with both
+An earlier version of this supplement reported the same ablation with both
 arms at the pre-refit support threshold and predicted that re-running it on
 the shipped labels would move the two arms together without changing a
 difference that small; it did. The depth-predicate limit is *monocular
@@ -1027,7 +1036,7 @@ geometry. Contact height cannot tell a hand from a shelf because a hand at
 waist height and a shelf at waist height are the same measurement.
 Separating them needs something the pipeline does not have, either surface
 normals from real 3D or an affordance notion of what can support, and both
-are the future work of §9.3 rather than a threshold.
+are the future work of §8.3 rather than a threshold.
 
 What the ablation does settle is the guard's blast radius. Fifty-one pairs
 in 836 images reach the contact threshold with a person on either side, so
@@ -1035,7 +1044,7 @@ the class list changes 51 decisions out of the 42,440 the tool makes. It is
 a narrow patch over a real gap, and the gap is a limit of monocular geometry
 rather than of the rule set.
 
-## Appendix E: Extended validation studies
+## Supplementary E: Extended validation studies
 
 Six studies sit here. Half of them support a result reported in a chapter
 and carry the detail behind it: the vision-language baseline of §4.13, whose
@@ -1319,7 +1328,7 @@ as nearer the camera, support as physically resting rather than held, and an
 explicit instruction to answer WRONG when unsure, which reproduces the
 conservative rule used in the author's own audits. Each browser receives a
 random identifier that prevents repeat judgements without identifying
-anybody, and faces are anonymised in every image (Chapter 8).
+anybody, and faces are anonymised in every image (§3.12).
 
 **Coverage.** Stratified by what each analysis requires. An aggregate precision estimate needs only one judgement per claim, the estimate being over claims rather than over raters, so ordinary claims target a single rater. The 147 claims that also carry an author verdict target three raters each, because the crowd-versus-author comparison and the inter-rater reliability figure both need several independent judgements on the *same* item; those claims are served first. Against the resized pool that is about 1,300 judgements rather than the 3,000 a uniform three-rater target would demand. The priority ordering was the design's hedge against a thin turnout, and it worked in the direction intended: all 147 priority claims reached three raters, so the author comparison and the reliability figure rest on the coverage they were specified for and not on whatever the response happened to allow.
 
@@ -1388,7 +1397,7 @@ This records how the clips were processed and what went wrong, both of which
 qualify the reading above.
 
 **The clips and the thresholds.** Two royalty-free stock clips, sourced in
-Appendix A, share nothing with the robot dataset: different scenes, a
+Supplementary A, share nothing with the robot dataset: different scenes, a
 different camera, and objects almost entirely outside the six annotated
 classes (monitor, keyboard, mouse, mug, spectacles, plants, lamp, notepad,
 laptop, wallet, earbuds case). Nothing was retuned for them, so `near_T`,
@@ -1421,7 +1430,7 @@ of the desk, which is the reference-frame dependence §2.5 cites from
 RoboSpatial, demonstrated rather than asserted.
 
 These figures are lower on clip 1 and higher on clip 2 than the version of
-this appendix written before the support threshold was refitted (§4.14),
+this supplement written before the support threshold was refitted (§4.14),
 which reported 0.90 and 0.94. The refit removes support emissions on weak
 contact evidence, and on a desk viewed from a moving camera those are
 exactly the borderline pairs that persisted across frames by inertia; on the
@@ -1555,7 +1564,7 @@ one.
 Throughput and density in Chapter 4 are measured on the 836 annotated images,
 which leaves the claim that the method extends to new captures resting on an
 extrapolation. The 1,766 unannotated frames of the raw sequence (§4.12,
-Appendix A) remove that gap: robot output nobody has labelled, from the same
+Supplementary A) remove that gap: robot output nobody has labelled, from the same
 platform but later in the session, with arrangements the tool has never been
 shown. Content-adaptive selection reduces them to 562 keyframes, 3.1×, at
 6.15 s per frame on the RTX 2060, finishing in 58 minutes against just over
@@ -1719,11 +1728,11 @@ written to a separate file that the judging interface never reads. The key is
 not distributed with the repository, since publishing it would make any
 later re-audit unblindable.
 
-## Appendix F: Supplementary tables and figures
+## Supplementary F: Additional tables and figures
 
 ### F.1 Per-predicate and per-slice results at seed 42
 
-Section 6.3 reports the headline benchmark result and Appendix F.1 the two
+Section 6.3 reports the headline benchmark result and Supplementary F.1 the two
 decompositions it draws on. Both come from the same pair of best checkpoints
 scored on the same 210-image test set, at seed 42 only, and from the same
 single training session as every other figure in Chapter 6; §6.3.1 replicates
@@ -2098,13 +2107,13 @@ overstates what is known.
 **Where the residual depth error sits.** Section 4.5 decomposes the depth
 pair's shortfall into calibrated abstention and a convention the annotators
 did not share, in measured proportions. Genuine depth error is the remainder
-and not absent: Appendix D.7 measures it at 1% of `in front of` misses
+and not absent: Supplementary D.7 measures it at 1% of `in front of` misses
 and 6% of `behind`, so the dominant terms are not depth error, which is a
 weaker claim than none of it being.
 
 ### F.12 The reasoning behind the answers
 
-Chapters 4 to 6 and §9.1 state their verdicts; the weighing behind them is
+Chapters 4 to 6 and §8.1 state their verdicts; the weighing behind them is
 collected here, so that each answer can be read as an answer.
 
 **Why RQ1 divides by predicate rather than by mean (§4.8).** The two axes
@@ -2164,7 +2173,7 @@ practice and not inferred. The one remaining instrument is a manual
 audit of the auto arm's top-ranked false positives, the analogue of §4.4,
 left as designed follow-up.
 
-**What the two counting conventions do to RQ1's comparability (§9.1).** The
+**What the two counting conventions do to RQ1's comparability (§8.1).** The
 criterion named two references. The trivial baselines are beaten by a wide
 margin. The second, how well two human annotators would agree with each
 other, this dataset cannot supply: the nine groups labelled disjoint batches

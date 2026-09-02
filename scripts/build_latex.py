@@ -39,8 +39,7 @@ CHAPTERS = [
     ("chapter5_results_rq2.md", "Downstream Utility"),
     ("chapter6_benchmark.md", "The Direct Benchmark Test"),
     ("chapter7_critical_evaluation.md", "Critical Evaluation"),
-    ("chapter8_lsep.md", "Legal, Social, Ethical and Professional Considerations"),
-    ("chapter9_conclusions.md", "Conclusions and Future Work"),
+    ("chapter8_conclusions.md", "Conclusions and Future Work"),
 ]
 
 # figure -> (chapter file it belongs in, caption, anchor text to insert after)
@@ -52,7 +51,7 @@ FIGURES = {
         "relation is correct. Right, a held-out group whose annotators recorded "
         "front and behind under the opposite convention, which is the failure "
         "Section 4.5 decomposes. Faces are pixelated from the dataset's own "
-        "human boxes, as Section 8.1 requires of anything republished.",
+        "human boxes, as Section 3.12 requires of anything republished.",
         "## 4.2 Headline: recall of the human triplets"),
     "rq1_recall.png": (
         "chapter4_results_rq1.md",
@@ -245,7 +244,7 @@ TABLES = {
         "justification.",
     ],
     # One caption per table, in document order. The two Ablation A9 captions
-    # that used to sit here moved with their tables to Appendix D.6; leaving
+    # that used to sit here moved with their tables to Supplementary D.6; leaving
     # them behind shifted every caption from the ablation table onward.
     "chapter4_results_rq1.md": [
         # 4.2
@@ -265,7 +264,7 @@ TABLES = {
         "draws and not between two readings of one.",
         # 4.15, the volunteer arm against both audit judges
         "Precision on the same pre-refit label generation under three "
-        "judges: volunteers who did not build the tool (Appendix E.3), the "
+        "judges: volunteers who did not build the tool (Supplementary E.3), the "
         "blinded author, and the vision-language model.",
     ],
     "chapter5_results_rq2.md": [
@@ -939,10 +938,10 @@ def main():
         ETHICS_MAIN.replace("__ETHICSBODY__", r"\input{ethics}"),
         encoding="utf-8")
 
-    # Appendices: each "## Appendix X: Title" becomes its own \chapter so the
-    # contents page reads "Appendix A: Ethical Approval", as the template shows.
+    # Supplements: each "## Supplementary X: Title" becomes its own \chapter,
+    # so the contents page reads "Supplementary A: Ethical Approval".
     app_md = (SRC / "appendices.md").read_text(encoding="utf-8")
-    parts = re.split(r"(?m)^##\s+Appendix\s+[A-Z]\s*[:.]?\s*(.+)$", app_md)
+    parts = re.split(r"(?m)^##\s+Supplementary\s+[A-Z]\s*[:.]?\s*(.+)$", app_md)
     chunks = []
     app_caps = list(TABLES.get("appendices.md", []))
     for title, body in zip(parts[1::2], parts[2::2]):
@@ -960,6 +959,16 @@ def main():
                 and a and a.removeprefix("after:") in body]
         chunks.append("\\chapter{" + inline(title.strip()) + "}\n"
                       + convert(body, here, take))
+    # Anything written above the first "## Supplementary A:" is the note that
+    # says the chapters stand on their own and this material is optional. It
+    # belongs at the head of the supplements, where a reader arriving from the
+    # contents page meets it, so it is emitted as an unnumbered opening rather
+    # than dropped with the rest of parts[0].
+    lead = re.sub(r"(?m)^#\s+.*$", "", parts[0]).strip()
+    if lead and chunks:
+        chunks.insert(0, "\\chapter*{Supplementary Material}\n"
+                         "\\addcontentsline{toc}{chapter}{Supplementary Material}\n"
+                      + convert(lead, []))
     (out / "appendices.tex").write_text(
         "\n\n".join(chunks) if chunks else convert(app_md, []), encoding="utf-8")
     # The chapter loop checks the caption registry against the tables it is
@@ -976,7 +985,7 @@ def main():
                     f"one after the mismatch sits on the wrong table")
     elif app_caps:
         app_note = f"  WARNING: {len(app_caps)} captions never consumed"
-    print(f"  appendices.md{'':21s} -> appendices.tex  ({len(chunks)} appendices, {n_app_tab} tables){app_note}")
+    print(f"  appendices.md{'':21s} -> appendices.tex  ({len(chunks)} supplements, {n_app_tab} tables){app_note}")
     (out / "references.tex").write_text(
         build_references((SRC / "references.md").read_text(encoding="utf-8")),
         encoding="utf-8")
@@ -984,7 +993,7 @@ def main():
     # The declaration's word count is computed here rather than typed in, so
     # it cannot drift as chapters are edited. The module template defines it as
     # "the sum of the words in all the chapters only", excluding the title
-    # page, abstract, acknowledgements, contents, references and appendices, so
+    # page, abstract, acknowledgements, contents, references and supplements, so
     # the abstract is not counted here; the editorial ">" notes at the top of a
     # chapter are dropped with it.
     words = 0
@@ -1123,6 +1132,10 @@ MAIN = r"""% GENERATED by scripts/build_latex.py -- do not edit by hand.
 \setlength{\cftbeforetabskip}{0pt}
 \setlength{\cftbeforefigskip}{0pt}
 \renewcommand{\cftchappagefont}{\bfseries}
+% Contents to section level. The 53 subsection entries cost a page of front
+% matter for navigation the section list already gives, and the front matter
+% counts against the page allowance.
+\setcounter{tocdepth}{1}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -1288,11 +1301,8 @@ will be penalised.
 \chapter{Critical Evaluation}
 \input{chapter7-critical-evaluation}
 
-\chapter{Legal, Social, Ethical and Professional Considerations}
-\input{chapter8-lsep}
-
 \chapter{Conclusions and Future Work}
-\input{chapter9-conclusions}
+\input{chapter8-conclusions}
 
 %==================== References ====================
 \chapter*{References}
@@ -1300,19 +1310,21 @@ will be penalised.
 \input{references}
 
 %==================== Appendices ====================
-% Named as the template's contents page requires: Appendix A is the ethics
-% record, later appendices are supplementary material.
+% The supervisor asked for the appendices to be named Supplementary, with the
+% chapters standing on their own and this material carrying only what a
+% reader would consult rather than need. \appendix still supplies the A, B,
+% C numbering; only the printed word changes.
 \appendix
-\renewcommand{\chaptertitlename}{Appendix}
+\renewcommand{\chaptertitlename}{Supplementary}
 % The contents-page prefix is set once for the chapters; the appendices
 % are still \chapter internally, so without this they list as
 % CHAPTER A: Ethical Approval.
-\addtocontents{toc}{\protect\renewcommand{\protect\cftchappresnum}{APPENDIX~}}
-\addtocontents{toc}{\protect\settowidth{\protect\cftchapnumwidth}{\protect\bfseries APPENDIX~F:\protect\hspace{0.75em}}}
-% Appendix subsections carry their own labels (C.1, D.1, E.1 ...) inside the
+\addtocontents{toc}{\protect\renewcommand{\protect\cftchappresnum}{SUPPLEMENTARY~}}
+\addtocontents{toc}{\protect\settowidth{\protect\cftchapnumwidth}{\protect\bfseries SUPPLEMENTARY~F:\protect\hspace{0.5em}}}
+% Supplement subsections carry their own labels (C.1, D.1, E.1 ...) inside the
 % heading text, so LaTeX must not number them a second time; without this a
 % heading reads "C.0.1 C.1 Notation ...". secnumdepth 0 keeps the chapter
-% numbering the contents page needs (Appendix A, B, C ...) and drops the rest.
+% numbering the contents page needs (Supplementary A, B, C ...) and drops the rest.
 \setcounter{secnumdepth}{0}
 \input{appendices}
 
@@ -1321,7 +1333,7 @@ will be penalised.
 
 # The ethics record is submitted as its own document rather than bound into
 # the dissertation, so that the signed forms can be attached to it directly.
-# Appendix A keeps a summary and points here, which is why the dissertation
+# Supplementary A keeps a summary and points here, which is why the dissertation
 # still reads without it.
 ETHICS_MAIN = r"""% GENERATED by scripts/build_latex.py -- do not edit by hand.
 \documentclass[12pt]{report}
@@ -1390,14 +1402,14 @@ With no local TeX installation, upload this whole folder to Overleaf
 present in a standard TeX Live.
 
 Two documents are submitted. The ethics record is deliberately not bound
-into the dissertation: Appendix A summarises it and points to ethics.pdf,
+into the dissertation: Supplementary A summarises it and points to ethics.pdf,
 which carries the full record. Before submitting, append the two signed
 forms to ethics.pdf (the one item this build cannot generate) and sign the
 dissertation's declaration page.
 
 The student ID is set, the acknowledgements are written, and the
 declaration's word count is computed at build time from the chapter sources
-(front matter, references and appendices excluded), so it cannot drift out
+(front matter, references and supplements excluded), so it cannot drift out
 of date the way a hand-typed figure does.
 """
 

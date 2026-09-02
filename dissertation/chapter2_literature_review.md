@@ -226,7 +226,7 @@ the assessments are this project's, made against the requirements of §2.10.
   frame-dependent primitives, so "the cup is left of the box" is true in one
   frame and false in another, and an annotator must pin the frame before any
   label is well defined. Hence *left/right* in the **camera frame**
-  (Appendix C), the frame the dataset's annotators saw on screen. Its output
+  (Supplementary C), the frame the dataset's annotators saw on screen. Its output
   is spatial QA over three frames.
 
 This raises the obvious alternative: ask a capable vision-language model to
@@ -506,7 +506,7 @@ definitions instead of improving them.
 The dissertation answers the second and fourth objections empirically
 (Chapters 5–6 and Chapters 4 and 7 respectively), concedes the third while
 reporting what mitigation was possible, does not answer the first at all and
-records it as a limitation (§9.3); the fifth is a different project.
+records it as a limitation (§8.3); the fifth is a different project.
 
 ## 2.10 Critical comparison and the research gap
 

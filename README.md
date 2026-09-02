@@ -78,7 +78,7 @@ python scripts/smoke_test.py --image assets/sample.jpg   # confirms depth + SAM2
 ## Reproducibility
 
 Everything is seeded (see `configs/default.yaml`) and version-pinned. A Dockerfile
-and reproducibility appendix are part of the deliverable. The dataset is CC-BY 4.0.
+and reproducibility supplement are part of the deliverable. The dataset is CC-BY 4.0.
 
 Reproducing the results end to end:
 
@@ -107,7 +107,7 @@ docker run --rm --gpus all spatial-annotator pytest -q
 
 The `Dockerfile` pins Python 3.11, torch 2.5.1+cu121 and SAM2 at commit
 `2b90b9f5`, and applies the CUDA-wheel fix described in `requirements.txt`.
-Appendix B of the dissertation records what the built image was checked
+Supplementary B of the dissertation records what the built image was checked
 against.
 
 ### The vision-language arms

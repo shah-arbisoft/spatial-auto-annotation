@@ -1,6 +1,6 @@
 """Check every crowd-study figure quoted in the dissertation against the data.
 
-Section 4.15 and Appendix E.3 quote the validation arm in prose, and the
+Section 4.15 and Supplementary E.3 quote the validation arm in prose, and the
 comparison table in 4.15 is a copy of the generated one. None of that
 updates itself. When the study returns more votes, `eval/crowd_validation.py`
 recomputes the JSON and this says which sentences still carry the old

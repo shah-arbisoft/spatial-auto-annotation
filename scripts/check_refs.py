@@ -1,7 +1,7 @@
 """Verify every section cross-reference in the dissertation resolves.
 
-The chapters refer to each other constantly (§4.9.6, Appendix B, Chapter 6).
-Moving material between chapters and appendices silently breaks those
+The chapters refer to each other constantly (§4.9.6, Supplementary B, Chapter 6).
+Moving material between chapters and supplements silently breaks those
 pointers: LaTeX has no idea, because they are prose, not \\ref. This script
 is the check that catches it.
 
@@ -24,7 +24,7 @@ FILES = sorted(SRC.glob("chapter*.md")) + [
 
 
 def headings() -> tuple[set[str], set[str]]:
-    """Every section number and every appendix letter that actually exists."""
+    """Every section number and every supplement letter that actually exists."""
     secs: set[str] = set()
     apps: set[str] = set()
     for f in SRC.glob("*.md"):
@@ -32,7 +32,7 @@ def headings() -> tuple[set[str], set[str]]:
             m = re.match(r"^#{2,4}\s+(\d+\.\d+(?:\.\d+)?)\s", line)
             if m:
                 secs.add(m.group(1))
-            m = re.match(r"^##\s+Appendix\s+([A-Z])\s*[:.]", line)
+            m = re.match(r"^##\s+Supplementary\s+([A-Z])\s*[:.]", line)
             if m:
                 apps.add(m.group(1))
     return secs, apps
@@ -86,15 +86,15 @@ def main() -> int:
             for ref in re.findall(r"§\s?(\d+\.\d+(?:\.\d+)?)", line):
                 if ref not in secs:
                     bad.append(f"{f.name}:{i}  §{ref} -> no such section")
-            for ref in re.findall(r"Appendix\s+([A-Z])\b", line):
+            for ref in re.findall(r"Supplementary\s+([A-Z])\b", line):
                 if ref not in apps:
-                    bad.append(f"{f.name}:{i}  Appendix {ref} -> no such appendix")
+                    bad.append(f"{f.name}:{i}  Supplementary {ref} -> no such supplement")
             for ref in re.findall(r"Chapters?\s+(\d)\b", line):
                 if ref not in chapters:
                     bad.append(f"{f.name}:{i}  Chapter {ref} -> no such chapter")
 
     print(f"sections defined : {len(secs)}")
-    print(f"appendices       : {', '.join(sorted(apps)) or '(none)'}")
+    print(f"supplements      : {', '.join(sorted(apps)) or '(none)'}")
     if bad:
         print(f"\nBROKEN REFERENCES ({len(bad)}):")
         for b in bad:

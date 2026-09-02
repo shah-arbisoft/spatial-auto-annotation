@@ -78,7 +78,7 @@ def ask(image_path: Path, claim: str, model: str, key: str,
         retries: int = 4, note=None) -> tuple[str, str, str]:
     """Returns (verdict, raw reply, model version that actually answered).
 
-    The alias in --model is not what answered: Appendix E.1 records that the
+    The alias in --model is not what answered: Supplementary E.1 records that the
     model behind `gemini-flash-latest` moved mid-project, so the reply's own
     modelVersion is captured per item rather than the name we asked for.
     """

@@ -18,12 +18,12 @@ With no local TeX installation, upload this whole folder to Overleaf
 present in a standard TeX Live.
 
 Two documents are submitted. The ethics record is deliberately not bound
-into the dissertation: Appendix A summarises it and points to ethics.pdf,
+into the dissertation: Supplementary A summarises it and points to ethics.pdf,
 which carries the full record. Before submitting, append the two signed
 forms to ethics.pdf (the one item this build cannot generate) and sign the
 dissertation's declaration page.
 
 The student ID is set, the acknowledgements are written, and the
 declaration's word count is computed at build time from the chapter sources
-(front matter, references and appendices excluded), so it cannot drift out
+(front matter, references and supplements excluded), so it cannot drift out
 of date the way a hand-typed figure does.

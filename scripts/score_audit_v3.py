@@ -17,7 +17,7 @@ to the model's is what answers the circularity 2.9 raises and 7.4 concedes.
 raw agreement flatters any pair of judges who both mostly say yes.
 
 **The support figure**, pooled over `on` and `under`, which is the number the
-abstract, 4.4, 4.8, 7.1 and Appendix D all state and which this pack exists to
+abstract, 4.4, 4.8, 7.1 and Supplementary D all state and which this pack exists to
 put on a defensible footing.
 
 One caveat is applied throughout rather than mentioned once: a decoy is a

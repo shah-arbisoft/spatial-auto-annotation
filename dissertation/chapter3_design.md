@@ -3,7 +3,8 @@
 This chapter sets out how the project was conducted and why the annotator is
 built the way it is: the methodology (§3.1), the problem and its constraints
 (§3.2), the design and the seven predicate rules that follow from it
-(§3.3–§3.11), and every decision collected in one table (§3.12).
+(§3.3–§3.11), the legal and ethical constraints that bounded
+them (§3.12), and every decision collected in one table (§3.13).
 
 ## 3.1 Research methodology
 
@@ -25,7 +26,7 @@ sent the work back to modelling twice, a depth gate then a mask-contact
 test, each pass re-validated on held-out annotators. §1.3 maps every phase
 to a part of this dissertation, including the two findings that came out of
 Data Understanding, and summarises the ethical considerations detailed in
-Appendix A.
+Supplementary A.
 
 ## 3.2 Problem analysis
 
@@ -74,7 +75,7 @@ because the seven predicates are spatial, each decidable from positions,
 extents and depth order, with one exception the design concedes rather than
 hides: support turns on whether a thing is resting or held, which geometry
 cannot represent, so a class guard stands in for it (§3.6) and ablation A10
-finds geometry cannot take that job back (Appendix D.8). The principle
+finds geometry cannot take that job back (Supplementary D.8). The principle
 therefore holds for six predicates outright and for support only up to one
 semantic list, which is the honest scope of the claim. SAM2 and Depth
 Anything only *measure* where things are; no learned component decides a
@@ -116,12 +117,12 @@ image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
 
 Coordinates are normalised, depth is inverted and normalised per image, and
 an EXIF-aware loader makes the 180°-rotated captures upright before anything
-is read from them; Appendix C.11 gives all three, with the sign error that
+is read from them; Supplementary C.11 gives all three, with the sign error that
 cost front/behind ~26% agreement until it was found.
 
 ## 3.5 The seven rules
 
-The complete specification is **Appendix C**: every rule, threshold and
+The complete specification is **Supplementary C**: every rule, threshold and
 shipped value with the evidence behind it, plus the correction and flagging
 policy. It is maintained in the repository as `docs/predicate_spec.md`, the
 copy the code and tests are checked against. The design rationale in one
@@ -162,7 +163,7 @@ under uncertainty cannot be audited. One further correction is class-aware
 instead of geometric: support is not evaluated when either object is a person, the
 annotators having never recorded one on **0 of 2,466 gold support
 triplets**, and ablation A10 finds geometry cannot take that job back
-(Appendix D.8). Appendix C.11 gives both arguments in full.
+(Supplementary D.8). Supplementary C.11 gives both arguments in full.
 
 Ambiguity flags, four kinds, accompany the triplets: lateral tie, depth tie,
 near-threshold edge, and the resolved contradiction above. They are the
@@ -186,7 +187,7 @@ and the benchmark share; and the h5 layout Chapter 6's framework ingests.
 Each reproduces the SGDET-Annotate structure exactly.
 The alternative, an internal schema plus a converter (§3.4), would have left
 every comparison one translation away from the thing it claims to measure.
-Appendix B lists the fields and the round-trip tests that verify them, so
+Supplementary B lists the fields and the round-trip tests that verify them, so
 auto-labels are drop-in replacements for human ones, which is the property
 RQ2 depends on.
 
@@ -198,7 +199,7 @@ because the label was applied by only three of nine groups with very
 different exhaustiveness. The protocol therefore fits on human-*annotated*,
 non-contact pairs from the training-split groups that used the label at all,
 and reports agreement on the held-out near-user who contributed nothing to
-the fit; Appendix C.11 gives the reasoning behind each of those three
+the fit; Supplementary C.11 gives the reasoning behind each of those three
 choices.
 
 Results *(measured)*: fitted **T = 1.372** (gap/mean-size units); held-out
@@ -220,7 +221,7 @@ argument, so no detector is wired in; one simply supplies that argument.
 That is what makes §4.11's conditional measurement meaningful, since holding
 the boxes fixed lets detector quality and relation quality be attributed
 separately, and a better detector improves the system without a line of rule
-code changing. Appendix B gives the contract, its three implementations, the
+code changing. Supplementary B gives the contract, its three implementations, the
 twelve tests that pin it and the two documented coupling points, one of
 which is that a detector drawing systematically different boxes should
 re-run §3.8's calibration.
@@ -241,7 +242,7 @@ preceding frame, so gradual motion accumulates while a genuine cut still
 crosses in one step, and each segment nominates the frame closest to its
 mean signature. One parameter spans two uses: small τ isolates
 near-duplicates, while large τ groups viewpoints of one arrangement, which is
-what §4.12's measurement consumes. Appendix E.2 gives the thumbnail distance,
+what §4.12's measurement consumes. Supplementary E.2 gives the thumbnail distance,
 the sweep and what the segmentation recovers.
 
 ## 3.11 Reproducibility by construction
@@ -250,7 +251,7 @@ Reproducibility is a design property, because three of the four requirements
 in §3.2 are unverifiable without it: a threshold is not fitted on groups 0–5
 if nobody else can refit it, and an ablation is an assertion unless the
 reader can re-run the arm it removes. It is delivered by three mechanisms,
-each given in full with the walk-through in Appendix B. Every threshold, seed
+given in full with the walk-through in Supplementary B. Every threshold, seed
 and model identifier lives in `configs/default.yaml`, and the runner caches
 each object's lifted geometry after the single GPU pass, so any rule change
 re-evaluates the whole dataset offline in about 20 seconds against roughly
@@ -260,19 +261,37 @@ sweep. The test suite is 66 tests running in about a
 second, deliberately, since a suite slow enough to skip constrains nothing;
 it encodes the predicate specification's worked examples as unit tests and
 fuzzes two thousand synthetic scenes against the structural guarantees §3.6
-promises. And the environment is pinned. The one step that can fail silently,
-a SAM2 install replacing the CUDA build of torch, costs an order of magnitude
-in speed and reports nothing, so Appendix B documents it instead of leaving
-it to be rediscovered. The repository is public.
+promises. And the environment is pinned; Supplementary B documents the one step that can
+fail silently, a SAM2 install replacing the CUDA build of torch, which costs
+an order of magnitude in speed and reports nothing. The repository is
+public.
 
-## 3.12 Summary of design decisions
+## 3.12 Legal and ethical constraints on the data and the models
 
-Every decision above shares one shape: an alternative was available and was
+The source dataset is CC-BY 4.0 (Wang et al., 2025), so the automatic
+annotations are a derivative work released on the same attribution terms.
+Model licences were an engineering requirement rather than a formality:
+Depth Anything v2 is Apache-2.0 only in its Small variant, so Small was
+preferred, a choice ablation A8 later justified on accuracy (Supplementary D.5);
+SAM2 and Grounding DINO are Apache-2.0; and the benchmark's YOLO training
+uses AGPL-3.0 `ultralytics`, so commercial deployment of that component
+would need a licence review. Some frames contain identifiable people, making
+them personal data under the Data Protection Act 2018, which the CC-BY
+licence does not settle: they are processed under the Act's research
+provisions, faces are anonymised automatically in every published figure and
+in anything put in front of a person, and an item whose judgement that would
+compromise is dropped rather than shown. Section 4.15 treats the validation
+study's per-browser identifier as a data-protection question rather than
+dismissing it. The ethics record is Supplementary A.
+
+## 3.13 Summary of design decisions
+
+Every decision above shares one shape: an alternative was available and
 rejected for a stated reason. Four were settled by evidence that arrived
 *after* the decision and could have overturned it, which is the test of
 whether a justification is real: the Small depth model, the relative-gap
 `near` metric, masks over box-only geometry, and the ground-plane fallback.
-Appendix F.3 tabulates all eleven with the alternative each displaced.
+Supplementary F.3 tabulates all eleven with the alternative each displaced.
 
 The decisions also carry the design's answer to the four objections §2.9
 directs at the method, none added afterwards to fit: predicates live in
@@ -280,12 +299,11 @@ configuration rather than code (§3.9); the rules abstain and flag instead of
 guessing (§3.6); randomised invariant testing (§3.11) asserts the structural
 guarantees without the author's judgement; and the camera frame is committed
 to explicitly (§3.5), so a disagreement is locatable as a convention
-difference. The first three are mitigations rather than refutations, and the fourth
-the design could not settle alone, because invariant testing pins rule
+difference. The first three are mitigations rather than refutations; the fourth the
+design could not settle alone, because invariant testing pins rule
 *consistency* and says nothing about rule *truth*. That took §4.14's
 instrument, built to attack the author's own verdicts, and it overturned
-one. Section 7.7 returns to all four with the evidence.
+one; §7.7 returns to all four with the evidence.
 
-Chapter 4 puts the annotator those decisions produce against the human
-annotations, which is the first of the three iterations that answer the two
-research questions.
+Chapter 4 puts that annotator against the human annotations, the first of
+three iterations answering the research questions.

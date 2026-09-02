@@ -63,7 +63,7 @@ model. The sharpest separation is on triplet *types never seen in training*,
 the manual annotation never recorded, not compositional generalisation.
 Prediction 2 is the one a single run cannot carry in either direction, the
 margin sitting well inside the human arm's own seed spread. That is why
-§6.3.1 exists. Appendix F.1 carries the per-predicate and per-slice
+§6.3.1 exists. Supplementary F.1 carries the per-predicate and per-slice
 breakdown; aligning the front/behind convention of groups 6 and 8, one
 disclosed bit per group as in §4.5, lifts both arms and leaves them level,
 0.310 against 0.312.
@@ -112,7 +112,7 @@ annotators applying nine conventions do not.
 Where the arms do differ, they differ by annotator. The human arm leads on
 the two §4.5 convicts of inverting the convention and *trails* on group 7,
 the one convicted of nothing, so the ordering runs with annotation quality
-rather than geometry. Appendix F.9 gives the three margins, none separable
+rather than geometry. Supplementary F.9 gives the three margins, none separable
 across seeds, the contamination behind them (**30% of the entire yardstick
 is front/behind written by the two inverted annotators**, a shared ceiling
 rather than a differential), and the replication at the earlier
@@ -141,7 +141,7 @@ and therefore the cleanest gold, where it reaches **0.362 against 0.278
 human and 0.289 auto**, its per-seed range (0.357–0.364) touching neither. A
 win on the cleanest annotator cannot be attributed to matching a defect, and
 it is the one result in this chapter that no argument here explains away.
-Appendix F.4 gives the per-slice table and the three readings the experiment
+Supplementary F.4 gives the per-slice table and the three readings the experiment
 cannot separate.
 
 ## 6.4 Why the advantage disappears between Chapter 5 and this chapter
@@ -168,7 +168,7 @@ were trained on consistent-convention front/behind while groups 6 and 8, two
 thirds of the test gold, invert it (§4.5): re-scoring against aligned gold
 lifts both almost equally, so the initial hypothesis that the denser arm is
 punished *harder* for its confidence is **refuted by that measurement and
-withdrawn**. Appendix F.9 gives both mechanisms with their figures, and the
+withdrawn**. Supplementary F.9 gives both mechanisms with their figures, and the
 replication at the shipped threshold showing roughly a tenth of the absolute
 mR@100 in this chapter is an artefact of that annotator defect, on both
 sides.
@@ -176,7 +176,7 @@ sides.
 **(ii′) Where the gap actually lives: the two defective test groups.** The
 per-group figures of §6.3.1 localise the human arm's lead to the two
 annotators convicted of convention inversion, where it is four times what it
-is on the clean one, and Appendix F.9 carries the fingerprint that separates
+is on the clean one, and Supplementary F.9 carries the fingerprint that separates
 selection from convention: on group 6's *lateral* gold, which has no
 direction to invert, the human arm recalls 0.48/0.68 against the auto arm's
 0.31/0.24 over three seeds with disjoint ranges, because it learned which
@@ -193,7 +193,7 @@ arms are scored against one shared reference, so its 0.268 against 0.052
 records that the automatic labels *cover* relation types the manual pass
 never recorded, which is the property the annotation bottleneck predicts and
 not compositional generalisation; this dissertation does not claim it as
-such. Appendix F.9 gives the type counts that establish it, and §6.5 weighs
+such. Supplementary F.9 gives the type counts that establish it, and §6.5 weighs
 what the column does establish.
 
 ## 6.5 What survives, read both ways
@@ -216,7 +216,7 @@ the human ones is equally entitled to say this design could not have shown
 it if they had. **What the same three seeds do resolve** is the part that is
 not a null: zero-shot recall separates with disjoint ranges, 0.225–0.309
 against 0.004–0.079, as does reproducibility, a 0.006 spread against 0.052,
-both running the automatic arm's way. Appendix F.12 gives both readings in
+both running the automatic arm's way. Supplementary F.12 gives both readings in
 full, together with why this critical reading is credible rather than
 convenient, it being the problem Neural Motifs, Unbiased SGG and Northcutt et
 al. each identified, here with the confound isolated by construction. It also

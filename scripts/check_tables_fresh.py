@@ -99,7 +99,7 @@ def check_recall_reconciles() -> int:
         want = round(rec[pred]["gold"] * (1 - rec[pred]["recall"]))
         if gold != rec[pred]["gold"] or abs(miss - want) > 1:
             bad += 1
-            print(f"  MISMATCH {pred}: appendix says {miss}/{gold}, the "
+            print(f"  MISMATCH {pred}: supplement says {miss}/{gold}, the "
                   f"fidelity run implies {want}/{rec[pred]['gold']}")
     print(f"  {seen} miss/gold row(s) checked against the recall table, "
           f"{bad} disagree")
@@ -122,7 +122,7 @@ def check_benchmark() -> int:
     and the chapter's central evidence was verified by nothing. That is the
     gap the whole script exists to close, and it matters more here than
     elsewhere: outputs/tables/seed_replication.md holds the *superseded*
-    on_contact_min 0.60 figures (Appendix F.9 quotes them deliberately), so
+    on_contact_min 0.60 figures (Supplementary F.9 quotes them deliberately), so
     the artefact nearest to hand contradicts the chapter by design. These
     numbers come from the shipped 0.85 re-evaluation instead.
     """
@@ -201,7 +201,7 @@ F4_ARMS = {"human": "human", "automatic": "auto", "vision-language": "vlm"}
 
 
 def check_f4_vlm_slices() -> int:
-    """Appendix F.4's VLM-by-slice table -- same source as check_benchmark,
+    """Supplementary F.4's VLM-by-slice table -- same source as check_benchmark,
     but a different header shape, in a different file, so nothing checked it."""
     app = DISS / "appendices.md"
     if not (BENCH.exists() and app.exists()):
@@ -247,7 +247,7 @@ def check_f4_vlm_slices() -> int:
 
 
 def check_group6_lateral() -> int:
-    """Appendix F.9's group-6 lateral table against the shipped 3-seed run.
+    """Supplementary F.9's group-6 lateral table against the shipped 3-seed run.
 
     outputs/sgg_benchmark/test_results.json is executed_1b_eval_seed42.ipynb's
     single-seed output, superseded when all nine arms were retrained; its
@@ -340,7 +340,7 @@ def check_downstream_indicators() -> int:
             want = _st.mean(d[arm][p][met] for p in PRED)
             if abs(got - want) > 0.0006:
                 bad += 1
-                print(f"  MISMATCH F.5 {label} {met}: appendix {got}, "
+                print(f"  MISMATCH F.5 {label} {met}: supplement {got}, "
                       f"report {want:.3f}")
     print(f"  {seen} F.5 indicator cell(s) checked against the RQ2 report, "
           f"{bad} disagree")

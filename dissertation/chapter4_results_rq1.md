@@ -7,7 +7,7 @@ audited precision (§4.3–§4.4), the hardest predicate pair per annotator
 each measure is bounded by the labels it is scored against, §4.12 and §4.13
 leave the gold behind: whether the labels survive the camera moving, and
 whether a vision-language model would have done the job instead. Three
-further studies carry no gold at all and sit in Appendix E: out-of-domain
+further studies carry no gold at all and sit in Supplementary E: out-of-domain
 video (E.4), 1,766 unlabelled robot frames (E.6), and the re-estimate of
 precision by disinterested judges (E.3, reported in §4.15).
 
@@ -59,7 +59,7 @@ would agree is answered by a cluster bootstrap over images
 (`eval/uncertainty.py`), whose widths rather than centres carry the argument
 and whose held-out intervals appear in §4.6.
 
-Underneath the table sit three readings, given in Appendix F.11: the
+Underneath the table sit three readings, given in Supplementary F.11: the
 tool recovers **81% of all human triplets** (7,276 of 8,926) against 14% for
 random and 23% for majority on the same triplet-weighted basis; box-only
 geometry matches it on the laterals but not on support quality or `near`,
@@ -72,7 +72,7 @@ because two stray annotation files without matching images are excluded.
 
 Restricted to the 8,790 annotated pairs, precision runs 0.95 and 0.92 on the
 support pair, 0.35 and 0.42 on the laterals, 0.43 and 0.35 on the depth pair
-and 0.11 on `near` (Appendix F.6). Every one is bounded below by
+and 0.11 on `near` (Supplementary F.6). Every one is bounded below by
 construction: the human typically recorded one or two relations where
 several hold at once, and `near` is the extreme case, emitted wherever the
 fitted gap holds while only 3 of 9 annotator groups ever used the label.
@@ -107,7 +107,7 @@ marginal.
 
 {{fig:front-behind-decomposition}} decomposes front/behind by annotator
 group, the two convention-inverted groups sitting alone near zero, and
-Appendix F.10 carries the per-group table. The pooled 0.70 resolves into
+Supplementary F.10 carries the per-group table. The pooled 0.70 resolves into
 three causes in measured proportions: **direction agreement is near-perfect
 where the tool commits**, 0.95–1.00 for six of the eight groups with
 meaningful counts, so genuine depth-ordering errors are rare; **two
@@ -137,7 +137,7 @@ cluster-bootstrap intervals of §4.2 put five of the seven predicates at 0.82
 or better and the depth pair far below, at 0.199 (0.148–0.257) and 0.369
 (0.300–0.443), a gap far wider than the sampling uncertainty. That is what
 makes §4.5's convention explanation a claim about the labels and not about
-noise (all seven intervals in Appendix F.8).
+noise (all seven intervals in Supplementary F.8).
 
 A quality verdict needs a yardstick the dataset does not supply: how well
 two *human* annotators would agree. The groups labelled disjoint batches, so
@@ -148,7 +148,7 @@ groups its agreement spans **0.851 to 0.933** about a mean of 0.892. That is
 an **upper bound on annotator heterogeneity, not a measurement of it**,
 because the nine batches differ threefold in object density and the spread
 therefore carries batch difficulty as well as annotator behaviour. The same
-non-exchangeability defeats the Fréchet route to a tighter bound; Appendix
+non-exchangeability defeats the Fréchet route to a tighter bound; Supplementary
 F.7 gives the derivation, the interval it produces, the density figures and
 why the presumption behind it is false here rather than merely unverified.
 This dataset cannot yield an inter-annotator agreement figure even by
@@ -159,7 +159,7 @@ baselines and the per-predicate audit (§4.8).
 ## 4.7 Flags: what review actually costs
 
 31.5% of ordered pairs carry at least one flag. The kinds overlap, and they
-therefore sum past that (Appendix C.9). Depth-ambiguous 19.3% (down from 29.5% before
+therefore sum past that (Supplementary C.9). Depth-ambiguous 19.3% (down from 29.5% before
 the ground-plane fallback resolved a third of the depth abstentions) and
 lateral-ambiguous 10.0% are *abstentions*, with nothing to review, while the
 borderline-near band, 8.5% of pairs, is the genuine review queue: at a
@@ -186,9 +186,9 @@ could not see the error it controls.
 So no predicate is weak on both axes and none is strong on both except the
 laterals and `near`. Support recalls well and cannot be trusted where it
 adds; the depth pair is trustworthy where it commits and commits less often
-than the annotators did. Appendix F.12 sets out why that structure is what
+than the annotators did. Supplementary F.12 sets out why that structure is what
 makes a per-predicate answer necessary, and F.11 why `near`'s 0.997 is the
-figure here that most overstates what is known. Section 9.1 answers RQ1
+figure here that most overstates what is known. Section 8.1 answers RQ1
 against the criteria of §1.2.2 on this basis, and the residual human cost is
 an 8.5% review queue (§4.7) against labels 20× denser than the human set.
 
@@ -199,7 +199,7 @@ geometry and re-run offline in about twenty seconds (`eval/ablations.py`),
 two test whether a heavier perception stack would do better and one whether
 geometry can replace the class guard, and all three say no. Every parameter
 was selected on the training annotator groups alone, with the held-out
-column reported and never optimised against; Appendix D.0 tabulates each
+column reported and never optimised against; Supplementary D.0 tabulates each
 ablation, its shipped setting and its verdict, and D.1–D.8 give the
 derivations.
 
@@ -215,14 +215,14 @@ two-view triangulation (A9) improves the depth pair, the second being 0.20
 *worse* where it answers at all, on 9% of pairs. The limit is monocular
 ambiguity in the scenes rather than model capacity, and what is declined is
 a lightweight uncalibrated estimator rather than multi-view geometry in
-general, so a calibrated stereo pair is the open route §9.3 keeps.
+general, so a calibrated stereo pair is the open route §8.3 keeps.
 
 ## 4.10 Failure gallery: every miss diagnosed
 
 Each missed human triplet is diagnosed automatically by re-checking the
 rule's conditions against the cached geometry and mask-contact maps
 (`scripts/make_failure_gallery.py`; rendered examples in
-`outputs/failure_gallery/`); Appendix D.7 breaks the 1,650 misses of the
+`outputs/failure_gallery/`); Supplementary D.7 breaks the 1,650 misses of the
 shipped rule set down by predicate and cause. Genuine depth-ordering errors
 remain 1–6% of front/behind misses, the support misses are threshold trades
 on real contact evidence, and `near` misses have all but vanished. The
@@ -247,7 +247,7 @@ trade §2.6 identifies, used because the authors' trained YOLOv10m weights
 were not available; and the 20-image tuning trial over-estimated detection
 quality, its scenes coming from one annotator batch. The same attribution
 holds on two out-of-domain clips, every visible failure again being a
-detection failure (Appendix E.4).
+detection failure (Supplementary E.4).
 
 ## 4.12 Temporal redundancy and stability under viewpoint change
 
@@ -258,7 +258,7 @@ convention (§4.5) and a `near` label used by three groups in nine (§3.2) are
 behaviours no arrangement of furniture can produce, and the confound runs
 favourably: 0.74 on held-out groups is generalisation to an unseen annotator
 *and* an unseen arrangement. The sequence also lets the verdicts be checked
-against themselves with no human labels, which Appendix E.2 carries in full.
+against themselves with no human labels, which Supplementary E.2 carries in full.
 
 Two results. Skipping frames costs nothing measurable, mean recall 0.832
 propagated against 0.829 per frame at every threshold tested. And the
@@ -282,7 +282,7 @@ images under Chapter 3's own definitions, in the same PredCls setting, one
 small and non-reasoning and one a reasoning model an order of magnitude
 larger; {{fig:rq1-with-vlm}} plots both against the pipeline; the setting, the
 per-predicate tables, the diagnostics and the limits of a thirty-image pilot
-are in Appendix E.1. Both lose on recall everywhere, 0.400 and 0.445 against
+are in Supplementary E.1. Both lose on recall everywhere, 0.400 and 0.445 against
 the pipeline's 0.834, so scaling the model does not scale the ability being
 measured. But recall rewards whoever asserts more, and restricted to the
 pairs both judged **both models are more precise than the pipeline**, 0.419
@@ -315,10 +315,10 @@ scored 100% on the earlier sheets and scores zero here. The same 242 images
 went to `gemini-3.6-flash` as a second judge independent of the author. That
 name is the concrete snapshot the `gemini-flash-latest` alias resolved to for
 this call, captured per item instead of assumed, because the alias moved
-during the project (Appendix B). The model rejected 24 of 28 decoys against
+during the project (Supplementary B). The model rejected 24 of 28 decoys against
 the author's 19 of 28, making it the stricter of the two, and the pair reach
 Cohen's κ 0.601 over all items and 0.425 over the claims alone: moderate
-agreement, not an echo. Appendix E.7 carries the
+agreement, not an echo. Supplementary E.7 carries the
 sampling, the class guard, the key handling, the pack's per-predicate table,
 the argument for letting a model judge what §4.13 shows it cannot annotate,
 and what the decoys measure about each judge.
@@ -327,7 +327,7 @@ and what the decoys measure about each judge.
 is diagnostic.** Section 4.3 measured precision on the pairs a human
 labelled, this audit on the pairs a human did not. For five predicates the
 first badly understates the second; for support it inverts sharply, 0.95 and
-0.93 on annotated pairs against 0.372 and 0.431 off them. Appendix E.7 reads
+0.93 on annotated pairs against 0.372 and 0.431 off them. Supplementary E.7 reads
 what that says about the human record.
 
 The lateral, depth and proximity claims survive; support does not. At 0.404
@@ -342,11 +342,11 @@ by **0.375**, 1.000 against 0.625 on the same 24 images, under a predicate
 the tool emits on 43,388 ordered pairs against 717 in the human record.
 
 The cause is a threshold fitted where its error was invisible. The shipped
-`on_contact_min` 0.60 came from Appendix D.2's fit on train F1 against gold
+`on_contact_min` 0.60 came from Supplementary D.2's fit on train F1 against gold
 covering ~10% of ordered pairs, so a false positive outside the gold cost the
 fit nothing. The repair was fitted on annotator groups 0–5, shipped at 0.85,
 and re-audited from scratch on a second pack of **191 claims** drawn from the
-new emissions; Appendix E.7 gives that pack's construction, the sequence, and
+new emissions; Supplementary E.7 gives that pack's construction, the sequence, and
 the held-out projection it declines to quote. Below, **v3** is the pre-refit
 pack at 0.60 and **v4** the fresh one at the shipped 0.85.
 
@@ -367,7 +367,7 @@ for the non-support predicates is `near` at its floor and `to the right of`
 at its ceiling. The change is confirmed and the projection was optimistic:
 both judges record a large improvement on an independent draw, and both
 record it below the 0.667 the held-out fit predicted, held-out support
-recall falling from 0.92 to 0.843 in exchange. Appendix E.7 reads what fitting on one
+recall falling from 0.92 to 0.843 in exchange. Supplementary E.7 reads what fitting on one
 audit and validating on the next can and cannot establish, and why neither
 the auditor's own improvement between the packs nor the model's parallel
 movement rescues the support figure. At 0.535, the labels the tool adds beyond the human
@@ -376,7 +376,7 @@ record on this predicate are right about half the time.
 ## 4.15 A disinterested check, against a human baseline
 
 Both judges in §4.14 carry an objection: one built the tool, the other is a
-system §4.13 shows annotates poorly. Appendix E.3 specifies the arm that
+system §4.13 shows annotates poorly. Supplementary E.3 specifies the arm that
 answers the first, putting sampled claims to volunteers who did not build
 the tool and are not shown what it predicted. It closed with **1,415** usable
 judgements from **20 raters** over **832** of the 1,000 claims in the pool,
@@ -410,7 +410,7 @@ five predicates hold and support does not**, 0.864 against 0.926 and 0.413
 against 0.975 (118/121). Across all seven predicates in the broader E.3 pool,
 **147** claims carry both a volunteer and an author verdict, and on those the
 two agree **0.871** of the time (Cohen's κ **0.683**), with crowd-internal
-reliability at Krippendorff's α **0.703**. Appendix E.3 carries the rest: the
+reliability at Krippendorff's α **0.703**. Supplementary E.3 carries the rest: the
 control arm's 0.940 against the tool's 0.726, why the denominators differ,
 the Spearman 0.96 ranking agreement, and the asymmetry that bounds the
 comparison. The arm settles that the author's audit did not run in the
