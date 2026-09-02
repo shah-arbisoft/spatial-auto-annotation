@@ -1000,8 +1000,21 @@ def main():
     for md_name, _title in CHAPTERS:
         body = (SRC / md_name).read_text(encoding="utf-8")
         words += len(re.sub(r"(?m)^>.*$", "", body).split())
+    # The acknowledgements thank the validation study's volunteers. One
+    # version of the dissertation does not report that study, and thanking
+    # people for work the reader never sees points at a section that is not
+    # there. Keyed off the section itself, so neither version needs its own
+    # copy of this file.
+    ch4 = (SRC / "chapter4_results_rq1.md").read_text(encoding="utf-8")
+    thanks = ""
+    if "4.15 A disinterested check" in ch4:
+        thanks = (
+            "I thank the volunteers who gave their time to judge sampled "
+            "predictions in\nthe validation study, without which the precision "
+            "estimates would have\nrested on my own verdicts alone.\n\n")
     (out / "main.tex").write_text(
         MAIN.replace("__WORDCOUNT__", f"{words:,}")
+           .replace("__VOLUNTEERTHANKS__", thanks)
            .replace("__BUILDSTAMP__", build_stamp()), encoding="utf-8")
     (out / "README.txt").write_text(README, encoding="utf-8")
     write_zip(out)
@@ -1213,11 +1226,7 @@ his research group both for collecting and releasing the dataset and for
 supplying the full robot capture from which the released images were cut,
 which made the scale and viewpoint-stability measurements possible.
 
-I thank the volunteers who gave their time to judge sampled predictions in
-the validation study, without which the precision estimates would have
-rested on my own verdicts alone.
-
-Finally, I thank my family and friends for their patience and support over
+__VOLUNTEERTHANKS__Finally, I thank my family and friends for their patience and support over
 the course of this work.
 
 \vspace{1.5cm}
@@ -1309,7 +1318,7 @@ will be penalised.
 \addcontentsline{toc}{chapter}{References}
 \input{references}
 
-%==================== Appendices ====================
+%============ Supplementary material ============
 % The supervisor asked for the appendices to be named Supplementary, with the
 % chapters standing on their own and this material carrying only what a
 % reader would consult rather than need. \appendix still supplies the A, B,
