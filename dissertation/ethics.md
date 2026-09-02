@@ -1,8 +1,8 @@
 # Ethics Record
 
-> Submitted alongside the dissertation as a separate document. Supplementary A of
-> the dissertation summarises this record and points here; this is the full
-> version, with the signed Secondary Data Checklist attached at the end.
+> Submitted alongside the dissertation as a separate document. Supplementary A
+> of the dissertation summarises this record and points here; this is the full
+> version, with the Secondary Data Checklist attached at the end.
 
 ## A.1 Basis of the work
 
@@ -42,7 +42,9 @@ https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-usi
 
 ## A.2 Documents attached
 
-1. **Secondary Data Checklist**, signed by the supervisor.
+1. **Secondary Data Checklist**, completed by the author and sent to the
+   supervisor for countersignature.
 
-It is reproduced in full on the page that follows. No ethics application
-arises, the work involving no human participants.
+The copy attached is the one held at submission, reproduced in full on the
+page that follows. No ethics application arises, the work involving no human
+participants.
