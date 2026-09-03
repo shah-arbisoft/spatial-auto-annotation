@@ -1116,8 +1116,9 @@ the gap: `gemini-flash-latest` is small and non-reasoning,
 `gemini-3.1-pro-preview` a reasoning model an order of magnitude larger.
 Scaling moves mean recall from 0.400 to 0.445 against the pipeline's 0.834,
 and on the depth pair 0.24 against 0.65 puts the model below the geometric
-method's known weak point: scaling the model does not scale the ability
-being measured.
+method's known weak point. Neither model closed the gap here, which is a
+result about these two models on thirty images and not about scale in
+general.
 
 **Why recall alone would be unfair.** It rewards whoever asserts more, and
 the pipeline makes 885 assertions on the 374 judged pairs against 344 and

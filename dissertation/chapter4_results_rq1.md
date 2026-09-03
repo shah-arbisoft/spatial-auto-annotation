@@ -288,8 +288,8 @@ small and non-reasoning and one a reasoning model an order of magnitude
 larger; {{fig:rq1-with-vlm}} plots both against the pipeline; the setting, the
 per-predicate tables, the diagnostics and the limits of a thirty-image pilot
 are in Supplementary E.1. Both lose on recall everywhere, 0.400 and 0.445 against
-the pipeline's 0.834, so scaling the model does not scale the ability being
-measured. But recall rewards whoever asserts more, and restricted to the
+the pipeline's 0.834, so neither model closed the gap in this pilot, on
+thirty images. But recall rewards whoever asserts more, and restricted to the
 pairs both judged **both models are more precise than the pipeline**, 0.419
 and 0.389 against 0.347, while losing F1 on every predicate. Most of the
 recall gap is silence: the model never addressed **171 of the 381 gold

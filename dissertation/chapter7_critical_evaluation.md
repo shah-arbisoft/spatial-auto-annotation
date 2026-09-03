@@ -188,8 +188,13 @@ on train annotators, shipped, every experiment re-run, and a second pack
 drawn from the new labels and audited blind. The lesson is the order, not
 the number: a threshold worth changing is worth re-auditing on labels it
 produced, because the estimate that justifies a change is not evidence for
-it. The SGDet **threshold tuning used one disclosed iteration on a trial
-slice** that over-estimated full-set detection quality, an instructive case
+it. The **bootstrap resamples images** as though they were independent draws,
+which §4.12 later shows they are not, the dataset being one trajectory whose
+neighbouring frames persist at 0.90 to 0.92. The unit was chosen before that
+was known, and the intervals it gives are therefore narrower than a block
+scheme over contiguous runs would give (Supplementary F.8); the point
+estimates are unaffected. A replication should resample segments. The SGDet
+**threshold tuning used one disclosed iteration on a trial slice** that over-estimated full-set detection quality, an instructive case
 of trial-set optimism; and invariant fuzzing pins rule consistency but not
 rule *truth*, which only the audits address.
 

@@ -314,11 +314,9 @@ the **detector-swap ablation**:
   paying with predictions defined only up to an unknown scale and shift
   (Ranftl et al., 2022).
 - **Adjacent, not used.** **CLIP** (Radford et al., 2021) and **SCLIP**
-  (Wang, F. et al., 2024), which reaches 38.2% zero-shot mIoU by making CLIP
-  dense through a training-free *Correlative Self-Attention*, bear on
-  open-vocabulary scaling, not relation logic; **PrimitiveAnything** (Ye et
-  al., 2025) assumes clean 3D input this project does not have. All three
-  are future directions.
+  (Wang, F. et al., 2024) bear on open-vocabulary scaling rather than
+  relation logic; **PrimitiveAnything** (Ye et al., 2025) assumes clean 3D
+  input this project does not have. All three are future directions.
 
 The division of labour is deliberate: the neural components only *measure*,
 and every relationship decision is an explicit rule over those measurements,
