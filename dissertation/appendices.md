@@ -38,6 +38,16 @@ https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-usi
 
 ## Supplementary B: Reproducibility
 
+This supplement is the evidence behind the claim that every number in this
+dissertation reproduces from the repository: what the results were produced
+on, how the repository is arranged so that a rule change re-evaluates in
+twenty seconds rather than five minutes, where each chapter's numbers come
+from, and a command-by-command walk-through with its run times and the
+traps worth knowing about. It closes with what each of the four constraints
+of §1.3 excluded, and the specification of each experiment §8.3 names as
+unfinished. Nothing here is needed to follow the argument; it is here so
+that a reader who doubts a number can go and check it.
+
 Environment: Windows 11, Python 3.11.9 (virtual environment), PyTorch 2.5.1
 (CUDA 12.1), single NVIDIA RTX 2060 (6 GB). All thresholds, seeds and model
 identifiers are pinned in `configs/default.yaml`.
