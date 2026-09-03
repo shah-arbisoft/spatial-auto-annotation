@@ -69,7 +69,9 @@ annotators with measured defects, and the third arm suits the argument least
 and is reported for that reason, vision-language labels leading at 0.329
 against 0.293 and 0.292 (§6.3.2).
 
-"Good enough to replace" is met at two levels and unrefuted at the third;
+"Good enough to replace" is met at the classifier, unrefuted at the
+benchmark, and reached at the planner only once a second automatic source
+is added alongside;
 "better" holds where ground truth means geometric consistency and not where
 it means annotation practice. The evidence carries this conditional:
 **automatic labels are better wherever ground truth means geometric
@@ -102,8 +104,10 @@ confident negative pseudo-labels for every positive one.
 
 **Methodologically.** Calibration held out by *annotator* and not by image;
 a sparse-gold protocol pairing recall with audited precision; exhaustive
-loss attribution; a way to bound what annotators would score against one
-another without their ever having labelled the same images (§4.6); and a
+loss attribution; a way to probe what annotators would score against one
+another without their ever having labelled the same images, together with
+the finding that on batches this unbalanced it yields an upper bound and
+no measurement (§4.6); and a
 reliability check needing no labels at all, from recovering the fact that
 the dataset was cut from a continuous capture (§4.12). The last is the most
 likely to transfer, since many robotics datasets are sequences presented as

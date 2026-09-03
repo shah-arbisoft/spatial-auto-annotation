@@ -280,9 +280,9 @@ them personal data under the Data Protection Act 2018, which the CC-BY
 licence does not settle: they are processed under the Act's research
 provisions, faces are anonymised automatically in every published figure and
 in anything put in front of a person, and an item whose judgement that would
-compromise is dropped rather than shown. Section 4.15 treats the validation
-study's per-browser identifier as a data-protection question rather than
-dismissing it. The ethics record is Supplementary A.
+compromise is dropped rather than shown. No data is collected from human
+participants at any point, so the work is secondary analysis throughout.
+The ethics record is Supplementary A.
 
 ## 3.13 Summary of design decisions
 

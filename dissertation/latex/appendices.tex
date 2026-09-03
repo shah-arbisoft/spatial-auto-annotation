@@ -7,7 +7,7 @@ This supplementary material is the dissertation's appendices, named as the super
 
 The countersigned Secondary Data Checklist is reproduced at the end of this supplement, which is where the module requires it. The full ethics record is also submitted as a \textbf{separate document, \texttt{ethics.pdf}}, carrying the same form; this supplement records what that document establishes, so the dissertation can be read without it.
 
-The work is a secondary analysis of an existing, published dataset (Wang et al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new personal data was collected for the annotation study. Scene images contain identifiable people, so every figure reproduced here blurs faces and the dataset is used strictly as released. The unreleased 1,766-frame remainder of the capture, used in \S{}4.12 and \S{}3.12, is \textbf{not} covered by that licence: it is used only to measure behaviour on unlabelled input, is not redistributed, and no figure reproduces a frame from it. No data was collected from human participants for this work, so the Secondary Data Checklist is the applicable route and no application for human-participant research arises.
+The work is a secondary analysis of an existing, published dataset (Wang et al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new personal data was collected for the annotation study. Scene images contain identifiable people, so every figure reproduced here blurs faces and the dataset is used strictly as released. The unreleased 1,766-frame remainder of the capture, used in \S{}4.12 and \S{}8.3, is \textbf{not} covered by that licence: it is used only to measure behaviour on unlabelled input, is not redistributed, and no figure reproduces a frame from it. No data was collected from human participants for this work, so the Secondary Data Checklist is the applicable route and no application for human-participant research arises.
 
 \textbf{Demonstration footage.} The two video clips of E.3 are royalty-free stock footage from Pexels, used under the Pexels licence (free use, no attribution required): clip 1 (desk scene, moving camera) https:/\allowbreak{}/\allowbreak{}www.\allowbreak{}pexels.\allowbreak{}com/\allowbreak{}video/\allowbreak{}6558513/\allowbreak{} and clip 2 (overhead desk, moving hands) https:/\allowbreak{}/\allowbreak{}www.\allowbreak{}pexels.\allowbreak{}com/\allowbreak{}video/\allowbreak{}a-\allowbreak{}person-\allowbreak{}working-\allowbreak{}with-\allowbreak{}pictures-\allowbreak{}and-\allowbreak{}photos-\allowbreak{}taken-\allowbreak{}using-\allowbreak{}a-\allowbreak{}modern-\allowbreak{}camera-\allowbreak{}3250234/\allowbreak{}.\allowbreak{}
 
@@ -139,7 +139,7 @@ Section 1.3 names them; this is what each ruled out. All perception runs on a \t
 
 \subsection{What each limitation would take to settle}
 
-Section 3.12 states each limitation with the experiment that would settle it; these are the specifications.
+Section 8.3 states each limitation with the experiment that would settle it; these are the specifications.
 
 \textbf{Execution, not just planning.} The planner experiment closes one of the two remaining links but no robot moved. The same five conditions on a physical Spot, or in a simulator with contact physics, would close the last one, and it is the only link left between labels and behaviour.
 
@@ -316,7 +316,7 @@ Every threshold above is declared in \texttt{configs/default.yaml}, so no consta
 
 Section 3.4 gives the pipeline table and \S{}3.6 the correction policy; these are the parts that did not need to sit in the chapter.
 
-\textbf{Normalisation and orientation.} Coordinates are normalised by image size so thresholds transfer across resolutions, and depth is inverted to "smaller is nearer" and min-max normalised per image. The sign was fixed after front/behind agreement rose from \textasciitilde{}26\% to \textasciitilde{}74\%, which is the kind of error that looks like a modelling failure and is not. An EXIF-aware loader makes the 180-degree-rotated captures upright before any box, mask or depth is read; the dataset stores that rotation behind a flag, and reading it wrongly produced correct-looking unit tests over an upside-down image (\S{}7.8).
+\textbf{Normalisation and orientation.} Coordinates are normalised by image size so thresholds transfer across resolutions, and depth is inverted to "smaller is nearer" and min-max normalised per image. The sign was fixed after front/behind agreement rose from \textasciitilde{}26\% to \textasciitilde{}74\%, which is the kind of error that looks like a modelling failure and is not. An EXIF-aware loader makes the 180-degree-rotated captures upright before any box, mask or depth is read; the dataset stores that rotation behind a flag, and reading it wrongly produced correct-looking unit tests over an upside-down image (\S{}8.4).
 
 \textbf{Why support is demoted rather than resolved.} \texttt{on} and \texttt{under} are independent tests over \textit{different} contact evidence, the mask-contact fraction measured each way round, so noise in either can make both fire on one pair; that case becomes an \texttt{on\_\allowbreak{}under\_\allowbreak{}conflict} flag and neither label is emitted. Picking the stronger of two contradictory signals would produce a label the evidence does not support while looking exactly like one it does, and an annotator that fabricates under uncertainty cannot be audited. The alternative of emitting everything and letting the consumer sort it out was rejected because RQ2's consumer is a model, which has no way to sort it out.
 
@@ -531,7 +531,7 @@ $\leq$ 0.50 & 89.9\% & 2.0\% \\
 \end{longtable}
 \end{center}
 
-There is no threshold that does both jobs. Excluding every blocked pair costs about half the genuine support recall; keeping most of the support recall lets almost every held object back in. That is a negative result, and a useful one, because the objection assumes a geometric solution exists and is merely being skipped, and on this data it does not exist at this level of geometry. Contact height cannot tell a hand from a shelf because a hand at waist height and a shelf at waist height are the same measurement. Separating them needs something the pipeline does not have, either surface normals from real 3D or an affordance notion of what can support, and both are the future work of \S{}3.12 rather than a threshold.
+There is no threshold that does both jobs. Excluding every blocked pair costs about half the genuine support recall; keeping most of the support recall lets almost every held object back in. That is a negative result, and a useful one, because the objection assumes a geometric solution exists and is merely being skipped, and on this data it does not exist at this level of geometry. Contact height cannot tell a hand from a shelf because a hand at waist height and a shelf at waist height are the same measurement. Separating them needs something the pipeline does not have, either surface normals from real 3D or an affordance notion of what can support, and both are the future work of \S{}8.3 rather than a threshold.
 
 What the ablation does settle is the guard's blast radius. Fifty-one pairs in 836 images reach the contact threshold with a person on either side, so the class list changes 51 decisions out of the 42,440 the tool makes. It is a narrow patch over a real gap, and the gap is a limit of monocular geometry rather than of the rule set.
 
@@ -852,7 +852,7 @@ Section 5.2 carries the per-predicate figures and the seed spreads. The chart be
 
 \subsection{F.3 Design decisions and the alternatives rejected}
 
-Section 3.12 states what the decisions have in common and names the four that later evidence could have overturned. The full table is here.
+Section 3.13 states what the decisions have in common and names the four that later evidence could have overturned. The full table is here.
 
 \needspace{28.7\baselineskip}
 \begin{center}
@@ -1099,7 +1099,7 @@ Section 4.2 carries the table and states the result; these are the three reading
 
 \subsection{F.12 The reasoning behind the answers}
 
-Chapters 4 to 6 and \S{}3.12 state their verdicts; the weighing behind them is collected here, so that each answer can be read as an answer.
+Chapters 4 to 6 and \S{}8.1 state their verdicts; the weighing behind them is collected here, so that each answer can be read as an answer.
 
 \textbf{Why RQ1 divides by predicate rather than by mean (\S{}4.8).} The two axes divide the seven predicates differently. On recall, five reach human-comparable levels and the exception is the depth pair; on precision, a \textit{different} five audit blind at 0.79--1.00 and the exception is support. So no predicate is weak on both axes and none is strong on both except the laterals and \texttt{near}: support recalls well and cannot be trusted where it adds, and the depth pair is trustworthy where it commits and commits less often than the annotators did. A mean over seven would conceal exactly that structure, which is why \S{}1.2.2 required the answer per predicate.
 
@@ -1109,4 +1109,4 @@ Chapters 4 to 6 and \S{}3.12 state their verdicts; the weighing behind them is c
 
 \textbf{Why the critical reading is credible rather than convenient (\S{}6.5).} Neural Motifs (Zellers et al., 2018) established that a frequency baseline ignoring the image is hard to beat; Unbiased SGG (Tang et al., 2020) formalised how thoroughly such models absorb the annotation distribution; and Northcutt, Athalye and Mueller (2021) showed erroneous test labels reorder rankings across ten benchmarks. What Chapter 6 adds is a case where the confound is \textit{isolated by construction}, since the arms differ only in label source, share a frozen detector, and the per-annotator defects were measured beforehand in Chapter 4, so the advantage is attributed to annotation practice and not inferred. The one remaining instrument is a manual audit of the auto arm's top-ranked false positives, the analogue of \S{}4.4, left as designed follow-up.
 
-\textbf{What the two counting conventions do to RQ1's comparability (\S{}3.12).} The criterion named two references. The trivial baselines are beaten by a wide margin. The second, how well two human annotators would agree with each other, this dataset cannot supply: the nine groups labelled disjoint batches differing threefold in object density, so \S{}4.6 reports the Fréchet bound as a measurement the data cannot support, and the assumption-free spread of 0.082 is too narrow to carry weight either. Comparability therefore rests on the trivial baselines and the per-predicate audit, and the yardstick \S{}1.2.2 hoped for is one this dataset could not supply, which is itself a finding about the dataset's construction rather than a gap in the evaluation.
+\textbf{What the two counting conventions do to RQ1's comparability (\S{}8.1).} The criterion named two references. The trivial baselines are beaten by a wide margin. The second, how well two human annotators would agree with each other, this dataset cannot supply: the nine groups labelled disjoint batches differing threefold in object density, so \S{}4.6 reports the Fréchet bound as a measurement the data cannot support, and the assumption-free spread of 0.082 is too narrow to carry weight either. Comparability therefore rests on the trivial baselines and the per-predicate audit, and the yardstick \S{}1.2.2 hoped for is one this dataset could not supply, which is itself a finding about the dataset's construction rather than a gap in the evaluation.

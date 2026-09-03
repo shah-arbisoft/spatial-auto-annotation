@@ -59,8 +59,9 @@ Robotics*, captured by a Boston Dynamics Spot robot. Verified specifics:
 
 - **Scale:** "nearly 1,000 robot-acquired indoor images" collected;
   "approximately 900" survive quality control. (The released GitHub subset
-  used here contains 884 images / **838 annotated**; see
-  [DATASET_NOTES.md](../docs/DATASET_NOTES.md).)
+  used here contains 884 images / **838 annotated**; Supplementary B gives
+  the reconciliation, and `docs/DATASET_NOTES.md` in the repository the
+  file-level detail.)
 - **Annotation:** "Nine trained annotators worked independently in batches
   of 100 images," using the manual **SGDET-Annotate** tool (every box drawn,
   every class and relationship clicked), with a majority-vote cleaning pass.
@@ -136,7 +137,7 @@ Label quality also contaminates *evaluation*. Northcutt, Athalye and Mueller
 (2021) measured label errors across ten heavily-used benchmarks (3.3%
 average, including 6% of ImageNet's validation labels) and showed that
 correcting them changes model rankings. Spatial-relation benchmarks met the
-same problem from the collection side: SpatialSense (Yang, Russakovsky and
+same problem from the collection side: SpatialSense (Yang, K., Russakovsky and
 Deng, 2019) used *adversarial* crowdsourcing, since relations collected
 without that pressure are dominated by guessable co-occurrences, and Rel3D
 (Goyal et al., 2020) rebuilt the task on 3D scenes with minimally
@@ -454,7 +455,7 @@ far side of it. *Holding* is a **human-object interaction**, and detecting
 those is a task in its own right with its own benchmarks: Chao et al. (2018)
 frame it as predicting an interaction label over a human-object pair, learned
 from examples rather than decided from geometry. Underneath sits the older
-notion of an **affordance**, what an object offers an agent, which Gibson
+notion of an **affordance**, what an object offers an agent, which Gibson (1979)
 introduced and which Jamone et al. (2018) survey across psychology,
 neuroscience and robotics; the recurring finding there is that what an object
 affords depends on the agent and its intent, so it is not recoverable from

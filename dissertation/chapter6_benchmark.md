@@ -199,12 +199,14 @@ what the column does establish.
 ## 6.5 What survives, read both ways
 
 Two interpretations survive and neither is available without the other. The
-benchmark result is real, because a consumer *evaluated against human-annotated
-scene graphs* is better supervised by human labels, which carry the
-annotation prior the evaluation shares. The interpretation is equally real:
-the ranking metric inherits every defect measured in the gold, and the
-advantage is concentrated exactly where the annotation is defective and
-absent where it is not.
+benchmark result is real: on the metric this chapter is organised around
+the two sources are level, and on raw R@100, where reproducing *which*
+pairs an annotator chose to record counts for most, the human labels keep
+a margin of 0.295 against 0.255, because they carry the annotation prior
+the evaluation shares. The interpretation is equally real: the ranking
+metric inherits every defect measured in the gold, and that margin is
+concentrated exactly where the annotation is defective and absent where it
+is not.
 
 Section 1.2.2 set a non-inferiority criterion, *at least as well* and not a
 win, so parity is the shape a pass takes, but the numbers refuse a strong

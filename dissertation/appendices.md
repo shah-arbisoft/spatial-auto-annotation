@@ -23,7 +23,7 @@ al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new
 personal data was collected for the annotation study. Scene images contain
 identifiable people, so every figure reproduced here blurs faces and the
 dataset is used strictly as released. The unreleased 1,766-frame remainder
-of the capture, used in §4.12 and §3.12, is **not** covered by that licence:
+of the capture, used in §4.12 and §8.3, is **not** covered by that licence:
 it is used only to measure behaviour on unlabelled input, is not
 redistributed, and no figure reproduces a frame from it. No data was collected from human participants for this work, so the
 Secondary Data Checklist is the applicable route and no application for
@@ -326,7 +326,7 @@ than smoothed over.
 
 ### What each limitation would take to settle
 
-Section 3.12 states each limitation with the experiment that would settle it;
+Section 8.3 states each limitation with the experiment that would settle it;
 these are the specifications.
 
 **Execution, not just planning.** The planner experiment closes one of the
@@ -662,7 +662,7 @@ front/behind agreement rose from ~26% to ~74%, which is the kind of error
 that looks like a modelling failure and is not. An EXIF-aware loader makes
 the 180-degree-rotated captures upright before any box, mask or depth is
 read; the dataset stores that rotation behind a flag, and reading it wrongly
-produced correct-looking unit tests over an upside-down image (§7.8).
+produced correct-looking unit tests over an upside-down image (§8.4).
 
 **Why support is demoted rather than resolved.** `on` and `under` are
 independent tests over *different* contact evidence, the mask-contact
@@ -1019,7 +1019,7 @@ geometry. Contact height cannot tell a hand from a shelf because a hand at
 waist height and a shelf at waist height are the same measurement.
 Separating them needs something the pipeline does not have, either surface
 normals from real 3D or an affordance notion of what can support, and both
-are the future work of §3.12 rather than a threshold.
+are the future work of §8.3 rather than a threshold.
 
 What the ablation does settle is the guard's blast radius. Fifty-one pairs
 in 836 images reach the contact threshold with a person on either side, so
@@ -1658,7 +1658,7 @@ ordering easier to take in at once.
 
 ### F.3 Design decisions and the alternatives rejected
 
-Section 3.12 states what the decisions have in common and names the four that
+Section 3.13 states what the decisions have in common and names the four that
 later evidence could have overturned. The full table is here.
 
 | Decision | Alternative rejected | Why |
@@ -1988,7 +1988,7 @@ weaker claim than none of it being.
 
 ### F.12 The reasoning behind the answers
 
-Chapters 4 to 6 and §3.12 state their verdicts; the weighing behind them is
+Chapters 4 to 6 and §8.1 state their verdicts; the weighing behind them is
 collected here, so that each answer can be read as an answer.
 
 **Why RQ1 divides by predicate rather than by mean (§4.8).** The two axes
@@ -2048,7 +2048,7 @@ practice and not inferred. The one remaining instrument is a manual
 audit of the auto arm's top-ranked false positives, the analogue of §4.4,
 left as designed follow-up.
 
-**What the two counting conventions do to RQ1's comparability (§3.12).** The
+**What the two counting conventions do to RQ1's comparability (§8.1).** The
 criterion named two references. The trivial baselines are beaten by a wide
 margin. The second, how well two human annotators would agree with each
 other, this dataset cannot supply: the nine groups labelled disjoint batches

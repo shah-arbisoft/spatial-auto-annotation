@@ -18,7 +18,9 @@ files having no matching image (§4.2); and **802** of those yield at least
 one ordered pair, the remaining 34 holding a single object. Two properties
 of the gold shape the protocol. It is **sparse**: 8,790 of 84,880 ordered
 pairs (~10%) carry a human label, so a label absent from the gold is
-unexamined, not wrong, and raw precision undercounts. And annotator
+unexamined, not wrong, and raw precision undercounts. Those 8,790 pairs
+hold 8,926 triplets, 136 of them carrying a second predicate, which is
+why the pair count and the triplet count differ throughout. And annotator
 behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second case), so
 agreement is reported per annotator group as well as pooled.
 
@@ -187,7 +189,7 @@ laterals and `near`. Support recalls well and cannot be trusted where it
 adds; the depth pair is trustworthy where it commits and commits less often
 than the annotators did. Supplementary F.12 sets out why that structure is what
 makes a per-predicate answer necessary, and F.11 why `near`'s 0.997 is the
-figure here that most overstates what is known. Section 3.12 answers RQ1
+figure here that most overstates what is known. Section 8.1 answers RQ1
 against the criteria of §1.2.2 on this basis, and the residual human cost is
 an 8.5% review queue (§4.7) against labels 20× denser than the human set.
 
@@ -214,7 +216,7 @@ two-view triangulation (A9) improves the depth pair, the second being 0.20
 *worse* where it answers at all, on 9% of pairs. The limit is monocular
 ambiguity in the scenes rather than model capacity, and what is declined is
 a lightweight uncalibrated estimator rather than multi-view geometry in
-general, so a calibrated stereo pair is the open route §3.12 keeps.
+general, so a calibrated stereo pair is the open route §8.3 keeps.
 
 ## 4.10 Failure gallery: every miss diagnosed
 
