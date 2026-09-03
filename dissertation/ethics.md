@@ -2,7 +2,8 @@
 
 > Submitted alongside the dissertation as a separate document. Supplementary A
 > of the dissertation summarises this record and points here; this is the full
-> version, with the Secondary Data Checklist attached at the end.
+> version, with the countersigned Secondary Data Checklist attached at the
+> end.
 
 ## A.1 Basis of the work
 
@@ -29,9 +30,10 @@ secondary analysis of the published dataset described above. No survey,
 questionnaire, interview or judgement task forms part of it, so no
 application for human-participant research arises.
 
-Because the released dataset is secondary data, the module's Secondary
-Data Checklist applies in addition, and requires the supervisor's signature
-before it is submitted.
+Because the released dataset is secondary data, the module's Secondary Data
+Checklist applies in addition. It was completed and countersigned by the
+supervisor on 2 September 2026, and that signature is the route under which
+the work proceeds without ethical review.
 
 **Demonstration footage.** The two video clips of E.3 are royalty-free
 stock footage from Pexels, used under the Pexels licence (free use, no
@@ -42,9 +44,8 @@ https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-usi
 
 ## A.2 Documents attached
 
-1. **Secondary Data Checklist**, completed by the author and sent to the
-   supervisor for countersignature.
+1. **Secondary Data Checklist**, countersigned by the supervisor on
+   2 September 2026.
 
-The copy attached is the one held at submission, reproduced in full on the
-page that follows. No ethics application arises, the work involving no human
-participants.
+It is reproduced in full on the page that follows. No ethics application
+arises, the work involving no human participants.

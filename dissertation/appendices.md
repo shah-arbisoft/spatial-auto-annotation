@@ -12,9 +12,9 @@ figures the chapters cite (F).
 ## Supplementary A: Ethical Approval
 
 The full ethics record is submitted as a **separate document, `ethics.pdf`**,
-with the Secondary Data Checklist attached to it, the form requiring the
-supervisor's countersignature. This supplement records what that document
-establishes, so the dissertation can be read without it.
+with the countersigned Secondary Data Checklist attached to it. This
+supplement records what that document establishes, so the dissertation can
+be read without it.
 
 The work is a secondary analysis of an existing, published dataset (Wang et
 al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new
