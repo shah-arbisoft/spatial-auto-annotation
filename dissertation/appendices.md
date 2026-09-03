@@ -1785,6 +1785,8 @@ Section 5.2 carries the per-predicate figures and the seed spreads. The chart
 below is the same experiment drawn instead of tabulated, which makes the
 ordering easier to take in at once.
 
+{{fig:rq2-comparison}}
+
 
 ### F.3 Design decisions and the alternatives rejected
 

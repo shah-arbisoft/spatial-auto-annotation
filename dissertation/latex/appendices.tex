@@ -877,8 +877,17 @@ group 8 alone (inverted, dense \texttt{near} user) & \textbf{0.130} & 0.123 \\
 The seed ranges above absorb one further source of variation. Re-scoring the \textit{same} checkpoints a second time does not reproduce them exactly: an independent re-evaluation pass moved the pooled human mR@100 by 0.001 and the group-8 figures, drawn from the smallest slice at 37 images, by up to 0.008. Inference is not bit-deterministic, so a margin of that order is not a result. The figures reported are those of the re-evaluation committed with this repository, and no claim in Chapter 6 turns on a difference smaller than the per-seed spread.
 
 \subsection{F.2 Downstream recall by label source}
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=0.80\textwidth,height=0.78\textheight,keepaspectratio]{figures/rq2-comparison.png}
+\caption[Downstream recall against held-out human gold]{Downstream recall against held-out human gold for the three label sources, per predicate, with the range over seeds 42, 43 and 44 drawn as error bars. The automatic arm's intervals are barely visible because its spread is at most 0.02 on every predicate, against up to 0.19 for the human arm.}
+\label{fig:rq2-comparison}
+\end{figure}
+
 
 Section 5.2 carries the per-predicate figures and the seed spreads. The chart below is the same experiment drawn instead of tabulated, which makes the ordering easier to take in at once.
+
+Figure~\ref{fig:rq2-comparison}
 
 
 \subsection{F.3 Design decisions and the alternatives rejected}
