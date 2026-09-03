@@ -6,8 +6,16 @@ pointers: LaTeX has no idea, because they are prose, not \\ref. This script
 is the check that catches it.
 
     python scripts/check_refs.py
+    python scripts/check_refs.py --map     # what each reference resolves to
 
 Exits non-zero if any reference points at a heading that does not exist.
+
+Existing is not the same as being right. Renumbering Chapter 9 to Chapter 8
+turned a batch of correct \u00a78.1 pointers into \u00a73.12, and every one of them
+still resolved, because \u00a73.12 exists too -- it is just the licensing section
+rather than the summary of the dissertation. --map prints each distinct
+reference beside the heading it lands on, which is the only cheap way to see
+that a pointer is aimed at the wrong place.
 """
 
 from __future__ import annotations
@@ -36,6 +44,38 @@ def headings() -> tuple[set[str], set[str]]:
             if m:
                 apps.add(m.group(1))
     return secs, apps
+
+
+def titles() -> dict[str, str]:
+    """Section number -> its heading text, for the resolution map."""
+    out: dict[str, str] = {}
+    for f in SRC.glob("*.md"):
+        for line in f.read_text(encoding="utf-8").split("\n"):
+            m = re.match(r"^#{2,4}\s+(\d+\.\d+(?:\.\d+)?)\s+(.+?)\s*$", line)
+            if m:
+                out[m.group(1)] = m.group(2)
+    return out
+
+
+def show_map() -> int:
+    """Print every distinct section reference beside where it lands."""
+    tit = titles()
+    used: dict[str, set[str]] = {}
+    for f in FILES:
+        if not f.exists():
+            continue
+        for ref in re.findall(r"\u00a7\s?(\d+\.\d+(?:\.\d+)?)",
+                              f.read_text(encoding="utf-8")):
+            used.setdefault(ref, set()).add(f.name.replace(".md", ""))
+        for ref in re.findall(r"Section\s+(\d+\.\d+(?:\.\d+)?)",
+                              f.read_text(encoding="utf-8")):
+            used.setdefault(ref, set()).add(f.name.replace(".md", ""))
+    for ref in sorted(used, key=lambda r: [int(x) for x in r.split(".")]):
+        where = ", ".join(sorted(s.replace("chapter", "ch")[:14]
+                                 for s in used[ref]))
+        print(f"  \u00a7{ref:<7} {tit.get(ref, '(MISSING)')[:46]:<48} <- {where}")
+    print(f"\n  {len(used)} distinct section references")
+    return 0
 
 
 def renumbering() -> dict[str, str]:
@@ -68,6 +108,8 @@ def renumbering() -> dict[str, str]:
 
 
 def main() -> int:
+    if "--map" in sys.argv:
+        return show_map()
     secs, apps = headings()
     printed = renumbering()
     chapters = {str(n) for n in range(1, 10)}

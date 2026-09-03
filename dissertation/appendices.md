@@ -1784,7 +1784,7 @@ ordering easier to take in at once.
 
 ### F.3 Design decisions and the alternatives rejected
 
-Section 3.12 states what the decisions have in common and names the four that
+Section 3.13 states what the decisions have in common and names the four that
 later evidence could have overturned. The full table is here.
 
 | Decision | Alternative rejected | Why |

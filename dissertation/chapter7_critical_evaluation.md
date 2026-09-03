@@ -6,7 +6,7 @@ failures are made of, what the measurements say about the dataset's own
 annotation process, and, in §7.7, an answer to each of the five objections
 §2.9 raised against the approach before any result was known, and what the
 result means socially and professionally (§7.8). The objective-by-objective
-audit belongs with the conclusions and is in §3.12.
+audit belongs with the conclusions and is in §8.1.
 
 ## 7.1 Achievement against the research questions
 
@@ -109,15 +109,17 @@ annotation guidelines (e.g., spatial thresholds for 'near')". This project
 quantifies how much further the guideline problem goes:
 
 1. `near` was used by 3 of 9 annotator groups, with ~4× variance in how
-exhaustively equally-close pairs were labelled. Yet all three annotators'
-labels sit inside one fitted threshold (held-out recall 1.0): consistent
-*notion*, non-exhaustive *application*. 2. Two annotator groups applied the
-**inverted direction convention** for in front of / behind (2–5% agreement
-where the tool commits; flipping recovers 0.94/0.82). 3. Support pairs were
-often labelled in **one direction only** (one group all-`on`, another
-all-`under`). 4. **No operational definition of the predicates survives in
-the released materials**: the annotation tool's repository carries
-vocabulary lists only (§4.7).
+   exhaustively equally-close pairs were labelled. Yet all three annotators'
+   labels sit inside one fitted threshold (held-out recall 1.0): consistent
+   *notion*, non-exhaustive *application*.
+2. Two annotator groups applied the **inverted direction convention** for in
+   front of / behind (2–5% agreement where the tool commits; flipping
+   recovers 0.94/0.82).
+3. Support pairs were often labelled in **one direction only** (one group
+   all-`on`, another all-`under`).
+4. **No operational definition of the predicates survives in the released
+   materials**: the annotation tool's repository carries vocabulary lists
+   only (§4.7).
 
 The fourth point needs stating precisely, because the obvious version of it
 is weaker than the evidence. Wang et al. (2025) report that annotators were
@@ -303,8 +305,11 @@ informative.** The objection predicts that a downstream model absorbs the
 rule's blind spot as fact, and Chapter 6 is that prediction coming true: the
 gap on the field's own metric is concentrated where the annotation itself is
 defective. But it also predicts that consistent-but-wrong supervision is
-worse than inconsistent human supervision, and on this dataset that is
-refuted at every level where the question was asked (§5.6, §5.7). The
+worse than inconsistent human supervision, and that is not what this
+dataset shows: the controlled classifier refutes it outright (§5.2), the
+benchmark returns parity rather than the predicted deficit (§6.3.1), and
+at the planner every automatic-arm failure is a relation missing rather
+than a wrong one acted on (§5.7). The
 reconciliation: systematic error is worse than random error only when it is
 *wrong*, and §4.12's finding, front/behind agreeing with itself across
 viewpoints 0.958 of the time while agreeing with the annotators 0.70 of the

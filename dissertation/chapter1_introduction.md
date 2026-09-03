@@ -136,8 +136,11 @@ the human record survive manual audit instead of turning out to be noise.
 *Comparable* is given content by two references, not a number chosen for
 convenience: the trivial random and majority baselines, which any method
 must beat, and an estimate of how well the human annotators would have
-scored against one another, the ceiling any annotator can fairly be held to
-(§4.6). The answer has to be given per predicate, because a mean over seven
+scored against one another, the ceiling any annotator can fairly be held
+to. In the event, §4.6 finds that second reference cannot be obtained from
+this dataset at all, its batches being disjoint, so the criterion falls
+back to the baselines and the per-predicate audit; the substitution is
+reported rather than quietly made. The answer has to be given per predicate, because a mean over seven
 can conceal one that fails outright.
 
 RQ2 is answered **yes** if a model trained on the automatic labels performs

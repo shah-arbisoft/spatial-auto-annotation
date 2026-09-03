@@ -19,7 +19,9 @@ files having no matching image (§4.2); and **802** of those yield at least
 one ordered pair, the remaining 34 holding a single object. Two properties
 of the gold shape the protocol. It is **sparse**: 8,790 of 84,880 ordered
 pairs (~10%) carry a human label, so a label absent from the gold is
-unexamined, not wrong, and raw precision undercounts. And annotator
+unexamined, not wrong, and raw precision undercounts. Those 8,790 pairs
+hold 8,926 triplets, 136 of them carrying a second predicate, which is
+why the pair count and the triplet count differ throughout. And annotator
 behaviour is **uneven** (Chapter 3 for `near`, §4.5 for a second case), so
 agreement is reported per annotator group as well as pooled.
 
