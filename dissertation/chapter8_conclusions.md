@@ -28,7 +28,8 @@ defects, and both readings are reported and not one selected. Section 1.2.2
 fixed what would count as an answer before any result was reported; what
 follows is the verdict against those criteria.
 
-**RQ1 is answered yes on five of seven predicates and qualified on two.**
+**RQ1 is answered yes on five of seven predicates and qualified on two,
+against a criterion this dataset forced to be weaker than the one set.**
 The criterion was per-predicate recall on annotator groups no threshold ever
 saw, judged against two references fixed in advance; the trivial baselines
 are beaten by a wide margin, 0.74 held-out and 0.85 pooled against 0.14 for
@@ -93,6 +94,8 @@ the ranked benchmark separates them nowhere.
 **For the source dataset and its authors.** An annotator that labels the
 existing images 20 times more densely in five minutes, in the dataset's own
 formats, with the operational definitions the annotation process never had.
+Six of its seven predicates are usable as labels; support is a candidate set,
+for the reason §4.8 gives.
 The fitted `near` threshold answers Wang et al.'s (2025) future-work request
 for "spatial thresholds for near", and two annotation defects are quantified
 for the first time: front/behind inverted in two of nine groups, and `near`

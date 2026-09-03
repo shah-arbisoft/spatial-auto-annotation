@@ -58,7 +58,10 @@ groups that labelled the pair under the *opposite direction convention*;
 population values, every human triplet being scored; whether another batch
 would agree is answered by a cluster bootstrap over images
 (`eval/uncertainty.py`), whose widths rather than centres carry the argument
-and whose held-out intervals appear in §4.6.
+and whose held-out intervals appear in §4.6. Those intervals are nominal
+rather than calibrated: §4.12 later establishes that the images are
+consecutive frames of one trajectory, so resampling them as independent
+draws understates the true width (Supplementary F.8).
 
 Underneath the table sit three readings, given in Supplementary F.11: the
 tool recovers **81% of all human triplets** (7,276 of 8,926) against 14% for
@@ -80,18 +83,15 @@ fitted gap holds while only 3 of 9 annotator groups ever used the label.
 That is why the protocol includes the audit (§4.4) instead of reading these
 columns at face value.
 
-## 4.4 Manual audit of extra predictions (true-precision estimate)
+## 4.4 Manual audit of extra predictions (audited precision)
 
 105 extra predictions (15 per predicate, seeded stratified sample) were
 rendered with subject/object boxes and manually verdicted, any case not
 clearly true marked wrong (`outputs/audit/audit_sheet.csv`). The audit ran
 against the *pre-gate box rule* and is reported as found because it
-motivated the support-rule repairs; §4.9 re-audits the shipped rules and
-§4.14 audits them again under blinding, and they disagree. Pooled support
-precision moves 0.13 → 0.77 unblinded, back to 0.40 judged blind against
-decoys, and to 0.54 once the threshold causing the over-emission is refitted
-and audited again, so the support figures here describe a fixed failure and
-not the final tool.
+motivated the support-rule repairs. Section 4.14 traces the whole arc, 0.13
+to 0.77 unblinded, 0.40 blind against decoys, 0.54 after the refit, so the
+support figures here describe a fixed failure and not the final tool.
 
 The audit splits the predicates in two. For lateral, depth and proximity,
 **every sampled extra prediction was correct** (15/15 each, Wilson 95%
@@ -328,11 +328,10 @@ the argument for letting a model judge what §4.13 shows it cannot annotate,
 and what the decoys measure about each judge.
 
 **The two precision measurements point in opposite directions, and which way
-is diagnostic.** Section 4.3 measured precision on the pairs a human
-labelled, this audit on the pairs a human did not. For five predicates the
-first badly understates the second; for support it inverts sharply, 0.95 and
-0.93 on annotated pairs against 0.372 and 0.431 off them. Supplementary E.6 reads
-what that says about the human record.
+is diagnostic.** For five predicates §4.3's restricted precision badly
+understates this audit's; for support it inverts, 0.95 and 0.93 on annotated
+pairs against 0.372 and 0.431 off them. Supplementary E.6 reads what that
+says about the human record.
 
 The lateral, depth and proximity claims survive; support does not. At 0.404
 it is less than half what §4.9 reported and outside any interval this
