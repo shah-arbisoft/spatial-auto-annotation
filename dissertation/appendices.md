@@ -289,7 +289,7 @@ in a container with nothing mounted.
 The check that the perception stage reproduces is
 `scripts/reannotate_from_cache.py`, which rebuilds `pairs.csv` from the
 cache and should return the identical file: 84,881 lines, SHA-256
-`60281435…e1bd`.
+`e6ff05f4…3c2b`, taken over the file as committed.
 
 | command | produces | time |
 |---|---|---|

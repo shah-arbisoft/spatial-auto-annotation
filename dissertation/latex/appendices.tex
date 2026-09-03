@@ -95,7 +95,7 @@ The end-to-end check is the one that matters for reproducibility. Mounting the d
 
 Four of those commands still read the dataset's annotation files, because they iterate the released images rather than the cache index: \texttt{reannotate\_\allowbreak{}from\_\allowbreak{}cache.py}, \texttt{eval/ablations.py}, \texttt{eval/keyframe\_\allowbreak{}propagation.py} and \texttt{eval/depth\_\allowbreak{}ablation.py}. They need \texttt{annotated\_\allowbreak{}data/} (17 MB) but never open a JPEG, so the images are not required for any of them. The rest, including the whole RQ1 battery, run from the committed caches and JSON alone; this was checked by running them in a container with nothing mounted.
 
-The check that the perception stage reproduces is \texttt{scripts/reannotate\_\allowbreak{}from\_\allowbreak{}cache.py}, which rebuilds \texttt{pairs.csv} from the cache and should return the identical file: 84,881 lines, SHA-256 \texttt{60281435\ldots{}e1bd}.
+The check that the perception stage reproduces is \texttt{scripts/reannotate\_\allowbreak{}from\_\allowbreak{}cache.py}, which rebuilds \texttt{pairs.csv} from the cache and should return the identical file: 84,881 lines, SHA-256 \texttt{e6ff05f4\ldots{}3c2b}, taken over the file as committed.
 
 \begin{center}
 \setlength{\tabcolsep}{3pt}

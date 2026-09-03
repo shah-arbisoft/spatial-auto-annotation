@@ -16,11 +16,12 @@ With no local TeX installation, upload this whole folder to Overleaf
 (New Project > Upload Project) and compile there. It needs only packages
 present in a standard TeX Live.
 
-Two documents are submitted. The ethics record is deliberately not bound
-into the dissertation: Supplementary A summarises it and points to ethics.pdf,
-which carries the full record. Before submitting, append the two signed
-forms to ethics.pdf (the one item this build cannot generate) and sign the
-dissertation's declaration page.
+One document is submitted. The ethics record is bound into the dissertation
+itself: Supplementary A carries it in full, and the countersigned Secondary
+Data Checklist binds in there from dissertation/checklist_signed.pdf. That
+file is the one item this build cannot generate and is untracked, because it
+carries a signature and this repository is public. Supply it before the final
+build, and sign the dissertation's declaration page.
 
 The student ID is set, the acknowledgements are written, and the
 declaration's word count is computed at build time from the chapter sources
