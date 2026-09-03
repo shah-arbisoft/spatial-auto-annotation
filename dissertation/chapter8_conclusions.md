@@ -99,7 +99,7 @@ for the reason §4.8 gives.
 The fitted `near` threshold answers Wang et al.'s (2025) future-work request
 for "spatial thresholds for near", and two annotation defects are quantified
 for the first time: front/behind inverted in two of nine groups, and `near`
-used by only three, with fourfold variation in exhaustiveness.
+supplied in quantity by only three, with fourfold variation in exhaustiveness.
 
 **For work on scene-graph benchmarks.** Evidence, by dissociation, that
 ranked recall against sparse, guideline-free annotation partly measures

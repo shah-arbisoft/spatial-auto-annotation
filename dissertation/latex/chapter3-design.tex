@@ -23,7 +23,7 @@ The dataset has three properties, established in Chapter 2 and verified directly
 \begin{itemize}
 \item \textbf{Monocular RGB only.} No metric depth exists and estimated depth is \textit{relative and per-image} (Yang, L. et al., 2024), so all depth comparisons are ordinal and within-image and no rule consumes absolute depth.
 \item \textbf{Sparse annotation.} Humans labelled a minority of object pairs \textit{(measured: 6,458 of 42,440 unordered pairs, 15\%; 8,790 of 84,880 ordered, 10\%, the two differing because most labelled pairs carry only one direction, \S{}4.5)}, so the tool labels every pair, density being the value added, and the protocol treats human labels as a recall target, never as an exhaustive gold standard.
-\item \textbf{Inconsistent \texttt{near}.} Only 3 of 9 annotator groups ever used \texttt{near} (461/160/93 labels of the 717 total, one further group supplying 3 and the rest none), each labelling a different fraction of equally-close pairs, so the threshold is fitted and annotator-aware (\S{}3.8); no consensus exists for it to be matched to.
+\item \textbf{Inconsistent \texttt{near}.} Three of the nine annotator groups supplied 714 of the 717 \texttt{near} labels (461/160/93); a fourth supplied three and five supplied none. Each labelled a different fraction of equally-close pairs, so the threshold is fitted and annotator-aware (\S{}3.8); no consensus exists for it to be matched to.
 \end{itemize}
 
 \section{Design principle: compute, don't predict}
@@ -94,7 +94,7 @@ Byte-compatibility is a requirement of the research design, not a convenience: R
 
 \section{Calibrating \texttt{near}: an annotator-aware protocol}
 
-Fitting one threshold to all \texttt{near} labels and testing on held-out images fails, and the failure is informative: held-out F1 comes out at 0.009, because the label was applied by only three of nine groups with very different exhaustiveness. The protocol therefore fits on human-\textit{annotated}, non-contact pairs from the training-split groups that used the label at all, and reports agreement on the held-out near-user who contributed nothing to the fit; Supplementary C.11 gives the reasoning behind each of those three choices.
+Fitting one threshold to all \texttt{near} labels and testing on held-out images fails, and the failure is informative: held-out F1 comes out at 0.009, because the label was applied in quantity by only three of nine groups, with very different exhaustiveness. The protocol therefore fits on human-\textit{annotated}, non-contact pairs from the training-split groups that used the label at all, and reports agreement on the held-out near-user who contributed nothing to the fit; Supplementary C.11 gives the reasoning behind each of those three choices.
 
 Results \textit{(measured)}: fitted \textbf{T = 1.372} (gap/mean-size units); held-out recall \textbf{1.000}, every pair the unseen annotator called near lying within the threshold. Since recall is 1.0 for all three near-using annotators simultaneously, their labels are directionally consistent with a single threshold, and what varies, by about fourfold, is how exhaustively each applied it. The fitted threshold applies one definition uniformly, which is exactly the "spatial thresholds for near" the source paper's future work requests; whether the tool's extra near pairs are genuinely near is checked by manual audit in the evaluation chapter.
 

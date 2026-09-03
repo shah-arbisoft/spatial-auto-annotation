@@ -46,9 +46,10 @@ measured labelling defect and reverses on the one without, a pattern
 consistent with the metric rewarding annotation habits as well as spatial
 correctness.
 
-One link further down the chain the relations decide the outcome. Asked for a
-safe grasp plan on 25 held-out scenes where an object rests on the target, a
-planner clears it in 0 of 25 given objects alone, 25 of 25 given human
+One link further down the chain the relations decide the outcome. Asked to
+plan a grasp on 25 held-out scenes where an object rests on the target, and
+scored only on whether the plan lifts that object off first, a planner clears
+it in 0 of 25 given objects alone, 25 of 25 given human
 relations, 19 of 25 given automatic ones and 25 of 25 given automatic and
 vision-language sources together, identically on two planners of very different
 capability. Automatic labels are at least the equal of human ones where the
