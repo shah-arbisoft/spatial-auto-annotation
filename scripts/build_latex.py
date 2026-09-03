@@ -71,6 +71,18 @@ FIGURES = {
         "tool commits, deliberate abstention, and the two groups that used "
         "the inverted direction convention.",
         "## 4.6 The tenth annotator"),
+    # F.2 says "the chart below" and had none, because this figure was
+    # never registered. It is the three-arm experiment with the seed
+    # ranges drawn as error bars, which the tabulated form cannot show
+    # at a glance.
+    "rq2_comparison.png": (
+        "appendices.md",
+        "Downstream recall against held-out human gold for the three "
+        "label sources, per predicate, with the range over seeds 42, 43 "
+        "and 44 drawn as error bars. The automatic arm's intervals are "
+        "barely visible because its spread is at most 0.02 on every "
+        "predicate, against up to 0.19 for the human arm.",
+        "after:### F.2"),
     "video_stability.png": (
         "appendices.md",
         "Frame-to-frame stability of the emitted triplets on the two "
