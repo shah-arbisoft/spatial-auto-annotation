@@ -83,9 +83,10 @@ is added alongside;
 it means annotation practice. The evidence carries this conditional, on this
 dataset: **automatic labels are better where ground truth means geometric
 consistency, and do not overtake human labels where it means annotation
-practice.** Robot planning needs the first, which is why the planner
-separates the sources decisively and the ranked benchmark cannot separate
-them at all.
+practice.** Robot planning needs the first. The planner is the one
+test that separates the sources at all, and it separates them in the human
+arm's favour until a second automatic source is added beside the tool's;
+the ranked benchmark separates them nowhere.
 
 ## 8.2 Research contributions
 
@@ -105,7 +106,9 @@ never recorded is the one trained on consistent computed labels.
 
 **For weak supervision.** A controlled three-way comparison, on the same
 features, model, split and seeds, showing that programmatic labels out-teach
-both scarce human labels and the standard remedy for them. The mechanism is
+both scarce human labels and the standard remedy for them in a feature space
+closely aligned with the labels' own generating mechanism, which is the
+scope §5.5 sets and Chapter 6 was run to test. The mechanism is
 measured, not inferred: self-training contributes roughly a thousand
 confident negative pseudo-labels for every positive one.
 
