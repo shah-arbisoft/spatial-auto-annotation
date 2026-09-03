@@ -2015,13 +2015,14 @@ advantage on the controlled classifier where features are held identical,
 and it does not carry to the benchmark's ranked metric.
 
 **Both readings of the benchmark, and why neither is available alone
-(§6.5).** The benchmark result is real: a consumer *evaluated against
-human-annotated scene graphs* is better supervised by human labels, which
-carry the annotation prior the evaluation shares. The interpretation is
-equally real: the ranking metric inherits every defect measured in the gold,
-and the advantage is concentrated exactly where the annotation is defective
-and absent where it is not, which is what annotation-prior agreement would
-look like. Section 1.2.2 set a non-inferiority criterion, so parity is the
+(§6.5).** The benchmark result is real: on mR@100 the two sources are
+level, and on raw R@100, where reproducing *which* pairs an annotator
+chose to record counts for most, the human labels keep a margin of 0.295
+against 0.255, because they carry the annotation prior the evaluation
+shares. The interpretation is equally real: the ranking metric inherits
+every defect measured in the gold, and that margin is concentrated exactly
+where the annotation is defective and absent where it is not, which is what
+annotation-prior agreement would look like. Section 1.2.2 set a non-inferiority criterion, so parity is the
 shape a pass takes; but the numbers refuse a strong claim in either
 direction, the paired mean difference being -0.0006 with a 95% interval of
 [-0.070, +0.069], three seeds bounding the gap to about a quarter of the

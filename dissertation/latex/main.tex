@@ -51,9 +51,11 @@
 % module requires the signed form inside the dissertation, not only
 % alongside it.
 \usepackage{pdfpages}
-\usepackage[hidelinks]{hyperref}
+% plainpages=false stops roman page i and arabic page 1 claiming the same
+% PDF destination name, which made one internal link ambiguous.
+\usepackage[hidelinks,plainpages=false,pdfpagelabels]{hyperref}
 % Identifies which build a given PDF is, from Document Properties.
-\hypersetup{pdfsubject={build b1e1f41 2026-09-03 06:58}}
+\hypersetup{pdfsubject={build d6151b5+dirty 2026-09-03 12:24}}
 
 % The supplied Word template (COMM070 Data Science - Template.docx) sets its
 % body text single-spaced in 12pt Times: 75 of its paragraphs carry
@@ -129,6 +131,12 @@
 % counts against the page allowance.
 \setcounter{tocdepth}{1}
 
+% fancyhdr wants 13.6pt of header room for a 12pt header line and warns on
+% every page otherwise, eighty times in this document. Giving it the room
+% keeps the rule off the text and empties the log of a warning that would
+% otherwise hide a real one.
+\setlength{\headheight}{13.6pt}
+\addtolength{\topmargin}{-1.6pt}
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\small A Fully-Automatic Spatial-Relationship Annotation Pipeline}
@@ -227,7 +235,7 @@ will be penalised.
 \noindent Signature: \rule{6cm}{0.4pt} \hfill Date: \rule{4cm}{0.4pt}
 
 \vspace{1cm}
-\noindent \textbf{Total Number of Words:} 25,682
+\noindent \textbf{Total Number of Words:} 25,686
 
 \cleardoublepage
 
