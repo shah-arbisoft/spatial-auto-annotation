@@ -61,9 +61,8 @@ Robotics*, captured by a Boston Dynamics Spot robot. Verified specifics:
 
 - **Scale:** "nearly 1,000 robot-acquired indoor images" collected;
   "approximately 900" survive quality control. (The released GitHub subset
-  used here contains 884 images / **838 annotated**; Supplementary B gives
-  the reconciliation, and `docs/DATASET_NOTES.md` in the repository the
-  file-level detail.)
+  used here contains 884 images / **838 annotated**; §4.1 reconciles the
+  counts.)
 - **Annotation:** "Nine trained annotators worked independently in batches
   of 100 images," using the manual **SGDET-Annotate** tool (every box drawn,
   every class and relationship clicked), with a majority-vote cleaning pass.
@@ -216,8 +215,8 @@ the assessments are this project's, made against the requirements of §2.10.
   region-reasoning VLM, not a labeller writing VG-format triplets.
 - **VQASynth** (Remyx AI, 2024) reproduces that pipeline openly (SAM2,
   monocular depth, grounded captioning): the most reusable code reference,
-  but its output stage produces QA pairs where a triplet writer is needed,
-  and its depth backend has shifted over time, so this project pins its own.
+  but it produces QA pairs where a triplet writer is needed, and its depth
+  backend has shifted, so this project pins its own.
 - **Open3D-VQA** (Zhang et al., 2025) is the source of the
   **error-correction** idea: extraction of 3D spatial relationships from a
   single RGB image with a correction flow discarding what its own geometry
@@ -314,11 +313,9 @@ the **detector-swap ablation**:
   paying with predictions defined only up to an unknown scale and shift
   (Ranftl et al., 2022).
 - **Adjacent, not used.** **CLIP** (Radford et al., 2021) and **SCLIP**
-  (Wang, F. et al., 2024), which reaches 38.2% zero-shot mIoU by making CLIP
-  dense through a training-free *Correlative Self-Attention*, bear on
-  open-vocabulary scaling, not relation logic; **PrimitiveAnything** (Ye et
-  al., 2025) assumes clean 3D input this project does not have. All three
-  are future directions.
+  (Wang, F. et al., 2024) bear on open-vocabulary scaling rather than
+  relation logic; **PrimitiveAnything** (Ye et al., 2025) assumes clean 3D
+  input this project does not have. All three are future directions.
 
 The division of labour is deliberate: the neural components only *measure*,
 and every relationship decision is an explicit rule over those measurements,
