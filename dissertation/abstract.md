@@ -40,8 +40,9 @@ the arms rank level (mR@100 0.292 against 0.293), while the automatic model
 recovers five times more of the relation types its annotation omits (zR@100
 0.268 against 0.052) and reproduces across seeds more than eight times more
 tightly. What difference remains sits on the two test annotators with a
-measured labelling defect and reverses on the one without, so the metric
-rewards annotation habits as well as spatial correctness.
+measured labelling defect and reverses on the one without, a pattern
+consistent with the metric rewarding annotation habits as well as spatial
+correctness.
 
 One link further down the chain the relations decide the outcome. Asked for a
 safe grasp plan on 25 held-out scenes where an object rests on the target, a
@@ -50,5 +51,5 @@ relations, 19 of 25 given automatic ones and 25 of 25 given automatic and
 vision-language sources together, identically on two planners of very different
 capability. Automatic labels are at least the equal of human ones where the
 criterion is annotation practice and better where it is geometric consistency,
-and robot planning needs the second. The bottleneck removed was limiting not just
-the dataset's size but what it could teach.
+and robot planning needs the second. On this dataset the bottleneck was
+limiting not just its size but what it could teach a model.

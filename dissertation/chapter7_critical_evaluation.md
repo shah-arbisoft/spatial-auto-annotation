@@ -276,10 +276,11 @@ contain.
 
 **Ethics.** Some frames contain identifiable people, so those images are
 personal data under the Data Protection Act 2018 and anonymising them is
-data minimisation, not a courtesy (§3.12). No figure in this dissertation
-reproduces a scene photograph. Where images are put in front of a
-person, in the audit pack, faces are pixelated automatically and any item
-whose judgement that would compromise is dropped instead of shown.
+data minimisation, not a courtesy (§3.12). Figure 4.1 is the only figure
+here showing scene imagery, with faces pixelated from the dataset's own
+human boxes before the file is written; the other nine are charts. The
+same rule runs automatically over the audit pack, and an item whose
+judgement that would compromise is dropped instead of shown.
 
 ## 7.7 The objections of §2.9, answered
 

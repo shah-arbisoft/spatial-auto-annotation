@@ -73,9 +73,9 @@ against 0.293 and 0.292 (§6.3.2).
 benchmark, and reached at the planner only once a second automatic source
 is added alongside;
 "better" holds where ground truth means geometric consistency and not where
-it means annotation practice. The evidence carries this conditional:
-**automatic labels are better wherever ground truth means geometric
-consistency, and do not overtake human labels wherever it means annotation
+it means annotation practice. The evidence carries this conditional, on this
+dataset: **automatic labels are better where ground truth means geometric
+consistency, and do not overtake human labels where it means annotation
 practice.** Robot planning needs the first, which is why the planner
 separates the sources decisively and the ranked benchmark cannot separate
 them at all.

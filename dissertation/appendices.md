@@ -29,6 +29,32 @@ redistributed, and no figure reproduces a frame from it. No data was collected f
 Secondary Data Checklist is the applicable route and no application for
 human-participant research arises.
 
+**What is anonymised, and what is not.** Four things are easily run
+together, and the distinction matters because the checklist attached to this
+record and the chapters of this dissertation describe the material in
+different terms.
+
+1. *The source dataset.* Released publicly under CC-BY 4.0 by the research
+   group that collected it, and certified by them for the University's
+   secondary-data route. People are identifiable in some of its frames. This
+   project does not redistribute it.
+2. *The working copy.* Processed unmodified. The pipeline has to detect
+   people, because the support rule refuses to fire when either object is a
+   person (§3.6), so anonymising the input would disable the guard that
+   exists to protect them.
+3. *Anything put in front of a person.* Every audit-pack image has faces
+   pixelated from the dataset's own `human` boxes before the file is written,
+   so no saved artefact holds an unmasked face, and an item whose judgement
+   that would compromise is dropped rather than shown.
+4. *Published figures.* One figure in this dissertation shows scene imagery,
+   Figure 4.1, under the same rule; the other nine are charts.
+
+The signed checklist records the provider's certification of the released
+dataset. What this dissertation describes is its own handling, which is
+stricter than that certification requires. The two statements are about
+different things, the first about what has been released and the second about
+what is done with it, and neither is offered as a correction of the other.
+
 **Demonstration footage.** The two video clips of E.3 are royalty-free stock
 footage from Pexels, used under the Pexels licence (free use, no attribution
 required): clip 1 (desk scene, moving camera)
