@@ -243,8 +243,8 @@ container regenerates it at 84,881 lines, the 84,880 ordered pairs plus a header
 with the SHA-256 of the file committed here, and repeating it gives the same digest. Deleting first is
 deliberate rather than tidy: the file ships inside the image, so a run that
 failed silently would leave the committed copy in place and a naive check
-would call that a reproduction. Twelve of the fifteen offline commands
-complete in the container; the three that do not need roughly 200 MB of
+would call that a reproduction. Twelve of the fifteen commands tried in the
+container complete; the three that do not need roughly 200 MB of
 GPU-produced intermediates the image deliberately omits, each of which
 already has its committed JSON summary. `outputs/docker/verification.md`
 records the full check, including the file-by-file integrity scan that
