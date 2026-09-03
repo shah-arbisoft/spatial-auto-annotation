@@ -9,7 +9,6 @@ chapters in dissertation/ are the source of truth. After editing them:
 To compile:
 
     latexmk -pdf main.tex          the dissertation
-    latexmk -pdf ethics_main.tex   the ethics record, submitted separately
 
 (run either twice if the ToC looks stale)
 

@@ -1,10 +1,9 @@
 # Ethics Record
 
-> To be submitted alongside the dissertation as a separate document, once the
-> ethics self-assessment is submitted and the Secondary Data Checklist is
-> signed by the supervisor. Supplementary A of the dissertation summarises this
-> record and points here; this is the full version, with the two forms
-> attached at the end.
+> Superseded, and kept as the drafting source. The ethics record now lives in
+> the dissertation itself, at Supplementary A, which carries it in full with
+> the countersigned Secondary Data Checklist bound in after it. Nothing here
+> is built or submitted.
 
 ## A.1 Basis of the work
 

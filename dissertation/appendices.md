@@ -12,20 +12,26 @@ figures the chapters cite (F).
 
 ## Supplementary A: Ethical Approval
 
-The countersigned Secondary Data Checklist is reproduced at the end of this
-supplement, which is where the module requires it. The same record and the
-same form are also submitted as a **separate document, `ethics.pdf`**, for
-the submission slot that asks for one. This supplement is self-contained,
-so neither document depends on the other.
+This is the project's ethics record in full, and the countersigned Secondary
+Data Checklist is reproduced at the end of it, which is where the module
+requires the signed form to sit. The checklist was completed by the author
+and countersigned by the supervisor on **2 September 2026**; that signature
+is the route under which the work proceeds without ethical review, the
+project being secondary analysis throughout.
 
 The work is a secondary analysis of an existing, published dataset (Wang et
 al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new
 personal data was collected for the annotation study. Scene images contain
 identifiable people, so every figure reproduced here blurs faces and the
-dataset is used strictly as released. The unreleased 1,766-frame remainder
-of the capture, used in §4.12 and §8.3, is **not** covered by that licence:
-it is used only to measure behaviour on unlabelled input, is not
-redistributed, and no figure reproduces a frame from it. The independent
+dataset is used strictly as released. A second body of data is used in §4.12 and §8.3: the
+complete 2,650-frame capture the released images were cut from, supplied
+directly by the supervising group. Frames 000000–000883 are the released
+dataset itself, verified by exact pixel match; the remaining 1,766 carry no
+annotation and are **not** covered by the CC-BY release. They are used only
+to measure behaviour on unlabelled input, are not redistributed, and no
+figure reproduces a frame from them. They show the same laboratory and the
+same people as the released portion, and the face rule above applies to
+them unchanged. The independent
 validation of Chapter 4 collects **pseudonymous** true/false judgements from
 adult volunteers, with no names, email addresses or IP addresses, only a
 per-browser random identifier used to spread coverage and drop duplicates,
