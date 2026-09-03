@@ -16,7 +16,14 @@ identical held-out test set. The isolation mirrors RQ2 exactly:
 
 - **Shared detector.** A YOLOv8m backbone is trained once on the ground-truth
   boxes of the training split and frozen for both arms (test-time detection
-  mAP is bit-identical between arms: 0.654). Only the relation labels differ.
+  mAP is bit-identical between arms: 0.654). The relation labels are the
+  intended difference, with one other that the design does not remove: each
+  arm's best checkpoint is chosen on validation scored against its *own*
+  labels (§6.2), so the two arms are selected under different objectives
+  before they meet the common human test gold. A cleaner design would fix
+  the epoch in advance or select on a shared target, and the comparison
+  should be read as label source plus selection rule rather than label
+  source alone.
 - **Split** follows the calibration protocol: train = groups 0–4 (500 images;
   5,421 human vs 119,020 automatic relations; the 22× density difference is
   the treatment), validation = group 5, test = groups 6–8 (human gold in both
