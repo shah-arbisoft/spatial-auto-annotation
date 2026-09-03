@@ -13,10 +13,10 @@ figures the chapters cite (F).
 ## Supplementary A: Ethical Approval
 
 The countersigned Secondary Data Checklist is reproduced at the end of this
-supplement, which is where the module requires it. The full ethics record
-is also submitted as a **separate document, `ethics.pdf`**, carrying the
-same form; this supplement records what that document establishes, so the
-dissertation can be read without it.
+supplement, which is where the module requires it. The same record and the
+same form are also submitted as a **separate document, `ethics.pdf`**, for
+the submission slot that asks for one. This supplement is self-contained,
+so neither document depends on the other.
 
 The work is a secondary analysis of an existing, published dataset (Wang et
 al., 2025; CC-BY 4.0) collected by the supervisor's research group; no new
