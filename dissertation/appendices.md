@@ -1,8 +1,9 @@
 # Supplementary Material
 
-The chapters are self-contained: every claim, table and figure needed to
-follow the argument is in them, and no result is stated here that a chapter
-depends on. What follows is further information for a reader who wants to
+This supplementary material is the dissertation's appendices, named as the
+supervisor asked. The chapters are self-contained: every claim, table and
+figure needed to follow the argument is in them, and no result is stated
+here that a chapter depends on. What follows is further information for a reader who wants to
 check or repeat something rather than to understand it: the ethics record
 (A), the reproduction instructions (B), the predicate specification the
 rules implement (C), the derivations behind each ablation (D), the extended
@@ -11,10 +12,10 @@ figures the chapters cite (F).
 
 ## Supplementary A: Ethical Approval
 
-The full ethics record is submitted as a **separate document, `ethics.pdf`**,
-with the two forms attached to it: the University ethics self-assessment and
-the Secondary Data Checklist, the latter requiring the supervisor's
-signature. This supplement records what that document establishes, so the
+The countersigned Secondary Data Checklist is reproduced at the end of this
+supplement, which is where the module requires it. The full ethics record
+is also submitted as a **separate document, `ethics.pdf`**, carrying the
+same form; this supplement records what that document establishes, so the
 dissertation can be read without it.
 
 The work is a secondary analysis of an existing, published dataset (Wang et
