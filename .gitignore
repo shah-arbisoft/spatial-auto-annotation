@@ -120,3 +120,12 @@ dissertation/latex/main.txt
 
 # the ethics record is a second compiled document; same rule as main.pdf
 dissertation/latex/ethics_main.pdf
+
+# The countersigned Secondary Data Checklist carries the supervisor's
+# signature and this repository is public. It binds into the dissertation
+# at build time and is submitted to the University, never pushed.
+dissertation/checklist_signed.pdf
+# and the copy build_latex.py places in the LaTeX tree for pdfpages.
+dissertation/latex/figures/checklist-signed.pdf
+# The submission copy, named as the module requires.
+6949963.pdf
