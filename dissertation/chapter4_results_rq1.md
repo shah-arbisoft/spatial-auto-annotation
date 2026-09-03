@@ -380,15 +380,12 @@ record on this predicate are right about half the time.
 ## 4.15 Summary
 
 This chapter measured the automatic labels against the 8,926 relationships
-the annotators recorded. Recall reaches 0.85 pooled and 0.74 on annotator
-groups no threshold ever saw, five predicates at human-comparable levels and
-the depth pair short of them for reasons §4.5 decomposes into calibrated
-abstention and an unshared convention. Precision on the labels the tool adds
-beyond the human record went through two instruments of increasing severity,
-an author audit followed by a blind decoy-controlled re-audit with a second
-judge. Both agree that five predicates hold at 0.79–1.00 and that support
-does not, at 0.535. Every remaining disagreement
-is attributed to a cause, leaving about 7% as avoidable tool error, and two
+the annotators recorded; §4.8 gives the answer, per predicate and per axis.
+Precision on the labels the tool adds beyond that record went through two
+instruments of increasing severity, an author audit and then a blind
+decoy-controlled re-audit with a second judge, which agree on where it holds
+and where it does not. Every remaining disagreement is attributed to a
+cause, leaving about 7% of the misses as avoidable tool error, and two
 checks needing no gold at all bound what the gold itself can settle.
 
 Chapter 5 turns from whether the labels are accurate to whether they are

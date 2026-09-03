@@ -38,16 +38,18 @@ where geometry must be recovered from monocular images first.
 
 Deciding those edges by rule is an old idea with a formal literature.
 **Qualitative spatial reasoning** represents space through a finite
-vocabulary of relations and reasons over it with composition tables: Allen's
-interval algebra (Allen, 1983) fixes the thirteen ways two intervals can lie
-on a line, RCC-8 does the same for connection and containment (Randell, Cui
-and Cohn, 1992), orientation calculi add direction from a viewpoint (Freksa,
-1992), and Cohn and Renz (2008) survey the family. What bears here are three
-of its properties. Its relations are *defined*, so annotators cannot disagree about
-what a label means, the defect §2.2 finds; its calculi are *decidable*, the
-underdetermined case being where abstention comes from; and its vocabularies
-are finite and hand-authored, the limitation §2.9 raises and this
-dissertation concedes. What it does not supply is the step from pixels to
+vocabulary of relations and reasons over it with composition tables: RCC-8
+fixes connection and containment (Randell, Cui and Cohn, 1992), orientation
+calculi add direction from a viewpoint (Freksa, 1992), and Cohn and Renz
+(2008) survey the family. Allen's interval algebra (Allen, 1983) is
+*temporal*, and reaches spatial reasoning only where its thirteen relations
+are applied to intervals projected onto an axis. Three properties bear here.
+Its relations are *defined*, so what a label means is not in dispute, though
+a definition settles the semantics and not the frame it is read in nor the
+perceptual call of whether it holds, which is what §4.5 and §7.3 measure
+going wrong; its calculi are *decidable*, the underdetermined case being
+where abstention comes from; and its vocabularies are finite and
+hand-authored, the limitation §2.9 raises and this dissertation concedes. What it does not supply is the step from pixels to
 regions; §2.5 does, and this project joins the two. This review
 concentrates on how those edges are **produced**: by hand, by learned
 prediction, or by computation from measured geometry.
@@ -96,8 +98,8 @@ an established name, **weak supervision**. **Snorkel** (Ratner et al., 2017)
 formalised *data programming*: experts write labelling functions instead of
 labelling examples, their noisy overlapping votes combined into training
 labels, trading per-label authority for coverage and consistency; its
-deployments repeatedly matched or beat hand-labelled baselines wherever the
-labelled set, not the model, was the bottleneck. This project's geometric
+reported deployments repeatedly matched or beat hand-labelled baselines where
+the labelled set, not the model, was the bottleneck. This project's geometric
 rules are labelling functions in that sense, being deterministic, auditable
 and dense, with two departures. Measured geometry gives near-exact votes for
 five predicates (blind-audited 0.79–1.00) and demonstrably noisy ones for
@@ -297,9 +299,10 @@ the **detector-swap ablation**:
   Both extend the transformer-detector line DETR began by removing
   hand-designed anchors and non-maximum suppression (Carion et al., 2020).
 - **Segmentation.** **SAM2** (Ravi et al., 2024), box-prompted, the video
-  successor to Segment Anything, whose promptable formulation and
-  eleven-million-image corpus made class-agnostic segmentation a component
-  other systems simply call (Kirillov et al., 2023). The silhouette is
+  successor to Segment Anything. It was the earlier model whose promptable
+  formulation and eleven-million-image corpus made class-agnostic
+  segmentation a component other systems simply call (Kirillov et al.,
+  2023); SAM2 inherits that formulation and adds video. The silhouette is
   load-bearing twice: depth is sampled by median over object pixels, and the
   support rule's contact test needs the object's bottom boundary pixel by
   pixel (§3.5).
@@ -364,8 +367,8 @@ the symptom. And Motifs' frequency-baseline lesson dictates the baseline
 discipline: every fidelity number in Chapter 4 is read against trivial
 random/majority baselines.
 
-**REACT++** (Neau and Falomir, 2026) is a real-time SGG model with a YOLO
-backbone, reportedly ~20% faster and ~10% more accurate on relation
+**REACT++** (Neau and Falomir, 2026), a preprint at the time of writing, is a
+real-time SGG model with a YOLO backbone, reportedly ~20% faster and ~10% more accurate on relation
 prediction than its predecessor, small enough to run onboard a robot,
 shipped in the open **SGG-Benchmark** framework. The essential point: such
 models **require labelled training data and sit downstream of an

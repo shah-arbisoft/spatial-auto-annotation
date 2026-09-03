@@ -17,7 +17,7 @@ human deciding any label, the dataset's formats written byte-compatibly.
 alone. **O3** is the fidelity study, mean recall 0.85 and 0.74 on annotators
 no threshold saw, against three baselines, a vision-language model, ten
 ablations and audited precision. **O4** attributes every one of the 1,650
-missed triplets to a cause, leaving roughly 7% genuine tool error (§4.10,
+missed triplets to a cause, leaving roughly 7% of them genuine tool error (§4.10,
 §7.2). **O5** is the controlled experiment, 0.75 against 0.30 human and 0.36
 self-trained. **O6** repeats it in the source paper's framework with a
 frozen detector and three seeds per arm, and carries it one link further to
