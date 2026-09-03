@@ -1322,7 +1322,7 @@ understand that assessed work that has been shown to have been plagiarised
 will be penalised.
 
 \vspace{1cm}
-\noindent Signature: \rule{6cm}{0.4pt} \hfill Date: \rule{4cm}{0.4pt}
+\noindent Signature: \underline{\hspace{0.4cm}Shah Hussain\hspace{0.4cm}} \hfill Date: \underline{\hspace{0.4cm}31 August 2026\hspace{0.4cm}}
 
 \vspace{1cm}
 \noindent \textbf{Total Number of Words:} __WORDCOUNT__
