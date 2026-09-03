@@ -836,7 +836,7 @@ BUILD_PRODUCTS = {".aux", ".log", ".out", ".toc", ".lot", ".lof", ".fls",
 # Not a suffix rule: README.txt is written for Overleaf and belongs in the
 # zip. main.txt is a pdftotext dump taken when checking the layout, scratch
 # and stale the moment the PDF is rebuilt.
-BUILD_FILES = {"main.pdf", "main.txt", "ethics_main.pdf"}
+BUILD_FILES = {"main.pdf", "main.txt"}
 
 
 def signed_checklist() -> Path:
@@ -968,21 +968,11 @@ def main():
         convert((SRC / "highlights.md").read_text(encoding="utf-8"), []),
         encoding="utf-8")
     # The ethics record builds to its own PDF beside the dissertation.
-    ethics_src = (SRC / "ethics.md").read_text(encoding="utf-8")
-    ethics_tex = convert(re.sub(r"(?m)^#\s.*$", "", ethics_src), [])
-    (out / "ethics.tex").write_text(ethics_tex, encoding="utf-8")
-    # A.2 says the checklist "is reproduced in full on the page that
-    # follows", so the ethics record has to carry it as well as the
-    # dissertation does. Same untracked source, same reason.
-    ebody = r"\input{ethics}"
-    if signed_checklist().exists():
-        ebody += ("\n\n\\includepdf[pages=-]{figures/checklist-signed.pdf}")
-    else:
-        ebody += ("\n\n\\medskip\\noindent\\textit{[The countersigned checklist "
-                  "binds in here from dissertation/checklist\\_signed.pdf, which is "
-                  "not in this build.]}")
-    (out / "ethics_main.tex").write_text(
-        ETHICS_MAIN.replace("__ETHICSBODY__", ebody), encoding="utf-8")
+    # The ethics record used to ship as a second PDF beside the dissertation.
+    # The module wants the signed checklist inside the dissertation's appendix,
+    # which Supplementary A now carries in full along with the record itself,
+    # so a separate document would only duplicate it and invite the two copies
+    # to drift. dissertation/ethics.md is kept as the drafting source.
 
     # Supplements: each "## Supplementary X: Title" becomes its own \chapter,
     # so the contents page reads "Supplementary A: Ethical Approval".
@@ -1490,7 +1480,6 @@ chapters in dissertation/ are the source of truth. After editing them:
 To compile:
 
     latexmk -pdf main.tex          the dissertation
-    latexmk -pdf ethics_main.tex   the ethics record, submitted separately
 
 (run either twice if the ToC looks stale)
 

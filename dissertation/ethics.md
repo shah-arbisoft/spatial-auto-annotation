@@ -1,9 +1,11 @@
 # Ethics Record
 
-> Submitted alongside the dissertation as a separate document. Supplementary A
-> of the dissertation summarises this record and points here; this is the full
-> version, with the countersigned Secondary Data Checklist attached at the
-> end.
+> Superseded, and kept as the drafting source. The ethics record now lives in
+> the dissertation itself, at Supplementary A, which carries it in full with
+> the countersigned Secondary Data Checklist bound in after it. The module
+> asks for the signed form in the appendix, so a second document beside the
+> dissertation would only duplicate it and let the two copies drift. Nothing
+> here is built or submitted.
 
 ## A.1 Basis of the work
 
