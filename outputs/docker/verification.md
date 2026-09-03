@@ -47,10 +47,18 @@ rather than trusting the tag.
 
 `pairs.csv` is **deleted before the run**, deliberately: it ships inside the
 image, so a run that silently failed would otherwise leave the committed file
-in place and look like a success. It regenerates at **84,881 rows** with
-SHA-256 `60281435122944fc243f3ca252be8f800867cb8a17413f9e43ccd1a4e220e1bd`,
+in place and look like a success. It regenerates at **84,881 rows**,
 **byte-identical to the file committed here**, and repeating it in the same
-container gives the same digest. The container therefore does not merely
+container gives the same digest:
+`e6ff05f4e44afe5ce9ac880e628fc204b033f989e5cc4b7fdb329a9f96673c2b`.
+
+That digest is taken over the file as committed, which has Unix line endings.
+`reannotate_from_cache.py` writes the platform's line ending, so a Windows
+working copy of identical content hashes differently while the container's
+output and the committed blob agree. An earlier revision of this file
+recorded the Windows copy's digest, and of the file as it stood before the
+refit regenerated it; it was corrected after re-verifying the regeneration
+against the committed cache. The container therefore does not merely
 install; it reproduces the annotations this dissertation reports.
 
 The `MSYS_NO_PATHCONV=1` prefix matters on Git Bash for Windows, which
