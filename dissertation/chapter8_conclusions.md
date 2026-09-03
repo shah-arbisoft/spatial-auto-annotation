@@ -35,7 +35,14 @@ are beaten by a wide margin, 0.74 held-out and 0.85 pooled against 0.14 for
 both random and majority, and the second reference, how well two human
 annotators would agree, is one this dataset cannot supply, for reasons
 Supplementary F.12 sets out. Comparability therefore rests on the baselines and
-the per-predicate audit. The second condition, that labels beyond the human
+the per-predicate audit, and that is a weaker footing than the criterion
+intended. What the evidence establishes is that the tool reproduces the
+human record far above any baseline and that the labels it adds beyond that
+record survive blind audit on five predicates. What it cannot establish is
+comparability with the human process itself, because no measurement of that
+process's own consistency exists to compare against: *answered yes* below is
+a verdict against the references that could be obtained, not against a human
+ceiling. The second condition, that labels beyond the human
 record survive audit, holds for the lateral, proximity and depth-decided
 predicates at blind-audited precision 0.79–1.00. **It is not met for
 support.** At 0.535 [0.42, 0.65] about half the support labels the tool adds
