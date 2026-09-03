@@ -118,7 +118,7 @@ image -- boxes+classes --> SAM2 masks --> depth map --> per-object geometry
 Coordinates are normalised, depth is inverted and normalised per image, and
 an EXIF-aware loader makes the 180°-rotated captures upright before anything
 is read from them; Supplementary C.11 gives all three, with the sign error that
-cost front/behind ~26% agreement until it was found.
+held front/behind agreement at ~26% until it was found, against ~74% after.
 
 ## 3.5 The seven rules
 

@@ -65,5 +65,6 @@ https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-usi
 2. **Secondary Data Checklist**, countersigned by the supervisor on
    2 September 2026.
 
-Both are reproduced in full on the pages that follow, as held at
-submission.
+The checklist is reproduced in full on the pages that follow, as held at
+submission; the self-assessment accompanies this record rather than being
+bound into it.
