@@ -200,9 +200,12 @@ recall of 0.81/0.75 in §4.2, so the planner result is the fidelity result
 one level higher in the chain, and it moves when that fidelity does. **The
 two automatic sources fail on disjoint scenes**: D scores 20 of 25 and its
 failures do not intersect C's, so their union clears the occluder in all 25,
-gaining six scenes over C and losing none. That is the only measurement here
-on which automatic labels *match* human annotation on a robot-relevant task,
-with no human in the labelling loop. Throughout, `grasps_target` and
+gaining six scenes over C and losing none. E is an exploratory condition
+rather than one §1.2.2 names, and its interest rests on a disjointness read
+off the results rather than predicted before them, so it is reported as a
+lead and not as the treatment RQ2 asks about. On that reading it is the
+only measurement here on which automatic labels *match* human annotation on
+a robot-relevant task, with no human in the labelling loop. Throughout, `grasps_target` and
 `no_invented` remain 1.00, so no plan failed for any other reason.
 
 Twenty-five scenes is small, and the pairing is what makes it enough. Exact
