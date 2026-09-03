@@ -42,15 +42,15 @@ from a calibration group and one held out.
 {{fig:rq1-recall}} plots the per-predicate result; the table adds the
 baselines.
 
-| Predicate | Gold | Ours | Ours (held-out) | Random | Majority | Box-only |
+| Predicate | Gold | Ours | **Ours (held-out)** | Random | Majority | Box-only |
 |---|---|---|---|---|---|---|
-| on | 1465 | 0.81 | 0.85 | 0.13 | 0.00 | 0.84 |
-| under | 1001 | 0.75 | 0.82 | 0.16 | 0.00 | 0.77 |
-| to the left of | 972 | 0.97 | 0.95 | 0.13 | 0.00 | 0.97 |
-| to the right of | 1174 | 0.98 | 0.99 | 0.13 | 0.00 | 0.99 |
-| in front of | 2013 | 0.70 | 0.20 | 0.13 | 1.00* | 0.00 |
-| behind | 1584 | 0.71 | 0.37 | 0.16 | 0.00 | 0.00 |
-| near | 717 | 1.00† | 1.00 | 0.16 | 0.00 | 0.87 |
+| on | 1465 | 0.81 | **0.85** | 0.13 | 0.00 | 0.84 |
+| under | 1001 | 0.75 | **0.82** | 0.16 | 0.00 | 0.77 |
+| to the left of | 972 | 0.97 | **0.95** | 0.13 | 0.00 | 0.97 |
+| to the right of | 1174 | 0.98 | **0.99** | 0.13 | 0.00 | 0.99 |
+| in front of | 2013 | 0.70 | **0.20** | 0.13 | 1.00* | 0.00 |
+| behind | 1584 | 0.71 | **0.37** | 0.16 | 0.00 | 0.00 |
+| near | 717 | 1.00† | **1.00** | 0.16 | 0.00 | 0.87 |
 | **mean** | 8,926 | **0.85** | **0.74** | 0.14 | 0.14 | 0.63 |
 
 The held-out front/behind cells (0.20/0.37) are dominated by two held-out
@@ -179,8 +179,11 @@ human-comparable levels, 0.75 to 1.00 as Table 4.1 reports them, mean 0.85
 and 0.74 on annotators no threshold ever saw; the exception is the depth
 pair, at 0.70/0.71 pooled and 0.91 once the two inverted groups are aligned.
 On **precision**, a different five audit blind at 0.79–1.00: the two
-laterals, the two depth predicates and `near`, each on 24 samples. The
-claim they support is therefore comparability. The exception there is support, at
+laterals, the two depth predicates and `near`, each on 24 samples. Those
+are two different fives, and the distinction matters: the first is recall
+against annotators no threshold saw, the second is audited precision on
+labels no annotator wrote. What they jointly support is weaker than
+comparability with the human process, for the reason §4.6 gives. The exception there is support, at
 **0.535 [0.42, 0.65]** on 71 samples of the shipped rule, up from 0.404
 before §4.14 traced the shortfall to a threshold fitted on a metric that
 could not see the error it controls.

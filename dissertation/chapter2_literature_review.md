@@ -145,8 +145,10 @@ contrastive pairs, having found 2D datasets let models score well without
 using spatial information at all. Both respond to the fact this dissertation
 measures in its own dataset, that what a benchmark appears to test and what its
 annotation rewards can diverge until someone measures the labels. Chapter 6
-shows the consequence here, and Northcutt et al.'s conclusion, that rankings
-flip when gold is corrected, is the shape of that result.
+puts that to the test here, and finds the consequence takes a different form
+from Northcutt et al.'s: correcting the gold lifts both label sources
+together rather than reordering them, and what moves with annotation quality
+is which source leads on which annotator.
 
 ## 2.4 The rival family: semi-supervised and active learning
 

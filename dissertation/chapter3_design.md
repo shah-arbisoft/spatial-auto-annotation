@@ -275,14 +275,17 @@ Depth Anything v2 is Apache-2.0 only in its Small variant, so Small was
 preferred, a choice ablation A8 later justified on accuracy (Supplementary D.5);
 SAM2 and Grounding DINO are Apache-2.0; and the benchmark's YOLO training
 uses AGPL-3.0 `ultralytics`, so commercial deployment of that component
-would need a licence review. Some frames contain identifiable people, making
-them personal data under the Data Protection Act 2018, which the CC-BY
-licence does not settle: they are processed under the Act's research
-provisions, faces are anonymised automatically in every published figure and
-in anything put in front of a person, and an item whose judgement that would
-compromise is dropped rather than shown. Section 4.15 treats the validation
-study's per-browser identifier as a data-protection question rather than
-dismissing it. The ethics record is Supplementary A.
+would need a licence review. Some frames contain identifiable people, and
+the source, the working copy and what is published have to be kept apart.
+The dataset is released under CC-BY 4.0 by the group that collected it and
+is not redistributed here. The input is not anonymised, because the support
+guard of §3.6 must detect people to refuse them. Everything published or
+shown is anonymised first, in Figure 4.1, in every audit pack and on the
+validation site. The frames are handled as personal data under the Data
+Protection Act 2018, which the CC-BY licence alone does not settle, and
+§4.15 treats the validation study's per-browser identifier as a
+data-protection question rather than dismissing it; Supplementary A
+separates the cases.
 
 ## 3.13 Summary of design decisions
 
@@ -305,5 +308,4 @@ design could not settle alone, because invariant testing pins rule
 instrument, built to attack the author's own verdicts, and it overturned
 one; §7.7 returns to all four with the evidence.
 
-Chapter 4 puts that annotator against the human annotations, the first of
-three iterations answering the research questions.
+Chapter 4 puts that annotator against the human annotations.
