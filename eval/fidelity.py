@@ -245,6 +245,22 @@ def baseline_box_only(rows, cfg, geo_root="outputs/geometry"):
 # --------------------------------------------------------------------------- #
 # reporting
 # --------------------------------------------------------------------------- #
+def f2(v) -> str:
+    """Two decimals, rounding halves away from zero.
+
+    The report stores rates at four decimals, and `f"{0.965:.2f}"` gives 0.96,
+    because 0.965 is a hair below 0.965 in binary. Formatting the same rate
+    from its unrounded form gives 0.97, so `to the left of` recall printed as
+    0.97 in T1 and 0.96 in T2: one number, two renderings, and the
+    dissertation inherited both.
+    """
+    from decimal import Decimal, ROUND_HALF_UP
+    if v is None:
+        return "\u2014"
+    return str(Decimal(repr(float(v))).quantize(Decimal("0.01"),
+                                                rounding=ROUND_HALF_UP))
+
+
 def md_recall_table(ours, rnd, majority, boxonly, major_name):
     lines = ["| Predicate | Gold | Ours | Ours (held-out) | Random | Majority"
              f" ({major_name}) | Box-only |",
@@ -302,8 +318,8 @@ def main():
           "| Predicate | P | R | F1 | support |", "|---|---|---|---|---|"]
     for k in PREDICATES:
         v = prf[k]
-        md.append(f"| {k} | {v['precision']:.2f} | {v['recall']:.2f} | "
-                  f"{v['f1']:.2f} | {v['support']} |")
+        md.append(f"| {k} | {f2(v['precision'])} | {f2(v['recall'])} | "
+                  f"{f2(v['f1'])} | {v['support']} |")
     md += ["\n## T3 — Per-annotator-group recall (tenth-annotator view)\n",
            "| Group | Gold triplets | Recall |", "|---|---|---|"]
     for g, v in groups.items():

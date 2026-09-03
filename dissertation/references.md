@@ -32,14 +32,14 @@ Chang, X., Ren, P., Xu, P., Li, Z., Chen, X. and Hauptmann, A. (2023) 'A
 comprehensive survey of scene graphs: generation and application', *IEEE
 Transactions on Pattern Analysis and Machine Intelligence*, 45(1), pp. 1-26.
 
+Chao, Y.-W., Liu, Y., Liu, X., Zeng, H. and Deng, J. (2018) 'Learning to
+detect human-object interactions', *Proceedings of the IEEE Winter Conference
+on Applications of Computer Vision (WACV)*, pp. 381-389.
+
 Chen, B., Xu, Z., Kirmani, S., Ichter, B., Sadigh, D., Guibas, L. and Xia, F.
 (2024) 'SpatialVLM: endowing vision-language models with spatial reasoning
 capabilities', *Proceedings of the IEEE/CVF Conference on Computer Vision and
 Pattern Recognition (CVPR)*, pp. 14455-14465.
-
-Chao, Y.-W., Liu, Y., Liu, X., Zeng, H. and Deng, J. (2018) 'Learning to
-detect human-object interactions', *Proceedings of the IEEE Winter Conference
-on Applications of Computer Vision (WACV)*, pp. 381-389.
 
 Cheng, A.-C. et al. (2024) 'SpatialRGPT: grounded spatial reasoning in
 vision-language models', *Advances in Neural Information Processing Systems
@@ -51,9 +51,6 @@ Cohen, J. (1960) 'A coefficient of agreement for nominal scales',
 Cohn, A.G. and Renz, J. (2008) 'Qualitative spatial representation and
 reasoning', in van Harmelen, F., Lifschitz, V. and Porter, B. (eds)
 *Handbook of Knowledge Representation*. Amsterdam: Elsevier, pp. 551-596.
-
-*Computer Misuse Act 1990*, c. 18. Available at:
-https://www.legislation.gov.uk/ukpga/1990/18/contents
 
 *Data Protection Act 2018*, c. 12. Available at:
 https://www.legislation.gov.uk/ukpga/2018/12/contents
