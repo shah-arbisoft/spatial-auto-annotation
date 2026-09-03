@@ -30,8 +30,13 @@ dataset itself, verified by exact pixel match; the remaining 1,766 carry no
 annotation and are **not** covered by the CC-BY release. They are used only
 to measure behaviour on unlabelled input, are not redistributed, and no
 figure reproduces a frame from them. They show the same laboratory and the
-same people as the released portion, and the face rule above applies to
-them unchanged. The independent
+same people as the released portion, and the face rule above applies to them
+unchanged. Their governance differs from the released set's and is worth
+stating separately: they were supplied directly by the data controller for
+this project's use, they are not public and not redistributed here, and the
+checklist's public-availability answer speaks to the released dataset rather
+than to them. A replication that wanted this portion would have to ask the
+same group for it. The independent
 validation of Chapter 4 collects **pseudonymous** true/false judgements from
 adult volunteers, with no names, email addresses or IP addresses, only a
 per-browser random identifier used to spread coverage and drop duplicates,
@@ -643,10 +648,10 @@ centroid distances are not comparable across scenes. In a metric comparison
 every 3D-centroid variant transferred to held-out annotators at F1 at or below
 0.024, while the size-relative gap transfers with recall 1.0.
 
-**Fitting protocol, annotator-aware.** Only three of the nine annotator groups
-ever used `near` (group_0: 461 labels, group_4: 160, group_8: 93, summing to
-714 of the 717 in Table 4.1; group_2 supplies the remaining 3 and the other
-five groups none). `near_T` is therefore fitted on the near-using groups inside
+**Fitting protocol, annotator-aware.** Three of the nine annotator groups
+supplied 714 of the 717 `near` labels in Table 4.1 (group_0: 461, group_4:
+160, group_8: 93); group_2 supplied the remaining three and five groups
+supplied none. `near_T` is therefore fitted on the near-using groups inside
 the training split (groups 0 and 4), on human-annotated non-contact pairs
 only, and evaluated on the held-out near-using annotator (group_8). The fitted
 value is **T = 1.372**, with held-out recall **1.000**: every pair that unseen
@@ -752,7 +757,8 @@ cannot, at a cost of half the support recall (D.8).
 **The `near` fitting protocol.** The naive protocol, fitting one threshold to
 all `near` labels and testing on held-out images, fails informatively: fitting on
 groups 0–5 and testing on 6–8 yields held-out F1 = 0.009, because the label
-was applied by only three of nine groups with very different exhaustiveness.
+was applied in quantity by only three of nine groups, with very different
+exhaustiveness.
 The protocol therefore fits on human-*annotated*, non-contact pairs only,
 since unannotated pairs are not reliable negatives under sparse annotation
 and contact pairs are never `near` by the measured convention; it uses only
@@ -1855,7 +1861,7 @@ later evidence could have overturned. The full table is here.
 | Abstention bands + flags | forced binary decisions | converts model uncertainty into measurable human cost |
 | Ground-plane fallback for depth ties | metric depth models; multi-frame fusion | free 2D cue, pixel-precise in the depth band; guarded by own contact evidence; metric depth needs new capture, multi-frame breaks the single-image contract |
 | `near` = relative box gap + contact exclusion | 3D centroid distance | measured: centroid metrics don't transfer (F1 ≤ 0.024); near never co-occurs with contact (0/469) |
-| Annotator-aware `near` fit | fit/test across all groups | only 3/9 groups used the label; naive protocol conflates annotator habits with tool error |
+| Annotator-aware `near` fit | fit/test across all groups | 3/9 groups supplied 99.6% of the label; naive protocol conflates annotator habits with tool error |
 | Byte-compatible writers | own format + converter | RQ1/RQ2 comparability; verified zero-error |
 | Config + geometry cache | ad-hoc constants, full re-runs | reproducibility; 20 s offline re-evaluation |
 

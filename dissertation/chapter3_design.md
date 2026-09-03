@@ -58,9 +58,9 @@ directly on the released files, and each drives a specific design response:
   direction, §4.5)*, so the tool labels every pair, density being the value
   added, and the protocol treats human labels as a recall target, never as
   an exhaustive gold standard.
-- **Inconsistent `near`.** Only 3 of 9 annotator groups ever used `near`
-  (461/160/93 labels of the 717 total, one further group supplying 3 and the
-  rest none), each labelling a different fraction of equally-close pairs, so
+- **Inconsistent `near`.** Three of the nine annotator groups supplied 714 of
+  the 717 `near` labels (461/160/93); a fourth supplied three and five
+  supplied none. Each labelled a different fraction of equally-close pairs, so
   the threshold is fitted and annotator-aware (§3.8); no consensus exists
   for it to be matched to.
 
@@ -195,7 +195,7 @@ RQ2 depends on.
 
 Fitting one threshold to all `near` labels and testing on held-out images
 fails, and the failure is informative: held-out F1 comes out at 0.009,
-because the label was applied by only three of nine groups with very
+because the label was applied in quantity by only three of nine groups, with very
 different exhaustiveness. The protocol therefore fits on human-*annotated*,
 non-contact pairs from the training-split groups that used the label at all,
 and reports agreement on the held-out near-user who contributed nothing to

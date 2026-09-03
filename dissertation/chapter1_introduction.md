@@ -120,7 +120,8 @@ They decompose into six verifiable objectives:
 - **O6 (test at the level the field measures).** The same comparison
   repeated in the source paper's own scene-graph framework with a shared
   frozen detector and replicated seeds, and carried one link further to an
-  LLM planner asked for a safe grasp plan under each label source, so the
+  LLM planner asked for a grasp plan under each label source and scored on
+  clearing the occluder first, so the
   answer to RQ2 does not rest on one lightweight model. *(Chapters 5, 6)*
 
 ### 1.2.2 What would count as an answer

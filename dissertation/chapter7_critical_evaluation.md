@@ -28,9 +28,10 @@ well as human labels, and the controlled experiment answered more strongly
 than the question was posed: with identical features, model, seed and split,
 the auto-trained classifier reaches 0.75 mean recall against held-out
 *human* gold versus 0.30 for its human-trained twin. At this dataset's
-annotation scale the automatic labels are better training material than the
-labels they were validated against, on density (20× more triplets) and
-consistency (one definition, uniformly applied), which converts the premise
+annotation scale, and in a feature space kin to the rules that wrote them
+(§5.5), the automatic labels are better training material than the labels
+they were validated against, on density (20× more triplets) and consistency
+(one definition, uniformly applied), which converts the premise
 from "removing the bottleneck loses little" to "removing the bottleneck
 gains". Chapter 6 scopes that claim without confirming it: it cannot
 separate the same two label sources in the source paper's framework, and the
@@ -108,7 +109,8 @@ The source paper flagged `near` as inconsistent and called for "clear
 annotation guidelines (e.g., spatial thresholds for 'near')". This project
 quantifies how much further the guideline problem goes:
 
-1. `near` was used by 3 of 9 annotator groups, with ~4× variance in how
+1. `near` was supplied in quantity by 3 of 9 annotator groups, a fourth
+   contributing three labels, with ~4× variance in how
    exhaustively equally-close pairs were labelled. Yet all three annotators'
    labels sit inside one fitted threshold (held-out recall 1.0): consistent
    *notion*, non-exhaustive *application*.
