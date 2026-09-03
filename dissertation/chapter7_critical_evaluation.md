@@ -200,9 +200,13 @@ of the margin this dissertation once reported between label sources was an
 artefact of when each arm was trained.** Nothing in the original protocol
 was careless, with seeds fixed, detector frozen and configuration shared.
 The confound entered through an unpinned dependency, the one axis the
-protocol did not name. A controlled comparison has to control the code as explicitly
-as it controls the data; §6.3 now does, and its figures supersede the
-earlier ones.
+protocol did not name. What moved was the external benchmark framework in a
+hosted session, not the annotator: that runs from a pinned environment and
+reproduces `pairs.csv` byte for byte against a committed digest
+(Supplementary B), which is why the fidelity numbers were unaffected. A
+controlled comparison has to control the code as explicitly as it controls
+the data, and a hosted run needs the discipline the local one already had;
+§6.3 now does, and its figures supersede the earlier ones.
 
 ## 7.5 Synthesis against the geometry-to-label lineage
 
