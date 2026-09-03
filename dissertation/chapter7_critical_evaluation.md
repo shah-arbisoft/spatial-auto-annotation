@@ -58,7 +58,7 @@ by re-checking rule conditions, so the analysis is exhaustive instead of
 anecdotal. What it establishes comes to three observations.
 
 First, **genuine tool error is rare**: §4.10 puts avoidable error at roughly
-7%, the bulk of the mass being calibrated abstention (43–54% of front/behind
+7% of the misses, the bulk of the mass being calibrated abstention (43–54% of front/behind
 misses sit in the depth ambiguity band) with measured annotator defects
 taking most of the rest. That shapes what is left to do: a tool whose
 misses are mostly abstention improves by deciding more often rather than
