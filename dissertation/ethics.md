@@ -62,8 +62,8 @@ https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-usi
 ## A.2 Documents attached
 
 1. **Ethics self-assessment**.
-2. **Secondary Data Checklist**, completed by the author and sent to the
-   supervisor for countersignature.
+2. **Secondary Data Checklist**, countersigned by the supervisor on
+   2 September 2026.
 
 Both are reproduced in full on the pages that follow, as held at
 submission.
