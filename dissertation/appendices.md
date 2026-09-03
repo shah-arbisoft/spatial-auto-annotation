@@ -45,6 +45,16 @@ https://www.pexels.com/video/a-person-working-with-pictures-and-photos-taken-usi
 
 ## Supplementary B: Reproducibility
 
+This supplement is the evidence behind the claim that every number in this
+dissertation reproduces from the repository: what the results were produced
+on, how the repository is arranged so that a rule change re-evaluates in
+twenty seconds rather than five minutes, where each chapter's numbers come
+from, and a command-by-command walk-through with its run times and the
+traps worth knowing about. It closes with what each of the four constraints
+of §1.3 excluded, and the specification of each experiment §8.3 names as
+unfinished. Nothing here is needed to follow the argument; it is here so
+that a reader who doubts a number can go and check it.
+
 Environment: Windows 11, Python 3.11.9 (virtual environment), PyTorch 2.5.1
 (CUDA 12.1), single NVIDIA RTX 2060 (6 GB). All thresholds, seeds and model
 identifiers are pinned in `configs/default.yaml`.
@@ -1734,6 +1744,14 @@ not distributed with the repository, since publishing it would make any
 later re-audit unblindable.
 
 ## Supplementary F: Additional tables and figures
+
+The chapters cite these without reproducing them. Most carry the
+per-predicate, per-annotator or per-seed detail underneath a headline
+figure; F.3 collects every design decision with the alternative it
+displaced; F.7 gives a derivation the chapters state only the verdict of;
+and the last two are readings rather than tables, F.11 setting out how the
+headline recall table should and should not be taken, F.12 the weighing
+behind each answer.
 
 ### F.1 Per-predicate and per-slice results at seed 42
 
