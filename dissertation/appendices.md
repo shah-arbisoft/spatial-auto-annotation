@@ -192,8 +192,8 @@ has no use for. The full inventory is in the README.
 
 The reproduction is the point. Mounting the dataset read-only, deleting
 `outputs/pairs.csv` and running `scripts/reannotate_from_cache.py` inside the
-container regenerates it at 84,881 rows with the SHA-256 of the file
-committed here, and repeating it gives the same digest. Deleting first is
+container regenerates it at 84,881 lines, the 84,880 ordered pairs plus a header,
+with the SHA-256 of the file committed here, and repeating it gives the same digest. Deleting first is
 deliberate rather than tidy: the file ships inside the image, so a run that
 failed silently would leave the committed copy in place and a naive check
 would call that a reproduction. Twelve of the fifteen offline commands
@@ -211,7 +211,7 @@ than aspirational.
 The end-to-end check is the one that matters for reproducibility. Mounting
 the dataset and the geometry cache read-only into the container and running
 `scripts/reannotate_from_cache.py` re-annotated all 836 images and produced
-a `pairs.csv` byte-identical to the one in this repository, 84,881 rows
+a `pairs.csv` byte-identical to the one in this repository, 84,881 lines
 sharing its SHA-256, together with the same 2,508 annotation files. The
 container therefore does not merely install; it reproduces the annotations
 this dissertation reports, exactly.
@@ -241,7 +241,7 @@ in a container with nothing mounted.
 
 The check that the perception stage reproduces is
 `scripts/reannotate_from_cache.py`, which rebuilds `pairs.csv` from the
-cache and should return the identical file: 84,881 rows, SHA-256
+cache and should return the identical file: 84,881 lines, SHA-256
 `60281435…e1bd`.
 
 | command | produces | time |
@@ -297,12 +297,6 @@ notebooks themselves, because either one silently produces a plausible wrong
 number: class index 0 is reserved, patched idempotently in a cell, and
 `--eval-only` is a no-op with this configuration, so evaluation calls
 `inference()` directly rather than trusting the flag.
-
-**5. The validation study** lives in its own public repository
-(`audit-game`), which regenerates its claim set from this repository's
-caches and scores the exported votes. The private answer key never enters
-either repository, so the study can stay open while its answers stay
-closed.
 
 Every reported number traces to one of the JSON/markdown artefacts these
 commands write; no figure or table in this dissertation is produced by hand.
@@ -461,7 +455,9 @@ centroid order. This recovers the containment case the box test misses, nested
 boxes at shallow viewing angles, formerly 79 to 88% of support misses, and
 rejects cluster neighbours whose boxes touch but whose masks do not. Measured:
 held-out support F1 0.71 to 0.87, and re-audited extra-label precision 0.07 to
-0.73 for `on` and 0.20 to 0.80 for `under`.
+0.73 for `on` and 0.20 to 0.80 for `under`. Those two re-audits were
+unblinded; §4.14 judges the shipped rule blind against decoys and puts it
+at 0.452 and 0.600, which are the figures to read.
 
 **Class guard.** Classes listed in `no_support_classes` (shipped value:
 `human`) are excluded from `on` and `under` in either role. The justification
@@ -791,7 +787,7 @@ rule and its two guards; what follows is the evidence that selected it. On the
 train groups the fallback adds 386 committed directions at 0.91 agreement; on
 held-out group 7 it adds 54 and **every one agrees with the annotator**.
 Effect on the headline: front/behind recall 0.52/0.55 → **0.70/0.71** (aligned
-overall 0.67 → **0.84**), mean recall 0.81 → **0.85**, and the depth-ambiguous
+overall 0.67 → **0.91**), mean recall 0.81 → **0.85**, and the depth-ambiguous
 flag rate falls 29.5% → 19.3%. A seeded 15-sample audit of the fallback's
 *extra* predictions (pairs no human labelled) estimates true precision
 conservatively at **11/15 ≈ 0.73**, and the four wrong/uncertain cases share
@@ -806,8 +802,10 @@ audit already motivates.
 The
 class-aware guard *shipped*: annotators never label person-support (0 of
 2,466 gold triplets), so support is no longer evaluated when either object is
-a person, removing ~130 held-object emissions at zero recall cost and
-eliminating the person-holding audit mode by construction. Two further
+a person, at zero recall cost and eliminating the person-holding audit mode
+by construction. It blocks 51 pairs at the shipped contact threshold
+(Supplementary D.8); the ~130 quoted in D.2 is the count at the pre-refit
+0.60, where the rule emitted support far more freely. Two further
 candidates were built, measured, and rejected on the evidence. (i)
 *Guard-only surface detection* (zero-shot prompts for tables, cases and trays
 feeding the elevation guard; `scripts/run_surface_guard.py`) suppressed 6% of
@@ -1732,7 +1730,7 @@ an error rate. Recall and F1 are restricted to the same 8,790 annotated pairs.
 |---|---|---|---|---|
 | on | 0.95 | 0.81 | 0.88 | 1465 |
 | under | 0.92 | 0.75 | 0.83 | 1001 |
-| to the left of | 0.35 | 0.96 | 0.51 | 972 |
+| to the left of | 0.35 | 0.97 | 0.51 | 972 |
 | to the right of | 0.42 | 0.98 | 0.59 | 1174 |
 | in front of | 0.43 | 0.70 | 0.53 | 2013 |
 | behind | 0.35 | 0.71 | 0.47 | 1584 |
