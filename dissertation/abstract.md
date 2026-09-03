@@ -9,7 +9,9 @@ near).
 
 The pipeline computes each relationship instead of predicting it: off-the-shelf
 models supply segmentation masks and monocular depth, objects are lifted to 3D
-positions, and geometric rules decide every label. Thresholds are fitted on
+positions, and geometric rules decide every label, save one semantic
+exception on support that ablation A10 shows geometry cannot remove.
+Thresholds are fitted on
 six of the nine annotator groups and validated on the other three; outputs
 use the dataset's native formats. All 836 images are annotated in five minutes
 on a consumer GPU, at 20 times the manual pass's density.
