@@ -789,6 +789,8 @@ decoys rejected & 19/28 0.679 [0.49, 0.82] & 24/28 0.857 [0.69, 0.94] \\
 \chapter{Additional tables and figures}
 
 
+The chapters cite these without reproducing them. Most carry the per-predicate, per-annotator or per-seed detail underneath a headline figure; F.3 collects every design decision with the alternative it displaced; F.7 gives a derivation the chapters state only the verdict of; and the last two are readings rather than tables, F.11 setting out how the headline recall table should and should not be taken, F.12 the weighing behind each answer.
+
 \subsection{F.1 Per-predicate and per-slice results at seed 42}
 
 Section 6.3 reports the headline benchmark result and Supplementary F.1 the two decompositions it draws on. Both come from the same pair of best checkpoints scored on the same 210-image test set, at seed 42 only, and from the same single training session as every other figure in Chapter 6; \S{}6.3.1 replicates the slice decomposition across three seeds, and where the two disagree the three-seed figures are the ones any claim rests on. They do disagree here: at this seed the automatic arm leads on group 6, where the three-seed mean puts the human arm ahead, which is the disagreement the replication exists to expose. Per-predicate figures are parsed from the evaluation log of the all-arms run (\texttt{scripts/kaggle/executed\_\allowbreak{}6\_\allowbreak{}all\_\allowbreak{}arms\_\allowbreak{}085.ipynb}, collected in \texttt{outputs/sgg\_\allowbreak{}benchmark/per\_\allowbreak{}predicate\_\allowbreak{}085.json}).

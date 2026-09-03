@@ -1613,6 +1613,14 @@ later re-audit unblindable.
 
 ## Supplementary F: Additional tables and figures
 
+The chapters cite these without reproducing them. Most carry the
+per-predicate, per-annotator or per-seed detail underneath a headline
+figure; F.3 collects every design decision with the alternative it
+displaced; F.7 gives a derivation the chapters state only the verdict of;
+and the last two are readings rather than tables, F.11 setting out how the
+headline recall table should and should not be taken, F.12 the weighing
+behind each answer.
+
 ### F.1 Per-predicate and per-slice results at seed 42
 
 Section 6.3 reports the headline benchmark result and Supplementary F.1 the two
