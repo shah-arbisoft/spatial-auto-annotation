@@ -118,7 +118,7 @@ They decompose into six verifiable objectives:
   same classifier is trained on each label source under identical features,
   splits and seeds, isolating the label source, answering RQ2. *(Chapter 5)*
 - **O6 (test at the level the field measures).** The same comparison
-  repeated in the source paper's own scene-graph framework with a shared
+  repeated in a current scene-graph framework with a shared
   frozen detector and replicated seeds, and carried one link further to an
   LLM planner asked for a grasp plan under each label source and scored on
   clearing the occluder first, so the
@@ -150,7 +150,7 @@ identical features, splits and seeds, judged against held-out *human*
 annotation, deliberately the harder direction, the yardstick being the
 rival source's own product. Since a single lightweight model could produce
 such a result by accident, the question is put three times at increasing
-cost, through a controlled classifier, the source paper's own benchmark
+cost, through a controlled classifier, a current scene-graph benchmark
 framework, and a planner acting on the relations, with the standard
 semi-supervised remedy as a third arm in the controlled experiment. Agreement across all
 three would be required for an unqualified yes; where they disagree, the
@@ -176,7 +176,7 @@ and says who can use it.
 
 In scope: the automatic annotator; the fidelity study with baselines and
 ablations; the controlled downstream classifier; the direct benchmark test
-in the source paper's own SGG framework (Chapter 6); the planner experiment
+in a current SGG framework (Chapter 6); the planner experiment
 carrying the comparison one link further towards robot behaviour (§5.7); the
 vision-language baseline (§4.13); and a critical evaluation chapter. Two
 items entered scope during the project and are marked as such where
@@ -240,7 +240,7 @@ the seven predicates. **Chapters 4 to 6 are three CRISP-DM iterations of
 increasing scope on the same question**, and reading them in order is the
 point: the fidelity study answers RQ1 against the human labels, the
 controlled downstream study answers RQ2 against a lightweight model, and the
-benchmark repeats it in the source paper's own framework and disagrees.
+benchmark repeats it in a current SGG framework and disagrees.
 Chapter 7 ties all three to causes and to prior work, and reads the result
 for its social and professional consequences, and Chapter 8 closes against
 the objectives, the contributions and what is left undone. The legal and

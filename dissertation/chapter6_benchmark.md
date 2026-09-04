@@ -1,18 +1,20 @@
 # Chapter 6: The Direct Benchmark Test: Training REACT++ on Both Label Sources
 
 This chapter is the third analysis iteration: the heavyweight version of the
-RQ2 experiment, run in the source paper's own framework against three
+RQ2 experiment, run in a current scene-graph framework against three
 predictions registered before it (§6.1). It reaches a different verdict from
 Chapter 5, and §6.4 decomposes why.
 
 ## 6.1 Design
 
 Chapter 5's controlled experiment used a deliberately small classifier; this
-chapter runs the heavyweight version on the source paper's own terms: a
-real-time scene-graph model (REACT++, the current model of the SGG-Benchmark
-framework the dataset's tooling belongs to; Neau and Falomir, 2026) trained
-once on the human relations and once on this tool's, evaluated on an
-identical held-out test set. The isolation mirrors RQ2 exactly:
+chapter runs the heavyweight version at the scale the field measures: a
+real-time scene-graph model (REACT++, the current model of the open
+SGG-Benchmark framework; Neau and Falomir, 2026) trained once on the human
+relations and once on this tool's, evaluated on an identical held-out test
+set. The source paper benchmarked a different set of relation models, VCTree
+scoring best among them (§2.6), so this is its task, split and metrics run
+with a current model rather than a re-run of its configuration. The isolation mirrors RQ2 exactly:
 
 - **Shared detector.** A YOLOv8m backbone is trained once on the ground-truth
   boxes of the training split and frozen for both arms (test-time detection
@@ -235,7 +237,7 @@ top-ranked false positives.
 ## 6.6 What Chapter 5's predictions got right and wrong
 
 Registered before the run, judged after: prediction 1 (early human-arm
-saturation) is **confirmed** and replicates the source paper. Prediction 2
+saturation) is **confirmed**, as the source paper also found. Prediction 2
 (higher plateau) is **unresolved on mR@100**, and the word matters, because an
 earlier version recorded it as refuted on a 0.048 gap that the retrained
 arms of §6.3.1 reduce to 0.001, which no experiment of this size can call
