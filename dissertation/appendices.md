@@ -611,6 +611,14 @@ locates its support rather than itself; and only when mask evidence exists at
 all, so it is off in box-only mode. Pairs both stages abstain on are flagged,
 never guessed.
 
+Both guards assume a single planar floor. An object standing on a step or a
+slope is not *elevated* in the sense the first guard tests, which looks for
+mask contact with another detected object, so the fallback can still fire and
+order the pair by a bottom edge the ground itself has displaced. The
+assumption holds across this capture and is untested beyond it; a deployment
+on uneven ground should raise `plane_band` past the image height, which makes
+stage two unsatisfiable and lets those pairs flag rather than be guessed.
+
 `behind` is the inverse throughout: `behind(A,B) == in_front_of(B,A)`.
 
 Worked example, encoded in `tests/test_predicates.py`: a bottle with box

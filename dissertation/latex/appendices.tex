@@ -263,6 +263,8 @@ plane(A, B)  ==  (y2_A - y2_B) >  plane_band   =>  in front of
 
 with \texttt{plane\_\allowbreak{}band} = 0.005 of normalised image height, calibrated on the training groups (ablation A7). Two guards apply. The fallback fires only when neither object is elevated, meaning neither has mask contact at or above \texttt{on\_\allowbreak{}contact\_\allowbreak{}min} with any partner, because an elevated object's box bottom locates its support rather than itself; and only when mask evidence exists at all, so it is off in box-only mode. Pairs both stages abstain on are flagged, never guessed.
 
+Both guards assume a single planar floor. An object standing on a step or a slope is not \textit{elevated} in the sense the first guard tests, which looks for mask contact with another detected object, so the fallback can still fire and order the pair by a bottom edge the ground itself has displaced. The assumption holds across this capture and is untested beyond it; a deployment on uneven ground should raise \texttt{plane\_\allowbreak{}band} past the image height, which makes stage two unsatisfiable and lets those pairs flag rather than be guessed.
+
 \texttt{behind} is the inverse throughout: \texttt{behind(A,B) == in\_\allowbreak{}front\_\allowbreak{}of(B,A)}.
 
 Worked example, encoded in \texttt{tests/test\_\allowbreak{}predicates.py}: a bottle with box bottom 0.80 against a book with box bottom 0.60, depths 0.50 and 0.51 and so inside \texttt{depth\_\allowbreak{}eps}, both floor-standing, gives bottle \texttt{in front of} book. The same pair with either object elevated is flagged instead.
