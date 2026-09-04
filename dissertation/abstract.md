@@ -37,7 +37,7 @@ guessing.
 A classifier trained on the automatic labels reaches 0.75 mean recall against
 held-out human annotations, where the human labels give 0.30 and self-training
 0.36, on geometric features close kin to the rules that wrote the labels.
-Repeated in the source paper's benchmark framework with a shared frozen
+Repeated in a current scene-graph framework with a shared frozen
 detector and three seeds per arm, that advantage disappears without reversing:
 the arms rank level (mR@100 0.292 against 0.293), while the automatic model
 recovers five times more of the relation types its annotation omits (zR@100

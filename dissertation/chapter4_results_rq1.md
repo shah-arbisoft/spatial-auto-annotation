@@ -260,7 +260,7 @@ detection failure (Supplementary E.4).
 The 884 released images are one continuous walk, each annotator group a
 contiguous 100-frame block, so §4.1's held-out split is held out by scene as
 well as by annotator. The annotator reading survives, since an inverted
-convention (§4.5) and a `near` label used by three groups in nine (§3.2) are
+convention (§4.5) and a `near` label used in quantity by three groups in nine are
 behaviours no arrangement of furniture can produce, and the confound runs
 favourably: 0.74 on held-out groups is generalisation to an unseen annotator
 *and* an unseen arrangement. The sequence also lets the verdicts be checked

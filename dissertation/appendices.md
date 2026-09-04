@@ -1280,7 +1280,7 @@ That has one consequence for §4.1's split, which §4.12 states: a group is
 simultaneously an annotator identity *and* a temporal block holding one
 arrangement, so the split is held out by scene as well as by annotator. The
 annotator reading survives, since an inverted front/behind convention (§4.5)
-and a `near` label used by three groups in nine (§3.2) are labelling
+and a `near` label used in quantity by three groups in nine are labelling
 behaviours no arrangement of furniture can produce, and the confound runs
 favourably: 0.74 on held-out groups is generalisation to an unseen annotator
 *and* an unseen arrangement.

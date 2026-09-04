@@ -34,7 +34,7 @@ they were validated against, on density (20× more triplets) and consistency
 (one definition, uniformly applied), which converts the premise
 from "removing the bottleneck loses little" to "removing the bottleneck
 gains". Chapter 6 scopes that claim without confirming it: it cannot
-separate the same two label sources in the source paper's framework, and the
+separate the same two label sources in a current SGG framework, and the
 advantage therefore does not appear on a ranked metric scored against sparse human
 annotation, and the defensible sentence is that automatic labels *teach
 better where correctness is the criterion and equally well where resemblance

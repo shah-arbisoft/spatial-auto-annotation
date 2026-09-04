@@ -19,7 +19,7 @@ no threshold saw, against three baselines, a vision-language model, ten
 ablations and audited precision. **O4** attributes every one of the 1,650
 missed triplets to a cause, leaving roughly 7% of them genuine tool error (§4.10,
 §7.2). **O5** is the controlled experiment, 0.75 against 0.30 human and 0.36
-self-trained. **O6** repeats it in the source paper's framework with a
+self-trained. **O6** repeats it in a current SGG framework with a
 frozen detector and three seeds per arm, and carries it one link further to
 a planner; it is met in the sense that decides the answer, since the
 heavyweight test does not agree with the lightweight one, the disagreement
