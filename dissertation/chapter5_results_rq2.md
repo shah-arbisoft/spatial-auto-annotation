@@ -256,5 +256,7 @@ comparison inside a full scene-graph model and returns parity, 0.292 against
 0.293, which no experiment of that size can separate. So the advantage
 established here is an advantage on the controlled classifier, where
 features are held identical, and it does not carry to the benchmark's ranked
-metric; §6.4 measures why the two disagree, and the answer to RQ2 should be
-read as that pair of results and not as this one alone.
+metric; §6.4 measures why the two disagree. The answer to RQ2 should be read
+across the three tests §1.2.2 names, the planner of §5.7 included, where the
+tool alone reached 19 of 25 against the human arm's 25, and not as this one
+alone.
