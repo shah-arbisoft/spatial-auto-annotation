@@ -2,7 +2,7 @@
 
 Ahn, M. et al. (2022) 'Do as I can, not as I say: grounding language in
 robotic affordances', *Proceedings of the 6th Conference on Robot Learning
-(CoRL)*. Available at: https://arxiv.org/abs/2204.01691
+(CoRL)*, pp. 287–318. Available at: https://arxiv.org/abs/2204.01691
 
 Allen, J.F. (1983) 'Maintaining knowledge about temporal intervals',
 *Communications of the ACM*, 26(11), pp. 832-843.
@@ -10,7 +10,7 @@ Allen, J.F. (1983) 'Maintaining knowledge about temporal intervals',
 Armeni, I., He, Z.-Y., Gwak, J., Zamir, A.R., Fischer, M., Malik, J. and
 Savarese, S. (2019) '3D scene graph: a structure for unified semantics, 3D
 space, and camera', *Proceedings of the IEEE/CVF International Conference on
-Computer Vision (ICCV)*.
+Computer Vision (ICCV)*, pp. 5663–5672.
 
 Artstein, R. and Poesio, M. (2008) 'Inter-coder agreement for computational
 linguistics', *Computational Linguistics*, 34(4), pp. 555–596.
@@ -85,7 +85,7 @@ Systems*, 10(1), pp. 4-25. doi: 10.1109/TCDS.2016.2594134
 Johnson, J., Hariharan, B., van der Maaten, L., Fei-Fei, L., Zitnick, C.L.
 and Girshick, R. (2017) 'CLEVR: a diagnostic dataset for compositional
 language and elementary visual reasoning', *Proceedings of the IEEE
-Conference on Computer Vision and Pattern Recognition (CVPR)*.
+Conference on Computer Vision and Pattern Recognition (CVPR)*, pp. 1988–1997.
 
 Kamath, A., Hessel, J. and Chang, K.-W. (2023) 'What's "up" with
 vision-language models? Investigating their struggle with spatial reasoning',
@@ -115,7 +115,7 @@ pre-training for open-set object detection', *Proceedings of the European Confer
 
 Lu, C., Krishna, R., Bernstein, M. and Fei-Fei, L. (2016) 'Visual
 relationship detection with language priors', *Proceedings of the European
-Conference on Computer Vision (ECCV)*.
+Conference on Computer Vision (ECCV)*, pp. 852–869.
 
 Neau, M. and Falomir, Z. (2026) 'REACT++: efficient cross-attention for
 real-time scene graph generation'. arXiv preprint. Available at:
@@ -166,11 +166,11 @@ vision-language models for robotics', *Proceedings of the IEEE/CVF Conference on
 
 Tang, K., Zhang, H., Wu, B., Luo, W. and Liu, W. (2019) 'Learning to compose
 dynamic tree structures for visual contexts', *Proceedings of the IEEE/CVF
-Conference on Computer Vision and Pattern Recognition (CVPR)*.
+Conference on Computer Vision and Pattern Recognition (CVPR)*, pp. 6619–6628.
 
 Tang, K., Niu, Y., Huang, J., Shi, J. and Zhang, H. (2020) 'Unbiased scene
 graph generation from biased training', *Proceedings of the IEEE/CVF
-Conference on Computer Vision and Pattern Recognition (CVPR)*.
+Conference on Computer Vision and Pattern Recognition (CVPR)*, pp. 3713–3722.
 
 Uma, A.N., Fornaciari, T., Hovy, D., Paun, S., Plank, B. and Poesio, M. (2021)
 'Learning from disagreement: a survey', *Journal of Artificial Intelligence
@@ -200,7 +200,7 @@ Practical Applications of Knowledge Discovery and Data Mining*, pp. 29–39.
 
 Xie, Q., Luong, M.-T., Hovy, E. and Le, Q.V. (2020) 'Self-training with
 Noisy Student improves ImageNet classification', *Proceedings of the IEEE/CVF
-Conference on Computer Vision and Pattern Recognition (CVPR)*.
+Conference on Computer Vision and Pattern Recognition (CVPR)*, pp. 10684–10695.
 
 Xu, D., Zhu, Y., Choy, C.B. and Fei-Fei, L. (2017) 'Scene graph generation
 by iterative message passing', *Proceedings of the IEEE Conference on
@@ -208,11 +208,11 @@ Computer Vision and Pattern Recognition (CVPR)*, pp. 5410-5419.
 
 Yang, K., Russakovsky, O. and Deng, J. (2019) 'SpatialSense: an adversarially
 crowdsourced benchmark for spatial relation recognition', *Proceedings of the
-IEEE/CVF International Conference on Computer Vision (ICCV)*.
+IEEE/CVF International Conference on Computer Vision (ICCV)*, pp. 2051–2060.
 
 Yang, J., Ang, Y.Z., Guo, Z., Zhou, K., Zhang, W. and Liu, Z. (2022)
 'Panoptic scene graph generation', *Proceedings of the European Conference
-on Computer Vision (ECCV)*.
+on Computer Vision (ECCV)*, pp. 178–196.
 
 Yang, L. et al. (2024) 'Depth Anything V2', *Advances in Neural Information
 Processing Systems (NeurIPS)*. Available at: https://arxiv.org/abs/2406.09414
@@ -222,7 +222,7 @@ generation with auto-regressive transformer', *ACM SIGGRAPH 2025 Conference Pape
 
 Zellers, R., Yatskar, M., Thomson, S. and Choi, Y. (2018) 'Neural Motifs:
 scene graph parsing with global context', *Proceedings of the IEEE/CVF
-Conference on Computer Vision and Pattern Recognition (CVPR)*.
+Conference on Computer Vision and Pattern Recognition (CVPR)*, pp. 5831–5840.
 
 Zhang, W. et al. (2025) 'Open3D-VQA: a benchmark for embodied spatial concept
 reasoning with multimodal large language model in open space', *Proceedings of the 33rd ACM International Conference on Multimedia (MM '25)*, pp. 12784-12791. doi:10.1145/3746027.3758219
