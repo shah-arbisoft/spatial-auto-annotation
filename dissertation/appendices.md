@@ -1867,7 +1867,7 @@ the point estimates are unaffected, since they are the population value
 for these images. A replication should resample trajectory segments
 rather than frames, which the released per-image outputs support.
 
-| Predicate | Recall (held-out) | 95% interval |
+| Predicate | Recall (held-out) | 95% interval (image-resampled) |
 |---|---|---|
 | on | 0.853 | 0.813–0.890 |
 | under | 0.823 | 0.768–0.875 |
