@@ -19,7 +19,11 @@ on a consumer GPU, at 20 times the manual pass's density.
 The automatic labels recover 7,276 of the 8,926 human relationships, 81%
 weighting every triplet equally and 0.85 as the unweighted per-predicate mean
 the field reports; on the held-out annotators the mean is 0.74 and five of the
-seven predicates sit at 0.82 or better. The nine annotators labelled disjoint batches, so how
+seven predicates sit at 0.82 or better. Those figures supply the rules with
+the dataset's boxes; run end to end from raw images with a zero-shot
+detector, triplet recall is 0.38, detection rather than the rules being the
+dominant term, since the relation layer scores 0.85 again wherever both
+objects are found. The nine annotators labelled disjoint batches, so how
 well two would have agreed cannot be measured and no human ceiling is claimed.
 A blinded, decoy-controlled audit of 191 claims puts precision at 0.79–1.00 for
 the lateral, depth and proximity predicates, on 24 samples each, so with wide
