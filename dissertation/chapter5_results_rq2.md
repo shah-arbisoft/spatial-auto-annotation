@@ -214,7 +214,7 @@ full in E.5) settle relations against none at p < 10^-5, the union's 6-to-0
 gain over the tool alone at p = 0.031, and the human arm's lead over the
 tool, the comparison that runs against this project. They also name what 25
 scenes cannot settle: the tool against the vision-language source is 6
-discordant to 5 at p = 1.00, so that two-scene margin is not read here. The
+discordant to 5 at p = 1.00, so that one-scene margin is not read here. The
 tests are sharp exactly where the absolute rates are not, C's own rate being
 19 of 25 with a 95% interval of [0.55, 0.91].
 
