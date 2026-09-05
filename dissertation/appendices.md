@@ -1467,7 +1467,7 @@ the tool's, all in one direction, p < 10^-5. The union's gain over the tool
 alone is 6 scenes to 0, p = 0.031, as is the human arm's lead over the tool
 alone, the comparison that runs against this project. What 25 scenes cannot
 settle is named too: the tool against the vision-language source is 6
-discordant scenes to 5, p = 1.00, so the two-scene margin means nothing and
+discordant scenes to 5, p = 1.00, so the one-scene margin means nothing and
 §5.7 declines to read it, and the union's edge over that source alone, 5 to
 0, reaches only p = 0.063. The paired tests are also sharp exactly where the
 absolute rates are not: C's own rate is 19 of 25 with a 95% interval of
