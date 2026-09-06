@@ -1479,25 +1479,25 @@ chapters in dissertation/ are the source of truth. After editing them:
 
 To compile:
 
-    latexmk -pdf main.tex          the dissertation
+    latexmk -pdf main.tex
 
-(run either twice if the ToC looks stale)
+Run it twice if the table of contents looks stale.
 
 With no local TeX installation, upload this whole folder to Overleaf
 (New Project > Upload Project) and compile there. It needs only packages
 present in a standard TeX Live.
 
-One document is submitted. The ethics record is bound into the dissertation
-itself: Supplementary A carries it in full, and the countersigned Secondary
-Data Checklist binds in there from dissertation/checklist_signed.pdf. That
-file is the one item this build cannot generate and is untracked, because it
-carries a signature and this repository is public. Supply it before the final
-build, and sign the dissertation's declaration page.
+The ethics record is bound into the dissertation rather than submitted beside
+it: Supplementary A carries it in full, and the countersigned Secondary Data
+Checklist binds in there. That checklist is the one input this build cannot
+generate. It carries a signature and this repository is public, so it is
+untracked and is not in this folder; the build prints a note in its place and
+is otherwise complete. Where dissertation/checklist_signed.pdf is present,
+scripts/build_latex.py copies it into figures/ and binds it in.
 
-The student ID is set, the acknowledgements are written, and the
-declaration's word count is computed at build time from the chapter sources
-(front matter, references and supplements excluded), so it cannot drift out
-of date the way a hand-typed figure does.
+The declaration's word count is computed at build time from the chapter
+sources, excluding front matter, references and supplements, so it cannot
+drift out of date the way a hand-typed figure does.
 """
 
 

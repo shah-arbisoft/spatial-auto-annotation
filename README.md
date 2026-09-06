@@ -49,22 +49,23 @@ RGB image
 
 ```
 configs/      seeds, hyperparameters, thresholds (default.yaml)
-data/         dataset + human labels (gitignored — obtain from supervisor)
+data/         empty; the dataset is read in place (see data/README.md)
 src/          detect, segment, depth, geometry, predicates, writers, pipeline
 eval/         fidelity (RQ1), ablations, classifier + downstream (RQ2)
 docs/         predicate_spec.md — the seven-predicate definition
-dissertation/ chapter drafts (write from week one)
-scripts/      smoke_test.py and helpers
+dissertation/ the dissertation sources and its LaTeX build
+scripts/      the annotator, the LaTeX build, and helpers
 outputs/      tables and figures for the dissertation
 ```
 
 ## Environment
 
-- **Hardware target:** one RTX 2060, 6 GB. Use Depth Anything v2 **Small** and a
-  small SAM2 variant to fit memory. Offload bulk runs / training to Kaggle or Colab.
-- **Python:** 3.10–3.12. **Note:** PyTorch and SAM2 do not yet ship wheels for
-  Python 3.14, which is what is currently installed on this machine. Create a
-  3.11 (or 3.12) virtual environment before installing `requirements.txt`.
+- **Hardware:** developed on one RTX 2060, 6 GB. Depth Anything v2 **Small** and
+  a small SAM2 variant are what fit that budget; the benchmark training of
+  Chapter 6 was run on Kaggle.
+- **Python:** 3.11 or 3.12. Torch and SAM2 ship no wheels for 3.13+, so create
+  a 3.11 environment before installing `requirements.txt`. The container
+  (`Dockerfile`) pins 3.11 and needs none of this.
 
 ```bash
 # example, adjust the python launcher to a 3.11/3.12 interpreter
@@ -186,10 +187,10 @@ Base/Large — non-commercial) · SAM2 Apache 2.0 · dataset CC-BY 4.0.
 
 ## Status
 
-Scope settled. **Dataset received** from the supervisor (Dr Peng Wang) and
-verified: 838 annotated images, 8,928 target triplets across 9 annotator groups
-— see [docs/DATASET_NOTES.md](docs/DATASET_NOTES.md). The loader
+Complete. The pipeline annotates the 836 images with matching frames in about
+five minutes on one RTX 2060, and the dissertation reporting it is in
+`dissertation/`. The dataset survey behind the protocol is in
+[docs/DATASET_NOTES.md](docs/DATASET_NOTES.md): 884 released frames, 838
+carrying a non-empty annotation, 9 annotator groups. The loader
 ([src/dataset.py](src/dataset.py)) and writers ([src/writers.py](src/writers.py))
-are validated byte-compatible with the SGDET-Annotate format (0-pixel box
-round-trip). Next: wire the perception models end-to-end (Week 2). See
-`dissertation/` for the in-progress write-up.
+round-trip the dataset's own annotation format with zero pixel drift.
