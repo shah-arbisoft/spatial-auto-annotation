@@ -1077,7 +1077,7 @@ are the future work of §8.3 rather than a threshold.
 
 What the ablation does settle is the guard's blast radius. Fifty-one pairs
 in 836 images reach the contact threshold with a person on either side, so
-the class list changes 51 decisions out of the 42,440 the tool makes. It is
+the class list changes 51 of the 42,440 unordered pairs the tool rules on. It is
 a narrow patch over a real gap, and the gap is a limit of monocular geometry
 rather than of the rule set.
 
@@ -1129,8 +1129,8 @@ result about these two models on thirty images and not about scale in
 general.
 
 **Why recall alone would be unfair.** It rewards whoever asserts more, and
-the pipeline makes 885 assertions on the 374 judged pairs against 344 and
-414. Restricted to those pairs, where precision is defined, the column
+the pipeline makes 885 assertions on the 374 judged pairs against 344 and 414.
+Restricted to those pairs, where precision is defined, the column
 reverses and both models are the more precise, 0.419 and 0.389 against
 0.347; they buy it with silence, at a price steep enough that both lose F1
 on every predicate, 0.397 and 0.405 against 0.485 pooled. On the pairs it
@@ -1515,7 +1515,7 @@ self-agreement rather than on truth. Two figures above need accounting for.
 *Yield and detections.* The run averages 330 triplets per frame from 11.7
 detected objects, and the human process recorded about 11 triplets per image.
 
-*Timing.* 6.15 s per frame is 586 frames per hour. It includes writing an inspection overlay per
+*Timing.* 6.15 s per frame is 585 frames per hour. It includes writing an inspection overlay per
 frame to make the output checkable by eye. Annotation is roughly half of it,
 so a JSON-only deployment run would land near 3.3 s per frame. The measured
 figure leads above because it is the one the repository reproduces.
