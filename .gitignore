@@ -129,3 +129,8 @@ dissertation/checklist_signed.pdf
 dissertation/latex/figures/checklist-signed.pdf
 # The submission copy, named as the module requires.
 6949963.pdf
+
+# reparse_vlm_replies.py writes a .prereparse copy before it rewrites a
+# replies file. It is a local safety net, not evidence: the raw reply text
+# stays in the live file, so the parse is reproducible by re-running it.
+*.prereparse
