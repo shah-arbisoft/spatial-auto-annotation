@@ -552,7 +552,7 @@ $\leq$ 0.50 & 89.9\% & 2.0\% \\
 
 There is no threshold that does both jobs. Excluding every blocked pair costs about half the genuine support recall; keeping most of the support recall lets almost every held object back in. That is a negative result, and a useful one, because the objection assumes a geometric solution exists and is merely being skipped, and on this data it does not exist at this level of geometry. Contact height cannot tell a hand from a shelf because a hand at waist height and a shelf at waist height are the same measurement. Separating them needs something the pipeline does not have, either surface normals from real 3D or an affordance notion of what can support, and both are the future work of \S{}8.3 rather than a threshold.
 
-What the ablation does settle is the guard's blast radius. Fifty-one pairs in 836 images reach the contact threshold with a person on either side, so the class list changes 51 decisions out of the 42,440 the tool makes. It is a narrow patch over a real gap, and the gap is a limit of monocular geometry rather than of the rule set.
+What the ablation does settle is the guard's blast radius. Fifty-one pairs in 836 images reach the contact threshold with a person on either side, so the class list changes 51 of the 42,440 unordered pairs the tool rules on. It is a narrow patch over a real gap, and the gap is a limit of monocular geometry rather than of the rule set.
 
 
 \chapter{Extended validation studies}
@@ -570,11 +570,7 @@ Section 4.13 reports the headline comparison over two models: they recover 0.40 
 
 \textbf{The setting.} Thirty images, stratified across all nine annotator groups, go to the model with the ground-truth boxes drawn on and numbered, and it answers by index (\texttt{scripts/run\_\allowbreak{}vlm\_\allowbreak{}pilot.py}). That is the PredCls setting the pipeline is evaluated in, so neither is scored on detection, and the prompt carries Chapter 3's definitions verbatim, without which the run would measure \S{}2.5's reference-frame ambiguity rather than accuracy. Two models were run, because the objection to one is that a larger model would close the gap: \texttt{gemini-flash-latest} is small and non-reasoning, \texttt{gemini-3.1-pro-preview} a reasoning model an order of magnitude larger. Scaling moves mean recall from 0.400 to 0.445 against the pipeline's 0.834, and on the depth pair 0.24 against 0.65 puts the model below the geometric method's known weak point. Neither model closed the gap here, which is a result about these two models on thirty images and not about scale in general.
 
-\textbf{Why recall alone would be unfair.} It rewards whoever asserts more, and the pipeline makes 885 assertions on the 374 judged pairs against 344 and
-\begin{enumerate}
-\item Restricted to those pairs, where precision is defined, the column
-reverses and both models are the more precise, 0.419 and 0.389 against 0.347; they buy it with silence, at a price steep enough that both lose F1 on every predicate, 0.397 and 0.405 against 0.485 pooled. On the pairs it did judge the smaller model's recall is \textbf{0.686} and not 0.378, and on the predicates where the tool's advantage looks largest the gap closes entirely: \texttt{to the left of} 0.909 against 0.918, and \texttt{on} 0.864 against 0.860, where the model is marginally the better of the two. A headline recall of 0.40 therefore measures two things at once, how often the model is wrong and how often it declines, and only the first is a claim about spatial competence.
-\end{enumerate}
+\textbf{Why recall alone would be unfair.} It rewards whoever asserts more, and the pipeline makes 885 assertions on the 374 judged pairs against 344 and 414. Restricted to those pairs, where precision is defined, the column reverses and both models are the more precise, 0.419 and 0.389 against 0.347; they buy it with silence, at a price steep enough that both lose F1 on every predicate, 0.397 and 0.405 against 0.485 pooled. On the pairs it did judge the smaller model's recall is \textbf{0.686} and not 0.378, and on the predicates where the tool's advantage looks largest the gap closes entirely: \texttt{to the left of} 0.909 against 0.918, and \texttt{on} 0.864 against 0.860, where the model is marginally the better of the two. A headline recall of 0.40 therefore measures two things at once, how often the model is wrong and how often it declines, and only the first is a claim about spatial competence.
 
 The per-predicate recall underneath that verdict is this:
 
@@ -773,7 +769,7 @@ What this demonstrates is capacity and stability, not correctness. There is no g
 
 \textit{Yield and detections.} The run averages 330 triplets per frame from 11.7 detected objects, and the human process recorded about 11 triplets per image.
 
-\textit{Timing.} 6.15 s per frame is 586 frames per hour. It includes writing an inspection overlay per frame to make the output checkable by eye. Annotation is roughly half of it, so a JSON-only deployment run would land near 3.3 s per frame. The measured figure leads above because it is the one the repository reproduces.
+\textit{Timing.} 6.15 s per frame is 585 frames per hour. It includes writing an inspection overlay per frame to make the output checkable by eye. Annotation is roughly half of it, so a JSON-only deployment run would land near 3.3 s per frame. The measured figure leads above because it is the one the repository reproduces.
 
 \textit{The two distribution differences.} The largest predicate shift is \textit{in front of}, 0.181 to 0.195. The \texttt{on}/\texttt{under} share is low in both runs, 0.006 annotated against 0.003 here, which is a property of open-vocabulary detection rather than of the new frames: more detections means more pairs, and most pairs are not in contact. Density per frame is lower for the same reason in reverse, 330 against 633 triplets, since the later arrangements hold fewer objects (11.7 detections against 16.9) and pair count grows with the square.
 
