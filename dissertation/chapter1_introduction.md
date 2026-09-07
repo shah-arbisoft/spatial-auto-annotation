@@ -2,92 +2,94 @@
 
 ## 1.1 Background
 
-A robot asked to pick up a book with a cube resting on it needs more than a
-list of what is in the room: it needs the edge that says the cube is *on*
-the book. Support, laterality, depth order and proximity are the scene-graph
-edges a planner consumes to decide what to move first, and §5.7 measures the
-consequence: given only the object list an LLM planner produces a safe grasp
-plan in 0 of 25 held-out scenes, and 19 to 25 of 25 once the relations are
-stated, depending on which source supplied them.
+Ask a robot to pick up a book with a cube sitting on it, and a list of what is
+in the room will not get it there. It needs the edge saying the cube is *on*
+the book, which tells it to move the cube first. Support, left/right, depth
+order and closeness are the scene-graph edges carrying that kind of fact, and
+§5.7 puts a number on how much they matter. Given only the object list, an LLM
+planner produced a safe grasp plan in 0 of 25 held-out scenes, and with the
+relations stated it managed 19 to 25 of 25, depending on where they came from.
 
-Learning to predict such relationships requires training data in which they
-are already labelled. Wang et al. (2025) introduced a spatial relationship
-aware dataset captured by a Boston Dynamics Spot robot: nearly a thousand
-indoor images (approximately 900 after cleaning; 838 annotated in the
-released subset), annotated with seven spatial predicates: *behind, in
-front of, on, to the left of, to the right of, under, near*. Every
-relationship was labelled by hand: nine trained annotators, working
-independently in batches of 100, drew every bounding box, assigned every
-class, and clicked subject then object to set each relationship, using a
-manual tool (SGDET-Annotate), with a majority-vote cleaning pass.
+Any model that learns to predict these relationships has to train on data
+somebody has already labelled. Wang et al. (2025) published a spatial
+relationship aware dataset shot by a Boston Dynamics Spot robot, nearly a
+thousand indoor images, about 900 after cleaning and 838 annotated in the
+released subset, over seven spatial predicates: *behind, in front of, on, to
+the left of, to the right of, under, near*. All of it, every box and every
+edge, was done by hand. Working on their own in batches of 100, nine trained
+annotators drew every box, assigned every class, and clicked subject then
+object for each relationship in a manual tool called SGDET-Annotate, after
+which a majority vote cleaned the result.
 
 ### 1.1.1 The annotation bottleneck
 
-Manual annotation is the bottleneck: slow, expensive and unscaling, it keeps
-the dataset small and limits what models trained on it can learn. The
-dataset's authors report that training saturates early because of limited
-diversity, that the *near* predicate was inconsistent between annotators,
-and that future work should "augment under-represented relations" and adopt
-"spatial thresholds for near." Crucially, **no automatic annotator exists
-for this dataset**: SGDET-Annotate only accelerates manual labelling; a
-human still decides every label.
+Hand labelling is the step that holds everything else up. It is slow, somebody
+has to be paid for it, and so the dataset stays small, which caps what any
+model trained on it can pick up.
 
-That cost is structural and grows faster than the data. Objects relate
-pairwise, so an image holding *n* annotated objects presents *n(n−1)*
-ordered pairs; this dataset averages 101 such pairs per image, so
-relationship annotation is never exhaustive in practice. Visual Genome
-records about eighteen relationships per image over scenes of roughly twenty
-objects (Krishna et al., 2017), and here humans labelled about 10% of
-ordered pairs. That sparsity is arithmetic and implies no inattention, and
-its consequence is one the field absorbs without comment: a model evaluated
-against such labels is rewarded for reproducing which pairs annotators
-happened to record as much as which relationships hold, which Chapter 6
-measures.
+Wang et al. (2025) name three problems of their own. Training saturates early
+for want of variety in the data, *near* was used inconsistently between
+annotators, and they suggest future work should "augment under-represented
+relations" and adopt "spatial thresholds for near." No automatic annotator
+exists for this dataset. SGDET-Annotate was built to make the manual pass
+faster, and it does. But a person still decides every label.
 
-A second cost is consistency, since nine annotators working independently
-produce nine slightly different conventions. Wang et al. (2025) report that
-annotators were trained on the tool and given predicate definitions; no such
-definition survives in the released materials, and Chapter 4 measures the
-stronger point either way, that the *application* diverged whatever was
-said, across three predicates, including two groups that recorded *in front
-of* and *behind* in opposite directions from everyone else. Neither cost is solved
-by hiring more annotators, because both scale with the number of humans
-involved.
+Scale makes it worse, and the cost grows faster than the data does. Objects
+relate in pairs, so an image with *n* annotated objects gives *n(n−1)* ordered
+pairs, and this one averages 101 per image, which puts complete labelling out
+of reach for nine people. Visual Genome, for comparison, records about
+eighteen relationships per image across scenes of roughly twenty objects
+(Krishna et al., 2017), while here the annotators covered about 10% of ordered
+pairs, which the pair count forces and which says nothing about how carefully
+they worked. The consequence is one the field mostly passes over. A model
+judged against these labels picks up credit for guessing which pairs the
+annotators wrote down as much as for getting the relationships right, which
+Chapter 6 measures.
+
+Then there is consistency, which spending more cannot fix. Nine people working
+on their own batches end up with nine slightly different habits, and although
+Wang et al. (2025) say annotators were trained and given definitions for each
+predicate, no such definition survives in the released files. Whatever was
+said at the time, Chapter 4 finds the *use* of three predicates drifted apart,
+with two groups recording *in front of* and *behind* the opposite way round
+from everyone else. Hiring more annotators helps with neither problem, because
+both scale with the number of people.
 
 ### 1.1.2 Why the existing remedies do not remove it
 
-A shortage of labels already has three families of remedy, each reviewed in
-Chapter 2 and tested here rather than dismissed on paper.
-Learned scene-graph generators predict relations from visual patterns, but
-they train on labelled triplets and so sit *downstream* of an annotator
-instead of replacing one. Semi-supervised methods stretch the labels that
-exist, which presupposes a consistent seed; this one is 10% dense and
-internally contradictory, and Chapter 5 measures what self-training does
-with it. A large vision-language model can be asked directly, the most
-plausible modern shortcut; §4.13 runs it on the same images with the same
-definitions and finds it reproduces the *human* annotation's characteristic
-failures, not a geometric one's. None produces a dense, self-consistent
-label for every ordered pair with no human deciding anything, which is the
-gap this project addresses.
+Three families of fix already exist for a shortage of labels, and Chapter 2
+goes through each. I tested all three here, in Chapters 4 and 5.
+
+Learned scene-graph generators read relations off visual patterns, but since
+they train on labelled triplets they sit downstream of an annotator and cannot
+take one's place. Semi-supervised methods stretch whatever labels already
+exist, which works when the seed is clean; this seed is 10% dense and
+disagrees with itself, and Chapter 5 measures what self-training does with it.
+The third route is to ask a large vision-language model outright, the obvious
+modern shortcut, and when §4.13 puts one on the same images with the same
+definitions, what comes back repeats the *human* annotation's typical
+failures, not a geometric system's. None of the three gives a dense,
+self-consistent label for every ordered pair with nobody deciding anything,
+and that gap is what this project fills.
 
 ## 1.2 Research aim and objectives
 
-This project removes the human from the labelling loop. The seven predicates
-are *spatial*, so they are computable from geometry: given a raw RGB image
-the pipeline detects objects, segments them, estimates monocular depth,
-lifts each object to a 3D position and **computes** each predicate for every
-ordered pair from explicit rules, writing a scene graph in the dataset's own
-formats (Visual Genome JSON, YOLO txt, h5).
+The point of the project, stated once and tested for the rest of it, is to
+take the human out of the labelling loop, and since the seven predicates are
+*spatial* they can be worked out from geometry. Given a raw RGB image, the
+pipeline finds objects, segments them, estimates monocular depth, lifts each
+to a 3D position and **computes** each predicate for every ordered pair from
+written-out rules, then saves a scene graph in the dataset's own formats,
+Visual Genome JSON, YOLO txt and h5.
 
-One distinction is central. Learned scene-graph models *predict*
-relationships and therefore need labelled data; this pipeline *computes*
-them from measured geometry and runs before any such model, making it the
-**supplier** of what they consume rather than a competitor (§3.3 sets out
-why that is possible for these seven predicates and what it costs). The one
-predicate the authors found unreliable, *near*, is handled by fitting a
-size-relative gap threshold to the human labels and reporting it: a fitted
-threshold is by construction more self-consistent than nine separate human
-judgements.
+One distinction runs through the dissertation. Learned models *predict*
+relationships, so they need labelled data, while this pipeline *computes* them
+from measured geometry and runs before any such model, which makes it the
+**supplier** of what those models consume, not a competitor. Section 3.3 sets
+out why it works for these seven predicates, and what it costs. For *near*,
+the one predicate the authors called unreliable, I fit a size-relative gap
+threshold to the human labels and report the number, since a fitted threshold
+is by construction more self-consistent than nine separate human judgements.
 
 ### 1.2.1 Research questions and objectives
 
@@ -99,112 +101,111 @@ judgements.
   relation-prediction model as effectively as human labels are? Measured
   with a controlled classifier trained once on each label source.
 
-RQ1 asks whether the labels are *accurate*, RQ2 whether they are *useful*.
-They decompose into six verifiable objectives:
+The first is about whether the labels are right. The second, which took most
+of the work, is about whether anything useful can be trained on them, and
+between them they break into six checkable objectives:
 
 - **O1 (build).** A fully-automatic pipeline (detection, segmentation,
   depth, geometric rules) that annotates the complete dataset in its native
   formats with no human in the labelling loop. *(Chapter 3)*
-- **O2 (specify and calibrate).** An operational geometric definition of all
+- **O2 (specify and calibrate).** A working geometric definition of all
   seven predicates, with every threshold fitted only on a subset of
-  annotator groups and validated on held-out annotators. *(Chapter 3)*
+  annotator groups and checked on held-out annotators. *(Chapter 3)*
 - **O3 (validate).** Per-predicate fidelity against the human annotations,
-  with trivial and box-only baselines, ablations, and manually audited true
+  with trivial and box-only baselines, ablations, and manually audited
   precision, answering RQ1. *(Chapter 4)*
-- **O4 (diagnose).** Every disagreement with the human labels attributed to
-  a cause: calibrated abstention, annotator behaviour, or genuine tool
-  error. *(Chapters 4, 7)*
+- **O4 (diagnose).** Every disagreement with the human labels traced to a
+  cause: calibrated abstention, annotator behaviour, or tool error.
+  *(Chapters 4, 7)*
 - **O5 (test downstream utility).** A controlled experiment in which the
   same classifier is trained on each label source under identical features,
   splits and seeds, isolating the label source, answering RQ2. *(Chapter 5)*
 - **O6 (test at the level the field measures).** The same comparison
-  repeated in a current scene-graph framework with a shared
-  frozen detector and replicated seeds, and carried one link further to an
-  LLM planner asked for a grasp plan under each label source and scored on
-  clearing the occluder first, so the
-  answer to RQ2 does not rest on one lightweight model. *(Chapters 5, 6)*
+  repeated in a current scene-graph framework with a shared frozen detector
+  and replicated seeds, then carried one step further to an LLM planner
+  asked for a grasp plan under each label source and scored on whether it
+  clears the occluder first, so the answer to RQ2 does not rest on one
+  lightweight model. *(Chapters 5, 6)*
 
 ### 1.2.2 What would count as an answer
 
-Both research questions can be answered badly by choosing the measurement
-after seeing the result, so the criteria are fixed here, before any result
-is reported.
+Picking the measurement after seeing the result proves little, so I set the
+tests out here first.
 
-RQ1 is answered **yes** if per-predicate recall of the human triplets is
-comparable to what the human process itself achieves, on annotator groups
-whose data influenced no threshold, and if the labels the tool emits beyond
-the human record survive manual audit instead of turning out to be noise.
-*Comparable* is given content by two references, not a number chosen for
-convenience: the trivial random and majority baselines, which any method
-must beat, and an estimate of how well the human annotators would have
-scored against one another, the ceiling any annotator can fairly be held
-to. In the event, §4.6 finds that second reference cannot be obtained from
-this dataset at all, its batches being disjoint, so the criterion falls
-back to the baselines and the per-predicate audit; the substitution is
-reported rather than quietly made. The answer has to be given per
-predicate, because a mean over seven can conceal one that fails outright.
+RQ1 gets a **yes** if per-predicate recall of the human triplets is about as
+good as the human process manages, on annotator groups whose data touched no
+threshold, and if the extra labels beyond the human record survive a manual
+audit instead of turning out to be noise. *About as good* needed two things to
+measure against, picked in advance. Trivial random and majority baselines are
+the first, since any method has to beat those. The second was an estimate of
+how well two human annotators would have agreed, roughly the ceiling an
+annotator can fairly be held to.
 
-RQ2 is answered **yes** if a model trained on the automatic labels performs
-at least as well as the same model trained on the human labels, under
-identical features, splits and seeds, judged against held-out *human*
-annotation, deliberately the harder direction, the yardstick being the
-rival source's own product. Since a single lightweight model could produce
-such a result by accident, the question is put three times at increasing
-cost, through a controlled classifier, a current scene-graph benchmark
-framework, and a planner acting on the relations, with the standard
-semi-supervised remedy as a third arm in the controlled experiment. Agreement across all
-three would be required for an unqualified yes; where they disagree, the
-disagreement is reported and explained and not resolved in the project's
-favour, and Chapter 6 is where that obligation falls due.
+The second does not exist. Because the batches are disjoint, §4.6 finds no way
+to get it from this dataset, so the test falls back on the baselines and the
+per-predicate audit, and I say so where it happens. Answers are given per
+predicate as well, since a mean over seven can bury one that has failed badly.
+
+RQ2 gets a **yes** if a model trained on the automatic labels does at least as
+well as the same model trained on the human labels, under the same features,
+splits and seeds, scored against held-out *human* annotation. That is the
+harder direction, since the measure belongs to the rival source. One
+lightweight model might return that by luck, so the question is asked three
+times at rising cost, through a controlled classifier, a current scene-graph
+benchmark framework, and a planner acting on the relations, with the usual
+semi-supervised fix as a third arm. An unqualified yes needs all three to
+agree. Chapter 6 is where they do not, and the disagreement is reported and
+explained, not resolved in the project's favour.
 
 ### 1.2.3 Contributions
 
-On the literature search of Chapter 2, which found no such system, the
-deliverable is the first fully-automatic spatial-relationship annotator for
-this dataset and its seven predicates, with a geometric specification of
-each, a correction step that rejects impossible labels, confidence flags
-over the ambiguous ones, and a fitted `near` threshold answering a
-limitation the dataset's authors named. Around it sit a fidelity study with
-baselines and ablations (RQ1), a controlled three-arm downstream study
-(RQ2), two measurements of the dataset's own annotation process its authors
-did not have, and a reliability check that needs no labels at all, obtained
-by recovering the fact that the released images are consecutive frames of
-one robot capture. Section 8.2 states each contribution against its evidence
-and says who can use it.
+The literature search in Chapter 2, with its search terms, turned up no system
+of this kind. What is delivered is the first fully-automatic
+spatial-relationship annotator for this dataset's seven predicates, with a
+geometric definition of each, a correction step that throws out impossible
+labels, confidence flags on the doubtful ones, and a fitted `near` threshold
+answering a limitation the authors named themselves. Around it sit a fidelity
+study with baselines and ablations (RQ1), a controlled three-arm downstream
+study (RQ2), two measurements of the dataset's own labelling process its
+authors did not have, and a reliability check needing no labels, which fell
+out of noticing that the released images are consecutive frames of one robot
+capture. Section 8.2 states each contribution against its evidence and says
+who can use it.
 
 ### 1.2.4 Scope
 
 In scope: the automatic annotator; the fidelity study with baselines and
-ablations; the controlled downstream classifier; the direct benchmark test
-in a current SGG framework (Chapter 6); the planner experiment
-carrying the comparison one link further towards robot behaviour (§5.7); the
-vision-language baseline (§4.13); and a critical evaluation chapter. Two
-items entered scope during the project and are marked as such where
-reported: scaling to robot captures beyond the annotated release, once the
-supervising group supplied the full capture (Supplementary E.5), and the
-vision-language comparison, brought forward once it became clear a reader
-would treat it as the obvious alternative. Deferred to future work:
-copy-paste augmentation of under-represented relations, and any revision of
-the dataset's own predicate definitions.
+ablations; the controlled downstream classifier; the direct benchmark test in
+a current SGG framework (Chapter 6); the planner experiment carrying the
+comparison one step closer to robot behaviour (§5.7); the vision-language
+baseline (§4.13); and a critical evaluation chapter.
 
-**Delimitations and assumptions.** Five, each a deliberate decision argued
-in §7.6 with the threat it carries. The work covers **one indoor environment
-and six annotated object classes**, so it is the method and not the fitted
-numbers that is claimed to transfer. Relations are computed in the **camera
-frame**, a choice among the reference frames Chapter 2 sets out and no fact
-about the world; §4.5 measures what it costs where an annotator chose
-differently. Depth is **monocular and relative**. Fidelity is measured in
-the **PredCls setting**, so detection error is held out and reported
-separately (§4.11). And the **seven predicates are taken as given**;
-improving their definitions would be a different project.
+Two things came into scope while the project was running, both marked where
+they are reported, and once the supervising group handed over the full
+capture, scaling to robot images beyond the annotated release became possible
+(Supplementary E.5). The vision-language comparison was pulled forward once it
+was clear a reader would treat it as the obvious alternative. Left for later
+work: copy-paste augmentation of under-represented relations, and any rewrite
+of the dataset's own predicate definitions.
+
+**Limits and assumptions.** Five, each argued in §7.6 with the risk it
+carries. Since the work covers **one indoor environment and six annotated
+object classes**, what I claim transfers is the method, not the fitted
+numbers. Relations are computed in the **camera frame**, one of the reference
+frames Chapter 2 sets out, not a fact about the world, and §4.5 measures what
+that costs where an annotator chose differently. Depth is **monocular and
+relative**. Since fidelity is measured in the **PredCls setting**, detection
+error is held out and reported on its own (§4.11). And the **seven predicates
+are taken as given**, because rewriting their definitions would be a different
+project.
 
 ## 1.3 Research approach
 
-The project follows CRISP-DM, chosen over KDD and SEMMA for the reasons §3.1
-gives. The mapping below earns its place: two findings (the dataset's stored
-image orientation and the three measured annotator behaviours) came straight
-out of Data Understanding, and the audit-driven repair of the support rules
-is a documented iteration between Evaluation and Modelling.
+The project follows CRISP-DM, picked over KDD and SEMMA for the reasons in
+§3.1. Two findings came out of Data Understanding, not Modelling, the way the
+images are stored on their side and the three annotator behaviours I measured,
+while the audit-driven repair of the support rules is a loop between
+Evaluation and Modelling that the write-up keeps.
 
 | CRISP-DM stage | In this project | Where |
 |---|---|---|
@@ -215,36 +216,34 @@ is a documented iteration between Evaluation and Modelling.
 | Evaluation | fidelity protocol (baselines, ablations, audits), controlled label-source comparison, exhaustive failure attribution | Ch. 4–6 |
 | Deployment | detector-in-the-loop mode, runtime/VRAM footprint, reproducibility package | Ch. 4, supplementary |
 
-Four constraints shaped the design as much as the research questions did: a
-single 6 GB consumer GPU, no budget for paid annotation, one dataset, and
-free hosted GPU sessions for the benchmark runs. Each ruled something out
-and each is answered somewhere in the evidence: the GPU budget by ablation
-A8, the annotation budget by auditing samples rather than re-annotating at
-scale, the single dataset by an argument rather than a second domain, and the GPU-hour cap by
-a three-seed replication whose width is reported rather than smoothed over.
-Supplementary B sets out what each constraint excluded.
+Four limits shaped the design about as much as the research questions did. I
+had one 6 GB consumer GPU, no money for paid annotation, one dataset, and free
+hosted GPU sessions for the benchmark runs, and each ruled something out and
+is answered somewhere in the evidence. Ablation A8 answers the GPU budget.
+Auditing samples, in place of re-labelling at scale, answers the annotation
+budget. The single dataset is answered by argument, not by a second domain,
+and the GPU-hour cap by a three-seed replication whose width I report.
+Supplementary B sets out what each limit excluded.
 
-Ethical considerations are summarised here and detailed in Supplementary A. The
-work is a secondary analysis of a published, openly licensed dataset (CC-BY
-4.0) collected by the supervising research group; no new personal data were
-gathered for the annotation study. Some dataset frames contain identifiable
-people, so faces are anonymised in every published figure. No data is collected from human
-participants at any point, so the work is secondary analysis throughout and
-the module's Secondary Data Checklist is the applicable route.
+Ethics is summarised here and covered in Supplementary A. The work is a
+secondary analysis of a published, openly licensed dataset (CC-BY 4.0)
+collected by the supervising research group, and I gathered no new personal
+data. Some frames show identifiable people, so faces are blurred in every
+published figure. Nothing comes from human participants, which makes the work
+secondary analysis throughout and the module's Secondary Data Checklist the
+route that applies.
 
 ## 1.4 Dissertation outline
 
-Chapter 2 reviews the literature with label quality as its organising
-question, and Chapter 3 gives the methodology and the geometric design of
-the seven predicates. **Chapters 4 to 6 are three CRISP-DM iterations of
-increasing scope on the same question**, and reading them in order is the
-point: the fidelity study answers RQ1 against the human labels, the
-controlled downstream study answers RQ2 against a lightweight model, and the
-benchmark repeats it in a current SGG framework and disagrees.
-Chapter 7 ties all three to causes and to prior work, and reads the result
-for its social and professional consequences, and Chapter 8 closes against
-the objectives, the contributions and what is left undone. The legal and
-ethical constraints on the data and the models are stated where they bore
-on the design, in §3.12. The chapters are self-contained; the
-supplementary material after the references is further information, not
-a part of the argument.
+Chapter 2 covers the literature with label quality as the organising question,
+and Chapter 3 gives the methodology and the geometric design of the seven
+predicates. **Chapters 4 to 6 are three CRISP-DM iterations of increasing
+scope on the same question**, meant to be read in order, since the fidelity
+study answers RQ1 against the human labels, the controlled downstream study
+answers RQ2 against a lightweight model, and the benchmark repeats it in a
+current SGG framework and disagrees. Chapter 7 ties all three to causes and to
+prior work, and reads the result for its social and professional consequences,
+while Chapter 8 closes against the objectives, contributions and what is left
+undone. Where the legal and ethical limits on the data and the models bore on
+the design, they are stated in §3.12. The chapters stand on their own, and the
+supplementary material after the references is background.
