@@ -1,0 +1,4 @@
+# Keep GitHub's language bar on the Python code: notebooks and the dissertation's
+# LaTeX are documentation, not the pipeline.
+*.ipynb linguist-documentation
+dissertation/** linguist-documentation

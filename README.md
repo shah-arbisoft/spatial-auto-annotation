@@ -1,5 +1,7 @@
 # Spatial-Auto-Annotation
 
+[![tests](https://github.com/shah-arbisoft/spatial-auto-annotation/actions/workflows/tests.yml/badge.svg)](https://github.com/shah-arbisoft/spatial-auto-annotation/actions/workflows/tests.yml)
+
 A fully-automatic spatial-relationship annotator for robot-acquired indoor scenes.
 
 Given a raw RGB image, the pipeline detects objects, segments them, estimates

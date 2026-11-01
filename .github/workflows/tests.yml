@@ -1,0 +1,22 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      # The tests cover predicates, geometry, contact, keyframes, classifier features and
+      # pipeline plumbing. They need only NumPy and PyYAML: no test imports the GPU models
+      # (YOLO, SAM2, Depth Anything), so CI stays fast and CPU-only.
+      - run: pip install numpy==1.26.4 PyYAML==6.0.2 pytest==8.3.2
+      - run: pytest -q
